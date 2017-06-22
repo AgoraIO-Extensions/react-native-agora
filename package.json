@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "声网Agora",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,9 @@
     "url": "git+https://github.com/DBshaoYan/react-native-agora.git"
   },
   "keywords": [
-    "agora"
+    "agora",
+    "react-native",
+    "react-native-agora"
   ],
   "author": "",
   "license": "ISC",
