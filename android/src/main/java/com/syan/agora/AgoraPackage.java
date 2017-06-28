@@ -15,7 +15,7 @@ public class AgoraPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.asList(new NativeModule[]{
-            new AgoraModule(reactContext),
+                new AgoraModule(reactContext),
         });
     }
 
@@ -25,6 +25,8 @@ public class AgoraPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        return Arrays.<ViewManager>asList(
+                new AgoraViewManage()
+        );
     }
 }
