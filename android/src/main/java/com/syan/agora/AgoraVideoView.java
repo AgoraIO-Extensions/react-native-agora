@@ -1,23 +1,25 @@
 package com.syan.agora;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
-
-import com.facebook.react.uimanager.ThemedReactContext;
+import android.util.AttributeSet;
+import android.widget.LinearLayout;
 
 /**
  * Created by DB on 2017/6/27.
  */
 
-public class AgoraVideoView extends RelativeLayout {
+public class AgoraVideoView extends LinearLayout {
 
-    Context context;
-
-    public AgoraVideoView(ThemedReactContext context) {
+    public AgoraVideoView(Context context) {
         super(context);
-
-        this.context = context;
-
     }
 
+    public AgoraVideoView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+
+    public AgoraVideoView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
 }

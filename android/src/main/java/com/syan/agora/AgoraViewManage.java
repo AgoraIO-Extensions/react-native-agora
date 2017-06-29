@@ -13,22 +13,18 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 public class AgoraViewManage extends SimpleViewManager<AgoraVideoView> {
 
-    ThemedReactContext context;
-
-    private AgoraVideoView agoraVideoView;
+    public static final String REACT_CLASS = "RCTAgoraView";
 
     @Override
     public String getName() {
-        return "AgoraView";
+        return REACT_CLASS;
     }
 
     @Override
     protected AgoraVideoView createViewInstance(ThemedReactContext reactContext) {
-        this.context = reactContext;
 
-        agoraVideoView = new AgoraVideoView(reactContext);
+        return new AgoraVideoView(reactContext);
 
-        return agoraVideoView;
     }
 
     @ReactProp(name = "localUid")
