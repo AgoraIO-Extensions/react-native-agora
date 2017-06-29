@@ -22,7 +22,7 @@ public class AgoraManager {
 
     public static AgoraManager sAgoraManager;
 
-    private RtcEngine mRtcEngine;
+    public RtcEngine mRtcEngine;
 
     private Context context;
 
