@@ -208,6 +208,10 @@ typedef NS_ENUM(NSUInteger, AgoraRtcLogFilter) {
     AgoraRtc_LogFilter_Critical = 0x0008,
 };
 
+typedef NS_ENUM(NSInteger, AgoraRtmpStreamLifeCycle) {
+    RtmpStream_LifeCycle_Bind2Channel = 1,
+    RtmpStream_LifeCycle_Bind2Ownner = 2,
+};
 
 typedef NS_ENUM(NSUInteger, AgoraRtcRenderMode) {
     /**
@@ -317,6 +321,8 @@ __attribute__((visibility("default"))) @interface AgoraRtcStats : NSObject
 @property (assign, nonatomic) NSUInteger txVideoKBitrate;
 @property (assign, nonatomic) NSUInteger rxVideoKBitrate;
 @property (assign, nonatomic) NSUInteger users;
+@property (assign, nonatomic) double cpuAppUsage;
+@property (assign, nonatomic) double cpuTotalUsage;
 @end
 
 __attribute__((visibility("default"))) @interface AgoraRtcLocalVideoStats : NSObject
@@ -358,6 +364,31 @@ __attribute__((visibility("default"))) @interface AgoraRtcVideoCompositingLayout
 @property (copy, nonatomic) NSString* appData;//app defined data
 @end
 
+__attribute__((visibility("default"))) @interface AgoraPublisherConfiguration : NSObject
+@property (assign, nonatomic) BOOL owner;
+@property (assign, nonatomic) NSInteger width;
+@property (assign, nonatomic) NSInteger height;
+@property (assign, nonatomic) NSInteger framerate;
+@property (assign, nonatomic) NSInteger bitrate;
+@property (assign, nonatomic) NSInteger defaultLayout;
+@property (assign, nonatomic) AgoraRtmpStreamLifeCycle lifeCycle;
+@property (copy, nonatomic) NSString* publishUrl;
+@property (copy, nonatomic) NSString* rawStreamUrl;
+@property (copy, nonatomic) NSString* extraInfo;
+-(BOOL) validate;
+-(NSString *) toJsonString;
+@end
+
+__attribute__((visibility("default"))) @interface AgoraPublisherConfigurationBuilder : NSObject
+- (AgoraPublisherConfigurationBuilder *) setOwner:(BOOL)isOwner;
+- (AgoraPublisherConfigurationBuilder *) setWidth:(NSInteger)width height:(NSInteger)height framerate:(NSInteger)framerate bitrate:(NSInteger)bitrate;
+- (AgoraPublisherConfigurationBuilder *) setDefaultLayout:(NSInteger)layoutStyle;
+- (AgoraPublisherConfigurationBuilder *) setLifeCycle:(AgoraRtmpStreamLifeCycle)lifecycle;
+- (AgoraPublisherConfigurationBuilder *) setPublisherUrl:(NSString*)url;
+- (AgoraPublisherConfigurationBuilder *) setRawStreamUrl:(NSString*)url;
+- (AgoraPublisherConfigurationBuilder *) setExtraInfo:(NSString *)info;
+- (AgoraPublisherConfiguration *) build;
+@end
 
 @class AgoraRtcEngineKit;
 @protocol AgoraRtcEngineDelegate <NSObject>
@@ -674,6 +705,24 @@ __attribute__((visibility("default"))) @interface AgoraRtcVideoCompositingLayout
  *  @param engine The engine kit
  */
 - (void)rtcEngineRequestChannelKey:(AgoraRtcEngineKit *)engine;
+
+/**
+ *  Event of the first audio frame is sent.
+ *
+ *  @param engine  The engine kit
+ *  @param elapsed The elapsed time(ms) from the beginning of the session.
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine firstLocalAudioFrame:(NSInteger)elapsed;
+
+/**
+ *  Event of the first audio frame from remote user is received.
+ *
+ *  @param engine  The engine kit
+ *  @param uid     The remote user id
+ *  @param elapsed The elapsed time(ms) from the beginning of the session.
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine firstRemoteAudioFrameOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
+
 @end
 
 
@@ -978,7 +1027,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineKit : NSObject
 - (int)adjustAudioMixingVolume:(NSInteger) volume;
 - (int)getAudioMixingDuration;
 - (int)getAudioMixingCurrentPosition;
-
+- (int)setAudioMixingPosition:(NSInteger) pos;
 
 /**
  *  Start screen capture
@@ -1217,15 +1266,6 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineKit : NSObject
 - (int) setRemoteVideoStream: (NSUInteger) uid
                         type: (AgoraRtcVideoStreamType) streamType;
 
-/**
- * play the video stream from network
- *
- * @param [in] uri the link of video source
- *
- * @return return 0 if success or an error code
- */
-- (int) startPlayingStream:(NSString*)uri __deprecated;
-- (int) stopPlayingStream __deprecated;
 
 - (int) startRecordingService:(NSString*)recordingKey;
 - (int) stopRecordingService:(NSString*)recordingKey;
@@ -1274,6 +1314,8 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineKit : NSObject
 - (int)enableWebSdkInteroperability:(BOOL)enabled;
 
 - (int)setVideoQualityParameters:(BOOL)preferFrameRateOverImageQuality;
+
+- (int)configPublisher:(AgoraPublisherConfiguration *)config;
 
 - (int)setVideoCompositingLayout:(AgoraRtcVideoCompositingLayout*)layout;
 

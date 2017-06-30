@@ -11,6 +11,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTView.h>
+#import "AgoraConst.h"
 
 @interface RCTAgora ()
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
@@ -45,7 +46,9 @@ RCT_EXPORT_MODULE();
  *  @param reactTag        绑定view的tag
  *  @return 0 when executed successfully. return negative value if failed.
  */
-RCT_EXPORT_METHOD(loadAgoraKit:(NSDictionary *)options callback:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
+    
+    [AgoraConst share].appid = options[@"appid"];
     
     self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:options[@"appid"] delegate:self];
     
@@ -60,35 +63,23 @@ RCT_EXPORT_METHOD(loadAgoraKit:(NSDictionary *)options callback:(RCTResponseSend
     //开启预览
     [self.rtcEngine startPreview];
     
-    [self.rtcEngine joinChannelByKey:nil channelName:options[@"channelName"] info:options[@"info"] uid:0 joinSuccess:^(NSString *channel, NSUInteger uid, NSInteger elapsed) {
-        
-        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        
-        params[@"channel"] = channel;
-        params[@"uid"] = [NSNumber numberWithInteger:uid];
-        params[@"elapsed"] = [NSNumber numberWithInteger:elapsed];
-        callback(@[params]);
-        
-        //绑定本地视图
-        AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
-        canvas.uid = uid;
-        canvas.view = [self.bridge.uiManager viewForReactTag:options[@"reactTag"]];
-        canvas.renderMode = AgoraRtc_Render_Hidden;
-        [self.rtcEngine setupLocalVideo:canvas];
-        
-    }];
-    
     //Agora Native SDK 与 Agora Web SDK 间的互通
     [self.rtcEngine enableWebSdkInteroperability:YES];
     
 }
 
+//加入房间
+RCT_EXPORT_METHOD(joinChannel:(NSString *)channelName) {
+    [self.rtcEngine joinChannelByKey:nil channelName:channelName info:nil uid:0 joinSuccess:NULL];
+}
 
 //离开频道
 RCT_EXPORT_METHOD(leaveChannel){
-    [AgoraRtcEngineKit destroy];
     [self.rtcEngine leaveChannel:^(AgoraRtcStats *stat) {
+        NSMutableDictionary *params = @{}.mutableCopy;
+        params[@"type"] = @"onLeaveChannel";
         
+        [self sendEvent:params];
     }];
 }
 
@@ -175,20 +166,48 @@ RCT_EXPORT_METHOD(stopRecordingService:(NSString*)recordingKey){
     [self.rtcEngine stopRecordingService:recordingKey];
 }
 
+//获取版本号
+RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
+    callback(@[[AgoraRtcEngineKit getSdkVersion]]);
+}
+
+
 /*
  该回调方法表示SDK运行时出现了（网络或媒体相关的）错误。通常情况下，SDK上报的错误意味着SDK无法自动恢复，需要应用程序干预或提示用户。
  比如启动通话失败时，SDK会上报AgoraRtc_Error_StartCall(1002)错误。
  应用程序可以提示用户启动通话失败，并调用leaveChannel退出频道。
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraRtcErrorCode)errorCode{
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onError";
+    params[@"err"] = [NSNumber numberWithInteger:errorCode];;
     
+    [self sendEvent:params];
 }
+
+/*
+ 警告
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurWarning:(AgoraRtcWarningCode)warningCode {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onWarning";
+    params[@"err"] = [NSNumber numberWithInteger:warningCode];;
+    
+    [self sendEvent:params];
+}
+
 
 /*
  客户端成功加入了指定的频道
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinChannel:(NSString*)channel withUid:(NSUInteger)uid elapsed:(NSInteger) elapsed {
+
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onJoinChannelSuccess";
+    params[@"uid"] = [NSNumber numberWithInteger:uid];
+    params[@"channel"] = channel;
     
+    [self sendEvent:params];
 }
 
 /*
@@ -196,13 +215,11 @@ RCT_EXPORT_METHOD(stopRecordingService:(NSString*)recordingKey){
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
     
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onFirstRemoteVideoDecoded";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
-    params[@"size"] = @{@"width": [NSString stringWithFormat:@"%f", size.width], @"height": [NSString stringWithFormat:@"%f", size.height]};
-    params[@"elapsed"] = [NSNumber numberWithInteger:elapsed];
     
-    [_bridge.eventDispatcher sendDeviceEventWithName:@"firstRemoteVideoDecodedOfUid" body:params];
+    [self sendEvent:params];
 
 }
 
@@ -210,34 +227,38 @@ RCT_EXPORT_METHOD(stopRecordingService:(NSString*)recordingKey){
  用户加入回调
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
- 
-    [_bridge.eventDispatcher sendDeviceEventWithName:@"didJoinedOfUid" body:[NSNumber numberWithInteger:uid]];
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onUserJoined";
+    params[@"uid"] = [NSNumber numberWithInteger:uid];
+    
+    [self sendEvent:params];
 }
 
 /*
  用户离线回调
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraRtcUserOfflineReason)reason {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onUserOffline";
+    params[@"uid"] = [NSNumber numberWithInteger:uid];
     
+    [self sendEvent:params];
 }
 
-/*
- 报告本地用户的网络质量，该回调方法每两秒触发一次
- */
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine lastmileQuality:(AgoraRtcQuality)quality {
-    
+- (void)sendEvent:(NSDictionary *)params {
+    [_bridge.eventDispatcher sendDeviceEventWithName:@"agoraEvent" body:params];
 }
 
 - (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
 }
 
-RCT_EXPORT_METHOD(getViewWithTag:(nonnull NSNumber *)reactTag) {
-    
-    UIView *view = [self.bridge.uiManager viewForReactTag:reactTag];
-    NSLog(@"%@",view);
-    
-}
+//RCT_EXPORT_METHOD(getViewWithTag:(nonnull NSNumber *)reactTag) {
+//    
+//    UIView *view = [self.bridge.uiManager viewForReactTag:reactTag];
+//    NSLog(@"%@",view);
+//    
+//}
 
 @end
 
