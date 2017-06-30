@@ -128,15 +128,30 @@ public class AgoraModule extends ReactContextBaseJavaModule {
          */
         @Override
         public void onLeaveChannel(RtcStats stats) {
-
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onLeaveChannel");
+                    commonEvent(map);
+                }
+            });
         }
 
         /**
          * 用户uid离线时的回调
          */
         @Override
-        public void onUserOffline(int uid, int reason) {
-
+        public void onUserOffline(final int uid, int reason) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onUserOffline");
+                    map.putInt("uid", uid);
+                    commonEvent(map);
+                }
+            });
         }
     };
 
