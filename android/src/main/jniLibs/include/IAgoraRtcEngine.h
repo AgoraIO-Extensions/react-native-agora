@@ -123,6 +123,7 @@ enum WARN_CODE_TYPE
     WARN_ADM_RECORD_AUDIO_SILENCE = 1019,
     WARN_ADM_PLAYOUT_MALFUNCTION = 1020,
     WARN_ADM_RECORD_MALFUNCTION = 1021,
+    WARN_ADM_RECORD_AUDIO_LOWLEVEL = 1031,
     WARN_APM_HOWLING = 1051,
 
     // sdk: 100~1000
@@ -213,7 +214,7 @@ enum LOG_FILTER_TYPE
 
 enum MAX_DEVICE_ID_LENGTH_TYPE
 {
-    MAX_DEVICE_ID_LENGTH = 128
+    MAX_DEVICE_ID_LENGTH = 512
 };
 
 enum QUALITY_REPORT_FORMAT_TYPE
@@ -237,7 +238,7 @@ enum MEDIA_ENGINE_EVENT_CODE_TYPE
     MEDIA_ENGINE_ROLE_COMM_PEER = 23,
     MEDIA_ENGINE_ROLE_GAME_PEER = 24,
     // iOS adm sample rate changed
-    MEDIA_ENGINE_AUDIO_ADM_SAMPLE_RATE_CHANGE = 110
+    MEDIA_ENGINE_AUDIO_ADM_REQUIRE_RESTART = 110
 };
 
 enum MEDIA_DEVICE_STATE_TYPE
@@ -434,6 +435,41 @@ struct VideoCompositingLayout
     {}
 };
 
+#if defined(_WIN32)
+
+enum RTMP_STREAM_LIFE_CYCLE_TYPE
+{
+	RTMP_STREAM_LIFE_CYCLE_BIND2CHANNEL = 1,
+	RTMP_STREAM_LIFE_CYCLE_BIND2OWNER = 2,
+};
+
+struct PublisherConfiguration {
+	int width;
+	int height;
+	int framerate;
+	int bitrate;
+	int defaultLayout;
+	int lifecycle;
+	bool owner;
+	const char* publishUrl;
+	const char* rawStreamUrl;
+	const char* extraInfo;
+
+	PublisherConfiguration()
+		: width(640)
+		, height(360)
+		, framerate(15)
+		, bitrate(500)
+		, defaultLayout(1)
+		, lifecycle(RTMP_STREAM_LIFE_CYCLE_BIND2CHANNEL)
+		, owner(true)
+		, publishUrl(NULL)
+		, rawStreamUrl(NULL)
+		, extraInfo(NULL)
+	{}
+
+};
+#endif
 #if !defined(__ANDROID__)
 struct VideoCanvas
 {
@@ -570,7 +606,7 @@ public:
     * @param [in] uid
     *        the uid of the peer
     * @param [in] quality
-    *        the quality of the user 0~5 the higher the better
+    *        the quality of the user, see QUALITY_TYPE for value definition
     * @param [in] delay
     *        the average time of the audio packages delayed
     * @param [in] lost
@@ -900,6 +936,28 @@ public:
     */
     virtual void onRequestChannelKey() {
     }
+
+    /**
+    * when the first local audio frame generated, the function will be called
+    * @param [in] elapsed
+    *        the time elapsed from remote user called joinChannel in ms
+    */
+    virtual void onFirstLocalAudioFrame(int elapsed) {
+        (void)elapsed;
+    }
+
+    /**
+    * when the first remote audio frame arrived, the function will be called
+    * @param [in] uid
+    *        the UID of the remote user
+    * @param [in] elapsed
+    *        the time elapsed from remote user called joinChannel in ms
+    */
+    virtual void onFirstRemoteAudioFrame(uid_t uid, int elapsed) {
+        (void)uid;
+        (void)elapsed;
+    }
+
 };
 
 /**
@@ -1339,6 +1397,10 @@ public:
 
     virtual int setVideoCompositingLayout(const VideoCompositingLayout& sei) = 0;
     virtual int clearVideoCompositingLayout() = 0;
+
+#if defined(_WIN32)
+	virtual int configPublisher(const PublisherConfiguration& config) = 0;
+#endif
 };
 
 
@@ -1616,25 +1678,6 @@ public:
         return setObject("rtc.video.set_remote_video_stream", "{\"uid\":%u,\"stream\":%d}", uid, streamType);
     }
 
-
-    /**
-     * play the video stream from network
-     * @param [in] uri the link of video source
-     * @return return 0 if success or an error code
-     */
-    int startPlayingStream(const char* uri) {
-        return m_parameter ? m_parameter->setString("rtc.api.video.start_play_stream", uri) : -ERR_NOT_INITIALIZED;
-    }
-
-    /**
-     *  stop playing the video stream from network
-     *
-     * @return return 0 if success or an error code
-     */
-    int stopPlayingStream() {
-        return m_parameter ? m_parameter->setBool("rtc.api.video.stop_play_stream", true) : -ERR_NOT_INITIALIZED;
-    }
-
     /**
     * set play sound volume
     * @param [in] volume
@@ -1751,6 +1794,9 @@ public:
         if (r == 0)
             r = pos;
         return r;
+    }
+    int setAudioMixingPosition(int pos /*in ms*/) {
+        return m_parameter ? m_parameter->setInt("che.audio.mixing.file.position", pos) : -ERR_NOT_INITIALIZED;
     }
 #if defined(__APPLE__)
 	/**
