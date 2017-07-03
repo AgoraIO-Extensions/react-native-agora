@@ -52,6 +52,8 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     
     self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:options[@"appid"] delegate:self];
     
+    [AgoraConst share].rtcEngine = self.rtcEngine;
+    
     //频道模式
     [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
     //启用双流模式

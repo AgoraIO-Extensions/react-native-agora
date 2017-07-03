@@ -12,6 +12,8 @@
 
 @property (nonatomic, copy) NSString *appid;
 
+@property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
+
 + (instancetype)share;
 
 @end
