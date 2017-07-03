@@ -13,7 +13,7 @@
 - (instancetype)init{
     
     if (self == [super init]) {
-        _rtcEngine =  [AgoraRtcEngineKit sharedEngineWithAppId:[AgoraConst share].appid delegate:nil];
+        _rtcEngine = [AgoraConst share].rtcEngine;
     }
     
     return self;

@@ -13,14 +13,14 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata
+#xcuserdata
 *.xccheckout
 *.moved-aside
 DerivedData
 *.hmap
 *.ipa
-*.xcuserstate
-project.xcworkspace
+#*.xcuserstate
+#project.xcworkspace
 
 # Android/IntelliJ
 #
@@ -51,3 +51,4 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
+android/src/main/res/drawable/

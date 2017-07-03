@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		23AF28211EEFECD800D771AB /* RCTAgora.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AF28201EEFECD800D771AB /* RCTAgora.m */; };
 		23AF28221EEFECD800D771AB /* RCTAgora.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 23AF281F1EEFECD800D771AB /* RCTAgora.h */; };
+		23C20DD11F0A6ED80095F60C /* AgoraConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DCC1F0A6ED80095F60C /* AgoraConst.m */; };
+		23C20DD21F0A6ED80095F60C /* RCTAgoraVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */; };
+		23C20DD31F0A6ED80095F60C /* RCTAgoraViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +32,12 @@
 		23AF281C1EEFECD800D771AB /* libRCTAgora.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTAgora.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		23AF281F1EEFECD800D771AB /* RCTAgora.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTAgora.h; sourceTree = "<group>"; };
 		23AF28201EEFECD800D771AB /* RCTAgora.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAgora.m; sourceTree = "<group>"; };
+		23C20DCB1F0A6ED80095F60C /* AgoraConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraConst.h; sourceTree = "<group>"; };
+		23C20DCC1F0A6ED80095F60C /* AgoraConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraConst.m; sourceTree = "<group>"; };
+		23C20DCD1F0A6ED80095F60C /* RCTAgoraVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAgoraVideoView.h; sourceTree = "<group>"; };
+		23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAgoraVideoView.m; sourceTree = "<group>"; };
+		23C20DCF1F0A6ED80095F60C /* RCTAgoraViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAgoraViewManager.h; sourceTree = "<group>"; };
+		23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAgoraViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +71,12 @@
 			isa = PBXGroup;
 			children = (
 				23ACF47C1EF0CF9500801BC7 /* libs */,
+				23C20DCB1F0A6ED80095F60C /* AgoraConst.h */,
+				23C20DCC1F0A6ED80095F60C /* AgoraConst.m */,
+				23C20DCD1F0A6ED80095F60C /* RCTAgoraVideoView.h */,
+				23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */,
+				23C20DCF1F0A6ED80095F60C /* RCTAgoraViewManager.h */,
+				23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */,
 				23AF281F1EEFECD800D771AB /* RCTAgora.h */,
 				23AF28201EEFECD800D771AB /* RCTAgora.m */,
 			);
@@ -126,6 +141,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23C20DD21F0A6ED80095F60C /* RCTAgoraVideoView.m in Sources */,
+				23C20DD31F0A6ED80095F60C /* RCTAgoraViewManager.m in Sources */,
+				23C20DD11F0A6ED80095F60C /* AgoraConst.m in Sources */,
 				23AF28211EEFECD800D771AB /* RCTAgora.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
