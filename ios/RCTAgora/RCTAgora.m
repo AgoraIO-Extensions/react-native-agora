@@ -71,8 +71,10 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
 }
 
 //加入房间
-RCT_EXPORT_METHOD(joinChannel:(NSString *)channelName) {
-    [self.rtcEngine joinChannelByKey:nil channelName:channelName info:nil uid:0 joinSuccess:NULL];
+RCT_EXPORT_METHOD(joinChannel:(NSString *)channelName uid:(NSInteger)uid) {
+    //保存一下uid 在自定义视图使用
+    [AgoraConst share].localUid = uid;
+    [self.rtcEngine joinChannelByKey:nil channelName:channelName info:nil uid:uid joinSuccess:NULL];
 }
 
 //离开频道
@@ -83,6 +85,11 @@ RCT_EXPORT_METHOD(leaveChannel){
         
         [self sendEvent:params];
     }];
+}
+
+//销毁引擎实例
+RCT_EXPORT_METHOD(destroy){
+    [AgoraRtcEngineKit destroy];
 }
 
 //设置 本地 视频显示属性
@@ -101,6 +108,17 @@ RCT_EXPORT_METHOD(setupRemoteVideo:(NSDictionary *)options){
     canvas.view = [self.bridge.uiManager viewForReactTag:options[@"reactTag"]];
     canvas.renderMode = [options[@"renderMode"] integerValue];
     [self.rtcEngine setupRemoteVideo:canvas];
+}
+
+//开启视频预览
+RCT_EXPORT_METHOD(startPreview){
+    [self.rtcEngine startPreview];
+    
+}
+
+//关闭视频预览
+RCT_EXPORT_METHOD(stopPreview){
+    [self.rtcEngine stopPreview];
 }
 
 //切换前置/后置摄像头

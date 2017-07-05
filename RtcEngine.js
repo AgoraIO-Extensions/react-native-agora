@@ -12,8 +12,8 @@ export default {
         this.listener && this.listener.remove();
         Agora.init(options);
     },
-    joinChannel(channelName = '001'){
-        Agora.joinChannel(channelName)
+    joinChannel(channelName = '00001', uid = 0){
+        Agora.joinChannel(channelName, uid)
     },
     eventEmitter(fnConf) {
         //there are no `removeListener` for NativeAppEventEmitter & DeviceEventEmitter

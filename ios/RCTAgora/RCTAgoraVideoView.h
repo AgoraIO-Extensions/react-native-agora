@@ -13,7 +13,7 @@
 
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
 
-@property (nonatomic) NSInteger localUid;
+@property (nonatomic) BOOL showLocalVideo;
 @property (nonatomic) NSInteger remoteUid;
 
 @end

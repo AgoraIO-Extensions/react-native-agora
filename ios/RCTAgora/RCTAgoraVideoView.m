@@ -19,10 +19,20 @@
     return self;
 }
 
-- (void)setLocalUid:(NSInteger)localUid {
-    if (localUid == 0) {
+//- (void)setLocalUid:(NSInteger)localUid {
+//    if (localUid == 0) {
+//        AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
+//        canvas.uid = localUid;
+//        canvas.view = self;
+//        canvas.renderMode = AgoraRtc_Render_Hidden;
+//        [_rtcEngine setupLocalVideo:canvas];
+//    }
+//}
+
+- (void)setShowLocalVideo:(Boolean)showLocalVideo {
+    if (showLocalVideo) {
         AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
-        canvas.uid = localUid;
+        canvas.uid = [AgoraConst share].localUid;
         canvas.view = self;
         canvas.renderMode = AgoraRtc_Render_Hidden;
         [_rtcEngine setupLocalVideo:canvas];
