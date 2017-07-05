@@ -12,6 +12,8 @@
 
 @property (nonatomic, copy) NSString *appid;
 
+@property (nonatomic, assign) NSInteger localUid;
+
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
 
 + (instancetype)share;

@@ -1,7 +1,6 @@
 package com.syan.agora;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
 
@@ -58,10 +57,8 @@ public class AgoraManager {
         //视频配置，设置为360P
         mRtcEngine.setVideoProfile(options.getInt("videoProfile"), true);
         mRtcEngine.enableWebSdkInteroperability(true);  //设置和web通信
-//        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);//设置为通信模式（默认）
-        mRtcEngine.setChannelProfile(options.getInt("channelProfile")); //设置为直播模式
-//        mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_GAME); //设置为游戏模式
-        mRtcEngine.setClientRole(options.getInt("clientRole"), null); //设置为主播
+        mRtcEngine.setChannelProfile(options.getInt("channelProfile")); //设置模式
+        mRtcEngine.setClientRole(options.getInt("clientRole"), null); //设置角色
     }
 
     /**
@@ -82,23 +79,19 @@ public class AgoraManager {
 
     public AgoraManager setupRemoteVideo(int uid) {
 
-        Log.i("Agora", "mSurfaceViews1---" + mSurfaceViews.toString());
-
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         mSurfaceViews.put(uid, surfaceView);
         mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
-        Log.i("Agora", "mSurfaceViews2---" + mSurfaceViews.toString());
         return this;
     }
 
-    public AgoraManager joinChannel(String channel) {
-        mRtcEngine.joinChannel(null, channel, null, 0);
+    public AgoraManager joinChannel(String channel, int uid) {
+        mRtcEngine.joinChannel(null, channel, null, uid);
         return this;
     }
 
     public void startPreview() {
-        int a = mRtcEngine.startPreview();
-        Log.i("Agora", "开启预览---" + a);
+        mRtcEngine.startPreview();
     }
 
     public void stopPreview() {

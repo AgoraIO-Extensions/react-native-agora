@@ -18,7 +18,7 @@ export default class AgoraView extends Component {
 }
 
 AgoraView.propTypes = {
-    localUid: PropTypes.number,
+    showLocalVideo: PropTypes.bool,
     remoteUid: PropTypes.number,
     ...View.propTypes
 };
