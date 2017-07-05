@@ -22,32 +22,25 @@ public class AgoraViewManage extends SimpleViewManager<AgoraVideoView> {
 
     @Override
     protected AgoraVideoView createViewInstance(ThemedReactContext reactContext) {
-
         return new AgoraVideoView(reactContext);
-
     }
 
-    @ReactProp(name = "localUid")
-    public void setLocalUid(final AgoraVideoView agoraVideoView, int localUid) {
+    @ReactProp(name = "showLocalVideo")
+    public void setShowLocalVideo(final AgoraVideoView agoraVideoView, boolean showLocalVideo) {
 
-        if (localUid == 0) {
+        if (showLocalVideo) {
             SurfaceView surfaceView = AgoraManager.getInstance().getLocalSurfaceView();
-            surfaceView.setZOrderMediaOverlay(true);
             surfaceView.setVisibility(View.VISIBLE);
             agoraVideoView.addView(surfaceView);
         }
-
     }
 
     @ReactProp(name = "remoteUid")
     public void setRemoteUid(final AgoraVideoView agoraVideoView, int remoteUid) {
-
-        if (remoteUid != 0) {
-            AgoraManager.getInstance().setupRemoteVideo(remoteUid);
-            SurfaceView surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
-            surfaceView.setZOrderMediaOverlay(true);
-            surfaceView.setVisibility(View.VISIBLE);
-            agoraVideoView.addView(surfaceView);
-        }
+        AgoraManager.getInstance().setupRemoteVideo(remoteUid);
+        SurfaceView surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
+        surfaceView.setVisibility(View.VISIBLE);
+        agoraVideoView.addView(surfaceView);
+        surfaceView.setZOrderMediaOverlay(true);
     }
 }

@@ -163,14 +163,27 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
     //进入房间
     @ReactMethod
-    public void joinChannel(String channelName) {
-        AgoraManager.getInstance().joinChannel(channelName);
+    public void joinChannel(String channelName, int uid) {
+        AgoraManager.getInstance().joinChannel(channelName, uid);
     }
 
     //退出
     @ReactMethod
     public void leaveChannel() {
+        AgoraManager.getInstance().stopPreview();
         AgoraManager.getInstance().leaveChannel();
+    }
+
+    //开启预览
+    @ReactMethod
+    public void startPreview() {
+        AgoraManager.getInstance().startPreview();
+    }
+
+    //闭关预览
+    @ReactMethod
+    public void stopPreview() {
+        AgoraManager.getInstance().stopPreview();
     }
 
     //打开音频
