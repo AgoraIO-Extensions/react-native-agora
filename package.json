@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "声网Agora",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,10 @@
   "keywords": [
     "agora",
     "react-native",
-    "react-native-agora"
+    "react-native-agora",
+    "live",
+    "react",
+    "Agora"
   ],
   "author": "",
   "license": "ISC",

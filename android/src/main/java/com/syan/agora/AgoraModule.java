@@ -10,10 +10,12 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import io.agora.rtc.IRtcEngineEventHandler;
+import io.agora.rtc.PublisherConfiguration;
 import io.agora.rtc.RtcEngine;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
@@ -90,6 +92,33 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
 
         /**
+         * 说话声音音量提示回调
+         */
+        @Override
+        public void onAudioVolumeIndication(final AudioVolumeInfo[] speakers,
+                                             final int totalVolume ) {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    WritableArray arr = Arguments.createArray();
+                    for (int i = 0; i < speakers.length; i++) {
+                        WritableMap obj = Arguments.createMap();
+                        obj.putInt("uid", speakers[i].uid);
+                        obj.putInt("volume", speakers[i].volume);
+                    }
+
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onAudioVolumeIndication");
+                    map.putArray("speakers", arr);
+                    map.putInt("totalVolume", totalVolume);
+                    commonEvent(map);
+                }
+            });
+        }
+
+        /**
          * 错误信息
          */
         @Override
@@ -158,7 +187,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void init(ReadableMap options) {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
-        AgoraManager.getInstance().setupLocalVideo().startPreview();
     }
 
     //进入房间
@@ -184,6 +212,42 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void stopPreview() {
         AgoraManager.getInstance().stopPreview();
+    }
+
+    //配置旁路直播推流
+    @ReactMethod
+    public void configPublisher(ReadableMap options) {
+        PublisherConfiguration config = new PublisherConfiguration.Builder()
+                .owner(options.getBoolean("owner"))
+                .size(options.getInt("width"), options.getInt("height"))
+                .frameRate(options.getInt("framerate"))
+                .biteRate(options.getInt("bitrate"))
+                .defaultLayout(options.getInt("defaultLayout"))
+                .streamLifeCycle(options.getInt("lifeCycle"))
+                .rawStreamUrl(options.getString("rawStreamUrl"))
+                .publishUrl(options.getString("publishUrl"))
+                .extraInfo(options.getString("extraInfo"))
+                .build();
+
+        AgoraManager.getInstance().mRtcEngine.configPublisher(config);
+    }
+
+    //设置本地视频显示模式
+    @ReactMethod
+    public void setLocalRenderMode(int mode) {
+        AgoraManager.getInstance().mRtcEngine.setLocalRenderMode(mode);
+    }
+
+    //设置远端视频显示模式
+    @ReactMethod
+    public void setRemoteRenderMode(int uid, int mode) {
+        AgoraManager.getInstance().mRtcEngine.setRemoteRenderMode(uid, mode);
+    }
+
+    //启用说话者音量提示
+    @ReactMethod
+    public void enableAudioVolumeIndication(int interval, int smooth) {
+        AgoraManager.getInstance().mRtcEngine.enableAudioVolumeIndication(interval, smooth);
     }
 
     //打开音频
@@ -273,7 +337,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     //查询 SDK 版本号
     @ReactMethod
     public void getSdkVersion(Callback callback) {
-        callback.invoke( RtcEngine.getSdkVersion());
+        callback.invoke(RtcEngine.getSdkVersion());
     }
 
     private void commonEvent(WritableMap map) {

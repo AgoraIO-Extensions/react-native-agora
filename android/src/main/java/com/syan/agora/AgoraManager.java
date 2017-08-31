@@ -1,6 +1,7 @@
 package com.syan.agora;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
 
@@ -51,11 +52,15 @@ public class AgoraManager {
         this.context = context;
 
         //创建RtcEngine对象，mRtcEventHandler为RtcEngine的回调
-        mRtcEngine = RtcEngine.create(context, options.getString("appid"), mRtcEventHandler);
+        try {
+            mRtcEngine = RtcEngine.create(context, options.getString("appid"), mRtcEventHandler);
+
+        } catch (Exception e) {
+            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
+        }
         //开启视频功能
         mRtcEngine.enableVideo();
-        //视频配置，设置为360P
-        mRtcEngine.setVideoProfile(options.getInt("videoProfile"), true);
+        mRtcEngine.setVideoProfile(options.getInt("videoProfile"), options.getBoolean("swapWidthAndHeight")); //视频配置，
         mRtcEngine.enableWebSdkInteroperability(true);  //设置和web通信
         mRtcEngine.setChannelProfile(options.getInt("channelProfile")); //设置模式
         mRtcEngine.setClientRole(options.getInt("clientRole"), null); //设置角色
@@ -122,4 +127,6 @@ public class AgoraManager {
     public SurfaceView getSurfaceView(int uid) {
         return mSurfaceViews.get(uid);
     }
+
+
 }
