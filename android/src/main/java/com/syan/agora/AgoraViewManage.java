@@ -1,7 +1,6 @@
 package com.syan.agora;
 
 import android.view.SurfaceView;
-import android.view.View;
 
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -14,6 +13,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 public class AgoraViewManage extends SimpleViewManager<AgoraVideoView> {
 
     public static final String REACT_CLASS = "RCTAgoraView";
+
+    public SurfaceView surfaceView;
 
     @Override
     public String getName() {
@@ -28,19 +29,25 @@ public class AgoraViewManage extends SimpleViewManager<AgoraVideoView> {
     @ReactProp(name = "showLocalVideo")
     public void setShowLocalVideo(final AgoraVideoView agoraVideoView, boolean showLocalVideo) {
 
-        if (showLocalVideo) {
-            SurfaceView surfaceView = AgoraManager.getInstance().getLocalSurfaceView();
-            surfaceView.setVisibility(View.VISIBLE);
-            agoraVideoView.addView(surfaceView);
-        }
+        AgoraManager.getInstance().setupLocalVideo();
+        surfaceView = AgoraManager.getInstance().getLocalSurfaceView();
+        //surfaceView.setVisibility(View.VISIBLE);
+        agoraVideoView.addView(surfaceView);
+//        surfaceView.setZOrderMediaOverlay(true);
+
+    }
+
+    @ReactProp(name = "zOrderMediaOverlay")
+    public void setZOrderMediaOverlay(final AgoraVideoView agoraVideoView, boolean zOrderMediaOverlay) {
+        surfaceView.setZOrderMediaOverlay(zOrderMediaOverlay);
     }
 
     @ReactProp(name = "remoteUid")
     public void setRemoteUid(final AgoraVideoView agoraVideoView, int remoteUid) {
         AgoraManager.getInstance().setupRemoteVideo(remoteUid);
-        SurfaceView surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
-        surfaceView.setVisibility(View.VISIBLE);
+        surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
+        //surfaceView.setVisibility(View.VISIBLE);
         agoraVideoView.addView(surfaceView);
-        surfaceView.setZOrderMediaOverlay(true);
+//        surfaceView.setZOrderMediaOverlay(true);
     }
 }

@@ -1,8 +1,13 @@
-[![QQ Group](https://img.shields.io/badge/QQ%20Group-471757030-red.svg)]()
+##### 有任何问题欢迎加入QQ群进行反馈  471757030
 
 # react-native-agora
 
-## Installation and linking libraries
+## 功能介绍
+
+- 支持 iOS Android  声网Agora视频通讯SDK
+- 支持 直播 多人视频会议 语音 功能
+
+## 安装使用
 
 Install with npm:
 
@@ -69,16 +74,20 @@ Add following to `AndroidManifest.xml`
 
 ## Documentation
 
-[声网API文档](https://docs.agora.io/cn/1.11.1/user_guide/API/ios_api_live_cn.html)
+[声网API文档](https://document.agora.io/cn/1.12/api/)
 
 ##### RtcEngine方法
 
 | Property                         | Type                                     | Description                           |
 | -------------------------------- | ---------------------------------------- | ------------------------------------- |
-| init                             | object {appid: 'agora注册的应用id', channelProfile: '频道模式', videoProfile: '视频模式', clientRole: '角色'} | 初始化Agora引擎                            |
+| init                             | object {appid: 'agora注册的应用id', channelProfile: '频道模式', videoProfile: '视频模式', clientRole: '角色', swapWidthAndHeight: 'bool值'} | 初始化Agora引擎                            |
 | joinChannel                      | string channelName （房间名称）   number uid （用户设置的uid 传0系统会自动分配） | 加入房间                                  |
 | leaveChannel                     |                                          | 离开频道                                  |
 | destroy                          |                                          | 销毁引擎实例                                |
+| configPublisher                     | object{} config参数请前往Agora文档查看                                        | 配置旁路直播推流方法                               |
+| setLocalRenderMode                     | number mode (1 2 3)                                        | 设置本地视频显示模式                                |
+| setRemoteRenderMode                     | number uid  number mode (1 2 3)                                          | 设置远端视频显示模式                                |
+| enableAudioVolumeIndication                     | number interval (时间间隔) number smooth(平滑系数。可以设置为 3)                                         | 启用说话者音量提示                                |
 | startPreview                     |                                          | 开启视频预览                                |
 | stopPreview                      |                                          | 关闭视频预览                                |
 | switchCamera                     |                                          | 切换前置/后置摄像头                            |
@@ -92,8 +101,8 @@ Add following to `AndroidManifest.xml`
 | enableLocalVideo                 | bool (default false)                     | 禁用本地视频功能                              |
 | muteAllRemoteVideoStreams        | bool (default false)                     | 暂停所有远端视频流                             |
 | muteRemoteVideoStream            | number uid（用户uid） bool  mute（是否暂停）       | 暂停指定远端视频流                             |
-| startRecordingService (ios only) | string  recordingKey                     | 启动服务端录制服务                             |
-| stopRecordingService (ios only)  | string  recordingKey                     | 停止服务端录制服务                             |
+| startRecordingService (iOS only) | string  recordingKey                     | 启动服务端录制服务                             |
+| stopRecordingService (iOS only)  | string  recordingKey                     | 停止服务端录制服务                             |
 | getSdkVersion                    | callback                                 | 获取版本号                                 |
 
 ##### 原生通知事件
@@ -106,7 +115,8 @@ RtcEngine.eventEmitter({
   onUserJoined: data => {},
   onError: data => {},
   onWarning: data => {},
-  onLeaveChannel: data => {}
+  onLeaveChannel: data => {},
+  onAudioVolumeIndication: data => {}
 })
 ```
 
@@ -119,6 +129,8 @@ RtcEngine.eventEmitter({
 | onError                   | 错误信息         |
 | onWarning                 | 警告           |
 | onLeaveChannel            | 退出频道         |
+| onAudioVolumeIndication            | 音量提示回调         |
+
 
 ##### AgoraView 组件
 
@@ -126,234 +138,32 @@ RtcEngine.eventEmitter({
 | -------------- | -------------------- |
 | showLocalVideo | 是否显示本地视频（bool）       |
 | remoteUid      | 显示远程视频（number 传入uid） |
+| zOrderMediaOverlay (Android only)      | 多视频界面覆盖 设置为true优先在上层（bool） |
 
-## Usage
+
+## 运行示例
 
 [Example](https://github.com/DBshaoYan/RNAgoraExample)
 
-```
-import React, {Component} from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    TouchableOpacity,
-    Image,
-    Dimensions
-} from 'react-native';
 
-const {width, height} = Dimensions.get('window');
+## 更新信息
 
-import {RtcEngine, AgoraView} from 'react-native-agora'
+#### 1.0.8
 
-export default class Meeting extends Component {
+ - 更新 Agora SDK 为 1.12
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            remotes: [],
-            isJoinSuccess: false,
-            isSpeaker: false,
-            isMute: false
-        };
-    }
+ - init 不再默认开启视频预览 根据自己需求和时机调用startPreview
 
-    componentWillMount() {
+ - init options 新增参数  是否交换宽和高 swapWidthAndHeight 默认false
 
-        //初始化Agora
-        const options = {
-            appid: '前往Agora官网进行申请--https://www.agora.io/cn/',
-            channelProfile: 1,
-            videoProfile: 40,
-            clientRole: 1,
-        };
-        RtcEngine.init(options);
-    }
+ - 新增方法 配置旁路直播推流方法 configPublisher
 
-    componentDidMount() {
+ - 新增方法 设置本地视频显示模式 setLocalRenderMode
 
-        //加入房间
-        RtcEngine.joinChannel();
+ - 新增方法 设置远端视频显示模式 setRemoteRenderMode
 
-        //所以的原生通知统一管理
-        RtcEngine.eventEmitter({
-            onFirstRemoteVideoDecoded: (data) => {
-                console.log(data);
-                //有远程视频加入 返回重要的  uid  AgoraView 根据uid 来设置remoteUid值
-                const {remotes} = this.state;
+ - 新增方法 启用说话者音量提示 enableAudioVolumeIndication
 
-                let arr = [...remotes];
-                let sign = false;
-                arr.forEach(v => {
-                    sign = v === data.uid
-                });
+ - 新增音量提示回调 onAudioVolumeIndication
 
-                if (!sign) {
-                    arr.push(data.uid)
-                }
-
-                this.setState({
-                    remotes: arr
-                })
-            },
-            onUserOffline: (data) => {
-             	console.log(data);
-              	//有人离开了！
-                const {remotes} = this.state;
-
-                let arr = [...remotes];
-
-                let newArr = [];
-                newArr = arr.filter(v => {
-                    return v !== data.uid
-                });
-
-                this.setState({
-                    remotes: newArr
-                });
-            },
-            onJoinChannelSuccess: (data) => {
-                console.log(data);
- 			   //加入房间成功!
-                this.setState({
-                    isJoinSuccess: true
-                });
-            },
-            onUserJoined: (data) => {
-                console.log(data);
-                //有人来了!
-            },
-            onError: (data) => {
-                console.log(data);
-                //错误!
-                RtcEngine.leaveChannel();
-            }
-        })
-    }
-
-    componentWillUnmount() {
-        RtcEngine.removeEmitter()
-    }
-
-    handlerCancel = () => {
-        RtcEngine.leaveChannel();
-    };
-
-    handlerSwitchCamera = () => {
-        RtcEngine.switchCamera();
-    };
-
-    handlerMuteAllRemoteAudioStreams = () => {
-        this.setState({
-            isMute: !this.state.isMute
-        }, () => {
-            RtcEngine.muteAllRemoteAudioStreams(this.state.isMute)
-        })
-    };
-
-    handlerSetEnableSpeakerphone = () => {
-
-        this.setState({
-            isSpeaker: !this.state.isSpeaker
-        }, () => {
-            RtcEngine.setEnableSpeakerphone(this.state.isSpeaker)
-        });
-
-    };
-
-    render() {
-
-        const {isMute, isSpeaker, remotes, isJoinSuccess} = this.state;
-
-        if (!isJoinSuccess) {
-            return(
-                <View style={{flex:1, backgroundColor:'#fff', justifyContent:'center', alignItems:'center'}}>
-                    <Text>正在创建视频会议...</Text>
-                </View>
-            )
-        }
-
-        return (
-            <View style={styles.container}>
-                <AgoraView style={styles.localView} showLocalVideo={true} />
-                <View style={styles.absView}>
-                    <View style={styles.videoView}>
-                        {remotes.map((v, k) => {
-                            return (
-                                <AgoraView
-                                    style={styles.remoteView}
-                                    key={k}
-                                    remoteUid={v}
-                                />
-                            )
-                        })}
-                    </View>
-                    <View>
-                        <TouchableOpacity
-                            style={{alignSelf: 'center'}}
-                            onPress={this.handlerCancel}>
-                            <Image
-                                style={{width: 60, height: 60}}
-                                source={require('../images/btn_endcall.png')}/>
-                        </TouchableOpacity>
-                        <View style={styles.bottomView}>
-                            <TouchableOpacity onPress={this.handlerMuteAllRemoteAudioStreams} activeOpacity={.7}>
-                                <Image
-                                    style={{width: 50, height: 50}}
-                                    source={ isMute ? require('../images/icon_muted.png') : require('../images/btn_mute.png')}/>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={this.handlerSwitchCamera} activeOpacity={.7}>
-                                <Image
-                                    style={{width: 50, height: 50}}
-                                    source={ require('../images/btn_switch_camera.png')}/>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={this.handlerSetEnableSpeakerphone} activeOpacity={.7}>
-                                <Image
-                                    style={{width: 50, height: 50}}
-                                    source={isSpeaker ? require('../images/icon_speaker.png') : require('../images/btn_speaker.png')}/>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                </View>
-            </View>
-        );
-    }
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F4F4F4'
-    },
-    absView: {
-        position: 'absolute',
-        top: 20,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        justifyContent: 'space-between'
-    },
-    videoView: {
-        padding: 5,
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        zIndex: 100
-    },
-    localView: {
-        flex: 1
-    },
-    remoteView: {
-        width: (width - 40) / 3,
-        height: (width - 40) / 3,
-        margin: 5
-    },
-    bottomView: {
-        padding: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-around'
-    }
-});
-```
+ - Android AgoraView 新增zOrderMediaOverlay属性 解决多视频界面覆盖 设置为true优先在上层
