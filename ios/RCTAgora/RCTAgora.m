@@ -59,11 +59,8 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     //启用双流模式
     [self.rtcEngine enableDualStreamMode:YES];
     [self.rtcEngine enableVideo];
-    [self.rtcEngine setVideoProfile:[options[@"videoProfile"] integerValue]swapWidthAndHeight:YES];
+    [self.rtcEngine setVideoProfile:[options[@"videoProfile"] integerValue]swapWidthAndHeight:[options[@"swapWidthAndHeight"]boolValue]];
     [self.rtcEngine setClientRole:[options[@"clientRole"] integerValue] withKey:nil];
-    
-    //开启预览
-    [self.rtcEngine startPreview];
     
     //Agora Native SDK 与 Agora Web SDK 间的互通
     [self.rtcEngine enableWebSdkInteroperability:YES];
@@ -113,8 +110,47 @@ RCT_EXPORT_METHOD(setupRemoteVideo:(NSDictionary *)options){
 //开启视频预览
 RCT_EXPORT_METHOD(startPreview){
     [self.rtcEngine startPreview];
-    
 }
+
+//配置旁路直播推流(configPublisher)
+//请确保用户已经调用 setClientRole() 且已将用户角色设为主播
+//主播必须在加入频道前调用本章 API
+RCT_EXPORT_METHOD(configPublisher:(NSDictionary *)config){
+    AgoraPublisherConfiguration *apc = [AgoraPublisherConfiguration new];
+    
+    apc.width = [config[@"width"] integerValue];  //旁路直播的输出码流的宽度
+    apc.height = [config[@"height"] integerValue]; //旁路直播的输出码流的高度
+    apc.framerate = [config[@"framerate"] integerValue]; //旁路直播的输出码率帧率
+    apc.bitrate = [config[@"bitrate"] integerValue]; //旁路直播输出码流的码率
+    apc.defaultLayout = [config[@"defaultLayout"] integerValue]; //设置流生命周期
+    apc.lifeCycle = [config[@"lifeCycle"] integerValue]; //默认合图布局
+    apc.publishUrl = config[@"publishUrl"]; //合图推流地址
+    apc.rawStreamUrl = config[@"rawStreamUrl"]; //单流地址
+    apc.extraInfo = config[@"extraInfo"]; //其他信息
+    apc.owner = [config[@"owner"] boolValue]; //是否将当前主播设为该 RTMP 流的主人
+  
+    [self.rtcEngine configPublisher:apc];
+}
+
+//设置本地视频显示模式
+RCT_EXPORT_METHOD(setLocalRenderMode:(NSUInteger)mode){
+    [self.rtcEngine setLocalRenderMode:mode];
+}
+
+//设置远端视频显示模式
+RCT_EXPORT_METHOD(setRemoteRenderMode:(NSUInteger)uid mode:(NSUInteger)mode){
+    [self.rtcEngine setRemoteRenderMode:uid mode:mode];
+}
+
+//启用说话者音量提示
+RCT_EXPORT_METHOD(enableAudioVolumeIndication:(NSUInteger)interval smooth:(NSUInteger)smooth){
+    [self.rtcEngine enableAudioVolumeIndication:interval smooth:smooth];
+}
+
+//开启屏幕共享
+//RCT_EXPORT_METHOD(startScreenCapture:(NSUInteger)windowId){
+//
+//}
 
 //关闭视频预览
 RCT_EXPORT_METHOD(stopPreview){
@@ -261,6 +297,25 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onUserOffline";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
+    
+    [self sendEvent:params];
+}
+
+/*
+ 音量提示回调
+ 需要开启enableAudioVolumeIndication
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine reportAudioVolumeIndicationOfSpeakers:(NSArray*)speakers totalVolume:(NSInteger)totalVolume {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onAudioVolumeIndication";
+    
+    NSMutableArray *arr = [NSMutableArray array];
+    for (AgoraRtcAudioVolumeInfo *obj in speakers) {
+        [arr addObject:@{@"uid":[NSNumber numberWithInteger:obj.uid], @"volume":[NSNumber numberWithInteger:obj.volume]}];
+    }
+    
+    params[@"speakers"] = arr;
+    params[@"totalVolume"] = [NSNumber numberWithInteger:totalVolume];
     
     [self sendEvent:params];
 }

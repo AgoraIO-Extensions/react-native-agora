@@ -5,7 +5,8 @@
 import  React, {Component, PropTypes} from 'react'
 import {
     requireNativeComponent,
-    View
+    View,
+    Platform
 } from 'react-native'
 
 export default class AgoraView extends Component {
@@ -20,6 +21,7 @@ export default class AgoraView extends Component {
 AgoraView.propTypes = {
     showLocalVideo: PropTypes.bool,
     remoteUid: PropTypes.number,
+    zOrderMediaOverlay: PropTypes.bool,
     ...View.propTypes
 };
 

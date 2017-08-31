@@ -39,7 +39,6 @@ typedef NS_ENUM(NSInteger, AgoraRtcWarningCode) {
     AgoraRtc_Warn_Adm_PlaybackMalfunction = 1020,
     AgoraRtc_Warn_Adm_RecordMalfunction = 1021,
     AgoraRtc_Warn_Adm_Interruption = 1025,
-    AgoraRtc_Warn_Adm_RouteChange = 1026,
     AgoraRtc_Warn_Apm_Howling = 1051,
 };
 
@@ -188,15 +187,21 @@ typedef NS_ENUM(NSInteger, AgoraRtcVideoStreamType) {
     AgoraRtc_VideoStream_Low = 1,
 };
 
-typedef NS_ENUM(NSInteger, AudioOutputRouting)
+typedef NS_ENUM(NSInteger, AgoraRtcAudioOutputRouting)
 {
-    AudioOutputRouting_Default = -1,
-    AudioOutputRouting_Headset = 0,
-    AudioOutputRouting_Earpiece = 1,
-    AudioOutputRouting_HeadsetNoMic = 2,
-    AudioOutputRouting_Speakerphone = 3,
-    AudioOutputRouting_Loudspeaker = 4,
-    AudioOutputRouting_HeadsetBluetooth = 5
+    AgoraRtc_AudioOutputRouting_Default = -1,
+    AgoraRtc_AudioOutputRouting_Headset = 0,
+    AgoraRtc_AudioOutputRouting_Earpiece = 1,
+    AgoraRtc_AudioOutputRouting_HeadsetNoMic = 2,
+    AgoraRtc_AudioOutputRouting_Speakerphone = 3,
+    AgoraRtc_AudioOutputRouting_Loudspeaker = 4,
+    AgoraRtc_AudioOutputRouting_HeadsetBluetooth = 5
+};
+
+typedef NS_ENUM(NSInteger, AgoraRtcAudioRecordingQuality) {
+    AgoraRtc_AudioRecordingQuality_Low = 0,
+    AgoraRtc_AudioRecordingQuality_Medium = 1,
+    AgoraRtc_AudioRecordingQuality_High = 2
 };
 
 typedef NS_ENUM(NSUInteger, AgoraRtcLogFilter) {
@@ -372,6 +377,9 @@ __attribute__((visibility("default"))) @interface AgoraPublisherConfiguration : 
 @property (assign, nonatomic) NSInteger bitrate;
 @property (assign, nonatomic) NSInteger defaultLayout;
 @property (assign, nonatomic) AgoraRtmpStreamLifeCycle lifeCycle;
+@property (assign, nonatomic) NSInteger injectStreamWidth;
+@property (assign, nonatomic) NSInteger injectStreamHeight;
+@property (copy, nonatomic) NSString* injectStreamUrl;
 @property (copy, nonatomic) NSString* publishUrl;
 @property (copy, nonatomic) NSString* rawStreamUrl;
 @property (copy, nonatomic) NSString* extraInfo;
@@ -387,6 +395,7 @@ __attribute__((visibility("default"))) @interface AgoraPublisherConfigurationBui
 - (AgoraPublisherConfigurationBuilder *) setPublisherUrl:(NSString*)url;
 - (AgoraPublisherConfigurationBuilder *) setRawStreamUrl:(NSString*)url;
 - (AgoraPublisherConfigurationBuilder *) setExtraInfo:(NSString *)info;
+- (AgoraPublisherConfigurationBuilder *) injectStream:(NSString *)url width:(NSInteger)width height:(NSInteger)height;
 - (AgoraPublisherConfiguration *) build;
 @end
 
@@ -500,7 +509,7 @@ __attribute__((visibility("default"))) @interface AgoraPublisherConfigurationBui
  *  @param engine The engine kit
  *  @param routing the current audio output routing
  */
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine didAudioRouteChanged:(AudioOutputRouting)routing;
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didAudioRouteChanged:(AgoraRtcAudioOutputRouting)routing;
 
 
 /**
@@ -548,6 +557,13 @@ __attribute__((visibility("default"))) @interface AgoraPublisherConfigurationBui
  *  @param engine The engine kit
  */
 - (void)rtcEngineMediaEngineDidAudioMixingFinish:(AgoraRtcEngineKit *)engine;
+
+/**
+ *  Event of meida engine finish audio mixing.
+ *
+ *  @param engine The engine kit
+ */
+- (void)rtcEngineMediaEngineDidAudioEffectFinish:(AgoraRtcEngineKit *)engine soundId:(NSInteger)soundId;
 
 /**
  *  Event of camera opened
@@ -723,6 +739,14 @@ __attribute__((visibility("default"))) @interface AgoraPublisherConfigurationBui
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine firstRemoteAudioFrameOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed;
 
+
+/**
+ *  The sdk reports who is active speaker in the channel
+ *
+ *  @param engine      The engine kit
+ *  @param speakerUid  The speaker who is talking
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine activeSpeaker:(NSUInteger)speakerUid;
 @end
 
 
@@ -1004,10 +1028,12 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineKit : NSObject
  *  Start recording conversation to file specified by the file path.
  *
  *  @param filePath file path to save recorded conversation.
+ *  @param quality  encode quality for the record file
  *
  *  @return 0 when executed successfully. return negative value if failed.
  */
-- (int)startAudioRecording:(NSString*)filePath;
+- (int)startAudioRecording:(NSString*)filePath
+                   quality:(AgoraRtcAudioRecordingQuality)quality;
 
 
 /**
@@ -1029,23 +1055,9 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineKit : NSObject
 - (int)getAudioMixingCurrentPosition;
 - (int)setAudioMixingPosition:(NSInteger) pos;
 
-/**
- *  Start screen capture
- *
- *  @return 0 when executed successfully. return negative value if failed.
- */
-- (int)startScreenCapture:(NSUInteger)windowId;
 
 
-/**
- *  Stop screen capture
- *
- *  @return 0 when executed successfully. return negative value if failed.
- */
-- (int)stopScreenCapture;
-
-
-- (int)setScreenCaptureId:(NSUInteger)windowId;
+//- (int)setScreenCaptureId:(NSUInteger)windowId;
 
 
 /**
@@ -1322,6 +1334,20 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineKit : NSObject
 - (int)clearVideoCompositingLayout;
 
 #if (!(TARGET_OS_IPHONE) && (TARGET_OS_MAC))
+/**
+ *  Start screen capture
+ *
+ *  @return 0 when executed successfully. return negative value if failed.
+ */
+- (int)startScreenCapture:(NSUInteger)windowId withCaptureFreq: (int) captureFreq AndRect :(CGRect)rect;
+
+
+/**
+ *  Stop screen capture
+ *
+ *  @return 0 when executed successfully. return negative value if failed.
+ */
+- (int)stopScreenCapture;
 
 - (void) monitorDeviceChange: (BOOL)enabled;
 - (NSArray*) enumerateDevices:(AgoraRtcDeviceType)type;  // return array of AgoraRtcDeviceInfo
@@ -1340,12 +1366,11 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineKit : NSObject
 - (int) stopCaptureDeviceTest;
 #endif
 
-- (int) checkAVUrlCompatibility:(NSURL*)url
-                 completionBlock:(void(^)())checkCompletionBlock;
-
 //Audio Effects
 - (double) getEffectsVolume;
 - (int) setEffectsVolume:(double) volume;
+- (int) setVolumeOfEffect:(int) soundId
+               withVolume:(double) volume;
 - (int) playEffect:(int) soundId
           filePath:(NSString*)filePath
               loop:(BOOL)loop
