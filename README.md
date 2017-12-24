@@ -74,7 +74,7 @@ Add following to `AndroidManifest.xml`
 
 ## Documentation
 
-[声网API文档](https://document.agora.io/cn/1.12/api/)
+[声网API文档](https://docs.agora.io/cn/2.0.2/product/Video/API%20Reference/communication_android_video?platform=Android)
 
 ##### RtcEngine方法
 
@@ -149,7 +149,7 @@ RtcEngine.eventEmitter({
 - 更新示例 React-Native为0.51 
 - 优化代码
 
-![](http://oy5rz3rfs.bkt.clouddn.com/github/IMG_1058.PNG)
+![](http://oy5rz3rfs.bkt.clouddn.com/github/IMG_1058.PNG?imageView/2/w/375)
 
 [Example](https://github.com/DBshaoYan/RNAgoraExample)
 
