@@ -120,18 +120,24 @@ enum WARN_CODE_TYPE
     WARN_OPEN_CHANNEL_TIMEOUT = 106,
     WARN_OPEN_CHANNEL_REJECTED = 107,
 
+    // sdk: 100~1000
+    WARN_SWITCH_LIVE_VIDEO_TIMEOUT = 111,
+    WARN_SET_CLIENT_ROLE_TIMEOUT = 118,
+    WARN_OPEN_CHANNEL_INVALID_TICKET = 121,
+    WARN_OPEN_CHANNEL_TRY_NEXT_VOS = 122,
     WARN_AUDIO_MIXING_OPEN_ERROR = 701,
+
     WARN_ADM_RUNTIME_PLAYOUT_WARNING = 1014,
     WARN_ADM_RUNTIME_RECORDING_WARNING = 1016,
     WARN_ADM_RECORD_AUDIO_SILENCE = 1019,
     WARN_ADM_PLAYOUT_MALFUNCTION = 1020,
     WARN_ADM_RECORD_MALFUNCTION = 1021,
+    WARN_ADM_WIN_CORE_NO_RECORDING_DEVICE = 1322,
+    WARN_ADM_WIN_CORE_NO_PLAYOUT_DEVICE = 1323,
+    WARN_ADM_WIN_CORE_IMPROPER_CAPTURE_RELEASE = 1324,
     WARN_ADM_RECORD_AUDIO_LOWLEVEL = 1031,
+    WARN_ADM_WINDOWS_NO_DATA_READY_EVENT = 1040,
     WARN_APM_HOWLING = 1051,
-
-    // sdk: 100~1000
-    WARN_SWITCH_LIVE_VIDEO_TIMEOUT = 111,
-	WARN_SET_CLIENT_ROLE_TIMEOUT = 118,
 };
 
 enum ERROR_CODE_TYPE
@@ -171,6 +177,7 @@ enum ERROR_CODE_TYPE
 	ERR_TOO_MANY_DATA_STREAMS = 116,
 	ERR_STREAM_MESSAGE_TIMEOUT = 117,
     ERR_SET_CLIENT_ROLE_NOT_AUTHORIZED = 119,
+    ERR_CLIENT_IS_BANNED_BY_SERVER = 123,
 
     //1001~2000
     ERR_LOAD_MEDIA_ENGINE = 1001,
@@ -189,11 +196,13 @@ enum ERROR_CODE_TYPE
     ERR_ADM_RUNTIME_PLAYOUT_ERROR = 1015,
     ERR_ADM_RUNTIME_RECORDING_ERROR = 1017,
     ERR_ADM_RECORD_AUDIO_FAILED = 1018,
-    ERR_ADM_INIT_LOOPBACK  = 1022,
-    ERR_ADM_START_LOOPBACK  = 1023,
+    ERR_ADM_INIT_LOOPBACK = 1022,
+    ERR_ADM_START_LOOPBACK = 1023,
+    ERR_ADM_NO_PERMISSION = 1027,
     // 1025, as warning for interruption of adm on ios
     // 1026, as warning for route change of adm on ios
-  
+    ERR_ADM_ANDROID_JNI_JAVA_RECORD_ERROR = 1115,
+
     // VDM error code starts from 1500
     ERR_VDM_CAMERA_NOT_AUTHORIZED  = 1501,
 
@@ -233,6 +242,8 @@ enum MEDIA_ENGINE_EVENT_CODE_TYPE
     MEDIA_ENGINE_RECORDING_WARNING = 2,
     MEDIA_ENGINE_PLAYOUT_WARNING = 3,
     MEDIA_ENGINE_AUDIO_FILE_MIX_FINISH = 10,
+    MEDIA_ENGINE_AUDIO_FAREND_MUSIC_BEGINS = 12,
+    MEDIA_ENGINE_AUDIO_FAREND_MUSIC_ENDS = 13,
     // media engine role changed
     MEDIA_ENGINE_ROLE_BROADCASTER_SOLO = 20,
     MEDIA_ENGINE_ROLE_BROADCASTER_INTERACTIVE = 21,
@@ -240,7 +251,10 @@ enum MEDIA_ENGINE_EVENT_CODE_TYPE
     MEDIA_ENGINE_ROLE_COMM_PEER = 23,
     MEDIA_ENGINE_ROLE_GAME_PEER = 24,
     // iOS adm sample rate changed
-    MEDIA_ENGINE_AUDIO_ADM_REQUIRE_RESTART = 110
+    MEDIA_ENGINE_AUDIO_ADM_REQUIRE_RESTART = 110,
+    MEDIA_ENGINE_AUDIO_ADM_SPECIAL_RESTART = 111,
+    // iOS keep AVAudioSession settings
+    MEDIA_ENGINE_AUDIO_KEEP_SESSION_CONFIG = 120
 };
 
 enum MEDIA_DEVICE_STATE_TYPE
@@ -258,6 +272,7 @@ enum MEDIA_DEVICE_TYPE
     AUDIO_RECORDING_DEVICE = 1,
     VIDEO_RENDER_DEVICE = 2,
     VIDEO_CAPTURE_DEVICE = 3,
+    AUDIO_APPLICATION_PLAYOUT_DEVICE = 4,
 };
 
 enum AUDIO_RECORDING_QUALITY_TYPE
@@ -330,6 +345,27 @@ enum VIDEO_PROFILE_TYPE
     VIDEO_PROFILE_4K = 70,          // 3840x2160 30   8910
     VIDEO_PROFILE_4K_3 = 72,        // 3840x2160 60   13500
     VIDEO_PROFILE_DEFAULT = VIDEO_PROFILE_360P,
+};
+
+enum AUDIO_PROFILE_TYPE // sample rate, bit rate, mono/stereo, speech/music codec
+{
+    AUDIO_PROFILE_DEFAULT = 0, // use default settings
+    AUDIO_PROFILE_SPEECH_STANDARD = 1, // 32Khz, 18kbps, mono, speech
+    AUDIO_PROFILE_MUSIC_STANDARD = 2, // 48Khz, 50kbps, mono, music
+    AUDIO_PROFILE_MUSIC_STANDARD_STEREO = 3, // 48Khz, 50kbps, stereo, music
+    AUDIO_PROFILE_MUSIC_HIGH_QUALITY = 4, // 48Khz, 128kbps, mono, music
+    AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO = 5, // 48Khz, 128kbps, stereo, music
+    AUDIO_PROFILE_NUM = 6,
+};
+
+enum AUDIO_SCENARIO_TYPE // set a suitable scenario for your app type
+{
+    AUDIO_SCENARIO_DEFAULT = 0,
+    AUDIO_SCENARIO_CHATROOM = 1,
+    AUDIO_SCENARIO_EDUCATION = 2,
+    AUDIO_SCENARIO_GAME_STREAMING = 3,
+    AUDIO_SCENARIO_SHOWROOM = 4,
+    AUDIO_SCENARIO_NUM = 5,
 };
 
 enum CHANNEL_PROFILE_TYPE
@@ -707,6 +743,14 @@ public:
     }
 
     /**
+     * When far-end rhythm begins/ends, these functions will be called
+     */
+    virtual void onRemoteAudioMixingBegin() {
+    }
+    virtual void onRemoteAudioMixingEnd() {
+    }
+
+    /**
     * When audio effect playback finished, this function will be called
     */
     virtual void onAudioEffectFinished(int soundId) {
@@ -878,7 +922,19 @@ public:
 		(void)enabled;
 	}
 	
-	/**
+    /**
+    * when remote user enable local video function, the function will be called
+    * @param [in] uid
+    *        the UID of the remote user
+    * @param [in] enabled
+    *        true: the remote user has enabled local video function, false: the remote user has disabled local video function
+    */
+    virtual void onUserEnableLocalVideo(uid_t uid, bool enabled) {
+        (void)uid;
+        (void)enabled;
+    }
+    
+    /**
     * when api call executed completely, the function will be called
     * @param [in] api
     *        the api name
@@ -927,6 +983,11 @@ public:
     * when local user disconnected by accident, the function will be called(then SDK will try to reconnect itself)
     */
     virtual void onConnectionInterrupted() {}
+
+    /**
+     * when local user is banned by the server, the function will be called
+     */
+    virtual void onConnectionBanned() {}
     
     virtual void onRefreshRecordingServiceStatus(int status) {
         (void)status;
@@ -1001,6 +1062,18 @@ public:
     */
     virtual void onActiveSpeaker(uid_t uid) {
         (void)uid;
+    }
+
+    /**
+    * when client role is successfully changed, the function will be called
+    */
+    virtual void onClientRoleChanged(CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole) {
+    }
+
+    virtual void onAudioDeviceVolumeChanged(MEDIA_DEVICE_TYPE deviceType, int volume, bool muted) {
+        (void)deviceType;
+        (void)volume;
+        (void)muted;
     }
 };
 
@@ -1117,6 +1190,10 @@ public:
     */
     virtual int setDevice(const char deviceId[MAX_DEVICE_ID_LENGTH]) = 0;
 
+    virtual int setApplicationVolume(int volume) = 0;
+    virtual int getApplicationVolume(int& volume) = 0;
+    virtual int setApplicationMute(bool mute) = 0;
+    virtual int isApplicationMute(bool& mute) = 0;
     /**
     * release the resource
     */
@@ -1201,6 +1278,11 @@ public:
     * @return return 0 if success or an error code
     */
     virtual int getRecordingDeviceVolume(int *volume) = 0;
+  
+    virtual int setPlaybackDeviceMute(bool mute) = 0;
+    virtual int getPlaybackDeviceMute(bool *mute) = 0;
+    virtual int setRecordingDeviceMute(bool mute) = 0;
+    virtual int getRecordingDeviceMute(bool *mute) = 0;
 
     /**
     * test the playback audio device to know whether it can worked well
@@ -1399,6 +1481,8 @@ public:
     * @return return 0 if success or an error code
     */
     virtual int disableAudio() = 0;
+
+    virtual int setAudioProfile(AUDIO_PROFILE_TYPE profile, AUDIO_SCENARIO_TYPE scenario) = 0;
 
     /**
     * get self call id in the current channel
@@ -1723,7 +1807,12 @@ public:
     }
 
     int setRemoteVideoStreamType(uid_t uid, REMOTE_VIDEO_STREAM_TYPE streamType) {
-        return setObject("rtc.video.set_remote_video_stream", "{\"uid\":%u,\"stream\":%d}", uid, streamType);
+        return setParameters("{\"rtc.video.set_remote_video_stream\":{\"uid\":%u,\"stream\":%d}, \"che.video.setstream\":{\"uid\":%u,\"stream\":%d}}", uid, streamType, uid, streamType);
+//        return setObject("rtc.video.set_remote_video_stream", "{\"uid\":%u,\"stream\":%d}", uid, streamType);
+    }
+
+    int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType) {
+        return m_parameter ? m_parameter->setInt("rtc.video.set_remote_default_video_stream_type", streamType) : -ERR_NOT_INITIALIZED;
     }
 
     /**
@@ -1846,6 +1935,68 @@ public:
     int setAudioMixingPosition(int pos /*in ms*/) {
         return m_parameter ? m_parameter->setInt("che.audio.mixing.file.position", pos) : -ERR_NOT_INITIALIZED;
     }
+    /**
+     * Change the pitch of local speaker's voice
+     * @param [in] pitch
+     *        frequency, in the range of [0.5..2.0], default value is 1.0
+     *
+     * @return return 0 if success or an error code
+     */
+    int setLocalVoicePitch(double pitch) {
+        return m_parameter ? m_parameter->setInt(
+            "che.audio.game_local_pitch_shift",
+            static_cast<int>(pitch * 100)) : -ERR_NOT_INITIALIZED;
+    }
+    /**
+     * Set the audio ears back's volume and effect
+     * @param [in] volume
+     *        set volume of audio ears back, in the range of [0..100], default value is 100
+     *
+     * @return return 0 if success or an error code
+     */
+    int setInEarMonitoringVolume(int volume) {
+        return m_parameter ? m_parameter->setInt("che.audio.headset.monitoring.parameter", volume) : -ERR_NOT_INITIALIZED;
+    }
+    /**
+     *  set audio profile and scenario
+     *  including sample rate, bit rate, mono/stereo, speech/music codec
+     *
+     *  @param [in] profile
+     *              enumeration definition about the audio's samplerate, bitrate, mono/stereo, speech/music codec
+     *  @param [in] scenario
+     *              enumeration definition about the audio scenario
+     *
+     *  @return 0 when executed successfully. return negative value if failed.
+     */
+    int setAudioProfile(AUDIO_PROFILE_TYPE profile, AUDIO_SCENARIO_TYPE scenario) {
+        return setObject(
+            "che.audio.profile",
+            "{\"config\":%d,\"scenario\":%d}",
+            static_cast<int>(profile), static_cast<int>(scenario));
+    }
+
+    /**
+     * disable audio function in channel, which will be recovered when leave channel.
+     * @return return 0 if success or an error code
+     */
+    int pauseAudio() {
+        return m_parameter ? m_parameter->setBool("che.pause.audio", true) : -ERR_NOT_INITIALIZED;
+    }
+
+    /**
+     * resume audio function in channel.
+     * @return return 0 if success or an error code
+     */
+    int resumeAudio() {
+        return m_parameter ? m_parameter->setBool("che.pause.audio", false) : -ERR_NOT_INITIALIZED;
+    }
+
+    int setExternalAudioSource(bool enabled, int sampleRate, int channels) {
+        if (enabled)
+            return setParameters("{\"che.audio.external_capture\":true,\"che.audio.external_capture.push\":true,\"che.audio.set_capture_raw_audio_format\":{\"sampleRate\":%d,\"channelCnt\":%d,\"mode\":%d}}", sampleRate, channels, RAW_AUDIO_FRAME_OP_MODE_TYPE::RAW_AUDIO_FRAME_OP_MODE_READ_WRITE);
+        else
+            return setParameters("{\"che.audio.external_capture\":false,\"che.audio.external_capture.push\":false}");
+    }
 #if defined(__APPLE__)
     /**
      * start screen/windows capture
@@ -1869,6 +2020,20 @@ public:
     int stopScreenCapture() {
         return m_parameter ? m_parameter->setBool("che.video.stop_screen_capture", true) : -ERR_NOT_INITIALIZED;
     }
+
+    /**
+    * update screen capture region
+    *
+    *  @param rect     valid when windowId is 0; whole screen if rect is NULL.
+    *
+    *  @return return 0 if success or an error code
+    */
+    int updateScreenCaptureRegion(const Rect *rect) {
+      if (!rect)
+        return setObject("che.video.update_screen_capture_region", "{}");
+      else
+        return setObject("che.video.update_screen_capture_region", "{\"top\":%d,\"left\":%d,\"bottom\":%d,\"right\":%d}", rect->top, rect->left, rect->bottom, rect->right);
+    }
 #elif defined(_WIN32)
     /**
      * start screen/windows capture
@@ -1891,6 +2056,20 @@ public:
      */
     int stopScreenCapture() {
         return m_parameter ? m_parameter->setBool("che.video.stop_screen_capture", true) : -ERR_NOT_INITIALIZED;
+    }
+
+    /**
+    * update screen capture region
+    *
+    *  @param rect     valid when windowId is 0; whole screen if rect is NULL.
+    *
+    *  @return return 0 if success or an error code
+    */
+    int updateScreenCaptureRegion(const Rect *rect) {
+      if (!rect)
+        return setObject("che.video.update_screen_capture_region", "{}");
+      else
+        return setObject("che.video.update_screen_capture_region", "{\"top\":%d,\"left\":%d,\"bottom\":%d,\"right\":%d}", rect->top, rect->left, rect->bottom, rect->right);
     }
 #endif
 
@@ -1973,7 +2152,7 @@ public:
     }
 
     int enableDualStreamMode(bool enabled) {
-        return setParameters("{\"rtc.dual_stream_mode\":%s,\"che.video.enableLowBitRateStream\":%s}", enabled ? "true" : "false", enabled ? "true" : "false");
+        return setParameters("{\"rtc.dual_stream_mode\":%s,\"che.video.enableLowBitRateStream\":%d}", enabled ? "true" : "false", enabled ? 1 : 0);
     }
 
     int setRecordingAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall) {
