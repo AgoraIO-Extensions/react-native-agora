@@ -1,0 +1,6 @@
+framework module AgoraRtcEngineKit {
+    umbrella header "AgoraRtcEngineKit.h"
+    
+    export *
+    module * { export * }
+}

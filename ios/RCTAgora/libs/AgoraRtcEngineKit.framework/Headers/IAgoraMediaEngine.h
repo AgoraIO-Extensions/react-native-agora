@@ -12,6 +12,11 @@ namespace agora
 namespace media
 {
 
+enum MEDIA_SOURCE_TYPE {
+    AUDIO_PLAYOUT_SOURCE = 0,
+    AUDIO_RECORDING_SOURCE = 1,
+};
+
 class IAudioFrameObserver
 {
 public:
@@ -166,6 +171,7 @@ public:
   virtual int registerAudioFrameObserver(IAudioFrameObserver* observer) = 0;
   virtual int registerVideoFrameObserver(IVideoFrameObserver* observer) = 0;
   virtual int registerVideoRenderFactory(IExternalVideoRenderFactory* factory) = 0;
+  virtual int pushAudioFrame(MEDIA_SOURCE_TYPE type, IAudioFrameObserver::AudioFrame *frame, bool wrap = false){ return -1; }
 };
 
 } //media
