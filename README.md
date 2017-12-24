@@ -1,5 +1,7 @@
 ##### 有任何问题欢迎加入QQ群进行反馈  471757030
 
+## [下载App体验](https://www.pgyer.com/jianLive)
+
 # react-native-agora
 
 ## 功能介绍
