@@ -17,7 +17,6 @@ RCT_EXPORT_VIEW_PROPERTY(showLocalVideo, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(remoteUid, NSInteger)
 
 - (UIView *)view {
-
     return [RCTAgoraVideoView new];
 }
 

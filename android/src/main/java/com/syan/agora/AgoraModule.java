@@ -96,7 +96,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
          */
         @Override
         public void onAudioVolumeIndication(final AudioVolumeInfo[] speakers,
-                                             final int totalVolume ) {
+                                            final int totalVolume) {
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -107,6 +107,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                         WritableMap obj = Arguments.createMap();
                         obj.putInt("uid", speakers[i].uid);
                         obj.putInt("volume", speakers[i].volume);
+                        arr.pushMap(obj);
                     }
 
                     WritableMap map = Arguments.createMap();
@@ -221,7 +222,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 .owner(options.getBoolean("owner"))
                 .size(options.getInt("width"), options.getInt("height"))
                 .frameRate(options.getInt("framerate"))
-                .biteRate(options.getInt("bitrate"))
+//                .biteRate(options.getInt("bitrate"))
                 .defaultLayout(options.getInt("defaultLayout"))
                 .streamLifeCycle(options.getInt("lifeCycle"))
                 .rawStreamUrl(options.getString("rawStreamUrl"))
@@ -326,6 +327,24 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void muteRemoteVideoStream(int uid, boolean muted) {
         AgoraManager.getInstance().mRtcEngine.muteRemoteVideoStream(uid, muted);
+    }
+
+    //设置是否打开闪光灯
+    @ReactMethod
+    public void setCameraTorchOn(boolean isOn) {
+        AgoraManager.getInstance().mRtcEngine.setCameraTorchOn(isOn);
+    }
+
+    //设置是否开启人脸对焦功能
+    @ReactMethod
+    public void setCameraAutoFocusFaceModeEnabled(boolean enabled) {
+        AgoraManager.getInstance().mRtcEngine.setCameraAutoFocusFaceModeEnabled(enabled);
+    }
+
+    //修改默认的语音路由 True: 默认路由改为外放(扬声器) False: 默认路由改为听筒
+    @ReactMethod
+    public void setDefaultAudioRouteToSpeakerphone(boolean defaultToSpeaker) {
+        AgoraManager.getInstance().mRtcEngine.setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker);
     }
 
     //销毁引擎实例
