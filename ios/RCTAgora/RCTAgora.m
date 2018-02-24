@@ -34,6 +34,8 @@ RCT_EXPORT_MODULE();
     return @{};
 }
 
+NSInteger defaultDataStreamId = -1;
+
 /**
  *  初始化AgoraKit
  *
@@ -61,6 +63,9 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     [self.rtcEngine enableVideo];
     [self.rtcEngine setVideoProfile:[options[@"videoProfile"] integerValue]swapWidthAndHeight:[options[@"swapWidthAndHeight"]boolValue]];
     [self.rtcEngine setClientRole:[options[@"clientRole"] integerValue] withKey:nil];
+
+    // 创建默认数据通道
+    [self.rtcEngine createDataStream:&dataChannelId reliable:0 ordered:0];
 
     //Agora Native SDK 与 Agora Web SDK 间的互通
     [self.rtcEngine enableWebSdkInteroperability:YES];
