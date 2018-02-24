@@ -21,6 +21,7 @@ import io.agora.rtc.RtcEngine;
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 
 public class AgoraModule extends ReactContextBaseJavaModule {
+    private int defaultStreamId = -1;
 
     public AgoraModule(ReactApplicationContext context) {
 
@@ -89,6 +90,23 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 }
             });
 
+        }
+
+        // 接收到对方数据流消息的回调
+        @Override
+        public void onStreamMessage(final int uid, final int streamId, final byte[] data) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String msg = new String(data);
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onStreamMessage");
+                    map.putInt("uid", uid);
+                    map.putInt("streamId", streamId);
+                    map.putString("data", msg);
+                    commonEvent(map);
+                }
+            });
         }
 
         /**
@@ -188,6 +206,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void init(ReadableMap options) {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
+        this.defaultStreamId = AgoraManager.getInstance().mRtcEngine.createDataStream(options.getBoolean("reliable"), options.getBoolean("ordered"));
     }
 
     //进入房间
@@ -345,6 +364,18 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setDefaultAudioRouteToSpeakerphone(boolean defaultToSpeaker) {
         AgoraManager.getInstance().mRtcEngine.setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker);
+    }
+
+    // 建立数据通道
+    @ReactMethod
+    public void createDataStream(boolean reliable, boolean ordered, Callback callback) {
+        callback.invoke(AgoraManager.getInstance().mRtcEngine.createDataStream(reliable, ordered));
+    }
+
+    // 发送数据
+    @ReactMethod
+    public void sendStreamMessage(int streamId, String message, Callback onError) {
+        onError.invoke(AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamId > 0 ? streamId : this.defaultStreamId, message.getBytes()));
     }
 
     //销毁引擎实例

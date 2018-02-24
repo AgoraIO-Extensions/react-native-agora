@@ -82,7 +82,7 @@ Add following to `AndroidManifest.xml`
 
 | Property                         | Type                                     | Description                           |
 | -------------------------------- | ---------------------------------------- | ------------------------------------- |
-| init                             | object {appid: 'agora注册的应用id', channelProfile: '频道模式', videoProfile: '视频模式', clientRole: '角色', swapWidthAndHeight: 'bool值'} | 初始化Agora引擎                            |
+| init                             | object {appid: 'agora注册的应用id', channelProfile: '频道模式', videoProfile: '视频模式', clientRole: '角色', swapWidthAndHeight: 'bool值', reliable: 'bool值 - 默认数据流通道创建参数，参考 createDataStream', ordered: 'bool值 - 默认数据流通道创建参数，参考 createDataStream'} | 初始化Agora引擎                            |
 | joinChannel                      | string channelName （房间名称）   number uid （用户设置的uid 传0系统会自动分配） | 加入房间                                  |
 | leaveChannel                     |                                          | 离开频道                                  |
 | destroy                          |                                          | 销毁引擎实例                                |
@@ -109,6 +109,8 @@ Add following to `AndroidManifest.xml`
 | startRecordingService (iOS only) | string  recordingKey                     | 启动服务端录制服务                             |
 | stopRecordingService (iOS only)  | string  recordingKey                     | 停止服务端录制服务                             |
 | getSdkVersion                    | callback                                 | 获取版本号                                 |
+| createDataStream | (boolean reliable, boolean ordered, (streamId) => {}), 其中 reliable, ordered 请参考官方文档同名方法说明 | 创建数据流通道 |
+| sendStreamMessage | (number streamId, string message, (errorCode) => {})| 发送数据 |
 
 ##### 原生通知事件
 
@@ -121,7 +123,8 @@ RtcEngine.eventEmitter({
   onError: data => {},
   onWarning: data => {},
   onLeaveChannel: data => {},
-  onAudioVolumeIndication: data => {}
+  onAudioVolumeIndication: data => {},
+  onStreamMessage: ({uid, streamId, data}) => {}
 })
 ```
 
@@ -135,6 +138,7 @@ RtcEngine.eventEmitter({
 | onWarning                 | 警告           |
 | onLeaveChannel            | 退出频道         |
 | onAudioVolumeIndication            | 音量提示回调         |
+| onStreamMessage | 接收到对方数据流消息的回调 |
 
 
 ##### AgoraView 组件
@@ -157,6 +161,12 @@ RtcEngine.eventEmitter({
 
 
 ## 更新信息
+
+#### 1.1.1
+
+- 新增方法 创建数据流通道 createDataStream
+- 新增方法 发送数据流 sendStreamMessage
+- 新增监听数据流事件 onStreamMessage
 
 #### 1.0.9
 
