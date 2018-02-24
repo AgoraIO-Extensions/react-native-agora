@@ -206,7 +206,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void init(ReadableMap options) {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
-        this.defaultStreamId = AgoraManager.getInstance().mRtcEngine.createDataStream(options.getBoolean("reliable"), options.getBoolean("ordered"));
+        this.defaultStreamId = AgoraManager.getInstance().mRtcEngine.createDataStream(false, false);
     }
 
     //进入房间
