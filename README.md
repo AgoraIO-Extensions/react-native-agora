@@ -82,7 +82,7 @@ Add following to `AndroidManifest.xml`
 
 | Property                         | Type                                     | Description                           |
 | -------------------------------- | ---------------------------------------- | ------------------------------------- |
-| init                             | object {appid: 'agora注册的应用id', channelProfile: '频道模式', videoProfile: '视频模式', clientRole: '角色', swapWidthAndHeight: 'bool值', reliable: 'bool值 - 默认数据流通道创建参数，参考 createDataStream', ordered: 'bool值 - 默认数据流通道创建参数，参考 createDataStream'} | 初始化Agora引擎                            |
+| init                             | object {appid: 'agora注册的应用id', channelProfile: '频道模式', videoProfile: '视频模式', clientRole: '角色', swapWidthAndHeight: 'bool值'} | 初始化Agora引擎                            |
 | joinChannel                      | string channelName （房间名称）   number uid （用户设置的uid 传0系统会自动分配） | 加入房间                                  |
 | leaveChannel                     |                                          | 离开频道                                  |
 | destroy                          |                                          | 销毁引擎实例                                |
