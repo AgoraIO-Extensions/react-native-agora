@@ -21,7 +21,6 @@ import io.agora.rtc.RtcEngine;
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 
 public class AgoraModule extends ReactContextBaseJavaModule {
-    private int defaultStreamId = -1;
 
     public AgoraModule(ReactApplicationContext context) {
 
@@ -206,7 +205,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void init(ReadableMap options) {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
-        this.defaultStreamId = AgoraManager.getInstance().mRtcEngine.createDataStream(false, false);
     }
 
     //进入房间
@@ -375,7 +373,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     // 发送数据
     @ReactMethod
     public void sendStreamMessage(int streamId, String message, Callback onError) {
-        onError.invoke(AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamId > 0 ? streamId : this.defaultStreamId, message.getBytes()));
+        onError.invoke(AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamId, message.getBytes()));
     }
 
     //销毁引擎实例
