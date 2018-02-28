@@ -47,13 +47,13 @@ RCT_EXPORT_MODULE();
  *  @return 0 when executed successfully. return negative value if failed.
  */
 RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
-    
+
     [AgoraConst share].appid = options[@"appid"];
-    
+
     self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:options[@"appid"] delegate:self];
-    
+
     [AgoraConst share].rtcEngine = self.rtcEngine;
-    
+
     //频道模式
     [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
     //启用双流模式
@@ -61,10 +61,10 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     [self.rtcEngine enableVideo];
     [self.rtcEngine setVideoProfile:[options[@"videoProfile"] integerValue]swapWidthAndHeight:[options[@"swapWidthAndHeight"]boolValue]];
     [self.rtcEngine setClientRole:[options[@"clientRole"] integerValue] withKey:nil];
-    
+
     //Agora Native SDK 与 Agora Web SDK 间的互通
     [self.rtcEngine enableWebSdkInteroperability:YES];
-    
+
 }
 
 //加入房间
@@ -79,7 +79,7 @@ RCT_EXPORT_METHOD(leaveChannel){
     [self.rtcEngine leaveChannel:^(AgoraRtcStats *stat) {
         NSMutableDictionary *params = @{}.mutableCopy;
         params[@"type"] = @"onLeaveChannel";
-        
+
         [self sendEvent:params];
     }];
 }
@@ -117,7 +117,7 @@ RCT_EXPORT_METHOD(startPreview){
 //主播必须在加入频道前调用本章 API
 RCT_EXPORT_METHOD(configPublisher:(NSDictionary *)config){
     AgoraPublisherConfiguration *apc = [AgoraPublisherConfiguration new];
-    
+
     apc.width = [config[@"width"] integerValue];  //旁路直播的输出码流的宽度
     apc.height = [config[@"height"] integerValue]; //旁路直播的输出码流的高度
     apc.framerate = [config[@"framerate"] integerValue]; //旁路直播的输出码率帧率
@@ -128,7 +128,7 @@ RCT_EXPORT_METHOD(configPublisher:(NSDictionary *)config){
     apc.rawStreamUrl = config[@"rawStreamUrl"]; //单流地址
     apc.extraInfo = config[@"extraInfo"]; //其他信息
     apc.owner = [config[@"owner"] boolValue]; //是否将当前主播设为该 RTMP 流的主人
-  
+
     [self.rtcEngine configPublisher:apc];
 }
 
@@ -237,6 +237,23 @@ RCT_EXPORT_METHOD(stopRecordingService:(NSString*)recordingKey){
     [self.rtcEngine stopRecordingService:recordingKey];
 }
 
+/*
+创建数据流
+*/
+RCT_EXPORT_METHOD(createDataStream:(BOOL)reliable ordered:(BOOL)ordered callback:(RCTResponseSenderBlock)callback){
+  NSInteger streamId = 0;
+  [self.rtcEngine createDataStream:&streamId reliable:reliable ordered:ordered];
+  callback(@[[NSNumber numberWithInteger:streamId]]);
+}
+
+/*
+发送数据流
+*/
+RCT_EXPORT_METHOD(sendStreamMessage:(NSInteger)streamId data:(NSData*)data callback:(RCTResponseSenderBlock)callback){
+  int err = [self.rtcEngine sendStreamMessage:(streamId) data:data];
+  callback(@[[NSNumber numberWithInteger:err]]);
+}
+
 //获取版本号
 RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     callback(@[[AgoraRtcEngineKit getSdkVersion]]);
@@ -252,7 +269,7 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onError";
     params[@"err"] = [NSNumber numberWithInteger:errorCode];;
-    
+
     [self sendEvent:params];
 }
 
@@ -263,7 +280,7 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onWarning";
     params[@"err"] = [NSNumber numberWithInteger:warningCode];;
-    
+
     [self sendEvent:params];
 }
 
@@ -277,7 +294,7 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     params[@"type"] = @"onJoinChannelSuccess";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
     params[@"channel"] = channel;
-    
+
     [self sendEvent:params];
 }
 
@@ -285,11 +302,11 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
  远端首帧视频接收解码回调
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-    
+
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onFirstRemoteVideoDecoded";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
-    
+
     [self sendEvent:params];
 
 }
@@ -301,7 +318,7 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onUserJoined";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
-    
+
     [self sendEvent:params];
 }
 
@@ -312,7 +329,7 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onUserOffline";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
-    
+
     [self sendEvent:params];
 }
 
@@ -323,16 +340,42 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine reportAudioVolumeIndicationOfSpeakers:(NSArray*)speakers totalVolume:(NSInteger)totalVolume {
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onAudioVolumeIndication";
-    
+
     NSMutableArray *arr = [NSMutableArray array];
     for (AgoraRtcAudioVolumeInfo *obj in speakers) {
         [arr addObject:@{@"uid":[NSNumber numberWithInteger:obj.uid], @"volume":[NSNumber numberWithInteger:obj.volume]}];
     }
-    
+
     params[@"speakers"] = arr;
     params[@"totalVolume"] = [NSNumber numberWithInteger:totalVolume];
-    
+
     [self sendEvent:params];
+}
+
+/*
+接受数据流
+*/
+
+- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData * _Nonnull)data{
+  NSMutableDictionary *params = @{}.mutableCopy;
+  params[@"type"] = @"onStreamMessage";
+  params[@"uid"] = [NSNumber numberWithInteger:uid];
+  params[@"streamId"] = [NSNumber numberWithInteger:streamId];
+  params[@"data"] = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+
+  [self sendEvent:params];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached{
+  NSMutableDictionary *params = @{}.mutableCopy;
+  params[@"type"] = @"onStreamMessageError";
+  params[@"uid"] = [NSNumber numberWithInteger:uid];
+  params[@"streamId"] = [NSNumber numberWithInteger:streamId];
+  params[@"error"] = [NSNumber numberWithInteger:error];
+  params[@"missed"] = [NSNumber numberWithInteger:missed];
+  params[@"cached"] = [NSNumber numberWithInteger:cached];
+
+  [self sendEvent:params];
 }
 
 - (void)sendEvent:(NSDictionary *)params {
@@ -344,10 +387,10 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
 }
 
 //RCT_EXPORT_METHOD(getViewWithTag:(nonnull NSNumber *)reactTag) {
-//    
+//
 //    UIView *view = [self.bridge.uiManager viewForReactTag:reactTag];
 //    NSLog(@"%@",view);
-//    
+//
 //}
 
 @end
