@@ -109,6 +109,8 @@ Add following to `AndroidManifest.xml`
 | startRecordingService (iOS only) | string  recordingKey                     | 启动服务端录制服务                             |
 | stopRecordingService (iOS only)  | string  recordingKey                     | 停止服务端录制服务                             |
 | getSdkVersion                    | callback                                 | 获取版本号                                 |
+| createDataStream | (boolean reliable, boolean ordered, (streamId) => {}), 其中 reliable, ordered 请参考官方文档同名方法说明 | 创建数据流通道 |
+| sendStreamMessage | (number streamId, string message, (errorCode) => {})| 发送数据 |
 
 ##### 原生通知事件
 
@@ -121,7 +123,9 @@ RtcEngine.eventEmitter({
   onError: data => {},
   onWarning: data => {},
   onLeaveChannel: data => {},
-  onAudioVolumeIndication: data => {}
+  onAudioVolumeIndication: data => {},
+  onStreamMessage: ({uid, streamId, data}) => {},
+  onStreamMessageError: ({uid, streamId, error, missed, cached}) => {},
 })
 ```
 
@@ -135,6 +139,8 @@ RtcEngine.eventEmitter({
 | onWarning                 | 警告           |
 | onLeaveChannel            | 退出频道         |
 | onAudioVolumeIndication            | 音量提示回调         |
+| onStreamMessage | 接收到对方数据流消息的回调 |
+| onStreamMessageError | 接收到对方数据流消息错误的回调 |
 
 
 ##### AgoraView 组件
@@ -157,6 +163,12 @@ RtcEngine.eventEmitter({
 
 
 ## 更新信息
+
+#### 1.1.1
+
+- 新增方法 创建数据流通道 createDataStream
+- 新增方法 发送数据流 sendStreamMessage
+- 新增监听数据流事件 onStreamMessage
 
 #### 1.0.9
 
