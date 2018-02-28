@@ -157,8 +157,6 @@ RtcEngine.eventEmitter({
 - 更新示例 React-Native为0.51 
 - 优化代码
 
-![](http://oy5rz3rfs.bkt.clouddn.com/github/IMG_1058.PNG?imageView/2/w/375)
-
 [Example](https://github.com/DBshaoYan/RNAgoraExample)
 
 
