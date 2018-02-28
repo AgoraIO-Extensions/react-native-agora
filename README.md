@@ -124,7 +124,8 @@ RtcEngine.eventEmitter({
   onWarning: data => {},
   onLeaveChannel: data => {},
   onAudioVolumeIndication: data => {},
-  onStreamMessage: ({uid, streamId, data}) => {}
+  onStreamMessage: ({uid, streamId, data}) => {},
+  onStreamMessageError: ({uid, streamId, error, missed, cached}) => {},
 })
 ```
 
@@ -139,6 +140,7 @@ RtcEngine.eventEmitter({
 | onLeaveChannel            | 退出频道         |
 | onAudioVolumeIndication            | 音量提示回调         |
 | onStreamMessage | 接收到对方数据流消息的回调 |
+| onStreamMessageError | 接收到对方数据流消息错误的回调 |
 
 
 ##### AgoraView 组件
