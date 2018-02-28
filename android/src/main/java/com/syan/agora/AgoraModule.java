@@ -108,6 +108,24 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             });
         }
 
+        // 接收对方数据流消息错误的回调
+        @Override
+        public void onStreamMessageError(final int uid, final int streamId, final int code, final int missed, final int cached) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onStreamMessageError");
+                    map.putInt("uid", uid);
+                    map.putInt("streamId", streamId);
+                    map.putInt("error", code);
+                    map.putInt("missed", missed);
+                    map.putInt("cached", cached);
+                    commonEvent(map);
+                }
+            });
+        }
+
         /**
          * 说话声音音量提示回调
          */
