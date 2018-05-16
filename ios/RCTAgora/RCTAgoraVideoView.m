@@ -21,20 +21,22 @@
 
 - (void)setShowLocalVideo:(BOOL)showLocalVideo {
     if (showLocalVideo) {
+        _remoteUid = 0;
         AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
-        canvas.uid = [AgoraConst share].localUid;
+//        canvas.uid = [AgoraConst share].localUid;
         canvas.view = self;
-        canvas.renderMode = AgoraRtc_Render_Hidden;
+        canvas.renderMode = AgoraVideoRenderModeHidden;
         [_rtcEngine setupLocalVideo:canvas];
     }
 }
 
 -(void)setRemoteUid:(NSInteger)remoteUid {
+    _remoteUid = remoteUid;
     if (remoteUid > 0) {
         AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
         canvas.uid = remoteUid;
         canvas.view = self;
-        canvas.renderMode = AgoraRtc_Render_Hidden;
+        canvas.renderMode = AgoraVideoRenderModeHidden;
         [_rtcEngine setupRemoteVideo:canvas];
     }
 }

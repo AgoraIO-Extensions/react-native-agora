@@ -47,40 +47,39 @@ RCT_EXPORT_MODULE();
  *  @return 0 when executed successfully. return negative value if failed.
  */
 RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
-
+    
     [AgoraConst share].appid = options[@"appid"];
-
+    
     self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:options[@"appid"] delegate:self];
-
+    
     [AgoraConst share].rtcEngine = self.rtcEngine;
-
+    
     //频道模式
     [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
     //启用双流模式
     [self.rtcEngine enableDualStreamMode:YES];
     [self.rtcEngine enableVideo];
     [self.rtcEngine setVideoProfile:[options[@"videoProfile"] integerValue]swapWidthAndHeight:[options[@"swapWidthAndHeight"]boolValue]];
-    [self.rtcEngine setClientRole:[options[@"clientRole"] integerValue] withKey:nil];
-
+    [self.rtcEngine setClientRole:[options[@"clientRole"] integerValue]];
     //Agora Native SDK 与 Agora Web SDK 间的互通
     [self.rtcEngine enableWebSdkInteroperability:YES];
-
+    
 }
 
 //加入房间
 RCT_EXPORT_METHOD(joinChannel:(NSString *)channelName uid:(NSInteger)uid) {
     //保存一下uid 在自定义视图使用
     [AgoraConst share].localUid = uid;
-    [self.rtcEngine joinChannelByKey:nil channelName:channelName info:nil uid:uid joinSuccess:NULL];
+    [self.rtcEngine joinChannelByToken:nil channelId:channelName info:nil uid:uid joinSuccess:NULL];
 }
 
 //离开频道
 RCT_EXPORT_METHOD(leaveChannel){
-    [self.rtcEngine leaveChannel:^(AgoraRtcStats *stat) {
-        NSMutableDictionary *params = @{}.mutableCopy;
-        params[@"type"] = @"onLeaveChannel";
-
-        [self sendEvent:params];
+    [self.rtcEngine leaveChannel:^(AgoraChannelStats * _Nonnull stat) {
+      NSMutableDictionary *params = @{}.mutableCopy;
+      params[@"type"] = @"onLeaveChannel";
+      
+      [self sendEvent:params];
     }];
 }
 
@@ -117,7 +116,7 @@ RCT_EXPORT_METHOD(startPreview){
 //主播必须在加入频道前调用本章 API
 RCT_EXPORT_METHOD(configPublisher:(NSDictionary *)config){
     AgoraPublisherConfiguration *apc = [AgoraPublisherConfiguration new];
-
+    
     apc.width = [config[@"width"] integerValue];  //旁路直播的输出码流的宽度
     apc.height = [config[@"height"] integerValue]; //旁路直播的输出码流的高度
     apc.framerate = [config[@"framerate"] integerValue]; //旁路直播的输出码率帧率
@@ -128,7 +127,7 @@ RCT_EXPORT_METHOD(configPublisher:(NSDictionary *)config){
     apc.rawStreamUrl = config[@"rawStreamUrl"]; //单流地址
     apc.extraInfo = config[@"extraInfo"]; //其他信息
     apc.owner = [config[@"owner"] boolValue]; //是否将当前主播设为该 RTMP 流的主人
-
+    
     [self.rtcEngine configPublisher:apc];
 }
 
@@ -237,50 +236,45 @@ RCT_EXPORT_METHOD(stopRecordingService:(NSString*)recordingKey){
     [self.rtcEngine stopRecordingService:recordingKey];
 }
 
-/*
-创建数据流
-*/
-RCT_EXPORT_METHOD(createDataStream:(BOOL)reliable ordered:(BOOL)ordered callback:(RCTResponseSenderBlock)callback){
-  NSInteger streamId = 0;
-  [self.rtcEngine createDataStream:&streamId reliable:reliable ordered:ordered];
-  callback(@[[NSNumber numberWithInteger:streamId]]);
-}
-
-/*
-发送数据流
-*/
-RCT_EXPORT_METHOD(sendStreamMessage:(NSInteger)streamId data:(NSData*)data callback:(RCTResponseSenderBlock)callback){
-  int err = [self.rtcEngine sendStreamMessage:(streamId) data:data];
-  callback(@[[NSNumber numberWithInteger:err]]);
-}
-
 //获取版本号
 RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     callback(@[[AgoraRtcEngineKit getSdkVersion]]);
 }
 
+RCT_EXPORT_METHOD(setAudioProfile:(NSInteger)audioProfile scenario:(NSInteger)scenario) {
+    [self.rtcEngine setAudioProfile:(AgoraAudioProfile)audioProfile
+                           scenario:(AgoraAudioScenario)scenario];
+}
+
+RCT_EXPORT_METHOD(allowMusicMix) {
+    BOOL result = [self.rtcEngine setParameters:@"{\"che.audio.mixable.option\": true}"];
+    result = [self.rtcEngine setAudioProfile:AgoraAudioProfileMusicHighQualityStereo
+                                    scenario:AgoraAudioScenarioChatRoomGaming];
+    result = [self.rtcEngine startAudioMixing:@"" loopback:YES replace:NO cycle:-1];
+    NSLog(@"%d", result);
+}
 
 /*
  该回调方法表示SDK运行时出现了（网络或媒体相关的）错误。通常情况下，SDK上报的错误意味着SDK无法自动恢复，需要应用程序干预或提示用户。
  比如启动通话失败时，SDK会上报AgoraRtc_Error_StartCall(1002)错误。
  应用程序可以提示用户启动通话失败，并调用leaveChannel退出频道。
  */
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraRtcErrorCode)errorCode{
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurError:(AgoraErrorCode)errorCode{
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onError";
     params[@"err"] = [NSNumber numberWithInteger:errorCode];;
-
+    
     [self sendEvent:params];
 }
 
 /*
  警告
  */
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurWarning:(AgoraRtcWarningCode)warningCode {
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurWarning:(AgoraWarningCode)warningCode {
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onWarning";
     params[@"err"] = [NSNumber numberWithInteger:warningCode];;
-
+    
     [self sendEvent:params];
 }
 
@@ -289,12 +283,12 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
  客户端成功加入了指定的频道
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinChannel:(NSString*)channel withUid:(NSUInteger)uid elapsed:(NSInteger) elapsed {
-
+    
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onJoinChannelSuccess";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
     params[@"channel"] = channel;
-
+    
     [self sendEvent:params];
 }
 
@@ -302,13 +296,13 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
  远端首帧视频接收解码回调
  */
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-
+    
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onFirstRemoteVideoDecoded";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
-
+    
     [self sendEvent:params];
-
+    
 }
 
 /*
@@ -318,18 +312,18 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onUserJoined";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
-
+    
     [self sendEvent:params];
 }
 
 /*
  用户离线回调
  */
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraRtcUserOfflineReason)reason {
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onUserOffline";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
-
+    
     [self sendEvent:params];
 }
 
@@ -340,45 +334,24 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine reportAudioVolumeIndicationOfSpeakers:(NSArray*)speakers totalVolume:(NSInteger)totalVolume {
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onAudioVolumeIndication";
-
+    
     NSMutableArray *arr = [NSMutableArray array];
     for (AgoraRtcAudioVolumeInfo *obj in speakers) {
         [arr addObject:@{@"uid":[NSNumber numberWithInteger:obj.uid], @"volume":[NSNumber numberWithInteger:obj.volume]}];
     }
-
+    
     params[@"speakers"] = arr;
     params[@"totalVolume"] = [NSNumber numberWithInteger:totalVolume];
-
+    
     [self sendEvent:params];
 }
 
-/*
-接受数据流
-*/
-
-- (void)rtcEngine:(AgoraRtcEngineKit * _Nonnull)engine receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData * _Nonnull)data{
-  NSMutableDictionary *params = @{}.mutableCopy;
-  params[@"type"] = @"onStreamMessage";
-  params[@"uid"] = [NSNumber numberWithInteger:uid];
-  params[@"streamId"] = [NSNumber numberWithInteger:streamId];
-  params[@"data"] = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-
-  [self sendEvent:params];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached{
-  NSMutableDictionary *params = @{}.mutableCopy;
-  params[@"type"] = @"onStreamMessageError";
-  params[@"uid"] = [NSNumber numberWithInteger:uid];
-  params[@"streamId"] = [NSNumber numberWithInteger:streamId];
-  params[@"error"] = [NSNumber numberWithInteger:error];
-  params[@"missed"] = [NSNumber numberWithInteger:missed];
-  params[@"cached"] = [NSNumber numberWithInteger:cached];
-
-  [self sendEvent:params];
+- (NSArray<NSString *> *)supportedEvents {
+  return @[@"agoraEvent"];
 }
 
 - (void)sendEvent:(NSDictionary *)params {
+//  [self sendEventWithName:@"agoraEvent" body:params];
     [_bridge.eventDispatcher sendDeviceEventWithName:@"agoraEvent" body:params];
 }
 
