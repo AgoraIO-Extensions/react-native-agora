@@ -334,6 +334,30 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
 }
 
 /*
+ 用户mute音频回调
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didAudioMuted:(BOOL)muted byUid:(NSUInteger)uid {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onUserMuteAudio";
+    params[@"uid"] = [NSNumber numberWithInteger:uid];;
+    params[@"muted"] = @(muted);
+
+    [self sendEvent:params];
+}
+
+/*
+ 用户mute视频回调
+ */
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didVideoMuted:(BOOL)muted byUid:(NSUInteger)uid {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onUserMuteVideo";
+    params[@"uid"] = [NSNumber numberWithInteger:uid];;
+    params[@"muted"] = @(muted);
+
+    [self sendEvent:params];
+}
+
+/*
  音量提示回调
  需要开启enableAudioVolumeIndication
  */
