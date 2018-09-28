@@ -1,7 +1,7 @@
 {
-  "name": "white-react-native-agora",
-  "version": "1.0.1",
-  "description": "Agora bridge for rn",
+  "name": "react-native-agora",
+  "version": "1.0.0",
+  "description": "声网Agora",
   "main": "index.js",
   "scripts": {
     "pu": "npm publish",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/duty-os/react-native-agora.git"
+    "url": "git+https://github.com/DBshaoYan/react-native-agora.git"
   },
   "keywords": [
     "agora",
@@ -24,7 +24,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/duty-os/react-native-agora/issues"
+    "url": "https://github.com/DBshaoYan/react-native-agora/issues"
   },
-  "homepage": "https://github.com/duty-os/react-native-agora#readme"
+  "homepage": "https://github.com/DBshaoYan/react-native-agora#readme"
 }
