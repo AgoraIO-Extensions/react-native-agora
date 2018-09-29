@@ -1,8 +1,11 @@
 ##### 有任何问题欢迎加入QQ群进行反馈  471757030
 
-## [下载App体验](https://www.pgyer.com/jianLive)
-
 # react-native-agora
+
+[![npm](https://img.shields.io/npm/v/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
+[![npm](https://img.shields.io/npm/dm/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
+[![npm](https://img.shields.io/npm/dt/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
+[![npm](https://img.shields.io/npm/l/react-native-agora.svg)](https://github.com/syanbo/react-native-agora/blob/master/LICENSE)
 
 ## 功能介绍
 
@@ -35,21 +38,21 @@ TARGETS->Build Phases-> Link Binary With Libaries中点击“+”按钮，选择
     CoreMotion.framework
     CoreMedia.framework
     CoreTelephony.framework
-    
+
 TARGETS->Build Phases-> Link Binary With Libaries中点击“+”按钮，在弹出的窗口中点击“Add Other”按钮，选择
 
     node_modules/react-native-agora/ios/RCTAgora/libs/libcrypto.a
     node_modules/react-native-agora/ios/RCTAgora/libs/AgoraRtcCryptoLoader.framework
     node_modules/react-native-agora/ios/RCTAgora/libs/AgoraRtcEngineKit.framework
-    
+
 TARGETS->Build Settings->Search Paths->Framework Search Paths添加
 
     "$(SRCROOT)/../node_modules/react-native-agora/ios/RCTAgora/libs"
-    
+
 TARGETS->Build Settings->Search Paths->Library Search Paths添加
 
     "$(SRCROOT)/../node_modules/react-native-agora/ios/RCTAgora/libs"
-    
+
 TARGETS->Build Settings->Enable Bitcode设置为No
 
 TARGETS->Capabilities->Background Modes->Modes勾选Audio,AirPlay,and Picture In Picture
@@ -154,13 +157,16 @@ RtcEngine.eventEmitter({
 
 ## 运行示例
 
-- 更新示例 React-Native为0.51 
+- 更新示例 React-Native为0.51
 - 优化代码
 
 [Example](https://github.com/DBshaoYan/RNAgoraExample)
 
 
 ## 更新信息
+#### 1.1.2
+- 增加onVideoMute
+- 新增onAudioMute回调
 
 #### 1.1.1
 
