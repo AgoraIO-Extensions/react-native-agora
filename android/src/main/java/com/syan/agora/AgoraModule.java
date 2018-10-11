@@ -223,7 +223,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
          * 用户mute音频回调
          */
         @Override
-        public void onUserMuteAudio(final int uid, boolean muted) {
+        public void onUserMuteAudio(final int uid, final boolean muted) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -240,7 +240,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
          * 用户mute视频回调
          */
         @Override
-        public void onUserMuteVideo(final int uid, boolean muted) {
+        public void onUserMuteVideo(final int uid, final boolean muted) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
