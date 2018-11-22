@@ -214,6 +214,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putString("type", "onUserOffline");
                     map.putInt("uid", uid);
+                    map.putInt("reason", reason);
                     commonEvent(map);
                 }
             });
