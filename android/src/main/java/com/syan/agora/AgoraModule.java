@@ -207,7 +207,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
          * 用户uid离线时的回调
          */
         @Override
-        public void onUserOffline(final int uid, int reason) {
+        public void onUserOffline(final int uid, final int reason) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
