@@ -329,6 +329,7 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onUserOffline";
     params[@"uid"] = [NSNumber numberWithInteger:uid];
+    params[@"reason"] = [NSNumber numberWithInteger:reason];
 
     [self sendEvent:params];
 }
