@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "声网Agora",
   "main": "index.js",
   "scripts": {
