@@ -253,6 +253,76 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 }
             });
         }
+
+        @Override
+        public void onLocalVideoStats(final LocalVideoStats stats) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onLocalVideoStats");
+                    map.putInt("sentBitrate", stats.sentBitrate);
+                    map.putInt("sentFrameRate", stats.sentFrameRate);
+                    commonEvent(map);
+                }
+            });
+        }
+
+        @Override
+        public void onRemoteVideoStats(final RemoteVideoStats stats) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onRemoteVideoStats");
+                    map.putInt("delay", stats.delay);
+                    map.putInt("receivedBitrate", stats.receivedBitrate);
+                    map.putInt("receivedFrameRate", stats.receivedFrameRate);
+                    map.putInt("rxStreamType", stats.rxStreamType);
+                    commonEvent(map);
+                }
+            });
+        }
+
+        @Override
+        public void onConnectionLost() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onConnectionLost");
+                    commonEvent(map);
+                }
+            });
+        }
+
+        @Override
+        public void onNetworkQuality(final int uid, final int txQuality, final int rxQuality) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onNetworkQuality");
+                    map.putInt("uid", uid);
+                    map.putInt("txQuality", txQuality);
+                    map.putInt("rxQuality", rxQuality);
+                    commonEvent(map);
+                }
+            });
+        }
+
+        @Override
+        public void onLastmileQuality(final int quality) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("type", "onLastmileQuality");
+                    map.putInt("quality", quality);
+                    commonEvent(map);
+                }
+            });
+        }
     };
 
     @ReactMethod
@@ -260,10 +330,25 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
     }
 
+    @ReactMethod
+    public void enableLastmileTest() {
+        AgoraManager.getInstance().enableLastmileTest();
+    }
+
+    @ReactMethod
+    public void disableLastmileTest() {
+        AgoraManager.getInstance().disableLastmileTest();
+    }
+
     //进入房间
     @ReactMethod
     public void joinChannel(String channelName, int uid) {
         AgoraManager.getInstance().joinChannel(channelName, uid);
+    }
+
+    @ReactMethod
+    public void joinChannelWithToken(String token, String channelName, int uid) {
+        AgoraManager.getInstance().joinChannelWithToken(token, channelName, uid);
     }
 
     //退出

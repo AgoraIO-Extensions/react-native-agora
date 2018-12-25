@@ -95,6 +95,21 @@ public class AgoraManager {
         return this;
     }
 
+    public AgoraManager joinChannelWithToken(String token, String channel, int uid) {
+        mRtcEngine.joinChannel(token, channel, null, uid);
+        return this;
+    }
+
+    public AgoraManager enableLastmileTest() {
+        mRtcEngine.enableLastmileTest();
+        return this;
+    }
+
+    public AgoraManager disableLastmileTest() {
+        mRtcEngine.disableLastmileTest();
+        return this;
+    }
+
     public void startPreview() {
         mRtcEngine.startPreview();
     }
