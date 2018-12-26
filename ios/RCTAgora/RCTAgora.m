@@ -67,11 +67,25 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
 
 }
 
+RCT_EXPORT_METHOD(enableLastmileTest) {
+    [self.rtcEngine enableLastmileTest];
+}
+
+RCT_EXPORT_METHOD(disableLastmileTest) {
+    [self.rtcEngine disableLastmileTest];
+}
+
 //加入房间
 RCT_EXPORT_METHOD(joinChannel:(NSString *)channelName uid:(NSInteger)uid) {
     //保存一下uid 在自定义视图使用
     [AgoraConst share].localUid = uid;
     [self.rtcEngine joinChannelByKey:nil channelName:channelName info:nil uid:uid joinSuccess:NULL];
+}
+
+RCT_EXPORT_METHOD(joinChannelWithToken:(NSString *)token channelName:(NSString *)channelName uid:(NSInteger)uid) {
+    //保存一下uid 在自定义视图使用
+    [AgoraConst share].localUid = uid;
+    [self.rtcEngine joinChannelByKey:token channelName:channelName info:nil uid:uid joinSuccess:NULL];
 }
 
 //离开频道
@@ -352,8 +366,53 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didVideoMuted:(BOOL)muted byUid:(NSUInteger)uid {
     NSMutableDictionary *params = @{}.mutableCopy;
     params[@"type"] = @"onUserMuteVideo";
-    params[@"uid"] = [NSNumber numberWithInteger:uid];;
+    params[@"uid"] = [NSNumber numberWithInteger:uid];
     params[@"muted"] = @(muted);
+
+    [self sendEvent:params];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine localVideoStats:(AgoraRtcLocalVideoStats *)stats {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onLocalVideoStats";
+    params[@"sentBitrate"] = @(stats.sentBitrate);
+    params[@"sentFrameRate"] = @(stats.sentFrameRate);
+
+    [self sendEvent:params];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine remoteVideoStats:(AgoraRtcRemoteVideoStats *)stats {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onRemoteVideoStats";
+    params[@"delay"] = @(stats.delay);
+    params[@"reivedBitrate"] = @(stats.receivedBitrate);
+    params[@"receivedFrameRate"] = @(stats.receivedFrameRate);
+    params[@"rxStreamType"] = @(stats.rxStreamType);
+
+    [self sendEvent:params];
+}
+
+- (void)rtcEngineConnectionDidLost:(AgoraRtcEngineKit *)engine {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onConnectionLost";
+
+    [self sendEvent:params];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine networkQuality:(NSUInteger)uid txQuality:(AgoraRtcQuality)txQuality rxQuality:(AgoraRtcQuality)rxQuality {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onNetworkQuality";
+    params[@"uid"] = @(uid);
+    params[@"txQuality"] = @(txQuality);
+    params[@"rxQuality"] = @(rxQuality);
+
+    [self sendEvent:params];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine lastmileQuality:(AgoraRtcQuality)quality {
+    NSMutableDictionary *params = @{}.mutableCopy;
+    params[@"type"] = @"onLastmileQuality";
+    params[@"quality"] = @(quality);
 
     [self sendEvent:params];
 }
@@ -419,4 +478,3 @@ RCT_EXPORT_METHOD(getSdkVersion:(RCTResponseSenderBlock)callback){
 //}
 
 @end
-
