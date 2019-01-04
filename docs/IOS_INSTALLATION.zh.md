@@ -55,3 +55,6 @@
 ![Step 8.1](./IOS_INSTALLATION/1.8.1_Set_info_plist.png)
 
 ![Step 8.2](./IOS_INSTALLATION/1.8.2_Set_camera_and_microphone.png)
+
+# Step 9 编译
+`react-native run-ios`
