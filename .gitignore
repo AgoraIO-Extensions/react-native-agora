@@ -52,3 +52,6 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 android/src/main/res/drawable/
+**/*.*~
+**/*.swp
+**/*.~
