@@ -26,56 +26,11 @@ Either way, then link with:
 
  `react-native link react-native-agora`
 
-#### iOS
+### [iOS Installation](docs/IOS_INSTALLATION.md)
+### [iOS 开发环境安装指南](docs/IOS_INSTALLATION.zh.md)
 
-TARGETS->Build Phases-> Link Binary With Libaries中点击“+”按钮，选择
-
-    libresolv.tbd
-    libc++.tbd
-    AVFoundation.framework
-    AudioToolbox.framework
-    VideoToolbox.framework
-    CoreMotion.framework
-    CoreMedia.framework
-    CoreTelephony.framework
-
-TARGETS->Build Phases-> Link Binary With Libaries中点击“+”按钮，在弹出的窗口中点击“Add Other”按钮，选择
-
-    node_modules/react-native-agora/ios/RCTAgora/libs/libcrypto.a
-    node_modules/react-native-agora/ios/RCTAgora/libs/AgoraRtcCryptoLoader.framework
-    node_modules/react-native-agora/ios/RCTAgora/libs/AgoraRtcEngineKit.framework
-
-TARGETS->Build Settings->Search Paths->Framework Search Paths添加
-
-    "$(SRCROOT)/../node_modules/react-native-agora/ios/RCTAgora/libs"
-
-TARGETS->Build Settings->Search Paths->Library Search Paths添加
-
-    "$(SRCROOT)/../node_modules/react-native-agora/ios/RCTAgora/libs"
-
-TARGETS->Build Settings->Enable Bitcode设置为No
-
-TARGETS->Capabilities->Background Modes->Modes勾选Audio,AirPlay,and Picture In Picture
-
-项目目录->Info.plist->增加2项
-
-    "Privacy - Camera Usage Description":"use camera to start video call"
-    "Privacy - Microphone Usage Description":"use microphone to start video call"
-
-
-#### Android
-
-Add following to `AndroidManifest.xml`
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-当您在写混淆代码时，请添加以下代码:
-
-    -keep class io.agora.**{*;}
-
+### [Android Installation](docs/ANDROID_INSTALLATION.md)
+### [Android 开发环境安装指南](docs/ANDROID_INSTALLATION.zh.md)
 
 ## Documentation
 
