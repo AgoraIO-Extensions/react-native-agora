@@ -25,3 +25,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+configurations.all {
+    exclude group: 'com.facebook.react', module: 'react-native'
+}
