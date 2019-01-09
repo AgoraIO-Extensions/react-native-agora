@@ -1,0 +1,5 @@
+rootProject.name = 'simpleDemo'
+include ':react-native-agora'
+project(':react-native-agora').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-agora/android')
+
+include ':app'
