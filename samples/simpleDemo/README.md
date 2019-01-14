@@ -1,3 +1,5 @@
+# [中文版本](./README.zh.md)
+
 # Android Setup
 
 ## Prerequisites
@@ -8,13 +10,13 @@
   * Android Device
 
 ## Build
+  [More details read the doc](../../docs/ANDROID_INSTALLATION.md)
   ```bash
   adb reverse tcp:8081 tcp:8081
   adb reverse tcp:8097 tcp:8097
   npm install
   npm run android
   ```
-
 
 # iOS Setup
 
@@ -25,6 +27,7 @@
   * Reliable iOS Device Cable
 
 ## Build
+  [More details read the doc](../../docs/IOS_INSTALLATION.md)
   ```bash
   npm install
   npm run ios
