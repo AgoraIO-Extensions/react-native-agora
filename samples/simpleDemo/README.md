@@ -10,7 +10,7 @@
   * Android Device
 
 ## Build
-  [More details read the doc](../../docs/ANDROID_INSTALLATION.md)
+  [More Android Setup details read the doc](../../docs/ANDROID_INSTALLATION.md)
   ```bash
   adb reverse tcp:8081 tcp:8081
   adb reverse tcp:8097 tcp:8097
@@ -27,7 +27,7 @@
   * Reliable iOS Device Cable
 
 ## Build
-  [More details read the doc](../../docs/IOS_INSTALLATION.md)
+  [More iOS Setup details read the doc](../../docs/IOS_INSTALLATION.md)
   ```bash
   npm install
   npm run ios
