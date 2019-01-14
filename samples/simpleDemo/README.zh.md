@@ -1,15 +1,16 @@
-# [中文版本](./README.zh.md)
+# [English](./README.md)
 
-# 构建 Android APK
+# Android环境搭建
 
 ## 依赖以下环境
   * linked `react-native-agora`
   * Android Studio
   * Android SDK
-  * Reliable USB Cable
-  * Android Device
+  * 可靠的USB数据线
+  * Android 设备
 
-## Build
+## 构建步骤
+  [详情请参阅文档](../../docs/ANDROID_INSTALLATION.zh.md)
   ```bash
   adb reverse tcp:8081 tcp:8081
   adb reverse tcp:8097 tcp:8097
@@ -17,16 +18,16 @@
   npm run android
   ```
 
+# iOS环境搭建
 
-# iOS Setup
-
-## Prerequisites
-  * You should installed and linked `react-native-agora`
+## 依赖以下环境
+  * linked `react-native-agora`
   * Xcode 10.0+
-  * iOS Device
-  * Reliable iOS Device Cable
+  * iOS 设备
+  * 可靠的苹果设备数据线
 
-## Build
+## 构建步骤
+  [详情请参阅文档](../../docs/IOS_INSTALLATION.zh.md)
   ```bash
   npm install
   npm run ios
