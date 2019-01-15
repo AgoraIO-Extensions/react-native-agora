@@ -12,13 +12,6 @@ import {
 } from 'react-native';
 import AgoraRTCView from './components/agora';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -57,7 +50,8 @@ export default class App extends Component<Props> {
       channelProfile: 1,
       videoProfile: 40,
       clientRole: 1,
-      swapWidthAndHeight: true
+      swapWidthAndHeight: true,
+      channelName: 'defaultChannel'
     };
   }
 
@@ -83,6 +77,7 @@ export default class App extends Component<Props> {
         videoProfile={this.state.videoProfile}
         clientRole={this.state.clientRole}
         swapWidthAndHeight={this.state.swapWidthAndHeight}
+        channelName={this.state.channelName}
       ></AgoraRTCView>);
     }
     return (
@@ -107,7 +102,8 @@ export default class App extends Component<Props> {
             let matched = text.match(/\d+/g) && text.match(/\d+/g)[0]
             if (matched) {
               this.setState({videoProfile: +matched})
-            }          }
+            }
+          }
         } />
         <TextInput
           style={{height: 40}}
@@ -117,8 +113,14 @@ export default class App extends Component<Props> {
             let matched = text.match(/\d+/g) && text.match(/\d+/g)[0]
             if (matched) {
               this.setState({clientRole: +matched})
-            }          }
+            }
+          }
         } />
+        <TextInput
+          style={{height: 40}}
+          placeholder="Enter channelName"
+          onChangeText={(text) => this.setState({channelName: text})}
+        />
         <TouchableOpacity
           style={styles.button}
           onPress={this.joinChannel}

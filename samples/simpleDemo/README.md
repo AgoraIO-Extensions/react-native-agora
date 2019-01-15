@@ -18,6 +18,41 @@
   npm run android
   ```
 
+## Build Signed App
+### Generate keystore file. 
+
+  ```bash
+    keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+  ```
+### Edit android/app/build.gradle
+
+  ```java
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+  ```
+
+### Edit android/gradle.properties
+
+  ```
+  MYAPP_RELEASE_STORE_FILE=my-release-key.keystore # your keystore file name
+  MYAPP_RELEASE_KEY_ALIAS=my-key-alias # key alias
+  MYAPP_RELEASE_STORE_PASSWORD=****** # password
+  MYAPP_RELEASE_KEY_PASSWORD=****** # password confirm
+  ```
+
+### Build
+  ```
+  npm run build-android
+  ```
+
 # iOS Setup
 
 ## Prerequisites

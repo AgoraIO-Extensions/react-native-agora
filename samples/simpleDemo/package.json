@@ -6,6 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "ios": "react-native run-ios && react-native log-ios",
     "android": "react-native run-android && react-native log-android",
+    "bundle-android": "react-native bundle --entry-file index.js --bundle-output android/app/build/generated/assets/react/release/index.android.bundle --platform android --assets-dest android/app/src/main/res --dev false",
+    "build-android": "cd android && ./gradlew assembleRelease",
     "test": "jest"
   },
   "dependencies": {
