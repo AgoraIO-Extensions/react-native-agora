@@ -57,7 +57,8 @@ export default class App extends Component<Props> {
       channelProfile: 1,
       videoProfile: 40,
       clientRole: 1,
-      swapWidthAndHeight: true
+      swapWidthAndHeight: true,
+      channelName: 'defaultChannel'
     };
   }
 
@@ -83,6 +84,7 @@ export default class App extends Component<Props> {
         videoProfile={this.state.videoProfile}
         clientRole={this.state.clientRole}
         swapWidthAndHeight={this.state.swapWidthAndHeight}
+        channelName={this.state.channelName}
       ></AgoraRTCView>);
     }
     return (
@@ -119,6 +121,11 @@ export default class App extends Component<Props> {
               this.setState({clientRole: +matched})
             }          }
         } />
+        <TextInput
+          style={{height: 40}}
+          placeholder="Enter channelName"
+          onChnageText={(text) => this.setState({channelName: text})}
+        />
         <TouchableOpacity
           style={styles.button}
           onPress={this.joinChannel}
