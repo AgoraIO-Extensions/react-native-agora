@@ -55,3 +55,6 @@ android/src/main/res/drawable/
 **/*.*~
 **/*.swp
 **/*.~
+.project
+.settings
+.classpath
