@@ -58,3 +58,4 @@ android/src/main/res/drawable/
 .project
 .settings
 .classpath
+.jest/
