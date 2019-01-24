@@ -7,7 +7,6 @@ import {
     IAgoraViewProps
 } from "./types.d";
 
-
 export default class AgoraView extends React.Component<IAgoraViewProps> {
     render() {
         return (
