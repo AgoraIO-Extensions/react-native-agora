@@ -59,3 +59,7 @@ android/src/main/res/drawable/
 .settings
 .classpath
 .jest/
+xcuserdata
+*.pbxproj
+lib
+*.xcworkspace

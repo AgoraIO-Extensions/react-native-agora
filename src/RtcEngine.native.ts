@@ -5,9 +5,9 @@ import {
 } from 'react-native';
 
 import {
-    IOption, IVideoOption,
-    IEventScheduler, IPublisherConfig,
-    ILiveTranscoding, ICallback,
+    Option, VideoOption,
+    EventScheduler, PublisherConfig,
+    LiveTranscoding, Callback,
     String, Number
 } from "./types.d";
 
@@ -15,8 +15,8 @@ const { Agora } = NativeModules;
 
 export default class RtcEngine {
 
-    private static listener: EmitterSubscription  = null;
-    static init(options: IOption): void {
+    private static listener: EmitterSubscription;
+    static init(options: Option): void {
         this.removeEmitter();
         Agora.init(options);
     }
@@ -30,7 +30,7 @@ export default class RtcEngine {
         Agora.joinChannelWithToken(token, channelName, uid);
     }
 
-    static eventEmitter(eventScheduler: IEventScheduler) {
+    static eventEmitter(eventScheduler: EventScheduler) {
         this.listener && this.listener.remove();
         this.listener = NativeAppEventEmitter.addListener('agoraEvent', event => {
             const functor = (eventScheduler as any)[event['type']];
@@ -58,11 +58,11 @@ export default class RtcEngine {
         Agora.destroy();
     }
     
-    static setupLocalVideo(options: IVideoOption) {
+    static setupLocalVideo(options: VideoOption) {
         Agora.setupLocalVideo(options);
     }
 
-    static setupRemoteVideo(options: IVideoOption) {
+    static setupRemoteVideo(options: VideoOption) {
         Agora.setupRemoteVideo(options);
     }
 
@@ -74,11 +74,11 @@ export default class RtcEngine {
         Agora.stopPreview();
     }
 
-    static configPublisher(options: IPublisherConfig) {
+    static configPublisher(options: PublisherConfig) {
         Agora.configPublisher(options);
     }
 
-    static setLiveTranscoding(options: ILiveTranscoding) {
+    static setLiveTranscoding(options: LiveTranscoding) {
         Agora.setLiveTranscoding(options);
     }
 
@@ -146,15 +146,15 @@ export default class RtcEngine {
         Agora.muteAllRemoteVideoStreams(status);
     }
 
-    static createDataStream(reliable: boolean, ordered: boolean, callback: ICallback<void>) {
+    static createDataStream(reliable: boolean, ordered: boolean, callback: Callback<void>) {
         Agora.createDataStream(reliable, ordered, callback);
     }
 
-    static sendStreamMessage(streamId: number, data: any, callback: ICallback<void>) {
+    static sendStreamMessage(streamId: number, data: any, callback: Callback<void>) {
         Agora.sendStreamMessage(streamId, data, callback);
     }
 
-    static getSdkVersion(callback: ICallback<void>) {
+    static getSdkVersion(callback: Callback<void>) {
         Agora.getSdkVersion(callback);
     }
 };

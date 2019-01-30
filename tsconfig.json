@@ -1,27 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "jsx": "react-native",
-    "noEmit": true,
+    "types": [
+      "react",
+      "react-native"
+    ],
+    "target": "es2015",
+    "jsx": "react",
     "moduleResolution": "node",
+    "sourceMap": true,
     "importHelpers": true,
+    "outDir": "./lib",
+    "module": "commonjs",
+    "strict": true,
     "allowSyntheticDefaultImports": true,
-    "noImplicitAny": false,
-    "preserveConstEnums": true,
-    "allowJs": false,
-    "strict": false,
-    "noImplicitReturns": false,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "importHelpers": true,
+    "esModuleInterop": true,
+    "lib": ["es2015"]
   },
-  "lib": [ "dom", "es5", "es6", "scripthost" ],
-  "exclude": [
-    "android",
-    "ios",
-    "node_modules"
+  "compileOnSave": true,
+  "include": [
+    "src"
   ]
 }

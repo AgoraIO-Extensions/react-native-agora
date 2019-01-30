@@ -6,7 +6,7 @@
 //  Copyright © 2017年 Syan. All rights reserved.
 //
 
-#import "RCTViewManager.h"
+#import <React/RCTViewManager.h>
 
 
 @interface RCTAgoraViewManager : RCTViewManager

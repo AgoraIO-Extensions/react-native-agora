@@ -2,10 +2,12 @@
   "name": "react-native-agora",
   "version": "1.2.5",
   "description": "声网Agora",
-  "main": "index.ts",
+  "main": "lib/index.js",
   "scripts": {
     "pu": "npm publish",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -29,16 +31,17 @@
   "homepage": "https://github.com/DBshaoYan/react-native-agora#readme",
   "peerDependencies": {
     "react": "16.3.0",
-    "react-native": "0.57.8",
-    "react-native-typescript-transformer": "^1.2.11",
-    "tslib": "latest"
+    "react-native": "0.57.8"
   },
   "devDependencies": {
     "@types/jest": "^23.3.13",
     "@types/react": "^16.7.20",
     "@types/react-native": "^0.57.31",
     "@types/react-test-renderer": "^16.0.3",
+    "react-native-typescript-transformer": "^1.2.11",
+    "tslib": "latest",
     "ts-jest": "^23.10.5",
+    "tslint": "^5.12.1",
     "typescript": "^3.2.4"
   },
   "types": [
