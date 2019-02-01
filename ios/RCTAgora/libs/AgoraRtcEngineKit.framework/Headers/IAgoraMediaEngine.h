@@ -31,6 +31,7 @@ public:
     int samplesPerSec;  //sampling rate
     void* buffer;  //data buffer
     int64_t renderTimeMs;
+    int avsync_type;
   };
 public:
   virtual bool onRecordAudioFrame(AudioFrame& audioFrame) = 0;
@@ -57,6 +58,7 @@ public:
     void* vBuffer;  //V data buffer
     int rotation; // rotation of this frame (0, 90, 180, 270)
     int64_t renderTimeMs;
+    int avsync_type;
   };
 public:
   virtual bool onCaptureVideoFrame(VideoFrame& videoFrame) = 0;
@@ -164,14 +166,46 @@ public:
   virtual IExternalVideoRender* createRenderInstance(const ExternalVideoRenerContext& context) = 0;
 };
 
-class IMediaEngine
+struct ExternalVideoFrame
 {
+  enum VIDEO_BUFFER_TYPE
+  {
+    VIDEO_BUFFER_RAW_DATA = 1,
+  };
+
+  enum VIDEO_PIXEL_FORMAT
+  {
+    VIDEO_PIXEL_UNKNOWN = 0,
+    VIDEO_PIXEL_I420 = 1,
+    VIDEO_PIXEL_BGRA = 2,
+    VIDEO_PIXEL_NV12 = 8,
+  };
+
+  VIDEO_BUFFER_TYPE type;
+  VIDEO_PIXEL_FORMAT format;
+  void* buffer;
+  int stride;
+  int height;
+  int cropLeft;
+  int cropTop;
+  int cropRight;
+  int cropBottom;
+  int rotation;
+  long long timestamp;
+};
+
+class IMediaEngine {
 public:
   virtual void release() = 0;
   virtual int registerAudioFrameObserver(IAudioFrameObserver* observer) = 0;
   virtual int registerVideoFrameObserver(IVideoFrameObserver* observer) = 0;
   virtual int registerVideoRenderFactory(IExternalVideoRenderFactory* factory) = 0;
-  virtual int pushAudioFrame(MEDIA_SOURCE_TYPE type, IAudioFrameObserver::AudioFrame *frame, bool wrap = false){ return -1; }
+  virtual int pushAudioFrame(MEDIA_SOURCE_TYPE type, IAudioFrameObserver::AudioFrame *frame, bool wrap) = 0;
+  virtual int pushAudioFrame(IAudioFrameObserver::AudioFrame *frame) = 0;
+  virtual int pullAudioFrame(IAudioFrameObserver::AudioFrame *frame) = 0;
+
+  virtual int setExternalVideoSource(bool enable, bool useTexture) = 0;
+  virtual int pushVideoFrame(ExternalVideoFrame *frame) = 0;
 };
 
 } //media
