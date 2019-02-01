@@ -31,6 +31,4 @@ static AgoraConst *_person;
     return _person;
 }
 
-
-
 @end
