@@ -2,6 +2,7 @@
   "name": "react-native-agora",
   "version": "1.2.5",
   "description": "声网Agora",
+  "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
   "scripts": {
     "pu": "npm publish",
@@ -11,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DBshaoYan/react-native-agora.git"
+    "url": "https://github.com/syanbo/react-native-agora.git"
   },
   "keywords": [
     "agora",
@@ -23,12 +24,13 @@
     "video",
     "react-native-video"
   ],
-  "author": "",
+  "author": "syanbo",
+  "authors": ["https://github.com/syanbo/react-native-agora/graphs/contributors"],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DBshaoYan/react-native-agora/issues"
+    "url": "https://github.com/syanbo/react-native-agora/issues"
   },
-  "homepage": "https://github.com/DBshaoYan/react-native-agora#readme",
+  "homepage": "https://github.com/syanbo/react-native-agora#readme",
   "peerDependencies": {
     "react": "16.3.0",
     "react-native": "0.57.8"
