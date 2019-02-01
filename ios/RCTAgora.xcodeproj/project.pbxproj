@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		085CF7D72204A7B7002075D5 /* AgoraRtcCryptoLoader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 085CF7D52204A7B7002075D5 /* AgoraRtcCryptoLoader.framework */; };
+		085CF7D82204A7B7002075D5 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 085CF7D62204A7B7002075D5 /* libcrypto.a */; };
 		23AF28211EEFECD800D771AB /* RCTAgora.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AF28201EEFECD800D771AB /* RCTAgora.m */; };
 		23AF28221EEFECD800D771AB /* RCTAgora.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 23AF281F1EEFECD800D771AB /* RCTAgora.h */; };
 		23C20DD11F0A6ED80095F60C /* AgoraConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DCC1F0A6ED80095F60C /* AgoraConst.m */; };
@@ -28,7 +30,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		23ACF47C1EF0CF9500801BC7 /* libs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = libs; sourceTree = "<group>"; };
+		085CF7D52204A7B7002075D5 /* AgoraRtcCryptoLoader.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AgoraRtcCryptoLoader.framework; sourceTree = "<group>"; };
+		085CF7D62204A7B7002075D5 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		23AF281C1EEFECD800D771AB /* libRCTAgora.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTAgora.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		23AF281F1EEFECD800D771AB /* RCTAgora.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTAgora.h; sourceTree = "<group>"; };
 		23AF28201EEFECD800D771AB /* RCTAgora.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAgora.m; sourceTree = "<group>"; };
@@ -45,12 +48,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				085CF7D82204A7B7002075D5 /* libcrypto.a in Frameworks */,
+				085CF7D72204A7B7002075D5 /* AgoraRtcCryptoLoader.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		085CF7D42204A787002075D5 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				085CF7D52204A7B7002075D5 /* AgoraRtcCryptoLoader.framework */,
+				085CF7D62204A7B7002075D5 /* libcrypto.a */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
 		23AF28131EEFECD800D771AB = {
 			isa = PBXGroup;
 			children = (
@@ -70,7 +84,7 @@
 		23AF281E1EEFECD800D771AB /* RCTAgora */ = {
 			isa = PBXGroup;
 			children = (
-				23ACF47C1EF0CF9500801BC7 /* libs */,
+				085CF7D42204A787002075D5 /* libs */,
 				23C20DCB1F0A6ED80095F60C /* AgoraConst.h */,
 				23C20DCC1F0A6ED80095F60C /* AgoraConst.m */,
 				23C20DCD1F0A6ED80095F60C /* RCTAgoraVideoView.h */,
@@ -248,12 +262,18 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/RCTAgora/libs\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/RCTAgora/libs\"",
+					"$(PROJECT_DIR)/RCTAgora/libs",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../react-native/React\"/**",
 					"\"$(SRCROOT)/../../react-native/Libraries\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/RCTAgora/libs",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -265,12 +285,18 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/RCTAgora/libs\"";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/RCTAgora/libs\"",
+					"$(PROJECT_DIR)/RCTAgora/libs",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../react-native/React\"/**",
 					"\"$(SRCROOT)/../../react-native/Libraries\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/RCTAgora/libs",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
