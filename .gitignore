@@ -64,3 +64,4 @@ xcuserdata
 lib
 *.xcworkspace
 *.zip
+.byebug_history
