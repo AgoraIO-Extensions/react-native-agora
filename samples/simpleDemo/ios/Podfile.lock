@@ -1,14 +1,5 @@
 PODS:
   - AgoraRtcEngine_iOS (2.3.3)
-  - boost-for-react-native (1.63.0)
-  - DoubleConversion (1.1.6)
-  - Folly (2016.10.31.00):
-    - boost-for-react-native
-    - DoubleConversion
-    - glog
-  - glog (0.3.5)
-  - React (0.57.8):
-    - React/Core (= 0.57.8)
   - react-native-agora (2.3.3):
     - AgoraRtcEngine_iOS (= 2.3.3)
     - react-native-agora/AgoraRtcCryptoLoader (= 2.3.3)
@@ -17,47 +8,22 @@ PODS:
     - AgoraRtcEngine_iOS (= 2.3.3)
   - react-native-agora/AgoraRtcEngineKit (2.3.3):
     - AgoraRtcEngine_iOS (= 2.3.3)
-  - React/Core (0.57.8):
-    - yoga (= 0.57.8.React)
-  - yoga (0.57.8.React)
 
 DEPENDENCIES:
-  - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
-  - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - React (from `../node_modules/react-native`)
   - react-native-agora (from `../node_modules/react-native-agora`)
-  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AgoraRtcEngine_iOS
-    - boost-for-react-native
 
 EXTERNAL SOURCES:
-  DoubleConversion:
-    :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
-  Folly:
-    :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
-  glog:
-    :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
-  React:
-    :path: "../node_modules/react-native"
   react-native-agora:
     :path: "../node_modules/react-native-agora"
-  yoga:
-    :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   AgoraRtcEngine_iOS: 8ad4b58dafed2cec5df03fa1f0ddbdad2c9ff958
-  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
-  Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
-  glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
-  React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-agora: ad43868aad1298fa32f167d9a00887e2c88af54b
-  yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: a165c0bfbdd660ff2132e775c48c7a2e58dd3cf7
+PODFILE CHECKSUM: ed05ca9e60ab637de485899d548c81338155a2ae
 
 COCOAPODS: 1.5.3
