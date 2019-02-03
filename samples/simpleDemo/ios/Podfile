@@ -15,6 +15,7 @@ target 'simpleDemo' do
   %w(DoubleConversion Folly glog).each do |lib_name|
     pod lib_name, podspec: "#{react_native_path}/third-party-podspecs/#{lib_name}.podspec"
   end
+  #pod 'AgoraRtcEngine_iOS', '2.3.3'
   target 'simpleDemoTests' do
     inherit! :search_paths
     # Pods for testing
