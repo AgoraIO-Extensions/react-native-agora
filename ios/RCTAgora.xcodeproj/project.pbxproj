@@ -290,13 +290,21 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../ios/Pods/**",
+					"$(PROJECT_DIR)/RCTAgora/libs/**",
+				);
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../../react-native/React\"/**",
 					"\"$(SRCROOT)/../../react-native/Libraries\"/**",
+					"$(SRCROOT)/../../../ios/Pods/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -310,13 +318,21 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../ios/Pods/**",
+					"$(PROJECT_DIR)/RCTAgora/libs/**",
+				);
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../../react-native/React\"/**",
 					"\"$(SRCROOT)/../../react-native/Libraries\"/**",
+					"$(SRCROOT)/../../../ios/Pods/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
