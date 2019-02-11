@@ -82,11 +82,6 @@ Pod::Spec.new do |s|
   #  you can include multiple dependencies to ensure it works.
 
   # s.requires_arc = true
-  s.subspec 'AgoraRtcEngineKit' do |sp|
-    sp.dependency 'AgoraRtcEngine_iOS', '2.3.3'
-    sp.source_files = 'AgoraRtcEngineKit/**/*.{c,h,m,mm,S,cpp}'
-  end  
-
   s.subspec 'AgoraRtcCryptoLoader' do |sp|
     sp.source_files = './ios/RCTAgora/libs/AgoraRtcCryptoLoader.framework/**/*.{c,h,m,mm,S,cpp}'
     sp.vendored_libraries = 'libcrypto.a'
@@ -99,5 +94,6 @@ Pod::Spec.new do |s|
     ]
   }
   s.dependency "AgoraRtcEngine_iOS", "2.3.3"
+  s.dependency 'React'
 
 end
