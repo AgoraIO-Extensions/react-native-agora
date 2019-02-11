@@ -92,84 +92,186 @@ export interface VideoOption {
 }
 
 export interface EventScheduler {
-  // onFirstRemoteVideoDecoded: Function,
-  // onJoinChannelSuccess: Function,
-  // onUserOffline: Function,
-  // onUserJoined: Function,
-  // onError: Function,
+  onWarning: Function,
+ 
+  onError: Function,
+   
+  onJoinChannelSuccess: Function,
+   
+  onRejoinChannelSuccess: Function,
+   
+  onLeaveChannel: Function,
+   
+  onClientRoleChanged: Function,
+   
+  onUserJoined: Function,
+   
+  onUserOffline: Function,
+   
+  onConnectionStateChanged: Function,
+   
+  onConnectionInterrupted?: Function,
+   
+  onConnectionLost: Function,
+   
+  onConnectionBanned: Function,
+   
+  onApiCallExecuted: Function,
+   
+  onTokenPrivilegeWillExpire: Function,
+   
+  onRequestToken: Function,
+   
+  onMicrophoneEnabled: Function,
+   
+  onAudioVolumeIndication: Function,
+   
+  onActiveSpeaker: Function,
+   
+  onFirstLocalAudioFrame: Function,
+   
+  onFirstRemoteAudioFrame: Function,
+   
+  onVideoStopped: Function,
+   
+  onFirstLocalVideoFrame: Function,
+   
+  onFirstRemoteVideoDecoded: Function,
+   
+  onFirstRemoteVideoFrame: Function,
+   
+  onUserMuteAudio: Function,
+   
+  onUserMuteVideo: Function,
+   
+  onUserEnableVideo: Function,
+   
+  onUserEnableLocalVideo: Function,
+   
+  onVideoSizeChanged: Function,
+   
+  onRemoteVideoStateChanged: Function,
+   
+  onLocalPublishFallbackToAudioOnly: Function,
+   
+  onRemoteSubscribeFallbackToAudioOnly: Function,
+   
+  onAudioRouteChanged: Function,
+   
+  onCameraReady: Function,
+   
+  onCameraFocusAreaChanged: Function,
+   
+  onCameraExposureAreaChanged: Function,
+   
+  onAudioQuality: Function,
+   
+  onRtcStats: Function,
+   
+  onLastmileQuality: Function,
+   
+  onNetworkQuality: Function,
+   
+  onLocalVideoStats: Function,
+   
+  onRemoteVideoStats: Function,
+   
+  onRemoteAudioStats: Function,
+   
+  onLocalVideoStat: Function,
+   
+  onRemoteVideoStat: Function,
+   
+  onRemoteAudioTransportStats: Function,
+   
+  onRemoteVideoTransportStats: Function,
+   
+  onAudioMixingFinished: Function,
+   
+  onAudioEffectFinished: Function,
+   
+  onStreamPublished: Function,
+   
+  onStreamUnpublished: Function,
+   
+  onTranscodingUpdated: Function,
+   
+  onStreamInjectedStatus: Function,
+   
+  onStreamMessage: Function,
+   
+  onStreamMessageError: Function,
+   
+  onMediaEngineLoadSuccess: Function,
+   
+  onMediaEngineStartCallSuccess: Function,
   // onWarning: Function,
+  // onError: Function,
+  // onJoinChannelSuccess: Function,
+  // onRejoinChannelSuccess: Function,
   // onLeaveChannel: Function,
-  // onAudioVolumeIndication: Function,
-  // onStreamMessage: Function,
-  // onStreamMessageError: Function
-  DidOccurWarning: Function,
-  DidOccurError: Function,
-  DidApiCallExecute: Function,
-  DidJoinChannel: Function,
-  DidRejoinChannel: Function,
-  DidLeaveChannel: Function,
-  LeaveChannel: Function,
-  DidClientRoleChanged: Function,
-  DidJoinedOfUid: Function,
-  DidOfflineOfUid: Function,
-  ConnectionChangedToState: Function,
-  ConnectionDidLost: Function,
-  TokenPrivilegeWillExpire: Function,
-  RequestToken: Function,
+  // onApiCallExecute: Function,
+  // onClientRoleChanged: Function,
+  // onUserJoined: Function,
+  // onUserOffline: Function,
+  // onConnectionStateChanged: Function,
+  // onConnectionInterrupted: Function,
+  // onTokenPrivilegeWillExpire: Function,
+  // onRequestToken: Function,
   
-  DidMicrophoneEnabled: Function,
-  ReportAudioVolumeIndicationOfSpeakers: Function,
-  ActiveSpeaker: Function,
-  FirstLocalAudioFrame: Function,
-  FirstRemoteAudioFrameOfUid: Function,
-  VideoDidStop: Function,
-  FirstLocalVideoFrameWithSize: Function,
-  FirstRemoteVideoDecodedOfUid: Function,
-  FirstRemoteVideoFrameOfUid: Function,
-  DidAudioMuted: Function,
-  DidVideoMuted: Function,
-  DidVideoEnabled: Function,
-  DidLocalVideoEnabled: Function,
-  VideoSizeChangedOfUid: Function,
-  RemoteVideoStateChangedOfUid: Function,
-  DidLocalPublishFallbackToAudioOnly: Function,
-  DidRemoteSubscribeFallbackToAudioOnly: Function,
+  // DidMicrophoneEnabled: Function,
+  // ReportAudioVolumeIndicationOfSpeakers: Function,
+  // ActiveSpeaker: Function,
+  // FirstLocalAudioFrame: Function,
+  // FirstRemoteAudioFrameOfUid: Function,
+  // VideoDidStop: Function,
+  // FirstLocalVideoFrameWithSize: Function,
+  // FirstRemoteVideoDecodedOfUid: Function,
+  // FirstRemoteVideoFrameOfUid: Function,
+  // DidAudioMuted: Function,
+  // DidVideoMuted: Function,
+  // DidVideoEnabled: Function,
+  // DidLocalVideoEnabled: Function,
+  // VideoSizeChangedOfUid: Function,
+  // RemoteVideoStateChangedOfUid: Function,
+  // DidLocalPublishFallbackToAudioOnly: Function,
+  // DidRemoteSubscribeFallbackToAudioOnly: Function,
   
-  DeviceTypeStateChanged: Function,
-  DidAudioRouteChanged: Function,
-  CameraDidReady: Function,
-  CameraFocusDidChangedToRect: Function,
-  CameraExposureDidChangedToRect: Function,
+  // DeviceTypeStateChanged: Function,
+  // DidAudioRouteChanged: Function,
+  // CameraDidReady: Function,
+  // CameraFocusDidChangedToRect: Function,
+  // CameraExposureDidChangedToRect: Function,
   
-  ReportRtcStats: Function,
-  LastmileQuality: Function,
-  NetworkQuality: Function,
-  LocalVideoStats: Function,
-  RemoteVideoStats: Function,
-  RemoteAudioStats: Function,
-  AudioTransportStatsOfUid: Function,
-  VideoTransportStatsOfUid: Function,
+  // ReportRtcStats: Function,
+  // LastmileQuality: Function,
+  // NetworkQuality: Function,
+  // LocalVideoStats: Function,
+  // RemoteVideoStats: Function,
+  // RemoteAudioStats: Function,
+  // AudioTransportStatsOfUid: Function,
+  // VideoTransportStatsOfUid: Function,
   
-  LocalAudioMixingDidFinish: Function,
-  RemoteAudioMixingDidStart: Function,
-  RemoteAudioMixingDidFinish: Function,
-  DidAudioEffectFinish: Function,
+  // LocalAudioMixingDidFinish: Function,
+  // RemoteAudioMixingDidStart: Function,
+  // RemoteAudioMixingDidFinish: Function,
+  // DidAudioEffectFinish: Function,
   
-  StreamPublished: Function,
-  StreamUnpublish: Function,
-  TranscodingUpdated: Function,
+  // StreamPublished: Function,
+  // StreamUnpublish: Function,
+  // TranscodingUpdated: Function,
   
-  StreamInjectedStatus: Function,
+  // StreamInjectedStatus: Function,
   
-  ReceiveStreamMessage: Function,
-  DidOccurStreamMessageError: Function,
+  // ReceiveStreamMessage: Function,
+  // DidOccurStreamMessageError: Function,
   
-  MediaEngineDidLoaded: Function,
-  MediaEngineDidStartCall: Function,
+  // MediaEngineDidLoaded: Function,
+  // MediaEngineDidStartCall: Function,
   
-  ConnectionDidInterrupted: Function,
-  ConnectionDidBanned: Function,
-  AudioQualityOfUi: Function
+  // ConnectionDidInterrupted: Function,
+  // ConnectionDidBanned: Function,
+  // AudioQualityOfUi: Function
 }
 
 export type Callback<T> = (err: any, data: any) => T;

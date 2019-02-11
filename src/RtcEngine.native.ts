@@ -6,7 +6,8 @@ import {
 
 import {
     Option, VideoOption,
-    EventScheduler, PublisherConfig,
+    EventScheduler,
+    PublisherConfig,
     LiveTranscoding, Callback,
     String, Number
 } from "./types.d";
@@ -25,7 +26,7 @@ export default class RtcEngine {
     }
 
     static joinChannel(channelName: String, uid?: Number, token?: String, info?: Object): void {
-        Agora.joinChannel({channelName, uid, token, info});
+        return Agora.joinChannel({channelName, uid, token, info});
     }
 
     static joinChannelWithToken(
@@ -35,83 +36,131 @@ export default class RtcEngine {
 
     static eventEmitter(eventScheduler: EventScheduler) {
         this.removeEmitter();
+        // const events = EventSchedulerKeys;
         const events = [
-            "DidOccurWarning",
-            "DidOccurError",
-            "DidApiCallExecute",
-            "DidJoinChannel",
-            "DidRejoinChannel",
-            "DidLeaveChannel",
-            "LeaveChannel",
-            "DidClientRoleChanged",
-            "DidJoinedOfUid",
-            "DidOfflineOfUid",
-            "ConnectionChangedToState",
-            "ConnectionDidLost",
-            "TokenPrivilegeWillExpire",
-            "RequestToken",
+            "onWarning",
             
-            "DidMicrophoneEnabled",
-            "ReportAudioVolumeIndicationOfSpeakers",
-            "ActiveSpeaker",
-            "FirstLocalAudioFrame",
-            "FirstRemoteAudioFrameOfUid",
-            "VideoDidStop",
-            "FirstLocalVideoFrameWithSize",
-            "FirstRemoteVideoDecodedOfUid",
-            "FirstRemoteVideoFrameOfUid",
-            "DidAudioMuted",
-            "DidVideoMuted",
-            "DidVideoEnabled",
-            "DidLocalVideoEnabled",
-            "VideoSizeChangedOfUid",
-            "RemoteVideoStateChangedOfUid",
-            "DidLocalPublishFallbackToAudioOnly",
-            "DidRemoteSubscribeFallbackToAudioOnly",
+            "onError",
             
-            "DeviceTypeStateChanged",
-            "DidAudioRouteChanged",
-            "CameraDidReady",
-            "CameraFocusDidChangedToRect",
-            "CameraExposureDidChangedToRect",
+            "onJoinChannelSuccess",
             
-            "ReportRtcStats",
-            "LastmileQuality",
-            "NetworkQuality",
-            "LocalVideoStats",
-            "RemoteVideoStats",
-            "RemoteAudioStats",
-            "AudioTransportStatsOfUid",
-            "VideoTransportStatsOfUid",
+            "onRejoinChannelSuccess",
             
-            "LocalAudioMixingDidFinish",
-            "RemoteAudioMixingDidStart",
-            "RemoteAudioMixingDidFinish",
-            "DidAudioEffectFinish",
+            "onLeaveChannel",
             
-            "StreamPublished",
-            "StreamUnpublish",
-            "TranscodingUpdated",
+            "onClientRoleChanged",
             
-            "StreamInjectedStatus",
+            "onUserJoined",
             
-            "ReceiveStreamMessage",
-            "DidOccurStreamMessageError",
+            "onUserOffline",
             
-            "MediaEngineDidLoaded",
-            "MediaEngineDidStartCall",
+            "onConnectionStateChanged",
             
-            "ConnectionDidInterrupted",
-            "ConnectionDidBanned",
-            "AudioQualityOfUid"
+            "onConnectionInterrupted",
+            
+            "onConnectionLost",
+            
+            "onConnectionBanned",
+            
+            "onApiCallExecuted",
+            
+            "onTokenPrivilegeWillExpire",
+            
+            "onRequestToken",
+            
+            "onMicrophoneEnabled",
+            
+            "onAudioVolumeIndication",
+            
+            "onActiveSpeaker",
+            
+            "onFirstLocalAudioFrame",
+            
+            "onFirstRemoteAudioFrame",
+            
+            "onVideoStopped",
+            
+            "onFirstLocalVideoFrame",
+            
+            "onFirstRemoteVideoDecoded",
+            
+            "onFirstRemoteVideoFrame",
+            
+            "onUserMuteAudio",
+            
+            "onUserMuteVideo",
+            
+            "onUserEnableVideo",
+            
+            "onUserEnableLocalVideo",
+            
+            "onVideoSizeChanged",
+            
+            "onRemoteVideoStateChanged",
+            
+            "onLocalPublishFallbackToAudioOnly",
+            
+            "onRemoteSubscribeFallbackToAudioOnly",
+            
+            "onAudioRouteChanged",
+            
+            "onCameraReady",
+            
+            "onCameraFocusAreaChanged",
+            
+            "onCameraExposureAreaChanged",
+            
+            "onAudioQuality",
+            
+            "onRtcStats",
+            
+            "onLastmileQuality",
+            
+            "onNetworkQuality",
+            
+            "onLocalVideoStats",
+            
+            "onRemoteVideoStats",
+            
+            "onRemoteAudioStats",
+            
+            "onLocalVideoStat",
+            
+            "onRemoteVideoStat",
+            
+            "onRemoteAudioTransportStats",
+            
+            "onRemoteVideoTransportStats",
+            
+            "onAudioMixingFinished",
+            
+            "onAudioEffectFinished",
+            
+            "onStreamPublished",
+            
+            "onStreamUnpublished",
+            
+            "onTranscodingUpdated",
+            
+            "onStreamInjectedStatus",
+            
+            "onStreamMessage",
+            
+            "onStreamMessageError",
+            
+            "onMediaEngineLoadSuccess",
+            
+            "onMediaEngineStartCallSuccess",
         ];
         for (let event of events) {
-            this.listeners.push(
-                AgoraEventEmitter.addListener(event, msg => {
-                    const functor = (eventScheduler as any)[event];
-                    functor && functor(msg);
-                })
-            );
+            const functor = (eventScheduler as any)[event];
+            if (functor) {
+                this.listeners.push(
+                    AgoraEventEmitter.addListener(event, msg => {
+                        functor(msg);
+                    })
+                );
+            }
         }
     }
 

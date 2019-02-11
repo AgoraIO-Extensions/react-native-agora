@@ -133,7 +133,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     }
   }
   
-  AgoraVideoEncoderConfiguration *video_encoder_config = [[AgoraVideoEncoderConfiguration init] initWithWidth:[options[@"videoEncoderConfig.width"] integerValue] height:[options[@"videoEncoderConfig.height"] integerValue] frameRate:(AgoraVideoFrameRate)[options[@"videoEncoderConfig.frameRate"] integerValue] bitrate:[options[@"videoEncoderConfig.bitrate"] integerValue] orientationMode: (AgoraVideoOutputOrientationMode)[options[@"videoEncoderCnofig.orientationMode"] integerValue]];
+  AgoraVideoEncoderConfiguration *video_encoder_config = [[AgoraVideoEncoderConfiguration new] initWithWidth:[options[@"videoEncoderConfig.width"] integerValue] height:[options[@"videoEncoderConfig.height"] integerValue] frameRate:(AgoraVideoFrameRate)[options[@"videoEncoderConfig.frameRate"] integerValue] bitrate:[options[@"videoEncoderConfig.bitrate"] integerValue] orientationMode: (AgoraVideoOutputOrientationMode)[options[@"videoEncoderCnofig.orientationMode"] integerValue]];
   [self.rtcEngine setVideoEncoderConfiguration:video_encoder_config];
   [self.rtcEngine setClientRole:(AgoraClientRole)[options[@"clientRole"] integerValue]];
   [self.rtcEngine setAudioProfile:(AgoraAudioProfile)[options[@"audioProfile"] integerValue]
@@ -144,7 +144,8 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
 }
 
 // renew token
-RCT_EXPORT_METHOD(renewToken:(NSString *)token
+RCT_EXPORT_METHOD(renewToken
+                  :(NSString *)token
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine renewToken:token];
@@ -180,7 +181,9 @@ RCT_EXPORT_METHOD(enableWebSdkInteroperability: (BOOL)enabled
 }
 
 // get agora connection state
-RCT_EXPORT_METHOD(getConnectionState: (RCTPromiseResolveBlock)resolve) {
+RCT_EXPORT_METHOD(getConnectionState
+                  :(RCTPromiseResolveBlock) resolve
+                  reject:(RCTPromiseRejectBlock) reject) {
   resolve(@{@"success": @(YES), @"state": @([self.rtcEngine getConnectionState])});
 }
 
@@ -190,9 +193,9 @@ RCT_EXPORT_METHOD(setClientRole:(NSString *) role) {
 }
 
 // join channel
-RCT_EXPORT_METHOD(joinChannel:(NSDictionary *) options:success) {
+RCT_EXPORT_METHOD(joinChannel:(NSDictionary *) options) {
   [AgoraConst share].localUid = [options[@"uid"] integerValue];
-  [self.rtcEngine joinChannelByToken:options[@"token"] channelId:options[@"channelId"] info:options[@"info"] uid:[AgoraConst share].localUid joinSuccess:nil];
+  [self.rtcEngine joinChannelByToken:options[@"token"] channelId:options[@"channelName"] info:options[@"info"] uid:[AgoraConst share].localUid joinSuccess:nil];
 }
 
 // leave channel
@@ -200,7 +203,7 @@ RCT_EXPORT_METHOD(leaveChannel
                   :(RCTPromiseResolveBlock) resolve
                   reject:(RCTPromiseRejectBlock) reject) {
   int res = [self.rtcEngine leaveChannel:^(AgoraChannelStats * _Nonnull stat) {
-    [self sendEvent:@"leaveChannel" params:@{
+    [self sendEvent:DidLeaveChannel params:@{
                                              @"message": @"leaveChannel",
                                              @"duration": @(stat.duration),
                                              @"txBytes": @(stat.txBytes),
@@ -215,7 +218,7 @@ RCT_EXPORT_METHOD(leaveChannel
                                              @"cpuTotalUsage": @(stat.cpuTotalUsage)
                                              }];
   }];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131038", @"leaveChannel failed", [self makeNSError:@{
                                                                   @"code": @(131038),
                                                                   @"message":@{
@@ -369,7 +372,10 @@ RCT_EXPORT_METHOD(enableAudioVolumeIndication: (NSInteger) interval smooth:(NSIn
 }
 
 // create data stream
-RCT_EXPORT_METHOD(createDataStream:(NSDictionary *)options resolve:(RCTPromiseResolveBlock)resolve) {
+RCT_EXPORT_METHOD(createDataStream
+                  :(NSDictionary *)options
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   NSInteger streamId = 0;
   if (options[@"streamId"] != nil) {
     streamId = [options[@"streamId"] integerValue];
@@ -498,10 +504,11 @@ RCT_EXPORT_METHOD(adjustAudioMixingPublishVolume:(NSInteger) volume) {
 }
 
 // get audio mixing duration
-RCT_EXPORT_METHOD(getAudioMixingDuration: (RCTPromiseResolveBlock)resolve
+RCT_EXPORT_METHOD(getAudioMixingDuration
+                  : (RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine getAudioMixingDuration];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131004", @"getAudioMixingDuration failed", [self makeNSError:@{
                                                                             @"code": @(131004),
                                                                             @"message":@{
@@ -518,10 +525,11 @@ RCT_EXPORT_METHOD(getAudioMixingDuration: (RCTPromiseResolveBlock)resolve
 }
 
 // get audio mixing current position
-RCT_EXPORT_METHOD(getAudioMixingCurrentPosition: (RCTPromiseResolveBlock)resolve
+RCT_EXPORT_METHOD(getAudioMixingCurrentPosition
+                  :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine getAudioMixingDuration];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131005", @"getAudioMixingCurrentPosition failed", [self makeNSError:@{
                                                                                    @"code": @(131005),
                                                                                    @"message":@{
@@ -538,11 +546,12 @@ RCT_EXPORT_METHOD(getAudioMixingCurrentPosition: (RCTPromiseResolveBlock)resolve
 }
 
 // set audio mixing position
-RCT_EXPORT_METHOD(setAudioMixingPosition: (NSInteger) pos
+RCT_EXPORT_METHOD(setAudioMixingPosition
+                  :(NSInteger) pos
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setAudioMixingPosition:pos];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131006", @"setAudioMixingPosition failed", [self makeNSError:@{
                                                                             @"code": @(131006),
                                                                             @"message":@{
@@ -562,7 +571,7 @@ RCT_EXPORT_METHOD(getEffectsVolume
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   double res = [self.rtcEngine getEffectsVolume];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131007", @"getEffectsVolume failed", [self makeNSError:@{
                                                                       @"code": @(131007),
                                                                       @"message":@{
@@ -579,11 +588,12 @@ RCT_EXPORT_METHOD(getEffectsVolume
 }
 
 // set effects volume
-RCT_EXPORT_METHOD(setEffectsVolume:(double) volume
+RCT_EXPORT_METHOD(setEffectsVolume
+                  :(double) volume
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setEffectsVolume:volume];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131008", @"setEffectsVolume failed", [self makeNSError:@{
                                                                       @"code": @(131008),
                                                                       @"message":@{
@@ -600,12 +610,13 @@ RCT_EXPORT_METHOD(setEffectsVolume:(double) volume
 }
 
 // set volume of effect
-RCT_EXPORT_METHOD(setVolumeOfEffect:(NSInteger) soundId
+RCT_EXPORT_METHOD(setVolumeOfEffect
+                  :(NSInteger) soundId
                   volume:(double)volume
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setVolumeOfEffect:soundId withVolume:volume];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131009", @"setVolumeOfEffect failed", [self makeNSError:@{
                                                                        @"code": @(131009),
                                                                        @"message":@{
@@ -622,7 +633,8 @@ RCT_EXPORT_METHOD(setVolumeOfEffect:(NSInteger) soundId
 }
 
 // play effect
-RCT_EXPORT_METHOD(playEffect:(NSDictionary *)options
+RCT_EXPORT_METHOD(playEffect
+                  :(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine playEffect:(int)[options[@"soundId"] integerValue]
@@ -632,7 +644,7 @@ RCT_EXPORT_METHOD(playEffect:(NSDictionary *)options
                                          pan:[options[@"pan"] doubleValue]
                                         gain:[options[@"gain"] boolValue]
                                      publish:[options[@"publish"] boolValue]];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131010", @"playEffect failed", [self makeNSError:@{
                                                                 @"code": @(131010),
                                                                 @"message":@{
@@ -649,11 +661,12 @@ RCT_EXPORT_METHOD(playEffect:(NSDictionary *)options
 }
 
 // stop effect by soundId
-RCT_EXPORT_METHOD(stopEffect:(NSInteger) soundId
+RCT_EXPORT_METHOD(stopEffect
+                  :(NSInteger) soundId
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine stopEffect:(int)soundId];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131011", @"stopEffect failed", [self makeNSError:@{
                                                                 @"code": @(131011),
                                                                 @"message":@{
@@ -670,11 +683,11 @@ RCT_EXPORT_METHOD(stopEffect:(NSInteger) soundId
 }
 
 // stopAllEffects
-RCT_EXPORT_METHOD(stopAllEffects:
-                  (RCTPromiseResolveBlock)resolve
+RCT_EXPORT_METHOD(stopAllEffects
+                  :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine stopAllEffects];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131012", @"stopAllEffects failed", [self makeNSError:@{
                                                                     @"code": @(131012),
                                                                     @"message":@{
@@ -691,12 +704,13 @@ RCT_EXPORT_METHOD(stopAllEffects:
 }
 
 // preloadEffect
-RCT_EXPORT_METHOD(preloadEffect:(NSInteger) soundId
+RCT_EXPORT_METHOD(preloadEffect
+                  :(NSInteger) soundId
                   filePath:(NSString *)filePath
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine preloadEffect:(int)soundId filePath:filePath];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131013", @"preloadEffect failed", [self makeNSError:@{
                                                                    @"code": @(131013),
                                                                    @"message":@{
@@ -713,11 +727,12 @@ RCT_EXPORT_METHOD(preloadEffect:(NSInteger) soundId
 }
 
 // unload effect
-RCT_EXPORT_METHOD(unloadEffect:(NSInteger) soundId
+RCT_EXPORT_METHOD(unloadEffect
+                  :(NSInteger) soundId
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine unloadEffect:(int)soundId];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131014", @"unloadEffect failed", [self makeNSError:@{
                                                                   @"code": @(131014),
                                                                   @"message":@{
@@ -734,11 +749,12 @@ RCT_EXPORT_METHOD(unloadEffect:(NSInteger) soundId
 }
 
 // pause effect by id
-RCT_EXPORT_METHOD(pauseEffect:(NSInteger) soundId
+RCT_EXPORT_METHOD(pauseEffect
+                  :(NSInteger) soundId
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine unloadEffect:(int)soundId];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131014", @"pauseEffect failed", [self makeNSError:@{
                                                                  @"code": @(131014),
                                                                  @"message":@{
@@ -759,7 +775,7 @@ RCT_EXPORT_METHOD(pauseAllEffects:(NSInteger) soundId
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine unloadEffect:(int)soundId];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131014", @"pauseAllEffects failed", [self makeNSError:@{
                                                                      @"code": @(131014),
                                                                      @"message":@{
@@ -780,7 +796,7 @@ RCT_EXPORT_METHOD(resumeEffect:(NSInteger) soundId
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine resumeEffect:(int)soundId];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131015", @"resumeEffect failed", [self makeNSError:@{
                                                                   @"code": @(131015),
                                                                   @"message":@{
@@ -801,7 +817,7 @@ RCT_EXPORT_METHOD(resumeAllEffects
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine resumeAllEffects];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131016", @"resumeAllEffects failed", [self makeNSError:@{
                                                                       @"code": @(131016),
                                                                       @"message":@{
@@ -834,7 +850,7 @@ RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary *)options
       break;
   }
   NSInteger res = [self.rtcEngine startAudioRecording:[options[@"filePath"] stringValue] quality:qualityType];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131017", @"startAudioRecording failed", [self makeNSError:@{
                                                                          @"code": @(131017),
                                                                          @"message":@{
@@ -855,7 +871,7 @@ RCT_EXPORT_METHOD(stopAudioRecording
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine stopAudioRecording];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131018", @"stopAudioRecording failed", [self makeNSError:@{
                                                                         @"code": @(131018),
                                                                         @"message":@{
@@ -907,7 +923,7 @@ RCT_EXPORT_METHOD(startEchoTest
              @"elapsed": @(elapsed)
              });
   }];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131019", @"startEchoTest failed", [self makeNSError:@{
                                                                    @"code": @(131019),
                                                                    @"message":@{
@@ -928,7 +944,7 @@ RCT_EXPORT_METHOD(stopEchoTest
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine stopEchoTest];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131020", @"stopEchoTest failed", [self makeNSError:@{
                                                                   @"code": @(131020),
                                                                   @"message":@{
@@ -949,7 +965,7 @@ RCT_EXPORT_METHOD(enableLastmileTest
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine enableLastmileTest];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131021", @"enableLastmileTest failed", [self makeNSError:@{
                                                                         @"code": @(131021),
                                                                         @"message":@{
@@ -970,7 +986,7 @@ RCT_EXPORT_METHOD(disableLastmileTest
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine disableLastmileTest];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131022", @"disableLastmileTest failed", [self makeNSError:@{
                                                                          @"code": @(131022),
                                                                          @"message":@{
@@ -995,7 +1011,7 @@ RCT_EXPORT_METHOD(setRecordingAudioFrameParametersWithSampleRate:(NSDictionary *
                                                                             mode:(AgoraAudioRawFrameOperationMode)[options[@"mode"] integerValue]
                                                                   samplesPerCall:[options[@"samplesPerCall"] integerValue]
                    ];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131023", @"setRecordingAudioFrameParametersWithSampleRate failed", [self makeNSError:@{
                                                                                                     @"code": @(131023),
                                                                                                     @"message":@{
@@ -1020,7 +1036,7 @@ RCT_EXPORT_METHOD(setPlaybackAudioFrameParametersWithSampleRate:(NSDictionary *)
                                                                            mode:(AgoraAudioRawFrameOperationMode)[options[@"mode"] integerValue]
                                                                  samplesPerCall:[options[@"samplesPerCall"] integerValue]
                    ];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131024", @"setPlaybackAudioFrameParametersWithSampleRate failed", [self makeNSError:@{
                                                                                                    @"code": @(131024),
                                                                                                    @"message":@{
@@ -1042,7 +1058,7 @@ RCT_EXPORT_METHOD(setMixedAudioFrameParametersWithSampleRate
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setMixedAudioFrameParametersWithSampleRate:[options[@"sampleRate"] integerValue] samplesPerCall:[options[@"samplesPerCall"] integerValue]];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131025", @"setMixedAudioFrameParametersWithSampleRate failed", [self makeNSError:@{
                                                                                                 @"code": @(131025),
                                                                                                 @"message":@{
@@ -1069,7 +1085,7 @@ RCT_EXPORT_METHOD(addVideoWatermark:(NSDictionary *)options
                                                                            @"width": options[@"width"],
                                                                            @"height": options[@"height"]
                                                                            }]];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131026", @"addVideoWatermark failed", [self makeNSError:@{
                                                                        @"code": @(131026),
                                                                        @"message":@{
@@ -1090,7 +1106,7 @@ RCT_EXPORT_METHOD(clearVideoWatermarks
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine clearVideoWatermarks];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131027", @"clearVideoWatermarks failed", [self makeNSError:@{
                                                                           @"code": @(131027),
                                                                           @"message":@{
@@ -1112,7 +1128,7 @@ RCT_EXPORT_METHOD(enableDualStreamMode
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine enableDualStreamMode:enabled];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131028", @"enableDualStreamMode failed", [self makeNSError:@{
                                                                           @"code": @(131028),
                                                                           @"message":@{
@@ -1135,7 +1151,7 @@ RCT_EXPORT_METHOD(setRemoteVideoStream
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setRemoteVideoStream:[options[@"uid"] integerValue]
                                                   type:(AgoraVideoStreamType)[options[@"streamType"] integerValue]];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131029", @"setRemoteVideoStream failed", [self makeNSError:@{
                                                                           @"code": @(131029),
                                                                           @"message":@{
@@ -1157,7 +1173,7 @@ RCT_EXPORT_METHOD(setRemoteDefaultVideoStreamType
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setRemoteDefaultVideoStreamType:(AgoraVideoStreamType)[options[@"streamType"] integerValue]];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131030", @"setRemoteDefaultVideoStreamType failed", [self makeNSError:@{
                                                                                      @"code": @(131030),
                                                                                      @"message":@{
@@ -1179,17 +1195,17 @@ RCT_EXPORT_METHOD(addInjectStreamUrl
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   AgoraLiveInjectStreamConfig *config = [AgoraLiveInjectStreamConfig new];
-  config.size = CGSizeMake([options[@"config.size.width"] floatValue], [options[@"config.size.height"] floatValue]);
-  config.videoGop = [options[@"config.videoGop"] integerValue];
-  config.videoFramerate = [options[@"config.videoFramerate"] integerValue];
-  config.videoBitrate = [options[@"config.videoBitrate"] integerValue];
-  config.audioSampleRate = (AgoraAudioSampleRateType)[options[@"config.audioSampleRate"] integerValue];
-  config.audioBitrate = [options[@"config.audioBitrate"] integerValue];
-  config.audioChannels = [options[@"config.audioChannels"] integerValue];
+  config.size = CGSizeMake([options[@"config"][@"size"][@"width"] floatValue], [options[@"config"][@"size"][@"height"] floatValue]);
+  config.videoGop = [options[@"config"][@"videoGop"] integerValue];
+  config.videoFramerate = [options[@"config"][@"videoFramerate"] integerValue];
+  config.videoBitrate = [options[@"config"][@"videoBitrate"] integerValue];
+  config.audioSampleRate = (AgoraAudioSampleRateType)[options[@"config"][@"audioSampleRate"] integerValue];
+  config.audioBitrate = [options[@"config"][@"audioBitrate"] integerValue];
+  config.audioChannels = [options[@"config"][@"audioChannels"] integerValue];
   
   NSInteger res = [self.rtcEngine addInjectStreamUrl:[options[@"url"] stringValue]
                                               config:config];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131031", @"addInjectStreamUrl failed", [self makeNSError:@{
                                                                         @"code": @(131031),
                                                                         @"message":@{
@@ -1212,7 +1228,7 @@ RCT_EXPORT_METHOD(removeInjectStreamUrl
                   reject:(RCTPromiseRejectBlock)reject) {
   
   NSInteger res = [self.rtcEngine removeInjectStreamUrl:url];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131032", @"removeInjectStreamUrl failed", [self makeNSError:@{
                                                                            @"code": @(131032),
                                                                            @"message":@{
@@ -1373,7 +1389,8 @@ RCT_EXPORT_METHOD(setCameraExposurePosition
 
 // enable camera torch
 RCT_EXPORT_METHOD(setCameraTorchOn:(BOOL)isOn
-                  resolve:(RCTPromiseResolveBlock)resolve) {
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine setCameraTorchOn:isOn];
   resolve(@{
             @"success": @(YES),
@@ -1383,7 +1400,8 @@ RCT_EXPORT_METHOD(setCameraTorchOn:(BOOL)isOn
 
 // enable auto focus face mode
 RCT_EXPORT_METHOD(setCameraAutoFocusFaceModeEnabled:(BOOL)enable
-                  resolve:(RCTPromiseResolveBlock)resolve) {
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine setCameraAutoFocusFaceModeEnabled:enable];
   resolve(@{
             @"success": @(YES),
@@ -1406,7 +1424,7 @@ RCT_EXPORT_METHOD(setLog
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   int res = [self.rtcEngine setLogFilter:level];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131036", @"setLogFilter failed", [self makeNSError:@{
                                                                   @"code": @(131036),
                                                                   @"message":@{
@@ -1421,7 +1439,7 @@ RCT_EXPORT_METHOD(setLog
               });
   }
   res = [self.rtcEngine setLogFile:filePath];
-  if (res < 0) {
+  if (res != 0) {
     reject(@"131037", @"setLogFile failed", [self makeNSError:@{
                                                                 @"code": @(131037),
                                                                 @"message":@{
@@ -1458,7 +1476,9 @@ RCT_EXPORT_METHOD(sendStreamMessage:(NSInteger)streamId data:(NSData*)data
 }
 
 // get sdk version
-RCT_EXPORT_METHOD(getSdkVersion:(RCTPromiseResolveBlock) resolve) {
+RCT_EXPORT_METHOD(getSdkVersion
+                  :(RCTPromiseResolveBlock) resolve
+                  reject:(RCTPromiseRejectBlock) reject) {
   resolve(@[[AgoraRtcEngineKit getSdkVersion]]);
 }
 
@@ -1494,7 +1514,7 @@ RCT_EXPORT_METHOD(addPublishStreamUrl:(NSDictionary *)options) {
 RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
   AgoraLiveTranscoding *transcoding = AgoraLiveTranscoding.defaultTranscoding;
   if (options[@"size"] != nil) {
-    transcoding.size = CGSizeMake([options[@"size.width"] doubleValue], [options[@"size.height"] doubleValue]);
+    transcoding.size = CGSizeMake([options[@"size"][@"width"] doubleValue], [options[@"size"][@"height"] doubleValue]);
   }
   if (options[@"videoBitrate"] != nil) {
     transcoding.videoBitrate = [options[@"videoBitrate"] integerValue];
@@ -1516,7 +1536,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
     for (NSDictionary *optionUser in options[@"users"]) {
       AgoraLiveTranscodingUser *liveUser = [AgoraLiveTranscodingUser new];
       liveUser.uid = (NSUInteger)[optionUser[@"uid"] integerValue];
-      liveUser.rect = CGRectMake((CGFloat)[options[@"backgroundColor.x"] floatValue], (CGFloat)[options[@"backgroundColor.y"] floatValue], (CGFloat)[options[@"backgroundColor.width"] floatValue], (CGFloat)[options[@"backgroundColor.height"] floatValue]);
+      liveUser.rect = CGRectMake((CGFloat)[options[@"backgroundColor"][@"x"] floatValue], (CGFloat)[options[@"backgroundColor"][@"y"] floatValue], (CGFloat)[options[@"backgroundColor"][@"width"] floatValue], (CGFloat)[options[@"backgroundColor"][@"height"] floatValue]);
       liveUser.zOrder = [optionUser[@"zOrder"] integerValue];
       liveUser.alpha = [optionUser[@"alpha"] doubleValue];
       liveUser.audioChannel = [optionUser[@"audioChannel"] integerValue];
@@ -1529,24 +1549,24 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
   }
   if (options[@"watermark"] != nil) {
     transcoding.watermark = [self makeAgoraImage:@{
-                                                   @"url": options[@"watermark.url"],
-                                                   @"x": options[@"watermark.x"],
-                                                   @"y": options[@"watermark.y"],
-                                                   @"width": options[@"watermark.width"],
-                                                   @"height": options[@"watermark.height"]
+                                                   @"url": options[@"watermark"][@"url"],
+                                                   @"x": options[@"watermark"][@"x"],
+                                                   @"y": options[@"watermark"][@"y"],
+                                                   @"width": options[@"watermark"][@"width"],
+                                                   @"height": options[@"watermark"][@"height"]
                                                    }];
   }
   if (options[@"backgroundImage"] != nil) {
     transcoding.backgroundImage = [self makeAgoraImage:@{
-                                                         @"url": options[@"backgroundImage.url"],
-                                                         @"x": options[@"backgroundImage.x"],
-                                                         @"y": options[@"backgroundImage.y"],
-                                                         @"width": options[@"backgroundImage.width"],
-                                                         @"height": options[@"backgroundImage.height"]
+                                                         @"url": options[@"backgroundImage"][@"url"],
+                                                         @"x": options[@"backgroundImage"][@"x"],
+                                                         @"y": options[@"backgroundImage"][@"y"],
+                                                         @"width": options[@"backgroundImage"][@"width"],
+                                                         @"height": options[@"backgroundImage"][@"height"]
                                                          }];
   }
   if (options[@"backgroundColor"] != nil) {
-    transcoding.backgroundColor = [[UIColor new] initWithRed:(CGFloat)[options[@"backgroundColor.red"] floatValue] green:(CGFloat)[options[@"backgroundColor.green"] floatValue] blue:(CGFloat)[options[@"backgroundColor.blue"] floatValue] alpha:(CGFloat)[options[@"backgroundColor.alpha"] floatValue]];
+    transcoding.backgroundColor = [[UIColor new] initWithRed:(CGFloat)[options[@"backgroundColor"][@"red"] floatValue] green:(CGFloat)[options[@"backgroundColor"][@"green"] floatValue] blue:(CGFloat)[options[@"backgroundColor"][@"blue"] floatValue] alpha:(CGFloat)[options[@"backgroundColor"][@"alpha"] floatValue]];
   }
   if (options[@"audioSampleRate"] != nil) {
     transcoding.audioSampleRate = (AgoraAudioSampleRateType)[options[@"audioSampleRate"] integerValue];
@@ -1658,11 +1678,13 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didApiCallExecute:(NSInteger)error api:(NSString *_Nonnull)api result:(NSString *_Nonnull)result {
-  [self sendEvent:DidOccurError  params:@{
-                                          @"api": api,
-                                          @"result": result,
-                                          @"error": @(error)
-                                          }];
+  if (error != 0) {
+    [self sendEvent:DidOccurError  params:@{
+                                            @"api": api,
+                                            @"result": result,
+                                            @"error": @(error)
+                                            }];
+  }
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didJoinChannel:(NSString *_Nonnull)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
@@ -1953,7 +1975,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
                                                @"sentBitrate": @(stats.sentBitrate),
                                                @"sentFrameRate": @(stats.sentFrameRate)
                                                }
-                                            }];
+                                           }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteVideoStats:(AgoraRtcRemoteVideoStats *_Nonnull)stats {

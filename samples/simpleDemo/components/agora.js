@@ -147,18 +147,26 @@ export default class AgoraComponent extends Component<Props> {
     RtcEngine.joinChannel(this.props.channelName);
     RtcEngine.enableAudioVolumeIndication(500, 3);
     RtcEngine.eventEmitter({
-      FirstRemoteVideoDecodedOfUid: (data) => {
-        console.log('[RtcEngine] firstRemoteVideoDecodedOfUid', data);
+      onFirstRemoteVideoDecoded: (data) => {
+        console.log('[RtcEngine] onFirstRemoteVideoDecoded', data);
       },
-      DidOfflineOfUid: (data) => {
-        console.log('[RtcEngine] didOfflineOfUid', data);
+      onUserJoined: (data) => {
+        console.log('[RtcEngine] onUserJoined', data);
+        const {peerIds} = this.state;
+        if (peerIds.indexOf(data.uid) !== -1) {
+          this.setState({
+            peerIds: [...peerIds, data.uid]
+          })
+        }
+      },
+      onUserOffline: (data) => {
+        console.log('[RtcEngine] onUserOffline', data);
         this.setState({
             peerIds: this.state.peerIds.filter(uid => uid !== data.uid)
         })
       },
-      DidJoinChannel: (data) => {
-        console.log('[RtcEngine] didJoinChannel', data);
-        // RtcEngine.setShowLocalVideo()
+      onJoinChannelSuccess: (data) => {
+        console.log('[RtcEngine] onJoinChannelSuccess', data);
         RtcEngine.startPreview();
         this.setState({
           joinSucceed: true
@@ -170,22 +178,13 @@ export default class AgoraComponent extends Component<Props> {
           })
         }
       },
-      ReportAudioVolumeIndicationOfSpeakers: (data) => {
-        console.log('[RtcEngine] reportAudioVolumeIndicationOfSpeakers', data);
+      onAudioVolumeIndication: (data) => {
+        console.log('[RtcEngine] onAudioVolumeIndication', data);
       },
-      DidClientRoleChanged: (data) => {
-        console.log("[RtcEngine] DidClientRoleChanged", data);
+      onClientRoleChanged: (data) => {
+        console.log("[RtcEngine] onClientRoleChanged", data);
       },
-      // onUserJoined: (data) => {
-      //   console.log('[RtcEngine] onUserJoined', data);
-      //   const {peerIds} = this.state;
-      //   if (peerIds.indexOf(data.uid) !== -1) {
-      //     this.setState({
-      //       peerIds: [...peerIds, data.uid]
-      //     })
-      //   }
-      // },
-      DidOccurError: (data) => {
+      onError: (data) => {
         console.log('[RtcEngine] onError', data);
         if (data.error === 17) {
           RtcEngine.leaveChannel().then(_ => {
@@ -198,8 +197,10 @@ export default class AgoraComponent extends Component<Props> {
   }
 
   componentWillUnmount () {
-    RtcEngine.leaveChannel();
-    RtcEngine.destroy();
+    if (this.state.joinSucceed) {
+      RtcEngine.leaveChannel();
+      RtcEngine.destroy();
+    }
   }
 
   handleCancel = () => {
@@ -232,7 +233,9 @@ export default class AgoraComponent extends Component<Props> {
     this.setState({
       isCameraTorch: !this.state.isCameraTorch
     }, () => {
-      RtcEngine.setCameraTorchOn(this.state.isCameraTorch)
+      RtcEngine.setCameraTorchOn(this.state.isCameraTorch).then(val => {
+        console.log("setCameraTorch", val);
+      })
     })
   }
 
