@@ -1,6 +1,6 @@
 import {
     NativeModules,
-    NativeAppEventEmitter,
+    NativeEventEmitter,
     EmitterSubscription
 } from 'react-native';
 
@@ -11,18 +11,21 @@ import {
     String, Number
 } from "./types.d";
 
+
 const { Agora } = NativeModules;
+const AgoraEventEmitter = new NativeEventEmitter(Agora);
 
 export default class RtcEngine {
 
-    private static listener: EmitterSubscription;
+    private static listeners: Array<EmitterSubscription>;
     static init(options: Option): void {
         this.removeEmitter();
         Agora.init(options);
+        this.listeners = [];
     }
 
-    static joinChannel(channelName: String, uid?: Number): void {
-        Agora.joinChannel(channelName, uid);
+    static joinChannel(channelName: String, uid?: Number, token?: String, info?: Object): void {
+        Agora.joinChannel({channelName, uid, token, info});
     }
 
     static joinChannelWithToken(
@@ -31,15 +34,94 @@ export default class RtcEngine {
     }
 
     static eventEmitter(eventScheduler: EventScheduler) {
-        this.listener && this.listener.remove();
-        this.listener = NativeAppEventEmitter.addListener('agoraEvent', event => {
-            const functor = (eventScheduler as any)[event['type']];
-            functor && functor(event);
-        });
+        this.removeEmitter();
+        const events = [
+            "DidOccurWarning",
+            "DidOccurError",
+            "DidApiCallExecute",
+            "DidJoinChannel",
+            "DidRejoinChannel",
+            "DidLeaveChannel",
+            "LeaveChannel",
+            "DidClientRoleChanged",
+            "DidJoinedOfUid",
+            "DidOfflineOfUid",
+            "ConnectionChangedToState",
+            "ConnectionDidLost",
+            "TokenPrivilegeWillExpire",
+            "RequestToken",
+            
+            "DidMicrophoneEnabled",
+            "ReportAudioVolumeIndicationOfSpeakers",
+            "ActiveSpeaker",
+            "FirstLocalAudioFrame",
+            "FirstRemoteAudioFrameOfUid",
+            "VideoDidStop",
+            "FirstLocalVideoFrameWithSize",
+            "FirstRemoteVideoDecodedOfUid",
+            "FirstRemoteVideoFrameOfUid",
+            "DidAudioMuted",
+            "DidVideoMuted",
+            "DidVideoEnabled",
+            "DidLocalVideoEnabled",
+            "VideoSizeChangedOfUid",
+            "RemoteVideoStateChangedOfUid",
+            "DidLocalPublishFallbackToAudioOnly",
+            "DidRemoteSubscribeFallbackToAudioOnly",
+            
+            "DeviceTypeStateChanged",
+            "DidAudioRouteChanged",
+            "CameraDidReady",
+            "CameraFocusDidChangedToRect",
+            "CameraExposureDidChangedToRect",
+            
+            "ReportRtcStats",
+            "LastmileQuality",
+            "NetworkQuality",
+            "LocalVideoStats",
+            "RemoteVideoStats",
+            "RemoteAudioStats",
+            "AudioTransportStatsOfUid",
+            "VideoTransportStatsOfUid",
+            
+            "LocalAudioMixingDidFinish",
+            "RemoteAudioMixingDidStart",
+            "RemoteAudioMixingDidFinish",
+            "DidAudioEffectFinish",
+            
+            "StreamPublished",
+            "StreamUnpublish",
+            "TranscodingUpdated",
+            
+            "StreamInjectedStatus",
+            
+            "ReceiveStreamMessage",
+            "DidOccurStreamMessageError",
+            
+            "MediaEngineDidLoaded",
+            "MediaEngineDidStartCall",
+            
+            "ConnectionDidInterrupted",
+            "ConnectionDidBanned",
+            "AudioQualityOfUid"
+        ];
+        for (let event of events) {
+            this.listeners.push(
+                AgoraEventEmitter.addListener(event, msg => {
+                    const functor = (eventScheduler as any)[event];
+                    functor && functor(msg);
+                })
+            );
+        }
     }
 
     static removeEmitter() {
-        this.listener && this.listener.remove();
+        if (this.listeners && this.listeners.length > 0) {
+            for (let listener of this.listeners) {
+                listener.remove();
+            }
+        }
+        this.listeners = [];
     }
 
     static enableLastmileTest() {
@@ -51,7 +133,7 @@ export default class RtcEngine {
     }
 
     static leaveChannel() {
-        Agora.leaveChannel();
+        return Agora.leaveChannel();
     }
 
     static destroy() {
@@ -118,8 +200,12 @@ export default class RtcEngine {
         Agora.muteRemoteAudioStream(uid, status);
     }
 
+    static muteAllRemoteAudioStreams(status: boolean) {
+        Agora.muteAllRemoteAudioStreams(status);
+    }
+
     static setCameraTorchOn(status: boolean) {
-        Agora.setCameraTorchOn(status);
+        return Agora.setCameraTorchOn(status);
     }
 
     static setCameraAutoFocusFaceModeEnabled(status: boolean) {
@@ -142,8 +228,8 @@ export default class RtcEngine {
         Agora.muteAllRemoteVideoStreams(status);
     }
 
-    static muteRemoteVideoStream(status: boolean) {
-        Agora.muteAllRemoteVideoStreams(status);
+    static muteRemoteVideoStream(uid: number, status: boolean) {
+        Agora.muteRemoteVideoStream(uid, status);
     }
 
     static createDataStream(reliable: boolean, ordered: boolean, callback: Callback<void>) {
@@ -155,6 +241,6 @@ export default class RtcEngine {
     }
 
     static getSdkVersion(callback: Callback<void>) {
-        Agora.getSdkVersion(callback);
+        Agora.getSdkVersion().then(callback);
     }
 };

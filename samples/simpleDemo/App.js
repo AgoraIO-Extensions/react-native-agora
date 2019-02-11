@@ -51,7 +51,7 @@ export default class App extends Component<Props> {
       videoProfile: 40,
       clientRole: 1,
       swapWidthAndHeight: true,
-      channelName: 'defaultChannel'
+      channelName: null
     };
   }
 
@@ -62,27 +62,26 @@ export default class App extends Component<Props> {
   }
 
   onCancel = (error) => {
-    console.log("[error]", error);
     this.setState({
       showLive: false,
-      error
+      error: JSON.stringify(error)
     })
   }
 
   render() {
     if (this.state.showLive) {
+      console.log('channelName', this.state.channelName);
       return (<AgoraRTCView
-        onCancel={this.onCancel}
         channelProfile={this.state.channelProfile}
+        channelName={this.state.channelName}
         videoProfile={this.state.videoProfile}
         clientRole={this.state.clientRole}
-        swapWidthAndHeight={this.state.swapWidthAndHeight}
-        channelName={this.state.channelName}
+        onCancel={this.onCancel}
       ></AgoraRTCView>);
     }
     return (
       <View style={styles.container}>
-        {this.state.error && <Text>Error Message: {error}</Text>}
+        {this.state.error ? <Text>Error Message: {this.state.error}</Text> : null}
         <TextInput
           style={{height: 40}}
           keyboardType='numeric'
@@ -112,12 +111,17 @@ export default class App extends Component<Props> {
             let matched = text.match(/\d+/g) && text.match(/\d+/g)[0]
             if (matched) {
               this.setState({clientRole: +matched})
-            }          }
+            }
+          }
         } />
         <TextInput
           style={{height: 40}}
           placeholder="Enter channelName"
-          onChnageText={(text) => this.setState({channelName: text})}
+          onChangeText={
+            (text) => {
+              this.setState({channelName: text}) 
+            }
+          }
         />
         <TouchableOpacity
           style={styles.button}

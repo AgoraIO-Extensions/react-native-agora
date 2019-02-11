@@ -1,4 +1,4 @@
-export const APPID = 'Your Agora APP_ID'; //'Your Agora APP_ID'
+export const APPID = 'Your Agora APP_ID';
 // iPhoneX Xs
 const X_WIDTH = 375;
 const X_HEIGHT = 812;

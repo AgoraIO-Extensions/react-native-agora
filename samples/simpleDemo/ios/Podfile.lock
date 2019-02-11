@@ -1,29 +1,41 @@
 PODS:
   - AgoraRtcEngine_iOS (2.3.3)
+  - React (0.58.3):
+    - React/Core (= 0.58.3)
   - react-native-agora (2.3.3):
     - AgoraRtcEngine_iOS (= 2.3.3)
+    - React
     - react-native-agora/AgoraRtcCryptoLoader (= 2.3.3)
-    - react-native-agora/AgoraRtcEngineKit (= 2.3.3)
   - react-native-agora/AgoraRtcCryptoLoader (2.3.3):
     - AgoraRtcEngine_iOS (= 2.3.3)
-  - react-native-agora/AgoraRtcEngineKit (2.3.3):
-    - AgoraRtcEngine_iOS (= 2.3.3)
+    - React
+  - React/Core (0.58.3):
+    - yoga (= 0.58.3.React)
+  - yoga (0.58.3.React)
 
 DEPENDENCIES:
-  - react-native-agora (from `../node_modules/react-native-agora`)
+  - React (from `../node_modules/react-native`)
+  - react-native-agora (from `../../../`)
+  - yoga (from `../node_modules/react-native/ReactCommon/yoga/Yoga.podspec`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AgoraRtcEngine_iOS
 
 EXTERNAL SOURCES:
+  React:
+    :path: "../node_modules/react-native"
   react-native-agora:
-    :path: "../node_modules/react-native-agora"
+    :path: "../../../"
+  yoga:
+    :path: "../node_modules/react-native/ReactCommon/yoga/Yoga.podspec"
 
 SPEC CHECKSUMS:
   AgoraRtcEngine_iOS: 8ad4b58dafed2cec5df03fa1f0ddbdad2c9ff958
-  react-native-agora: ad43868aad1298fa32f167d9a00887e2c88af54b
+  React: 9b873b38b92ed8012d7cdf3b965477095ed364c4
+  react-native-agora: ad538661771e745fac8920412002e0e90903bbc8
+  yoga: 0885622311729a02c2bc02dca97167787a51488b
 
-PODFILE CHECKSUM: ed05ca9e60ab637de485899d548c81338155a2ae
+PODFILE CHECKSUM: 20565f1fb8643e49a8e76b33da6bb4e2d188134a
 
 COCOAPODS: 1.5.3

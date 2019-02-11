@@ -13,7 +13,9 @@ target 'simpleDemo' do
   #  inherit! :search_paths
   #  # Pods for testing
   #end
-  pod "react-native-agora", path: "../node_modules/react-native-agora"
+  pod "react-native-agora", path: "../../../"
+  pod 'yoga', path: '../node_modules/react-native/ReactCommon/yoga/Yoga.podspec'
+  pod 'React', path: '../node_modules/react-native'
   #pod "React", path: react_native_path
   #%w(DoubleConversion Folly glog).each do |lib_name|
   #  pod lib_name, podspec: "#{react_native_path}/third-party-podspecs/#{lib_name}.podspec"
