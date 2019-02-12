@@ -74,6 +74,33 @@ RCT_EXPORT_MODULE();
            @"Connected": @(AgoraConnectionStateConnected),
            @"Reconnecting": @(AgoraConnectionStateReconnecting),
            @"ConnectionFailed": @(AgoraConnectionStateFailed),
+           @"ConnectionChangedConnecting": @(AgoraConnectionChangedConnecting),
+           @"ConnectionChangedJoinSuccess": @(AgoraConnectionChangedJoinSuccess),
+           @"ConnectionChangedInterrupted": @(AgoraConnectionChangedInterrupted),
+           @"ConnectionChangedBannedByServer": @(AgoraConnectionChangedBannedByServer),
+           @"ConnectionChangedJoinFailed": @(AgoraConnectionChangedJoinFailed),
+           @"ConnectionChangedLeaveChannel": @(AgoraConnectionChangedLeaveChannel),
+           @"AudioOutputRoutingDefault": @(AgoraAudioOutputRoutingDefault),
+           @"AudioOutputRoutingHeadset": @(AgoraAudioOutputRoutingHeadset),
+           @"AudioOutputRoutingEarpiece": @(AgoraAudioOutputRoutingEarpiece),
+           @"AudioOutputRoutingHeadsetNoMic": @(AgoraAudioOutputRoutingHeadsetNoMic),
+           @"AudioOutputRoutingSpeakerphone": @(AgoraAudioOutputRoutingSpeakerphone),
+           @"AudioOutputRoutingLoudspeaker": @(AgoraAudioOutputRoutingLoudspeaker),
+           @"AudioOutputRoutingHeadsetBluetooth": @(AgoraAudioOutputRoutingHeadsetBluetooth),
+           @"NetworkQualityUnknown": @(AgoraNetworkQualityUnknown),
+           @"NetworkQualityExcellent": @(AgoraNetworkQualityExcellent),
+           @"NetworkQualityGood": @(AgoraNetworkQualityGood),
+           @"NetworkQualityPoor": @(AgoraNetworkQualityPoor),
+           @"NetworkQualityBad": @(AgoraNetworkQualityBad),
+           @"NetworkQualityVBad": @(AgoraNetworkQualityVBad),
+           @"NetworkQualityDown": @(AgoraNetworkQualityDown),
+           @"ErrorCodeNoError": @(AgoraErrorCodeNoError),
+           @"ErrorCodeFailed": @(AgoraErrorCodeFailed),
+           @"ErrorCodeInvalidArgument": @(AgoraErrorCodeInvalidArgument),
+           @"ErrorCodeTimedOut": @(AgoraErrorCodeTimedOut),
+           @"ErrorCodeAlreadyInUse": @(AgoraErrorCodeAlreadyInUse),
+           @"ErrorCodeAbort": @(AgoraErrorCodeAbort),
+           @"ErrorCodeResourceLimited": @(AgoraErrorCodeResourceLimited),
            @"AudioProfileDefault": @(AgoraAudioProfileDefault),
            @"AudioProfileSpeechStandard": @(AgoraAudioProfileSpeechStandard),
            @"AudioProfileMusicStandard": @(AgoraAudioProfileMusicStandard),
@@ -107,7 +134,10 @@ RCT_EXPORT_MODULE();
            @"AgoraVideoMirrorModeAuto": @(AgoraVideoMirrorModeAuto),
            @"AgoraVideoMirrorModeEnabled": @(AgoraVideoMirrorModeEnabled),
            @"AgoraVideoMirrorModeDisabled": @(AgoraVideoMirrorModeDisabled),
-           };
+           @"AgoraChannelProfileCommunication": @(AgoraChannelProfileCommunication),
+           @"AgoraChannelProfileLiveBroadcasting": @(AgoraChannelProfileLiveBroadcasting),
+           @"AgoraChannelProfileGame": @(AgoraChannelProfileGame)
+         };
 }
 
 // init
@@ -133,7 +163,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     }
   }
   
-  AgoraVideoEncoderConfiguration *video_encoder_config = [[AgoraVideoEncoderConfiguration new] initWithWidth:[options[@"videoEncoderConfig.width"] integerValue] height:[options[@"videoEncoderConfig.height"] integerValue] frameRate:(AgoraVideoFrameRate)[options[@"videoEncoderConfig.frameRate"] integerValue] bitrate:[options[@"videoEncoderConfig.bitrate"] integerValue] orientationMode: (AgoraVideoOutputOrientationMode)[options[@"videoEncoderCnofig.orientationMode"] integerValue]];
+  AgoraVideoEncoderConfiguration *video_encoder_config = [[AgoraVideoEncoderConfiguration new] initWithWidth:[options[@"videoEncoderConfig"][@"width"] integerValue] height:[options[@"videoEncoderConfig"][@"height"] integerValue] frameRate:(AgoraVideoFrameRate)[options[@"videoEncoderConfig"][@"frameRate"] integerValue] bitrate:[options[@"videoEncoderConfig"][@"bitrate"] integerValue] orientationMode: (AgoraVideoOutputOrientationMode)[options[@"videoEncoderConfig"][@"orientationMode"] integerValue]];
   [self.rtcEngine setVideoEncoderConfiguration:video_encoder_config];
   [self.rtcEngine setClientRole:(AgoraClientRole)[options[@"clientRole"] integerValue]];
   [self.rtcEngine setAudioProfile:(AgoraAudioProfile)[options[@"audioProfile"] integerValue]
