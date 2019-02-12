@@ -1,12 +1,27 @@
 apply plugin: 'com.android.library'
 
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2'
+    }
+}
+
+def DEFAULT_COMPILE_SDK_VERSION = 27
+def DEFAULT_BUILD_TOOLS_VERSION = "27.0.3"
+def DEFAULT_TARGET_SDK_VERSION = 27
+def DEFAULT_ANDROID_SUPPORT_VERSION = "27.1.0"
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+    buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
 
@@ -19,13 +34,42 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    splits {
+        abi {
+            enable true
+
+            reset()
+
+            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            // Specify that we do not want an additional universal SDK
+            universalApk false
+        }
+    }
 }
 
 dependencies {
-    implementation "com.facebook.react:react-native:+"
+    def androidSupportVersion = rootProject.hasProperty("androidSupportVersion")  ? rootProject.androidSupportVersion : DEFAULT_ANDROID_SUPPORT_VERSION
+    // from internet
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$androidSupportVersion"
+    implementation "io.agora.rtc:full-sdk:2.3.3"
+    // from node_modules
+    implementation "com.facebook.react:react-native:+"
+    implementation 'com.google.code.gson:gson:2.8.5'
+}
+//
+//configurations.all {
+//    exclude group: 'com.facebook.react', module: 'react-native'
+//}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url "file:///Users/ly/GithubPremium/react-native-agora/node_modules/react-native"
+    }
+    jcenter()
+    google()
 }
 
-configurations.all {
-    exclude group: 'com.facebook.react', module: 'react-native'
-}
