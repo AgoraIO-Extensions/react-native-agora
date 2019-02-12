@@ -316,6 +316,10 @@ RCT_EXPORT_METHOD(setDefaultAudioRouteToSpeakerphone:(BOOL)defaultToSpeaker){
   [self.rtcEngine setDefaultAudioRouteToSpeakerphone:defaultToSpeaker];
 }
 
+RCT_EXPORT_METHOD(setDefaultMuteAllRemoteAudioStreams:(BOOL)defaultToSpeaker){
+  [self.rtcEngine setDefaultMuteAllRemoteAudioStreams:defaultToSpeaker];
+}
+
 // enable video
 RCT_EXPORT_METHOD(enableVideo) {
   [self.rtcEngine enableVideo];
@@ -344,6 +348,10 @@ RCT_EXPORT_METHOD(muteAllRemoteVideoStreams:(BOOL)muted){
 // mute video stream by uid
 RCT_EXPORT_METHOD(muteRemoteVideoStream:(NSUInteger)uid mute:(BOOL)mute){
   [self.rtcEngine muteRemoteVideoStream:uid mute:mute];
+}
+
+RCT_EXPORT_METHOD(setDefaultMuteAllRemoteVideoStreams:(BOOL)mute) {
+  [self.rtcEngine setDefaultMuteAllRemoteVideoStreams:mute];
 }
 
 // enable audio
@@ -376,15 +384,15 @@ RCT_EXPORT_METHOD(muteRemoteAudioStream:(NSUInteger)uid muted:(BOOL)mute){
   [self.rtcEngine muteRemoteAudioStream:uid mute:mute];
 }
 
-// start recoding service
-RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary*)options){
-  [self.rtcEngine startAudioRecording:options[@"path"] quality:(AgoraAudioRecordingQuality)[options[@"quality"] integerValue]];
-}
-
-// stop recoding service
-RCT_EXPORT_METHOD(stopAudioRecording:(NSString*)recordingKey){
-  [self.rtcEngine stopAudioRecording];
-}
+//// start recoding service
+//RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary*)options){
+//  [self.rtcEngine startAudioRecording:options[@"path"] quality:(AgoraAudioRecordingQuality)[options[@"quality"] integerValue]];
+//}
+//
+//// stop recoding service
+//RCT_EXPORT_METHOD(stopAudioRecording:(NSString*)recordingKey){
+//  [self.rtcEngine stopAudioRecording];
+//}
 
 // adjust recorcding signal volume
 RCT_EXPORT_METHOD(adjustRecordingSignalVolume: (NSInteger) volume){
@@ -435,7 +443,7 @@ RCT_EXPORT_METHOD(setLocalVoicePitch:(double) pitch) {
 }
 
 // set local video equalization of band frequency
-RCT_EXPORT_METHOD(setLocalVoiceEqualizationOfBandFrequency:(NSInteger)band gain:(NSInteger)gain) {
+RCT_EXPORT_METHOD(setLocalVoiceEqualization:(NSInteger)band gain:(NSInteger)gain) {
   AgoraAudioEqualizationBandFrequency bandType = AgoraAudioEqualizationBand31;
   switch (band) {
     case AgoraAudioEqualizationBand31:
@@ -473,7 +481,7 @@ RCT_EXPORT_METHOD(setLocalVoiceEqualizationOfBandFrequency:(NSInteger)band gain:
 }
 
 // set local voice reverb of type
-RCT_EXPORT_METHOD(setLocalVoiceReverbOfType:(NSInteger)reverb value:(NSInteger)value) {
+RCT_EXPORT_METHOD(setLocalVoiceReverb:(NSInteger)reverb value:(NSInteger)value) {
   AgoraAudioReverbType reverbType = AgoraAudioReverbDryLevel;
   switch (reverb) {
     case AgoraAudioReverbDryLevel:
@@ -525,7 +533,7 @@ RCT_EXPORT_METHOD(adjustAudioMixingVolume:(NSInteger) volume) {
 
 // adjust audio mixing playout volume
 RCT_EXPORT_METHOD(adjustAudioMixingPlayoutVolume:(NSInteger) volume) {
-  [self.rtcEngine adjustAudioMixingVolume:volume];
+  [self.rtcEngine adjustAudioMixingPlayoutVolume:volume];
 }
 
 // adjust audio mixing publish volume
@@ -783,7 +791,7 @@ RCT_EXPORT_METHOD(pauseEffect
                   :(NSInteger) soundId
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine unloadEffect:(int)soundId];
+  NSInteger res = [self.rtcEngine pauseEffect:(int)soundId];
   if (res != 0) {
     reject(@"131014", @"pauseEffect failed", [self makeNSError:@{
                                                                  @"code": @(131014),
@@ -801,10 +809,10 @@ RCT_EXPORT_METHOD(pauseEffect
 }
 
 // pause all effects
-RCT_EXPORT_METHOD(pauseAllEffects:(NSInteger) soundId
-                  resolve:(RCTPromiseResolveBlock)resolve
+RCT_EXPORT_METHOD(pauseAllEffects
+                  :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine unloadEffect:(int)soundId];
+  NSInteger res = [self.rtcEngine pauseAllEffects];
   if (res != 0) {
     reject(@"131014", @"pauseAllEffects failed", [self makeNSError:@{
                                                                      @"code": @(131014),
@@ -943,8 +951,7 @@ RCT_EXPORT_METHOD(setAudioSessionOperationRestriction
 
 // gateway test start echo
 RCT_EXPORT_METHOD(startEchoTest
-                  :(RCTResponseSenderBlock)sender
-                  resolve:(RCTPromiseResolveBlock)resolve
+                  :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine startEchoTest:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
     sender(@{
@@ -1152,6 +1159,49 @@ RCT_EXPORT_METHOD(clearVideoWatermarks
   }
 }
 
+// set local publish fallback option
+RCT_EXPORT_METHOD(setLocalPublishFallbackOption:(NSInteger)option
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSInteger res = [self.rtcEngine setLocalPublishFallbackOption:option];
+  if (res != 0) {
+    reject(@"131039", @"setLocalPublishFallbackOption failed", [self makeNSError:@{
+                                                                          @"code": @(131039),
+                                                                          @"message":@{
+                                                                              @"success":@(NO),
+                                                                              @"value":@(res)
+                                                                              }
+                                                                          }]);
+  } else {
+    resolve(@{
+              @"success": @(YES),
+              @"value": @(res)
+              });
+  }
+}
+
+// set remote subscribe fallback option
+RCT_EXPORT_METHOD(setRemoteSubscribeFallbackOption:(NSInteger)option
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSInteger res = [self.rtcEngine setRemoteSubscribeFallbackOption:option];
+  if (res != 0) {
+    reject(@"131040", @"setRemoteSubscribeFallbackOption failed", [self makeNSError:@{
+                                                                                   @"code": @(131040),
+                                                                                   @"message":@{
+                                                                                       @"success":@(NO),
+                                                                                       @"value":@(res)
+                                                                                       }
+                                                                                   }]);
+  } else {
+    resolve(@{
+              @"success": @(YES),
+              @"value": @(res)
+              });
+  }
+}
+
+
 // enable dual stream mode
 RCT_EXPORT_METHOD(enableDualStreamMode
                   :(BOOL) enabled
@@ -1175,14 +1225,14 @@ RCT_EXPORT_METHOD(enableDualStreamMode
 }
 
 // set remote video stream
-RCT_EXPORT_METHOD(setRemoteVideoStream
+RCT_EXPORT_METHOD(setRemoteVideoStreamType
                   :(NSDictionary *) options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setRemoteVideoStream:[options[@"uid"] integerValue]
                                                   type:(AgoraVideoStreamType)[options[@"streamType"] integerValue]];
   if (res != 0) {
-    reject(@"131029", @"setRemoteVideoStream failed", [self makeNSError:@{
+    reject(@"131029", @"setRemoteVideoStreamType failed", [self makeNSError:@{
                                                                           @"code": @(131029),
                                                                           @"message":@{
                                                                               @"success":@(NO),
@@ -1294,7 +1344,7 @@ RCT_EXPORT_METHOD(setVideoQualityParameters
 }
 
 // set local video mirror mode
-RCT_EXPORT_METHOD(setLocalVideoMirroMode
+RCT_EXPORT_METHOD(setLocalVideoMirrorMode
                   :(NSInteger) mode
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
@@ -1354,8 +1404,8 @@ RCT_EXPORT_METHOD(isCameraTorchSupported
             });
 }
 
-// isCameraFocusPositionInPreviewSupported
-RCT_EXPORT_METHOD(isCameraFocusPositionInPreviewSupported
+// isCameraFocusSupported
+RCT_EXPORT_METHOD(isCameraFocusSupported
                   :(RCTPromiseResolveBlock)resolve) {
   BOOL res = [self.rtcEngine isCameraFocusPositionInPreviewSupported];
   resolve(@{
@@ -1440,7 +1490,9 @@ RCT_EXPORT_METHOD(setCameraAutoFocusFaceModeEnabled:(BOOL)enable
 }
 
 // getCallId
-RCT_EXPORT_METHOD(getCallId:(RCTPromiseResolveBlock)resolve) {
+RCT_EXPORT_METHOD(getCallId
+                  :(RCTPromiseResolveBlock)resolve)
+                  reject:(RCTPromiseRejectBlock)reject) {
   resolve(@{
             @"success": @(YES),
             @"value": [self.rtcEngine getCallId]
@@ -1538,6 +1590,11 @@ RCT_EXPORT_METHOD(configPublisher:(NSDictionary *)config){
 RCT_EXPORT_METHOD(addPublishStreamUrl:(NSDictionary *)options) {
   [self.rtcEngine addPublishStreamUrl:options[@"url"] transcodingEnabled:[options[@"enable"] boolValue]];
   [self.rtcEngine setLiveTranscoding:AgoraLiveTranscoding.defaultTranscoding];
+}
+
+// remove publish stream url
+RCT_EXPORT_METHOD(removePublishStreamUrl:(NSDictionary *)options) {
+  [self.rtcEngine removePublishStreamUrl:options[@"url"]];
 }
 
 // set living transcoding
