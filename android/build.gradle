@@ -1,5 +1,14 @@
 apply plugin: 'com.android.library'
 
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.encoding = 'utf-8'
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
+}
+
 buildscript {
     repositories {
         google()
@@ -67,7 +76,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven {
-        url "file:///Users/ly/GithubPremium/react-native-agora/node_modules/react-native"
+        url "$rootDir/../node_modules/react-native/android"
     }
     jcenter()
     google()
