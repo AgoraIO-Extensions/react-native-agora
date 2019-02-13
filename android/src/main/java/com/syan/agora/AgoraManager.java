@@ -165,11 +165,12 @@ public class AgoraManager {
         return mRtcEngine.getConnectionState();
     }
     public int joinChannel(ReadableMap options) {
-        String token = options.getString("token");
-        String channel = options.getString("channel");
-        String optionalInfo = options.getString("optionalInfo");
-        int uid = options.getInt("uid");
-        return mRtcEngine.joinChannel(token, channel, optionalInfo, uid);
+        String token = options.hasKey("token") ? options.getString("token") : null;
+        String channelName = options.hasKey("channelName") ? options.getString("channelName") : null;
+        String optionalInfo = options.hasKey("optionalInfo") ? options.getString("optionalInfo") : null;
+        int uid = options.hasKey("uid") ? options.getInt("uid") : 0;
+        this.mLocalUid = uid;
+        return mRtcEngine.joinChannel(token, channelName, optionalInfo, uid);
     }
 
 //    public int joinChannelWithToken(ReadableMap options) {
