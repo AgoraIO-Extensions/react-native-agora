@@ -66,3 +66,7 @@ lib
 *.zip
 .byebug_history
 Untitled*
+Pods
+**/*~
+xcuserdata*
+**/*/xcuserdata*

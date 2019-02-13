@@ -954,7 +954,7 @@ RCT_EXPORT_METHOD(startEchoTest
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine startEchoTest:^(NSString * _Nonnull channel, NSUInteger uid, NSInteger elapsed) {
-    sender(@{
+    _block(@{
              @"channel": channel,
              @"uid": @(uid),
              @"elapsed": @(elapsed)
@@ -1491,7 +1491,7 @@ RCT_EXPORT_METHOD(setCameraAutoFocusFaceModeEnabled:(BOOL)enable
 
 // getCallId
 RCT_EXPORT_METHOD(getCallId
-                  :(RCTPromiseResolveBlock)resolve)
+                  :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   resolve(@{
             @"success": @(YES),
