@@ -8,7 +8,6 @@
 
 #import <React/RCTViewManager.h>
 
-
 @interface RCTAgoraViewManager : RCTViewManager
 
 @end

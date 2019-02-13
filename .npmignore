@@ -20,3 +20,7 @@ config.gypi
 CVS
 npm-debug.log
 node_modules
+ios/Pods
+ios/Podfile*
+xcuserdata*
+**/*/xcuserdata*
