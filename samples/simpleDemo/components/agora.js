@@ -100,7 +100,8 @@ type Props = {
   channelName: String,
   videoProfile: Number,
   clientRole: Number,
-  onCancel: Function
+  onCancel: Function,
+  uid: Number,
 }
 
 export default class AgoraComponent extends Component<Props> {
@@ -144,7 +145,7 @@ export default class AgoraComponent extends Component<Props> {
     })
 
     console.log('[joinChannel] ' + this.props.channelName);
-    RtcEngine.joinChannel(this.props.channelName);
+    RtcEngine.joinChannel(this.props.channelName, this.props.uid);
     RtcEngine.enableAudioVolumeIndication(500, 3);
     RtcEngine.eventEmitter({
       onFirstRemoteVideoDecoded: (data) => {
@@ -153,7 +154,7 @@ export default class AgoraComponent extends Component<Props> {
       onUserJoined: (data) => {
         console.log('[RtcEngine] onUserJoined', data);
         const {peerIds} = this.state;
-        if (peerIds.indexOf(data.uid) !== -1) {
+        if (peerIds.indexOf(data.uid) === -1) {
           this.setState({
             peerIds: [...peerIds, data.uid]
           })
@@ -172,7 +173,7 @@ export default class AgoraComponent extends Component<Props> {
           joinSucceed: true
         })
         const {peerIds} = this.state;
-        if (peerIds.indexOf(data.uid) !== -1) {
+        if (peerIds.indexOf(data.uid) === -1) {
           this.setState({
             peerIds: [...peerIds, data.uid]
           })

@@ -15,7 +15,6 @@
 		23C20DD11F0A6ED80095F60C /* AgoraConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DCC1F0A6ED80095F60C /* AgoraConst.m */; };
 		23C20DD21F0A6ED80095F60C /* RCTAgoraVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */; };
 		23C20DD31F0A6ED80095F60C /* RCTAgoraViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */; };
-		A5E11A595539F6638D9619C2 /* libPods-RCTAgora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C2FCBA90F5ADC578F5914ABD /* libPods-RCTAgora.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,9 +43,6 @@
 		23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAgoraVideoView.m; sourceTree = "<group>"; };
 		23C20DCF1F0A6ED80095F60C /* RCTAgoraViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAgoraViewManager.h; sourceTree = "<group>"; };
 		23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAgoraViewManager.m; sourceTree = "<group>"; };
-		490A35EA6380B5E4C44524D5 /* Pods-RCTAgora.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCTAgora.release.xcconfig"; path = "Pods/Target Support Files/Pods-RCTAgora/Pods-RCTAgora.release.xcconfig"; sourceTree = "<group>"; };
-		C0B631272109DCDA602914D3 /* Pods-RCTAgora.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCTAgora.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RCTAgora/Pods-RCTAgora.debug.xcconfig"; sourceTree = "<group>"; };
-		C2FCBA90F5ADC578F5914ABD /* libPods-RCTAgora.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RCTAgora.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +53,6 @@
 				08B28CF72211239F00E57CEB /* AgoraRtcEngineKit.framework in Frameworks */,
 				085CF7D82204A7B7002075D5 /* libcrypto.a in Frameworks */,
 				085CF7D72204A7B7002075D5 /* AgoraRtcCryptoLoader.framework in Frameworks */,
-				A5E11A595539F6638D9619C2 /* libPods-RCTAgora.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +72,6 @@
 			isa = PBXGroup;
 			children = (
 				08B28CF62211239F00E57CEB /* AgoraRtcEngineKit.framework */,
-				C2FCBA90F5ADC578F5914ABD /* libPods-RCTAgora.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -88,7 +82,6 @@
 				23AF281E1EEFECD800D771AB /* RCTAgora */,
 				23AF281D1EEFECD800D771AB /* Products */,
 				08B28CF52211239F00E57CEB /* Frameworks */,
-				A255C129D266B0FA939457B2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -116,15 +109,6 @@
 			path = RCTAgora;
 			sourceTree = "<group>";
 		};
-		A255C129D266B0FA939457B2 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C0B631272109DCDA602914D3 /* Pods-RCTAgora.debug.xcconfig */,
-				490A35EA6380B5E4C44524D5 /* Pods-RCTAgora.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,7 +116,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 23AF28251EEFECD800D771AB /* Build configuration list for PBXNativeTarget "RCTAgora" */;
 			buildPhases = (
-				B3851A406998F536E1F7EE0E /* [CP] Check Pods Manifest.lock */,
 				23AF28181EEFECD800D771AB /* Sources */,
 				23AF28191EEFECD800D771AB /* Frameworks */,
 				23AF281A1EEFECD800D771AB /* CopyFiles */,
@@ -178,31 +161,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		B3851A406998F536E1F7EE0E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RCTAgora-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		23AF28181EEFECD800D771AB /* Sources */ = {
@@ -329,7 +287,6 @@
 		};
 		23AF28261EEFECD800D771AB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0B631272109DCDA602914D3 /* Pods-RCTAgora.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
@@ -337,7 +294,6 @@
 					"$(inherited)",
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
-					"$(PROJECT_DIR)/Pods/**",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -350,7 +306,6 @@
 					"$(PROJECT_DIR)",
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
-					"$(PROJECT_DIR)/Pods/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -360,7 +315,6 @@
 		};
 		23AF28271EEFECD800D771AB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 490A35EA6380B5E4C44524D5 /* Pods-RCTAgora.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
@@ -368,7 +322,6 @@
 					"$(inherited)",
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
-					"$(PROJECT_DIR)/Pods/**",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -381,7 +334,6 @@
 					"$(PROJECT_DIR)",
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
-					"$(PROJECT_DIR)/Pods/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

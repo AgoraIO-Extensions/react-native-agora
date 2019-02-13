@@ -50,6 +50,7 @@ export default class App extends Component<Props> {
       channelProfile: 1,
       videoProfile: 40,
       clientRole: 1,
+      uid: 0,
       swapWidthAndHeight: true,
       channelName: null
     };
@@ -76,6 +77,7 @@ export default class App extends Component<Props> {
         channelName={this.state.channelName}
         videoProfile={this.state.videoProfile}
         clientRole={this.state.clientRole}
+        uid={this.state.uid}
         onCancel={this.onCancel}
       ></AgoraRTCView>);
     }
@@ -120,6 +122,15 @@ export default class App extends Component<Props> {
           onChangeText={
             (text) => {
               this.setState({channelName: text}) 
+            }
+          }
+        />
+        <TextInput
+          style={{height: 40}}
+          placeholder="Enter uid"
+          onChangeText={
+            (uid) => {
+              this.setState({uid: +uid}) 
             }
           }
         />

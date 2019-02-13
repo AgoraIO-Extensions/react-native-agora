@@ -1,6 +1,7 @@
 package com.syan.agora;
 
 import android.graphics.Rect;
+import android.media.MediaRecorder;
 import android.net.wifi.p2p.nsd.WifiP2pServiceRequest;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -19,27 +20,25 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.google.gson.Gson;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.RegEx;
-
+import io.agora.rtc.Constants;
 import io.agora.rtc.IAudioEffectManager;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.PublisherConfiguration;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.live.LiveInjectStreamConfig;
-import io.agora.rtc.live.LiveInjectStreamConfig.AudioSampleRateType;
 import io.agora.rtc.live.LiveTranscoding;
 import io.agora.rtc.video.AgoraImage;
+import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
-import static io.agora.rtc.Constants.*;
+import static io.agora.rtc.Constants.AudioScenario;
+import static io.agora.rtc.Constants.AudioProfile;
 
 public class AgoraModule extends ReactContextBaseJavaModule {
 
@@ -58,12 +57,12 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private static String UserOfflineReasonQuit = "UserOfflineReasonQuit";
     private static String UserOfflineReasonDropped = "UserOfflineReasonDropped";
     private static String UserOfflineReasonBecomeAudience = "UserOfflineReasonBecomeAudience";
-    private static String CodecTypeBaseLine = "CodecTypeBaseLine";
-    private static String CodecTypeMain = "CodecTypeMain";
-    private static String CodecTypeHigh = "CodecTypeHigh";
     private static String AudioSampleRateType32000 = "AudioSampleRateType32000";
     private static String AudioSampleRateType44100 = "AudioSampleRateType44100";
     private static String AudioSampleRateType48000 = "AudioSampleRateType48000";
+    private static String CodecTypeBaseLine = "CodecTypeBaseLine";
+    private static String CodecTypeMain = "CodecTypeMain";
+    private static String CodecTypeHigh = "CodecTypeHigh";
     private static String QualityLow = "QualityLow";
     private static String QualityMedium = "QualityMedium";
     private static String QualityHigh = "QualityHigh";
@@ -158,57 +157,104 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
 
-        constants.put(ChannelProfileCommunication, CHANNEL_PROFILE_LIVE_BROADCASTING);
-        constants.put(ChannelProfileLiveBroadcasting, CHANNEL_PROFILE_LIVE_BROADCASTING);
-        constants.put(ChannelProfileGame, CHANNEL_PROFILE_GAME);
-        constants.put(UserOfflineReasonQuit, USER_OFFLINE_QUIT);
-        constants.put(UserOfflineReasonDropped, USER_OFFLINE_DROPPED);
-        constants.put(UserOfflineReasonBecomeAudience, USER_OFFLINE_BECOME_AUDIENCE);
-        constants.put(Disconnected, CONNECTION_STATE_DISCONNECTED);
-        constants.put(Connecting, CONNECTION_STATE_CONNECTING);
-        constants.put(Connected, CONNECTION_STATE_CONNECTED);
-        constants.put(Reconnecting, CONNECTION_STATE_RECONNECTING);
-        constants.put(ConnectionFailed, CONNECTION_STATE_FAILED);
-        constants.put(ConnectionChangedConnecting, CONNECTION_CHANGED_CONNECTING);
-        constants.put(ConnectionChangedJoinSuccess, CONNECTION_CHANGED_JOIN_SUCCESS);
-        constants.put(ConnectionChangedInterrupted, CONNECTION_CHANGED_INTERRUPTED);
-        constants.put(ConnectionChangedBannedByServer, CONNECTION_CHANGED_BANNED_BY_SERVER);
-        constants.put(ConnectionChangedJoinFailed, CONNECTION_CHANGED_JOIN_FAILED);
-        constants.put(ConnectionChangedLeaveChannel, CONNECTION_CHANGED_LEAVE_CHANNEL);
-        constants.put(AudioOutputRoutingDefault, AUDIO_ROUTE_DEFAULT);
-        constants.put(AudioOutputRoutingHeadset, AUDIO_ROUTE_HEADSET);
-        constants.put(AudioOutputRoutingEarpiece, AUDIO_ROUTE_EARPIECE);
-        constants.put(AudioOutputRoutingHeadsetNoMic, AUDIO_ROUTE_HEADSETNOMIC);
-        constants.put(AudioOutputRoutingSpeakerphone, AUDIO_ROUTE_SPEAKERPHONE);
-        constants.put(AudioOutputRoutingLoudspeaker, AUDIO_ROUTE_LOUDSPEAKER);
-        constants.put(AudioOutputRoutingHeadsetBluetooth, AUDIO_ROUTE_HEADSETBLUETOOTH);
-        constants.put(NetworkQualityUnknown, QUALITY_UNKNOWN);
-        constants.put(NetworkQualityExcellent, QUALITY_EXCELLENT);
-        constants.put(NetworkQualityGood, QUALITY_GOOD);
-        constants.put(NetworkQualityPoor, QUALITY_POOR);
-        constants.put(NetworkQualityBad, QUALITY_BAD);
-        constants.put(NetworkQualityVBad, QUALITY_VBAD);
-        constants.put(NetworkQualityDown, QUALITY_DOWN);
-        constants.put(ErrorCodeNoError, ERR_OK);
-        constants.put(ErrorCodeFailed, ERR_FAILED);
-        constants.put(ErrorCodeInvalidArgument, ERR_INVALID_ARGUMENT);
-        constants.put(ErrorCodeTimedOut, ERR_TIMEDOUT);
-        constants.put(ErrorCodeAlreadyInUse, ERR_ALREADY_IN_USE);
-        constants.put(ErrorCodeEncryptedStreamNotAllowedPublished, ERR_ENCRYPTED_STREAM_NOT_ALLOWED_PUBLISHED);
-        constants.put(InjectStreamStatusStartSuccess, INJECT_STREAM_STATUS_START_SUCCESS);
-        constants.put(InjectStreamStatusStartAlreadyExist, INJECT_STREAM_STATUS_START_ALREADY_EXISTS);
-        constants.put(InjectStreamStatusStartUnauthorized, INJECT_STREAM_STATUS_START_UNAUTHORIZED);
-        constants.put(InjectStreamStatusStartTimeout, INJECT_STREAM_STATUS_START_TIMEDOUT);
-        constants.put(InjectStreamStatusStartFailed, INJECT_STREAM_STATUS_START_FAILED);
-        constants.put(InjectStreamStatusStopSuccess, INJECT_STREAM_STATUS_STOP_SUCCESS);
-        constants.put(InjectStreamStatusStopNotFound, INJECT_STREAM_STATUS_STOP_NOT_FOUND);
-        constants.put(InjectStreamStatusStopUnauthorized, INJECT_STREAM_STATUS_STOP_UNAUTHORIZED);
-        constants.put(InjectStreamStatusStopTimeout, INJECT_STREAM_STATUS_STOP_TIMEDOUT);
-        constants.put(InjectStreamStatusStopFailed, INJECT_STREAM_STATUS_STOP_FAILED);
-        constants.put(InjectStreamStatusBroken, INJECT_STREAM_STATUS_BROKEN);
+        constants.put(Adaptative, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE.getValue());
+        constants.put(FixedLandscape, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE.getValue());
+        constants.put(FixedPortrait, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT.getValue());
+        constants.put(Host, IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+        constants.put(Audience, IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
+        constants.put(ChannelProfileCommunication, Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        constants.put(ChannelProfileLiveBroadcasting, Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        constants.put(ChannelProfileGame, Constants.CHANNEL_PROFILE_GAME);
+        constants.put(UserOfflineReasonQuit, Constants.USER_OFFLINE_QUIT);
+        constants.put(UserOfflineReasonDropped, Constants.USER_OFFLINE_DROPPED);
+        constants.put(UserOfflineReasonBecomeAudience, Constants.USER_OFFLINE_BECOME_AUDIENCE);
+        constants.put(Disconnected, Constants.CONNECTION_STATE_DISCONNECTED);
+        constants.put(Connecting, Constants.CONNECTION_STATE_CONNECTING);
+        constants.put(Connected, Constants.CONNECTION_STATE_CONNECTED);
+        constants.put(Reconnecting, Constants.CONNECTION_STATE_RECONNECTING);
+        constants.put(ConnectionFailed, Constants.CONNECTION_STATE_FAILED);
+        constants.put(ConnectionChangedConnecting, Constants.CONNECTION_CHANGED_CONNECTING);
+        constants.put(ConnectionChangedJoinSuccess, Constants.CONNECTION_CHANGED_JOIN_SUCCESS);
+        constants.put(ConnectionChangedInterrupted, Constants.CONNECTION_CHANGED_INTERRUPTED);
+        constants.put(ConnectionChangedBannedByServer, Constants.CONNECTION_CHANGED_BANNED_BY_SERVER);
+        constants.put(ConnectionChangedJoinFailed, Constants.CONNECTION_CHANGED_JOIN_FAILED);
+        constants.put(ConnectionChangedLeaveChannel, Constants.CONNECTION_CHANGED_LEAVE_CHANNEL);
+        constants.put(AudioOutputRoutingDefault, Constants.AUDIO_ROUTE_DEFAULT);
+        constants.put(AudioOutputRoutingHeadset, Constants.AUDIO_ROUTE_HEADSET);
+        constants.put(AudioOutputRoutingEarpiece, Constants.AUDIO_ROUTE_EARPIECE);
+        constants.put(AudioOutputRoutingHeadsetNoMic, Constants.AUDIO_ROUTE_HEADSETNOMIC);
+        constants.put(AudioOutputRoutingSpeakerphone, Constants.AUDIO_ROUTE_SPEAKERPHONE);
+        constants.put(AudioOutputRoutingLoudspeaker, Constants.AUDIO_ROUTE_LOUDSPEAKER);
+        constants.put(AudioOutputRoutingHeadsetBluetooth, Constants.AUDIO_ROUTE_HEADSETBLUETOOTH);
+        constants.put(NetworkQualityUnknown, Constants.QUALITY_UNKNOWN);
+        constants.put(NetworkQualityExcellent, Constants.QUALITY_EXCELLENT);
+        constants.put(NetworkQualityGood, Constants.QUALITY_GOOD);
+        constants.put(NetworkQualityPoor, Constants.QUALITY_POOR);
+        constants.put(NetworkQualityBad, Constants.QUALITY_BAD);
+        constants.put(NetworkQualityVBad, Constants.QUALITY_VBAD);
+        constants.put(NetworkQualityDown, Constants.QUALITY_DOWN);
+        constants.put(ErrorCodeNoError, Constants.ERR_OK);
+        constants.put(ErrorCodeFailed, Constants.ERR_FAILED);
+        constants.put(ErrorCodeInvalidArgument, Constants.ERR_INVALID_ARGUMENT);
+        constants.put(ErrorCodeTimedOut, Constants.ERR_TIMEDOUT);
+        constants.put(ErrorCodeAlreadyInUse, Constants.ERR_ALREADY_IN_USE);
+        constants.put(ErrorCodeEncryptedStreamNotAllowedPublished, Constants.ERR_ENCRYPTED_STREAM_NOT_ALLOWED_PUBLISHED);
+        constants.put(InjectStreamStatusStartSuccess, Constants.INJECT_STREAM_STATUS_START_SUCCESS);
+        constants.put(InjectStreamStatusStartAlreadyExist, Constants.INJECT_STREAM_STATUS_START_ALREADY_EXISTS);
+        constants.put(InjectStreamStatusStartUnauthorized, Constants.INJECT_STREAM_STATUS_START_UNAUTHORIZED);
+        constants.put(InjectStreamStatusStartTimeout, Constants.INJECT_STREAM_STATUS_START_TIMEDOUT);
+        constants.put(InjectStreamStatusStartFailed, Constants.INJECT_STREAM_STATUS_START_FAILED);
+        constants.put(InjectStreamStatusStopSuccess, Constants.INJECT_STREAM_STATUS_STOP_SUCCESS);
+        constants.put(InjectStreamStatusStopNotFound, Constants.INJECT_STREAM_STATUS_STOP_NOT_FOUND);
+        constants.put(InjectStreamStatusStopUnauthorized, Constants.INJECT_STREAM_STATUS_STOP_UNAUTHORIZED);
+        constants.put(InjectStreamStatusStopTimeout, Constants.INJECT_STREAM_STATUS_STOP_TIMEDOUT);
+        constants.put(InjectStreamStatusStopFailed, Constants.INJECT_STREAM_STATUS_STOP_FAILED);
+        constants.put(InjectStreamStatusBroken, Constants.INJECT_STREAM_STATUS_BROKEN);
         constants.put(AudioSampleRateType32000, 32000);
         constants.put(AudioSampleRateType44100, 44100);
         constants.put(AudioSampleRateType48000, 48000);
+        constants.put(FPS1, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_1.getValue());
+        constants.put(FPS7, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_7.getValue());
+        constants.put(FPS10, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_10.getValue());
+        constants.put(FPS15, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15.getValue());
+        constants.put(FPS24, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_24.getValue());
+        constants.put(FPS30, VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30.getValue());
+        constants.put(AudioProfileDefault, Constants.AUDIO_PROFILE_DEFAULT);
+        constants.put(AudioProfileSpeechStandard, Constants.AUDIO_PROFILE_SPEECH_STANDARD);
+        constants.put(AudioProfileMusicStandard, Constants.AUDIO_PROFILE_MUSIC_STANDARD);
+        constants.put(AgoraAudioProfileMusicStandardStereo, Constants.AUDIO_PROFILE_MUSIC_STANDARD_STEREO);
+        constants.put(AudioProfileMusicHighQuality, Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY);
+        constants.put(AudioProfileMusicHighQualityStereo, Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO);
+        constants.put(AudioScenarioDefault, Constants.AUDIO_SCENARIO_DEFAULT);
+        constants.put(AudioScenarioChatRoomEntertainment, Constants.AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT);
+        constants.put(AudioScenarioEducation, Constants.AUDIO_SCENARIO_EDUCATION);
+        constants.put(AudioScenarioGameStreaming, Constants.AUDIO_SCENARIO_GAME_STREAMING);
+        constants.put(AudioScenarioShowRoom, Constants.AUDIO_SCENARIO_SHOWROOM);
+        constants.put(AudioScenarioChatRoomGaming, Constants.AUDIO_SCENARIO_CHATROOM_GAMING);
+        constants.put(AudioEqualizationBand31, Constants.AUDIO_EQUALIZATION_BAND_31);
+        constants.put(AudioEqualizationBand62, Constants.AUDIO_EQUALIZATION_BAND_62);
+        constants.put(AudioEqualizationBand125, Constants.AUDIO_EQUALIZATION_BAND_125);
+        constants.put(AudioEqualizationBand250, Constants.AUDIO_EQUALIZATION_BAND_250);
+        constants.put(AudioEqualizationBand500, Constants.AUDIO_EQUALIZATION_BAND_500);
+        constants.put(AudioEqualizationBand1K, Constants.AUDIO_EQUALIZATION_BAND_1K);
+        constants.put(AudioEqualizationBand2K, Constants.AUDIO_EQUALIZATION_BAND_2K);
+        constants.put(AudioEqualizationBand4K, Constants.AUDIO_EQUALIZATION_BAND_4K);
+        constants.put(AudioEqualizationBand8K, Constants.AUDIO_EQUALIZATION_BAND_8K);
+        constants.put(AudioEqualizationBand16K, Constants.AUDIO_EQUALIZATION_BAND_16K);
+        constants.put(AudioRawFrameOperationModeReadOnly, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_ONLY);
+        constants.put(AudioRawFrameOperationModeWriteOnly, Constants.RAW_AUDIO_FRAME_OP_MODE_WRITE_ONLY);
+        constants.put(AudioRawFrameOperationModeReadWrite, Constants.RAW_AUDIO_FRAME_OP_MODE_READ_WRITE);
+        constants.put(VideoStreamTypeHigh, Constants.VIDEO_STREAM_HIGH);
+        constants.put(VideoStreamTypeLow, Constants.VIDEO_STREAM_LOW);
+        constants.put(VideoMirrorModeAuto, Constants.VIDEO_MIRROR_MODE_AUTO);
+        constants.put(VideoMirrorModeEnabled, Constants.VIDEO_MIRROR_MODE_ENABLED);
+        constants.put(VideoMirrorModeDisabled, Constants.VIDEO_MIRROR_MODE_DISABLED);
+        constants.put(CodecTypeBaseLine, 66);
+        constants.put(CodecTypeMain, 77);
+        constants.put(CodecTypeHigh, 100);
+        constants.put(QualityLow, Constants.AUDIO_RECORDING_QUALITY_LOW);
+        constants.put(QualityMedium, Constants.AUDIO_RECORDING_QUALITY_MEDIUM);
+        constants.put(QualityHigh, Constants.AUDIO_RECORDING_QUALITY_HIGH);
         return constants;
     }
 
@@ -1041,6 +1087,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
+            err.putInt("code", ((ReactNativeAgoraException) e).getCode());
             sendEvent(getReactApplicationContext(), "onError", err);
         }
     }
@@ -1911,17 +1958,17 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
-    public AudioSampleRateType getAudioSampleRateEnum (int val) {
-        AudioSampleRateType type = AudioSampleRateType.TYPE_32000;
+    public LiveInjectStreamConfig.AudioSampleRateType getAudioSampleRateEnum (int val) {
+        LiveInjectStreamConfig.AudioSampleRateType type = LiveInjectStreamConfig.AudioSampleRateType.TYPE_32000;
         switch (Integer.valueOf(val)) {
             case 32000:
-                type = AudioSampleRateType.TYPE_32000;
+                type = LiveInjectStreamConfig.AudioSampleRateType.TYPE_32000;
                 break;
             case 44100:
-                type = AudioSampleRateType.TYPE_44100;
+                type = LiveInjectStreamConfig.AudioSampleRateType.TYPE_44100;
                 break;
             case 48000:
-                type = AudioSampleRateType.TYPE_48000;
+                type = LiveInjectStreamConfig.AudioSampleRateType.TYPE_48000;
                 break;
         }
         return type;
@@ -1942,6 +1989,24 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
         return type;
     }
+
+
+    public LiveTranscoding.VideoCodecProfileType getLiveTranscodingVideoCodecProfileEnum (int val) {
+        LiveTranscoding.VideoCodecProfileType type = LiveTranscoding.VideoCodecProfileType.BASELINE;
+        switch (Integer.valueOf(val)) {
+            case 66:
+                type = LiveTranscoding.VideoCodecProfileType.BASELINE;
+                break;
+            case 77:
+                type = LiveTranscoding.VideoCodecProfileType.MAIN;
+                break;
+            case 100:
+                type = LiveTranscoding.VideoCodecProfileType.HIGH;
+                break;
+        }
+        return type;
+    }
+
 
 
     @ReactMethod
@@ -2043,7 +2108,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 transcoding.videoGop = options.getInt("videoGop");
             }
             if (options.hasKey("videoCodecProfile")) {
-                transcoding.videoGop = options.getInt("videoCodecProfile");
+                transcoding.videoCodecProfile = getLiveTranscodingVideoCodecProfileEnum(options.getInt("videoCodecProfile"));
             }
             if (options.hasKey("transcodingUsers")) {
                 ArrayList<LiveTranscoding.TranscodingUser> users = new ArrayList<LiveTranscoding.TranscodingUser>();
