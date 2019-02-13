@@ -93,9 +93,9 @@ public class AgoraManager {
         //create rtcEngine instance and setup rtcEngine eventHandler
         try {
             mRtcEngine = RtcEngine.create(context, options.getString("appid"), mRtcEventHandler);
-            if (null != options.getString("secret")) {
+            if (options.hasKey("secret") && null != options.getString("secret")) {
                 mRtcEngine.setEncryptionSecret(options.getString("secret"));
-                if (null != options.getString("secretMode")) {
+                if (options.hasKey("secretMode") && null != options.getString("secretMode")) {
                     mRtcEngine.setEncryptionMode(options.getString("secretMode"));
                 }
             }
