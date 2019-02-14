@@ -23,6 +23,10 @@
   bool hasListeners;
 }
 
++(BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
 RCT_EXPORT_MODULE();
 
 - (NSError *) makeNSError:(NSDictionary *)options {
