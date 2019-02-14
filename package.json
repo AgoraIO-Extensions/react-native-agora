@@ -1,15 +1,18 @@
 {
   "name": "react-native-agora",
-  "version": "1.2.5",
+  "version": "2.3.3",
   "description": "声网Agora",
-  "main": "index.js",
+  "summary": "agora native sdk for react-native",
+  "main": "lib/index.js",
   "scripts": {
     "pu": "npm publish",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DBshaoYan/react-native-agora.git"
+    "url": "https://github.com/syanbo/react-native-agora.git"
   },
   "keywords": [
     "agora",
@@ -21,10 +24,53 @@
     "video",
     "react-native-video"
   ],
-  "author": "",
+  "author": "syanbo",
+  "authors": [
+    "https://github.com/syanbo/react-native-agora/graphs/contributors"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DBshaoYan/react-native-agora/issues"
+    "url": "https://github.com/syanbo/react-native-agora/issues"
   },
-  "homepage": "https://github.com/DBshaoYan/react-native-agora#readme"
+  "homepage": "https://github.com/syanbo/react-native-agora#readme",
+  "peerDependencies": {
+    "react": ">=16.7.0",
+    "react-native": ">=0.58.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.13",
+    "@types/react": "^16.7.20",
+    "@types/react-native": "^0.57.31",
+    "@types/react-test-renderer": "^16.0.3",
+    "react": "16.7.0",
+    "react-native": "0.58.3",
+    "react-native-typescript-transformer": "^1.2.11",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.4"
+  },
+  "types": [
+    "./types.d.ts"
+  ],
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/"
+    ],
+    "cacheDirectory": ".jest/cache"
+  },
+  "dependencies": {
+    "tslib": "^1.9.3"
+  }
 }
