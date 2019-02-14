@@ -137,16 +137,6 @@ export default class AgoraComponent extends Component<Props> {
     console.log("[CONFIG]", JSON.stringify(config));
     console.log("[CONFIG.encoderConfig", config.videoEncoderConfig);
     RtcEngine.init(config);
-  }
-
-  componentDidMount () {
-    RtcEngine.getSdkVersion((version) => {
-      console.log('[RtcEngine] getSdkVersion', version);
-    })
-
-    console.log('[joinChannel] ' + this.props.channelName);
-    RtcEngine.joinChannel(this.props.channelName, this.props.uid);
-    RtcEngine.enableAudioVolumeIndication(500, 3);
     RtcEngine.eventEmitter({
       onFirstRemoteVideoDecoded: (data) => {
         console.log('[RtcEngine] onFirstRemoteVideoDecoded', data);
@@ -195,6 +185,16 @@ export default class AgoraComponent extends Component<Props> {
         }
       }
     })
+  }
+
+  componentDidMount () {
+    RtcEngine.getSdkVersion((version) => {
+      console.log('[RtcEngine] getSdkVersion', version);
+    })
+
+    console.log('[joinChannel] ' + this.props.channelName);
+    RtcEngine.joinChannel(this.props.channelName, this.props.uid);
+    RtcEngine.enableAudioVolumeIndication(500, 3);
   }
 
   componentWillUnmount () {
