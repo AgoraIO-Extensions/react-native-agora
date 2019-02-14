@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <React/RCTBridgeModule.h>
-#import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCTAgora : NSObject<RCTBridgeModule, AgoraRtcEngineDelegate>
+@interface RCTAgora : RCTEventEmitter<RCTBridgeModule>
 
 @end

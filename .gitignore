@@ -58,3 +58,16 @@ android/src/main/res/drawable/
 .project
 .settings
 .classpath
+.jest/
+xcuserdata
+*.pbxproj
+lib
+*.xcworkspace
+*.zip
+.byebug_history
+Untitled*
+Pods
+**/*~
+xcuserdata*
+**/*/xcuserdata*
+.vscode

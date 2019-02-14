@@ -8,16 +8,9 @@
 
 import React, {Component} from 'react';
 import {
-  Platform, StyleSheet, Text, View, TouchableOpacity, TextInput
+  StyleSheet, Text, View, TouchableOpacity, TextInput
 } from 'react-native';
 import AgoraRTCView from './components/agora';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 const styles = StyleSheet.create({
   container: {
@@ -57,8 +50,9 @@ export default class App extends Component<Props> {
       channelProfile: 1,
       videoProfile: 40,
       clientRole: 1,
+      uid: 0,
       swapWidthAndHeight: true,
-      channelName: 'defaultChannel'
+      channelName: null
     };
   }
 
@@ -69,27 +63,27 @@ export default class App extends Component<Props> {
   }
 
   onCancel = (error) => {
-    console.log("[error]", error);
     this.setState({
       showLive: false,
-      error
+      error: JSON.stringify(error)
     })
   }
 
   render() {
     if (this.state.showLive) {
+      console.log('channelName', this.state.channelName);
       return (<AgoraRTCView
-        onCancel={this.onCancel}
         channelProfile={this.state.channelProfile}
+        channelName={this.state.channelName}
         videoProfile={this.state.videoProfile}
         clientRole={this.state.clientRole}
-        swapWidthAndHeight={this.state.swapWidthAndHeight}
-        channelName={this.state.channelName}
+        uid={this.state.uid}
+        onCancel={this.onCancel}
       ></AgoraRTCView>);
     }
     return (
       <View style={styles.container}>
-        {this.state.error && <Text>Error Message: {error}</Text>}
+        {this.state.error ? <Text>Error Message: {this.state.error}</Text> : null}
         <TextInput
           style={{height: 40}}
           keyboardType='numeric'
@@ -119,12 +113,26 @@ export default class App extends Component<Props> {
             let matched = text.match(/\d+/g) && text.match(/\d+/g)[0]
             if (matched) {
               this.setState({clientRole: +matched})
-            }          }
+            }
+          }
         } />
         <TextInput
           style={{height: 40}}
           placeholder="Enter channelName"
-          onChnageText={(text) => this.setState({channelName: text})}
+          onChangeText={
+            (text) => {
+              this.setState({channelName: text}) 
+            }
+          }
+        />
+        <TextInput
+          style={{height: 40}}
+          placeholder="Enter uid"
+          onChangeText={
+            (uid) => {
+              this.setState({uid: +uid}) 
+            }
+          }
         />
         <TouchableOpacity
           style={styles.button}
