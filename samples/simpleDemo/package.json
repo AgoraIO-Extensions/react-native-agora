@@ -11,14 +11,14 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "16.6.3",
-    "react-native": "0.57.8"
+    "react": "16.7.0",
+    "react-native": "0.58.3",
+    "react-native-agora": "file:../.."
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.51.1",
-    "react-native-agora": "^1.2.5",
     "react-test-renderer": "16.6.3"
   },
   "jest": {

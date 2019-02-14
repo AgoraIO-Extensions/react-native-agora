@@ -1,18 +1,25 @@
 package com.syan.agora;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.video.VideoCanvas;
+import io.agora.rtc.video.VideoEncoderConfiguration;
+
+import static io.agora.rtc.video.VideoEncoderConfiguration.*;
+
 
 /**
  * Created by Leon on 2017/4/9.
@@ -45,31 +52,77 @@ public class AgoraManager {
         return sAgoraManager;
     }
 
+    private FRAME_RATE getVideoEncoderEnum (int val) {
+        FRAME_RATE type = FRAME_RATE.FRAME_RATE_FPS_1;
+        switch (val) {
+            case 1:
+                type = FRAME_RATE.FRAME_RATE_FPS_1;
+            case 7:
+                type = FRAME_RATE.FRAME_RATE_FPS_7;
+            case 10:
+                type = FRAME_RATE.FRAME_RATE_FPS_10;
+            case 15:
+                type = FRAME_RATE.FRAME_RATE_FPS_15;
+            case 24:
+                type = FRAME_RATE.FRAME_RATE_FPS_24;
+            case 30:
+                type = FRAME_RATE.FRAME_RATE_FPS_30;
+        }
+        return type;
+    }
+
+    private ORIENTATION_MODE getOrientationModeEnum (int val) {
+        ORIENTATION_MODE type = ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+        switch (val) {
+            case 0:
+                type = ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+            case 1:
+                type = ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE;
+            case 2:
+                type = ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+        }
+        return type;
+    }
+
     /**
-     * 初始化RtcEngine
+     * initialize rtc engine
      */
-    public void init(Context context, IRtcEngineEventHandler mRtcEventHandler, ReadableMap options) {
+    public int init(Context context, IRtcEngineEventHandler mRtcEventHandler, ReadableMap options) {
         this.context = context;
 
-        //创建RtcEngine对象，mRtcEventHandler为RtcEngine的回调
+        //create rtcEngine instance and setup rtcEngine eventHandler
         try {
             mRtcEngine = RtcEngine.create(context, options.getString("appid"), mRtcEventHandler);
-
+            if (options.hasKey("secret") && null != options.getString("secret")) {
+                mRtcEngine.setEncryptionSecret(options.getString("secret"));
+                if (options.hasKey("secretMode") && null != options.getString("secretMode")) {
+                    mRtcEngine.setEncryptionMode(options.getString("secretMode"));
+                }
+            }
         } catch (Exception e) {
-            throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
+            throw new RuntimeException("create rtc engine failed\n" + Log.getStackTraceString(e));
         }
-        //开启视频功能
+        mRtcEngine.enableDualStreamMode(true);
+        mRtcEngine.setChannelProfile(options.getInt("channelProfile"));
         mRtcEngine.enableVideo();
-        mRtcEngine.setVideoProfile(options.getInt("videoProfile"), options.getBoolean("swapWidthAndHeight")); //视频配置，
-        mRtcEngine.enableWebSdkInteroperability(true);  //设置和web通信
-        mRtcEngine.setChannelProfile(options.getInt("channelProfile")); //设置模式
-        mRtcEngine.setClientRole(options.getInt("clientRole"), null); //设置角色
+        ReadableMap config = options.getMap("videoEncoderConfig");
+        VideoEncoderConfiguration encoderConfig = new VideoEncoderConfiguration(
+            config.getInt("width"),
+            config.getInt("height"),
+            getVideoEncoderEnum(config.getInt("frameRate")),
+            config.getInt("bitrate"),
+            getOrientationModeEnum(config.getInt("orientationMode"))
+        );
+        mRtcEngine.setVideoEncoderConfiguration(encoderConfig);
+        mRtcEngine.setAudioProfile(options.getInt("audioProfile"), options.getInt("audioScenario"));
+        mRtcEngine.setClientRole(options.getInt("clientRole"));
+        return mRtcEngine.enableWebSdkInteroperability(true);
     }
 
     /**
      * 设置本地视频，即前置摄像头预览
      */
-    public AgoraManager setupLocalVideo() {
+    public int setupLocalVideo() {
         //创建一个SurfaceView用作视频预览
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         //将SurfaceView保存起来在SparseArray中，后续会将其加入界面。key为视频的用户id，这里是本地视频, 默认id是0
@@ -78,36 +131,62 @@ public class AgoraManager {
 
         //设置本地视频，渲染模式选择VideoCanvas.RENDER_MODE_HIDDEN，如果选其他模式会出现视频不会填充满整个SurfaceView的情况，
         //具体渲染模式参考官方文档https://docs.agora.io/cn/user_guide/API/android_api.html#set-local-video-view-setuplocalvideo
-        mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, mLocalUid));
-        return this;//返回AgoraManager以作链式调用
+        return mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, mLocalUid));
     }
 
-    public AgoraManager setupRemoteVideo(int uid) {
+    public int setupRemoteVideo(int uid) {
 
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         mSurfaceViews.put(uid, surfaceView);
-        mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
-        return this;
+        return mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
     }
 
-    public AgoraManager joinChannel(String channel, int uid) {
-        mRtcEngine.joinChannel(null, channel, null, uid);
-        return this;
+    public int setEnableSpeakerphone(boolean enabled) {
+        return mRtcEngine.setEnableSpeakerphone(enabled);
     }
 
-    public AgoraManager joinChannelWithToken(String token, String channel, int uid) {
-        mRtcEngine.joinChannel(token, channel, null, uid);
-        return this;
+    public int setDefaultAudioRouteToSpeakerphone(boolean enabled) {
+        return mRtcEngine.setDefaultAudioRoutetoSpeakerphone(enabled);
     }
 
-    public AgoraManager enableLastmileTest() {
-        mRtcEngine.enableLastmileTest();
-        return this;
+    public int renewToken(String token) {
+        return mRtcEngine.renewToken(token);
     }
 
-    public AgoraManager disableLastmileTest() {
-        mRtcEngine.disableLastmileTest();
-        return this;
+    public int setClientRole(int role) {
+        return mRtcEngine.setClientRole(role);
+    }
+
+    public int enableWebSdkInteroperability(boolean enabled) {
+        return mRtcEngine.enableWebSdkInteroperability(enabled);
+    }
+
+    public int getConnectionState() {
+        return mRtcEngine.getConnectionState();
+    }
+    public int joinChannel(ReadableMap options) {
+        String token = options.hasKey("token") ? options.getString("token") : null;
+        String channelName = options.hasKey("channelName") ? options.getString("channelName") : null;
+        String optionalInfo = options.hasKey("optionalInfo") ? options.getString("optionalInfo") : null;
+        int uid = options.hasKey("uid") ? options.getInt("uid") : 0;
+        this.mLocalUid = uid;
+        return mRtcEngine.joinChannel(token, channelName, optionalInfo, uid);
+    }
+
+//    public int joinChannelWithToken(ReadableMap options) {
+//        String token = options.getString("token");
+//        String channel = options.getString("channel");
+//        String optionalInfo = options.getString("optionalInfo");
+//        int uid = options.getInt("uid");
+//        return mRtcEngine.joinChannel(token, channel, optionalInfo, uid);
+//    }
+
+    public int enableLastmileTest() {
+        return mRtcEngine.enableLastmileTest();
+    }
+
+    public int disableLastmileTest() {
+        return mRtcEngine.disableLastmileTest();
     }
 
     public void startPreview() {
@@ -118,8 +197,8 @@ public class AgoraManager {
         mRtcEngine.stopPreview();
     }
 
-    public void leaveChannel() {
-        mRtcEngine.leaveChannel();
+    public int leaveChannel() {
+        return mRtcEngine.leaveChannel();
     }
 
     public void removeSurfaceView(int uid) {
