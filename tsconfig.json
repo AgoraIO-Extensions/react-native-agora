@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "types": [
+      "react",
+      "react-native"
+    ],
+    "target": "es2015",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "importHelpers": true,
+    "outDir": "./lib",
+    "module": "commonjs",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "lib": ["es2015"]
+  },
+  "compileOnSave": true,
+  "include": [
+    "src"
+  ]
+}

@@ -1,7 +1,7 @@
 import React, {Component, PureComponent} from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
-  Image, Dimensions, Modal, Platform
+  Image, Dimensions, Modal, Platform, NativeModules
 } from 'react-native';
 
 import {RtcEngine, AgoraView} from 'react-native-agora';
@@ -9,6 +9,20 @@ import {
   APPID,
   isIphoneX, isIphoneXR
 } from '../utils';
+
+const {Agora} = NativeModules;
+
+if (!Agora) {
+  throw new Error("Agora load failed in react-native, please check ur compiler environments");
+}
+
+const {
+  FPS30,
+  FixedLandscape,
+  Host,
+  AudioProfileDefault,
+  AudioScenarioDefault,
+} = Agora;
 
 const BtnEndCall = () => require('../assets/btn_endcall.png');
 const BtnMute = () => require('../assets/btn_mute.png');
@@ -86,11 +100,11 @@ type Props = {
   channelName: String,
   videoProfile: Number,
   clientRole: Number,
-  swapWidthAndHeight: Boolean,
-  onCancel: Function
+  onCancel: Function,
+  uid: Number,
 }
 
-export default class Agora extends Component<Props> {
+export default class AgoraComponent extends Component<Props> {
   state = {
     peerIds: [],
     joinSucceed: false,
@@ -109,9 +123,19 @@ export default class Agora extends Component<Props> {
       channelProfile: this.props.channelProfile,
       videoProfile: this.props.videoProfile,
       clientRole: this.props.clientRole,
-      swapWidthAndHeight: this.props.swapWidthAndHeight
+      videoEncoderConfig: {
+        width: 360,
+        height: 480,
+        bitrate: 1,
+        frameRate: FPS30,
+        orientationMode: FixedLandscape,
+      },
+      clientRole: Host,
+      audioProfile: AudioProfileDefault,
+      audioScenario: AudioScenarioDefault
     }
-    console.log("[CONFIG]", config);
+    console.log("[CONFIG]", JSON.stringify(config));
+    console.log("[CONFIG.encoderConfig", config.videoEncoderConfig);
     RtcEngine.init(config);
   }
 
@@ -121,11 +145,20 @@ export default class Agora extends Component<Props> {
     })
 
     console.log('[joinChannel] ' + this.props.channelName);
-    RtcEngine.joinChannel(this.props.channelName);
+    RtcEngine.joinChannel(this.props.channelName, this.props.uid);
     RtcEngine.enableAudioVolumeIndication(500, 3);
     RtcEngine.eventEmitter({
       onFirstRemoteVideoDecoded: (data) => {
         console.log('[RtcEngine] onFirstRemoteVideoDecoded', data);
+      },
+      onUserJoined: (data) => {
+        console.log('[RtcEngine] onUserJoined', data);
+        const {peerIds} = this.state;
+        if (peerIds.indexOf(data.uid) === -1) {
+          this.setState({
+            peerIds: [...peerIds, data.uid]
+          })
+        }
       },
       onUserOffline: (data) => {
         console.log('[RtcEngine] onUserOffline', data);
@@ -135,37 +168,40 @@ export default class Agora extends Component<Props> {
       },
       onJoinChannelSuccess: (data) => {
         console.log('[RtcEngine] onJoinChannelSuccess', data);
-        // RtcEngine.setShowLocalVideo()
         RtcEngine.startPreview();
         this.setState({
           joinSucceed: true
         })
-      },
-      onAudioVolumeIndication: (data) => {
-        console.log('[RtcEngine] onAudioVolumeIndication', data);
-      },
-      onUserJoined: (data) => {
-        console.log('[RtcEngine] onUserJoined', data);
         const {peerIds} = this.state;
-        if (peerIds.indexOf(data.uid) !== -1) {
+        if (peerIds.indexOf(data.uid) === -1) {
           this.setState({
             peerIds: [...peerIds, data.uid]
           })
         }
       },
+      onAudioVolumeIndication: (data) => {
+        console.log('[RtcEngine] onAudioVolumeIndication', data);
+      },
+      onClientRoleChanged: (data) => {
+        console.log("[RtcEngine] onClientRoleChanged", data);
+      },
       onError: (data) => {
         console.log('[RtcEngine] onError', data);
         if (data.error === 17) {
-          RtcEngine.leaveChannel();
-          RtcEngine.destroy();
+          RtcEngine.leaveChannel().then(_ => {
+            RtcEngine.destroy();
+            this.props.onCancel(data);
+          });
         }
-        this.props.onCancel(data.error);
       }
     })
   }
 
   componentWillUnmount () {
-    RtcEngine.removeEmitter()
+    if (this.state.joinSucceed) {
+      RtcEngine.leaveChannel();
+      RtcEngine.destroy();
+    }
   }
 
   handleCancel = () => {
@@ -198,7 +234,9 @@ export default class Agora extends Component<Props> {
     this.setState({
       isCameraTorch: !this.state.isCameraTorch
     }, () => {
-      RtcEngine.setCameraTorchOn(this.state.isCameraTorch)
+      RtcEngine.setCameraTorchOn(this.state.isCameraTorch).then(val => {
+        console.log("setCameraTorch", val);
+      })
     })
   }
 
