@@ -1123,8 +1123,9 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setupRemoteVideo(int uid) {
+    public void setupRemoteVideo(ReadableMap options) {
         try {
+            int uid = options.getInt("uid");
             int res = AgoraManager.getInstance().setupRemoteVideo(uid);
             if (res != 0) throw new ReactNativeAgoraException("setupRemoteVideo Failed", res);
         } catch(Exception e) {

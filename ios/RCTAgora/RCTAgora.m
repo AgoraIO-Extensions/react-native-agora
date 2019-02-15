@@ -289,6 +289,17 @@ RCT_EXPORT_METHOD(setupRemoteVideo:(NSDictionary *) options) {
   [self.rtcEngine setupRemoteVideo:canvas];
 }
 
+// set local video render mode
+RCT_EXPORT_METHOD(setLocalRenderMode:(NSInteger) mode) {
+  [self.rtcEngine setLocalRenderMode:mode];
+}
+
+// set remote video render mode
+RCT_EXPORT_METHOD(setRemoteRenderMode:(NSInteger) uid
+                  mode:(NSInteger) mode) {
+  [self.rtcEngine setLocalRenderMode:uid mode:mode];
+}
+
 // start video preview
 RCT_EXPORT_METHOD(startPreview) {
   [self.rtcEngine startPreview];

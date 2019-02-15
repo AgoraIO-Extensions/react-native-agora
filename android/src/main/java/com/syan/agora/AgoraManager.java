@@ -134,8 +134,8 @@ public class AgoraManager {
         return mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, mLocalUid));
     }
 
-    public int setupRemoteVideo(int uid) {
-
+    public int setupRemoteVideo(ReadableMap options) {
+        int uid = options.getInt("uid");
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         mSurfaceViews.put(uid, surfaceView);
         return mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
