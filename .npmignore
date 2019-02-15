@@ -33,3 +33,4 @@ proguard-rules.pro
 .idea
 .settings
 .vscode
+package-lock.json

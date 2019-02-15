@@ -1,18 +1,19 @@
 ##### 有任何问题欢迎加入QQ群进行反馈  471757030
 
-# react-native-agora
+## [for 1.x old version](README.old.md)
 
+# react-native-agora
 [![npm](https://img.shields.io/npm/v/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
 [![npm](https://img.shields.io/npm/dm/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
 [![npm](https://img.shields.io/npm/dt/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
 [![npm](https://img.shields.io/npm/l/react-native-agora.svg)](https://github.com/syanbo/react-native-agora/blob/master/LICENSE)
+[![join chat](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/react-native-agora/community)
 
-## 功能介绍
+## Description
 
-- 支持 iOS Android  声网Agora视频通讯SDK
-- 支持 直播 多人视频会议 语音 功能
+The react-native-agora is an open-source wrapper for react-native developers. This SDK takes advantage of React Native and Agora RTC Video SDKs on Android/iOS.
 
-## 安装使用
+## Installation
 
 Install with npm:
 
@@ -34,43 +35,106 @@ Either way, then link with:
 
 ## Documentation
 
-[声网API文档](https://docs.agora.io/cn/2.0.2/product/Video/API%20Reference/communication_android_video?platform=Android)
+[声网API文档](https://docs.agora.io/cn/Video/API%20Reference/java/index.html)
+
+[Agora.io API DOCS](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 
 ##### RtcEngine方法
 
-| Property                         | Type                                     | Description                           |
+| Property                         | Arguments                                     | Description                           |
 | -------------------------------- | ---------------------------------------- | ------------------------------------- |
-| init                             | object {appid: 'agora注册的应用id', channelProfile: '频道模式', videoProfile: '视频模式', clientRole: '角色', swapWidthAndHeight: 'bool值'} | 初始化Agora引擎                            |
-| joinChannel                      | string channelName （房间名称）   number uid （用户设置的uid 传0系统会自动分配） | 加入房间                                  |
-| leaveChannel                     |                                          | 离开频道                                  |
-| destroy                          |                                          | 销毁引擎实例                                |
-| configPublisher                     | object{} config参数请前往Agora文档查看                                        | 配置旁路直播推流方法                               |
-| setLocalRenderMode                     | number mode (1 2 3)                                        | 设置本地视频显示模式                                |
-| setRemoteRenderMode                     | number uid  number mode (1 2 3)                                          | 设置远端视频显示模式                                |
-| enableAudioVolumeIndication                     | number interval (时间间隔) number smooth(平滑系数。可以设置为 3)                                         | 启用说话者音量提示                                |
-| startPreview                     |                                          | 开启视频预览                                |
-| stopPreview                      |                                          | 关闭视频预览                                |
-| switchCamera                     |                                          | 切换前置/后置摄像头                            |
-| enableVideo                      |                                          | 开启视频模式                                |
-| disableVideo                     |                                          | 关闭视频                                  |
-| setCameraAutoFocusFaceModeEnabled                     |                                          | 是否开启人脸对焦功能                                  |
-| setDefaultAudioRouteToSpeakerphone                     |                                          | 修改默认的语音路由                                  |
-| setCameraTorchOn                     |                                          | 是否打开闪光灯                                  |
-| setEnableSpeakerphone            | bool                                     | 开启扬声器  trun: 音频输出至扬声器  false: 音频输出至听筒 |
-| muteLocalAudioStream             | bool (default false)                     | 将自己静音                                 |
-| muteAllRemoteAudioStreams        | bool (default false)                     | 静音所有远端 音频                             |
-| muteRemoteAudioStream            | number uid（用户uid） bool  mute（是否静音）       | 静音指定用户 音频                             |
-| muteLocalVideoStream             | bool (default false)                     | 暂停发送本地 视频流                            |
-| enableLocalVideo                 | bool (default false)                     | 禁用本地视频功能                              |
-| muteAllRemoteVideoStreams        | bool (default false)                     | 暂停所有远端视频流                             |
-| muteRemoteVideoStream            | number uid（用户uid） bool  mute（是否暂停）       | 暂停指定远端视频流                             |
-| startRecordingService (iOS only) | string  recordingKey                     | 启动服务端录制服务                             |
-| stopRecordingService (iOS only)  | string  recordingKey                     | 停止服务端录制服务                             |
-| getSdkVersion                    | callback                                 | 获取版本号                                 |
-| createDataStream | (boolean reliable, boolean ordered, (streamId) => {}), 其中 reliable, ordered 请参考官方文档同名方法说明 | 创建数据流通道 |
-| sendStreamMessage | (number streamId, string message, (errorCode) => {})| 发送数据 |
+| init | [Option](####Option) | create and initialize AgoraRtcEngine instance                     
+| Promise<any> joinChannel | String channelName, Number uid | join channel|
+| eventEmitter | [events_list](####events_list) | registe event emitters|
+| removeEmitter | void | remove event emitter |
+| Promise<any> enableLastmileTest | void | enable network quality test |
+| Promise<any> disableLastmileTest | void | disable network quality test |
+| Promise<any> leaveChannel | void | quit channel |
+| destroy | void | destroy AgoraRtcEngine instance |
+| setupLocalVideo | Number: uid, Number: renderMode, Number: reactTag | setup local video |
+| setupRemoteVideo | Number: uid, Number: renderMode, Number: reactTag | setup remote video |
+| startPreview | void | open video preview |
+| stopPreview | void | close video preview |
+| setLiveTranscoding | [LiveTranscoding](####LiveTranscoding) | start live trancoding |
+| setLocalRenderMode | Number: mode | set local video render mode  |
+| setRemoteRenderMode | Number: uid, Number: mode | set remote video render mode |
+| enableAudioVolumeIndication | Number: interval, Number smooth | enable speaker volume notification|
+| Promise<any> switchCamera | void | switch mobile camera |
+| enableVideo | void | enable video  |
+| disableVideo | void | disable video |
+| setEnableSpeakerphone | Boolean: enabled | set enable speaker phone |
+| setCameraAutoFocusFaceModeEnabled | Boolean: enabled | set camera auto focus face mode |
+| setDefaultAudioRouteToSpeakerphone | Boolean: enabled | set default audio route to speaker phone |
+| setCameraTorchOn  | Boolean: enabled | set camera torch on |
+| muteLocalAudioStream  | Boolean: enabled | mute/unmute local audio |
+| muteRemoteAudioStream  | Number: uid, Boolean: enabled | mute/unmute remote audio by uid |
+| muteAllRemoteAudioStreams | Boolean: enabled | mute/unmute all remote audio |
+| muteLocalVideoStream  | Boolean: enabled | mute/unmute local video stream |
+| enableLocalVideo | Boolean: enabled | set enabled status to local video |
+| muteAllRemoteVideoStreams | void | mute/unmute all remote videos |
+| muteRemoteVideoStream | Number: uid, Boolean: enabled | mute/unmute remote video by uid |
+| getSdkVersion | Function: callback | get sdk version |
+| createDataStream | Boolean: reliable, Boolean: ordered | createDataStream |
+| sendStreamMessage | Number: streamId, String data | send data with uid |
 
-##### 原生通知事件
+
+#### Option
+```typescript
+export interface Option {
+  appid: String,
+  videoProfile: number
+  channelProfile: number,
+  videoEncoderConfig: VideoEncoderConfig,
+  clientRole: number,
+  audioProfile: number,
+  audioScenario: number
+}
+
+export interface VideoEncoderConfig {
+  width: number,
+  height: number,
+  bitrate: number,
+  frameRate: number,
+  orientationMode: number,
+}
+```
+
+#### LiveTranscoding
+```typescript
+export interface LiveTranscoding {
+  size: Size,
+  videoBitrate: number,
+  videoFramerate: number,
+  lowLatency: boolean,
+  videoGop: number,
+  videoCodecProfile: number,
+  transcodingUsers: Array<TranscodingUser>,
+  transcodingExtraInfo: string,
+  watermark: BackgroundImage,
+  backgroundImage: BackgroundImage,
+  backgroundColor: Color,
+  audioSampleRate: number,
+  audioBitrate: number,
+  audioChannels: number,
+}
+```
+
+####events_list
+
+```
+RtcEngine.eventEmitter({
+  onFirstRemoteVideoDecoded: data => {},
+  onJoinChannelSuccess: data => {},
+  onUserOffline: data => {},
+  onUserJoined: data => {},
+  onError: data => {},
+  onWarning: data => {},
+  onLeaveChannel: data => {},
+  onAudioVolumeIndication: data => {},
+  onStreamMessage: ({uid, streamId, data}) => {},
+  onStreamMessageError: ({uid, streamId, error, missed, cached}) => {},
+})
+```
 
 ```
 RtcEngine.eventEmitter({
@@ -89,17 +153,64 @@ RtcEngine.eventEmitter({
 
 | Name                      | Description  |
 | ------------------------- | ------------ |
-| onFirstRemoteVideoDecoded | 远端首帧视频接收解码回调 |
-| onJoinChannelSuccess      | 加入频道成功的回调    |
-| onUserOffline             | 其他用户离开当前频道   |
-| onUserJoined              | 其他用户加入当前频道   |
-| onError                   | 错误信息         |
-| onWarning                 | 警告           |
-| onLeaveChannel            | 退出频道         |
-| onAudioVolumeIndication            | 音量提示回调         |
-| onStreamMessage | 接收到对方数据流消息的回调 |
-| onStreamMessageError | 接收到对方数据流消息错误的回调 |
-
+| onWarning                 | warning |
+| onError                   | error |
+| onFirstRemoteVideoDecoded | when received first frame send from remote decoded stream |
+| onJoinChannelSuccess      | join channel success |
+| onReJoinChannelSuccess      | rejoin channel success |
+| onLeaveChannel            | quit channel |
+| onClientRoleChanged | when changed client role |
+| onUserJoined              | when user joined channel |
+| onUserOffline             | when user left channel |
+| onConnectionStateChanged | when connection state changed |
+| onConnectionInterrupted | when connection interrupted |
+| onConnectionLost | when connection lost |
+| onConnectionBanned | when connection banned |
+| onApiCallExecuted | capture api call executed |
+| onTokenPrivilegeWillExpire | when token will expire |
+| onRequestToken | when token expired |
+| onMicrophoneEnabled | when microphone enabled |
+| onAudioVolumeIndication | notice audio volume |
+| onActiveSpeaker | reports which user is the loudest speaker |
+| onFirstLocalAudioFrame | when the first local audio frame is sent |
+| onFirstRemoteAudioFrame | when the first remote audio frame is sent |
+| onVideoStopped | when video stopped |
+| onFirstLocalVideoFrame | when first local video frame is sent |
+| onFirstRemoteVideoDecoded | when first remote video is decoded |
+| onFirstRemoteVideoFrame | when first remote video frame is rendered |
+| onUserMuteAudio | when a remote user's audio stream is muted/unmuted |
+| onUserMuteVideo | when a remote user's video stream is muted/unmuted |
+| onUserEnableVideo | when a remote user enables/disables the video module |
+| onUserEnableLocalVideo | when a remote user enables/disables the local video capture function |
+| onVideoSizeChanged | when the video size or rotation information of a specified remote user changes |
+| onRemoteVideoStateChanged | when the remote video stream state changes |
+| onLocalPublishFallbackToAudioOnly | when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve |
+| onRemoteSubscribeFallbackToAudioOnly | when the subscribed media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve |
+| onAudioRouteChanged | when the local audio pkayout route changes |
+| onCameraReady | when the camera is turned on and ready to capture video |
+| onCameraFocusAreaChanged | when the camera focus area is changed |
+| onCameraExposureAreaChanged | The camera exposure area has changed |
+| onAudioQuality | Reports the statistics of the audio stream from each remote user/host |
+| onRtcStats | Reports the statistics of the RtcEngine once every two seconds |
+| onLastmileQuality | Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. After the application calls the enableLastmileTest method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel. |
+| onNetworkQuality | Reports the last mile network quality of each user in the channel once every two seconds. Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the uplink last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times. |
+| onLocalVideoStats | Reports the statistics of the uploading local video streams. This callback is triggered once every two seconds for each individual user/host. If there are multiple users/hosts in the channel, this callback is triggered multiple times every 2 seconds. |
+| onRemoteVideoStats | Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times. This callback reports statistics more closely linked to the real-user experience of the video transmission quality than the statistics that the onRemoteVideoTransportStats callback reports |
+| onRemoteAudioStats | Reports the statistics of the audio stream from each remote user/host |
+| onLocalVideoStat | Reports the statistics of the uploading local video streams |
+| onRemoteVideoStat | Reports the statistics of the video stream from each remote user/host.|
+| onRemoteAudioTransportStats | Reports the transport-layer statistics of each remote audio stream.This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user. |
+| onRemoteVideoTransportStats | Reports the transport-layer statistics of each remote video stream.This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user. |
+| onAudioMixingFinished | when the audio mixing file playback finishes. |
+| onAudioEffectFinished | when the audio effect file playback finishes. |
+| onStreamPublished | when a CDN live stream is published. |
+| onStreamUnpublished | when CDN live streaming stops. |
+| onTranscodingUpdated | when the publisher's transcoding settings are updated. |
+| onStreamInjectedStatus | Reports the status of the injected online media stream. |
+| onStreamMessage | recevied stream message peer endpoint |
+| onStreamMessageError | recevied error message from peer endpoint stream message |
+| onMediaEngineLoadSuccess | when the media engine is loaded. |
+| onMediaEngineStartCallSuccess | when the media engine starts. |
 
 ##### AgoraView 组件
 
@@ -119,6 +230,10 @@ RtcEngine.eventEmitter({
 
 
 ## 更新信息
+#### 2.3.3-alpha
+- support agora video sdk 2.3.3
+
+
 #### 1.1.2
 - 增加onVideoMute
 - 新增onAudioMute回调
