@@ -121,7 +121,7 @@ export interface LiveTranscoding {
 
 #### Events
 
-```
+```javascript
 RtcEngine.eventEmitter({
   onFirstRemoteVideoDecoded: data => {},
   onJoinChannelSuccess: data => {},
