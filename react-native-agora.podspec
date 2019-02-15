@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
   #
 
   #s.source       = { :http => "file:///./ios" }
-  s.source        = { :git => package["repository"]["url"] }
+  s.source        = { :git => package["repository"]["url"], :tag => "#{s.version}" }
   #s.source        = { :git => package["repository"]["url"] , :tag => "#{s.version}" }
 
   s.source_files  = "RCTAgora", "RCTAgora/**/*.{h,m}"
