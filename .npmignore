@@ -24,7 +24,9 @@ ios/Pods
 ios/Podfile*
 xcuserdata*
 **/*/xcuserdata*
-src
+src/**/*.ts
+!android/src/
+!android/build.gradle
 **/*.iml
 **/*.properties
 .project
