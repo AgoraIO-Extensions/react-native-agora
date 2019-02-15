@@ -136,21 +136,6 @@ RtcEngine.eventEmitter({
 })
 ```
 
-```
-RtcEngine.eventEmitter({
-  onFirstRemoteVideoDecoded: data => {},
-  onJoinChannelSuccess: data => {},
-  onUserOffline: data => {},
-  onUserJoined: data => {},
-  onError: data => {},
-  onWarning: data => {},
-  onLeaveChannel: data => {},
-  onAudioVolumeIndication: data => {},
-  onStreamMessage: ({uid, streamId, data}) => {},
-  onStreamMessageError: ({uid, streamId, error, missed, cached}) => {},
-})
-```
-
 | Name                      | Description  |
 | ------------------------- | ------------ |
 | onWarning                 | warning |
