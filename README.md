@@ -45,7 +45,7 @@ Either way, then link with:
 | -------------------------------- | ---------------------------------------- | ------------------------------------- |
 | init | [Option](#Option) | create and initialize AgoraRtcEngine instance                     
 | Promise<any> joinChannel | String channelName, Number uid | join channel|
-| eventEmitter | [events_list](#events_list) | registe event emitters|
+| eventEmitter | [Events](#Events) | registe event emitters|
 | removeEmitter | void | remove event emitter |
 | Promise<any> enableLastmileTest | void | enable network quality test |
 | Promise<any> disableLastmileTest | void | disable network quality test |
@@ -119,7 +119,7 @@ export interface LiveTranscoding {
 }
 ```
 
-####events_list
+#### Events
 
 ```
 RtcEngine.eventEmitter({
