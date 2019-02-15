@@ -43,9 +43,9 @@ Either way, then link with:
 
 | Property                         | Arguments                                     | Description                           |
 | -------------------------------- | ---------------------------------------- | ------------------------------------- |
-| init | [Option](####Option) | create and initialize AgoraRtcEngine instance                     
+| init | [Option](#Option) | create and initialize AgoraRtcEngine instance                     
 | Promise<any> joinChannel | String channelName, Number uid | join channel|
-| eventEmitter | [events_list](####events_list) | registe event emitters|
+| eventEmitter | [events_list](#events_list) | registe event emitters|
 | removeEmitter | void | remove event emitter |
 | Promise<any> enableLastmileTest | void | enable network quality test |
 | Promise<any> disableLastmileTest | void | disable network quality test |
@@ -55,7 +55,7 @@ Either way, then link with:
 | setupRemoteVideo | Number: uid, Number: renderMode, Number: reactTag | setup remote video |
 | startPreview | void | open video preview |
 | stopPreview | void | close video preview |
-| setLiveTranscoding | [LiveTranscoding](####LiveTranscoding) | start live trancoding |
+| setLiveTranscoding | [LiveTranscoding](#LiveTranscoding) | start live trancoding |
 | setLocalRenderMode | Number: mode | set local video render mode  |
 | setRemoteRenderMode | Number: uid, Number: mode | set remote video render mode |
 | enableAudioVolumeIndication | Number: interval, Number smooth | enable speaker volume notification|
