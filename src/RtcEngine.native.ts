@@ -29,11 +29,6 @@ export default class RtcEngine {
         return Agora.joinChannel({channelName, uid, token, info});
     }
 
-    static joinChannelWithToken(
-        channelName: string, token?: String, uid?: Number): void {
-        Agora.joinChannelWithToken(token, channelName, uid);
-    }
-
     static eventEmitter(eventScheduler: EventScheduler) {
         this.removeEmitter();
         // const events = EventSchedulerKeys;
@@ -168,17 +163,17 @@ export default class RtcEngine {
         if (this.listeners && this.listeners.length > 0) {
             for (let listener of this.listeners) {
                 listener.remove();
+                this.listeners = [];
             }
         }
-        this.listeners = [];
     }
 
     static enableLastmileTest() {
-        Agora.enableLastmileTest();
+        return Agora.enableLastmileTest();
     }
 
     static disableLastmileTest() {
-        Agora.disableLastmileTest();
+        return Agora.disableLastmileTest();
     }
 
     static leaveChannel() {
@@ -205,10 +200,6 @@ export default class RtcEngine {
         Agora.stopPreview();
     }
 
-    static configPublisher(options: PublisherConfig) {
-        Agora.configPublisher(options);
-    }
-
     static setLiveTranscoding(options: LiveTranscoding) {
         Agora.setLiveTranscoding(options);
     }
@@ -217,8 +208,8 @@ export default class RtcEngine {
         Agora.setLocalRenderMode(mode);
     }
 
-    static setRemoteRenderMode(mode: number) {
-        Agora.setRemoteRenderMode(mode);
+    static setRemoteRenderMode(uid: number, mode: number) {
+        Agora.setRemoteRenderMode(uid, mode);
     }
 
     static enableAudioVolumeIndication(interval: number, smooth: number) {
@@ -226,7 +217,7 @@ export default class RtcEngine {
     }
 
     static switchCamera() {
-        Agora.switchCamera();
+        return Agora.switchCamera();
     }
 
     static enableVideo() {
@@ -258,7 +249,7 @@ export default class RtcEngine {
     }
 
     static setCameraAutoFocusFaceModeEnabled(status: boolean) {
-        Agora.setCameraAutoFocusFaceModeEnabled(status);
+        return Agora.setCameraAutoFocusFaceModeEnabled(status);
     }
 
     static setDefaultAudioRouteToSpeakerphone(status: boolean) {
@@ -281,12 +272,12 @@ export default class RtcEngine {
         Agora.muteRemoteVideoStream(uid, status);
     }
 
-    static createDataStream(reliable: boolean, ordered: boolean, callback: Callback<void>) {
-        Agora.createDataStream(reliable, ordered, callback);
+    static createDataStream(reliable: boolean, ordered: boolean) {
+        return Agora.createDataStream(reliable, ordered);
     }
 
-    static sendStreamMessage(streamId: number, data: any, callback: Callback<void>) {
-        Agora.sendStreamMessage(streamId, data, callback);
+    static sendStreamMessage(streamId: number, data: any) {
+        return Agora.sendStreamMessage(streamId, data);
     }
 
     static getSdkVersion(callback: Callback<void>) {
