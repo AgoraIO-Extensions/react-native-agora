@@ -25,3 +25,11 @@ ios/Podfile*
 xcuserdata*
 **/*/xcuserdata*
 src
+**/*.iml
+**/*.properties
+.project
+proguard-rules.pro
+.gradle
+.idea
+.settings
+.vscode
