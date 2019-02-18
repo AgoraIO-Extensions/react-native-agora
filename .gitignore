@@ -70,3 +70,4 @@ Pods
 xcuserdata*
 **/*/xcuserdata*
 .vscode
+samples/**/package-lock.json
