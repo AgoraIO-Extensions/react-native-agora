@@ -162,12 +162,6 @@ export default class AgoraComponent extends Component<Props> {
         this.setState({
           joinSucceed: true
         })
-        const {peerIds} = this.state;
-        if (peerIds.indexOf(data.uid) === -1) {
-          this.setState({
-            peerIds: [...peerIds, data.uid]
-          })
-        }
       },
       onAudioVolumeIndication: (data) => {
         console.log('[RtcEngine] onAudioVolumeIndication', data);
