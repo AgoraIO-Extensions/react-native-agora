@@ -2,6 +2,7 @@ package com.syan.agora;
 
 import android.view.SurfaceView;
 
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -43,7 +44,7 @@ public class AgoraViewManage extends SimpleViewManager<AgoraVideoView> {
     }
 
     @ReactProp(name = "remoteUid")
-    public void setRemoteUid(final AgoraVideoView agoraVideoView, int remoteUid) {
+    public void setRemoteUid(final AgoraVideoView agoraVideoView, final int remoteUid) {
         AgoraManager.getInstance().setupRemoteVideo(remoteUid);
         surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
         //surfaceView.setVisibility(View.VISIBLE);
