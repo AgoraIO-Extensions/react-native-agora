@@ -297,7 +297,7 @@ RCT_EXPORT_METHOD(setLocalRenderMode:(NSInteger) mode) {
 // set remote video render mode
 RCT_EXPORT_METHOD(setRemoteRenderMode:(NSInteger) uid
                   mode:(NSInteger) mode) {
-  [self.rtcEngine setLocalRenderMode:uid mode:mode];
+  [self.rtcEngine setRemoteRenderMode:uid mode:mode];
 }
 
 // start video preview
