@@ -217,6 +217,7 @@ RtcEngine.eventEmitter({
 ## 更新信息
 #### 2.3.3-alpha
 - support agora video sdk 2.3.3
+- release 2.3.3-alpha.3
 
 
 #### 1.1.2
