@@ -9,6 +9,9 @@ import {
 
 const RCTAgoraView = requireNativeComponent("RCTAgoraView");
 
+/**
+ * @class AgoraView
+ */
 export default class AgoraView extends React.Component<AgoraViewProps> {
     public render(): JSX.Element {
         return (
