@@ -1576,28 +1576,6 @@ RCT_EXPORT_METHOD(getSdkVersion
   resolve(@[[AgoraRtcEngineKit getSdkVersion]]);
 }
 
-/*
- * @deprecated method
- * configPublisher
- */
-RCT_EXPORT_METHOD(configPublisher:(NSDictionary *)config){
-  AgoraPublisherConfiguration *apc = [AgoraPublisherConfiguration new];
-  
-  apc.width = [config[@"width"] integerValue];  //旁路直播的输出码流的宽度
-  apc.height = [config[@"height"] integerValue]; //旁路直播的输出码流的高度
-  apc.framerate = [config[@"framerate"] integerValue]; //旁路直播的输出码率帧率
-  apc.bitrate = [config[@"bitrate"] integerValue]; //旁路直播输出码流的码率
-  apc.defaultLayout = [config[@"defaultLayout"] integerValue]; //设置流生命周期
-  apc.lifeCycle = [config[@"lifeCycle"] integerValue]; //默认合图布局
-  apc.publishUrl = config[@"publishUrl"]; //合图推流地址
-  apc.rawStreamUrl = config[@"rawStreamUrl"]; //单流地址
-  apc.extraInfo = config[@"extraInfo"]; //其他信息
-  apc.owner = [config[@"owner"] boolValue]; //是否将当前主播设为该 RTMP 流的主人
-  
-  [self.rtcEngine configPublisher:apc];
-  NSLog(@"[DEPRECATED] configPublisher, use addPublishStreamUrl instead ");
-}
-
 // add publish stream url
 RCT_EXPORT_METHOD(addPublishStreamUrl:(NSDictionary *)options) {
   [self.rtcEngine addPublishStreamUrl:options[@"url"] transcodingEnabled:[options[@"enable"] boolValue]];
