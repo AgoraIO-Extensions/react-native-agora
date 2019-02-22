@@ -71,3 +71,4 @@ xcuserdata*
 **/*/xcuserdata*
 .vscode
 samples/**/package-lock.json
+*.iml

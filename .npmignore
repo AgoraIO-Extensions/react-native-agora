@@ -25,6 +25,7 @@ ios/Podfile*
 xcuserdata*
 **/*/xcuserdata*
 src/**/*.ts
+src/**/*.tsx
 !android/src/
 !android/build.gradle
 **/*.iml
