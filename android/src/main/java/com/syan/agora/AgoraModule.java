@@ -2370,25 +2370,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
-
-    //配置旁路直播推流
-    @ReactMethod
-    public void configPublisher(ReadableMap options) {
-        PublisherConfiguration config = new PublisherConfiguration.Builder()
-                .owner(options.getBoolean("owner"))
-                .size(options.getInt("width"), options.getInt("height"))
-                .frameRate(options.getInt("framerate"))
-//                .biteRate(options.getInt("bitrate"))
-                .defaultLayout(options.getInt("defaultLayout"))
-                .streamLifeCycle(options.getInt("lifeCycle"))
-                .rawStreamUrl(options.getString("rawStreamUrl"))
-                .publishUrl(options.getString("publishUrl"))
-                .extraInfo(options.getString("extraInfo"))
-                .build();
-
-        AgoraManager.getInstance().mRtcEngine.configPublisher(config);
-    }
-
     //设置本地视频显示模式
     @ReactMethod
     public void setLocalRenderMode(int mode) {
