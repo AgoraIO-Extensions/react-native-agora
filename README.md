@@ -208,8 +208,7 @@ RtcEngine.eventEmitter({
 
 ## 运行示例
 
-- 更新示例 React-Native为0.51
-- 优化代码
+- 更新示例 React-Native为0.58
 
 [Samples](./samples/README.md)
 
@@ -218,6 +217,7 @@ RtcEngine.eventEmitter({
 #### 2.3.3-alpha
 - support agora video sdk 2.3.3
 - release 2.3.3-alpha.3
+- release 2.3.3-alpha.4 (remove deprecated native api)
 
 
 #### 1.1.2
