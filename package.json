@@ -34,8 +34,8 @@
   },
   "homepage": "https://github.com/syanbo/react-native-agora#readme",
   "peerDependencies": {
-    "react": ">=16.7.0",
-    "react-native": ">=0.58.3"
+    "react": ">=16.6.0",
+    "react-native": ">=0.58.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.13",
