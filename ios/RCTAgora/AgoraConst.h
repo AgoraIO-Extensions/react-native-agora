@@ -54,8 +54,8 @@ static NSString *NetworkQuality = @"networkQuality";
 static NSString *LocalVideoStats = @"localVideoStats";
 static NSString *RemoteVideoStats = @"remoteVideoStats";
 static NSString *RemoteAudioStats = @"remoteAudioStats";
-static NSString *AudioTransportStatsOfUid = @"AudioTransportStatsOfUid";
-static NSString *VideoTransportStatsOfUid = @"VideoTransportStatsOfUid";
+static NSString *AudioTransportStatsOfUid = @"audioTransportStatsOfUid";
+static NSString *VideoTransportStatsOfUid = @"videoTransportStatsOfUid";
 
 static NSString *LocalAudioMixingDidFinish = @"localAudioMixingFinish";
 static NSString *RemoteAudioMixingDidStart = @"remoteAudioMixingStart";
