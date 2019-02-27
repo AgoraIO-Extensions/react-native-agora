@@ -29,7 +29,6 @@ import java.util.Map;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IAudioEffectManager;
 import io.agora.rtc.IRtcEngineEventHandler;
-import io.agora.rtc.PublisherConfiguration;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.live.LiveTranscoding;
@@ -280,7 +279,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putString("message", "AgoraError");
                     map.putInt("code", code);
-                    sendEvent(getReactApplicationContext(), "onError", map);
+                    sendEvent(getReactApplicationContext(), "error", map);
                 }
             });
         }
@@ -294,7 +293,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putString("channel", channel);
                     map.putInt("uid", uid);
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onJoinChannelSuccess", map);
+                    sendEvent(getReactApplicationContext(), "joinChannelSuccess", map);
                 }
             });
         }
@@ -308,7 +307,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putString("channel", channel);
                     map.putInt("uid", uid);
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onReJoinChannelSuccess", map);                }
+                    sendEvent(getReactApplicationContext(), "reJoinChannelSuccess", map);
+                }
             });
         }
 
@@ -334,7 +334,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
-                    sendEvent(getReactApplicationContext(), "onLeaveChannel", map);
+                    sendEvent(getReactApplicationContext(), "leaveChannel", map);
                 }
             });
         }
@@ -347,7 +347,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("oldRole", oldRole);
                     map.putInt("newRole", newRole);
-                    sendEvent(getReactApplicationContext(), "onClientRoleChanged", map);
+                    sendEvent(getReactApplicationContext(), "clientRoleChanged", map);
                 }
             });
         }
@@ -360,7 +360,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onUserJoined", map);
+                    sendEvent(getReactApplicationContext(), "userJoined", map);
                 }
             });
         }
@@ -373,7 +373,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putInt("reason", reason);
-                    sendEvent(getReactApplicationContext(), "onUserOffline", map);
+                    sendEvent(getReactApplicationContext(), "userOffline", map);
                 }
             });
         }
@@ -386,7 +386,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("state", state);
                     map.putInt("reason", reason);
-                    sendEvent(getReactApplicationContext(), "onConnectionStateChanged", map);
+                    sendEvent(getReactApplicationContext(), "connectionStateChanged", map);
                 }
             });
         }
@@ -398,8 +398,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 @Override
                 public void run() {
                     WritableMap map = Arguments.createMap();
-                    map.putString("message", "onConnectionLost");
-                    sendEvent(getReactApplicationContext(), "onConnectionLost", map);
+                    map.putString("message", "connectionLost");
+                    sendEvent(getReactApplicationContext(), "connectionLost", map);
                 }
             });
         }
@@ -414,7 +414,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                         map.putInt("error", code);
                         map.putString("api", api);
                         map.putString("result", result);
-                        sendEvent(getReactApplicationContext(), "onApiCallExecuted", map);
+                        sendEvent(getReactApplicationContext(), "apiCallExecuted", map);
                     }
                 }
             });
@@ -427,7 +427,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putString("token", token);
-                    sendEvent(getReactApplicationContext(), "onTokenPrivilegeWillExpire", map);
+                    sendEvent(getReactApplicationContext(), "tokenPrivilegeWillExpire", map);
                 }
             });
         }
@@ -439,7 +439,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putString("message", "RequestToken");
-                    sendEvent(getReactApplicationContext(), "onRequestToken", map);
+                    sendEvent(getReactApplicationContext(), "requestToken", map);
                 }
             });
         }
@@ -451,7 +451,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putBoolean("enabled", enabled);
-                    sendEvent(getReactApplicationContext(), "onMicrophoneEnabled", map);
+                    sendEvent(getReactApplicationContext(), "microphoneEnabled", map);
                 }
 
             });
@@ -474,7 +474,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putArray("speakers", arr);
                     map.putInt("totalVolume", totalVolume);
-                    sendEvent(getReactApplicationContext(), "onAudioVolumeIndication", map);
+                    sendEvent(getReactApplicationContext(), "audioVolumeIndication", map);
                 }
             });
         }
@@ -486,7 +486,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
-                    sendEvent(getReactApplicationContext(), "onActiveSpeaker", map);
+                    sendEvent(getReactApplicationContext(), "activeSpeaker", map);
                 }
             });
         }
@@ -498,7 +498,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onFirstLocalAudioFrame", map);
+                    sendEvent(getReactApplicationContext(), "firstLocalAudioFrame", map);
                 }
             });
         }
@@ -511,7 +511,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onFirstRemoteAudioFrame", map);
+                    sendEvent(getReactApplicationContext(), "firstRemoteAudioFrame", map);
                 }
             });
         }
@@ -523,7 +523,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putString("message", "VideoStopped");
-                    sendEvent(getReactApplicationContext(), "onVideoStopped", map);
+                    sendEvent(getReactApplicationContext(), "videoStopped", map);
                 }
             });
         }
@@ -537,7 +537,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("width", width);
                     map.putInt("height", height);
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onFirstLocalVideoFrame", map);
+                    sendEvent(getReactApplicationContext(), "firstLocalVideoFrame", map);
                 }
             });
         }
@@ -555,7 +555,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("width", width);
                     map.putInt("height", height);
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onFirstRemoteVideoDecoded", map);
+                    sendEvent(getReactApplicationContext(), "firstRemoteVideoDecoded", map);
                 }
             });
         }
@@ -570,7 +570,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("width", width);
                     map.putInt("height", height);
                     map.putInt("elapsed", elapsed);
-                    sendEvent(getReactApplicationContext(), "onFirstRemoteVideoFrame", map);
+                    sendEvent(getReactApplicationContext(), "firstRemoteVideoFrame", map);
                 }
             });
         }
@@ -583,7 +583,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putBoolean("muted", muted);
-                    sendEvent(getReactApplicationContext(), "onUserMuteAudio", map);
+                    sendEvent(getReactApplicationContext(), "userMuteAudio", map);
                 }
             });
         }
@@ -596,7 +596,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putBoolean("muted", muted);
-                    sendEvent(getReactApplicationContext(), "onUserMuteVideo", map);
+                    sendEvent(getReactApplicationContext(), "userMuteVideo", map);
                 }
             });
         }
@@ -609,7 +609,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putBoolean("muted", muted);
-                    sendEvent(getReactApplicationContext(), "onUserEnableVideo", map);
+                    sendEvent(getReactApplicationContext(), "userEnableVideo", map);
                 }
             });
         }
@@ -622,7 +622,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putBoolean("muted", muted);
-                    sendEvent(getReactApplicationContext(), "onUserEnableLocalVideo", map);
+                    sendEvent(getReactApplicationContext(), "userEnableLocalVideo", map);
                 }
             });
         }
@@ -637,7 +637,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("width", width);
                     map.putInt("height", height);
                     map.putInt("rotation", rotation);
-                    sendEvent(getReactApplicationContext(), "onVideoSizeChanged", map);
+                    sendEvent(getReactApplicationContext(), "videoSizeChanged", map);
                 }
             });
         }
@@ -650,7 +650,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putInt("state", state);
-                    sendEvent(getReactApplicationContext(), "onRemoteVideoStateChanged", map);
+                    sendEvent(getReactApplicationContext(), "remoteVideoStateChanged", map);
                 }
             });
         }
@@ -662,7 +662,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putBoolean("isFallbackOrRecover", isFallbackOrRecover);
-                    sendEvent(getReactApplicationContext(), "onLocalPublishFallbackToAudioOnly", map);
+                    sendEvent(getReactApplicationContext(), "localPublishFallbackToAudioOnly", map);
                 }
             });
         }
@@ -675,7 +675,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putBoolean("isFallbackOrRecover", isFallbackOrRecover);
-                    sendEvent(getReactApplicationContext(), "onRemoteSubscribeFallbackToAudioOnly", map);
+                    sendEvent(getReactApplicationContext(), "remoteSubscribeFallbackToAudioOnly", map);
                 }
             });
         }
@@ -687,7 +687,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putInt("routing", routing);
-                    sendEvent(getReactApplicationContext(), "onAudioRouteChanged", map);
+                    sendEvent(getReactApplicationContext(), "audioRouteChanged", map);
                 }
             });
         }
@@ -699,7 +699,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putString("message", "CameraDidReady");
-                    sendEvent(getReactApplicationContext(), "onCameraReady", map);
+                    sendEvent(getReactApplicationContext(), "cameraReady", map);
                 }
             });
         }
@@ -716,7 +716,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     rectMap.putInt("left", rect.left);
                     WritableMap map = Arguments.createMap();
                     map.putMap("rect", rectMap);
-                    sendEvent(getReactApplicationContext(), "onCameraFocusAreaChanged", map);
+                    sendEvent(getReactApplicationContext(), "cameraFocusAreaChanged", map);
                 }
             });
         }
@@ -733,7 +733,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     rectMap.putInt("left", rect.left);
                     WritableMap map = Arguments.createMap();
                     map.putMap("rect", rectMap);
-                    sendEvent(getReactApplicationContext(), "onCameraExposureAreaChanged", map);
+                    sendEvent(getReactApplicationContext(), "cameraExposureAreaChanged", map);
                 }
             });
         }
@@ -760,7 +760,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
-                    sendEvent(getReactApplicationContext(), "onRtcStats", map);
+                    sendEvent(getReactApplicationContext(), "rtcStats", map);
                 }
             });
         }
@@ -772,7 +772,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putInt("quality", quality);
-                    sendEvent(getReactApplicationContext(), "onLastmileQuality", map);
+                    sendEvent(getReactApplicationContext(), "lastmileQuality", map);
                 }
             });
         }
@@ -786,7 +786,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("uid", uid);
                     map.putInt("txQuality", txQuality);
                     map.putInt("rxQuality", rxQuality);
-                    sendEvent(getReactApplicationContext(), "onNetworkQuality", map);
+                    sendEvent(getReactApplicationContext(), "networkQuality", map);
                 }
             });
         }
@@ -803,7 +803,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
-                    sendEvent(getReactApplicationContext(), "onLocalVideoStats", map);
+                    sendEvent(getReactApplicationContext(), "localVideoStats", map);
                 }
             });
         }
@@ -821,7 +821,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("rxStreamType", stats.rxStreamType);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
-                    sendEvent(getReactApplicationContext(), "onRemoteVideoStats", map);
+                    sendEvent(getReactApplicationContext(), "remoteVideoStats", map);
                 }
             });
         }
@@ -839,7 +839,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("audioLossRate", stats.audioLossRate);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
-                    sendEvent(getReactApplicationContext(), "onRemoteAudioStats", map);
+                    sendEvent(getReactApplicationContext(), "remoteAudioStats", map);
                 }
             });
         }
@@ -859,7 +859,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("rxKBitRate", rxKBitRate);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
-                    sendEvent(getReactApplicationContext(), "onRemoteAudioTransportStats", map);
+                    sendEvent(getReactApplicationContext(), "remoteAudioTransportStats", map);
                 }
             });
         }
@@ -879,7 +879,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("rxKBitRate", rxKBitRate);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
-                    sendEvent(getReactApplicationContext(), "onRemoteVideoTransportStats", map);
+                    sendEvent(getReactApplicationContext(), "remoteVideoTransportStats", map);
                 }
             });
         }
@@ -891,7 +891,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putString("message", "LocalAudioMixingSucceedFinish");
-                    sendEvent(getReactApplicationContext(), "onAudioMixingFinish", map);
+                    sendEvent(getReactApplicationContext(), "audioMixingFinish", map);
                 }
             });
         }
@@ -903,7 +903,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putInt("soundId", soundId);
-                    sendEvent(getReactApplicationContext(), "onAudioEffectFinished", map);
+                    sendEvent(getReactApplicationContext(), "audioEffectFinished", map);
                 }
             });
         }
@@ -916,7 +916,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putString("url", url);
                     map.putInt("error", error);
-                    sendEvent(getReactApplicationContext(), "onStreamPublished", map);
+                    sendEvent(getReactApplicationContext(), "streamPublished", map);
                 }
             });
         }
@@ -928,7 +928,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putString("url", url);
-                    sendEvent(getReactApplicationContext(), "onStreamUnpublished", map);
+                    sendEvent(getReactApplicationContext(), "streamUnpublished", map);
                 }
             });
         }
@@ -940,7 +940,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap map = Arguments.createMap();
                     map.putString("message", "TranscodingUpdated");
-                    sendEvent(getReactApplicationContext(), "onTranscodingUpdated", map);
+                    sendEvent(getReactApplicationContext(), "transcodingUpdated", map);
                 }
             });
         }
@@ -954,7 +954,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putString("url", url);
                     map.putInt("uid", uid);
                     map.putInt("status", status);
-                    sendEvent(getReactApplicationContext(), "onStreamInjectedStatus", map);
+                    sendEvent(getReactApplicationContext(), "streamInjectedStatus", map);
                 }
             });
         }
@@ -972,7 +972,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("uid", uid);
                     map.putInt("streamId", streamId);
                     map.putString("data", msg);
-                    sendEvent(getReactApplicationContext(), "onStreamMessage", map);
+                    sendEvent(getReactApplicationContext(), "streamMessage", map);
                 }
             });
         }
@@ -983,13 +983,13 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 @Override
                 public void run() {
                     WritableMap map = Arguments.createMap();
-                    map.putString("type", "onStreamMessageError");
+                    map.putString("type", "streamMessageError");
                     map.putInt("uid", uid);
                     map.putInt("streamId", streamId);
                     map.putInt("error", code);
                     map.putInt("missed", missed);
                     map.putInt("cached", cached);
-                    sendEvent(getReactApplicationContext(), "onStreamMessageError", map);
+                    sendEvent(getReactApplicationContext(), "streamMessageError", map);
                 }
             });
         }
@@ -1000,8 +1000,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 @Override
                 public void run() {
                     WritableMap map = Arguments.createMap();
-                    map.putString("message", "onMediaEngineLoadSuccess");
-                    sendEvent(getReactApplicationContext(), "onMediaEngineLoadSuccess", map);
+                    map.putString("message", "mediaEngineLoadSuccess");
+                    sendEvent(getReactApplicationContext(), "mediaEngineLoadSuccess", map);
                 }
             });
         }
@@ -1012,8 +1012,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 @Override
                 public void run() {
                     WritableMap map = Arguments.createMap();
-                    map.putString("message", "onMediaEngineStartCallSuccess");
-                    sendEvent(getReactApplicationContext(), "onMediaEngineStartCallSuccess", map);
+                    map.putString("message", "mediaEngineStartCallSuccess");
+                    sendEvent(getReactApplicationContext(), "mediaEngineStartCallSuccess", map);
                 }
             });
         }
@@ -1074,7 +1074,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1088,7 +1088,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             err.putBoolean("success", false);
             err.putString("message", e.toString());
             err.putInt("code", ((ReactNativeAgoraException) e).getCode());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1118,7 +1118,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1132,7 +1132,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1155,7 +1155,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1168,7 +1168,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1428,7 +1428,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1441,7 +1441,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1494,7 +1494,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1507,7 +1507,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1520,7 +1520,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1533,7 +1533,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1546,7 +1546,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1564,7 +1564,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1577,7 +1577,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1590,7 +1590,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1603,7 +1603,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1616,7 +1616,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1629,7 +1629,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -1642,7 +1642,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
@@ -2176,7 +2176,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             WritableMap err = Arguments.createMap();
             err.putBoolean("success", false);
             err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "onError", err);
+            sendEvent(getReactApplicationContext(), "error", err);
         }
     }
 
