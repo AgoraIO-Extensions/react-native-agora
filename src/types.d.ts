@@ -91,6 +91,11 @@ export interface VideoOption {
   reactTag: number
 }
 
+export interface AudioRecordingOption {
+  filePath: String,
+  quality: Number
+}
+
 export interface EventScheduler {
   onWarning: Function,
  

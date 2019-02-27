@@ -2,11 +2,11 @@ PODS:
   - AgoraRtcEngine_iOS (2.3.3)
   - React (0.58.3):
     - React/Core (= 0.58.3)
-  - react-native-agora (2.3.3):
+  - react-native-agora (2.3.3-alpha.4):
     - AgoraRtcEngine_iOS (= 2.3.3)
     - React
-    - react-native-agora/AgoraRtcCryptoLoader (= 2.3.3)
-  - react-native-agora/AgoraRtcCryptoLoader (2.3.3):
+    - react-native-agora/AgoraRtcCryptoLoader (= 2.3.3-alpha.4)
+  - react-native-agora/AgoraRtcCryptoLoader (2.3.3-alpha.4):
     - AgoraRtcEngine_iOS (= 2.3.3)
     - React
   - React/Core (0.58.3):
@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AgoraRtcEngine_iOS: 8ad4b58dafed2cec5df03fa1f0ddbdad2c9ff958
   React: 9b873b38b92ed8012d7cdf3b965477095ed364c4
-  react-native-agora: ad538661771e745fac8920412002e0e90903bbc8
+  react-native-agora: 749ff4aadd5c8125139c82787c378de7e304805d
   yoga: 0885622311729a02c2bc02dca97167787a51488b
 
 PODFILE CHECKSUM: 20565f1fb8643e49a8e76b33da6bb4e2d188134a

@@ -10,73 +10,73 @@
 
 static NSString *RCTAgoraErrorDomain = @"RCTAgoraErrorDomain";
 
-static NSString *DidOccurWarning = @"onWarning";
-static NSString *DidOccurError = @"onError";
-static NSString *DidApiCallExecute = @"onApiCallExecute";
-static NSString *DidJoinChannel = @"onJoinChannelSuccess";
-static NSString *DidRejoinChannel = @"onRejoinChannelSuccess";
-static NSString *DidLeaveChannel = @"onLeaveChannel";
-static NSString *DidClientRoleChanged = @"onClientRoleChanged";
-static NSString *DidJoinedOfUid = @"onUserJoined";
-static NSString *DidOfflineOfUid = @"onUserOffline";
-static NSString *ConnectionChangedToState = @"onConnectionStateChanged";
-static NSString *ConnectionDidLost = @"onConnectionLost";
-static NSString *TokenPrivilegeWillExpire = @"onTokenPrivilegeWillExpire";
-static NSString *RequestToken = @"onRequestToken";
+static NSString *DidOccurWarning = @"warning";
+static NSString *DidOccurError = @"error";
+static NSString *DidApiCallExecute = @"apiCallExecute";
+static NSString *DidJoinChannel = @"joinChannelSuccess";
+static NSString *DidRejoinChannel = @"rejoinChannelSuccess";
+static NSString *DidLeaveChannel = @"leaveChannel";
+static NSString *DidClientRoleChanged = @"clientRoleChanged";
+static NSString *DidJoinedOfUid = @"userJoined";
+static NSString *DidOfflineOfUid = @"userOffline";
+static NSString *ConnectionChangedToState = @"connectionStateChanged";
+static NSString *ConnectionDidLost = @"connectionLost";
+static NSString *TokenPrivilegeWillExpire = @"tokenPrivilegeWillExpire";
+static NSString *RequestToken = @"requestToken";
 
-static NSString *DidMicrophoneEnabled = @"onMicrophoneEnabled";
-static NSString *ReportAudioVolumeIndicationOfSpeakers = @"onAudioVolumeIndication";
-static NSString *ActiveSpeaker = @"onActiveSpeaker";
-static NSString *FirstLocalAudioFrame = @"onFirstLocalAudioFrame";
-static NSString *FirstRemoteAudioFrameOfUid = @"onFirstRemoteAudioFrame";
-static NSString *VideoDidStop = @"onVideoStopped";
-static NSString *FirstLocalVideoFrameWithSize = @"onFirstLocalVideoFrame";
-static NSString *FirstRemoteVideoDecodedOfUid = @"onFirstRemoteVideoDecoded";
-static NSString *FirstRemoteVideoFrameOfUid = @"onFirstRemoteVideoFrame";
-static NSString *DidAudioMuted = @"onUserMuteAudio";
-static NSString *DidVideoMuted = @"onUserMuteVideo";
-static NSString *DidVideoEnabled = @"onUserEnableVideo";
-static NSString *DidLocalVideoEnabled = @"onUserEnableLocalVideo";
-static NSString *VideoSizeChangedOfUid = @"onVideoSizeChanged";
-static NSString *RemoteVideoStateChangedOfUid = @"onRemoteVideoStateChanged";
-static NSString *DidLocalPublishFallbackToAudioOnly = @"onLocalPublishFallbackToAudioOnly";
-static NSString *DidRemoteSubscribeFallbackToAudioOnly = @"onRemoteSubscribeFallbackToAudioOnly";
+static NSString *DidMicrophoneEnabled = @"microphoneEnabled";
+static NSString *ReportAudioVolumeIndicationOfSpeakers = @"audioVolumeIndication";
+static NSString *ActiveSpeaker = @"activeSpeaker";
+static NSString *FirstLocalAudioFrame = @"firstLocalAudioFrame";
+static NSString *FirstRemoteAudioFrameOfUid = @"firstRemoteAudioFrame";
+static NSString *VideoDidStop = @"videoStopped";
+static NSString *FirstLocalVideoFrameWithSize = @"firstLocalVideoFrame";
+static NSString *FirstRemoteVideoDecodedOfUid = @"firstRemoteVideoDecoded";
+static NSString *FirstRemoteVideoFrameOfUid = @"firstRemoteVideoFrame";
+static NSString *DidAudioMuted = @"userMuteAudio";
+static NSString *DidVideoMuted = @"userMuteVideo";
+static NSString *DidVideoEnabled = @"userEnableVideo";
+static NSString *DidLocalVideoEnabled = @"userEnableLocalVideo";
+static NSString *VideoSizeChangedOfUid = @"videoSizeChanged";
+static NSString *RemoteVideoStateChangedOfUid = @"remoteVideoStateChanged";
+static NSString *DidLocalPublishFallbackToAudioOnly = @"localPublishFallbackToAudioOnly";
+static NSString *DidRemoteSubscribeFallbackToAudioOnly = @"remoteSubscribeFallbackToAudioOnly";
 
-static NSString *DeviceTypeStateChanged = @"onDeviceTypeStateChanged";
-static NSString *DidAudioRouteChanged = @"onAudioRouteChanged";
-static NSString *CameraDidReady = @"onCameraReady";
-static NSString *CameraFocusDidChangedToRect = @"onCameraFocusAreaChanged";
-static NSString *CameraExposureDidChangedToRect = @"onCameraExposureAreaChanged";
+static NSString *DeviceTypeStateChanged = @"deviceTypeStateChanged";
+static NSString *DidAudioRouteChanged = @"audioRouteChanged";
+static NSString *CameraDidReady = @"cameraReady";
+static NSString *CameraFocusDidChangedToRect = @"cameraFocusAreaChanged";
+static NSString *CameraExposureDidChangedToRect = @"cameraExposureAreaChanged";
 
-static NSString *ReportRtcStats = @"onRtcStats";
-static NSString *LastmileQuality = @"onLastmileQuality";
-static NSString *NetworkQuality = @"onNetworkQuality";
-static NSString *LocalVideoStats = @"onLocalVideoStats";
-static NSString *RemoteVideoStats = @"onRemoteVideoStats";
-static NSString *RemoteAudioStats = @"onRemoteAudioStats";
+static NSString *ReportRtcStats = @"rtcStats";
+static NSString *LastmileQuality = @"lastmileQuality";
+static NSString *NetworkQuality = @"networkQuality";
+static NSString *LocalVideoStats = @"localVideoStats";
+static NSString *RemoteVideoStats = @"remoteVideoStats";
+static NSString *RemoteAudioStats = @"remoteAudioStats";
 static NSString *AudioTransportStatsOfUid = @"AudioTransportStatsOfUid";
 static NSString *VideoTransportStatsOfUid = @"VideoTransportStatsOfUid";
 
-static NSString *LocalAudioMixingDidFinish = @"onLocalAudioMixingFinish";
-static NSString *RemoteAudioMixingDidStart = @"onRemoteAudioMixingStart";
-static NSString *RemoteAudioMixingDidFinish = @"onRemoteAudioMixingFinish";
-static NSString *DidAudioEffectFinish = @"onAudioEffectFinish";
+static NSString *LocalAudioMixingDidFinish = @"localAudioMixingFinish";
+static NSString *RemoteAudioMixingDidStart = @"remoteAudioMixingStart";
+static NSString *RemoteAudioMixingDidFinish = @"remoteAudioMixingFinish";
+static NSString *DidAudioEffectFinish = @"audioEffectFinish";
 
-static NSString *StreamPublished = @"onStreamPublished";
-static NSString *StreamUnpublish = @"onStreamUnpublish";
-static NSString *TranscodingUpdated = @"onTranscodingUpdate";
+static NSString *StreamPublished = @"streamPublished";
+static NSString *StreamUnpublish = @"streamUnpublish";
+static NSString *TranscodingUpdated = @"transcodingUpdate";
 
-static NSString *StreamInjectedStatus = @"onStreamInjectedStatus";
+static NSString *StreamInjectedStatus = @"streamInjectedStatus";
 
-static NSString *ReceiveStreamMessage = @"onReceiveStreamMessage";
-static NSString *DidOccurStreamMessageError = @"onOccurStreamMessageError";
+static NSString *ReceiveStreamMessage = @"receiveStreamMessage";
+static NSString *DidOccurStreamMessageError = @"occurStreamMessageError";
 
-static NSString *MediaEngineDidLoaded = @"onMediaEngineLoaded";
-static NSString *MediaEngineDidStartCall = @"onMediaEngineStartCall";
+static NSString *MediaEngineDidLoaded = @"mediaEngineLoaded";
+static NSString *MediaEngineDidStartCall = @"mediaEngineStartCall";
 
-static NSString *ConnectionDidInterrupted = @"onConnectionInterrupted";
-static NSString *ConnectionDidBanned = @"onConnectionBanned";
-static NSString *AudioQualityOfUid = @"onAudioQuality";
+static NSString *ConnectionDidInterrupted = @"connectionInterrupted";
+static NSString *ConnectionDidBanned = @"connectionBanned";
+static NSString *AudioQualityOfUid = @"audioQuality";
 
 @interface AgoraConst : NSObject
 
