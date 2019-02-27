@@ -1692,7 +1692,6 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
            DidLocalPublishFallbackToAudioOnly,
            DidRemoteSubscribeFallbackToAudioOnly,
            
-           DeviceTypeStateChanged,
            DidAudioRouteChanged,
            CameraDidReady,
            CameraFocusDidChangedToRect,
@@ -1968,14 +1967,6 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
                                                                  @"isFallbackOrRecover": @(isFallbackOrRecover),
                                                                  @"uid": @(uid)
                                                                  }];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine device:(NSString *_Nonnull)deviceId type:(AgoraMediaDeviceType)deviceType stateChanged:(NSInteger)state {
-  [self sendEvent:DeviceTypeStateChanged params:@{
-                                                  @"deviceId": deviceId,
-                                                  @"deviceType": @(deviceType),
-                                                  @"state": @(state)
-                                                  }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didAudioRouteChanged:(AgoraAudioOutputRouting)routing {

@@ -42,7 +42,6 @@ static NSString *RemoteVideoStateChangedOfUid = @"remoteVideoStateChanged";
 static NSString *DidLocalPublishFallbackToAudioOnly = @"localPublishFallbackToAudioOnly";
 static NSString *DidRemoteSubscribeFallbackToAudioOnly = @"remoteSubscribeFallbackToAudioOnly";
 
-static NSString *DeviceTypeStateChanged = @"deviceTypeStateChanged";
 static NSString *DidAudioRouteChanged = @"audioRouteChanged";
 static NSString *CameraDidReady = @"cameraReady";
 static NSString *CameraFocusDidChangedToRect = @"cameraFocusAreaChanged";
