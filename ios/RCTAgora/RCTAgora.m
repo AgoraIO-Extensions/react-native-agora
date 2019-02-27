@@ -2050,7 +2050,6 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
   [self sendEvent:RemoteVideoStats params:@{
                                             @"stats": @{
                                                 @"uid": @(stats.uid),
-                                                @"delay": @(stats.delay),
                                                 @"width": @(stats.width),
                                                 @"height": @(stats.height),
                                                 @"receivedBitrate": @(stats.receivedBitrate),

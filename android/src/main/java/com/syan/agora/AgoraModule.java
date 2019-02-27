@@ -815,7 +815,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 public void run() {
                     WritableMap statsMap = Arguments.createMap();
                     statsMap.putInt("uid", stats.uid);
-                    statsMap.putInt("delay", stats.delay);
                     statsMap.putInt("receivedBitrate", stats.receivedBitrate);
                     statsMap.putInt("receivedFrameRate", stats.receivedFrameRate);
                     statsMap.putInt("rxStreamType", stats.rxStreamType);
