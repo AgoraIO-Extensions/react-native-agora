@@ -34,26 +34,33 @@ Either way, then link with:
 
  `react-native link react-native-agora`
 
-### [iOS Installation](docs/IOS_INSTALLATION.md)
-### [iOS 开发环境安装指南](docs/IOS_INSTALLATION.zh.md)
+### iOS Installation
+  [中文](docs/IOS_INSTALLATION.zh.md)
+  [English](docs/IOS_INSTALLATION.md)
 
-### [Android Installation](docs/ANDROID_INSTALLATION.md)
-### [Android 开发环境安装指南](docs/ANDROID_INSTALLATION.zh.md)
+### Android Installation
+  [中文](docs/ANDROID_INSTALLATION.zh.md) 
+  [English](docs/ANDROID_INSTALLATION.md)
 
-## Documentation
+## Agora Native API Documentation
 
-[声网API文档](https://docs.agora.io/cn/Video/API%20Reference/java/index.html)
+### Android
+  [中文](https://docs.agora.io/cn/Video/API%20Reference/java/index.html) 
+  [English](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 
-[Agora.io API DOCS](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
+## iOS
+  [中文](https://docs.agora.io/cn/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
+  [English](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
-##### RtcEngine Methods
 
-| Property                         | Arguments                                     | Description                           |
+#### RtcEngine Methods
+
+| Method Name | Parameters  | Description  |
 | -------------------------------- | ---------------------------------------- | ------------------------------------- |
 | init | [Option](#Option) | create and initialize AgoraRtcEngine instance, notice: invoke this method, it will start subscribe events |
 | Promise<any> joinChannel | String channelName, Number uid, String? token, String? extraInfo | join channel|
-| on | [Events](#Events), Handler: Function | addEventListener for native module events |
-| off | [Events](#Events) | removeEventListeners for native module events |
+| on | String: [EventType](#Events), Handler: Function | addEventListener for native module events |
+| off | String: [EventType](#Events) | removeEventListeners for native module events |
 | removeAllListeners | void | remove all event listeners |
 | destroy | void | destroy AgoraRtcEngine instance |
 | getSdkVersion | Function: callback | get sdk version |
