@@ -129,142 +129,79 @@ export interface LiveTranscoding {
 #### Events
 
 ```javascript
-RtcEngine.eventEmitter({
-  onFirstRemoteVideoDecoded: data => {},
-  onJoinChannelSuccess: data => {},
-  onUserOffline: data => {},
-  onUserJoined: data => {},
-  onError: data => {},
-  onWarning: data => {},
-  onLeaveChannel: data => {},
-  onAudioVolumeIndication: data => {},
-  onStreamMessage: ({uid, streamId, data}) => {},
-  onStreamMessageError: ({uid, streamId, error, missed, cached}) => {},
-})
+RtcEngine.on('eventName', (data) => {
+    console.log(data);
+});
 ```
 
-| Name                      | Description  |
-| ------------------------- | ------------ |
-| onWarning                 | warning |
-| onError                   | error |
-| onFirstRemoteVideoDecoded | when received first frame send from remote decoded stream |
-| onJoinChannelSuccess      | join channel success |
-| onReJoinChannelSuccess      | rejoin channel success |
-| onLeaveChannel            | quit channel |
-| onClientRoleChanged | when changed client role |
-| onUserJoined              | when user joined channel |
-| onUserOffline             | when user left channel |
-| onConnectionStateChanged | when connection state changed |
-| onConnectionInterrupted | when connection interrupted |
-| onConnectionLost | when connection lost |
-| onConnectionBanned | when connection banned |
-| onApiCallExecuted | capture api call executed |
-| onTokenPrivilegeWillExpire | when token will expire |
-| onRequestToken | when token expired |
-| onMicrophoneEnabled | when microphone enabled |
-| onAudioVolumeIndication | notice audio volume |
-| onActiveSpeaker | reports which user is the loudest speaker |
-| onFirstLocalAudioFrame | when the first local audio frame is sent |
-| onFirstRemoteAudioFrame | when the first remote audio frame is sent |
-| onVideoStopped | when video stopped |
-| onFirstLocalVideoFrame | when first local video frame is sent |
-| onFirstRemoteVideoDecoded | when first remote video is decoded |
-| onFirstRemoteVideoFrame | when first remote video frame is rendered |
-| onUserMuteAudio | when a remote user's audio stream is muted/unmuted |
-| onUserMuteVideo | when a remote user's video stream is muted/unmuted |
-| onUserEnableVideo | when a remote user enables/disables the video module |
-| onUserEnableLocalVideo | when a remote user enables/disables the local video capture function |
-| onVideoSizeChanged | when the video size or rotation information of a specified remote user changes |
-| onRemoteVideoStateChanged | when the remote video stream state changes |
-| onLocalPublishFallbackToAudioOnly | when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve |
-| onRemoteSubscribeFallbackToAudioOnly | when the subscribed media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve |
-| onAudioRouteChanged | when the local audio pkayout route changes |
-| onCameraReady | when the camera is turned on and ready to capture video |
-| onCameraFocusAreaChanged | when the camera focus area is changed |
-| onCameraExposureAreaChanged | The camera exposure area has changed |
-| onAudioQuality | Reports the statistics of the audio stream from each remote user/host |
-| onRtcStats | Reports the statistics of the RtcEngine once every two seconds |
-| onLastmileQuality | Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. After the application calls the enableLastmileTest method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel. |
-| onNetworkQuality | Reports the last mile network quality of each user in the channel once every two seconds. Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the uplink last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times. |
-| onLocalVideoStats | Reports the statistics of the uploading local video streams. This callback is triggered once every two seconds for each individual user/host. If there are multiple users/hosts in the channel, this callback is triggered multiple times every 2 seconds. |
-| onRemoteVideoStats | Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times. This callback reports statistics more closely linked to the real-user experience of the video transmission quality than the statistics that the onRemoteVideoTransportStats callback reports |
-| onRemoteAudioStats | Reports the statistics of the audio stream from each remote user/host |
-| onLocalVideoStat | Reports the statistics of the uploading local video streams |
-| onRemoteVideoStat | Reports the statistics of the video stream from each remote user/host.|
-| onRemoteAudioTransportStats | Reports the transport-layer statistics of each remote audio stream.This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user. |
-| onRemoteVideoTransportStats | Reports the transport-layer statistics of each remote video stream.This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user. |
-| onAudioMixingFinished | when the audio mixing file playback finishes. |
-| onAudioEffectFinished | when the audio effect file playback finishes. |
-| onStreamPublished | when a CDN live stream is published. |
-| onStreamUnpublished | when CDN live streaming stops. |
-| onTranscodingUpdated | when the publisher's transcoding settings are updated. |
-| onStreamInjectedStatus | Reports the status of the injected online media stream. |
-| onStreamMessage | recevied stream message peer endpoint |
-| onStreamMessageError | recevied error message from peer endpoint stream message |
-| onMediaEngineLoadSuccess | when the media engine is loaded. |
-| onMediaEngineStartCallSuccess | when the media engine starts. |
+| Name                      | Description  | Platform |
+| ------------------------- | ------------ | ------- |
+| warning                 | warning | all |
+| error                   | error | all |
+| apiCallExecute | capture agora native api call executed| all |
+| joinChannelSuccess      | join channel success | all |
+| reJoinChannelSuccess      | rejoin channel success | all |
+| leaveChannel            | quit channel | all |
+| clientRoleChanged | when changed client role | all |
+| userJoined              | when user joined channel | all |
+| userOffline             | when user left channel | all |
+| connectionStateChanged | when connection state changed | all |
+| connectionLost | when connection lost | all |
+| tokenPrivilegeWillExpire | when token will expire | all |
+| requestToken | when token expired | all |
+| microphoneEnabled | when microphone enabled | all |
+| audioVolumeIndication | notice audio volume | all |
+| activeSpeaker | reports which user is the loudest speaker | all |
+| firstLocalAudioFrame | when the first local audio frame is sent | all |
+| firstRemoteAudioFrame | when the first remote audio frame is sent | all |
+| videoStopped | when video stopped | all |
+| firstLocalVideoFrame | when first local video frame is sent | all |
+| firstRemoteVideoDecoded | when first remote video is decoded | all |
+| firstRemoteVideoFrame | when first remote video frame is rendered | all |
+| userMuteAudio | when a remote user's audio stream is muted/unmuted | all |
+| userMuteVideo | when a remote user's video stream is muted/unmuted | all |
+| userEnableVideo | when a remote user enables/disables the video module | all |
+| userEnableLocalVideo | when a remote user enables/disables the local video capture function | all |
+| videoSizeChanged | when the video size or rotation information of a specified remote user changes | all|
+| remoteVideoStateChanged | when the remote video stream state changes | all |
+| localPublishFallbackToAudioOnly | Occurs when the published video stream falls back to an audio-only stream due to unreliable network conditions or switches back to the video when the network conditions improve. | all |
+| remoteSubscribeFallbackToAudioOnly | Occurs when the remote video stream falls back to an audio-only stream due to unreliable network conditions or switches back to the video after the network conditions improve. | all |
+| audioRouteChanged | when the local audio pkayout route changes | all |
+| cameraReady | when the camera is turned on and ready to capture video | all |
+| cameraFocusAreaChanged | when the camera focus area is changed | all |
+| cameraExposureAreaChanged | The camera exposure area has changed | all |
+| remoteAudioStats | Reports the statistics of the audio stream from each remote user/host. | all |
+| rtcStats | Reports the statistics of the RtcEngine once every two seconds | all |
+| lastmileQuality | Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. After the application calls the enableLastmileTest method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel. | all |
+| networkQuality | Reports the last mile network quality of each user in the channel once every two seconds. Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the uplink last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times. | all |
+| localVideoStats | Reports the statistics of the uploading local video streams. This callback is triggered once every two seconds for each individual user/host. If there are multiple users/hosts in the channel, this callback is triggered multiple times every 2 seconds. | all |
+| remoteVideoStats | Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times. This callback reports statistics more closely linked to the real-user experience of the video transmission quality than the statistics that the onRemoteVideoTransportStats callback reports | all |
+| audioTransportStatsOfUid | Reports the transport-layer statistics of each remote audio stream. | all |
+| videoTransportStatsOfUid | Reports the transport-layer statistics of each remote video stream. | all |
+| localAudioMixingFinish | Occurs when the audio mixing file playback finishes. | all |
+| remoteAudioMixingStart | Occurs when a remote user starts audio mixing. | ios |
+| remoteAudioMixingFinish | Occurs when a remote user finishes audio mixing. | ios |
+| audioEffectFinish | Occurs when the audio effect file playback finishes. | all |
+| streamPublished | Occurs when a CDN live stream is published. | all |
+| streamUnpublish | Occurs when CDN live streaming stops. This callback notifies the host that the CDN live stream is unpublished. | all |
+| transcodingUpdate | Occurs when the publisher's transcoding settings are updated. | all |
+| streamInjectedStatus | Reports the status of the injected online media stream. | all |
+| receiveStreamMessage | Occurs when the local user receives a remote data stream within five seconds. | all |
+| occurStreamMessageError | Occurs when the local user fails to receive a remote data stream. | all |
+| mediaEngineLoaded | Occurs when the media engine is loaded. | all |
+| mediaEngineStartCall | Occurs when the media engine starts. | all |
 
-##### AgoraView 组件
+##### AgoraView Component
 
 | Name           | Description          |
 | -------------- | -------------------- |
-| showLocalVideo | 是否显示本地视频（bool）       |
-| remoteUid      | 显示远程视频（number 传入uid） |
-| zOrderMediaOverlay (Android only)      | 多视频界面覆盖 设置为true优先在上层（bool） |
+| showLocalVideo | boolean: (true | false) enable/disable video view  | 
+| remoteUid      | uid for remote |
+| zOrderMediaOverlay (Android only)      | enable zorder to media overlay |
 
 
-## 运行示例
+## samples
 
-- 更新示例 React-Native为0.58
+- need react-native 0.58.+
 
 [Samples](./samples/README.md)
-
-
-## 更新信息
-#### 2.3.3-alpha
-- support agora video sdk 2.3.3
-- release 2.3.3-alpha.3
-- release 2.3.3-alpha.4 (remove deprecated native api)
-
-
-#### 1.1.2
-- 增加onVideoMute
-- 新增onAudioMute回调
-
-#### 1.1.1
-
-- 新增方法 创建数据流通道 createDataStream
-- 新增方法 发送数据流 sendStreamMessage
-- 新增监听数据流事件 onStreamMessage
-
-#### 1.0.9
-
-- 更新Agora SDK 为 2.0.2
-
-- 新增方法 是否开启人脸对焦功能 setCameraAutoFocusFaceModeEnabled
-
-- 新增方法 修改默认的语音路由 setDefaultAudioRouteToSpeakerphone
-
-- 新增方法 是否打开闪光灯 setCameraTorchOn
-
-- 修复 Android 说话者音量提示bug
-
-#### 1.0.8
-
- - 更新 Agora SDK 为 1.12
-
- - init 不再默认开启视频预览 根据自己需求和时机调用startPreview
-
- - init options 新增参数  是否交换宽和高 swapWidthAndHeight 默认false
-
- - 新增方法 配置旁路直播推流方法 configPublisher
-
- - 新增方法 设置本地视频显示模式 setLocalRenderMode
-
- - 新增方法 设置远端视频显示模式 setRemoteRenderMode
-
- - 新增方法 启用说话者音量提示 enableAudioVolumeIndication
-
- - 新增音量提示回调 onAudioVolumeIndication
-
- - Android AgoraView 新增zOrderMediaOverlay属性 解决多视频界面覆盖 设置为true优先在上层
