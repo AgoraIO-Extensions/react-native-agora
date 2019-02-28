@@ -1,0 +1,50 @@
+## THE CHANGELOG
+
+#### 2.3.3-alpha
+- support agora video sdk 2.3.3
+- release 2.3.3-alpha.3
+- release 2.3.3-alpha.4 (remove deprecated native api)
+- release 2.3.3-alpha.5 (refactor event react api & refactor native wrapper)
+
+
+#### 1.1.2
+- add onVideoMute
+- add onAudioMute
+
+#### 1.1.1
+
+- add createDataStream
+- add sendStreamMessage
+- add onStreamMessage
+
+#### 1.0.9
+
+- update to agora sdk version 2.0.2
+
+- add setCameraAutoFocusFaceModeEnabled
+
+- add setDefaultAudioRouteToSpeakerphone
+
+- add setCameraTorchOn
+
+- fix bug: Android speaker's volume indication
+
+#### 1.0.8
+
+ - update to agora sdk version 1.12
+
+ - init wouldn't start video preview. Should manually use startPreview.
+
+ - init options add new boolean parameter `swapWidthAndHeight` to support swap width and height.
+
+ - add configPublisher
+
+ - add setLocalRenderMode
+
+ - add setRemoteRenderMode
+
+ - add enableAudioVolumeIndication
+
+ - add onAudioVolumeIndication
+
+ - add zOrderMediaOverlay for android platform, support media overlay
