@@ -291,7 +291,7 @@ RtcEngine.on('eventName', (data) => {
 | mediaEngineLoaded | Occurs when the media engine is loaded. | all |
 | mediaEngineStartCall | Occurs when the media engine starts. | all |
 
-##### AgoraView Component
+#### AgoraView Component
 
 | Name           | Description          |
 | -------------- | -------------------- |
@@ -299,9 +299,7 @@ RtcEngine.on('eventName', (data) => {
 | remoteUid      | uid for remote |
 | zOrderMediaOverlay (Android only)      | enable zorder to media overlay |
 
-
-## samples
-
-- need react-native 0.58.+
-
-[Samples](./samples/README.md)
+## Resources
+* Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
+* [File bugs about this sample](https://github.com/syanbo/react-native-agora/issues)
+* [React Native Getting Started](https://facebook.github.io/react-native/docs/getting-started.html)
