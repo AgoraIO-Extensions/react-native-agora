@@ -151,9 +151,9 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   
   [AgoraConst share].rtcEngine = self.rtcEngine;
   
-  //频道模式
+  //channel mode
   [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
-  //启用双流模式
+  //enable dual stream
   [self.rtcEngine enableDualStreamMode:YES];
   [self.rtcEngine enableVideo];
   
@@ -170,7 +170,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   [self.rtcEngine setAudioProfile:(AgoraAudioProfile)[options[@"audioProfile"] integerValue]
                          scenario:(AgoraAudioScenario)[options[@"audioScenario"] integerValue]];
   
-  //Agora Native SDK 与 Agora Web SDK 间的互通
+  //Enable Agora Native SDK be Interoperable with Agora Web SDK
   [self.rtcEngine enableWebSdkInteroperability:YES];
 }
 
@@ -219,7 +219,7 @@ RCT_EXPORT_METHOD(getConnectionState
 }
 
 // set client role
-RCT_EXPORT_METHOD(setClientRole:(NSString *) role) {
+RCT_EXPORT_METHOD(setClientRole:(NSInteger) role) {
   [self.rtcEngine setClientRole:(AgoraClientRole)role];
 }
 
@@ -395,16 +395,6 @@ RCT_EXPORT_METHOD(muteAllRemoteAudioStreams:(BOOL)mute){
 RCT_EXPORT_METHOD(muteRemoteAudioStream:(NSUInteger)uid muted:(BOOL)mute){
   [self.rtcEngine muteRemoteAudioStream:uid mute:mute];
 }
-
-//// start recoding service
-//RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary*)options){
-//  [self.rtcEngine startAudioRecording:options[@"path"] quality:(AgoraAudioRecordingQuality)[options[@"quality"] integerValue]];
-//}
-//
-//// stop recoding service
-//RCT_EXPORT_METHOD(stopAudioRecording:(NSString*)recordingKey){
-//  [self.rtcEngine stopAudioRecording];
-//}
 
 // adjust recorcding signal volume
 RCT_EXPORT_METHOD(adjustRecordingSignalVolume: (NSInteger) volume){
@@ -692,7 +682,7 @@ RCT_EXPORT_METHOD(playEffect
                                    loopCount:(int)[options[@"loopCount"] integerValue]
                                        pitch:[options[@"pitch"] doubleValue]
                                          pan:[options[@"pan"] doubleValue]
-                                        gain:[options[@"gain"] boolValue]
+                                        gain:[options[@"gain"] doubleValue]
                                      publish:[options[@"publish"] boolValue]];
   if (res != 0) {
     reject(@"131010", @"playEffect failed", [self makeNSError:@{
@@ -1052,7 +1042,7 @@ RCT_EXPORT_METHOD(disableLastmileTest
 }
 
 // set recording audioframe parameters with samplerate
-RCT_EXPORT_METHOD(setRecordingAudioFrameParametersWithSampleRate:(NSDictionary *) options
+RCT_EXPORT_METHOD(setRecordingAudioFrameParameters:(NSDictionary *) options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setRecordingAudioFrameParametersWithSampleRate:[options[@"sampleRate"] integerValue]
@@ -1061,7 +1051,7 @@ RCT_EXPORT_METHOD(setRecordingAudioFrameParametersWithSampleRate:(NSDictionary *
                                                                   samplesPerCall:[options[@"samplesPerCall"] integerValue]
                    ];
   if (res != 0) {
-    reject(@"131023", @"setRecordingAudioFrameParametersWithSampleRate failed", [self makeNSError:@{
+    reject(@"131023", @"setRecordingAudioFrameParameters failed", [self makeNSError:@{
                                                                                                     @"code": @(131023),
                                                                                                     @"message":@{
                                                                                                         @"success": @(NO),
@@ -1077,7 +1067,7 @@ RCT_EXPORT_METHOD(setRecordingAudioFrameParametersWithSampleRate:(NSDictionary *
 }
 
 // set playback audioframe parameters with samplerate
-RCT_EXPORT_METHOD(setPlaybackAudioFrameParametersWithSampleRate:(NSDictionary *) options
+RCT_EXPORT_METHOD(setPlaybackAudioFrameParameters:(NSDictionary *) options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setPlaybackAudioFrameParametersWithSampleRate:[options[@"sampleRate"] integerValue]
@@ -1086,7 +1076,7 @@ RCT_EXPORT_METHOD(setPlaybackAudioFrameParametersWithSampleRate:(NSDictionary *)
                                                                  samplesPerCall:[options[@"samplesPerCall"] integerValue]
                    ];
   if (res != 0) {
-    reject(@"131024", @"setPlaybackAudioFrameParametersWithSampleRate failed", [self makeNSError:@{
+    reject(@"131024", @"setPlaybackAudioFrameParameters failed", [self makeNSError:@{
                                                                                                    @"code": @(131024),
                                                                                                    @"message":@{
                                                                                                        @"success":@(NO),
@@ -1472,7 +1462,7 @@ RCT_EXPORT_METHOD(setCameraFocusPositionInPreview
 RCT_EXPORT_METHOD(setCameraExposurePosition
                   :(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve) {
-  BOOL res = [self.rtcEngine setCameraFocusPositionInPreview:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
+  BOOL res = [self.rtcEngine setCameraExposurePosition:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
   resolve(@{
             @"success": @(YES),
             @"value": @(res)
@@ -1579,7 +1569,6 @@ RCT_EXPORT_METHOD(getSdkVersion
 // add publish stream url
 RCT_EXPORT_METHOD(addPublishStreamUrl:(NSDictionary *)options) {
   [self.rtcEngine addPublishStreamUrl:options[@"url"] transcodingEnabled:[options[@"enable"] boolValue]];
-  [self.rtcEngine setLiveTranscoding:AgoraLiveTranscoding.defaultTranscoding];
 }
 
 // remove publish stream url
