@@ -172,14 +172,6 @@ public class AgoraManager {
         return mRtcEngine.joinChannel(token, channelName, optionalInfo, uid);
     }
 
-//    public int joinChannelWithToken(ReadableMap options) {
-//        String token = options.getString("token");
-//        String channel = options.getString("channel");
-//        String optionalInfo = options.getString("optionalInfo");
-//        int uid = options.getInt("uid");
-//        return mRtcEngine.joinChannel(token, channel, optionalInfo, uid);
-//    }
-
     public int enableLastmileTest() {
         return mRtcEngine.enableLastmileTest();
     }
