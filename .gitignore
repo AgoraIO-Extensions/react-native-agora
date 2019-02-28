@@ -72,3 +72,4 @@ xcuserdata*
 .vscode
 samples/**/package-lock.json
 *.iml
+android/bin

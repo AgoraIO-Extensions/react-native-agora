@@ -151,9 +151,9 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   
   [AgoraConst share].rtcEngine = self.rtcEngine;
   
-  //频道模式
+  //channel mode
   [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
-  //启用双流模式
+  //enable dual stream
   [self.rtcEngine enableDualStreamMode:YES];
   [self.rtcEngine enableVideo];
   
@@ -170,7 +170,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   [self.rtcEngine setAudioProfile:(AgoraAudioProfile)[options[@"audioProfile"] integerValue]
                          scenario:(AgoraAudioScenario)[options[@"audioScenario"] integerValue]];
   
-  //Agora Native SDK 与 Agora Web SDK 间的互通
+  //Enable Agora Native SDK be Interoperable with Agora Web SDK
   [self.rtcEngine enableWebSdkInteroperability:YES];
 }
 
@@ -219,7 +219,7 @@ RCT_EXPORT_METHOD(getConnectionState
 }
 
 // set client role
-RCT_EXPORT_METHOD(setClientRole:(NSString *) role) {
+RCT_EXPORT_METHOD(setClientRole:(NSInteger) role) {
   [self.rtcEngine setClientRole:(AgoraClientRole)role];
 }
 
@@ -234,7 +234,7 @@ RCT_EXPORT_METHOD(leaveChannel
                   :(RCTPromiseResolveBlock) resolve
                   reject:(RCTPromiseRejectBlock) reject) {
   int res = [self.rtcEngine leaveChannel:^(AgoraChannelStats * _Nonnull stat) {
-    [self sendEvent:DidLeaveChannel params:@{
+    [self sendEvent:AGLeaveChannel params:@{
                                              @"message": @"leaveChannel",
                                              @"duration": @(stat.duration),
                                              @"txBytes": @(stat.txBytes),
@@ -395,16 +395,6 @@ RCT_EXPORT_METHOD(muteAllRemoteAudioStreams:(BOOL)mute){
 RCT_EXPORT_METHOD(muteRemoteAudioStream:(NSUInteger)uid muted:(BOOL)mute){
   [self.rtcEngine muteRemoteAudioStream:uid mute:mute];
 }
-
-//// start recoding service
-//RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary*)options){
-//  [self.rtcEngine startAudioRecording:options[@"path"] quality:(AgoraAudioRecordingQuality)[options[@"quality"] integerValue]];
-//}
-//
-//// stop recoding service
-//RCT_EXPORT_METHOD(stopAudioRecording:(NSString*)recordingKey){
-//  [self.rtcEngine stopAudioRecording];
-//}
 
 // adjust recorcding signal volume
 RCT_EXPORT_METHOD(adjustRecordingSignalVolume: (NSInteger) volume){
@@ -692,7 +682,7 @@ RCT_EXPORT_METHOD(playEffect
                                    loopCount:(int)[options[@"loopCount"] integerValue]
                                        pitch:[options[@"pitch"] doubleValue]
                                          pan:[options[@"pan"] doubleValue]
-                                        gain:[options[@"gain"] boolValue]
+                                        gain:[options[@"gain"] doubleValue]
                                      publish:[options[@"publish"] boolValue]];
   if (res != 0) {
     reject(@"131010", @"playEffect failed", [self makeNSError:@{
@@ -1052,7 +1042,7 @@ RCT_EXPORT_METHOD(disableLastmileTest
 }
 
 // set recording audioframe parameters with samplerate
-RCT_EXPORT_METHOD(setRecordingAudioFrameParametersWithSampleRate:(NSDictionary *) options
+RCT_EXPORT_METHOD(setRecordingAudioFrameParameters:(NSDictionary *) options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setRecordingAudioFrameParametersWithSampleRate:[options[@"sampleRate"] integerValue]
@@ -1061,7 +1051,7 @@ RCT_EXPORT_METHOD(setRecordingAudioFrameParametersWithSampleRate:(NSDictionary *
                                                                   samplesPerCall:[options[@"samplesPerCall"] integerValue]
                    ];
   if (res != 0) {
-    reject(@"131023", @"setRecordingAudioFrameParametersWithSampleRate failed", [self makeNSError:@{
+    reject(@"131023", @"setRecordingAudioFrameParameters failed", [self makeNSError:@{
                                                                                                     @"code": @(131023),
                                                                                                     @"message":@{
                                                                                                         @"success": @(NO),
@@ -1077,7 +1067,7 @@ RCT_EXPORT_METHOD(setRecordingAudioFrameParametersWithSampleRate:(NSDictionary *
 }
 
 // set playback audioframe parameters with samplerate
-RCT_EXPORT_METHOD(setPlaybackAudioFrameParametersWithSampleRate:(NSDictionary *) options
+RCT_EXPORT_METHOD(setPlaybackAudioFrameParameters:(NSDictionary *) options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine setPlaybackAudioFrameParametersWithSampleRate:[options[@"sampleRate"] integerValue]
@@ -1086,7 +1076,7 @@ RCT_EXPORT_METHOD(setPlaybackAudioFrameParametersWithSampleRate:(NSDictionary *)
                                                                  samplesPerCall:[options[@"samplesPerCall"] integerValue]
                    ];
   if (res != 0) {
-    reject(@"131024", @"setPlaybackAudioFrameParametersWithSampleRate failed", [self makeNSError:@{
+    reject(@"131024", @"setPlaybackAudioFrameParameters failed", [self makeNSError:@{
                                                                                                    @"code": @(131024),
                                                                                                    @"message":@{
                                                                                                        @"success":@(NO),
@@ -1472,7 +1462,7 @@ RCT_EXPORT_METHOD(setCameraFocusPositionInPreview
 RCT_EXPORT_METHOD(setCameraExposurePosition
                   :(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve) {
-  BOOL res = [self.rtcEngine setCameraFocusPositionInPreview:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
+  BOOL res = [self.rtcEngine setCameraExposurePosition:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
   resolve(@{
             @"success": @(YES),
             @"value": @(res)
@@ -1579,7 +1569,6 @@ RCT_EXPORT_METHOD(getSdkVersion
 // add publish stream url
 RCT_EXPORT_METHOD(addPublishStreamUrl:(NSDictionary *)options) {
   [self.rtcEngine addPublishStreamUrl:options[@"url"] transcodingEnabled:[options[@"enable"] boolValue]];
-  [self.rtcEngine setLiveTranscoding:AgoraLiveTranscoding.defaultTranscoding];
 }
 
 // remove publish stream url
@@ -1660,73 +1649,68 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 
 - (NSArray<NSString *> *)supportedEvents {
   return @[
-           DidOccurWarning,
-           DidOccurError,
-           DidApiCallExecute,
-           DidJoinChannel,
-           DidRejoinChannel,
-           DidLeaveChannel,
-           DidClientRoleChanged,
-           DidJoinedOfUid,
-           DidOfflineOfUid,
-           ConnectionChangedToState,
-           ConnectionDidLost,
-           TokenPrivilegeWillExpire,
-           RequestToken,
+           AGWarning,
+           AGError,
+           AGApiCallExecute,
+           AGJoinChannelSuccess,
+           AGRejoinChannelSuccess,
+           AGLeaveChannel,
+           AGClientRoleChanged,
+           AGUserJoined,
+           AGUserOffline,
+           AGConnectionStateChanged,
+           AGConnectionLost,
+           AGTokenPrivilegeWillExpire,
+           AGRequestToken,
            
-           DidMicrophoneEnabled,
-           ReportAudioVolumeIndicationOfSpeakers,
-           ActiveSpeaker,
-           FirstLocalAudioFrame,
-           FirstRemoteAudioFrameOfUid,
-           VideoDidStop,
-           FirstLocalVideoFrameWithSize,
-           FirstRemoteVideoDecodedOfUid,
-           FirstRemoteVideoFrameOfUid,
-           DidAudioMuted,
-           DidVideoMuted,
-           DidVideoEnabled,
-           DidLocalVideoEnabled,
-           VideoSizeChangedOfUid,
-           RemoteVideoStateChangedOfUid,
-           DidLocalPublishFallbackToAudioOnly,
-           DidRemoteSubscribeFallbackToAudioOnly,
+           AGMicrophoneEnabled,
+           AGAudioVolumeIndication,
+           AGActiveSpeaker,
+           AGFirstLocalAudioFrame,
+           AGFirstRemoteAudioFrame,
+           AGVideoStopped,
+           AGFirstLocalVideoFrame,
+           AGFirstRemoteVideoDecoded,
+           AGFirstRemoteVideoFrame,
+           AGUserMuteAudio,
+           AGUserMuteVideo,
+           AGUserEnableVideo,
+           AGUserEnableLocalVideo,
+           AGVideoSizeChanged,
+           AGRemoteVideoStateChanged,
+           AGLocalPublishFallbackToAudioOnly,
+           AGRemoteSubscribeFallbackToAudioOnly,
            
-           DeviceTypeStateChanged,
-           DidAudioRouteChanged,
-           CameraDidReady,
-           CameraFocusDidChangedToRect,
-           CameraExposureDidChangedToRect,
+           AGAudioRouteChanged,
+           AGCameraReady,
+           AGCameraFocusAreaChanged,
+           AGCameraExposureAreaChanged,
            
-           ReportRtcStats,
-           LastmileQuality,
-           NetworkQuality,
-           LocalVideoStats,
-           RemoteVideoStats,
-           RemoteAudioStats,
-           AudioTransportStatsOfUid,
-           VideoTransportStatsOfUid,
+           AGRtcStats,
+           AGLastmileQuality,
+           AGNetworkQuality,
+           AGLocalVideoStats,
+           AGRemoteVideoStats,
+           AGRemoteAudioStats,
+           AGAudioTransportStatsOfUid,
+           AGVideoTransportStatsOfUid,
            
-           LocalAudioMixingDidFinish,
-           RemoteAudioMixingDidStart,
-           RemoteAudioMixingDidFinish,
-           DidAudioEffectFinish,
+           AGLocalAudioMixingFinish,
+           AGRemoteAudioMixingStart,
+           AGRemoteAudioMixingFinish,
+           AGAudioEffectFinish,
            
-           StreamPublished,
-           StreamUnpublish,
-           TranscodingUpdated,
+           AGStreamPublished,
+           AGStreamUnpublish,
+           AGTranscodingUpdate,
            
-           StreamInjectedStatus,
+           AGStreamInjectedStatus,
            
-           ReceiveStreamMessage,
-           DidOccurStreamMessageError,
+           AGReceiveStreamMessage,
+           AGOccurStreamMessageError,
            
-           MediaEngineDidLoaded,
-           MediaEngineDidStartCall,
-           
-           ConnectionDidInterrupted,
-           ConnectionDidBanned,
-           AudioQualityOfUid
+           AGMediaEngineLoaded,
+           AGMediaEngineStartCall,
            ];
 }
 
@@ -1747,16 +1731,22 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 #pragma mark - <AgoraRtcEngineDelegate>
 // EVENT CALLBACKS
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didOccurWarning:(AgoraWarningCode)warningCode {
-  [self sendEvent:DidOccurWarning params:@{@"message": @"AgoraWarning", @"code": @(warningCode)}];
+  [self sendEvent:AGWarning params:@{@"message": @"AgoraWarning", @"code": @(warningCode)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didOccurError:(AgoraErrorCode)errorCode {
-  [self sendEvent:DidOccurError params:@{@"message": @"AgoraError", @"code": @(errorCode)}];
+  [self sendEvent:AGError params:@{@"message": @"AgoraError", @"code": @(errorCode)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didApiCallExecute:(NSInteger)error api:(NSString *_Nonnull)api result:(NSString *_Nonnull)result {
   if (error != 0) {
-    [self sendEvent:DidOccurError  params:@{
+    [self sendEvent:AGError  params:@{
+                                            @"api": api,
+                                            @"result": result,
+                                            @"error": @(error)
+                                            }];
+  } else {
+    [self sendEvent:AGApiCallExecute  params:@{
                                             @"api": api,
                                             @"result": result,
                                             @"error": @(error)
@@ -1765,7 +1755,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didJoinChannel:(NSString *_Nonnull)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
-  [self sendEvent:DidJoinChannel params:@{
+  [self sendEvent:AGJoinChannelSuccess params:@{
                                           @"channel": channel,
                                           @"uid": @(uid),
                                           @"elapsed": @(elapsed)
@@ -1773,7 +1763,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didRejoinChannel:(NSString *_Nonnull)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
-  [self sendEvent:DidRejoinChannel params:@{
+  [self sendEvent:AGRejoinChannelSuccess params:@{
                                             @"channel": channel,
                                             @"uid": @(uid),
                                             @"elapsed": @(elapsed)
@@ -1781,7 +1771,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didLeaveChannelWithStats:(AgoraChannelStats *_Nonnull)stats {
-  [self sendEvent:DidLeaveChannel params:@{
+  [self sendEvent:AGLeaveChannel params:@{
                                            @"stats": @{
                                                @"duration": @(stats.duration),
                                                @"txBytes": @(stats.txBytes),
@@ -1799,53 +1789,53 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didClientRoleChanged:(AgoraClientRole)oldRole newRole:(AgoraClientRole)newRole {
-  [self sendEvent:DidClientRoleChanged params:@{
+  [self sendEvent:AGClientRoleChanged params:@{
                                                 @"oldRole": @(oldRole),
                                                 @"newRole": @(newRole)
                                                 }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
-  [self sendEvent:DidJoinedOfUid params:@{
+  [self sendEvent:AGUserJoined params:@{
                                           @"uid": @(uid),
                                           @"elapsed": @(elapsed)
                                           }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
-  [self sendEvent:DidOfflineOfUid params:@{
+  [self sendEvent:AGUserOffline params:@{
                                            @"uid": @(uid),
                                            @"reason": @(reason)
                                            }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine connectionChangedToState:(AgoraConnectionStateType)state reason:(AgoraConnectionChangedReason)reason {
-  [self sendEvent:ConnectionChangedToState params:@{
+  [self sendEvent:AGConnectionStateChanged params:@{
                                                     @"state": @(state),
                                                     @"reason": @(reason)
                                                     }];
 }
 
 - (void)rtcEngineConnectionDidLost:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:ConnectionDidLost params:@{
-                                             @"message": @"ConnectionDidLost"
+  [self sendEvent:AGConnectionLost params:@{
+                                             @"message": @"connectionLost"
                                              }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine tokenPrivilegeWillExpire:(NSString *_Nonnull)token {
-  [self sendEvent:TokenPrivilegeWillExpire params:@{
+  [self sendEvent:AGTokenPrivilegeWillExpire params:@{
                                                     @"token": token
                                                     }];
 }
 
 - (void)rtcEngineRequestToken:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:RequestToken params:@{
+  [self sendEvent:AGRequestToken params:@{
                                         @"message": @"RequestToken"
                                         }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didMicrophoneEnabled:(BOOL)enabled {
-  [self sendEvent:DidMicrophoneEnabled params:@{
+  [self sendEvent:AGMicrophoneEnabled params:@{
                                                 @"enabled": @(enabled)
                                                 }];
 }
@@ -1858,152 +1848,145 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
                         @"volume": @(speaker.volume)
                         }];
   }
-  [self sendEvent:ReportAudioVolumeIndicationOfSpeakers params:@{
+  [self sendEvent:AGAudioVolumeIndication params:@{
                                                                  @"speakers": result,
                                                                  @"totalVolume": @(totalVolume)
                                                                  }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine activeSpeaker:(NSUInteger)speakerUid {
-  [self sendEvent:ActiveSpeaker params:@{
-                                         @"speakerUid": @(speakerUid)
+  [self sendEvent:AGActiveSpeaker params:@{
+                                         @"uid": @(speakerUid)
                                          }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine firstLocalAudioFrame:(NSInteger)elapsed {
-  [self sendEvent:FirstLocalAudioFrame params:@{
+  [self sendEvent:AGFirstLocalAudioFrame params:@{
                                                 @"elapsed": @(elapsed)
                                                 }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine firstRemoteAudioFrameOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
-  [self sendEvent:FirstRemoteAudioFrameOfUid params:@{
+  [self sendEvent:AGFirstRemoteAudioFrame params:@{
                                                       @"uid": @(uid),
                                                       @"elapsed": @(elapsed)
                                                       }];
 }
 
 - (void)rtcEngineVideoDidStop:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:VideoDidStop params:@{
+  [self sendEvent:AGVideoStopped params:@{
                                         @"message": @"VideoStopped"
                                         }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine firstLocalVideoFrameWithSize:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self sendEvent:FirstLocalVideoFrameWithSize params:@{
-                                                        @"size": @(size),
+  [self sendEvent:AGFirstLocalVideoFrame params:@{
+                                                        @"width": @(size.width),
+                                                        @"height": @(size.height),
                                                         @"elapsed": @(elapsed)
                                                         }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self sendEvent:FirstRemoteVideoDecodedOfUid params:@{
+  [self sendEvent:AGFirstRemoteVideoDecoded params:@{
                                                         @"uid": @(uid),
-                                                        @"size": @(size),
+                                                        @"width": @(size.width),
+                                                        @"height": @(size.height),
                                                         @"elapsed": @(elapsed)
                                                         }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine firstRemoteVideoFrameOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self sendEvent:FirstRemoteVideoFrameOfUid params:@{
+  [self sendEvent:AGFirstRemoteVideoFrame params:@{
                                                       @"uid": @(uid),
-                                                      @"size": @(size),
+                                                      @"width": @(size.width),
+                                                      @"height": @(size.height),
                                                       @"elapsed": @(elapsed)}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didAudioMuted:(BOOL)muted byUid:(NSUInteger)uid {
-  [self sendEvent:DidAudioMuted params:@{
+  [self sendEvent:AGUserMuteAudio params:@{
                                          @"muted": @(muted),
                                          @"uid": @(uid)
                                          }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didVideoMuted:(BOOL)muted byUid:(NSUInteger)uid {
-  [self sendEvent:DidVideoMuted params:@{
+  [self sendEvent:AGUserMuteVideo params:@{
                                          @"muted": @(muted),
                                          @"uid": @(uid)
                                          }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didVideoEnabled:(BOOL)enabled byUid:(NSUInteger)uid {
-  [self sendEvent:DidVideoEnabled params:@{
+  [self sendEvent:AGUserEnableVideo params:@{
                                            @"enabled": @(enabled),
                                            @"uid": @(uid)
                                            }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didLocalVideoEnabled:(BOOL)enabled byUid:(NSUInteger)uid {
-  [self sendEvent:DidLocalVideoEnabled params:@{
+  [self sendEvent:AGUserEnableLocalVideo params:@{
                                                 @"enabled": @(enabled),
                                                 @"uid": @(uid)
                                                 }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine videoSizeChangedOfUid:(NSUInteger)uid size:(CGSize)size rotation:(NSInteger)rotation {
-  [self sendEvent:VideoSizeChangedOfUid params:@{
+  [self sendEvent:AGVideoSizeChanged params:@{
                                                  @"uid": @(uid),
-                                                 @"size": @{
-                                                     @"width": @(size.width),
-                                                     @"height": @(size.height)
-                                                     },
+                                                 @"width": @(size.width),
+                                                 @"height": @(size.height),
                                                  @"roration": @(rotation)
                                                  }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteVideoStateChangedOfUid:(NSUInteger)uid state:(AgoraVideoRemoteState)state {
-  [self sendEvent:RemoteVideoStateChangedOfUid params:@{
+  [self sendEvent:AGRemoteVideoStateChanged params:@{
                                                         @"uid": @(uid),
                                                         @"state": @(state)
                                                         }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didLocalPublishFallbackToAudioOnly:(BOOL)isFallbackOrRecover {
-  [self sendEvent:DidLocalPublishFallbackToAudioOnly params:@{
+  [self sendEvent:AGLocalPublishFallbackToAudioOnly params:@{
                                                               @"isFallbackOrRecover": @(isFallbackOrRecover)
                                                               }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didRemoteSubscribeFallbackToAudioOnly:(BOOL)isFallbackOrRecover byUid:(NSUInteger)uid {
-  [self sendEvent:DidRemoteSubscribeFallbackToAudioOnly params:@{
+  [self sendEvent:AGRemoteSubscribeFallbackToAudioOnly params:@{
                                                                  @"isFallbackOrRecover": @(isFallbackOrRecover),
                                                                  @"uid": @(uid)
                                                                  }];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine device:(NSString *_Nonnull)deviceId type:(AgoraMediaDeviceType)deviceType stateChanged:(NSInteger)state {
-  [self sendEvent:DeviceTypeStateChanged params:@{
-                                                  @"deviceId": deviceId,
-                                                  @"deviceType": @(deviceType),
-                                                  @"state": @(state)
-                                                  }];
-}
-
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didAudioRouteChanged:(AgoraAudioOutputRouting)routing {
-  [self sendEvent:DidAudioRouteChanged params:@{
+  [self sendEvent:AGAudioRouteChanged params:@{
                                                 @"routing": @(routing)
                                                 }];
 }
 
 - (void)rtcEngineCameraDidReady:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:CameraDidReady params:@{
+  [self sendEvent:AGCameraReady params:@{
                                           @"message": @"CameraDidReady"
                                           }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine cameraFocusDidChangedToRect:(CGRect)rect {
-  [self sendEvent:CameraFocusDidChangedToRect params:@{
+  [self sendEvent:AGCameraFocusAreaChanged params:@{
                                                        @"rect": @(rect)
                                                        }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine cameraExposureDidChangedToRect:(CGRect)rect {
-  [self sendEvent:CameraExposureDidChangedToRect params:@{
+  [self sendEvent:AGCameraExposureAreaChanged params:@{
                                                           @"rect": @(rect)
                                                           }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteAudioStats:(AgoraRtcRemoteAudioStats *_Nonnull)stats {
-  [self sendEvent:RemoteAudioStats params:@{
+  [self sendEvent:AGRemoteAudioStats params:@{
                                             @"stats": @{
                                                 @"uid": @(stats.uid),
                                                 @"quality": @(stats.quality),
@@ -2015,7 +1998,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine reportRtcStats:(AgoraChannelStats *_Nonnull)stats {
-  [self sendEvent:ReportRtcStats params:@{
+  [self sendEvent:AGRtcStats params:@{
                                           @"stats": @{
                                               @"duration": @(stats.duration),
                                               @"txBytes": @(stats.txBytes),
@@ -2033,13 +2016,13 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine lastmileQuality:(AgoraNetworkQuality)quality {
-  [self sendEvent:LastmileQuality params:@{
+  [self sendEvent:AGLastmileQuality params:@{
                                            @"quality": @(quality)
                                            }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine networkQuality:(NSUInteger)uid txQuality:(AgoraNetworkQuality)txQuality rxQuality:(AgoraNetworkQuality)rxQuality {
-  [self sendEvent:NetworkQuality params:@{
+  [self sendEvent:AGNetworkQuality params:@{
                                           @"uid": @(uid),
                                           @"txQuality": @(txQuality),
                                           @"rxQuality": @(rxQuality)
@@ -2047,7 +2030,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine localVideoStats:(AgoraRtcLocalVideoStats *_Nonnull)stats {
-  [self sendEvent:LocalVideoStats params:@{
+  [self sendEvent:AGLocalVideoStats params:@{
                                            @"stats": @{
                                                @"sentBitrate": @(stats.sentBitrate),
                                                @"sentFrameRate": @(stats.sentFrameRate)
@@ -2056,10 +2039,9 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteVideoStats:(AgoraRtcRemoteVideoStats *_Nonnull)stats {
-  [self sendEvent:RemoteVideoStats params:@{
+  [self sendEvent:AGRemoteVideoStats params:@{
                                             @"stats": @{
                                                 @"uid": @(stats.uid),
-                                                @"delay": @(stats.delay),
                                                 @"width": @(stats.width),
                                                 @"height": @(stats.height),
                                                 @"receivedBitrate": @(stats.receivedBitrate),
@@ -2070,7 +2052,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine audioTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
-  [self sendEvent:AudioTransportStatsOfUid params:@{
+  [self sendEvent:AGAudioTransportStatsOfUid params:@{
                                                     @"uid": @(uid),
                                                     @"delay": @(delay),
                                                     @"lost": @(lost),
@@ -2079,7 +2061,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine videoTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
-  [self sendEvent:VideoTransportStatsOfUid params:@{
+  [self sendEvent:AGVideoTransportStatsOfUid params:@{
                                                     @"uid": @(uid),
                                                     @"delay": @(delay),
                                                     @"lost": @(lost),
@@ -2088,50 +2070,50 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngineLocalAudioMixingDidFinish:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:LocalAudioMixingDidFinish params:@{
+  [self sendEvent:AGLocalAudioMixingFinish params:@{
                                                      @"message": @"LocalAudioMixingSucceedFinish"
                                                      }];
 }
 
 - (void)rtcEngineRemoteAudioMixingDidStart:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:RemoteAudioMixingDidStart params:@{
+  [self sendEvent:AGRemoteAudioMixingStart params:@{
                                                      @"message": @"RemoteAudioMixingStarted"
                                                      }];
 }
 
 - (void)rtcEngineRemoteAudioMixingDidFinish:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:RemoteAudioMixingDidFinish params:@{
+  [self sendEvent:AGRemoteAudioMixingFinish params:@{
                                                       @"message": @"RemoteAudioMixingFinish"
                                                       }];
 }
 
 - (void)rtcEngineDidAudioEffectFinish:(AgoraRtcEngineKit *_Nonnull)engine soundId:(NSInteger)soundId {
-  [self sendEvent:DidAudioEffectFinish params:@{
+  [self sendEvent:AGAudioEffectFinish params:@{
                                                 @"soundId": @(soundId)
                                                 }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine streamPublishedWithUrl:(NSString *_Nonnull)url errorCode:(AgoraErrorCode)errorCode {
-  [self sendEvent:StreamPublished params:@{
+  [self sendEvent:AGStreamPublished params:@{
                                            @"url": url,
                                            @"code": @(errorCode)
                                            }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine streamUnpublishedWithUrl:(NSString *_Nonnull)url {
-  [self sendEvent:StreamUnpublish params:@{
+  [self sendEvent:AGStreamUnpublish params:@{
                                            @"url": url,
                                            }];
 }
 
 - (void)rtcEngineTranscodingUpdated:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:TranscodingUpdated params:@{
-                                              @"message": @"TranscodingUpdated"
+  [self sendEvent:AGTranscodingUpdate params:@{
+                                              @"message": @"AGTranscodingUpdate"
                                               }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine streamInjectedStatusOfUrl:(NSString *_Nonnull)url uid:(NSUInteger)uid status:(AgoraInjectStreamStatus)status {
-  [self sendEvent:StreamInjectedStatus params:@{
+  [self sendEvent:AGStreamInjectedStatus params:@{
                                                 @"uid": @(uid),
                                                 @"url": url,
                                                 @"status": @(status)
@@ -2139,7 +2121,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData *_Nonnull)data {
-  [self sendEvent:ReceiveStreamMessage params:@{
+  [self sendEvent:AGReceiveStreamMessage params:@{
                                                 @"uid": @(uid),
                                                 @"streamId": @(streamId),
                                                 @"data": data
@@ -2147,7 +2129,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached {
-  [self sendEvent:DidOccurStreamMessageError params:@{
+  [self sendEvent:AGOccurStreamMessageError params:@{
                                                       @"uid": @(uid),
                                                       @"streamId": @(streamId),
                                                       @"error": @(error),
@@ -2157,14 +2139,14 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 }
 
 - (void)rtcEngineMediaEngineDidLoaded:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:MediaEngineDidLoaded params:@{
+  [self sendEvent:AGMediaEngineLoaded params:@{
                                                 @"message": @"MediaEngineLoaded"
                                                 }];
 }
 
 - (void)rtcEngineMediaEngineDidStartCall:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:MediaEngineDidStartCall params:@{
-                                                   @"message": @"MediaEngineDidStartCall"
+  [self sendEvent:AGMediaEngineStartCall params:@{
+                                                   @"message": @"AGMediaEngineStartCall"
                                                    }];
 }
 
