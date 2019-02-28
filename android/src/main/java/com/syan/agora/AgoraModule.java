@@ -1368,10 +1368,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getCameraMaxZoomFactor(Promise promise) {
         try {
-            int res = AgoraManager.getInstance().mRtcEngine.getCameraMaxZoomFactor();
+            double res = AgoraManager.getInstance().mRtcEngine.getCameraMaxZoomFactor();
             WritableMap map = Arguments.createMap();
             map.putBoolean("success", true);
-            map.putInt("value", res);
+            map.putDouble("value", res);
             promise.resolve(map);
         } catch (Exception e) {
             promise.reject(e);
