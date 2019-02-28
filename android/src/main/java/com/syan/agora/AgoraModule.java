@@ -1093,7 +1093,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                            Promise promise) {
         try {
             int res = AgoraManager.getInstance().renewToken(token);
-            if (res != 0) throw new ReactNativeAgoraException("renewToken Failed", res);
+            if (res != 0) throw new ReactNativeAgoraException("renew token failed", res);
             WritableMap map = Arguments.createMap();
             map.putBoolean("success", true);
             promise.resolve(map);
@@ -1366,6 +1366,19 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getCameraMaxZoomFactor(Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.getCameraMaxZoomFactor();
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            map.putInt("value", res);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
     public void setCameraFocusPositionInPreview(ReadableMap options, Promise promise) {
         try {
             int res = AgoraManager.getInstance().mRtcEngine.setCameraFocusPositionInPreview(
@@ -1417,7 +1430,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     public void setCameraAutoFocusFaceModeEnabled(boolean enabled, Promise promise) {
         try {
             int res = AgoraManager.getInstance().mRtcEngine.setCameraAutoFocusFaceModeEnabled(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("setCameraTorchOn Failed", res);
+            if (res != 0) throw new ReactNativeAgoraException("setCameraAutoFocusFaceModeEnabled Failed", res);
             WritableMap map = Arguments.createMap();
             map.putBoolean("success", true);
             map.putInt("value", res);
@@ -1833,7 +1846,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     public void disableLastmileTest(Promise promise) {
         try {
             int res = AgoraManager.getInstance().mRtcEngine
-                    .enableLastmileTest();
+                    .disableLastmileTest();
             if (res != 0) throw new ReactNativeAgoraException("disableLastmileTest Failed", res);
             WritableMap map = Arguments.createMap();
             map.putBoolean("success", true);
@@ -2077,21 +2090,22 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addInjectStreamUrl(ReadableMap options, Promise promise) {
         try {
-            LiveInjectStreamConfig config = new LiveInjectStreamConfig();
-            config.width = options.getInt("width");
-            config.height = options.getInt("height");
-            config.videoGop = options.getInt("videoGop");
-            config.videoBitrate = options.getInt("videoBitrate");
-            config.videoFramerate = options.getInt("videoFramerate");
-            config.audioBitrate = options.getInt("audioBitrate");
-            config.audioSampleRate = getAudioSampleRateEnum(options.getInt("audioSampleRate"));
-            config.audioChannels = options.getInt("audioChannels");
-
+            LiveInjectStreamConfig injectstream = new LiveInjectStreamConfig();
+            ReadableMap config = options.getMap("config");
+            ReadableMap size = config.getMap("size");
+            injectstream.width = size.getInt("width");
+            injectstream.height = size.getInt("height");
+            injectstream.videoGop = config.getInt("videoGop");
+            injectstream.videoBitrate = config.getInt("videoBitrate");
+            injectstream.videoFramerate = config.getInt("videoFramerate");
+            injectstream.audioBitrate = config.getInt("audioBitrate");
+            injectstream.audioSampleRate = getAudioSampleRateEnum(config.getInt("audioSampleRate"));
+            injectstream.audioChannels = config.getInt("audioChannels");
 
             int res = AgoraManager.getInstance().mRtcEngine
                     .addInjectStreamUrl(
                             options.getString("url"),
-                            config
+                            injectstream
                     );
             if (res != 0) throw new ReactNativeAgoraException("addInjectStreamUrl Failed", res);
             WritableMap map = Arguments.createMap();
