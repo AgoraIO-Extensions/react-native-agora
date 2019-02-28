@@ -1663,7 +1663,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
            AGTokenPrivilegeWillExpire,
            AGRequestToken,
            
-           DidMicrophoneEnabled,
+           AGMicrophoneEnabled,
            AGAudioVolumeIndication,
            AGActiveSpeaker,
            AGFirstLocalAudioFrame,
@@ -1936,7 +1936,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
   [self sendEvent:AGVideoSizeChanged params:@{
                                                  @"uid": @(uid),
                                                  @"width": @(size.width),
-                                                 @"height": @(size.height)
+                                                 @"height": @(size.height),
                                                  @"roration": @(rotation)
                                                  }];
 }
