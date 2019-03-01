@@ -109,8 +109,7 @@ Either way, then link with:
 | setLocalVoicePitch | Number(double): pitch | Changes the voice pitch of the local speaker. |
 | setLocalVoiceEqualization | Number: bandFrequency, Number: bandGain | Sets the local voice equalization effect. |
 | setLocalVoiceReverb | Number: reverbKey, Number: value | Sets the local voice reverberation.|
-| startAudioMixing | {filepath: String, loopback: Boolean, replace: Boolean, cycle: Int} | [android](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#ac56ceea1a143a4898382bce10b04df09)
- & [ios](https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/startAudioMixing:loopback:replace:cycle:) |
+| startAudioMixing | {filepath: String, loopback: Boolean, replace: Boolean, cycle: Int} | [android](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#ac56ceea1a143a4898382bce10b04df09) & [ios](https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/startAudioMixing:loopback:replace:cycle:) |
  | stopAudioMixing | void | stop audio mixing |
  | pauseAudioMixing | void | [android](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#ab2d4fb72ec3031f59da72b55857e0da7) & [ios](https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/pauseAudioMixing) |
  | resumeAudioMixing | void | resume audio mixing |
