@@ -8,7 +8,8 @@
 
 import React, {Component} from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity, TextInput
+  StyleSheet, Text, View, TouchableOpacity, TextInput,
+  PermissionsAndroid
 } from 'react-native';
 import AgoraRTCView from './components/agora';
 
@@ -67,6 +68,26 @@ export default class App extends Component<Props> {
       showLive: false,
       error: JSON.stringify(error)
     })
+  }
+
+  async requestCameraAndAudioAndroidPermission() {
+    try {
+      const granted = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      ]);
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
+  componentWillMount () {
+    this.requestCameraAndAudioAndroidPermission().then(_ => {});
   }
 
   render() {
