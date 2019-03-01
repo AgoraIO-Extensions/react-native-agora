@@ -37,8 +37,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>use camera for avc</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>use microphone for avc sdk</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
@@ -57,9 +61,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>use camera for avc</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>use microphone for avc sdk</string>
 </dict>
 </plist>

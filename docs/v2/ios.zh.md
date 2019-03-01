@@ -22,16 +22,13 @@ pod install
 # Step 3. 在项目里新增RCTAgora项目到Libraries目录里
 ![Step 3.1](./IOS_INSTALLATION/1.3_Add_Files_To_Project.png)
 ![Step 3.2](./IOS_INSTALLATION/1.3.1_RCTAgora.png)
+根据以下的步骤。重新加载RCTAgora里面的AgoraRtcEngineKit。
+![Step 3.3](./IOS_INSTALLATION/1.3.3_UPDATE_RCTAgora_AgoraRtcEngineKit_Framework.png)
+![Step 3.4](./IOS_INSTALLATION/1.3.4_SELECT_AgoraRtcEngineKit_from_iOS_Pods_folder.png)
+![Step 3.5](./IOS_INSTALLATION/1.3.5_DRAG_IT_INTO_Link_Binary_With_Libraries.png)
 
-# Step 4. 把react-native-agora添加到linked libraries里
-![Step 4.1](./IOS_INSTALLATION/1.4.1_SET_LINKED_LIBARIES.png)
-![Step 4.2](./IOS_INSTALLATION/1.4.1_SET_LINKED_LIBARIES.png)
-![Step 4.3](./IOS_INSTALLATION/1.4.2_SET_RCTAgora.a.png)
+# Step 4. 把RCTAgora.a 添加到linked libraries里
+![Step 4.3](./IOS_INSTALLATION/1.4.1_SET_RCTAgora.a.png)
 
-# Step 5. 设置 Framework & Libraries Search Paths
-![Step 5.1](./IOS_INSTALLATION/1.5.1_Add_Framework_Search_Paths.png)
-![Step 5.2](./IOS_INSTALLATION/1.5.2_Add_Library_Search_Paths.png)
-
-
-# Step 6. xcode 编译并运行
+# Step 5. xcode 编译并运行
 
