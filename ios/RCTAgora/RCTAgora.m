@@ -677,9 +677,9 @@ RCT_EXPORT_METHOD(playEffect
                   :(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine playEffect:(int)[options[@"soundId"] integerValue]
-                                    filePath:[options[@"filePath"] stringValue]
-                                   loopCount:(int)[options[@"loopCount"] integerValue]
+  NSInteger res = [self.rtcEngine playEffect:(int)[options[@"soundid"] integerValue]
+                                    filePath:[options[@"filepath"] stringValue]
+                                   loopCount:(int)[options[@"loopcount"] integerValue]
                                        pitch:[options[@"pitch"] doubleValue]
                                          pan:[options[@"pan"] doubleValue]
                                         gain:[options[@"gain"] doubleValue]
@@ -873,7 +873,7 @@ RCT_EXPORT_METHOD(resumeAllEffects
   }
 }
 
-// start audio recoding quality
+// start audio recording quality
 RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
@@ -889,7 +889,7 @@ RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary *)options
       qualityType = AgoraAudioRecordingQualityMedium;
       break;
   }
-  NSInteger res = [self.rtcEngine startAudioRecording:[options[@"filePath"] stringValue] quality:qualityType];
+  NSInteger res = [self.rtcEngine startAudioRecording:[options[@"filepath"] stringValue] quality:qualityType];
   if (res != 0) {
     reject(@"131017", @"startAudioRecording failed", [self makeNSError:@{
                                                                          @"code": @(131017),
@@ -2089,7 +2089,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options) {
 
 - (void)rtcEngineDidAudioEffectFinish:(AgoraRtcEngineKit *_Nonnull)engine soundId:(NSInteger)soundId {
   [self sendEvent:AGAudioEffectFinish params:@{
-                                                @"soundId": @(soundId)
+                                                @"soundid": @(soundId)
                                                 }];
 }
 

@@ -8,7 +8,8 @@
     "pu": "npm publish",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tslint",
-    "build": "tsc"
+    "build": "tsc",
+    "doc": "typedoc --out docs/api ./src"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,7 @@
     "react-native-typescript-transformer": "^1.2.11",
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.1",
+    "typedoc": "^0.14.2",
     "typescript": "^3.2.4"
   },
   "types": [
