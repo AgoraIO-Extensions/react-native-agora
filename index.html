@@ -1,0 +1,1107 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>react-native-agora</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">react-native-agora</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> react-native-agora</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h5 id="-qq-471757030">有任何问题欢迎加入QQ群进行反馈  471757030</h5>
+				<h2 id="for-1-x-old-version"><a href="README.old.md">for 1.x old version</a></h2>
+				<h1 id="react-native-agora">react-native-agora</h1>
+				<p><a href="https://www.npmjs.com/package/react-native-agora"><img src="https://img.shields.io/npm/v/react-native-agora.svg" alt="npm"></a>
+					<a href="https://www.npmjs.com/package/react-native-agora"><img src="https://img.shields.io/npm/dm/react-native-agora.svg" alt="npm"></a>
+					<a href="https://www.npmjs.com/package/react-native-agora"><img src="https://img.shields.io/npm/dt/react-native-agora.svg" alt="npm"></a>
+					<a href="https://github.com/syanbo/react-native-agora/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/react-native-agora.svg" alt="npm"></a>
+				<a href="https://gitter.im/react-native-agora/community"><img src="https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg" alt="join chat"></a></p>
+				<h2 id="description">Description</h2>
+				<p>The react-native-agora is an open-source wrapper for react-native developers. This SDK takes advantage of React Native and Agora RTC Video SDKs on Android/iOS.</p>
+				<h2 id="compatibility">Compatibility</h2>
+				<ul>
+					<li>react native 0.58.x</li>
+					<li>iOS SDK 8.0+</li>
+					<li>Android 5.0+ x86 arm64 armv7a</li>
+				</ul>
+				<h2 id="quick-start"><a href="https://github.com/AgoraIO-Community/Agora-RN-Quickstart">quick start</a></h2>
+				<h2 id="installation">Installation</h2>
+				<p>Install with npm:</p>
+				<p> <code>npm install --save react-native-agora</code></p>
+				<p>Or, install with yarn:</p>
+				<p> <code>yarn add react-native-agora</code></p>
+				<p>Either way, then link with:</p>
+				<p> <code>react-native link react-native-agora</code></p>
+				<h3 id="ios-installation">iOS Installation</h3>
+				<p>  <a href="docs/IOS_INSTALLATION.zh.md">中文</a>
+				<a href="docs/IOS_INSTALLATION.md">English</a></p>
+				<h3 id="android-installation">Android Installation</h3>
+				<p>  <a href="docs/ANDROID_INSTALLATION.zh.md">中文</a>
+				<a href="docs/ANDROID_INSTALLATION.md">English</a></p>
+				<h2 id="agora-native-api-documentation">Agora Native API Documentation</h2>
+				<h3 id="android">Android</h3>
+				<p>  <a href="https://docs.agora.io/cn/Video/API%20Reference/java/index.html">中文</a>
+				<a href="https://docs.agora.io/en/Video/API%20Reference/java/index.html">English</a></p>
+				<h2 id="ios">iOS</h2>
+				<p>  <a href="https://docs.agora.io/cn/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html">中文</a>
+				<a href="https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html">English</a></p>
+				<h4 id="rtcengine-methods">RtcEngine Methods</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Method Name</th>
+							<th>Parameters</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>init</td>
+							<td><a href="#Option">Option</a></td>
+							<td>create and initialize AgoraRtcEngine instance, notice: invoke this method, it will start subscribe events</td>
+						</tr>
+						<tr>
+							<td>Promise<any> joinChannel</td>
+							<td>String channelName, Number uid, String? token, String? extraInfo</td>
+							<td>join channel</td>
+						</tr>
+						<tr>
+							<td>on</td>
+							<td>String: <a href="#Events">EventType</a>, Handler: Function</td>
+							<td>addEventListener for native module events</td>
+						</tr>
+						<tr>
+							<td>off</td>
+							<td>String: <a href="#Events">EventType</a></td>
+							<td>removeEventListeners for native module events</td>
+						</tr>
+						<tr>
+							<td>removeAllListeners</td>
+							<td>void</td>
+							<td>remove all event listeners</td>
+						</tr>
+						<tr>
+							<td>destroy</td>
+							<td>void</td>
+							<td>destroy AgoraRtcEngine instance</td>
+						</tr>
+						<tr>
+							<td>getSdkVersion</td>
+							<td>Function: callback</td>
+							<td>get sdk version</td>
+						</tr>
+						<tr>
+							<td>Promise<any> enableLastmileTest</td>
+							<td>void</td>
+							<td>enable network quality test</td>
+						</tr>
+						<tr>
+							<td>Promise<any> disableLastmileTest</td>
+							<td>void</td>
+							<td>disable network quality test</td>
+						</tr>
+						<tr>
+							<td>Promise<any> leaveChannel</td>
+							<td>void</td>
+							<td>quit channel</td>
+						</tr>
+						<tr>
+							<td>setupLocalVideo</td>
+							<td>Number: uid, Number: renderMode, Number: reactTag</td>
+							<td>setup local video</td>
+						</tr>
+						<tr>
+							<td>setupRemoteVideo</td>
+							<td>Number: uid, Number: renderMode, Number: reactTag</td>
+							<td>setup remote video</td>
+						</tr>
+						<tr>
+							<td>startPreview</td>
+							<td>void</td>
+							<td>open video preview</td>
+						</tr>
+						<tr>
+							<td>stopPreview</td>
+							<td>void</td>
+							<td>close video preview</td>
+						</tr>
+						<tr>
+							<td>setLiveTranscoding</td>
+							<td><a href="#LiveTranscoding">LiveTranscoding</a></td>
+							<td>start live trancoding</td>
+						</tr>
+						<tr>
+							<td>setLocalRenderMode</td>
+							<td>Number: mode</td>
+							<td>set local video render mode</td>
+						</tr>
+						<tr>
+							<td>setRemoteRenderMode</td>
+							<td>Number: uid, Number: mode</td>
+							<td>set remote video render mode</td>
+						</tr>
+						<tr>
+							<td>enableAudioVolumeIndication</td>
+							<td>Number: interval, Number smooth</td>
+							<td>enable speaker volume notification</td>
+						</tr>
+						<tr>
+							<td>Promise<any> switchCamera</td>
+							<td>void</td>
+							<td>switch mobile camera</td>
+						</tr>
+						<tr>
+							<td>enableVideo</td>
+							<td>void</td>
+							<td>enable video</td>
+						</tr>
+						<tr>
+							<td>disableVideo</td>
+							<td>void</td>
+							<td>disable video</td>
+						</tr>
+						<tr>
+							<td>setEnableSpeakerphone</td>
+							<td>Boolean: enabled</td>
+							<td>set enable speaker phone</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setCameraAutoFocusFaceModeEnabled</td>
+							<td>Boolean: enabled</td>
+							<td>set camera auto focus face mode</td>
+						</tr>
+						<tr>
+							<td>setDefaultAudioRouteToSpeakerphone</td>
+							<td>Boolean: enabled</td>
+							<td>set default audio route to speaker phone</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setCameraTorchOn</td>
+							<td>Boolean: enabled</td>
+							<td>set camera torch on</td>
+						</tr>
+						<tr>
+							<td>muteLocalAudioStream</td>
+							<td>Boolean: enabled</td>
+							<td>mute/unmute local audio</td>
+						</tr>
+						<tr>
+							<td>muteRemoteAudioStream</td>
+							<td>Number: uid, Boolean: enabled</td>
+							<td>mute/unmute remote audio by uid</td>
+						</tr>
+						<tr>
+							<td>muteAllRemoteAudioStreams</td>
+							<td>Boolean: enabled</td>
+							<td>mute/unmute all remote audio</td>
+						</tr>
+						<tr>
+							<td>muteLocalVideoStream</td>
+							<td>Boolean: enabled</td>
+							<td>mute/unmute local video stream</td>
+						</tr>
+						<tr>
+							<td>enableLocalVideo</td>
+							<td>Boolean: enabled</td>
+							<td>set enabled status to local video</td>
+						</tr>
+						<tr>
+							<td>muteAllRemoteVideoStreams</td>
+							<td>void</td>
+							<td>mute/unmute all remote videos</td>
+						</tr>
+						<tr>
+							<td>muteRemoteVideoStream</td>
+							<td>Number: uid, Boolean: enabled</td>
+							<td>mute/unmute remote video by uid</td>
+						</tr>
+						<tr>
+							<td>Promise<any> createDataStream</td>
+							<td>Boolean: reliable, Boolean: ordered</td>
+							<td>createDataStream</td>
+						</tr>
+						<tr>
+							<td>Promise<any> renewToken</td>
+							<td>String: token</td>
+							<td>renew token</td>
+						</tr>
+						<tr>
+							<td>Promise<any> getConnectionState</td>
+							<td>void</td>
+							<td>return connection state</td>
+						</tr>
+						<tr>
+							<td>setClientRole</td>
+							<td>Number: role(1: host, 2: audience)</td>
+							<td>change client role</td>
+						</tr>
+						<tr>
+							<td>enableAudio</td>
+							<td>void</td>
+							<td>enable audio</td>
+						</tr>
+						<tr>
+							<td>disableAudio</td>
+							<td>void</td>
+							<td>disable audio</td>
+						</tr>
+						<tr>
+							<td>enableLocalAudio</td>
+							<td>Boolean: enable</td>
+							<td>enable/disable local audio</td>
+						</tr>
+						<tr>
+							<td>muteLocalAudioStream</td>
+							<td>Boolean: mute</td>
+							<td>enable/disable local audio stream</td>
+						</tr>
+						<tr>
+							<td>muteAllRemoteAudioStreams</td>
+							<td>Boolean: mute</td>
+							<td>enable/disable all remote audio streams</td>
+						</tr>
+						<tr>
+							<td>muteRemoteAudioStream</td>
+							<td>Number: uid, Boolean: mute</td>
+							<td>mute/unmute remote audio stream by uid</td>
+						</tr>
+						<tr>
+							<td>adjustRecordingSignalVolume</td>
+							<td>Number: volume</td>
+							<td>Adjusts the recording volume.</td>
+						</tr>
+						<tr>
+							<td>adjustPlaybackSignalVolume</td>
+							<td>Number: volume</td>
+							<td>Adjusts the playback volume.</td>
+						</tr>
+						<tr>
+							<td>enableAudioVolumeIndication</td>
+							<td>Number: interval, Number: smooth</td>
+							<td>Enables the onAudioVolumeIndication callback at a set time interval to report on which users are speaking and the speakers&#39; volume.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> startAudioRecording</td>
+							<td>{filepath: String, quality: int}</td>
+							<td>start audio recording</td>
+						</tr>
+						<tr>
+							<td>Promise<any> stopAudioRecoding</td>
+							<td>void</td>
+							<td>stop audio recording</td>
+						</tr>
+						<tr>
+							<td>methodisSpeakerphoneEnabled</td>
+							<td>void</td>
+							<td>Checks whether the speakerphone is enabled.</td>
+						</tr>
+						<tr>
+							<td>setInEarMonitoringVolume</td>
+							<td>Number: volume</td>
+							<td>Sets the volume of the in-ear monitor.</td>
+						</tr>
+						<tr>
+							<td>setLocalVoicePitch</td>
+							<td>Number(double): pitch</td>
+							<td>Changes the voice pitch of the local speaker.</td>
+						</tr>
+						<tr>
+							<td>setLocalVoiceEqualization</td>
+							<td>Number: bandFrequency, Number: bandGain</td>
+							<td>Sets the local voice equalization effect.</td>
+						</tr>
+						<tr>
+							<td>setLocalVoiceReverb</td>
+							<td>Number: reverbKey, Number: value</td>
+							<td>Sets the local voice reverberation.</td>
+						</tr>
+						<tr>
+							<td>startAudioMixing</td>
+							<td>{filepath: String, loopback: Boolean, replace: Boolean, cycle: Int}</td>
+							<td><a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#ac56ceea1a143a4898382bce10b04df09">android</a> &amp; <a href="https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/startAudioMixing:loopback:replace:cycle:">ios</a></td>
+						</tr>
+						<tr>
+							<td>stopAudioMixing</td>
+							<td>void</td>
+							<td>stop audio mixing</td>
+						</tr>
+						<tr>
+							<td>pauseAudioMixing</td>
+							<td>void</td>
+							<td><a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#ab2d4fb72ec3031f59da72b55857e0da7">android</a> &amp; <a href="https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/pauseAudioMixing">ios</a></td>
+						</tr>
+						<tr>
+							<td>resumeAudioMixing</td>
+							<td>void</td>
+							<td>resume audio mixing</td>
+						</tr>
+						<tr>
+							<td>adjustAudioMixingVolume</td>
+							<td>Number: volume</td>
+							<td>adjust audio mixing volume, call this method when you are in a channel</td>
+						</tr>
+						<tr>
+							<td>adjustAudioMixingPlayoutVolume</td>
+							<td>Number: volume</td>
+							<td>adjust audio mixing playout volume, call this method when you are in a channel</td>
+						</tr>
+						<tr>
+							<td>adjustAudioMixingPublishVolume</td>
+							<td>Number: volume</td>
+							<td>Adjusts the volume of audio mixing for publishing (sending to other users). call this method when you are in a channel.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> getAudioMixingDuration</td>
+							<td>void</td>
+							<td>Gets the duration (ms) of the music file. Call this method when you are in a channel.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> getAudioMixingCurrentPosition</td>
+							<td>void</td>
+							<td>Gets the playback position (ms) of the music file. Call this method when you are in a channel.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setAudioMixingPosition</td>
+							<td>Number: pos</td>
+							<td>Sets the playback position (ms) of the music file to a different starting position (the default plays from the beginning).</td>
+						</tr>
+						<tr>
+							<td>Promise<any> getEffectsVolume</td>
+							<td>void</td>
+							<td>Retrieves the volume of the audio effects.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setEffectsVolume</td>
+							<td>Number(double): volume</td>
+							<td>Sets the volume of the audio effects.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setVolumeOfEffect</td>
+							<td>Number: soundId, Number(double): volume</td>
+							<td>Sets the volume of a specified audio effect.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> playEffect</td>
+							<td>{soundId: Number, filepath: String, loopCount: Number, pitch: Number(double), gain: Boolean, publish: Boolean}</td>
+							<td>Plays a specified audio effect. <a href="https://docs.agora.io/en/Video/API%20Reference/java/interfaceio_1_1agora_1_1rtc_1_1_i_audio_effect_manager.html#a6fd330db3e3e5735f7f8d5c36bc3fea1">android</a> &amp; <a href="https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/playEffect:filepath:loopCount:pitch:pan:gain:publish:">ios</a></td>
+						</tr>
+						<tr>
+							<td>Promise<any> stopEffect</td>
+							<td>Number: soundId</td>
+							<td>Stops playing a specified audio effect.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> stopAllEffects</td>
+							<td>void</td>
+							<td>Stops all playing audio effects.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> preloadEffect</td>
+							<td>Number: soundid, String: filepath</td>
+							<td>Preloads a specified audio effect file into the memory. Supported audio formats: mp3, aac, m4a, 3gp, wav.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> unloadEffect</td>
+							<td>Number: soundId</td>
+							<td>Releases a specified preloaded audio effect from the memory.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> pauseEffect</td>
+							<td>Number: soundId</td>
+							<td>Pauses a specified audio effect.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> pauseAllEffects</td>
+							<td>void</td>
+							<td>Pauses all audio effects.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> resumeEffect</td>
+							<td>void</td>
+							<td>Resumes playing a specified audio effect.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> resumeAllEffects</td>
+							<td>void</td>
+							<td>Resumes playing all audio effects.</td>
+						</tr>
+						<tr>
+							<td>setAudioSessionOperationRestriction</td>
+							<td>void</td>
+							<td><a href="https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/setAudioSessionOperationRestriction:">ios only</a></td>
+						</tr>
+						<tr>
+							<td>Promise<any> startEchoTest</td>
+							<td>void</td>
+							<td>Starts an audio call test.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> stopEchoTest</td>
+							<td>void</td>
+							<td>Stop the audio call test.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setRecordingAudioFrameParameters</td>
+							<td>{sampleRate: Number, channel: Number, mode: Number, samplesPerCall: Number }</td>
+							<td>Sets the audio recording format for the RecordFrame callback.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setPlaybackAudioFrameParameters</td>
+							<td>{sampleRate: Number, channel: Number, mode: Number, samplesPerCall: Number }</td>
+							<td>Sets the audio playback format for the onPlaybackFrame callback.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> addVideoWatermark</td>
+							<td>{url: String, x: Number, y: Number, width: Number, height: Number }</td>
+							<td>add video watermark</td>
+						</tr>
+						<tr>
+							<td>clearVideoWatermarks</td>
+							<td>void</td>
+							<td>remove the watermark image from the video stream added by addVideoWatermark</td>
+						</tr>
+						<tr>
+							<td>setLocalPublishFallbackOption</td>
+							<td>Number: <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_constants.html#a3e453c93766e783a7e5eca05b1776238">option(0, 1, 2)</a></td>
+							<td><a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#ac8c08e79844a4e62e0670553484cbe90">android</a> &amp; <a href="https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/setLocalPublishFallbackOption:">ios</a></td>
+						</tr>
+						<tr>
+							<td>setRemoteSubscribeFallbackOption</td>
+							<td>Number: <a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_constants.html#a3e453c93766e783a7e5eca05b1776238">option (0, 1, 2)</a></td>
+							<td><a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#af64301ea1788dad0561aa678f3fe6ad3">android</a> &amp; <a href="https://docs.agora.io/en/Voice/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/setRemoteSubscribeFallbackOption:">ios</a></td>
+						</tr>
+						<tr>
+							<td>Promise<any> enableDualStreamMode</td>
+							<td>Boolean: enabled</td>
+							<td>Enables/disables dual-stream mode.</td>
+						</tr>
+						<tr>
+							<td>setRemoteVideoStreamType</td>
+							<td>{ uid: Number, streamType: Number }</td>
+							<td>Sets the video stream type of the remotely subscribed video stream.</td>
+						</tr>
+						<tr>
+							<td>setRemoteDefaultVideoStreamType</td>
+							<td>{ streamType: Number }</td>
+							<td>Sets the default video stream type of the remotely subscribed video stream.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> addInjectStreamUrl</td>
+							<td><a href="#InjectionStream">InjectionStream</a></td>
+							<td>Injects an online media stream to a live broadcast.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> removePublishStreamUrl</td>
+							<td>String: url</td>
+							<td>Removes a CDN live stream URL address.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setVideoQualityParameters</td>
+							<td>Boolean: quality</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Sets the preference option for the video quality (Live broadcast only).</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Promise<any> setLocalVideoMirrorMode</td>
+							<td>Number: mode</td>
+							<td>Sets the local video mirror mode.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> switchCamera</td>
+							<td>void</td>
+							<td>Switches between front and rear cameras.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> isCameraZoomSupported</td>
+							<td>void</td>
+							<td>Checks whether the camera zoom function is supported.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> isCameraTorchSupported</td>
+							<td>void</td>
+							<td>Checks whether the camera flash function is supported.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> isCameraFocusSupported</td>
+							<td>void</td>
+							<td>Checks whether the camera manual focus function is supported.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> isCameraExposurePositionSupported</td>
+							<td>void</td>
+							<td>Checks whether the camera exposure function is supported.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> isCameraAutoFocusFaceModeSupported</td>
+							<td>void</td>
+							<td>Checks whether the camera face auto-focus function is supported.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setCameraZoomFactor</td>
+							<td>Number(float): zoomFactor</td>
+							<td>Sets the camera zoom ratio.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> getCameraMaxZoomFactor</td>
+							<td>void</td>
+							<td>Gets the maximum zoom ratio of the camera.<a href="https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#a1084b42001cc5c008d58ec938fc0b7f3">android only</a></td>
+						</tr>
+						<tr>
+							<td>Promise<any>  setCameraFocusPositionInPreview</td>
+							<td>{x: Number(double), y: Number(double) }</td>
+							<td>Sets the camera manual focus position.</td>
+						</tr>
+						<tr>
+							<td>Promise<any>  setCameraExposurePosition</td>
+							<td>{x: Number(double), y: Number(double) }</td>
+							<td>Sets the camera exposure position.</td>
+						</tr>
+						<tr>
+							<td>Promise<any>  setCameraTorchOn</td>
+							<td>Boolean isOn</td>
+							<td>Enables the camera flash function.</td>
+						</tr>
+						<tr>
+							<td>Promise<any>  setCameraAutoFocusFaceModeEnabled</td>
+							<td>Boolean enabled</td>
+							<td>Enables the camera auto-face focus function.</td>
+						</tr>
+						<tr>
+							<td>Promise<any> getCallId</td>
+							<td>void</td>
+							<td>getcalll id</td>
+						</tr>
+						<tr>
+							<td>Promise<any> setLog</td>
+							<td>filepath: String, level: Number</td>
+							<td>specifies an SDK output log file.</td>
+						</tr>
+						<tr>
+							<td>addPublishStreamUrl</td>
+							<td>{ url: String, enabled: Boolean }</td>
+							<td>Adds a CDN live stream URL address. it must be invoked after invoking setLiveTranscoding</td>
+						</tr>
+						<tr>
+							<td>removePublishStreamUrl</td>
+							<td>{ url: String }</td>
+							<td>Removes a CDN live stream URL address.</td>
+						</tr>
+				</tbody></table>
+				<h4 id="option">Option</h4>
+				<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> Option {
+  appid: <span class="hljs-built_in">String</span>,
+  videoProfile: <span class="hljs-built_in">number</span>
+  channelProfile: <span class="hljs-built_in">number</span>,
+  videoEncoderConfig: VideoEncoderConfig,
+  clientRole: <span class="hljs-built_in">number</span>,
+  audioProfile: <span class="hljs-built_in">number</span>,
+  audioScenario: <span class="hljs-built_in">number</span>
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> VideoEncoderConfig {
+  width: <span class="hljs-built_in">number</span>,
+  height: <span class="hljs-built_in">number</span>,
+  bitrate: <span class="hljs-built_in">number</span>,
+  frameRate: <span class="hljs-built_in">number</span>,
+  orientationMode: <span class="hljs-built_in">number</span>,
+}</code></pre>
+				<h4 id="livetranscoding">LiveTranscoding</h4>
+				<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> LiveTranscoding {
+  size: Size,
+  videoBitrate: <span class="hljs-built_in">number</span>,
+  videoFramerate: <span class="hljs-built_in">number</span>,
+  lowLatency: <span class="hljs-built_in">boolean</span>,
+  videoGop: <span class="hljs-built_in">number</span>,
+  videoCodecProfile: <span class="hljs-built_in">number</span>,
+  transcodingUsers: <span class="hljs-built_in">Array</span>&lt;TranscodingUser&gt;,
+  transcodingExtraInfo: <span class="hljs-built_in">string</span>,
+  watermark: BackgroundImage,
+  backgroundImage: BackgroundImage,
+  backgroundColor: Color,
+  audioSampleRate: <span class="hljs-built_in">number</span>,
+  audioBitrate: <span class="hljs-built_in">number</span>,
+  audioChannels: <span class="hljs-built_in">number</span>,
+}</code></pre>
+				<h4 id="injectionstream">InjectionStream</h4>
+				<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> InjectionStream {
+  config: {
+    size: {
+      width: <span class="hljs-built_in">Number</span>,
+      height: <span class="hljs-built_in">Number</span>,
+    },
+    videoGop: <span class="hljs-built_in">Number</span>,
+    videoBitrate: <span class="hljs-built_in">Number</span>,
+    audioBitrate: <span class="hljs-built_in">Number</span>,
+    audioSampleRate: <span class="hljs-built_in">Number</span>,
+    videoFrameRate: <span class="hljs-built_in">Number</span>
+    audioChannels: <span class="hljs-built_in">Number</span>
+  }
+}</code></pre>
+				<h4 id="events">Events</h4>
+				<pre><code class="language-javascript">RtcEngine.on(<span class="hljs-string">'eventName'</span>, (data) =&gt; {
+    <span class="hljs-built_in">console</span>.log(data);
+});</code></pre>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Platform</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>warning</td>
+							<td>warning</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>error</td>
+							<td>error</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>apiCallExecute</td>
+							<td>capture agora native api call executed</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>joinChannelSuccess</td>
+							<td>join channel success</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>reJoinChannelSuccess</td>
+							<td>rejoin channel success</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>leaveChannel</td>
+							<td>quit channel</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>clientRoleChanged</td>
+							<td>when changed client role</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>userJoined</td>
+							<td>when user joined channel</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>userOffline</td>
+							<td>when user left channel</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>connectionStateChanged</td>
+							<td>when connection state changed</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>connectionLost</td>
+							<td>when connection lost</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>tokenPrivilegeWillExpire</td>
+							<td>when token will expire</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>requestToken</td>
+							<td>when token expired</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>microphoneEnabled</td>
+							<td>when microphone enabled</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>audioVolumeIndication</td>
+							<td>notice audio volume</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>activeSpeaker</td>
+							<td>reports which user is the loudest speaker</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>firstLocalAudioFrame</td>
+							<td>when the first local audio frame is sent</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>firstRemoteAudioFrame</td>
+							<td>when the first remote audio frame is sent</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>videoStopped</td>
+							<td>when video stopped</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>firstLocalVideoFrame</td>
+							<td>when first local video frame is sent</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>firstRemoteVideoDecoded</td>
+							<td>when first remote video is decoded</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>firstRemoteVideoFrame</td>
+							<td>when first remote video frame is rendered</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>userMuteAudio</td>
+							<td>when a remote user&#39;s audio stream is muted/unmuted</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>userMuteVideo</td>
+							<td>when a remote user&#39;s video stream is muted/unmuted</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>userEnableVideo</td>
+							<td>when a remote user enables/disables the video module</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>userEnableLocalVideo</td>
+							<td>when a remote user enables/disables the local video capture function</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>videoSizeChanged</td>
+							<td>when the video size or rotation information of a specified remote user changes</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>remoteVideoStateChanged</td>
+							<td>when the remote video stream state changes</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>localPublishFallbackToAudioOnly</td>
+							<td>Occurs when the published video stream falls back to an audio-only stream due to unreliable network conditions or switches back to the video when the network conditions improve.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>remoteSubscribeFallbackToAudioOnly</td>
+							<td>Occurs when the remote video stream falls back to an audio-only stream due to unreliable network conditions or switches back to the video after the network conditions improve.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>audioRouteChanged</td>
+							<td>when the local audio pkayout route changes</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>cameraReady</td>
+							<td>when the camera is turned on and ready to capture video</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>cameraFocusAreaChanged</td>
+							<td>when the camera focus area is changed</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>cameraExposureAreaChanged</td>
+							<td>The camera exposure area has changed</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>remoteAudioStats</td>
+							<td>Reports the statistics of the audio stream from each remote user/host.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>rtcStats</td>
+							<td>Reports the statistics of the RtcEngine once every two seconds</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>lastmileQuality</td>
+							<td>Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora&#39;s edge server. After the application calls the enableLastmileTest method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>networkQuality</td>
+							<td>Reports the last mile network quality of each user in the channel once every two seconds. Last mile refers to the connection between the local device and Agora&#39;s edge server. This callback reports once every two seconds the uplink last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>localVideoStats</td>
+							<td>Reports the statistics of the uploading local video streams. This callback is triggered once every two seconds for each individual user/host. If there are multiple users/hosts in the channel, this callback is triggered multiple times every 2 seconds.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>remoteVideoStats</td>
+							<td>Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times. This callback reports statistics more closely linked to the real-user experience of the video transmission quality than the statistics that the onRemoteVideoTransportStats callback reports</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>audioTransportStatsOfUid</td>
+							<td>Reports the transport-layer statistics of each remote audio stream.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>videoTransportStatsOfUid</td>
+							<td>Reports the transport-layer statistics of each remote video stream.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>localAudioMixingFinish</td>
+							<td>Occurs when the audio mixing file playback finishes.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>remoteAudioMixingStart</td>
+							<td>Occurs when a remote user starts audio mixing.</td>
+							<td>ios</td>
+						</tr>
+						<tr>
+							<td>remoteAudioMixingFinish</td>
+							<td>Occurs when a remote user finishes audio mixing.</td>
+							<td>ios</td>
+						</tr>
+						<tr>
+							<td>audioEffectFinish</td>
+							<td>Occurs when the audio effect file playback finishes.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>streamPublished</td>
+							<td>Occurs when a CDN live stream is published.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>streamUnpublish</td>
+							<td>Occurs when CDN live streaming stops. This callback notifies the host that the CDN live stream is unpublished.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>transcodingUpdate</td>
+							<td>Occurs when the publisher&#39;s transcoding settings are updated.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>streamInjectedStatus</td>
+							<td>Reports the status of the injected online media stream.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>receiveStreamMessage</td>
+							<td>Occurs when the local user receives a remote data stream within five seconds.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>occurStreamMessageError</td>
+							<td>Occurs when the local user fails to receive a remote data stream.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>mediaEngineLoaded</td>
+							<td>Occurs when the media engine is loaded.</td>
+							<td>all</td>
+						</tr>
+						<tr>
+							<td>mediaEngineStartCall</td>
+							<td>Occurs when the media engine starts.</td>
+							<td>all</td>
+						</tr>
+				</tbody></table>
+				<h4 id="agoraview-component">AgoraView Component</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>showLocalVideo</td>
+							<td>boolean: (true</td>
+						</tr>
+						<tr>
+							<td>remoteUid</td>
+							<td>uid for remote</td>
+						</tr>
+						<tr>
+							<td>zOrderMediaOverlay (Android only)</td>
+							<td>enable zorder to media overlay</td>
+						</tr>
+				</tbody></table>
+				<h2 id="resources">Resources</h2>
+				<ul>
+					<li>Complete <a href="https://docs.agora.io/en/">API documentation</a> at the Developer Center</li>
+					<li><a href="https://github.com/syanbo/react-native-agora/issues">File bugs about this sample</a></li>
+					<li><a href="https://facebook.github.io/react-native/docs/getting-started.html">React Native Getting Started</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/agoraview.html" class="tsd-kind-icon">Agora<wbr>View</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/rtcengine.html" class="tsd-kind-icon">Rtc<wbr>Engine</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#agora" class="tsd-kind-icon">Agora</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#agoraeventemitter" class="tsd-kind-icon">Agora<wbr>Event<wbr>Emitter</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#rctagoraview" class="tsd-kind-icon">RCTAgora<wbr>View</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
