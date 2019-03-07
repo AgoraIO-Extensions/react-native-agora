@@ -1,6 +1,6 @@
 import { View, ViewProps } from 'react-native';
 
-declare module "IAgora";
+declare module "IAgora"
 
 export interface VideoEncoderConfig {
   width: number,
@@ -68,7 +68,7 @@ export interface Color {
   alpha: number
 }
 
-export interface LiveTranscoding {
+export interface LiveTranscodingOption {
   size: Size,
   videoBitrate: number,
   videoFramerate: number,
@@ -86,197 +86,14 @@ export interface LiveTranscoding {
 }
 
 export interface VideoOption {
-  uid: Number,
+  uid: number,
   renderMode: number,
   reactTag: number
 }
 
 export interface AudioRecordingOption {
-  filePath: String,
-  quality: Number
-}
-
-export interface EventScheduler {
-  onWarning: Function,
- 
-  onError: Function,
-   
-  onJoinChannelSuccess: Function,
-   
-  onRejoinChannelSuccess: Function,
-   
-  onLeaveChannel: Function,
-   
-  onClientRoleChanged: Function,
-   
-  onUserJoined: Function,
-   
-  onUserOffline: Function,
-   
-  onConnectionStateChanged: Function,
-   
-  onConnectionInterrupted?: Function,
-   
-  onConnectionLost: Function,
-   
-  onConnectionBanned: Function,
-   
-  onApiCallExecuted: Function,
-   
-  onTokenPrivilegeWillExpire: Function,
-   
-  onRequestToken: Function,
-   
-  onMicrophoneEnabled: Function,
-   
-  onAudioVolumeIndication: Function,
-   
-  onActiveSpeaker: Function,
-   
-  onFirstLocalAudioFrame: Function,
-   
-  onFirstRemoteAudioFrame: Function,
-   
-  onVideoStopped: Function,
-   
-  onFirstLocalVideoFrame: Function,
-   
-  onFirstRemoteVideoDecoded: Function,
-   
-  onFirstRemoteVideoFrame: Function,
-   
-  onUserMuteAudio: Function,
-   
-  onUserMuteVideo: Function,
-   
-  onUserEnableVideo: Function,
-   
-  onUserEnableLocalVideo: Function,
-   
-  onVideoSizeChanged: Function,
-   
-  onRemoteVideoStateChanged: Function,
-   
-  onLocalPublishFallbackToAudioOnly: Function,
-   
-  onRemoteSubscribeFallbackToAudioOnly: Function,
-   
-  onAudioRouteChanged: Function,
-   
-  onCameraReady: Function,
-   
-  onCameraFocusAreaChanged: Function,
-   
-  onCameraExposureAreaChanged: Function,
-   
-  onAudioQuality: Function,
-   
-  onRtcStats: Function,
-   
-  onLastmileQuality: Function,
-   
-  onNetworkQuality: Function,
-   
-  onLocalVideoStats: Function,
-   
-  onRemoteVideoStats: Function,
-   
-  onRemoteAudioStats: Function,
-   
-  onLocalVideoStat: Function,
-   
-  onRemoteVideoStat: Function,
-   
-  onRemoteAudioTransportStats: Function,
-   
-  onRemoteVideoTransportStats: Function,
-   
-  onAudioMixingFinished: Function,
-   
-  onAudioEffectFinished: Function,
-   
-  onStreamPublished: Function,
-   
-  onStreamUnpublished: Function,
-   
-  onTranscodingUpdated: Function,
-   
-  onStreamInjectedStatus: Function,
-   
-  onStreamMessage: Function,
-   
-  onStreamMessageError: Function,
-   
-  onMediaEngineLoadSuccess: Function,
-   
-  onMediaEngineStartCallSuccess: Function,
-  // onWarning: Function,
-  // onError: Function,
-  // onJoinChannelSuccess: Function,
-  // onRejoinChannelSuccess: Function,
-  // onLeaveChannel: Function,
-  // onApiCallExecute: Function,
-  // onClientRoleChanged: Function,
-  // onUserJoined: Function,
-  // onUserOffline: Function,
-  // onConnectionStateChanged: Function,
-  // onConnectionInterrupted: Function,
-  // onTokenPrivilegeWillExpire: Function,
-  // onRequestToken: Function,
-  
-  // DidMicrophoneEnabled: Function,
-  // ReportAudioVolumeIndicationOfSpeakers: Function,
-  // ActiveSpeaker: Function,
-  // FirstLocalAudioFrame: Function,
-  // FirstRemoteAudioFrameOfUid: Function,
-  // VideoDidStop: Function,
-  // FirstLocalVideoFrameWithSize: Function,
-  // FirstRemoteVideoDecodedOfUid: Function,
-  // FirstRemoteVideoFrameOfUid: Function,
-  // DidAudioMuted: Function,
-  // DidVideoMuted: Function,
-  // DidVideoEnabled: Function,
-  // DidLocalVideoEnabled: Function,
-  // VideoSizeChangedOfUid: Function,
-  // RemoteVideoStateChangedOfUid: Function,
-  // DidLocalPublishFallbackToAudioOnly: Function,
-  // DidRemoteSubscribeFallbackToAudioOnly: Function,
-  
-  // DeviceTypeStateChanged: Function,
-  // DidAudioRouteChanged: Function,
-  // CameraDidReady: Function,
-  // CameraFocusDidChangedToRect: Function,
-  // CameraExposureDidChangedToRect: Function,
-  
-  // ReportRtcStats: Function,
-  // LastmileQuality: Function,
-  // NetworkQuality: Function,
-  // LocalVideoStats: Function,
-  // RemoteVideoStats: Function,
-  // RemoteAudioStats: Function,
-  // AudioTransportStatsOfUid: Function,
-  // VideoTransportStatsOfUid: Function,
-  
-  // LocalAudioMixingDidFinish: Function,
-  // RemoteAudioMixingDidStart: Function,
-  // RemoteAudioMixingDidFinish: Function,
-  // DidAudioEffectFinish: Function,
-  
-  // StreamPublished: Function,
-  // StreamUnpublish: Function,
-  // TranscodingUpdated: Function,
-  
-  // StreamInjectedStatus: Function,
-  
-  // ReceiveStreamMessage: Function,
-  // DidOccurStreamMessageError: Function,
-  
-  // MediaEngineDidLoaded: Function,
-  // MediaEngineDidStartCall: Function,
-  
-  // ConnectionDidInterrupted: Function,
-  // ConnectionDidBanned: Function,
-  // AudioQualityOfUi: Function
+  filepath: String,
+  quality: number
 }
 
 export type Callback<T> = (err: any, data: any) => T;
@@ -288,7 +105,93 @@ export type Number = Nullable<number> | 0;
 
 export interface AgoraViewProps extends ViewProps {
   showLocalVideo: boolean,
-  remoteUid: Number,
+  remoteUid: number,
   zOrderMediaOverlay: boolean,
   [key:string]: any;
+}
+
+export interface DataStreamOption {
+  streamId: number,
+  ordered: boolean,
+  reliable: boolean
+}
+
+export interface AudioMixingOption {
+  filepath: String,
+  loopback: boolean,
+  replace: boolean,
+  cycle: number
+}
+
+export interface PlayEffectOption {
+  soundId: number,
+  filepath: String,
+  loopcount: number,
+  pitch: number,
+  pan: number,
+  gain: number,
+  publish: boolean
+}
+
+export interface AudioFrameOption {
+  sampleRate: number,
+  channel: number,
+  mode: number,
+  samplesPerCall: number
+}
+
+export interface MixedAudioFrameOption {
+  sampleRate: number,
+  samplesPerCall: number
+}
+
+export interface ImageOption {
+  url: String,
+  height: number,
+  width: number,
+  x: number,
+  y: number
+}
+
+export interface VideoStreamOption {
+  uid: number,
+  streamType: number
+}
+
+export interface DefaultVideoStreamOption {
+  streamType: number
+}
+
+export interface InjectStreamOption {
+  url: String,
+  config: {
+    size: {
+      width: number,
+      height: number,
+    },
+    videoGop: number,
+    videoBitrate: number,
+    videoFramerate: number,
+    audioBitrate: number,
+    audioSampleRate: number,
+    audioChannels: number
+  }
+}
+
+export interface RemoveInjectStreamOption {
+  url: String
+}
+
+export interface PublishStreamOption {
+  url: String,
+  enable: boolean
+}
+
+export interface RemovePublishStreamOption {
+  url: String
+}
+
+export interface PositionOption {
+  x: number,
+  y: number
 }
