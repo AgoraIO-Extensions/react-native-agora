@@ -967,7 +967,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 @Override
                 public void run() {
                     WritableMap map = Arguments.createMap();
-                    map.putInt("soundId", soundId);
+                    map.putInt("soundid", soundId);
                     sendEvent(getReactApplicationContext(), AGAudioEffectFinish, map);
                 }
             });
@@ -1769,7 +1769,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         try {
             int res = AgoraManager.getInstance().mRtcEngine
                     .startAudioRecording(
-                            options.getString("filePath"),
+                            options.getString("filepath"),
                             options.getInt("quality")
                     );
             if (res != 0) throw new ReactNativeAgoraException("startAudioRecording Failed", res);
@@ -1858,7 +1858,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setRecordingAudioFrameParameters(WritableMap options, Promise promise) {
+    public void setRecordingAudioFrameParameters(ReadableMap options, Promise promise) {
         try {
             int res = AgoraManager.getInstance().mRtcEngine
                     .setRecordingAudioFrameParameters(
@@ -1878,7 +1878,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setPlaybackAudioFrameParameters(WritableMap options, Promise promise) {
+    public void setPlaybackAudioFrameParameters(ReadableMap options, Promise promise) {
         try {
             int res = AgoraManager.getInstance().mRtcEngine
                     .setPlaybackAudioFrameParameters(
@@ -1926,7 +1926,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void addVideoWatermark(WritableMap options, Promise promise) {
+    public void addVideoWatermark(ReadableMap options, Promise promise) {
         try {
             int res = AgoraManager.getInstance().mRtcEngine
                     .addVideoWatermark(createAgoraImage(options));
@@ -2309,9 +2309,9 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         try {
             IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
             int res = manager.playEffect(
-                    options.getInt("soundId"),
-                    options.getString("filePath"),
-                    options.getInt("loopCount"),
+                    options.getInt("soundid"),
+                    options.getString("filepath"),
+                    options.getInt("loopcount"),
                     options.getDouble("pitch"),
                     options.getDouble("pan"),
                     options.getDouble("gain"),
@@ -2448,13 +2448,13 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
-    //设置本地视频显示模式
+    // set local video render mode
     @ReactMethod
     public void setLocalRenderMode(int mode) {
         AgoraManager.getInstance().mRtcEngine.setLocalRenderMode(mode);
     }
 
-    //设置远端视频显示模式
+    // set remote video render mode
     @ReactMethod
     public void setRemoteRenderMode(int uid, int mode) {
         AgoraManager.getInstance().mRtcEngine.setRemoteRenderMode(uid, mode);
