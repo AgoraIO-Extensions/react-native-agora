@@ -6,6 +6,24 @@
 * cocoapods
 
 ```bash
+# Use npm
+npm install react-native-agora
+```
+or
+
+```bash
+# Use yarn
+yarn add react-native-agora
+```
+then you need to link the library
+
+```bash
+# Link the library
+react-native link react-native-agora
+```
+
+
+```bash
 # installed ruby first then run it
 gem install cocoapods
 ```
