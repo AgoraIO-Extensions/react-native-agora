@@ -84,68 +84,68 @@ post_install do |installer|
 end
 ```
 This is how your podfile should look like
-
+![Step 6](./IOS_INSTALLATION/06c.png)
 after that you can run this command again
 ```sh
 $ pod install
 ```
 
 #### 7. Open up your xcode project *[project name].xcworkspace* inside in ios folder
-![Step 6](./IOS_INSTALLATION/07.png)
+![Step 7](./IOS_INSTALLATION/07.png)
 
 #### 8. expand your project folder and right click on the *"Libraries"* folder and choose *"add files to [project name]"*
-![Step 6](./IOS_INSTALLATION/08.png)
+![Step 8](./IOS_INSTALLATION/08.png)
 
 #### 9. follow the image below to find the RCTAgora lib
 
-![Step 6](./IOS_INSTALLATION/09a.png)
+![Step 9](./IOS_INSTALLATION/09a.png)
 the path is  node_modules => react-native-agora => ios => RCTAgora.xcodeproj
 
 make sure you check so that those are checked
 
-![Step 6](./IOS_INSTALLATION/09b.png)
+![Step 9](./IOS_INSTALLATION/09b.png)
 
 If the file is greyed out it means you already have it inside of you library folder.
 Check so that RCTAgora.xcodeproj are inside of your "Libraries" folder
-![Step 6](./IOS_INSTALLATION/09c.png)
+![Step 9](./IOS_INSTALLATION/09c.png)
 
 #### 10. we need to add the framework
 expand your "Frameworks" folder and you should see the "AgoraRtcEngineKit.framework" are red.
-![Step 6](./IOS_INSTALLATION/10a.png)
+![Step 10](./IOS_INSTALLATION/10a.png)
 right click and delete that
 Left click on your "RCTAgora.xcodeproj" and clöick on "Build Phases"
-![Step 6](./IOS_INSTALLATION/10b.png)
+![Step 10](./IOS_INSTALLATION/10b.png)
 left click on the "AgoraRtcEngineKit.framework" in the list and click on the "-"(minus sign) to remove it from the list.
-![Step 6](./IOS_INSTALLATION/10c.png)
+![Step 10](./IOS_INSTALLATION/10c.png)
 then click on the "+"(plus sign) so that we can add the framework.
 Click on the "Add other..." button
-![Step 6](./IOS_INSTALLATION/10d.png)
+![Step 10](./IOS_INSTALLATION/10d.png)
 then we need to navigate and find our framwork
-![Step 6](./IOS_INSTALLATION/10e.png)
+![Step 10](./IOS_INSTALLATION/10e.png)
 the path is : ios => Pods => AgoraRtcEngine_iOS => AgoraRtcEngineKit.framework and click on "add"
 
 #### 11. at last we need to link the library
 click on your project on the left and then click on "Build Phases" and then expand "Link Binary With Libraries" and then click on the "+"(plug sign)
-![Step 6](./IOS_INSTALLATION/11.png)
+![Step 11](./IOS_INSTALLATION/11.png)
 Search for libRCTAGora and click on add
-![Step 6](./IOS_INSTALLATION/12.png)
+![Step 11](./IOS_INSTALLATION/12.png)
 if you cant find it in your list check so that you dont already have it
 
 ----------------------------------------------
 ### Troubleshooting
 
 if you get some errors like the pictures below
-![Step 6](./IOS_INSTALLATION/t01.png)
-![Step 6](./IOS_INSTALLATION/t02.png)
+![Step t1](./IOS_INSTALLATION/t01.png)
+![Step t2](./IOS_INSTALLATION/t02.png)
 
 the chances are that you have some framework that already have imported time.h something like firestore.
 
 Expand your "Libraries" and then click on "RCTAgora.xcodeproj". Then click on "Build settings" and search for "Header search paths" 
-![Step 6](./IOS_INSTALLATION/t03.png)
+![Step t3](./IOS_INSTALLATION/t03.png)
 Doubble click on the path
-![Step 6](./IOS_INSTALLATION/t04.png)
+![Step t4](./IOS_INSTALLATION/t04.png)
 and change the Pods path from "recursive" to non-recursive
-![Step 6](./IOS_INSTALLATION/t05.png)
+![Step t5](./IOS_INSTALLATION/t05.png)
 
 
 
