@@ -29,11 +29,6 @@ or yarn
 $ yarn add react-native-agora
 ```
 
-#### 4. we need to link the Agora library
-run this command in your terminal
-```sh
-$ react-native link react-native-agora
-```
 
 #### 5. cd into your ios folder
 ```sh
