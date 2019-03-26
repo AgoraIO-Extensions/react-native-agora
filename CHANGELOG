@@ -5,6 +5,7 @@
 - release 2.3.3-alpha.3
 - release 2.3.3-alpha.4 (remove deprecated native api)
 - release 2.3.3-alpha.5 (refactor event react api & refactor native wrapper)
+- release 2.3.3-alpha.6 (refactor with typescript & fix. iOS platform binding bug)
 
 
 #### 1.1.2
