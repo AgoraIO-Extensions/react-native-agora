@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "2.3.3-alpha.5",
+  "version": "2.3.3-alpha.6",
   "description": "声网Agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
