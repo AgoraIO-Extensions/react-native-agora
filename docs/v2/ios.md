@@ -38,7 +38,7 @@ $ cd ios
 #### 6. we need to initialize pod
 if you don't have cocopods installed run this command in your terminal
 ```sh
-$ sudo gem install Cocoapods
+$ gem install Cocoapods
 ```
 after you have installed Cocopods run this command inside of your ios folder
 ```sh
