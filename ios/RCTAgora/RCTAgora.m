@@ -545,7 +545,7 @@ RCT_EXPORT_METHOD(adjustAudioMixingPublishVolume:(NSInteger) volume) {
 
 // get audio mixing duration
 RCT_EXPORT_METHOD(getAudioMixingDuration
-                  : (RCTPromiseResolveBlock)resolve
+                  :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine getAudioMixingDuration];
   if (res != 0) {
@@ -1387,7 +1387,8 @@ RCT_EXPORT_METHOD(switchCamera
 
 // isCameraZoomSupported
 RCT_EXPORT_METHOD(isCameraZoomSupported
-                  :(RCTPromiseResolveBlock)resolve) {
+                  :(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine isCameraZoomSupported];
   resolve(@{
             @"success": @(YES),
@@ -1398,7 +1399,8 @@ RCT_EXPORT_METHOD(isCameraZoomSupported
 
 // isCameraTorchSupported
 RCT_EXPORT_METHOD(isCameraTorchSupported
-                  :(RCTPromiseResolveBlock)resolve) {
+                  :(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine isCameraTorchSupported];
   resolve(@{
             @"success": @(YES),
@@ -1408,7 +1410,8 @@ RCT_EXPORT_METHOD(isCameraTorchSupported
 
 // isCameraFocusSupported
 RCT_EXPORT_METHOD(isCameraFocusSupported
-                  :(RCTPromiseResolveBlock)resolve) {
+                  :(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine isCameraFocusPositionInPreviewSupported];
   resolve(@{
             @"success": @(YES),
@@ -1418,7 +1421,8 @@ RCT_EXPORT_METHOD(isCameraFocusSupported
 
 // isCameraExposurePositionSupported
 RCT_EXPORT_METHOD(isCameraExposurePositionSupported
-                  :(RCTPromiseResolveBlock)resolve) {
+                  :(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine isCameraExposurePositionSupported];
   resolve(@{
             @"success": @(YES),
@@ -1428,7 +1432,8 @@ RCT_EXPORT_METHOD(isCameraExposurePositionSupported
 
 // isCameraAutoFocusFaceModeSupported
 RCT_EXPORT_METHOD(isCameraAutoFocusFaceModeSupported
-                  :(RCTPromiseResolveBlock)resolve) {
+                  :(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine isCameraAutoFocusFaceModeSupported];
   resolve(@{
             @"success": @(YES),
@@ -1439,7 +1444,8 @@ RCT_EXPORT_METHOD(isCameraAutoFocusFaceModeSupported
 // setCameraZoomFactor
 RCT_EXPORT_METHOD(setCameraZoomFactor
                   :(float)zoomFactor
-                  resolve:(RCTPromiseResolveBlock)resolve) {
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine setCameraZoomFactor:(CGFloat)zoomFactor];
   resolve(@{
             @"success": @(YES),
@@ -1450,7 +1456,8 @@ RCT_EXPORT_METHOD(setCameraZoomFactor
 // setCameraFocusPositionInPreview
 RCT_EXPORT_METHOD(setCameraFocusPositionInPreview
                   :(NSDictionary *)options
-                  resolve:(RCTPromiseResolveBlock)resolve) {
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine setCameraFocusPositionInPreview:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
   resolve(@{
             @"success": @(YES),
@@ -1461,7 +1468,8 @@ RCT_EXPORT_METHOD(setCameraFocusPositionInPreview
 // setCameraExposurePosition
 RCT_EXPORT_METHOD(setCameraExposurePosition
                   :(NSDictionary *)options
-                  resolve:(RCTPromiseResolveBlock)resolve) {
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
   BOOL res = [self.rtcEngine setCameraExposurePosition:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
   resolve(@{
             @"success": @(YES),
