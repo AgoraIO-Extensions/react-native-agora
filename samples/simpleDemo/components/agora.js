@@ -102,6 +102,7 @@ type Props = {
   clientRole: Number,
   onCancel: Function,
   uid: Number,
+  showVideo: boolean,
 }
 
 export default class AgoraComponent extends Component<Props> {
@@ -111,7 +112,7 @@ export default class AgoraComponent extends Component<Props> {
     isSpeak: true,
     isMute: false,
     isCameraTorch: false,
-    disableVideo: false,
+    showVideo: true,
     hideButton: false,
     visible: false,
     selectedUid: undefined,
@@ -234,11 +235,17 @@ export default class AgoraComponent extends Component<Props> {
   }
 
   toggleVideo = () => {
+    const showVideo = !this.state.showVideo
     this.setState({
-      disableVideo: !this.state.videodisableVideo
-    }, () => {
-      this.state.disableVideo ? RtcEngine.enableVideo() : RtcEngine.disableVideo()
-    });
+      showVideo
+    })
+    if (showVideo) {
+      RtcEngine.enableVideo()
+      RtcEngine.startPreview()
+    } else {
+      RtcEngine.disableVideo()
+      RtcEngine.stopPreview()
+    }
   }
 
   toggleHideButtons = () => {
@@ -257,7 +264,7 @@ export default class AgoraComponent extends Component<Props> {
     })
   }
 
-  buttonsView = ({hideButton, isCameraTorch, disableVideo, isMute, isSpeaker}) => {
+  buttonsView = ({hideButton, isCameraTorch, showVideo, isMute, isSpeaker}) => {
     if (!hideButton) {
     return (
       <View>
@@ -275,7 +282,7 @@ export default class AgoraComponent extends Component<Props> {
         />
         <OperateButton
           onPress={this.toggleVideo}
-          source={disableVideo ? EnableCamera() : DisableCamera()}
+          source={showVideo ? EnableCamera() : DisableCamera()}
         />
       </View>
       <View style={styles.bottomView}>
@@ -353,7 +360,7 @@ export default class AgoraComponent extends Component<Props> {
         onPress={this.toggleHideButtons}
         style={styles.container}
       >
-        <AgoraView style={styles.localView} showLocalVideo={true} />
+        { this.state.showVideo ? <AgoraView style={styles.localView} showLocalVideo={this.state.showVideo} /> : null}
           <View style={styles.absView}>
             <Text>channelName: {this.props.channelName}, peers: {this.state.peerIds.length}</Text>
             {this.agoraPeerViews(this.state)}
