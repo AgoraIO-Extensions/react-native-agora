@@ -15,6 +15,8 @@ export interface Option {
   videoProfile: number
   channelProfile: number,
   videoEncoderConfig: VideoEncoderConfig,
+  dualStream: boolean,
+  mode: number,
   clientRole: number,
   audioProfile: number,
   audioScenario: number

@@ -88,35 +88,65 @@ public class AgoraManager {
      * initialize rtc engine
      */
     public int init(Context context, IRtcEngineEventHandler mRtcEventHandler, ReadableMap options) {
-        this.context = context;
-
         //create rtcEngine instance and setup rtcEngine eventHandler
         try {
-            mRtcEngine = RtcEngine.create(context, options.getString("appid"), mRtcEventHandler);
+            this.context = context;
+            this.mRtcEngine = RtcEngine.create(context, options.getString("appid"), mRtcEventHandler);
             if (options.hasKey("secret") && null != options.getString("secret")) {
                 mRtcEngine.setEncryptionSecret(options.getString("secret"));
                 if (options.hasKey("secretMode") && null != options.getString("secretMode")) {
                     mRtcEngine.setEncryptionMode(options.getString("secretMode"));
                 }
             }
+            if (options.hasKey("channelProfile")) {
+                mRtcEngine.setChannelProfile(options.getInt("channelProfile"));
+            }
+            if (options.hasKey("dualStream")) {
+                mRtcEngine.enableDualStreamMode(options.getBoolean("dualStream"));
+            }
+            if (options.hasKey("mode")) {
+                Integer mode = options.getInt("mode");
+                switch (mode) {
+                    case 0: {
+                        mRtcEngine.enableAudio();
+                        mRtcEngine.disableVideo();
+                        break;
+                    }
+                    case 1: {
+                        mRtcEngine.enableVideo();
+                        mRtcEngine.disableAudio();
+                        break;
+                    }
+                }
+            } else {
+                mRtcEngine.enableVideo();
+                mRtcEngine.enableAudio();
+            }
+
+            if (options.hasKey("videoEncoderConfig") && null != options.getMap("videoEncoderConfig")) {
+                ReadableMap config = options.getMap("videoEncoderConfig");
+                VideoEncoderConfiguration encoderConfig = new VideoEncoderConfiguration(
+                        config.getInt("width"),
+                        config.getInt("height"),
+                        getVideoEncoderEnum(config.getInt("frameRate")),
+                        config.getInt("bitrate"),
+                        getOrientationModeEnum(config.getInt("orientationMode"))
+                );
+                mRtcEngine.setVideoEncoderConfiguration(encoderConfig);
+            }
+
+            if (options.hasKey("audioProfile") &&
+                options.hasKey("audioScenario")) {
+                mRtcEngine.setAudioProfile(options.getInt("audioProfile"), options.getInt("audioScenario"));
+            }
+
+            if (options.hasKey("clientRole")) {
+                mRtcEngine.setClientRole(options.getInt("clientRole"));
+            }
+            return mRtcEngine.enableWebSdkInteroperability(true);
         } catch (Exception e) {
             throw new RuntimeException("create rtc engine failed\n" + Log.getStackTraceString(e));
         }
-        mRtcEngine.enableDualStreamMode(true);
-        mRtcEngine.setChannelProfile(options.getInt("channelProfile"));
-        mRtcEngine.enableVideo();
-        ReadableMap config = options.getMap("videoEncoderConfig");
-        VideoEncoderConfiguration encoderConfig = new VideoEncoderConfiguration(
-            config.getInt("width"),
-            config.getInt("height"),
-            getVideoEncoderEnum(config.getInt("frameRate")),
-            config.getInt("bitrate"),
-            getOrientationModeEnum(config.getInt("orientationMode"))
-        );
-        mRtcEngine.setVideoEncoderConfiguration(encoderConfig);
-        mRtcEngine.setAudioProfile(options.getInt("audioProfile"), options.getInt("audioScenario"));
-        mRtcEngine.setClientRole(options.getInt("clientRole"));
-        return mRtcEngine.enableWebSdkInteroperability(true);
     }
 
     /**
