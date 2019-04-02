@@ -137,7 +137,9 @@ RCT_EXPORT_MODULE();
            @"AgoraVideoMirrorModeDisabled": @(AgoraVideoMirrorModeDisabled),
            @"AgoraChannelProfileCommunication": @(AgoraChannelProfileCommunication),
            @"AgoraChannelProfileLiveBroadcasting": @(AgoraChannelProfileLiveBroadcasting),
-           @"AgoraChannelProfileGame": @(AgoraChannelProfileGame)
+           @"AgoraChannelProfileGame": @(AgoraChannelProfileGame),
+           @"AgoraAudioMode": @(AgoraAudioMode),
+           @"AgoraVideoMode": @(AgoraVideoMode),
          };
 }
 
@@ -154,25 +156,43 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   //channel mode
   [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
   //enable dual stream
-  [self.rtcEngine enableDualStreamMode:YES];
-  [self.rtcEngine enableVideo];
-  
-  if (options[@"secret"] != nil) {
-    [self.rtcEngine setEncryptionSecret:[options[@"secret"] stringValue]];
-    if (options[@"secretMode"] != nil) {
-      [self.rtcEngine setEncryptionMode:[options[@"secretMode"] stringValue]];
+  if ([options objectForKey:@"dualStream"]) {
+    [self.rtcEngine enableDualStreamMode:[options[@"dualStream"] boolValue]];
+     }
+  if ([options objectForKey:@"mode"]) {
+    switch([options[@"mode"] integerValue]) {
+       case AgoraAudioMode: {
+         [self.rtcEngine enableAudio];
+         [self.rtcEngine disableVideo];
+         break;
+       }
+       case AgoraVideoMode: {
+         [self.rtcEngine enableVideo];
+         [self.rtcEngine disableAudio];
+         break;
+       }
     }
-  }
+   } else {
+     [self.rtcEngine enableVideo];
+     [self.rtcEngine enableAudio];
+   }
   
-  AgoraVideoEncoderConfiguration *video_encoder_config = [[AgoraVideoEncoderConfiguration new] initWithWidth:[options[@"videoEncoderConfig"][@"width"] integerValue] height:[options[@"videoEncoderConfig"][@"height"] integerValue] frameRate:(AgoraVideoFrameRate)[options[@"videoEncoderConfig"][@"frameRate"] integerValue] bitrate:[options[@"videoEncoderConfig"][@"bitrate"] integerValue] orientationMode: (AgoraVideoOutputOrientationMode)[options[@"videoEncoderConfig"][@"orientationMode"] integerValue]];
-  [self.rtcEngine setVideoEncoderConfiguration:video_encoder_config];
-  [self.rtcEngine setClientRole:(AgoraClientRole)[options[@"clientRole"] integerValue]];
-  [self.rtcEngine setAudioProfile:(AgoraAudioProfile)[options[@"audioProfile"] integerValue]
-                         scenario:(AgoraAudioScenario)[options[@"audioScenario"] integerValue]];
-  
-  //Enable Agora Native SDK be Interoperable with Agora Web SDK
-  [self.rtcEngine enableWebSdkInteroperability:YES];
-}
+   if (options[@"secret"] != nil) {
+     [self.rtcEngine setEncryptionSecret:[options[@"secret"] stringValue]];
+     if (options[@"secretMode"] != nil) {
+       [self.rtcEngine setEncryptionMode:[options[@"secretMode"] stringValue]];
+     }
+   }
+     
+   AgoraVideoEncoderConfiguration *video_encoder_config = [[AgoraVideoEncoderConfiguration new] initWithWidth:[options[@"videoEncoderConfig"][@"width"] integerValue] height:[options[@"videoEncoderConfig"][@"height"] integerValue] frameRate:(AgoraVideoFrameRate)[options[@"videoEncoderConfig"][@"frameRate"] integerValue] bitrate:[options[@"videoEncoderConfig"][@"bitrate"] integerValue] orientationMode: (AgoraVideoOutputOrientationMode)[options[@"videoEncoderConfig"][@"orientationMode"] integerValue]];
+   [self.rtcEngine setVideoEncoderConfiguration:video_encoder_config];
+   [self.rtcEngine setClientRole:(AgoraClientRole)[options[@"clientRole"] integerValue]];
+   [self.rtcEngine setAudioProfile:(AgoraAudioProfile)[options[@"audioProfile"] integerValue]
+                          scenario:(AgoraAudioScenario)[options[@"audioScenario"] integerValue]];
+     
+     //Enable Agora Native SDK be Interoperable with Agora Web SDK
+   [self.rtcEngine enableWebSdkInteroperability:YES];
+ }
 
 // renew token
 RCT_EXPORT_METHOD(renewToken

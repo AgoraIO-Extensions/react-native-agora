@@ -73,6 +73,11 @@ static NSString *AGOccurStreamMessageError = @"occurStreamMessageError";
 static NSString *AGMediaEngineLoaded = @"mediaEngineLoaded";
 static NSString *AGMediaEngineStartCall = @"mediaEngineStartCall";
 
+typedef NS_ENUM(NSInteger, AgoraModeType) {
+  AgoraAudioMode,
+  AgoraVideoMode
+};
+
 @interface AgoraConst : NSObject
 
 @property (nonatomic, copy) NSString *appid;

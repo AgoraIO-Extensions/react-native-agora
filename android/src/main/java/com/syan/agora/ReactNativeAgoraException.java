@@ -1,8 +1,5 @@
 package com.syan.agora;
 
-
-import com.facebook.react.bridge.WritableMap;
-
 public class ReactNativeAgoraException extends Exception {
 
     private int code;
