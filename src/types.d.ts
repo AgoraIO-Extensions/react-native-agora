@@ -10,9 +10,19 @@ export interface VideoEncoderConfig {
   orientationMode: number,
 }
 
+/**
+ * Option is work for init method
+ * @property: string appid Sets the appid
+ * @property: number channelProfile Sets the channel mode. 0 is communication mode, 1 is broadcasting mode
+ * @property: {@link VideoEncoderConfig} sets video encoding config
+ * @property: mode is optional sets only enable video / audio, 0 is audio mode, 1 is video mode
+ * @property: clientRole is only work in live mode, 1 is host, 2 is audience
+ * @property: dualStream is optional parameter only for enable for detail see {@link https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableDualStreamMode:}
+ * @property: audioProfile {@link https://docs.agora.io/en/Video/API%20Reference/oc/Constants/AgoraAudioProfile.html}
+ * @property: audioScenario {@link https://docs.agora.io/en/Video/API%20Reference/oc/Constants/AgoraAudioScenario.html}
+ */
 export interface Option {
   appid: String,
-  videoProfile: number
   channelProfile: number,
   videoEncoderConfig: VideoEncoderConfig,
   dualStream: boolean,
