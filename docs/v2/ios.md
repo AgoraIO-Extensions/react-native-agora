@@ -1,7 +1,7 @@
 # React native Agora iOS Installation
 #### Minimum compatibility
 * React native 0.58.x
-* IOS SDK 8.0+
+* iOS SDK 8.0+
 * Android 5.0+ x86 arm64 armv7a
 
 #### 1. open up your terminal and write this :
