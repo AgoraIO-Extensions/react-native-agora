@@ -122,7 +122,7 @@ the path is : ios => Pods => AgoraRtcEngine_iOS => AgoraRtcEngineKit.framework a
 #### 10. at last we need to link the library
 click on your project on the left and then click on "Build Phases" and then expand "Link Binary With Libraries" and then click on the "+"(plus sign)
 ![Step 10](./IOS_INSTALLATION/10a.png)
-Search for libRCTAGora and click on add
+Search for libRCTAgora and click on add
 ![Step 10](./IOS_INSTALLATION/10b.png)
 if you cant find it in your list check so that you dont already have it
 
