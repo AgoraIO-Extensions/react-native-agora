@@ -73,6 +73,10 @@ static NSString *AGOccurStreamMessageError = @"occurStreamMessageError";
 static NSString *AGMediaEngineLoaded = @"mediaEngineLoaded";
 static NSString *AGMediaEngineStartCall = @"mediaEngineStartCall";
 
+static NSString *AGIntervalTest = @"startEchoTestWithInterval";
+static NSString *AGAudioMixingStateChanged = @"audioMixingStateChanged";
+static NSString *AGLastmileProbeTestResult = @"lastmileProbeTestResult";
+
 typedef NS_ENUM(NSInteger, AgoraModeType) {
   AgoraAudioMode,
   AgoraVideoMode

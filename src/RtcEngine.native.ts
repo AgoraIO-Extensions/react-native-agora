@@ -21,7 +21,10 @@ import {
     PublishStreamOption,
     RemovePublishStreamOption,
     LiveTranscodingOption,
-    PositionOption
+    PositionOption,
+    BeautyOption,
+    LastmileProbeConfig,
+    CameraCapturerConfiguration
 } from "./types.d";
 
 
@@ -757,14 +760,15 @@ class RtcEngine {
      }
 
     /**
+     * @deprecated
      * start echo test
      * 
      * This method launches an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly.
      * @returns Promise<{success, value}>
      */
-    public static startEchoTest(): Promise<any> {
-        return Agora.startEchoTest();
-    }
+    // public static startEchoTest(): Promise<any> {
+    //     return Agora.startEchoTest();
+    // }
 
     /**
      * stop echo test
@@ -942,6 +946,7 @@ class RtcEngine {
     }
 
     /**
+     * @deprecated
      * set video quality 
      * 
      * This method sets the preferences for the video quality. (Live broadcast only).
@@ -949,9 +954,9 @@ class RtcEngine {
      * @param quality boolean
      * @returns Promise<{success, value}> 
      */
-    public static setVideoQualityParameters(quality: boolean): Promise<any> {
-        return Agora.setVideoQualityParameters(quality);
-    }
+    // public static setVideoQualityParameters(quality: boolean): Promise<any> {
+    //     return Agora.setVideoQualityParameters(quality);
+    // }
 
     /**
      * set local video mirror mode
@@ -1119,12 +1124,13 @@ class RtcEngine {
      * 
      * This method sets the log file generated path and specified the log level.
      *
-     * @param filepath
-     * @param level
+     * @param filepath string
+     * @param level enum
+     * @param maxfileSize integer (KB)
      * @returns Promise<{success, value}>
      */
-    public static setLog(filepath: string, level: number): Promise<any> {
-        return Agora.setLog(filepath, level)
+    public static setLog(filepath: string, level: number, maxfileSize: number): Promise<any> {
+        return Agora.setLog(filepath, level, maxfileSize)
     }
     
     /**
@@ -1136,8 +1142,8 @@ class RtcEngine {
      * @param data 
      * @returns Promise<{success, value}>
      */
-    public static sendStreamMessage(uid: number, data: any): Promise<any> {
-        return Agora.sendStreamMessage(uid, data);
+    public static sendMessage(streamID: number, data: any, reliable: boolean, ordered: boolean): Promise<any> {
+        return Agora.sendMessage({streamID, data, reliable, ordered});
     }
 
     /**
@@ -1199,6 +1205,160 @@ class RtcEngine {
      public static muteLocalAudioStream(enabled: boolean) {
         Agora.muteLocalAudioStream(enabled);
      }
+
+    /**
+     * video pre-process/post-process
+     * 
+     * This method enables/disables image enhancement and sets the options.
+     * 
+     * @param enable boolean
+     * @param options {@link BeautyOptions}
+     * @returns Promise<{success, value}>
+     */
+    static setBeautyEffectOptions(enabled: boolean, options: BeautyOption): Promise<any> {
+        return Agora.setBeautyEffectOptions(enabled, options);
+    }
+
+    /**
+     * set local voice change
+     * 
+     * This method changes local speaker voice with voiceChanger
+     * 
+     * @param voiceChanger integer
+     * @voiceChanger value ranges [
+     *          0: "The original voice",
+     *          1: "An old man’s voice",
+     *          2: "A little boy’s voice.",
+     *          3: "A little girl’s voice.",
+     *          4: "TBD",
+     *          5: "Ethereal vocal effects.",
+     *          6: "Hulk’s voice."
+     *      ]
+     * @returns Promise<{success, value}>
+     */
+    static setLocalVoiceChanger(voiceChanger: number): Promise<any> {
+        return Agora.setLocalVoiceChanger(voiceChanger);
+    }
+
+    /**
+     * set the preset local voice reverberation effect.
+     * 
+     * This method sets the preset local voice reverberation effect.
+     * 
+     * @param preset integer
+     * @returns Promise<{success, value}>
+     */
+    static setLocalVoiceReverbPreset(preset: number): Promise<any> {
+        return Agora.setLocalVoiceReverbPreset(preset);
+    }
+
+    /**
+     * control stereo panning for remote users
+     * 
+     * This method enables/disables stereo panning for remote users.
+     * 
+     * @param enabled boolean
+     * @returns Promise<{success, value}>
+     */
+    static enableSoundPositionIndication(enabled: boolean): Promise<any> {
+        return Agora.enableSoundPositionIndication(enabled);
+    }
+
+    /**
+     * set the sound position of a remote user
+     * 
+     * This method sets the sound position of a remote user by uid
+     * 
+     * @param uid number | The ID of the remote user
+     * @param pan float | The sound position of the remote user. The value ranges from -1.0 to 1.0
+     * @pan 
+     *  0.0: the remote sound comes from the front.
+     *  -1.0: the remote sound comes from the left.
+     *  1.0: the remote sound comes from the right.
+     * @param gain float | Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
+     * @returns Promise<{success, value}>
+     */
+    static setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<any> {
+        return Agora.setRemoteVoicePosition(uid, pan, gain)
+    }
+
+    /**
+     * start the lastmile probe test
+     *
+     * This method start the last-mile network probe test before joining a channel to get the uplink and downlink last-mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).
+     * 
+     * @param config LastmileProbeConfig {@link LastmileProbeConfig}
+     * 
+     * @event onLastmileQuality: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
+     * @event onLastmileProbeResult: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
+     * @returns Promise<{success, value}>
+     */
+    static startLastmileProbeTest(config: LastmileProbeConfig): Promise<any> {
+        return Agora.startLastmileProbeTest(config);
+    }
+
+    /**
+     * stop the lastmile probe test
+     *
+     * This method stop the lastmile probe test.
+     * 
+     * @returns Promise<{success, value}>
+     */
+    static stopLastmileProbeTest(): Promise<any> {
+        return Agora.stopLastmileProbeTest();
+    }
+
+    /**
+     * sets the priority of a remote user's media stream.
+     * 
+     * note: Use this method with the setRemoteSubscribeFallbackOption method. If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
+     * 
+     * This method sets the priority of a remote user's media stream.
+     * @param uid number
+     * @param userPriority number | The value range is  [50 is "user's priority is hgih", 100 is "the default user's priority is normal"]
+     * 
+     * @returns Promise<{success, value}>
+     */
+    static setRemoteUserPriority(uid: number, userPrority: number): Promise<any> {
+        return Agora.setRemoteUserPriority(uid, userPrority);
+    }
+
+    /**
+     * start an audio call test.
+     * 
+     * note:
+     *   Call this method before joining a channel.
+     *   After calling this method, call the stopEchoTest method to end the test. Otherwise, the app cannot run the next echo test, or call the joinchannel method.
+     *   In the Live-broadcast profile, only a host can call this method.
+     * This method will start an audio call test with interval parameter.
+     * In the audio call test, you record your voice. If the recording plays back within the set time interval, the audio devices and the network connection are working properly.
+     * 
+     * @param interval number
+     * 
+     * @returns Promise<{success, value}>
+     */
+    static startEchoTestWithInterval(interval: number): Promise<any> {
+        return Agora.startEchoTestWithInterval(interval)
+    }
+
+    /**
+     * set the camera capture preference.
+     *
+     * note:
+     *  For a video call or live broadcast, generally the SDK controls the camera output parameters. When the default camera capture settings do not meet special requirements or cause performance problems, we recommend using this method to set the camera capture preference:
+     *  If the resolution or frame rate of the captured raw video data are higher than those set by setVideoEncoderConfiguration, processing video frames requires extra CPU and RAM usage and degrades performance. We recommend setting config as CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE(1) to avoid such problems.
+     *  If you do not need local video preview or are willing to sacrifice preview quality, we recommend setting config as CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE(1) to optimize CPU and RAM usage.
+     *  If you want better quality for the local video preview, we recommend setting config as CAPTURER_OUTPUT_PREFERENCE_PREVIEW(2).
+     * 
+     * This method will set the camera capture preference.
+     * 
+     * @param config {@link CameraCapturerConfiguration}
+     * 
+     * @returns Promise<{success, value}>
+     */
+    static setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<any> {
+        return Agora.setCameraCapturerConfiguration(config);
+    }
 }
 
 
