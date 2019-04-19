@@ -771,15 +771,14 @@ class RtcEngine {
     // }
 
     /**
-     * @deprecated
      * stop echo test
      * 
      * This method stop launched an audio call test.
      * @returns Promise<{success, value}>
      */
-    // public static stopEchoTest(): Promise<any> {
-    //     return Agora.stopEchoTest();
-    // }
+    public static stopEchoTest(): Promise<any> {
+        return Agora.stopEchoTest();
+    }
 
     /**
      * enable lastmile test
