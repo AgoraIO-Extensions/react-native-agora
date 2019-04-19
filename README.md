@@ -53,7 +53,9 @@ Either way, then link with:
   [English](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
 
-## [API DOCS](https://syanbo.github.io/react-native-agora/globals.html)
+## [2.3 API DOCS](https://syanbo.github.io/react-native-agora/globals.html)
+
+## [2.4 API DOCS](https://syanbo.github.io/react-native-agora/v2.4/globals.html)
 
 #### Events
 
