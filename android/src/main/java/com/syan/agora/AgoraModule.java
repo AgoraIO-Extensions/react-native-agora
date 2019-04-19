@@ -319,6 +319,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
     private final static String AGMediaEngineLoaded = "mediaEngineLoaded";
     private final static String AGMediaEngineStartCall = "mediaEngineStartCall";
+    private final static String AGLastmileProbeResult = "lastmileProbeTestResult";
+//    private final static String AGIntervalTest = "startEchoTestWithInterval";
 
     private IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
 
@@ -1076,8 +1078,21 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 @Override
                 public void run() {
                     WritableMap map = Arguments.createMap();
-                    map.putString("message", "AGMediaEngineStartCall");
+                    map.putString("message", "MediaEngineStartCall");
                     sendEvent(getReactApplicationContext(), AGMediaEngineStartCall, map);
+                }
+            });
+        }
+
+        @Override
+        public void onLastmileProbeResult(LastmileProbeResult result) {
+            super.onLastmileProbeResult(result);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("message", "LastmileProbeTestResult");
+                    sendEvent(getReactApplicationContext(), AGLastmileProbeResult, map);
                 }
             });
         }
