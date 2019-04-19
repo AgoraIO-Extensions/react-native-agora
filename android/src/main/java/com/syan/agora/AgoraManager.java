@@ -15,6 +15,7 @@ import java.util.Map;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoCanvas;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
@@ -121,6 +122,28 @@ public class AgoraManager {
             } else {
                 mRtcEngine.enableVideo();
                 mRtcEngine.enableAudio();
+            }
+
+            if (options.hasKey("beauty") && null != options.getMap("beauty")) {
+                ReadableMap beauty = options.getMap("beauty");
+                BeautyOptions beautyOption = new BeautyOptions();
+                beautyOption.lighteningContrastLevel = beauty.getInt("lighteningContrastLevel");
+                beautyOption.lighteningLevel = (float) beauty.getDouble("lighteningLevel");
+                beautyOption.smoothnessLevel = (float) beauty.getDouble("smoothnessLevel");
+                beautyOption.rednessLevel = (float) beauty.getDouble("rednessLevel");
+                mRtcEngine.setBeautyEffectOptions(true, beautyOption);
+            }
+
+            if (options.hasKey("voice") && null != options.getMap("voice")) {
+                ReadableMap voice = options.getMap("voice");
+                final String voiceType = voice.getString("type");
+                final Integer voiceValue = voice.getInt("value");
+                if (voiceType.equals("changer")) {
+                    mRtcEngine.setLocalVoiceChanger(voiceValue);
+                }
+                if (voiceType.equals("reverbPreset")) {
+                    mRtcEngine.setLocalVoiceReverbPreset(voiceValue);
+                }
             }
 
             if (options.hasKey("videoEncoderConfig") && null != options.getMap("videoEncoderConfig")) {

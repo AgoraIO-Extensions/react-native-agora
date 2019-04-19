@@ -760,24 +760,26 @@ class RtcEngine {
      }
 
     /**
+     * @deprecated
      * start echo test
      * 
      * This method launches an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly.
      * @returns Promise<{success, value}>
      */
-    public static startEchoTest(): Promise<any> {
-        return Agora.startEchoTest();
-    }
+    // public static startEchoTest(): Promise<any> {
+    //     return Agora.startEchoTest();
+    // }
 
     /**
+     * @deprecated
      * stop echo test
      * 
      * This method stop launched an audio call test.
      * @returns Promise<{success, value}>
      */
-    public static stopEchoTest(): Promise<any> {
-        return Agora.stopEchoTest();
-    }
+    // public static stopEchoTest(): Promise<any> {
+    //     return Agora.stopEchoTest();
+    // }
 
     /**
      * enable lastmile test
@@ -945,6 +947,7 @@ class RtcEngine {
     }
 
     /**
+     * @deprecated
      * set video quality 
      * 
      * This method sets the preferences for the video quality. (Live broadcast only).
@@ -952,9 +955,9 @@ class RtcEngine {
      * @param quality boolean
      * @returns Promise<{success, value}> 
      */
-    public static setVideoQualityParameters(quality: boolean): Promise<any> {
-        return Agora.setVideoQualityParameters(quality);
-    }
+    // public static setVideoQualityParameters(quality: boolean): Promise<any> {
+    //     return Agora.setVideoQualityParameters(quality);
+    // }
 
     /**
      * set local video mirror mode
@@ -1357,16 +1360,6 @@ class RtcEngine {
     static setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<any> {
         return Agora.setCameraCapturerConfiguration(config);
     }
-
-    /**
-     * set the log file size (KB).
-     * TODO: setLogFileSize
-     * This method will set the log file size
-     */
-
-
-    
-
 }
 
 
