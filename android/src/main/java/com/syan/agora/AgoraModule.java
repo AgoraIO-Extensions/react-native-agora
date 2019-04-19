@@ -25,9 +25,12 @@ import io.agora.rtc.Constants;
 import io.agora.rtc.IAudioEffectManager;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.internal.LastmileProbeConfig;
 import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.live.LiveTranscoding;
 import io.agora.rtc.video.AgoraImage;
+import io.agora.rtc.video.BeautyOptions;
+import io.agora.rtc.video.CameraCapturerConfiguration;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
@@ -1451,9 +1454,11 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setLog(String filePath, int level, Promise promise) {
+    public void setLog(String filePath, int level, int size, Promise promise) {
         try {
             int res = 0;
+            res = AgoraManager.getInstance().mRtcEngine.setLogFileSize(size);
+            if (res != 0) throw new ReactNativeAgoraException("setLogFileSize Failed", res);
             res = AgoraManager.getInstance().mRtcEngine.setLogFilter(level);
             if (res != 0) throw new ReactNativeAgoraException("setLogFilter Failed", res);
             res = AgoraManager.getInstance().mRtcEngine.setLogFile(filePath);
@@ -1794,20 +1799,21 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
-    @ReactMethod
-    public void startEchoTest(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
-                    .startEchoTest();
-            if (res != 0) throw new ReactNativeAgoraException("startEchoTest Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131009", e);
-        }
-    }
+//  deprecated
+//    @ReactMethod
+//    public void startEchoTest(Promise promise) {
+//        try {
+//            int res = AgoraManager.getInstance().mRtcEngine
+//                    .startEchoTest();
+//            if (res != 0) throw new ReactNativeAgoraException("startEchoTest Failed", res);
+//            WritableMap map = Arguments.createMap();
+//            map.putBoolean("success", true);
+//            map.putInt("value", res);
+//            promise.resolve(map);
+//        } catch (Exception e) {
+//            promise.reject("131009", e);
+//        }
+//    }
 
     @ReactMethod
     public void stopEchoTest(Promise promise) {
@@ -2458,12 +2464,18 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sendStreamMessage(int streamId, String data, Promise promise) {
+    public void sendMessage(ReadableMap options, Promise promise) {
         try {
-            int res = AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamId, data.getBytes());
+            boolean reliable = options.getBoolean("reliable");
+            boolean ordered = options.getBoolean("ordered");
+            String data = options.getString("data");
+            int streamID = AgoraManager.getInstance().mRtcEngine.createDataStream(reliable, ordered);
+            if (streamID < 0) throw new ReactNativeAgoraException("createDataStream Failed", streamID);
+            int res = AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamID, data.getBytes("utf8"));
             if (res != 0) throw new ReactNativeAgoraException("sendStreamMessage Failed", res);
             WritableMap map = Arguments.createMap();
             map.putBoolean("success", true);
+            map.putInt("streamID", streamID);
             promise.resolve(map);
         } catch (Exception e) {
             promise.reject(e);
@@ -2480,19 +2492,20 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
-    @ReactMethod
-    public void setVideoQualityParameters(boolean quality, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setVideoQualityParameters(quality);
-            if (res != 0) throw new ReactNativeAgoraException("sendStreamMessage Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
-    }
+//    deprecated
+//    @ReactMethod
+//    public void setVideoQualityParameters(boolean quality, Promise promise) {
+//        try {
+//            int res = AgoraManager.getInstance().mRtcEngine.setVideoQualityParameters(quality);
+//            if (res != 0) throw new ReactNativeAgoraException("sendStreamMessage Failed", res);
+//            WritableMap map = Arguments.createMap();
+//            map.putBoolean("success", true);
+//            map.putInt("value", res);
+//            promise.resolve(map);
+//        } catch (Exception e) {
+//            promise.reject(e);
+//        }
+//    }
 
     @ReactMethod
     public void setLocalVideoMirrorMode(int mode, Promise promise) {
@@ -2506,6 +2519,167 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             promise.reject(e);
         }
     }
+
+    @ReactMethod
+    public void setBeautyEffectOptions(boolean enabled, ReadableMap options, Promise promise) {
+        try {
+            BeautyOptions beautyOption = new BeautyOptions();
+            beautyOption.lighteningContrastLevel = options.getInt("lighteningContrastLevel");
+            beautyOption.lighteningLevel = (float) options.getDouble("lighteningLevel");
+            beautyOption.smoothnessLevel = (float) options.getDouble("smoothnessLevel");
+            beautyOption.rednessLevel = (float) options.getDouble("rednessLevel");
+            int res = AgoraManager.getInstance().mRtcEngine.setBeautyEffectOptions(true, beautyOption);
+            if (res != 0) throw new ReactNativeAgoraException("setBeautyEffectOptions Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void setLocalVoiceChanger(int voiceChanger, Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceChanger(voiceChanger);
+            if (res != 0) throw new ReactNativeAgoraException("setLocalVoiceChanger Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void setLocalVoiceReverbPreset(int preset, Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceReverbPreset(preset);
+            if (res != 0) throw new ReactNativeAgoraException("setLocalVoiceReverbPreset Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void enableSoundPositionIndication(boolean enabled, Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.enableSoundPositionIndication(enabled);
+            if (res != 0) throw new ReactNativeAgoraException("enableSoundPositionIndication Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void setRemoteVoicePosition(int uid, int pan, int gain, Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.setRemoteVoicePosition(uid, pan, gain);
+            if (res != 0) throw new ReactNativeAgoraException("setRemoteVoicePosition Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void startLastmileProbeTest(ReadableMap config, Promise promise) {
+        try {
+            LastmileProbeConfig probeConfig = new LastmileProbeConfig();
+            probeConfig.probeUplink = config.getBoolean("probeUplink");
+            probeConfig.probeDownlink = config.getBoolean("probeDownlink");
+            probeConfig.expectedDownlinkBitrate = config.getInt("expectedDownlinkBitrate");
+            probeConfig.expectedUplinkBitrate = config.getInt("expectedUplinkBitrate");
+            int res = AgoraManager.getInstance().mRtcEngine.startLastmileProbeTest(probeConfig);
+            if (res != 0) throw new ReactNativeAgoraException("startLastmileProbeTest Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void stopLastmileProbeTest(Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.stopLastmileProbeTest();
+            if (res != 0) throw new ReactNativeAgoraException("stopLastmileProbeTest Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void setRemoteUserPriority(int uid, int userPrority, Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.setRemoteUserPriority(uid, userPrority);
+            if (res != 0) throw new ReactNativeAgoraException("setRemoteUserPriority Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void startEchoTestWithInterval(int interval, Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.startEchoTest(interval);
+            if (res != 0) throw new ReactNativeAgoraException("startEchoTestWithInterval Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void setCameraCapturerConfiguration(ReadableMap options, Promise promise) {
+        try {
+            CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_AUTO;
+            switch (options.getInt("preference")) {
+                case 0: {
+                    preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_AUTO;
+                    break;
+                }
+                case 1: {
+                    preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE;
+                    break;
+                }
+                case 2: {
+                    preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_PREVIEW;
+                    break;
+                }
+            }
+            CameraCapturerConfiguration config = new CameraCapturerConfiguration(preference);
+
+            int res = AgoraManager.getInstance().mRtcEngine.setCameraCapturerConfiguration(config);
+            if (res != 0) throw new ReactNativeAgoraException("setCameraCapturerConfiguration Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+
+
+    @ReactMethod
 
     private void sendEvent(ReactContext reactContext,
                            String eventName,
