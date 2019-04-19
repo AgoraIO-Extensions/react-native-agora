@@ -53,9 +53,7 @@ Either way, then link with:
   [English](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
 
-## [2.3 API DOCS](https://syanbo.github.io/react-native-agora/globals.html)
-
-## [2.4 API DOCS](https://syanbo.github.io/react-native-agora/v2.4/globals.html)
+## [API DOCS](https://syanbo.github.io/react-native-agora/globals.html)
 
 #### Events
 
@@ -121,6 +119,9 @@ RtcEngine.on('eventName', (data) => {
 | occurStreamMessageError | Occurs when the local user fails to receive a remote data stream. | all |
 | mediaEngineLoaded | Occurs when the media engine is loaded. | all |
 | mediaEngineStartCall | Occurs when the media engine starts. | all |
+| startEchoTestWithInterval | Occurs when you startEchoTestWithInterval | all |
+| audioMixingStateChanged | Occurs when audio mixing state changed | all |
+| lastmileProbeTestResult | Reports the last-mile network probe result. | all|
 
 ## Resources
 * Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
