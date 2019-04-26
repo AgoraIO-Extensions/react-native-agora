@@ -1,6 +1,6 @@
 {
-  "name": "@zhigang1992/react-native-agora",
-  "version": "v2.4.0-alpha-4",
+  "name": "react-native-agora",
+  "version": "2.4.0-alpha-1",
   "description": "React Native around the Agora RTC SDKs for Android and iOS agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
