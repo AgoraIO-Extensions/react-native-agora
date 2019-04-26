@@ -25,7 +25,7 @@ import {
     BeautyOption,
     LastmileProbeConfig,
     CameraCapturerConfiguration
-} from "./types.d";
+} from "./types";
 
 
 const { Agora } = NativeModules;
@@ -33,9 +33,9 @@ const AgoraEventEmitter = new NativeEventEmitter(Agora);
 
 /**
  * RtcEngine is the javascript object for control agora native sdk through react native bridge.
- * 
+ *
  * You can use the RtcEngine methods to create {@link init}
- * 
+ *
  * Other methods of the RtcEngine object serve for agora native sdk and set up error logging.
  */
 class RtcEngine {
@@ -44,7 +44,7 @@ class RtcEngine {
 
     /**
      * Creates a RtcEngine Object internal.
-     * 
+     *
      * This method creates and start event observer. You should call this method once.
      * @example `RtcEngine.init(option)`
      * @param options Defines the property of the client, see {@link Option} for details.
@@ -55,24 +55,24 @@ class RtcEngine {
 
     /**
      * join specified channel
-     * 
+     *
      * This method joins and begin rendering the video stream. when join succeeds.
      * Otherwise, it will invoke error by the event
-     * @param channelName 
-     * @param uid 
-     * @param token 
-     * @param info 
+     * @param channelName
+     * @param uid
+     * @param token
+     * @param info
      */
     public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): void {
         return Agora.joinChannel({channelName, uid, token, info});
     }
-    
+
     /**
      * add event listener
-     * 
+     *
      * This method subscribes specified eventType and run listener. You should call this method at first.
      * @param eventType
-     * @param listener 
+     * @param listener
      */
     public static on(eventType: string, listener: (...args: any[]) => any) {
         this.eventTypes.add(eventType);
@@ -81,9 +81,9 @@ class RtcEngine {
 
     /**
      * remove event listeners
-     * 
+     *
      * This method unsubscribes specified eventType related all listeners. You should call this method when you want to unsubscribe some eventType.
-     * @param eventType 
+     * @param eventType
      */
     public static off(eventType: string) {
         AgoraEventEmitter.removeAllListeners(eventType);
@@ -92,10 +92,10 @@ class RtcEngine {
 
     /**
      * remove all events listeners
-     * 
+     *
      * This method unsubscribes all eventTypes related listeners.
-     * 
-     * @param token 
+     *
+     * @param token
      */
     public static removeAllListeners() {
         for (let eventType of this.eventTypes) {
@@ -106,7 +106,7 @@ class RtcEngine {
 
     /**
      * renew token
-     * 
+     *
      * This method renews a new token.
      * @param token
      */
@@ -116,9 +116,9 @@ class RtcEngine {
 
     /**
      * enable websdk interoperability
-     * 
+     *
      * This method used to enable websdk interoperability, so that it can connect with agora websdk apps.
-     * 
+     *
      * @param enabled
      * @returns Promise<{success, value}>
      */
@@ -128,7 +128,7 @@ class RtcEngine {
 
     /**
      * get agora native sdk connection state
-     * 
+     *
      * This method gets agora native sdk connection state
      * @returns Promise<{success: true, state: (connection state)}>
      */
@@ -138,7 +138,7 @@ class RtcEngine {
 
     /**
      * change the client role
-     * 
+     *
      * This method changes the client of role.
      * @param role (audience: 0, host: 1)
      */
@@ -148,10 +148,10 @@ class RtcEngine {
 
     /**
      * leave channel
-     * 
+     *
      * This method leaves the joined channel, then your video view will not render ever.
      * You should call it, when you dont need render video stream.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static leaveChannel(): Promise<any> {
@@ -160,10 +160,10 @@ class RtcEngine {
 
     /**
      * destroy
-     * 
+     *
      * This method stops event subscribe and destroy the RtcEngine instance's.
      * You should call it, when you want to destroy the engine.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static destroy(): Promise<any> {
@@ -172,7 +172,7 @@ class RtcEngine {
 
     /**
      * show local video
-     * 
+     *
      * This method calls native sdk render canvas for local video.
      * @param options {@link VideoOption}
      */
@@ -183,7 +183,7 @@ class RtcEngine {
 
     /**
      * show remote video
-     * 
+     *
      * This method calls native sdk render canvas for remote video.
      * @param options {@link VideoOption}
      */
@@ -193,7 +193,7 @@ class RtcEngine {
 
     /**
      * set local video render mode
-     * 
+     *
      * This method calls native sdk render mode for local video.
      * @param mode
      */
@@ -203,9 +203,9 @@ class RtcEngine {
 
     /**
      * set the specified remote video render mode
-     * 
+     *
      * This method calls native sdk render mode for the specified remote video.
-     * 
+     *
      * @param uid
      * @param mode
      */
@@ -215,7 +215,7 @@ class RtcEngine {
 
     /**
      * start video preview
-     * 
+     *
      * This method start video preview for video.
      */
     public static startPreview() {
@@ -225,7 +225,7 @@ class RtcEngine {
 
     /**
      * stop video preview
-     * 
+     *
      * This method stops video preview for video.
      */
     public static stopPreview() {
@@ -234,7 +234,7 @@ class RtcEngine {
 
     /**
      * set enable speaker phone
-     * 
+     *
      * This method set the speaker phone enable or disable by pass boolean parameter.
      * @param enabled
      */
@@ -244,7 +244,7 @@ class RtcEngine {
 
     /**
      * set default audio speaker
-     * 
+     *
      * This method set the default audio speaker enable or disable by pass boolean parameter.
      * @param enabled
      */
@@ -255,9 +255,9 @@ class RtcEngine {
 
     /**
      * set default mute all remote audio streams
-     * 
+     *
      * This method set default mute all remote audio streams enable or not by pass boolean parameter.
-     * @param enabled 
+     * @param enabled
      */
     public static setDefaultMuteAllRemoteAudioStreams(enabled: boolean) {
         Agora.setDefaultMuteAllRemoteAudioStreams(enabled);
@@ -265,7 +265,7 @@ class RtcEngine {
 
     /**
      * enable video
-     * 
+     *
      * This method enables video.
      */
     public static enableVideo() {
@@ -274,7 +274,7 @@ class RtcEngine {
 
     /**
      * disable video
-     * 
+     *
      * This method disables video.
      */
     public static disableVideo() {
@@ -283,27 +283,27 @@ class RtcEngine {
 
     /**
      * enable local video
-     * 
+     *
      * This method enables the local video by the boolean parameter.
      * @param enabled
      */
     public static enableLocalVideo(enabled: boolean) {
         Agora.enableLocalVideo(enabled);
-    } 
+    }
 
     /**
      * mute local video stream
-     * 
+     *
      * This method mutes video stream by the boolean parameter.
      * @param muted
      */
     public static muteLocalVideoStream(muted: boolean) {
         Agora.muteLocalVideoStream(muted);
-    } 
+    }
 
     /**
      * mute all remote video streams
-     * 
+     *
      * This method mutes all remote streams by the boolean parameter.
      * @param muted
      */
@@ -313,7 +313,7 @@ class RtcEngine {
 
     /**
      * mute specified remote video stream.
-     * 
+     *
      * This method mutes remote video stream by the number of uid and boolean parameter.
      * @param uid
      * @param muted
@@ -324,7 +324,7 @@ class RtcEngine {
 
     /**
      * set default mute all remote video stream
-     * 
+     *
      * This method mutes all remote video stream default by the boolean parameter.
      * @param muted
      */
@@ -334,7 +334,7 @@ class RtcEngine {
 
     /**
      * enable audio
-     * 
+     *
      * This method enables audio
      */
     public static enableAudio() {
@@ -343,7 +343,7 @@ class RtcEngine {
 
     /**
      * disable audio
-     * 
+     *
      * This method disables audio
      */
     public static disableAudio() {
@@ -352,7 +352,7 @@ class RtcEngine {
 
     /**
      * enable local audio
-     * 
+     *
      * This method enables local audio by the boolean parameter.
      * @param enabled
      */
@@ -362,7 +362,7 @@ class RtcEngine {
 
     /**
      * mute local audio stream
-     * 
+     *
      * This method mutes the local audio stream by muted.
      * @param muted
      */
@@ -372,7 +372,7 @@ class RtcEngine {
 
     /**
      * mute all remote audio streams
-     * 
+     *
      * This method mutes all remote audio streams by muted
      */
     public static muteAllRemoteAudioStreams(muted: boolean) {
@@ -381,7 +381,7 @@ class RtcEngine {
 
     /**
      * mute specified remote audio stream by muted
-     * 
+     *
      * This method mutes specified remote audio stream by number uid and boolean muted.
      * @param uid
      * @param muted
@@ -392,7 +392,7 @@ class RtcEngine {
 
     /**
      * adjust recording signal volume
-     * 
+     *
      * This method adjusts recording your signal by volume.
      * @param volume
      */
@@ -402,7 +402,7 @@ class RtcEngine {
 
     /**
      * adjust playback signal volume
-     * 
+     *
      * This method adjusts playback signal by volume.
      * @param volume
      */
@@ -412,7 +412,7 @@ class RtcEngine {
 
     /**
      * enable audio volume indication
-     * 
+     *
      * This method enables audio volume by interval and smooth
      * @param interval
      * @param smooth
@@ -423,9 +423,9 @@ class RtcEngine {
 
     /**
      * create data stream
-     * 
+     *
      * This method creates data stream with options
-     * 
+     *
      * @param options {@link DataStreamOption}
      */
     public static createDataStream(options: DataStreamOption) {
@@ -434,7 +434,7 @@ class RtcEngine {
 
     /**
      * check for mobile phone speaker enabled
-     * 
+     *
      * This method checks the phone speaker is enabled
      * @param callback
      */
@@ -444,9 +444,9 @@ class RtcEngine {
 
     /**
      * enable in-ear monitor
-     * 
+     *
      * This method enables in-ear monitoring by boolean parameter enabled
-     * 
+     *
      * @param enabled
      */
     public static enableInEarMonitoring(enabled: boolean) {
@@ -455,9 +455,9 @@ class RtcEngine {
 
     /**
      * set in-ear monitoring volume
-     * 
+     *
      * This method sets the in-ear-monitoring volume by number parameter volume
-     * 
+     *
      * @param volume
      */
     public static setInEarMonitoringVolume(volume: number) {
@@ -466,9 +466,9 @@ class RtcEngine {
 
     /**
      * set local voice pitch
-     * 
+     *
      * This method sets the local voice pitch by float parameter pitch
-     * 
+     *
      * @param pitch
      */
     public static setLocalVoicePitch(pitch: number) {
@@ -477,9 +477,9 @@ class RtcEngine {
 
     /**
      * set local voice equalization
-     * 
+     *
      * This method set local video equalization of band frequency by enum band number and number of gain
-     * 
+     *
      * @param band
      * @param gain
      */
@@ -489,9 +489,9 @@ class RtcEngine {
 
     /**
      * set local voice reverb
-     * 
+     *
      * This method sets local voice by reverb and value
-     * @param reverb 
+     * @param reverb
      * @param value
      */
     public static setLocalVoiceReverb(reverb: number, value: number) {
@@ -500,9 +500,9 @@ class RtcEngine {
 
     /**
      * start audio mixing
-     * 
+     *
      * This method will start audio mixing by option config
-     * 
+     *
      * @param options {@link AudioMixingOption}
      */
     public static startAudioMixing(options: AudioMixingOption) {
@@ -511,7 +511,7 @@ class RtcEngine {
 
     /**
      * stop audio mixing
-     * 
+     *
      * This methods stops for audio mixing.
      */
     public static stopAudioMixing() {
@@ -520,7 +520,7 @@ class RtcEngine {
 
     /**
      * pause audio mixing
-     * 
+     *
      * This method pauses for audio mixing.
      */
     public static pauseAudioMixing() {
@@ -529,7 +529,7 @@ class RtcEngine {
 
     /**
      * resume audio mixing
-     * 
+     *
      * This method resumes for audio mixing.
      */
     public static resumeAudioMixing() {
@@ -538,7 +538,7 @@ class RtcEngine {
 
     /**
      * adjust audio mixing volume
-     * 
+     *
      * This method adjusts audio mixing volume by the volume number parameter
      * @param volume
      */
@@ -548,7 +548,7 @@ class RtcEngine {
 
     /**
      * adjust audio mixing playout volume
-     * 
+     *
      * This method adjusts audio mixing playout by the volume parameter
      * @param volume
      */
@@ -558,7 +558,7 @@ class RtcEngine {
 
     /**
      * adjust audio mixing publish volume
-     * 
+     *
      * This method adjusts audio mixing publish by the volume paraemter
      * @param volume
      */
@@ -568,7 +568,7 @@ class RtcEngine {
 
     /**
      * get audio mixing duration
-     * 
+     *
      * This method gets the audio mixing duration
      * @returns Promise<{success, value}>
      */
@@ -578,7 +578,7 @@ class RtcEngine {
 
     /**
      * get audio mixing current position
-     * 
+     *
      * This method gets audio mixing current position value.
      * @returns Promise<{success, value}>
      */
@@ -588,7 +588,7 @@ class RtcEngine {
 
     /**
      * set audio mixing position
-     * 
+     *
      * This method sets audio mixing position by the parameter pos
      * @param pos
      */
@@ -598,7 +598,7 @@ class RtcEngine {
 
      /**
       * get effects of volume
-      * 
+      *
       * This methods get audio mixing effects volume value.
       * @returns Promise<{success, value}>
       */
@@ -608,7 +608,7 @@ class RtcEngine {
 
      /**
       * set effects volume
-      * 
+      *
       * This methods set audio mixing effects volume by float parameter.
       * @param volume
       * @returns Promise<{success, value}>
@@ -619,7 +619,7 @@ class RtcEngine {
 
      /**
       * set volume for playing effects.
-      * 
+      *
       * This methods set for playing audio mixing effects
       * @returns Promise<{success, value}>
       */
@@ -629,7 +629,7 @@ class RtcEngine {
 
      /**
       * play specified effect for audio mixing
-      * 
+      *
       * This methos plays the specified effect of audio mixing file by option config.
       * @param options {@link PlayEffectOption}
       * @returns Promise<{success, value}>
@@ -640,9 +640,9 @@ class RtcEngine {
 
      /**
       * stop play effect for audio mixing
-      * 
+      *
       * This methods stops the specified effect for audio mixing file by soundid.
-      * @param sounid 
+      * @param sounid
       * @returns Promise<{success, value}>
       */
      public static stopEffect(soundId: number): Promise<any> {
@@ -651,7 +651,7 @@ class RtcEngine {
 
      /**
       * stop play all for effect audio mixing.
-      * 
+      *
       * This methods stops all effect audio mixing.
       * @returns Promise<{success, value}>
       */
@@ -661,7 +661,7 @@ class RtcEngine {
 
      /**
       * preload effect for audio mixing file.
-      * 
+      *
       * This methods preloads the specified audio mixing file to memory by the soundid
       * @param soundid
       * @param filepath
@@ -670,10 +670,10 @@ class RtcEngine {
      public static preloadEffect(soundId: number, filepath: string): Promise<any> {
         return Agora.preloadEffect(soundId, filepath);
      }
-     
+
      /**
       * unload effect
-      * 
+      *
       * This methods unload the already loaded audio mixing file from memory by the soundid.
       * @param soundid
       * @returns Promise<{success, value}>
@@ -684,7 +684,7 @@ class RtcEngine {
 
      /**
       * pause the specified effect for audio mixing by soundid
-      * 
+      *
       * This method pauses the specified effect for audio mixing by soundid.
       * @param soundid
       * @returns Promise<{success, value}>
@@ -695,7 +695,7 @@ class RtcEngine {
 
      /**
       * pause all effects for audio mixing
-      * 
+      *
       * This method pause all effects for audio mixing.
       * @param soundid
       * @returns Promise<{success, value}>
@@ -706,7 +706,7 @@ class RtcEngine {
 
      /**
       * resume audio mixing effect by the specified soundid
-      * 
+      *
       * This method resumes audio mixing effect by the specified soundid
       * @param soundid
       * @returns Promise<{success, value}>
@@ -717,7 +717,7 @@ class RtcEngine {
 
      /**
       * resume all audio mixing effects.
-      * 
+      *
       * This method resumes all audio mixing effects.
       * @returns Promise<{success, value}>
       */
@@ -727,7 +727,7 @@ class RtcEngine {
 
      /**
       * start audio recording by quality
-      * 
+      *
       * This method start audio recording by quality config
       * @param options {@link AudioRecordingOption}
       * @returns Promise<{success, value}>
@@ -738,7 +738,7 @@ class RtcEngine {
 
      /**
       * stop audio recording
-      * 
+      *
       * This method stops audio recording.
       * @returns Promise<{success, value}>
       */
@@ -748,7 +748,7 @@ class RtcEngine {
 
      /**
       * set audio session operation restriction
-      * 
+      *
       * The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
       * You can call this method at any time to return the control of the audio sessions to the SDK.
       * This method restricts the SDK’s manipulation of the audio session. Any operation to the audio session relies solely on the app, other apps, or third-party components.
@@ -762,7 +762,7 @@ class RtcEngine {
     /**
      * @deprecated
      * start echo test
-     * 
+     *
      * This method launches an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly.
      * @returns Promise<{success, value}>
      */
@@ -772,7 +772,7 @@ class RtcEngine {
 
     /**
      * stop echo test
-     * 
+     *
      * This method stop launched an audio call test.
      * @returns Promise<{success, value}>
      */
@@ -782,9 +782,9 @@ class RtcEngine {
 
     /**
      * enable lastmile test
-     * 
+     *
      * This method enables the network connection qualit test.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static enableLastmileTest(): Promise<any> {
@@ -793,9 +793,9 @@ class RtcEngine {
 
     /**
      * disable lastmile test
-     * 
+     *
      * This method disable the network connection qualit test.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static disableLastmileTest(): Promise<any> {
@@ -804,9 +804,9 @@ class RtcEngine {
 
     /**
      * set recording audio frame parameters
-     * 
+     *
      * This method Sets the audio recording format for the audioFrame callback.
-     * 
+     *
      * @param options {@link RecordingAudioFrameOption}
      * @returns Promise<{success, value}>
      */
@@ -816,9 +816,9 @@ class RtcEngine {
 
     /**
      * set playback audio frame parameters
-     * 
+     *
      * This method Sets the audio frame format for the playbackFrame callback.
-     * 
+     *
      * @param options {@link AudioFrameOption}
      * @returns Promise<{success, value}>
      */
@@ -828,9 +828,9 @@ class RtcEngine {
 
     /**
      * set mixed audio frame parameters
-     * 
+     *
      * This method Sets the audio frame format for the mixedAudioFrame callback.
-     * 
+     *
      * @param options {@link MixedAudioFrameOption}
      * @returns Promise<{success, value}>
      */
@@ -840,7 +840,7 @@ class RtcEngine {
 
     /**
      * add video watermark
-     * 
+     *
      * This method adds video watermark to the local video.
      *
      * @param options {@link ImageOption}
@@ -852,9 +852,9 @@ class RtcEngine {
 
     /**
      * clear video watermarks
-     * 
+     *
      * This method removes the watermark image from the video stream added by addVideoWatermark.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static removclearVideoWatermarkse(): Promise<any> {
@@ -863,9 +863,9 @@ class RtcEngine {
 
     /**
      * set local publish fallback
-     * 
+     *
      * This method sets the fallback option for the locally published video stream based on the network conditions.
-     * 
+     *
      * @param option {0, 1, 2}  [more details](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_constants.html#a3e453c93766e783a7e5eca05b1776238)
      * @returns Promise<{success, value}>
      */
@@ -875,9 +875,9 @@ class RtcEngine {
 
     /**
      * set remote publish fallback
-     * 
+     *
      * This method sets the fallback option for the remotely subscribed video stream based on the network conditions.
-     * 
+     *
      * @param option {0, 1, 2} [more details](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_constants.html#a3e453c93766e783a7e5eca05b1776238)
      * @returns Promise<{success, value}>
      */
@@ -887,9 +887,9 @@ class RtcEngine {
 
     /**
      * enable dual stream mode
-     * 
+     *
      * This method enables the dual stream by parameter mode.
-     * 
+     *
      * @param enabled
      * @returns Promise<{success, value}>
      */
@@ -899,9 +899,9 @@ class RtcEngine {
 
     /**
      * set remote video stream type
-     * 
+     *
      * This method sets the remote video stream type by uid and streamType.
-     * 
+     *
      * @param options {@link VideoStreamOption}
      * @returns Promise<{success, value}>
      */
@@ -911,9 +911,9 @@ class RtcEngine {
 
     /**
      * set remote default video stream type
-     * 
+     *
      * This method sets the default video stream type.
-     * 
+     *
      * @param options {@link DefaultVideoStreamOption}
      * @returns Promise<{success, value}>
      */
@@ -923,9 +923,9 @@ class RtcEngine {
 
     /**
      * add inject stream url
-     * 
+     *
      * This method injects an online media stream to a live broadcast.
-     * 
+     *
      * @param options {@link InjectStreamOption}
      * @returns Promise<{success, value}>
      */
@@ -935,9 +935,9 @@ class RtcEngine {
 
     /**
      * remove inject stream url
-     * 
+     *
      * This method removes stream by addInjectsStreamUrl.
-     * 
+     *
      * @param options {@link RemoveInjectStreamOption}
      * @returns Promise<{success, value}>
      */
@@ -947,12 +947,12 @@ class RtcEngine {
 
     /**
      * @deprecated
-     * set video quality 
-     * 
+     * set video quality
+     *
      * This method sets the preferences for the video quality. (Live broadcast only).
-     * 
+     *
      * @param quality boolean
-     * @returns Promise<{success, value}> 
+     * @returns Promise<{success, value}>
      */
     // public static setVideoQualityParameters(quality: boolean): Promise<any> {
     //     return Agora.setVideoQualityParameters(quality);
@@ -960,9 +960,9 @@ class RtcEngine {
 
     /**
      * set local video mirror mode
-     * 
+     *
      * This method sets local video mirror mode
-     * 
+     *
      * @param mode
      * @returns Promise<{success, value}>
      */
@@ -972,10 +972,10 @@ class RtcEngine {
 
     /**
      * switch camera
-     * 
+     *
      * This method switches camera between front and rear.
-     * 
-     * @returns Promise<{success, value}> 
+     *
+     * @returns Promise<{success, value}>
      */
     public static switchCamera(): Promise<any> {
         return Agora.switchCamera();
@@ -983,9 +983,9 @@ class RtcEngine {
 
     /**
      * is camera zoom supported
-     * 
+     *
      * This method checks whether the camera zoom function is supported.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static isCameraZoomSupported(): Promise<any> {
@@ -994,9 +994,9 @@ class RtcEngine {
 
     /**
      * is camera torch supported
-     * 
+     *
      * This method checks whether the camera flash function is supported.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static isCameraTorchSupported(): Promise<any> {
@@ -1005,9 +1005,9 @@ class RtcEngine {
 
     /**
      * is camera focus supported
-     * 
+     *
      * This method checks whether the camera mannual focus function is supported.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static isCameraFocusSupported(): Promise<any> {
@@ -1016,9 +1016,9 @@ class RtcEngine {
 
     /**
      * is camera exposure position supported
-     * 
+     *
      * This method checks whether the camera mannual exposure function is supported.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static isCameraExposurePositionSupported(): Promise<any> {
@@ -1027,9 +1027,9 @@ class RtcEngine {
 
     /**
      * is camera auto focus face mode supported
-     * 
+     *
      * This method checks whether the camera mannual auto-face focus function is supported.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static isCameraAutoFocusFaceModeSupported(): Promise<any> {
@@ -1038,9 +1038,9 @@ class RtcEngine {
 
     /**
      * set camera zoom ratio
-     * 
+     *
      * This method sets the camera zoom ratio.
-     * 
+     *
      * @param zoomFactor
      * @returns Promise<{success, value}>
      */
@@ -1050,9 +1050,9 @@ class RtcEngine {
 
     /**
      * get camera max zoom ratio
-     * 
+     *
      * This method gets the camera maximum zoom ratio.
-     * 
+     *
      * @notice Android Only
      * @returns Promise<{success, value}>
      */
@@ -1062,9 +1062,9 @@ class RtcEngine {
 
     /**
      * set camera focus position in preview
-     * 
+     *
      * This method sets the mannual focus position.
-     * 
+     *
      * @param options {@link PositionOption}
      * @returns Promise<{success, value}>
      */
@@ -1074,9 +1074,9 @@ class RtcEngine {
 
     /**
      * set camera exposure position
-     * 
+     *
      * This method sets the mannual exposure position.
-     * 
+     *
      * @param options {@link PositionOption}
      * @returns Promise<{success, value}>
      */
@@ -1086,11 +1086,11 @@ class RtcEngine {
 
     /**
      * set camera torch on
-     * 
+     *
      * This method enables the camera flash function.
-     * 
+     *
      * @param enabled
-     * @returns Promise<{success, value}> 
+     * @returns Promise<{success, value}>
      */
     public static setCameraTorchOn(enabled: boolean): Promise<any> {
         return Agora.setCameraTorchOn(enabled);
@@ -1098,9 +1098,9 @@ class RtcEngine {
 
     /**
      * set enable auto focus face mode
-     * 
+     *
      * This method enables auto-focus face mode function.
-     * 
+     *
      * @param enabled boolean
      * @returns Promise<{success, value}>
      */
@@ -1109,10 +1109,10 @@ class RtcEngine {
     }
 
     /**
-     * get call id 
-     * 
+     * get call id
+     *
      * This method is used to get call id.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     public static getCallId(): Promise<any> {
@@ -1121,7 +1121,7 @@ class RtcEngine {
 
     /**
      * set log file and log filter
-     * 
+     *
      * This method sets the log file generated path and specified the log level.
      *
      * @param filepath string
@@ -1132,14 +1132,14 @@ class RtcEngine {
     public static setLog(filepath: string, level: number, maxfileSize: number): Promise<any> {
         return Agora.setLog(filepath, level, maxfileSize)
     }
-    
+
     /**
      * send stream message
-     * 
+     *
      * This method sends stream message by specified uid
-     * 
+     *
      * @param uid
-     * @param data 
+     * @param data
      * @returns Promise<{success, value}>
      */
     public static sendMessage(streamID: number, data: any, reliable: boolean, ordered: boolean): Promise<any> {
@@ -1148,9 +1148,9 @@ class RtcEngine {
 
     /**
      * add publish stream url
-     * 
+     *
      * This method add publish stream by option.
-     * 
+     *
      * @param options {@link PublishStreamOption}
      * @returns Promise<{success, value}>
      */
@@ -1160,9 +1160,9 @@ class RtcEngine {
 
     /**
      * remove publish stream url
-     * 
+     *
      * This method remove publish stream by options.
-     * 
+     *
      * @param options {@link RemovePublishStreamOption}
      * @returns Promise<{success, value}>
      */
@@ -1172,9 +1172,9 @@ class RtcEngine {
 
     /**
      * set live transcoding
-     * 
+     *
      * This method sets the video layout and audio settings for CDN live.
-     * 
+     *
      * @param options {@link LiveTranscoding}
      * @returns Promise<{success, value}>
      */
@@ -1184,9 +1184,9 @@ class RtcEngine {
 
     /**
      * get sdk version
-     * 
+     *
      * This method gets the sdk version details and passed it into callback function
-     * 
+     *
      * @param callback to handle resolve from getSdkVersion
      * @param errorHandler to handle reject error from getSdkVersion
      */
@@ -1196,9 +1196,9 @@ class RtcEngine {
 
     /**
      * mute local audio stream
-     * 
+     *
      * This method sends/stops sending the local audio.
-     * 
+     *
      * @param enabled
      */
 
@@ -1208,9 +1208,9 @@ class RtcEngine {
 
     /**
      * video pre-process/post-process
-     * 
+     *
      * This method enables/disables image enhancement and sets the options.
-     * 
+     *
      * @param enable boolean
      * @param options {@link BeautyOptions}
      * @returns Promise<{success, value}>
@@ -1221,9 +1221,9 @@ class RtcEngine {
 
     /**
      * set local voice change
-     * 
+     *
      * This method changes local speaker voice with voiceChanger
-     * 
+     *
      * @param voiceChanger integer
      * @voiceChanger value ranges [
      *          0: "The original voice",
@@ -1242,9 +1242,9 @@ class RtcEngine {
 
     /**
      * set the preset local voice reverberation effect.
-     * 
+     *
      * This method sets the preset local voice reverberation effect.
-     * 
+     *
      * @param preset integer
      * @returns Promise<{success, value}>
      */
@@ -1254,9 +1254,9 @@ class RtcEngine {
 
     /**
      * control stereo panning for remote users
-     * 
+     *
      * This method enables/disables stereo panning for remote users.
-     * 
+     *
      * @param enabled boolean
      * @returns Promise<{success, value}>
      */
@@ -1266,12 +1266,12 @@ class RtcEngine {
 
     /**
      * set the sound position of a remote user
-     * 
+     *
      * This method sets the sound position of a remote user by uid
-     * 
+     *
      * @param uid number | The ID of the remote user
      * @param pan float | The sound position of the remote user. The value ranges from -1.0 to 1.0
-     * @pan 
+     * @pan
      *  0.0: the remote sound comes from the front.
      *  -1.0: the remote sound comes from the left.
      *  1.0: the remote sound comes from the right.
@@ -1286,9 +1286,9 @@ class RtcEngine {
      * start the lastmile probe test
      *
      * This method start the last-mile network probe test before joining a channel to get the uplink and downlink last-mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).
-     * 
+     *
      * @param config LastmileProbeConfig {@link LastmileProbeConfig}
-     * 
+     *
      * @event onLastmileQuality: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
      * @event onLastmileProbeResult: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
      * @returns Promise<{success, value}>
@@ -1301,7 +1301,7 @@ class RtcEngine {
      * stop the lastmile probe test
      *
      * This method stop the lastmile probe test.
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     static stopLastmileProbeTest(): Promise<any> {
@@ -1310,13 +1310,13 @@ class RtcEngine {
 
     /**
      * sets the priority of a remote user's media stream.
-     * 
+     *
      * note: Use this method with the setRemoteSubscribeFallbackOption method. If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
-     * 
+     *
      * This method sets the priority of a remote user's media stream.
      * @param uid number
      * @param userPriority number | The value range is  [50 is "user's priority is hgih", 100 is "the default user's priority is normal"]
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     static setRemoteUserPriority(uid: number, userPrority: number): Promise<any> {
@@ -1325,16 +1325,16 @@ class RtcEngine {
 
     /**
      * start an audio call test.
-     * 
+     *
      * note:
      *   Call this method before joining a channel.
      *   After calling this method, call the stopEchoTest method to end the test. Otherwise, the app cannot run the next echo test, or call the joinchannel method.
      *   In the Live-broadcast profile, only a host can call this method.
      * This method will start an audio call test with interval parameter.
      * In the audio call test, you record your voice. If the recording plays back within the set time interval, the audio devices and the network connection are working properly.
-     * 
+     *
      * @param interval number
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     static startEchoTestWithInterval(interval: number): Promise<any> {
@@ -1349,11 +1349,11 @@ class RtcEngine {
      *  If the resolution or frame rate of the captured raw video data are higher than those set by setVideoEncoderConfiguration, processing video frames requires extra CPU and RAM usage and degrades performance. We recommend setting config as CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE(1) to avoid such problems.
      *  If you do not need local video preview or are willing to sacrifice preview quality, we recommend setting config as CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE(1) to optimize CPU and RAM usage.
      *  If you want better quality for the local video preview, we recommend setting config as CAPTURER_OUTPUT_PREFERENCE_PREVIEW(2).
-     * 
+     *
      * This method will set the camera capture preference.
-     * 
+     *
      * @param config {@link CameraCapturerConfiguration}
-     * 
+     *
      * @returns Promise<{success, value}>
      */
     static setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<any> {
