@@ -1,9 +1,10 @@
 {
   "name": "@zhigang1992/react-native-agora",
-  "version": "2.4.0-alpha-3",
+  "version": "v2.4.0-alpha-4",
   "description": "React Native around the Agora RTC SDKs for Android and iOS agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "pu": "npm publish",
     "test": "echo \"Error: no test specified\" && exit 1",
