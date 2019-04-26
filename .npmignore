@@ -3,7 +3,6 @@
 *.md
 *.MD
 .DS_Store
-tsconfig.json
 samples
 __tests__
 docs
