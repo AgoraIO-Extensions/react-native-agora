@@ -12,6 +12,7 @@
     "outDir": "./lib",
     "module": "commonjs",
     "strict": true,
+    "declaration": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "lib": ["es2015"]
