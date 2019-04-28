@@ -4,6 +4,7 @@
   "description": "React Native around the Agora RTC SDKs for Android and iOS agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "pu": "npm publish",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -51,9 +52,6 @@
     "typedoc": "^0.14.2",
     "typescript": "^3.2.4"
   },
-  "types": [
-    "./types.d.ts"
-  ],
   "jest": {
     "preset": "react-native",
     "moduleFileExtensions": [
