@@ -73,3 +73,5 @@ xcuserdata*
 samples/**/package-lock.json
 *.iml
 android/bin
+yarn.lock
+package-lock.json
