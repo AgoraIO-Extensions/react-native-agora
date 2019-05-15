@@ -1,5 +1,5 @@
 import React from 'react';
-import { AgoraViewProps } from "./types.d";
+import { AgoraViewProps } from "./types";
 /**
  * AgoraView is the render layer for rendering video stream
  *
