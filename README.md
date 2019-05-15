@@ -14,7 +14,7 @@
 The react-native-agora is an open-source wrapper for react-native developers. This SDK takes advantage of React Native and Agora RTC Video SDKs on Android/iOS.
 
 ## Compatibility
-  * react native 0.58.x
+  * >= react native 0.55.x
   * iOS SDK 8.0+
   * Android 5.0+ x86 arm64 armv7a
 
