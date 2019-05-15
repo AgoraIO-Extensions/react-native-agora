@@ -158,23 +158,27 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   //enable dual stream
   if ([options objectForKey:@"dualStream"]) {
     [self.rtcEngine enableDualStreamMode:[options[@"dualStream"] boolValue]];
-     }
+  }
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    [self.rtcEngine enableVideo];
+    [self.rtcEngine enableAudio];
+  });
   if ([options objectForKey:@"mode"]) {
     switch([options[@"mode"] integerValue]) {
        case AgoraAudioMode: {
-         [self.rtcEngine enableAudio];
-         [self.rtcEngine disableVideo];
+         [self.rtcEngine enableLocalAudio:true];
+         [self.rtcEngine enableLocalVideo:false];
          break;
        }
        case AgoraVideoMode: {
-         [self.rtcEngine enableVideo];
-         [self.rtcEngine disableAudio];
+         [self.rtcEngine enableLocalVideo:true];
+         [self.rtcEngine enableLocalAudio:false];
          break;
        }
     }
    } else {
-     [self.rtcEngine enableVideo];
-     [self.rtcEngine enableAudio];
+     [self.rtcEngine enableLocalVideo:true];
+     [self.rtcEngine enableLocalAudio:true];
    }
   
   if ([options objectForKey:@"beauty"]) {
@@ -1520,11 +1524,13 @@ RCT_EXPORT_METHOD(setCameraFocusPositionInPreview
                   :(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  BOOL res = [self.rtcEngine setCameraFocusPositionInPreview:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
-  resolve(@{
-            @"success": @(YES),
-            @"value": @(res)
-            });
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    BOOL res = [self.rtcEngine setCameraFocusPositionInPreview:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
+    resolve(@{
+              @"success": @(YES),
+              @"value": @(res)
+              });
+  });
 }
 
 // setCameraExposurePosition
@@ -2395,11 +2401,11 @@ RCT_EXPORT_METHOD(setCameraCapturerConfiguration:(NSDictionary *)config
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData *_Nonnull)data {
+  NSString *_data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
   [self sendEvent:AGReceiveStreamMessage params:@{
-                                                @"uid": @(uid),
-                                                @"streamId": @(streamId),
-                                                @"data": data
-                                                }];
+                                                  @"uid": @(uid),
+                                                  @"streamId": @(streamId),
+                                                  @"data": _data}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached {
