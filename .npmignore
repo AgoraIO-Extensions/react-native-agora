@@ -38,3 +38,4 @@ proguard-rules.pro
 .vscode
 package-lock.json
 android/bin
+lib/**/*.ts.map
