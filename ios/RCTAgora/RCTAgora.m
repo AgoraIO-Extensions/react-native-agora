@@ -158,23 +158,27 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   //enable dual stream
   if ([options objectForKey:@"dualStream"]) {
     [self.rtcEngine enableDualStreamMode:[options[@"dualStream"] boolValue]];
-     }
+  }
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    [self.rtcEngine enableVideo];
+    [self.rtcEngine enableAudio];
+  });
   if ([options objectForKey:@"mode"]) {
     switch([options[@"mode"] integerValue]) {
        case AgoraAudioMode: {
-         [self.rtcEngine enableAudio];
-         [self.rtcEngine disableVideo];
+         [self.rtcEngine enableLocalAudio:true];
+         [self.rtcEngine enableLocalVideo:false];
          break;
        }
        case AgoraVideoMode: {
-         [self.rtcEngine enableVideo];
-         [self.rtcEngine disableAudio];
+         [self.rtcEngine enableLocalVideo:true];
+         [self.rtcEngine enableLocalAudio:false];
          break;
        }
     }
    } else {
-     [self.rtcEngine enableVideo];
-     [self.rtcEngine enableAudio];
+     [self.rtcEngine enableLocalVideo:true];
+     [self.rtcEngine enableLocalAudio:true];
    }
   
   if ([options objectForKey:@"beauty"]) {
@@ -1520,11 +1524,13 @@ RCT_EXPORT_METHOD(setCameraFocusPositionInPreview
                   :(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  BOOL res = [self.rtcEngine setCameraFocusPositionInPreview:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
-  resolve(@{
-            @"success": @(YES),
-            @"value": @(res)
-            });
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    BOOL res = [self.rtcEngine setCameraFocusPositionInPreview:CGPointMake((CGFloat)[options[@"x"] floatValue], (CGFloat)[options[@"y"] floatValue])];
+    resolve(@{
+              @"success": @(YES),
+              @"value": @(res)
+              });
+  });
 }
 
 // setCameraExposurePosition
