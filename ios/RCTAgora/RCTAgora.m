@@ -2401,11 +2401,11 @@ RCT_EXPORT_METHOD(setCameraCapturerConfiguration:(NSDictionary *)config
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData *_Nonnull)data {
+  NSString *_data = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
   [self sendEvent:AGReceiveStreamMessage params:@{
-                                                @"uid": @(uid),
-                                                @"streamId": @(streamId),
-                                                @"data": data
-                                                }];
+                                                  @"uid": @(uid),
+                                                  @"streamId": @(streamId),
+                                                  @"data": _data}];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didOccurStreamMessageErrorFromUid:(NSUInteger)uid streamId:(NSInteger)streamId error:(NSInteger)error missed:(NSInteger)missed cached:(NSInteger)cached {
