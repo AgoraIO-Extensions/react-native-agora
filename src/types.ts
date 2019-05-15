@@ -1,6 +1,5 @@
 import { View, ViewProps } from 'react-native';
 
-declare module "IAgora"
 
 /**
  * VideoEncoderConfig details
@@ -45,8 +44,8 @@ export interface Option {
 
 /**
  * VoiceDecorator is decorate local audio voice
- * 
- * @property type: string | the range values ['changer' | 'reverbPreset'] This property is the identifier for audio voice decorator 
+ *
+ * @property type: string | the range values ['changer' | 'reverbPreset'] This property is the identifier for audio voice decorator
  * @property value: number | the value for voice parameter option.
  * type 'reverbPreset' range values: [0 is "off", 1 is "popular", 2 is "rnb", 3 is "rock", 4 is "hiphop", 5 is "vocal concert", 6 is "KTV", 7 is "studio"]
  * type 'changer' range values: [0 is "off", 1 is "old man", 2 is "baby boy", 3 is "baby girl", 4 is "zhubajie", 5 is "ethereal", 6 is "hulk"]

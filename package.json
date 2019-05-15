@@ -52,9 +52,6 @@
     "typedoc": "^0.14.2",
     "typescript": "^3.2.4"
   },
-  "types": [
-    "./types.d.ts"
-  ],
   "jest": {
     "preset": "react-native",
     "moduleFileExtensions": [
