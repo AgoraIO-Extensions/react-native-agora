@@ -1,6 +1,6 @@
 # iOS 开发搭建指南
 #### 最低兼容
-* React Native 0.58.x
+* >= React Native 0.55.x
 * iOS SDK 8.0+
 * Android 5.0+ x86 arm64 armv7a
 
