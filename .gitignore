@@ -75,3 +75,4 @@ samples/**/package-lock.json
 android/bin
 yarn.lock
 package-lock.json
+lib
