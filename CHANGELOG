@@ -4,6 +4,8 @@
 #### 2.4.0-alpha
 - support 2.4.0-alpha.1 agora video sdk android-2.4.0 / iOS-2.4.0.1 and add sendMessage support in the same channel. Deprecate: startEchoTest and setVideoQualityParameters
 - support 2.4.0-alpha.2 using 0.55.1 as peerDependency and support typescript
+- support 2.4.0-alpha.3 bugfix iOS receiveStreamMessage data is null
+- support 2.4.0-alpha.4 bugfix iOS videoSizeChanged field rotation typo
 
 #### 2.3.3-alpha
 - support agora video sdk 2.3.3
