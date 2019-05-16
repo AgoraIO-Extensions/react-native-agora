@@ -2217,7 +2217,7 @@ RCT_EXPORT_METHOD(setCameraCapturerConfiguration:(NSDictionary *)config
                                                  @"uid": @(uid),
                                                  @"width": @(size.width),
                                                  @"height": @(size.height),
-                                                 @"roration": @(rotation)
+                                                 @"rotation": @(rotation)
                                                  }];
 }
 
