@@ -138,8 +138,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private static final String InjectStreamStatusStopTimeout = "InjectStreamStatusStopTimeout";
     private static final String InjectStreamStatusStopFailed = "InjectStreamStatusStopFailed";
     private static final String InjectStreamStatusBroken = "InjectStreamStatusBroken";
-    private static final String AgoraAudioMode = "AgoraAudioMode";
-    private static final String AgoraVideoMode = "AgoraVideoMode";
+    private static final String AgoraAudioMode = "AudioMode";
+    private static final String AgoraVideoMode = "VideoMode";
 
     public AgoraModule(ReactApplicationContext context) {
         super(context);
