@@ -7,6 +7,7 @@
 //
 
 #import "RCTAgoraVideoView.h"
+#import <React/RCTBridgeModule.h>
 
 @implementation RCTAgoraVideoView
 
@@ -14,28 +15,45 @@
   
   if (self == [super init]) {
     _rtcEngine = [AgoraConst share].rtcEngine;
+    _renderMode = AgoraVideoRenderModeHidden;
   }
   
   return self;
 }
 
+- (void)setRenderMode:(NSInteger)renderMode {
+  _renderMode = renderMode;
+}
+
 - (void)setShowLocalVideo:(BOOL)showLocalVideo {
-  if (showLocalVideo) {
-    AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
+  _showLocalVideo = showLocalVideo;
+  AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
+  if (_showLocalVideo) {
     canvas.uid = [AgoraConst share].localUid;
     canvas.view = self;
-    canvas.renderMode = AgoraVideoRenderModeHidden;
+    canvas.renderMode = _renderMode;
     [_rtcEngine setupLocalVideo:canvas];
   }
 }
 
 -(void)setRemoteUid:(NSInteger)remoteUid {
-  if (remoteUid > 0) {
-    AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
-    canvas.uid = remoteUid;
+  _remoteUid = remoteUid;
+  AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
+  if (_remoteUid > 0) {
+    canvas.uid = _remoteUid;
     canvas.view = self;
-    canvas.renderMode = AgoraVideoRenderModeHidden;
+    canvas.renderMode = _renderMode;
     [_rtcEngine setupRemoteVideo:canvas];
+    return;
+  }
+}
+
+-(void) willMoveToSuperview:(UIView *)newSuperview {
+  [super willMoveToSuperview:newSuperview];
+  if (_remoteUid > 0) {
+    [_rtcEngine setRemoteRenderMode:_remoteUid mode:_renderMode];
+  } else {
+    [_rtcEngine setLocalRenderMode:_renderMode];
   }
 }
 

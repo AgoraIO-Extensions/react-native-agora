@@ -1,4 +1,4 @@
-import { Option, Callback, VideoOption, AudioMixingOption, DataStreamOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
+import { Option, Callback, AudioMixingOption, DataStreamOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
 /**
  * RtcEngine is the javascript object for control agora native sdk through react native bridge.
  *
@@ -98,20 +98,6 @@ declare class RtcEngine {
      * @returns Promise<{success, value}>
      */
     static destroy(): Promise<any>;
-    /**
-     * show local video
-     *
-     * This method calls native sdk render canvas for local video.
-     * @param options {@link VideoOption}
-     */
-    static setupLocalVideo(options: VideoOption): void;
-    /**
-     * show remote video
-     *
-     * This method calls native sdk render canvas for remote video.
-     * @param options {@link VideoOption}
-     */
-    static setupRemoteVideo(options: VideoOption): void;
     /**
      * set local video render mode
      *
@@ -513,11 +499,8 @@ declare class RtcEngine {
      */
     static setAudioSessionOperationRestriction(): void;
     /**
-     * @deprecated
-     * start echo test
-     *
-     * This method launches an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly.
-     * @returns Promise<{success, value}>
+     * @deprecated startEchoTest
+     * startEchoTest
      */
     /**
      * stop echo test
@@ -650,13 +633,16 @@ declare class RtcEngine {
      */
     static removeInjectStreamUrl(options: RemoveInjectStreamOption): Promise<any>;
     /**
-     * @deprecated
-     * set video quality
-     *
-     * This method sets the preferences for the video quality. (Live broadcast only).
-     *
-     * @param quality boolean
-     * @returns Promise<{success, value}>
+     * @deprecated setupLocalVideo
+     * setupLocalVideo
+     */
+    /**
+     * @deprecated setupRemoteVideo
+     * setupRemoteVideo
+     */
+    /**
+     * @deprecated setVideoQualityParameters
+     * setVideoQualityParameters
      */
     /**
      * set local video mirror mode

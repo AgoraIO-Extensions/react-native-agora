@@ -173,24 +173,40 @@ public class AgoraManager {
     }
 
     /**
-     * 设置本地视频，即前置摄像头预览
+     * setupLocalVideo will render video from local side capture into ui layout
      */
-    public int setupLocalVideo() {
-        //创建一个SurfaceView用作视频预览
+    public int setupLocalVideo(Integer mode) {
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        //将SurfaceView保存起来在SparseArray中，后续会将其加入界面。key为视频的用户id，这里是本地视频, 默认id是0
-
         mSurfaceViews.put(mLocalUid, surfaceView);
-
-        //设置本地视频，渲染模式选择VideoCanvas.RENDER_MODE_HIDDEN，如果选其他模式会出现视频不会填充满整个SurfaceView的情况，
-        //具体渲染模式参考官方文档https://docs.agora.io/cn/user_guide/API/android_api.html#set-local-video-view-setuplocalvideo
-        return mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, mLocalUid));
+        return mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, mode, mLocalUid));
     }
 
-    public int setupRemoteVideo(final int uid) {
+    /**
+     * setupRemoteVideo will render video from remote side capture into ui layout
+     */
+    public int setupRemoteVideo(final int uid, final Integer mode) {
         SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
         mSurfaceViews.put(uid, surfaceView);
-        return mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
+        return mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, mode, uid));
+    }
+
+    /**
+     * set local video render mode
+     * @param Integer renderMode
+     * @return result state
+     */
+    public int setLocalRenderMode(final Integer renderMode) {
+        return mRtcEngine.setLocalRenderMode(renderMode);
+    }
+
+    /**
+     * set remote video render mode
+     * @param Integer uid
+     * @param Integer renderMode
+     * @return result state
+     */
+    public int setRemoteRenderMode(final Integer uid, final Integer renderMode) {
+        return mRtcEngine.setRemoteRenderMode(uid, renderMode);
     }
 
     public int setEnableSpeakerphone(boolean enabled) {

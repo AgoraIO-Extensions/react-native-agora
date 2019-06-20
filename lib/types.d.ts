@@ -122,6 +122,7 @@ export declare type Nullable<T> = T | null | undefined;
 export declare type String = Nullable<string>;
 export declare type Number = Nullable<number> | 0;
 export interface AgoraViewProps extends ViewProps {
+    mode: number;
     showLocalVideo: boolean;
     remoteUid: number;
     zOrderMediaOverlay: boolean;

@@ -1189,33 +1189,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setupLocalVideo() {
-        try {
-            int res = AgoraManager.getInstance().setupLocalVideo();
-            if (res != 0) throw new ReactNativeAgoraException("setupLocalVideo Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
-        }
-    }
-
-    @ReactMethod
-    public void setupRemoteVideo(ReadableMap options) {
-        try {
-            int uid = options.getInt("uid");
-            int res = AgoraManager.getInstance().setupRemoteVideo(uid);
-            if (res != 0) throw new ReactNativeAgoraException("setupRemoteVideo Failed", res);
-        } catch(Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
-        }
-    }
-
-    @ReactMethod
     public void startPreview() {
         AgoraManager.getInstance().startPreview();
     }
@@ -1813,22 +1786,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             promise.reject("131008", e);
         }
     }
-
-//  deprecated
-//    @ReactMethod
-//    public void startEchoTest(Promise promise) {
-//        try {
-//            int res = AgoraManager.getInstance().mRtcEngine
-//                    .startEchoTest();
-//            if (res != 0) throw new ReactNativeAgoraException("startEchoTest Failed", res);
-//            WritableMap map = Arguments.createMap();
-//            map.putBoolean("success", true);
-//            map.putInt("value", res);
-//            promise.resolve(map);
-//        } catch (Exception e) {
-//            promise.reject("131009", e);
-//        }
-//    }
 
     @ReactMethod
     public void stopEchoTest(Promise promise) {
@@ -2506,21 +2463,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             promise.reject(e);
         }
     }
-
-//    deprecated
-//    @ReactMethod
-//    public void setVideoQualityParameters(boolean quality, Promise promise) {
-//        try {
-//            int res = AgoraManager.getInstance().mRtcEngine.setVideoQualityParameters(quality);
-//            if (res != 0) throw new ReactNativeAgoraException("sendStreamMessage Failed", res);
-//            WritableMap map = Arguments.createMap();
-//            map.putBoolean("success", true);
-//            map.putInt("value", res);
-//            promise.resolve(map);
-//        } catch (Exception e) {
-//            promise.reject(e);
-//        }
-//    }
 
     @ReactMethod
     public void setLocalVideoMirrorMode(int mode, Promise promise) {

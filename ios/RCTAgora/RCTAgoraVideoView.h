@@ -12,8 +12,8 @@
 @interface RCTAgoraVideoView : UIView
 
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
-
 @property (nonatomic) BOOL showLocalVideo;
 @property (nonatomic) NSInteger remoteUid;
+@property (nonatomic) NSInteger renderMode;
 
 @end
