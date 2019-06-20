@@ -952,5 +952,60 @@ declare class RtcEngine {
      * @returns Promise<{success, value}>
      */
     static setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<any>;
+    /**
+     * Gets the audio mixing volume for local playback.
+     *
+     * note:
+     * This method helps troubleshoot audio volume related issues.
+     *
+     * @returns Promise{<success, value}>
+     */
+    static getAudioMixingPlayoutVolume(): Promise<any>;
+    /**
+     * Gets the audio mixing volume for publishing.
+     *
+     * note:
+     * This method helps troubleshoot audio volume related issues.
+     *
+     * @returns Promise{<success, value}>
+     */
+    static getAudioMixingPublishVolume(): Promise<any>;
+    /**
+     * sendMediaData for media observer.
+     *
+     * note:
+     * This method needs you invoke registerMediaMetadataObserver success first and you could send media data through interval media observer feature.
+     * The data have limit length is 1024 bytes, if you pass data length bigger than limit it will failed.
+     * @param data String: 1024 bytes limit
+     */
+    static sendMediaData(data: String): void;
+    /**
+     * Registers the metadata observer.
+     *
+     * note:
+     * This method only work in live mode
+     * This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
+     * This method trigger 'metaMediaDataRecevied' event, here is example:
+     * ```javascript
+     *      RtcEngine.on("metaMediaDataRecevied", (data) => {
+     *        console.log("metaMediaDataRecevied", data);
+     *      })
+     * ```
+     * @returns Promise{<success, value}>
+     */
+    static registerMediaMetadataObserver(): Promise<any>;
+    /**
+     * Get local device camera support info
+     *
+     * note:
+     * This method returns your current device camera support info.
+     * ```javascript
+     *      RtcEngine.getCameraInfo().then(info => {
+     *         console.log("your currrent camera", info);
+     *      })
+     * ```
+     * @returns Promise{cameraSupportInfo}>
+     */
+    static getCameraInfo(): Promise<any>;
 }
 export default RtcEngine;

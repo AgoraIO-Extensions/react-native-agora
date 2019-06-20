@@ -1336,6 +1336,90 @@ class RtcEngine {
     static setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<any> {
         return Agora.setCameraCapturerConfiguration(config);
     }
+
+    /**
+     * Gets the audio mixing volume for local playback.
+     * 
+     * note:
+     * This method helps troubleshoot audio volume related issues.
+     * 
+     * @returns Promise{<success, value}>
+     */
+    static getAudioMixingPlayoutVolume(): Promise<any> {
+        return Agora.getAudioMixingPlayoutVolume();
+    }
+
+    /**
+     * Gets the audio mixing volume for publishing.
+     * 
+     * note:
+     * This method helps troubleshoot audio volume related issues.
+     * 
+     * @returns Promise{<success, value}>
+     */
+    static getAudioMixingPublishVolume(): Promise<any> {
+        return Agora.getAudioMixingPublishVolume();
+    }
+
+    /**
+     * sendMediaData for media observer.
+     * 
+     * note:
+     * This method needs you invoke registerMediaMetadataObserver success first and you could send media data through interval media observer feature.
+     * The data have limit length is 1024 bytes, if you pass data length bigger than limit it will failed.
+     * @param data String: 1024 bytes limit
+     */
+    static sendMediaData(data: String): void {
+        return Agora.sendMediaData(data);
+    }
+
+    /**
+     * Registers the metadata observer.
+     * 
+     * note:
+     * This method only work in live mode
+     * This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
+     * This method trigger 'metaMediaDataRecevied' event, here is example:
+     * ```javascript
+     *      RtcEngine.on("metaMediaDataRecevied", (data) => {
+     *        console.log("metaMediaDataRecevied", data);
+     *      })
+     * ```
+     * @returns Promise{<success, value}>
+     */
+    static registerMediaMetadataObserver(): Promise<any> {
+        return Agora.registerMediaMetadataObserver();
+    }
+
+    /**
+     * Get local device camera support info
+     * 
+     * note:
+     * This method returns your current device camera support info.
+     * ```javascript
+     *      RtcEngine.getCameraInfo().then(info => {
+     *         console.log("your currrent camera", info);
+     *      })
+     * ```
+     * @returns Promise{cameraSupportInfo}>
+     */
+    static async getCameraInfo(): Promise<any> {
+        let zoomSupported = await this.isCameraZoomSupported();
+        let torchSupported = await this.isCameraTorchSupported();
+        let focusSupported = await this.isCameraFocusSupported();
+        let exposurePositionSupported = await this.isCameraExposurePositionSupported();
+        let autoFocusFaceModeSupported = await this.isCameraAutoFocusFaceModeSupported();
+        let maxZoomFactor = await this.getCameraMaxZoomFactor();
+        return {
+            zoomSupported,
+            torchSupported,
+            focusSupported,
+            exposurePositionSupported,
+            autoFocusFaceModeSupported,
+            maxZoomFactor
+        }
+    }
+
 }
 
 

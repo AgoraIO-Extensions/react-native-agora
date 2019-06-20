@@ -13,4 +13,5 @@
 
 @interface RCTAgora : RCTEventEmitter<RCTBridgeModule>
 
++(void) sendEvent:(NSString *)name params:(NSDictionary*)params;
 @end
