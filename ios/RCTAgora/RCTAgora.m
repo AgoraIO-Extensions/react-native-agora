@@ -132,14 +132,14 @@ RCT_EXPORT_MODULE();
            @"AudioRawFrameOperationModeReadWrite": @(AgoraAudioRawFrameOperationModeReadWrite),
            @"VideoStreamTypeHigh": @(AgoraVideoStreamTypeHigh),
            @"VideoStreamTypeLow": @(AgoraVideoStreamTypeLow),
-           @"AgoraVideoMirrorModeAuto": @(AgoraVideoMirrorModeAuto),
-           @"AgoraVideoMirrorModeEnabled": @(AgoraVideoMirrorModeEnabled),
-           @"AgoraVideoMirrorModeDisabled": @(AgoraVideoMirrorModeDisabled),
-           @"AgoraChannelProfileCommunication": @(AgoraChannelProfileCommunication),
-           @"AgoraChannelProfileLiveBroadcasting": @(AgoraChannelProfileLiveBroadcasting),
-           @"AgoraChannelProfileGame": @(AgoraChannelProfileGame),
-           @"AgoraAudioMode": @(AgoraAudioMode),
-           @"AgoraVideoMode": @(AgoraVideoMode),
+           @"VideoMirrorModeAuto": @(AgoraVideoMirrorModeAuto),
+           @"VideoMirrorModeEnabled": @(AgoraVideoMirrorModeEnabled),
+           @"VideoMirrorModeDisabled": @(AgoraVideoMirrorModeDisabled),
+           @"ChannelProfileCommunication": @(AgoraChannelProfileCommunication),
+           @"ChannelProfileLiveBroadcasting": @(AgoraChannelProfileLiveBroadcasting),
+           @"ChannelProfileGame": @(AgoraChannelProfileGame),
+           @"AudioMode": @(AgoraAudioMode),
+           @"VideoMode": @(AgoraVideoMode),
          };
 }
 
