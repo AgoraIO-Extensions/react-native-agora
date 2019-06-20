@@ -17,12 +17,14 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import io.agora.rtc.Constants;
 import io.agora.rtc.IAudioEffectManager;
+import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.internal.LastmileProbeConfig;
@@ -285,6 +287,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private final static String AGUserEnableVideo = "userEnableVideo";
     private final static String AGUserEnableLocalVideo = "userEnableLocalVideo";
     private final static String AGVideoSizeChanged = "videoSizeChanged";
+    private final static String AGRtmpStreamingStateChanged = "rtmpStreamingStateChanged";
+    private final static String AGNetworkTypeChanged = "networkTypeChanged";
+    private final static String AGFirstRemoteAudioDecoded = "firstRemoteAudioDecoded";
+    private final static String AGMediaMetaDataRecevied = "mediaMetaDataRecevied";
     private final static String AGRemoteVideoStateChanged = "remoteVideoStateChanged";
     private final static String AGLocalPublishFallbackToAudioOnly = "localPublishFallbackToAudioOnly";
     private final static String AGRemoteSubscribeFallbackToAudioOnly = "remoteSubscribeFallbackToAudioOnly";
@@ -415,6 +421,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("userCount", stats.users);
                     statsMap.putDouble("cpuAppUsage", stats.cpuAppUsage);
                     statsMap.putDouble("cpuTotalUsage", stats.cpuTotalUsage);
+                    statsMap.putInt("txPacketLossRate", stats.txPacketLossRate);
+                    statsMap.putInt("rxPacketLossRate", stats.rxPacketLossRate);
 
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
@@ -584,17 +592,17 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             });
         }
 
-        @Override
-        public void onVideoStopped() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    WritableMap map = Arguments.createMap();
-                    map.putString("message", "VideoStopped");
-                    sendEvent(getReactApplicationContext(), AGVideoStopped, map);
-                }
-            });
-        }
+//        @Override
+//        public void onVideoStopped() {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    WritableMap map = Arguments.createMap();
+//                    map.putString("message", "VideoStopped");
+//                    sendEvent(getReactApplicationContext(), AGVideoStopped, map);
+//                }
+//            });
+//        }
 
         @Override
         public void onFirstLocalVideoFrame(final int width, final int height, final int elapsed) {
@@ -706,6 +714,45 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("height", height);
                     map.putInt("rotation", rotation);
                     sendEvent(getReactApplicationContext(), AGVideoSizeChanged, map);
+                }
+            });
+        }
+
+        @Override
+        public void onRtmpStreamingStateChanged(final String url, final int state, final int errCode) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("url", url);
+                    map.putInt("state", state);
+                    map.putInt("errorCode", errCode);
+                    sendEvent(getReactApplicationContext(), AGRtmpStreamingStateChanged, map);
+                }
+            });
+        }
+
+        @Override
+        public void onNetworkTypeChanged(final int type) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putInt("type", type);
+                    sendEvent(getReactApplicationContext(), AGNetworkTypeChanged, map);
+                }
+            });
+        }
+
+        @Override
+        public void onFirstRemoteAudioDecoded(final int uid, final int elapsed) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putInt("uid", uid);
+                    map.putInt("elapsed", elapsed);
+                    sendEvent(getReactApplicationContext(), AGFirstRemoteAudioDecoded, map);
                 }
             });
         }
@@ -884,7 +931,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap statsMap = Arguments.createMap();
                     statsMap.putInt("sentBitrate", stats.sentBitrate);
                     statsMap.putInt("sentFrameRate", stats.sentFrameRate);
-
+                    statsMap.putInt("encoderOutputFrameRate", stats.encoderOutputFrameRate);
+                    statsMap.putInt("rendererOutputFrameRate", stats.rendererOutputFrameRate);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
                     sendEvent(getReactApplicationContext(), AGLocalVideoStats, map);
@@ -902,7 +950,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("width", stats.width);
                     statsMap.putInt("height", stats.height);
                     statsMap.putInt("receivedBitrate", stats.receivedBitrate);
-                    statsMap.putInt("receivedFrameRate", stats.receivedFrameRate);
+                    statsMap.putInt("rendererOutputFrameRate", stats.rendererOutputFrameRate);
                     statsMap.putInt("rxStreamType", stats.rxStreamType);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
@@ -1034,7 +1082,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    String msg = new String(data);
+                    String msg = new String(data, Charset.forName("UTF-8"));
                     WritableMap map = Arguments.createMap();
                     map.putInt("uid", uid);
                     map.putInt("streamId", streamId);
@@ -1714,6 +1762,33 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getAudioMixingPlayoutVolume(Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
+            if (res < 0) throw new ReactNativeAgoraException("getAudioMixingPlayoutVolume Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putString("volume", Integer.toString(res));
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject("-1", e);
+        }
+    }
+
+    @ReactMethod
+    public void getAudioMixingPublishVolume(Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
+            if (res < 0) throw new ReactNativeAgoraException("getAudioMixingPublishVolume Failed", res);
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            map.putInt("value", res);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject("-1", e);
+        }
+    }
+
+    @ReactMethod
     public void getAudioMixingDuration(Promise promise) {
         try {
             int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingDuration();
@@ -1723,7 +1798,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             map.putInt("value", res);
             promise.resolve(map);
         } catch (Exception e) {
-            promise.reject("131004", e);
+            promise.reject("-1", e);
         }
     }
 
@@ -2007,7 +2082,57 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             map.putInt("value", res);
             promise.resolve(map);
         } catch (Exception e) {
-            promise.reject("131030", e);
+            promise.reject("-1", e);
+        }
+    }
+
+    private static final Integer MAX_META_DATA = 1024;
+
+    private byte[] metadata = null;
+
+    @ReactMethod
+    public void sendMediaData(String data) {
+        metadata = data.getBytes(Charset.forName("UTF-8"));
+    }
+
+    @ReactMethod
+    public void registerMediaMetadataObserver(final Promise promise) {
+        try {
+            int res = AgoraManager.getInstance().mRtcEngine.registerMediaMetadataObserver(new IMetadataObserver() {
+                @Override
+                public int getMaxMetadataSize() { return MAX_META_DATA; }
+
+                @Override
+                public byte[] onReadyToSendMetadata(long timeStampMs) {
+                    if (metadata == null) {
+                        return null;
+                    }
+                    byte[] toSend = metadata;
+                    if (toSend.length > MAX_META_DATA) {
+                        return null;
+                    }
+                    metadata = null;
+                    return toSend;
+                }
+
+                @Override
+                public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs) {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("data", new String(buffer, Charset.forName("UTF-8")));
+                    map.putString("uid", Integer.toString(uid));
+                    map.putString("ts", Long.toString(timeStampMs));
+                    sendEvent(getReactApplicationContext(), AGMediaMetaDataRecevied, map);
+                }
+            }, IMetadataObserver.VIDEO_METADATA);
+            if (res < 0) {
+                new ReactNativeAgoraException("setRemoteDefaultVideoStreamType Failed", res);
+            }
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            map.putInt("value", res);
+            promise.resolve(map);
+        } catch (Exception e) {
+            promise.reject("-1", e);
         }
     }
 
@@ -2443,7 +2568,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             String data = options.getString("data");
             int streamID = AgoraManager.getInstance().mRtcEngine.createDataStream(reliable, ordered);
             if (streamID < 0) throw new ReactNativeAgoraException("createDataStream Failed", streamID);
-            int res = AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamID, data.getBytes("utf8"));
+            int res = AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamID, data.getBytes(Charset.forName("UTF-8")));
             if (res != 0) throw new ReactNativeAgoraException("sendStreamMessage Failed", res);
             WritableMap map = Arguments.createMap();
             map.putBoolean("success", true);

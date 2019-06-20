@@ -29,6 +29,7 @@ static NSString *AGAudioVolumeIndication = @"audioVolumeIndication";
 static NSString *AGActiveSpeaker = @"activeSpeaker";
 static NSString *AGFirstLocalAudioFrame = @"firstLocalAudioFrame";
 static NSString *AGFirstRemoteAudioFrame = @"firstRemoteAudioFrame";
+static NSString *AGFirstRemoteAudioDecoded = @"firstRemoteAudioDecoded";
 static NSString *AGVideoStopped = @"videoStopped";
 static NSString *AGFirstLocalVideoFrame = @"firstLocalVideoFrame";
 static NSString *AGFirstRemoteVideoDecoded = @"firstRemoteVideoDecoded";
@@ -76,6 +77,11 @@ static NSString *AGMediaEngineStartCall = @"mediaEngineStartCall";
 static NSString *AGIntervalTest = @"startEchoTestWithInterval";
 static NSString *AGAudioMixingStateChanged = @"audioMixingStateChanged";
 static NSString *AGLastmileProbeTestResult = @"lastmileProbeTestResult";
+
+static NSString *AGRtmpStreamingStateChanged = @"rtmpStreamingStateChanged";
+static NSString *AGLocalVideoChanged = @"localVideoChanged";
+static NSString *AGNetworkTypeChanged = @"networkTypeChanged";
+static NSString *AGMediaMetaDataRecevied = @"mediaMetaDataRecevied";
 
 typedef NS_ENUM(NSInteger, AgoraModeType) {
   AgoraAudioMode,
