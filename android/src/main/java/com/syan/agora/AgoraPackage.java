@@ -26,7 +26,7 @@ public class AgoraPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                new AgoraViewManage()
+                new AgoraViewManager()
         );
     }
 }

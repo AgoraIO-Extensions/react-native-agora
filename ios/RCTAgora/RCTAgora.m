@@ -146,7 +146,6 @@ RCT_EXPORT_MODULE();
 // init
 RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   [self startObserving];
-  NSLog(@"startObserving events");
   [AgoraConst share].appid = options[@"appid"];
   
   self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:options[@"appid"] delegate:self];
@@ -311,24 +310,6 @@ RCT_EXPORT_METHOD(leaveChannel
 RCT_EXPORT_METHOD(destroy) {
   [self stopObserving];
   [AgoraRtcEngineKit destroy];
-}
-
-// set local video canvas
-RCT_EXPORT_METHOD(setupLocalVideo:(NSDictionary *)options){
-  AgoraRtcVideoCanvas *canvas = [AgoraRtcVideoCanvas new];
-  canvas.uid = [AgoraConst share].localUid;
-  canvas.view = [self.bridge.uiManager viewForReactTag:options[@"reactTag"]];
-  canvas.renderMode = [options[@"renderMode"] integerValue];
-  [self.rtcEngine setupLocalVideo:canvas];
-}
-
-// set remote video canvas
-RCT_EXPORT_METHOD(setupRemoteVideo:(NSDictionary *) options) {
-  AgoraRtcVideoCanvas *canvas = [AgoraRtcVideoCanvas new];
-  canvas.uid = [options[@"uid"] integerValue];
-  canvas.view = [self.bridge.uiManager viewForReactTag:options[@"reactTag"]];
-  canvas.renderMode = [options[@"renderMode"] integerValue];
-  [self.rtcEngine setupRemoteVideo:canvas];
 }
 
 // set local video render mode
@@ -1390,26 +1371,6 @@ RCT_EXPORT_METHOD(removeInjectStreamUrl
               });
   }
 }
-
-// deprecated
-// set video quality
-//RCT_EXPORT_METHOD(setVideoQualityParameters
-//                  :(BOOL) quality
-//                  resolve:(RCTPromiseResolveBlock)resolve
-//                  reject:(RCTPromiseRejectBlock)reject) {
-//  NSInteger res = [self.rtcEngine setVideoQualityParameters:quality];
-//  if (res == 0) {
-//    resolve(@{@"success": @(YES)});
-//  } else {
-//    reject(@"131033", @"setVideoQualityParameters failed", [self makeNSError:@{
-//                                                                               @"code": @(131033),
-//                                                                               @"message":@{
-//                                                                                   @"success": @(NO),
-//                                                                                   @"value":[NSNumber numberWithInteger:res]
-//                                                                                   }
-//                                                                               }]);
-//  }
-//}
 
 // set local video mirror mode
 RCT_EXPORT_METHOD(setLocalVideoMirrorMode

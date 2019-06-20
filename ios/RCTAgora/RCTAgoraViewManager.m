@@ -11,10 +11,19 @@
 
 @implementation RCTAgoraViewManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RCTAgoraVideoView)
 
-RCT_EXPORT_VIEW_PROPERTY(showLocalVideo, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(remoteUid, NSInteger)
+RCT_CUSTOM_VIEW_PROPERTY(mode, NSInteger, RCTAgoraVideoView) {
+  view.renderMode = [RCTConvert NSInteger:json];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(showLocalVideo, BOOL, RCTAgoraVideoView) {
+  view.showLocalVideo = [RCTConvert BOOL:json];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(remoteUid, NSInteger, RCTAgoraVideoView) {
+  view.remoteUid = [RCTConvert NSInteger:json];
+}
 
 - (UIView *)view {
   return [RCTAgoraVideoView new];

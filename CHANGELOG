@@ -6,6 +6,7 @@
 - support 2.4.0-alpha.2 using 0.55.1 as peerDependency and support typescript
 - support 2.4.0-alpha.3 bugfix iOS receiveStreamMessage data is null
 - support 2.4.0-alpha.4 bugfix iOS videoSizeChanged field rotation typo
+- support 2.4.0-alpha.5 bugfix Android & iOS side not support fit mode and hidden mode. Deprecate: setupLocalVideo & setupRemoteVideo
 
 #### 2.3.3-alpha
 - support agora video sdk 2.3.3

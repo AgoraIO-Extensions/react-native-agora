@@ -171,27 +171,6 @@ class RtcEngine {
     }
 
     /**
-     * show local video
-     *
-     * This method calls native sdk render canvas for local video.
-     * @param options {@link VideoOption}
-     */
-
-    public static setupLocalVideo(options: VideoOption) {
-        Agora.setupLocalVideo(options);
-    }
-
-    /**
-     * show remote video
-     *
-     * This method calls native sdk render canvas for remote video.
-     * @param options {@link VideoOption}
-     */
-    public static setupRemoteVideo(options: VideoOption) {
-        Agora.setupRemoteVideo(options);
-    }
-
-    /**
      * set local video render mode
      *
      * This method calls native sdk render mode for local video.
@@ -760,15 +739,10 @@ class RtcEngine {
      }
 
     /**
-     * @deprecated
-     * start echo test
-     *
-     * This method launches an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly.
-     * @returns Promise<{success, value}>
+     * @deprecated startEchoTest
+     * startEchoTest
      */
-    // public static startEchoTest(): Promise<any> {
-    //     return Agora.startEchoTest();
-    // }
+
 
     /**
      * stop echo test
@@ -946,17 +920,20 @@ class RtcEngine {
     }
 
     /**
-     * @deprecated
-     * set video quality
-     *
-     * This method sets the preferences for the video quality. (Live broadcast only).
-     *
-     * @param quality boolean
-     * @returns Promise<{success, value}>
+     * @deprecated setupLocalVideo
+     * setupLocalVideo 
      */
-    // public static setVideoQualityParameters(quality: boolean): Promise<any> {
-    //     return Agora.setVideoQualityParameters(quality);
-    // }
+
+    /**
+     * @deprecated setupRemoteVideo
+     * setupRemoteVideo 
+     */
+
+
+    /**
+     * @deprecated setVideoQualityParameters
+     * setVideoQualityParameters
+     */
 
     /**
      * set local video mirror mode
