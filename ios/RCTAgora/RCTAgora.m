@@ -17,46 +17,7 @@
 
 @interface RCTAgora ()
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
-
-@end
-
-@interface MediaMetaDataObserver : NSObject<AgoraMediaMetadataDataSource, AgoraMediaMetadataDelegate>
-  @property (strong, nonatomic) NSData* metadata;
-
-  - (NSInteger) metadataMaxSize;
-
-  - (NSData *_Nullable)readyToSendMetadataAtTimestamp:(NSTimeInterval)timestamp;
-- (void)receiveMetadata:(NSData *_Nonnull)data fromUser:(NSInteger)uid atTimestamp:(NSTimeInterval)timestamp;
-
-
-@end
-
-@implementation MediaMetaDataObserver
-  - (NSInteger) metadataMaxSize {
-    return MAX_DATA_LENGTH;
-  }
-
-  - (NSData *_Nullable)readyToSendMetadataAtTimestamp:(NSTimeInterval)timestamp
-  {
-    if (nil == _metadata) {
-      return nil;
-    }
-    NSData *toSend = [_metadata copy];
-    if ([toSend length] > MAX_DATA_LENGTH) {
-      return nil;
-    }
-    _metadata = nil;
-    return toSend;
-  }
-
-  - (void)receiveMetadata:(NSData *_Nonnull)data fromUser:(NSInteger)uid atTimestamp:(NSTimeInterval)timestamp {
-    NSString *dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [RCTAgora sendEvent:AGMediaMetaDataRecevied params:@{
-                                                         @"uid": @(uid),
-                                                         @"data": dataStr,
-                                                         @"ts": @(timestamp)
-                                                         }];
-  }
+@property (strong, nonatomic) NSData *metadata;
 @end
 
 @implementation RCTAgora {
@@ -64,14 +25,37 @@
   bool hasListeners;
 }
 
-+(void) sendEvent:(NSString *)name params:(NSDictionary*)params {
-  [self sendEvent:name params:params];
-  return;
-}
-
 +(BOOL)requiresMainQueueSetup {
   return YES;
 }
+
+
+- (NSInteger) metadataMaxSize {
+  return MAX_DATA_LENGTH;
+}
+
+- (NSData *_Nullable)readyToSendMetadataAtTimestamp:(NSTimeInterval)timestamp
+{
+  if (nil == _metadata) {
+    return nil;
+  }
+  NSData *toSend = [_metadata copy];
+  if ([toSend length] > MAX_DATA_LENGTH) {
+    return nil;
+  }
+  _metadata = nil;
+  return toSend;
+}
+
+- (void)receiveMetadata:(NSData *_Nonnull)data fromUser:(NSInteger)uid atTimestamp:(NSTimeInterval)timestamp {
+  NSString *dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  [self sendEvent:AGMediaMetaDataReceived params:@{
+                                               @"uid": @(uid),
+                                               @"data": dataStr,
+                                               @"ts": @(timestamp)
+                                               }];
+}
+
 
 RCT_EXPORT_MODULE();
 
@@ -1977,11 +1961,27 @@ RCT_EXPORT_METHOD(setCameraCapturerConfiguration:(NSDictionary *)config
   }
 }
 
+RCT_EXPORT_METHOD(sendMediaData:(NSString *)dataStr
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  if ([self respondsToSelector:@selector(readyToSendMetadataAtTimestamp:)]) {
+    self.metadata = [dataStr dataUsingEncoding:NSUTF8StringEncoding];
+    resolve(@{
+              @"success": @(YES)
+              });
+  } else {
+    reject(@"-1", @"sendMediaData failed", [self makeNSError:@{
+                                                        @"code": @(-1),
+                                                        @"message":@{
+                                                          @"success": @(NO),
+                                                        }}]);
+  }
+}
+
 RCT_EXPORT_METHOD(registerMediaMetadataObserver
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  MediaMetaDataObserver *observer = [[MediaMetaDataObserver alloc] init];
-  BOOL res = [_rtcEngine setMediaMetadataDataSource:observer withType:AgoraMetadataTypeVideo];
+  BOOL res = [_rtcEngine setMediaMetadataDataSource:self withType:AgoraMetadataTypeVideo];
   if (res == YES) {
     resolve(@{
               @"success": @(YES)
@@ -2069,7 +2069,7 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
            AGLocalVideoChanged,
            AGNetworkTypeChanged,
            AGFirstRemoteAudioFrame,
-           AGMetaMediaDataRecevied
+           AGMediaMetaDataReceived
            ];
 }
 

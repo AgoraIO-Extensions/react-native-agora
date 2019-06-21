@@ -81,7 +81,7 @@ static NSString *AGLastmileProbeTestResult = @"lastmileProbeTestResult";
 static NSString *AGRtmpStreamingStateChanged = @"rtmpStreamingStateChanged";
 static NSString *AGLocalVideoChanged = @"localVideoChanged";
 static NSString *AGNetworkTypeChanged = @"networkTypeChanged";
-static NSString *AGMediaMetaDataRecevied = @"mediaMetaDataRecevied";
+static NSString *AGMediaMetaDataReceived = @"mediaMetaDataReceived";
 
 typedef NS_ENUM(NSInteger, AgoraModeType) {
   AgoraAudioMode,
