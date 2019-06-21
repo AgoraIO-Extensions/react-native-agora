@@ -57,7 +57,6 @@ static NSString *AGRemoteAudioStats = @"remoteAudioStats";
 static NSString *AGAudioTransportStatsOfUid = @"audioTransportStatsOfUid";
 static NSString *AGVideoTransportStatsOfUid = @"videoTransportStatsOfUid";
 
-static NSString *AGLocalAudioMixingFinish = @"localAudioMixingFinish";
 static NSString *AGRemoteAudioMixingStart = @"remoteAudioMixingStart";
 static NSString *AGRemoteAudioMixingFinish = @"remoteAudioMixingFinish";
 static NSString *AGAudioEffectFinish = @"audioEffectFinish";

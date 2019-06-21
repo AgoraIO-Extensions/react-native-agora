@@ -1981,8 +1981,9 @@ RCT_EXPORT_METHOD(sendMediaData:(NSString *)dataStr
 RCT_EXPORT_METHOD(registerMediaMetadataObserver
                   :(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  BOOL res = [_rtcEngine setMediaMetadataDataSource:self withType:AgoraMetadataTypeVideo];
-  if (res == YES) {
+  if (YES == [_rtcEngine setMediaMetadataDataSource:self withType:AgoraMetadataTypeVideo] &&
+    YES == [_rtcEngine setMediaMetadataDelegate:self withType:AgoraMetadataTypeVideo]
+    ) {
     resolve(@{
               @"success": @(YES)
               });
@@ -1991,7 +1992,7 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                                                              @"code": @(-1),
                                                                              @"message":@{
                                                                                  @"success": @(NO),
-                                                                                 @"value":[NSNumber numberWithInteger:res]
+                                                                                 @"value":@(0)
                                                                                  }
                                                                              }]);
   }
@@ -2046,7 +2047,7 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
            AGAudioTransportStatsOfUid,
            AGVideoTransportStatsOfUid,
            
-           AGLocalAudioMixingFinish,
+           AGAudioMixingStateChanged,
            AGRemoteAudioMixingStart,
            AGRemoteAudioMixingFinish,
            AGAudioEffectFinish,
@@ -2063,7 +2064,6 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
            AGMediaEngineLoaded,
            AGMediaEngineStartCall,
            AGIntervalTest,
-           AGAudioMixingStateChanged,
            AGLastmileProbeTestResult,
            AGRtmpStreamingStateChanged,
            AGLocalVideoChanged,
@@ -2433,12 +2433,6 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                                     @"lost": @(lost),
                                                     @"rxKBitrate": @(rxKBitRate)
                                                     }];
-}
-
-- (void)rtcEngineLocalAudioMixingDidFinish:(AgoraRtcEngineKit *_Nonnull)engine {
-  [self sendEvent:AGLocalAudioMixingFinish params:@{
-                                                     @"message": @"LocalAudioMixingSucceedFinish"
-                                                     }];
 }
 
 - (void)rtcEngineRemoteAudioMixingDidStart:(AgoraRtcEngineKit *_Nonnull)engine {

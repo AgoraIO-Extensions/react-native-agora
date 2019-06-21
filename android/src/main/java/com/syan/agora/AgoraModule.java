@@ -291,6 +291,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private final static String AGNetworkTypeChanged = "networkTypeChanged";
     private final static String AGFirstRemoteAudioDecoded = "firstRemoteAudioDecoded";
     private final static String AGMediaMetaDataReceived = "mediaMetaDataReceived";
+    private final static String AGLocalVideoChanged = "localVideoChanged";
     private final static String AGRemoteVideoStateChanged = "remoteVideoStateChanged";
     private final static String AGLocalPublishFallbackToAudioOnly = "localPublishFallbackToAudioOnly";
     private final static String AGRemoteSubscribeFallbackToAudioOnly = "remoteSubscribeFallbackToAudioOnly";
@@ -309,10 +310,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private final static String AGAudioTransportStatsOfUid = "audioTransportStatsOfUid";
     private final static String AGVideoTransportStatsOfUid = "videoTransportStatsOfUid";
 
-    private final static String AGLocalAudioMixingFinish = "localAudioMixingFinish";
     private final static String AGRemoteAudioMixingStart = "remoteAudioMixingStart";
     private final static String AGRemoteAudioMixingFinish = "remoteAudioMixingFinish";
     private final static String AGAudioEffectFinish = "audioEffectFinish";
+    private final static String AGAudioMixingStateChanged = "audioMixingStateChanged";
 
     private final static String AGStreamPublished = "streamPublished";
     private final static String AGStreamUnpublish = "streamUnpublish";
@@ -594,18 +595,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             });
         }
 
-//        @Override
-//        public void onVideoStopped() {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    WritableMap map = Arguments.createMap();
-//                    map.putString("message", "VideoStopped");
-//                    sendEvent(getReactApplicationContext(), AGVideoStopped, map);
-//                }
-//            });
-//        }
-
         @Override
         public void onFirstLocalVideoFrame(final int width, final int height, final int elapsed) {
             runOnUiThread(new Runnable() {
@@ -810,18 +799,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
 
         @Override
-        public void onCameraReady() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    WritableMap map = Arguments.createMap();
-                    map.putString("message", "CameraDidReady");
-                    sendEvent(getReactApplicationContext(), AGCameraReady, map);
-                }
-            });
-        }
-
-        @Override
         public void onCameraFocusAreaChanged(final Rect rect) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -890,6 +867,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("userCount", stats.users);
                     statsMap.putDouble("cpuAppUsage", stats.cpuAppUsage);
                     statsMap.putDouble("cpuTotalUsage", stats.cpuTotalUsage);
+                    statsMap.putInt("txPacketLossRate", stats.txPacketLossRate);
+                    statsMap.putInt("rxPacketLossRate", stats.rxPacketLossRate);
 
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
@@ -1002,13 +981,14 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
 
         @Override
-        public void onAudioMixingFinished() {
+        public void onAudioMixingStateChanged(final int state, final int errorCode) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     WritableMap map = Arguments.createMap();
-                    map.putString("message", "LocalAudioMixingSucceedFinish");
-                    sendEvent(getReactApplicationContext(), AGLocalAudioMixingFinish, map);
+                    map.putInt("state", state);
+                    map.putInt("errorCode", errorCode);
+                    sendEvent(getReactApplicationContext(), AGAudioMixingStateChanged, map);
                 }
             });
         }
@@ -1143,6 +1123,20 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     WritableMap map = Arguments.createMap();
                     map.putString("message", "LastmileProbeTestResult");
                     sendEvent(getReactApplicationContext(), AGLastmileProbeResult, map);
+                }
+            });
+        }
+
+        @Override
+        public void onLocalVideoStateChanged(final int localVideoState, final int error) {
+            super.onLocalVideoStateChanged(localVideoState, error);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putString("message", "LocalVideoChanged");
+                    map.putInt("state", localVideoState);
+                    sendEvent(getReactApplicationContext(), AGLocalVideoChanged, map);
                 }
             });
         }
@@ -1769,7 +1763,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
             if (res < 0) throw new ReactNativeAgoraException("getAudioMixingPlayoutVolume Failed", res);
             WritableMap map = Arguments.createMap();
-            map.putString("volume", Integer.toString(res));
+            map.putBoolean("success", true);
+            map.putInt("value", res);
             promise.resolve(map);
         } catch (Exception e) {
             promise.reject("-1", e);
