@@ -93,7 +93,7 @@ Pod::Spec.new do |s|
       "$(SDKROOT)../../ios/Pods"
     ]
   }
-  s.dependency "AgoraRtcEngine_iOS", "2.4.0.1"
+  s.dependency "AgoraRtcEngine_iOS", "2.4.1"
   s.dependency 'React'
 
 end
