@@ -1,5 +1,19 @@
 ## THE CHANGELOG
 
+#### 2.4.1-alpha
+- support 2.4.1-alpha.1 agora video sdk android-2.4.1 / iOS-2.4.1
+  1. Deprecate iOS
+  2. Add methods getAudioMixingPlayoutVolume, getAudioMixingPublishVolume for audio mixing troubleshooting.
+  3. Add `txPacketLossRate`, `rxPacketLossRate` on `rtcStats` interface. usage: `RtcEngine.on('rtcStats', (data) => console.log(data))`.
+  4. Rename `receivedFrameRate` to `rendererOutputFrameRate` this property related on `localVideoStats` and `remoteVideoStats`.
+  5. Add event 'localVideoChanged' and Deprecate events `cameraReady` and `videoStopped`. You can listen `localVideoChanged` event instead  `cameraReady` & `videoStopped`.
+  6. Add event `rtmpStreamingStateChanged` for rtmp streaming troubleshooting
+  7. Add event `audioCodecProfile` on `liveTranscoding` interface.
+  8. Add event `networkTypeChanged` for network troubleshooting.
+  9. Add method `registerMediaMetadataObserver` method, this method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes. note: Call this method before the joinChannel method. and applies to `channelProfile` with 1. 
+  10. Add method `sendMediaData`, this method enables you send media data under the live broadcast mode (`channelProfile` = 1) note: call this method after the `registerMediaMetadataObserver` method.
+  11. Add event `audioMixingStateChanged` and Deprecate event 'localAudioMixingFinish`.
+  11. Add `firstRemoteAudioDecoded` event you can get more detail [here](https://docs.agora.io/en/Interactive%20Broadcast/release_android_video?platform=Android#v241)
 
 #### 2.4.0-alpha
 - support 2.4.0-alpha.1 agora video sdk android-2.4.0 / iOS-2.4.0.1 and add sendMessage support in the same channel. Deprecate: startEchoTest and setVideoQualityParameters
