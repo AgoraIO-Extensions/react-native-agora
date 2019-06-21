@@ -61,7 +61,7 @@ dependencies {
     def androidSupportVersion = rootProject.hasProperty("androidSupportVersion")  ? rootProject.androidSupportVersion : DEFAULT_ANDROID_SUPPORT_VERSION
     // from internet
     implementation "com.android.support:appcompat-v7:$androidSupportVersion"
-    implementation "io.agora.rtc:full-sdk:2.4.0"
+    implementation "io.agora.rtc:full-sdk:2.4.1"
     // from node_modules
     implementation "com.facebook.react:react-native:+"
 }

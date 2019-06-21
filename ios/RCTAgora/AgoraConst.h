@@ -29,6 +29,7 @@ static NSString *AGAudioVolumeIndication = @"audioVolumeIndication";
 static NSString *AGActiveSpeaker = @"activeSpeaker";
 static NSString *AGFirstLocalAudioFrame = @"firstLocalAudioFrame";
 static NSString *AGFirstRemoteAudioFrame = @"firstRemoteAudioFrame";
+static NSString *AGFirstRemoteAudioDecoded = @"firstRemoteAudioDecoded";
 static NSString *AGVideoStopped = @"videoStopped";
 static NSString *AGFirstLocalVideoFrame = @"firstLocalVideoFrame";
 static NSString *AGFirstRemoteVideoDecoded = @"firstRemoteVideoDecoded";
@@ -56,7 +57,6 @@ static NSString *AGRemoteAudioStats = @"remoteAudioStats";
 static NSString *AGAudioTransportStatsOfUid = @"audioTransportStatsOfUid";
 static NSString *AGVideoTransportStatsOfUid = @"videoTransportStatsOfUid";
 
-static NSString *AGLocalAudioMixingFinish = @"localAudioMixingFinish";
 static NSString *AGRemoteAudioMixingStart = @"remoteAudioMixingStart";
 static NSString *AGRemoteAudioMixingFinish = @"remoteAudioMixingFinish";
 static NSString *AGAudioEffectFinish = @"audioEffectFinish";
@@ -76,6 +76,11 @@ static NSString *AGMediaEngineStartCall = @"mediaEngineStartCall";
 static NSString *AGIntervalTest = @"startEchoTestWithInterval";
 static NSString *AGAudioMixingStateChanged = @"audioMixingStateChanged";
 static NSString *AGLastmileProbeTestResult = @"lastmileProbeTestResult";
+
+static NSString *AGRtmpStreamingStateChanged = @"rtmpStreamingStateChanged";
+static NSString *AGLocalVideoChanged = @"localVideoChanged";
+static NSString *AGNetworkTypeChanged = @"networkTypeChanged";
+static NSString *AGMediaMetaDataReceived = @"mediaMetaDataReceived";
 
 typedef NS_ENUM(NSInteger, AgoraModeType) {
   AgoraAudioMode,
