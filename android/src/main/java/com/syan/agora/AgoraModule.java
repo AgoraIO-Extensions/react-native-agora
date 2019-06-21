@@ -290,7 +290,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private final static String AGRtmpStreamingStateChanged = "rtmpStreamingStateChanged";
     private final static String AGNetworkTypeChanged = "networkTypeChanged";
     private final static String AGFirstRemoteAudioDecoded = "firstRemoteAudioDecoded";
-    private final static String AGMediaMetaDataRecevied = "mediaMetaDataRecevied";
+    private final static String AGMediaMetaDataReceived = "mediaMetaDataReceived";
     private final static String AGRemoteVideoStateChanged = "remoteVideoStateChanged";
     private final static String AGLocalPublishFallbackToAudioOnly = "localPublishFallbackToAudioOnly";
     private final static String AGRemoteSubscribeFallbackToAudioOnly = "remoteSubscribeFallbackToAudioOnly";
@@ -327,6 +327,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private final static String AGMediaEngineStartCall = "mediaEngineStartCall";
     private final static String AGLastmileProbeResult = "lastmileProbeTestResult";
 //    private final static String AGIntervalTest = "startEchoTestWithInterval";
+
+    private MediaObserver mediaObserver = null;
 
     private IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
 
@@ -2086,46 +2088,26 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
-    private static final Integer MAX_META_DATA = 1024;
-
-    private byte[] metadata = null;
-
     @ReactMethod
-    public void sendMediaData(String data) {
-        metadata = data.getBytes(Charset.forName("UTF-8"));
+    public void sendMediaData(String data, final Promise promise) {
+        if (null == mediaObserver) {
+            promise.reject("-1", "sendMediaData failed");
+        } else {
+            mediaObserver.setMetadata(data.getBytes(Charset.forName("UTF-8")));
+            WritableMap map = Arguments.createMap();
+            map.putBoolean("success", true);
+            promise.resolve(map);
+        }
     }
 
     @ReactMethod
     public void registerMediaMetadataObserver(final Promise promise) {
         try {
-            int res = AgoraManager.getInstance().mRtcEngine.registerMediaMetadataObserver(new IMetadataObserver() {
-                @Override
-                public int getMaxMetadataSize() { return MAX_META_DATA; }
-
-                @Override
-                public byte[] onReadyToSendMetadata(long timeStampMs) {
-                    if (metadata == null) {
-                        return null;
-                    }
-                    byte[] toSend = metadata;
-                    if (toSend.length > MAX_META_DATA) {
-                        return null;
-                    }
-                    metadata = null;
-                    return toSend;
-                }
-
-                @Override
-                public void onMetadataReceived(byte[] buffer, int uid, long timeStampMs) {
-                    WritableMap map = Arguments.createMap();
-                    map.putString("data", new String(buffer, Charset.forName("UTF-8")));
-                    map.putString("uid", Integer.toString(uid));
-                    map.putString("ts", Long.toString(timeStampMs));
-                    sendEvent(getReactApplicationContext(), AGMediaMetaDataRecevied, map);
-                }
-            }, IMetadataObserver.VIDEO_METADATA);
+            mediaObserver = new MediaObserver(getReactApplicationContext());
+            int res = AgoraManager.getInstance().mRtcEngine
+                    .registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA);
             if (res < 0) {
-                new ReactNativeAgoraException("setRemoteDefaultVideoStreamType Failed", res);
+                new ReactNativeAgoraException("registerMediaMetadataObserver Failed", res);
             }
             WritableMap map = Arguments.createMap();
             map.putBoolean("success", true);
@@ -2760,7 +2742,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
 
-
     @ReactMethod
 
     private void sendEvent(ReactContext reactContext,
@@ -2770,5 +2751,4 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
-
 }
