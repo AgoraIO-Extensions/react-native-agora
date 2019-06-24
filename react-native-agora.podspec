@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
     end
     
   s.dependency 'React'
-    s.dependency "AgoraRtcEngine_iOS", "2.4.0.1"
+    s.dependency "AgoraRtcEngine_iOS", "2.4.1"
 end
