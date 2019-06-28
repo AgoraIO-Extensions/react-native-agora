@@ -8,6 +8,8 @@
 
 #import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
 
+static NSString *AG_PREFIX = @"ag_rtc";
+
 static NSString *RCTAgoraErrorDomain = @"RCTAgoraErrorDomain";
 
 static NSString *AGWarning = @"warning";
@@ -97,4 +99,5 @@ typedef NS_ENUM(NSInteger, AgoraModeType) {
 
 + (instancetype)share;
 
++ (NSArray<NSString*> *) supportEvents;
 @end

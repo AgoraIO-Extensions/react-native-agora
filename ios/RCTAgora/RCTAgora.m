@@ -1998,84 +1998,15 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
   }
 }
 
+
 - (NSArray<NSString *> *)supportedEvents {
-  return @[
-           AGWarning,
-           AGError,
-           AGApiCallExecute,
-           AGJoinChannelSuccess,
-           AGRejoinChannelSuccess,
-           AGLeaveChannel,
-           AGClientRoleChanged,
-           AGUserJoined,
-           AGUserOffline,
-           AGConnectionStateChanged,
-           AGConnectionLost,
-           AGTokenPrivilegeWillExpire,
-           AGRequestToken,
-           
-           AGMicrophoneEnabled,
-           AGAudioVolumeIndication,
-           AGActiveSpeaker,
-           AGFirstLocalAudioFrame,
-           AGFirstRemoteAudioFrame,
-           AGFirstRemoteAudioDecoded,
-           AGVideoStopped,
-           AGFirstLocalVideoFrame,
-           AGFirstRemoteVideoDecoded,
-           AGFirstRemoteVideoFrame,
-           AGUserMuteAudio,
-           AGUserMuteVideo,
-           AGUserEnableVideo,
-           AGUserEnableLocalVideo,
-           AGVideoSizeChanged,
-           AGRemoteVideoStateChanged,
-           AGLocalPublishFallbackToAudioOnly,
-           AGRemoteSubscribeFallbackToAudioOnly,
-           
-           AGAudioRouteChanged,
-           AGCameraReady,
-           AGCameraFocusAreaChanged,
-           AGCameraExposureAreaChanged,
-           
-           AGRtcStats,
-           AGLastmileQuality,
-           AGNetworkQuality,
-           AGLocalVideoStats,
-           AGRemoteVideoStats,
-           AGRemoteAudioStats,
-           AGAudioTransportStatsOfUid,
-           AGVideoTransportStatsOfUid,
-           
-           AGAudioMixingStateChanged,
-           AGRemoteAudioMixingStart,
-           AGRemoteAudioMixingFinish,
-           AGAudioEffectFinish,
-           
-           AGStreamPublished,
-           AGStreamUnpublish,
-           AGTranscodingUpdate,
-           
-           AGStreamInjectedStatus,
-           
-           AGReceiveStreamMessage,
-           AGOccurStreamMessageError,
-           
-           AGMediaEngineLoaded,
-           AGMediaEngineStartCall,
-           AGIntervalTest,
-           AGLastmileProbeTestResult,
-           AGRtmpStreamingStateChanged,
-           AGLocalVideoChanged,
-           AGNetworkTypeChanged,
-           AGFirstRemoteAudioFrame,
-           AGMediaMetaDataReceived
-           ];
+  return [AgoraConst supportEvents];
 }
 
 - (void) sendEvent:(NSString *)msg params:(NSDictionary *)params {
   if (hasListeners) {
-    [self sendEventWithName:msg body:params];
+    NSString *evtName = [NSString stringWithFormat:@"%@%@", AG_PREFIX, msg];
+    [self sendEventWithName:evtName body:params];
   }
 }
 

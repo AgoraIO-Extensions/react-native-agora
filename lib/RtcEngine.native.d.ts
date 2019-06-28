@@ -7,7 +7,7 @@ import { Option, Callback, AudioMixingOption, DataStreamOption, PlayEffectOption
  * Other methods of the RtcEngine object serve for agora native sdk and set up error logging.
  */
 declare class RtcEngine {
-    private static eventTypes;
+    private static readonly AG_PREFIX;
     /**
      * Creates a RtcEngine Object internal.
      *
@@ -35,21 +35,6 @@ declare class RtcEngine {
      * @param listener
      */
     static on(eventType: string, listener: (...args: any[]) => any): void;
-    /**
-     * remove event listeners
-     *
-     * This method unsubscribes specified eventType related all listeners. You should call this method when you want to unsubscribe some eventType.
-     * @param eventType
-     */
-    static off(eventType: string): void;
-    /**
-     * remove all events listeners
-     *
-     * This method unsubscribes all eventTypes related listeners.
-     *
-     * @param token
-     */
-    static removeAllListeners(): void;
     /**
      * renew token
      *

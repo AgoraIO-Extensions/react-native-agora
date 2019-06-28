@@ -40,7 +40,7 @@ const AgoraEventEmitter = new NativeEventEmitter(Agora);
  */
 class RtcEngine {
 
-    private static eventTypes: Set<string> = new Set<string>();
+    private static readonly AG_PREFIX: string = 'ag_rtc';
 
     /**
      * Creates a RtcEngine Object internal.
@@ -75,33 +75,7 @@ class RtcEngine {
      * @param listener
      */
     public static on(eventType: string, listener: (...args: any[]) => any) {
-        this.eventTypes.add(eventType);
-        AgoraEventEmitter.addListener(eventType, listener);
-    }
-
-    /**
-     * remove event listeners
-     *
-     * This method unsubscribes specified eventType related all listeners. You should call this method when you want to unsubscribe some eventType.
-     * @param eventType
-     */
-    public static off(eventType: string) {
-        AgoraEventEmitter.removeListener(eventType, () => {});
-        this.eventTypes.delete(eventType);
-    }
-
-    /**
-     * remove all events listeners
-     *
-     * This method unsubscribes all eventTypes related listeners.
-     *
-     * @param token
-     */
-    public static removeAllListeners() {
-        for (let eventType of this.eventTypes) {
-            AgoraEventEmitter.removeListener(eventType, () => {});
-        }
-        this.eventTypes.clear();
+        AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, listener);
     }
 
     /**
