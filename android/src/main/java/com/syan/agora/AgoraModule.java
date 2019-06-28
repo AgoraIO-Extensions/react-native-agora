@@ -36,6 +36,7 @@ import io.agora.rtc.video.CameraCapturerConfiguration;
 import io.agora.rtc.video.VideoEncoderConfiguration;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
+import static com.syan.agora.AgoraConst.*;
 
 public class AgoraModule extends ReactContextBaseJavaModule {
 
@@ -259,74 +260,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         return constants;
     }
 
-    private final static String AGWarning = "warning";
-    private final static String AGError = "error";
-    private final static String AGApiCallExecute = "apiCallExecute";
-    private final static String AGJoinChannelSuccess = "joinChannelSuccess";
-    private final static String AGRejoinChannelSuccess = "rejoinChannelSuccess";
-    private final static String AGLeaveChannel = "leaveChannel";
-    private final static String AGClientRoleChanged = "clientRoleChanged";
-    private final static String AGUserJoined = "userJoined";
-    private final static String AGUserOffline = "userOffline";
-    private final static String AGConnectionStateChanged = "connectionStateChanged";
-    private final static String AGConnectionLost = "connectionLost";
-    private final static String AGTokenPrivilegeWillExpire = "tokenPrivilegeWillExpire";
-    private final static String AGRequestToken = "requestToken";
 
-    private final static String AGMicrophoneEnabled = "microphoneEnabled";
-    private final static String AGAudioVolumeIndication = "audioVolumeIndication";
-    private final static String AGActiveSpeaker = "activeSpeaker";
-    private final static String AGFirstLocalAudioFrame = "firstLocalAudioFrame";
-    private final static String AGFirstRemoteAudioFrame = "firstRemoteAudioFrame";
-    private final static String AGVideoStopped = "videoStopped";
-    private final static String AGFirstLocalVideoFrame = "firstLocalVideoFrame";
-    private final static String AGFirstRemoteVideoDecoded = "firstRemoteVideoDecoded";
-    private final static String AGFirstRemoteVideoFrame = "firstRemoteVideoFrame";
-    private final static String AGUserMuteAudio = "userMuteAudio";
-    private final static String AGUserMuteVideo = "userMuteVideo";
-    private final static String AGUserEnableVideo = "userEnableVideo";
-    private final static String AGUserEnableLocalVideo = "userEnableLocalVideo";
-    private final static String AGVideoSizeChanged = "videoSizeChanged";
-    private final static String AGRtmpStreamingStateChanged = "rtmpStreamingStateChanged";
-    private final static String AGNetworkTypeChanged = "networkTypeChanged";
-    private final static String AGFirstRemoteAudioDecoded = "firstRemoteAudioDecoded";
-    private final static String AGMediaMetaDataReceived = "mediaMetaDataReceived";
-    private final static String AGLocalVideoChanged = "localVideoChanged";
-    private final static String AGRemoteVideoStateChanged = "remoteVideoStateChanged";
-    private final static String AGLocalPublishFallbackToAudioOnly = "localPublishFallbackToAudioOnly";
-    private final static String AGRemoteSubscribeFallbackToAudioOnly = "remoteSubscribeFallbackToAudioOnly";
-
-    private final static String AGAudioRouteChanged = "audioRouteChanged";
-    private final static String AGCameraReady = "cameraReady";
-    private final static String AGCameraFocusAreaChanged = "cameraFocusAreaChanged";
-    private final static String AGCameraExposureAreaChanged = "cameraExposureAreaChanged";
-
-    private final static String AGRtcStats = "rtcStats";
-    private final static String AGLastmileQuality = "lastmileQuality";
-    private final static String AGNetworkQuality = "networkQuality";
-    private final static String AGLocalVideoStats = "localVideoStats";
-    private final static String AGRemoteVideoStats = "remoteVideoStats";
-    private final static String AGRemoteAudioStats = "remoteAudioStats";
-    private final static String AGAudioTransportStatsOfUid = "audioTransportStatsOfUid";
-    private final static String AGVideoTransportStatsOfUid = "videoTransportStatsOfUid";
-
-    private final static String AGRemoteAudioMixingStart = "remoteAudioMixingStart";
-    private final static String AGRemoteAudioMixingFinish = "remoteAudioMixingFinish";
-    private final static String AGAudioEffectFinish = "audioEffectFinish";
-    private final static String AGAudioMixingStateChanged = "audioMixingStateChanged";
-
-    private final static String AGStreamPublished = "streamPublished";
-    private final static String AGStreamUnpublish = "streamUnpublish";
-    private final static String AGTranscodingUpdate = "transcodingUpdate";
-
-    private final static String AGStreamInjectedStatus = "streamInjectedStatus";
-
-    private final static String AGReceiveStreamMessage = "receiveStreamMessage";
-    private final static String AGOccurStreamMessageError = "occurStreamMessageError";
-
-    private final static String AGMediaEngineLoaded = "mediaEngineLoaded";
-    private final static String AGMediaEngineStartCall = "mediaEngineStartCall";
-    private final static String AGLastmileProbeResult = "lastmileProbeTestResult";
 //    private final static String AGIntervalTest = "startEchoTestWithInterval";
 
     private MediaObserver mediaObserver = null;
@@ -2742,8 +2676,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private void sendEvent(ReactContext reactContext,
                            String eventName,
                            @Nullable WritableMap params) {
+        StringBuffer agoraEvtName = new StringBuffer(AG_PREFIX);
+        agoraEvtName.append(eventName);
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, params);
+                .emit(agoraEvtName.toString(), params);
     }
 }
