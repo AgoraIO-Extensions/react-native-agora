@@ -375,17 +375,6 @@ class RtcEngine {
     }
 
     /**
-     * create data stream
-     *
-     * This method creates data stream with options
-     *
-     * @param options {@link DataStreamOption}
-     */
-    public static createDataStream(options: DataStreamOption) {
-        return Agora.createDataStream(options);
-    }
-
-    /**
      * check for mobile phone speaker enabled
      *
      * This method checks the phone speaker is enabled
@@ -894,6 +883,16 @@ class RtcEngine {
     }
 
     /**
+     * @deprecated sendMessage
+     * sendMessage
+     */
+
+    /**
+     * @deprecated createDataStream
+     * createDataStream
+     */
+
+    /**
      * @deprecated setupLocalVideo
      * setupLocalVideo 
      */
@@ -1082,19 +1081,6 @@ class RtcEngine {
      */
     public static setLog(filepath: string, level: number, maxfileSize: number): Promise<any> {
         return Agora.setLog(filepath, level, maxfileSize)
-    }
-
-    /**
-     * send stream message
-     *
-     * This method sends stream message by specified uid
-     *
-     * @param uid
-     * @param data
-     * @returns Promise<{success, value}>
-     */
-    public static sendMessage(streamID: number, data: any, reliable: boolean, ordered: boolean): Promise<any> {
-        return Agora.sendMessage({streamID, data, reliable, ordered});
     }
 
     /**

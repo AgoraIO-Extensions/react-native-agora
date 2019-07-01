@@ -1506,24 +1506,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void createDataStream(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
-                    .createDataStream(
-                            options.getBoolean("ordered"),
-                            options.getBoolean("reliable")
-                            );
-            if (res != 0) throw new ReactNativeAgoraException("adjustPlaybackSignalVolume Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putString("message", "createDataStream");
-            promise.resolve(map);
-        } catch(Exception e) {
-            promise.reject(e);
-        }
-    }
-
-    @ReactMethod
     public void methodisSpeakerphoneEnabled(Callback callback) {
         WritableMap map = Arguments.createMap();
         map.putBoolean("status", AgoraManager.getInstance().mRtcEngine.isSpeakerphoneEnabled());
@@ -2463,31 +2445,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setLocalRenderMode(int mode) {
         AgoraManager.getInstance().mRtcEngine.setLocalRenderMode(mode);
-    }
-
-    // set remote video render mode
-    @ReactMethod
-    public void setRemoteRenderMode(int uid, int mode) {
-        AgoraManager.getInstance().mRtcEngine.setRemoteRenderMode(uid, mode);
-    }
-
-    @ReactMethod
-    public void sendMessage(ReadableMap options, Promise promise) {
-        try {
-            boolean reliable = options.getBoolean("reliable");
-            boolean ordered = options.getBoolean("ordered");
-            String data = options.getString("data");
-            int streamID = AgoraManager.getInstance().mRtcEngine.createDataStream(reliable, ordered);
-            if (streamID < 0) throw new ReactNativeAgoraException("createDataStream Failed", streamID);
-            int res = AgoraManager.getInstance().mRtcEngine.sendStreamMessage(streamID, data.getBytes(Charset.forName("UTF-8")));
-            if (res != 0) throw new ReactNativeAgoraException("sendStreamMessage Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("streamID", streamID);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
     }
 
     @ReactMethod

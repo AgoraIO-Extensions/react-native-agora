@@ -1,4 +1,4 @@
-import { Option, Callback, AudioMixingOption, DataStreamOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
+import { Option, Callback, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
 /**
  * RtcEngine is the javascript object for control agora native sdk through react native bridge.
  *
@@ -242,14 +242,6 @@ declare class RtcEngine {
      * @param smooth
      */
     static enableAudioVolumeIndication(interval: number, smooth: number): void;
-    /**
-     * create data stream
-     *
-     * This method creates data stream with options
-     *
-     * @param options {@link DataStreamOption}
-     */
-    static createDataStream(options: DataStreamOption): any;
     /**
      * check for mobile phone speaker enabled
      *
@@ -618,6 +610,14 @@ declare class RtcEngine {
      */
     static removeInjectStreamUrl(options: RemoveInjectStreamOption): Promise<any>;
     /**
+     * @deprecated sendMessage
+     * sendMessage
+     */
+    /**
+     * @deprecated createDataStream
+     * createDataStream
+     */
+    /**
      * @deprecated setupLocalVideo
      * setupLocalVideo
      */
@@ -759,16 +759,6 @@ declare class RtcEngine {
      * @returns Promise<{success, value}>
      */
     static setLog(filepath: string, level: number, maxfileSize: number): Promise<any>;
-    /**
-     * send stream message
-     *
-     * This method sends stream message by specified uid
-     *
-     * @param uid
-     * @param data
-     * @returns Promise<{success, value}>
-     */
-    static sendMessage(streamID: number, data: any, reliable: boolean, ordered: boolean): Promise<any>;
     /**
      * add publish stream url
      *
