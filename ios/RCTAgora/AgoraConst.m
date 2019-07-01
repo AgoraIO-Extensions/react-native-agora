@@ -100,7 +100,7 @@ static AgoraConst *_person;
                                   AGMediaMetaDataReceived];
   
   NSMutableArray<NSString *> *eventList = [NSMutableArray arrayWithCapacity:[array count]];
-  [eventList enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+  [array enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     id mapObj = [NSString stringWithFormat:@"%@%@", AG_PREFIX, obj];
     [eventList addObject:mapObj];
   }];
