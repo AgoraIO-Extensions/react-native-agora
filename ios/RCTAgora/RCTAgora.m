@@ -464,41 +464,6 @@ RCT_EXPORT_METHOD(enableAudioVolumeIndication: (NSInteger) interval smooth:(NSIn
   [self.rtcEngine enableAudioVolumeIndication:interval smooth:smooth];
 }
 
-RCT_EXPORT_METHOD(sendMessage
-                  :(NSDictionary *)options
-                  resolve:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger uid = 0;
-  if (options[@"streamID"] != nil) {
-    uid = [options[@"streamID"] integerValue];
-  }
-  NSInteger streamID = [self.rtcEngine createDataStream:&uid reliable:[options[@"reliable"] boolValue] ordered:[options[@"ordered"] boolValue]];
-  if (streamID < 0) {
-    reject(@"131001", @"createDataStream failed", [self makeNSError:@{
-                                                                      @"code": @(131001),
-                                                                      @"message":@{
-                                                                        @"success": @(NO),
-                                                                        @"value":[NSNumber numberWithInteger:uid]
-                                                                        }
-                                                                    }]);
-  }
-  NSString *dataStr = options[@"data"];
-  NSData *data = [dataStr dataUsingEncoding:NSUTF8StringEncoding];
-  NSInteger res = [self.rtcEngine sendStreamMessage:uid data:data];
-  if (res == 0) {
-    resolve(@{@"success": @(YES), @"streamID": @(uid)});
-  } else {
-    reject(@"131001", @"sendStreamMessage failed", [self makeNSError:@{
-                                                                       @"code": @(131001),
-                                                                       @"message":@{
-                                                                         @"success": @(NO),
-                                                                         @"value":[NSNumber numberWithInteger:res]
-                                                                         }
-                                                                     }]);
-  }
-}
-
-
 // is speaker phone enabled
 RCT_EXPORT_METHOD(methodisSpeakerphoneEnabled:(RCTResponseSenderBlock)callback) {
   callback(@[@{@"status": @([self.rtcEngine isSpeakerphoneEnabled])}]);
