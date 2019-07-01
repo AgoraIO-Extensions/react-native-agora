@@ -1,8 +1,13 @@
 ## THE CHANGELOG
 
+#### 2.4.1-alpha.2
+- deprecated `sendMessage` & `createDataStream` & `removeAllListeners`
+- refactor event system
+
+
 #### 2.4.1-alpha
 - support 2.4.1-alpha.1 agora video sdk android-2.4.1 / iOS-2.4.1
-  1. Deprecate iOS
+  1. Deprecate iOS manual link operator, instead using cocoapods resolve compile dependencies.
   2. Add methods getAudioMixingPlayoutVolume, getAudioMixingPublishVolume for audio mixing troubleshooting.
   3. Add `txPacketLossRate`, `rxPacketLossRate` on `rtcStats` interface. usage: `RtcEngine.on('rtcStats', (data) => console.log(data))`.
   4. Rename `receivedFrameRate` to `rendererOutputFrameRate` this property related on `localVideoStats` and `remoteVideoStats`.
