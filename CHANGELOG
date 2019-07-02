@@ -1,7 +1,7 @@
 ## THE CHANGELOG
 
 #### 2.4.1-alpha.2
-- deprecated `sendMessage` & `createDataStream` & `removeAllListeners`
+- deprecated `sendMessage` & `createDataStream` & `removeAllListeners` & `off`
 - refactor event system
 - fix `android` enum convert failed.
 
