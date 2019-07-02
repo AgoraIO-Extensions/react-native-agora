@@ -71,11 +71,102 @@ class RtcEngine {
      * add event listener
      *
      * This method subscribes specified eventType and run listener. You should call this method at first.
+     * 
+     * @events
+     * ---
+     * name | description | usage |
+     * error | occurs when emit error  | on("error", evt) |
+     * warning | occurs when emit warning | on("warning", evt) |
+     * messageReceived | occurs when message received | on("messageReceived", evt) |
+     * localInvitationReceivedByPeer | occurs when local inviation received by peer | on("localInvitationReceivedByPeer", evt) |
+     * localInvitationAccepted | occurs when local invitation accepted | on("localInvitationAccepted", evt) |
+     * localInvitationRefused | occurs when local invitation refused | on("localInvitationRefused", evt) |
+     * localInvitationCanceled | occurs when local invitation canceled | on("localInvitationCanceled", evt) |
+     * localInvitationFailure | occurs when local invitation failure | on("localInvitationFailure", evt) |
+     * remoteInvitationFailure | occurs when remote invitation failure | on("remoteInvitationFailure", evt) |
+     * remoteInvitationReceived | occurs when remote invitation received | on("remoteInvitationReceived", evt) |
+     * remoteInvitationAccepted | occurs when remote invitation accepted | on("remoteInvitationAccepted", evt) |
+     * remoteInvitationRefused | occurs when remote invitation refused | on("remoteInvitationRefused", evt) |
+     * remoteInvitationCanceled | occurs when remote invitation canceled | on("remoteInvitationCanceled", evt) |
+     * channelMessageReceived | occurs when received channel message | on("channelMessageReceived", evt) |
+     * channelMemberJoined | occurs when some one joined in the subscribed channel | on("channelMemberJoined", evt) |
+     * channelMemberLeft | occurs when sone one left from u subscribed channel | on("channelMemberLeft", evt) |
+     * tokenExpired | occurs when token has expired | on("tokenExpired", evt) |
+     * apiCallExecute | occurs when apiCallExecute emit, this event is api call monitor | on("apiCallExecute", evt) |
+     * joinChannelSuccess | occurs when joinChannel success | on("joinChannelSuccess", evt) |
+     * rejoinChannelSuccess | occurs when rejoinChannel success | on("rejoinChannelSuccess", evt) |
+     * leaveChannel | occurs when leaveChannel success | on("leaveChannel", evt) |
+     * clientRoleChanged | occurs when setClientRole changed | on("clientRoleChanged", evt) |
+     * userJoined | occurs when remote user joined | on("userJoined", evt) |
+     * userOffline | this event occurs when remote user offline in rtc mode, this events only occurs host user offline in live mode | on("userOffline", evt) |
+     * connectionStateChanged | occurs when sdk connection changed state | on("connectionStateChanged", evt) |
+     * connectionLost | occurs when sdk connection lost | on("connectionLost", evt) |
+     * tokenPrivilegeWillExpire | occurs when token will expire | on("tokenPrivilegeWillExpire", evt) |
+     * requestToken | occurs when token expired | on("requestToken") |
+     * microphoneEnabled | occurs when microphone enable state changed | on("microphoneEnabled", evt) |
+     * audioVolumeIndication | occurs when audio volume indication changed | on("audioVolumeIndication", evt) |
+     * activeSpeaker | occurs when detect active speaker | on("activeSpeaker", evt) |
+     * firstLocalAudioFrame | occurs when sent first audio frame on local | on("firstLocalAudioFrame", evt) |
+     * firstRemoteAudioFrame | occurs when received first audio frame from remote side | on("firstRemoteAudioFrame", evt) |
+     * firstRemoteAudioDecoded | occurs when first remote audio decoded | on("firstRemoteAudioDecoded", evt) |
+     * firstLocalVideoFrame | occurs when sent first video frame on local | on("firstLocalVideoFrame", evt) |
+     * firstRemoteVideoDecoded | occurs when received first video frame from remote side decoded | on("firstRemoteVideoDecoded", evt) |
+     * firstRemoteVideoFrame | occurs when received first video frame from remote side | on("firstRemoteVideoFrame", evt) |
+     * userMuteAudio | occurs when user mute audio | on("userMuteAudio", evt) |
+     * userMuteVideo | occurs when user mute video | on("userMuteVideo", evt) |
+     * userEnableVideo | occurs when remote side's user change video enable state | on("userEnableVideo", evt) |
+     * userEnableLocalVideo | occurs when user change video enable state on local | on("userEnableLocalVideo", evt) |
+     * videoSizeChanged | occurs when change local or remote side video size or rotation | on("videoSizeChanged", evt) |
+     * remoteVideoStateChanged | occurs when remote video state has any changed | on("remoteVideoStateChanged", evt) |
+     * localPublishFallbackToAudioOnly | occurs when published stream from local side fallback to audio stream | on("localPublishFallbackToAudioOnly", evt) |
+     * remoteSubscribeFallbackToAudioOnly | occurs when subscribed side's stream fallback to audio stream | on("remoteSubscribeFallbackToAudioOnly", evt) |
+     * audioRouteChanged | occurs when local audio route changed | on("audioRouteChanged", evt) |
+     * cameraFocusAreaChanged | occurs when a camera focus area changed | on("cameraFocusAreaChanged", evt) |
+     * cameraExposureAreaChanged | occurs when a camera exposure area changed | on("cameraExposureAreaChanged", evt) |
+     * rtcStats | occurs when reports the statistics of the current call session once every two seconds. | on("rtcStats", evt) | 
+     * lastmileQuality | occurs when reports the last mile network quality of the local user once every two seconds before the user joins a channel.| on("lastmileQuality", evt) | 
+     * networkQuality | occurs when reports the last mile network quality of each user in the channel once every two seconds.| on("networkQuality", evt) | 
+     * localVideoStats | occurs when reports local video statistics | on("localVideoStats", evt) | 
+     * remoteVideoStats | occurs when reports remote video statistics| on("remoteVideoStats", evt) | 
+     * remoteAudioStats | occurs when reports remote audio statistics| on("remoteAudioStats", evt) | 
+     * audioTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote audio stream. | on("audioTransportStatsOfUid", evt) | 
+     * videoTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote video stream.| on("videoTransportStatsOfUid", evt) | 
+     * audioEffectFinish | occurs when the local audio effect playback finishes. | on("audioEffectFinish", evt) | 
+     * streamPublished | occurs when addPublishStreamUrl success| on("streamPublished", evt) | 
+     * streamUnpublish | occurs when removePublishStreamUrl success| on("streamUnpublish", evt) | 
+     * transcodingUpdate | occurs when the cdn live streaming settings are updated | on("transcodingUpdate", evt) | 
+     * streamInjectedStatus | occurs when report the status of online injecting stream to a live broadcast | on("streamInjectedStatus", evt) | 
+     * mediaEngineLoaded | occurs when the media engine loaded | on("mediaEngineLoaded", evt) | 
+     * mediaEngineStartCall | occurs when the media engine call starts | on("mediaEngineStartCall", evt) | 
+     * startEchoTestWithInterval | occurs when startEchoTestWithInterval success | on("startEchoTestWithInterval", evt) | 
+     * audioMixingStateChanged | occurs when reports the local audio mixing state changed | on("audioMixingStateChanged", evt) | 
+     * lastmileProbeTestResult | occurs when reports the last-mile network probe result.| on("lastmileProbeTestResult", evt) | 
+     * rtmpStreamingStateChanged | occurs when reports the rtmp injecting stream state changed | on("rtmpStreamingStateChanged", evt) | 
+     * localVideoChanged | occurs when the local video changed  | on("localVideoChanged", evt) | 
+     * networkTypeChanged | occurs when the device network type changed | on("networkTypeChanged", evt) | 
+     * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) | 
+     * ---
      * @param eventType
      * @param listener
+     * @return any
      */
-    public static on(eventType: string, listener: (...args: any[]) => any) {
+    public static on(eventType: string, listener: (...args: any[]) => any): any {
         AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, listener);
+    }
+
+    /**
+     * @deprecated removeAllListeners
+     */
+    static removeAllListeners() {
+        console.warn("removeAllListeners method already deprecated");
+    }
+
+    /**
+     * @deprecated off
+     * @param mode 
+     */
+    static off(evt: any) {
+        console.warn("off method already deprecated");
     }
 
     /**
@@ -94,7 +185,7 @@ class RtcEngine {
      * This method used to enable websdk interoperability, so that it can connect with agora websdk apps.
      *
      * @param enabled
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static enableWebSdkInteroperability(enabled: boolean): Promise<any> {
         return Agora.enableWebSdkInteroperability(enabled);
@@ -104,9 +195,9 @@ class RtcEngine {
      * get agora native sdk connection state
      *
      * This method gets agora native sdk connection state
-     * @returns Promise<{success: true, state: (connection state)}>
+     * @return Promise<{state: (connection state)}>
      */
-    public static getConnectionState() {
+    public static getConnectionState(): Promise<any> {
         return Agora.getConnectionState();
     }
 
@@ -116,8 +207,8 @@ class RtcEngine {
      * This method changes the client of role.
      * @param role (audience: 0, host: 1)
      */
-    public static setClientRole(role: number) {
-        Agora.setClientRole(role);
+    public static setClientRole(role: number): Promise<any> {
+        return Agora.setClientRole(role);
     }
 
     /**
@@ -126,7 +217,7 @@ class RtcEngine {
      * This method leaves the joined channel, then your video view will not render ever.
      * You should call it, when you dont need render video stream.
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<null>
      */
     public static leaveChannel(): Promise<any> {
         return Agora.leaveChannel();
@@ -138,9 +229,9 @@ class RtcEngine {
      * This method stops event subscribe and destroy the RtcEngine instance's.
      * You should call it, when you want to destroy the engine.
      *
-     * @returns Promise<{success, value}>
+     * @return void
      */
-    public static destroy(): Promise<any> {
+    public static destroy() {
         return Agora.destroy();
     }
 
@@ -149,9 +240,10 @@ class RtcEngine {
      *
      * This method calls native sdk render mode for local video.
      * @param mode
+     * @return Promise<any>
      */
-    public static setLocalRenderMode(mode: number) {
-        Agora.setLocalRenderMode(mode);
+    public static setLocalRenderMode(mode: number): Promise<any> {
+        return Agora.setLocalRenderMode(mode);
     }
 
     /**
@@ -161,18 +253,20 @@ class RtcEngine {
      *
      * @param uid
      * @param mode
+     * @return Promise<any>
      */
-    public static setRemoteRenderMode(uid: number, mode: number) {
-        Agora.setRemoteRenderMode(uid, mode);
+    public static setRemoteRenderMode(uid: number, mode: number): Promise<any> {
+        return Agora.setRemoteRenderMode(uid, mode);
     }
 
     /**
      * start video preview
      *
      * This method start video preview for video.
+     * @return Promise<any>
      */
-    public static startPreview() {
-        Agora.startPreview();
+    public static startPreview(): Promise<any> {
+        return Agora.startPreview();
     }
 
 
@@ -180,9 +274,10 @@ class RtcEngine {
      * stop video preview
      *
      * This method stops video preview for video.
+     * @return Promise<any>
      */
-    public static stopPreview() {
-        Agora.stopPreview();
+    public static stopPreview(): Promise<any> {
+        return Agora.stopPreview();
     }
 
     /**
@@ -190,9 +285,10 @@ class RtcEngine {
      *
      * This method set the speaker phone enable or disable by pass boolean parameter.
      * @param enabled
+     * @return Promise<any>
      */
-    public static setEnableSpeakerphone(enabled: boolean) {
-        Agora.setEnableSpeakerphone(enabled);
+    public static setEnableSpeakerphone(enabled: boolean): Promise<any> {
+        return Agora.setEnableSpeakerphone(enabled);
     }
 
     /**
@@ -200,38 +296,41 @@ class RtcEngine {
      *
      * This method set the default audio speaker enable or disable by pass boolean parameter.
      * @param enabled
+     * @return Promise<any>
      */
-    public static setDefaultAudioRouteToSpeakerphone(enabled: boolean) {
-        Agora.setDefaultAudioRouteToSpeakerphone(enabled);
+    public static setDefaultAudioRouteToSpeakerphone(enabled: boolean): Promise<any> {
+        return Agora.setDefaultAudioRouteToSpeakerphone(enabled);
     }
-
 
     /**
      * set default mute all remote audio streams
      *
      * This method set default mute all remote audio streams enable or not by pass boolean parameter.
      * @param enabled
+     * @return Promise<any>
      */
-    public static setDefaultMuteAllRemoteAudioStreams(enabled: boolean) {
-        Agora.setDefaultMuteAllRemoteAudioStreams(enabled);
+    public static setDefaultMuteAllRemoteAudioStreams(enabled: boolean): Promise<any> {
+        return Agora.setDefaultMuteAllRemoteAudioStreams(enabled);
     }
 
     /**
      * enable video
      *
      * This method enables video.
+     * @return Promise<any>
      */
-    public static enableVideo() {
-        Agora.enableVideo();
+    public static enableVideo(): Promise<any> {
+        return Agora.enableVideo();
     }
 
     /**
      * disable video
      *
      * This method disables video.
+     * @return Promise<any>
      */
-    public static disableVideo() {
-        Agora.disableVideo();
+    public static disableVideo(): Promise<any> {
+        return Agora.disableVideo();
     }
 
     /**
@@ -239,9 +338,10 @@ class RtcEngine {
      *
      * This method enables the local video by the boolean parameter.
      * @param enabled
+     * @return Promise<any>
      */
-    public static enableLocalVideo(enabled: boolean) {
-        Agora.enableLocalVideo(enabled);
+    public static enableLocalVideo(enabled: boolean): Promise<any> {
+        return Agora.enableLocalVideo(enabled);
     }
 
     /**
@@ -249,9 +349,10 @@ class RtcEngine {
      *
      * This method mutes video stream by the boolean parameter.
      * @param muted
+     * @return Promise<any>
      */
-    public static muteLocalVideoStream(muted: boolean) {
-        Agora.muteLocalVideoStream(muted);
+    public static muteLocalVideoStream(muted: boolean): Promise<any> {
+        return Agora.muteLocalVideoStream(muted);
     }
 
     /**
@@ -259,9 +360,10 @@ class RtcEngine {
      *
      * This method mutes all remote streams by the boolean parameter.
      * @param muted
+     * @return Promise<any>
      */
-    public static muteAllRemoteVideoStreams(muted: boolean) {
-        Agora.muteAllRemoteVideoStreams(muted);
+    public static muteAllRemoteVideoStreams(muted: boolean): Promise<any> {
+        return Agora.muteAllRemoteVideoStreams(muted);
     }
 
     /**
@@ -270,9 +372,10 @@ class RtcEngine {
      * This method mutes remote video stream by the number of uid and boolean parameter.
      * @param uid
      * @param muted
+     * @return Promise<any>
      */
-    public static muteRemoteVideoStream(uid: number, muted: boolean) {
-        Agora.muteRemoteVideoStream(uid, muted);
+    public static muteRemoteVideoStream(uid: number, muted: boolean): Promise<any> {
+        return Agora.muteRemoteVideoStream(uid, muted);
     }
 
     /**
@@ -280,27 +383,30 @@ class RtcEngine {
      *
      * This method mutes all remote video stream default by the boolean parameter.
      * @param muted
+     * @return Promise<any>
      */
-    public static setDefaultMuteAllRemoteVideoStreams(muted: boolean) {
-        Agora.setDefaultMuteAllRemoteVideoStreams(muted);
+    public static setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<any> {
+        return Agora.setDefaultMuteAllRemoteVideoStreams(muted);
     }
 
     /**
      * enable audio
      *
      * This method enables audio
+     * @return Promise<any>
      */
-    public static enableAudio() {
-        Agora.enableAudio();
+    public static enableAudio(): Promise<any> {
+        return Agora.enableAudio();
     }
 
     /**
      * disable audio
      *
      * This method disables audio
+     * @return Promise<any>
      */
-    public static disableAudio() {
-        Agora.disableAudio();
+    public static disableAudio(): Promise<any> {
+        return Agora.disableAudio();
     }
 
     /**
@@ -308,9 +414,10 @@ class RtcEngine {
      *
      * This method enables local audio by the boolean parameter.
      * @param enabled
+     * @return Promise<any>
      */
-    public static enableLocalAudio(enabled: boolean) {
-        Agora.enableLocalAudio(enabled);
+    public static enableLocalAudio(enabled: boolean): Promise<any> {
+        return Agora.enableLocalAudio(enabled);
     }
 
     /**
@@ -318,18 +425,21 @@ class RtcEngine {
      *
      * This method mutes the local audio stream by muted.
      * @param muted
+     * @return Promise<any>
      */
-    public static disableLocalAudio(muted: boolean) {
-        Agora.disableLocalAudio(muted);
+    public static disableLocalAudio(muted: boolean): Promise<any> {
+        return Agora.disableLocalAudio(muted);
     }
 
     /**
      * mute all remote audio streams
      *
      * This method mutes all remote audio streams by muted
+     * @param muted boolean
+     * @return Promise<any>
      */
-    public static muteAllRemoteAudioStreams(muted: boolean) {
-        Agora.muteAllRemoteAudioStreams(muted);
+    public static muteAllRemoteAudioStreams(muted: boolean): Promise<any> {
+        return Agora.muteAllRemoteAudioStreams(muted);
     }
 
     /**
@@ -338,9 +448,10 @@ class RtcEngine {
      * This method mutes specified remote audio stream by number uid and boolean muted.
      * @param uid
      * @param muted
+     * @return Promise<any>
      */
-    public static muteRemoteAudioStream(uid: number, muted: boolean) {
-        Agora.muteRemoteAudioStream(uid, muted);
+    public static muteRemoteAudioStream(uid: number, muted: boolean): Promise<any> {
+        return Agora.muteRemoteAudioStream(uid, muted);
     }
 
     /**
@@ -348,9 +459,10 @@ class RtcEngine {
      *
      * This method adjusts recording your signal by volume.
      * @param volume
+     * @return Promise<any>
      */
-    public static adjustRecordingSignalVolume(volume: number) {
-        Agora.adjustRecordingSignalVolume(volume);
+    public static adjustRecordingSignalVolume(volume: number): Promise<any> {
+        return Agora.adjustRecordingSignalVolume(volume);
     }
 
     /**
@@ -358,9 +470,10 @@ class RtcEngine {
      *
      * This method adjusts playback signal by volume.
      * @param volume
+     * @return Promise<any>
      */
-    public static adjustPlaybackSignalVolume(volume: number) {
-        Agora.adjustPlaybackSignalVolume(volume);
+    public static adjustPlaybackSignalVolume(volume: number): Promise<any> {
+        return Agora.adjustPlaybackSignalVolume(volume);
     }
 
     /**
@@ -369,9 +482,10 @@ class RtcEngine {
      * This method enables audio volume by interval and smooth
      * @param interval
      * @param smooth
+     * @return Promise<any>
      */
-    public static enableAudioVolumeIndication(interval: number, smooth: number) {
-        Agora.enableAudioVolumeIndication(interval, smooth);
+    public static enableAudioVolumeIndication(interval: number, smooth: number): Promise<any> {
+        return Agora.enableAudioVolumeIndication(interval, smooth);
     }
 
     /**
@@ -379,9 +493,10 @@ class RtcEngine {
      *
      * This method checks the phone speaker is enabled
      * @param callback
+     * @return any
      */
-    public static methodisSpeakerphoneEnabled(callback: Callback<any>) {
-        Agora.methodisSpeakerphoneEnabled(callback);
+    public static methodisSpeakerphoneEnabled(callback: Callback<any>): any {
+        return Agora.methodisSpeakerphoneEnabled(callback);
     }
 
     /**
@@ -390,9 +505,10 @@ class RtcEngine {
      * This method enables in-ear monitoring by boolean parameter enabled
      *
      * @param enabled
+     * @return Promise<any>
      */
-    public static enableInEarMonitoring(enabled: boolean) {
-        Agora.enableInEarMonitoring(enabled);
+    public static enableInEarMonitoring(enabled: boolean): Promise<any> {
+        return Agora.enableInEarMonitoring(enabled);
     }
 
     /**
@@ -401,9 +517,10 @@ class RtcEngine {
      * This method sets the in-ear-monitoring volume by number parameter volume
      *
      * @param volume
+     * @return Promise<any>
      */
-    public static setInEarMonitoringVolume(volume: number) {
-        Agora.setInEarMonitoringVolume(volume);
+    public static setInEarMonitoringVolume(volume: number): Promise<any> {
+        return Agora.setInEarMonitoringVolume(volume);
     }
 
     /**
@@ -412,9 +529,10 @@ class RtcEngine {
      * This method sets the local voice pitch by float parameter pitch
      *
      * @param pitch
+     * @return Promise<any>
      */
-    public static setLocalVoicePitch(pitch: number) {
-        Agora.setLocalVoicePitch(pitch);
+    public static setLocalVoicePitch(pitch: number): Promise<any> {
+        return Agora.setLocalVoicePitch(pitch);
     }
 
     /**
@@ -424,6 +542,7 @@ class RtcEngine {
      *
      * @param band
      * @param gain
+     * @return Promise<any>
      */
     public static setLocalVoiceEqualization(band: number, gain: number) {
         Agora.setLocalVoiceEqualization(band ,gain);
@@ -512,7 +631,7 @@ class RtcEngine {
      * get audio mixing duration
      *
      * This method gets the audio mixing duration
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static getAudioMixingDuration(): Promise<any> {
         return Agora.getAudioMixingDuration();
@@ -522,7 +641,7 @@ class RtcEngine {
      * get audio mixing current position
      *
      * This method gets audio mixing current position value.
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static getAudioMixingCurrentPosition(): Promise<any> {
         return Agora.getAudioMixingCurrentPosition();
@@ -542,7 +661,7 @@ class RtcEngine {
       * get effects of volume
       *
       * This methods get audio mixing effects volume value.
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static getEffectsVolume(): Promise<any> {
          return Agora.getEffectsVolume();
@@ -553,7 +672,7 @@ class RtcEngine {
       *
       * This methods set audio mixing effects volume by float parameter.
       * @param volume
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static setEffectsVolume(volume: number): Promise<any> {
         return Agora.setEffectsVolume(volume);
@@ -563,7 +682,7 @@ class RtcEngine {
       * set volume for playing effects.
       *
       * This methods set for playing audio mixing effects
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static setVolumeOfEffect(volume: number): Promise<any> {
         return Agora.setVolumeOfEffect(volume);
@@ -574,7 +693,7 @@ class RtcEngine {
       *
       * This methos plays the specified effect of audio mixing file by option config.
       * @param options {@link PlayEffectOption}
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static playEffect(options: PlayEffectOption): Promise<any> {
         return Agora.playEffect(options);
@@ -585,7 +704,7 @@ class RtcEngine {
       *
       * This methods stops the specified effect for audio mixing file by soundid.
       * @param sounid
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static stopEffect(soundId: number): Promise<any> {
         return Agora.stopEffect(soundId);
@@ -595,7 +714,7 @@ class RtcEngine {
       * stop play all for effect audio mixing.
       *
       * This methods stops all effect audio mixing.
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static stopAllEffects(): Promise<any> {
         return Agora.stopAllEffects();
@@ -607,7 +726,7 @@ class RtcEngine {
       * This methods preloads the specified audio mixing file to memory by the soundid
       * @param soundid
       * @param filepath
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static preloadEffect(soundId: number, filepath: string): Promise<any> {
         return Agora.preloadEffect(soundId, filepath);
@@ -618,7 +737,7 @@ class RtcEngine {
       *
       * This methods unload the already loaded audio mixing file from memory by the soundid.
       * @param soundid
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static unloadEffect(soundId: number): Promise<any> {
          return Agora.unloadEffect(soundId);
@@ -629,7 +748,7 @@ class RtcEngine {
       *
       * This method pauses the specified effect for audio mixing by soundid.
       * @param soundid
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static pauseEffect(soundId: number): Promise<any> {
         return Agora.pauseEffect(soundId);
@@ -640,7 +759,7 @@ class RtcEngine {
       *
       * This method pause all effects for audio mixing.
       * @param soundid
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static pauseAllEffects(): Promise<any> {
         return Agora.pauseAllEffects();
@@ -651,7 +770,7 @@ class RtcEngine {
       *
       * This method resumes audio mixing effect by the specified soundid
       * @param soundid
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static resumeEffect(soundId: number): Promise<any> {
         return Agora.resumeEffect(soundId);
@@ -661,7 +780,7 @@ class RtcEngine {
       * resume all audio mixing effects.
       *
       * This method resumes all audio mixing effects.
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static resumeAllEffects(): Promise<any> {
         return Agora.resumeAllEffects();
@@ -672,7 +791,7 @@ class RtcEngine {
       *
       * This method start audio recording by quality config
       * @param options {@link AudioRecordingOption}
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static startAudioRecording(options: AudioRecordingOption): Promise<any> {
         return Agora.startAudioRecording(options);
@@ -682,7 +801,7 @@ class RtcEngine {
       * stop audio recording
       *
       * This method stops audio recording.
-      * @returns Promise<{success, value}>
+      * @return Promise<{success, value}>
       */
      public static stopAudioRecording(): Promise<any> {
         return Agora.stopAudioRecording();
@@ -706,12 +825,20 @@ class RtcEngine {
      * startEchoTest
      */
 
+     /**
+      * @deprecated isCameraAutoFocusFaceModeSupported
+      * @deprecated isCameraExposurePositionSupported
+      * @deprecated isCameraFocusSupported
+      * @deprecated isCameraTorchSupported
+      * @deprecated isCameraZoomSupported
+      * instead use {@method getCameraInfo}
+      */
 
     /**
      * stop echo test
      *
      * This method stop launched an audio call test.
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static stopEchoTest(): Promise<any> {
         return Agora.stopEchoTest();
@@ -722,7 +849,7 @@ class RtcEngine {
      *
      * This method enables the network connection qualit test.
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static enableLastmileTest(): Promise<any> {
         return Agora.enableLastmileTest();
@@ -733,7 +860,7 @@ class RtcEngine {
      *
      * This method disable the network connection qualit test.
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static disableLastmileTest(): Promise<any> {
         return Agora.disableLastmileTest();
@@ -745,7 +872,7 @@ class RtcEngine {
      * This method Sets the audio recording format for the audioFrame callback.
      *
      * @param options {@link RecordingAudioFrameOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setRecordingAudioFrameParameters(options: AudioFrameOption): Promise<any> {
         return Agora.setRecordingAudioFrameParameters(options);
@@ -757,7 +884,7 @@ class RtcEngine {
      * This method Sets the audio frame format for the playbackFrame callback.
      *
      * @param options {@link AudioFrameOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setPlaybackAudioFrameParameters(options: AudioFrameOption): Promise<any> {
         return Agora.setPlaybackAudioFrameParameters(options);
@@ -769,7 +896,7 @@ class RtcEngine {
      * This method Sets the audio frame format for the mixedAudioFrame callback.
      *
      * @param options {@link MixedAudioFrameOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setMixedAudioFrameParameters(options: MixedAudioFrameOption): Promise<any> {
         return Agora.setMixedAudioFrameParameters(options);
@@ -781,7 +908,7 @@ class RtcEngine {
      * This method adds video watermark to the local video.
      *
      * @param options {@link ImageOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static addVideoWatermark(options: ImageOption): Promise<any> {
         return Agora.addVideoWatermark(options);
@@ -792,7 +919,7 @@ class RtcEngine {
      *
      * This method removes the watermark image from the video stream added by addVideoWatermark.
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static removclearVideoWatermarkse(): Promise<any> {
         return Agora.clearVideoWatermarks();
@@ -804,7 +931,7 @@ class RtcEngine {
      * This method sets the fallback option for the locally published video stream based on the network conditions.
      *
      * @param option {0, 1, 2}  [more details](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_constants.html#a3e453c93766e783a7e5eca05b1776238)
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setLocalPublishFallbackOption(option: number): Promise<any> {
         return Agora.setLocalPublishFallbackOption(option);
@@ -816,7 +943,7 @@ class RtcEngine {
      * This method sets the fallback option for the remotely subscribed video stream based on the network conditions.
      *
      * @param option {0, 1, 2} [more details](https://docs.agora.io/en/Video/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_constants.html#a3e453c93766e783a7e5eca05b1776238)
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setRemoteSubscribeFallbackOption(option: number): Promise<any> {
         return Agora.setRemoteSubscribeFallbackOption(option);
@@ -828,7 +955,7 @@ class RtcEngine {
      * This method enables the dual stream by parameter mode.
      *
      * @param enabled
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static enableDualStreamMode(enabled: boolean): Promise<any> {
         return Agora.enableDualStreamMode(enabled);
@@ -840,7 +967,7 @@ class RtcEngine {
      * This method sets the remote video stream type by uid and streamType.
      *
      * @param options {@link VideoStreamOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setRemoteVideoStreamType(options: VideoStreamOption): Promise<any> {
         return Agora.setRemoteVideoStreamType(options);
@@ -852,7 +979,7 @@ class RtcEngine {
      * This method sets the default video stream type.
      *
      * @param options {@link DefaultVideoStreamOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setRemoteDefaultVideoStreamType(options: DefaultVideoStreamOption): Promise<any> {
         return Agora.setRemoteDefaultVideoStreamType(options);
@@ -864,7 +991,7 @@ class RtcEngine {
      * This method injects an online media stream to a live broadcast.
      *
      * @param options {@link InjectStreamOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static addInjectStreamUrl(options: InjectStreamOption): Promise<any> {
         return Agora.addInjectStreamUrl(options);
@@ -876,7 +1003,7 @@ class RtcEngine {
      * This method removes stream by addInjectsStreamUrl.
      *
      * @param options {@link RemoveInjectStreamOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static removeInjectStreamUrl(options: RemoveInjectStreamOption): Promise<any> {
         return Agora.removeInjectStreamUrl(options);
@@ -886,6 +1013,9 @@ class RtcEngine {
      * @deprecated sendMessage
      * sendMessage
      */
+    static async sendMessage(): Promise<any> {
+        return console.warn("sendMessage already deprecated");
+    }
 
     /**
      * @deprecated createDataStream
@@ -914,7 +1044,7 @@ class RtcEngine {
      * This method sets local video mirror mode
      *
      * @param mode
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setLocalVideoMirrorMode(mode: number): Promise<any> {
         return Agora.setLocalVideoMirrorMode(mode);
@@ -925,65 +1055,10 @@ class RtcEngine {
      *
      * This method switches camera between front and rear.
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static switchCamera(): Promise<any> {
         return Agora.switchCamera();
-    }
-
-    /**
-     * is camera zoom supported
-     *
-     * This method checks whether the camera zoom function is supported.
-     *
-     * @returns Promise<{success, value}>
-     */
-    public static isCameraZoomSupported(): Promise<any> {
-        return Agora.isCameraZoomSupported();
-    }
-
-    /**
-     * is camera torch supported
-     *
-     * This method checks whether the camera flash function is supported.
-     *
-     * @returns Promise<{success, value}>
-     */
-    public static isCameraTorchSupported(): Promise<any> {
-        return Agora.isCameraTorchSupported();
-    }
-
-    /**
-     * is camera focus supported
-     *
-     * This method checks whether the camera mannual focus function is supported.
-     *
-     * @returns Promise<{success, value}>
-     */
-    public static isCameraFocusSupported(): Promise<any> {
-        return Agora.isCameraFocusSupported();
-    }
-
-    /**
-     * is camera exposure position supported
-     *
-     * This method checks whether the camera mannual exposure function is supported.
-     *
-     * @returns Promise<{success, value}>
-     */
-    public static isCameraExposurePositionSupported(): Promise<any> {
-        return Agora.isCameraExposurePositionSupported();
-    }
-
-    /**
-     * is camera auto focus face mode supported
-     *
-     * This method checks whether the camera mannual auto-face focus function is supported.
-     *
-     * @returns Promise<{success, value}>
-     */
-    public static isCameraAutoFocusFaceModeSupported(): Promise<any> {
-        return Agora.isCameraAutoFocusFaceModeSupported();
     }
 
     /**
@@ -992,7 +1067,7 @@ class RtcEngine {
      * This method sets the camera zoom ratio.
      *
      * @param zoomFactor
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setCameraZoomFactor(zoomFactor: number): Promise<any> {
         return Agora.setCameraZoomFactor(zoomFactor);
@@ -1004,7 +1079,7 @@ class RtcEngine {
      * This method gets the camera maximum zoom ratio.
      *
      * @notice Android Only
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static getCameraMaxZoomFactor(): Promise<any> {
         return Agora.getCameraMaxZoomFactor();
@@ -1016,7 +1091,7 @@ class RtcEngine {
      * This method sets the mannual focus position.
      *
      * @param options {@link PositionOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setCameraFocusPositionInPreview(options: PositionOption): Promise<any> {
         return Agora.setCameraFocusPositionInPreview(options);
@@ -1028,7 +1103,7 @@ class RtcEngine {
      * This method sets the mannual exposure position.
      *
      * @param options {@link PositionOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setCameraExposurePosition(options: PositionOption): Promise<any> {
         return Agora.setCameraExposurePosition(options);
@@ -1040,7 +1115,7 @@ class RtcEngine {
      * This method enables the camera flash function.
      *
      * @param enabled
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setCameraTorchOn(enabled: boolean): Promise<any> {
         return Agora.setCameraTorchOn(enabled);
@@ -1052,7 +1127,7 @@ class RtcEngine {
      * This method enables auto-focus face mode function.
      *
      * @param enabled boolean
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setCameraAutoFocusFaceModeEnabled(enabled: boolean): Promise<any> {
         return Agora.setCameraAutoFocusFaceModeEnabled(enabled);
@@ -1063,7 +1138,7 @@ class RtcEngine {
      *
      * This method is used to get call id.
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static getCallId(): Promise<any> {
         return Agora.getCallId();
@@ -1077,7 +1152,7 @@ class RtcEngine {
      * @param filepath string
      * @param level enum
      * @param maxfileSize integer (KB)
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setLog(filepath: string, level: number, maxfileSize: number): Promise<any> {
         return Agora.setLog(filepath, level, maxfileSize)
@@ -1089,7 +1164,7 @@ class RtcEngine {
      * This method add publish stream by option.
      *
      * @param options {@link PublishStreamOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static addPublishStreamUrl(options: PublishStreamOption): Promise<any> {
         return Agora.addPublishStreamUrl(options);
@@ -1101,7 +1176,7 @@ class RtcEngine {
      * This method remove publish stream by options.
      *
      * @param options {@link RemovePublishStreamOption}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static removePublishStreamUrl(options: RemovePublishStreamOption): Promise<any> {
         return Agora.removePublishStreamUrl(options);
@@ -1113,7 +1188,7 @@ class RtcEngine {
      * This method sets the video layout and audio settings for CDN live.
      *
      * @param options {@link LiveTranscoding}
-     * @returns Promise<{success, value}>
+     * @return Promise<{success, value}>
      */
     public static setLiveTranscoding(options: LiveTranscodingOption): Promise<any> {
         return Agora.setLiveTranscoding(options);
@@ -1126,8 +1201,9 @@ class RtcEngine {
      *
      * @param callback to handle resolve from getSdkVersion
      * @param errorHandler to handle reject error from getSdkVersion
+     * @return any
      */
-    public static getSdkVersion(callback: Callback<any>, errorHandler?: Callback<any>) {
+    public static getSdkVersion(callback: Callback<any>, errorHandler?: Callback<any>): any {
         return Agora.getSdkVersion().then(callback).catch(errorHandler);
     }
 
@@ -1137,10 +1213,11 @@ class RtcEngine {
      * This method sends/stops sending the local audio.
      *
      * @param enabled
+     * @return Promise<any>
      */
 
-     public static muteLocalAudioStream(enabled: boolean) {
-        Agora.muteLocalAudioStream(enabled);
+     public static muteLocalAudioStream(enabled: boolean): Promise<any> {
+        return Agora.muteLocalAudioStream(enabled);
      }
 
     /**
@@ -1150,7 +1227,7 @@ class RtcEngine {
      *
      * @param enable boolean
      * @param options {@link BeautyOptions}
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static setBeautyEffectOptions(enabled: boolean, options: BeautyOption): Promise<any> {
         return Agora.setBeautyEffectOptions(enabled, options);
@@ -1171,7 +1248,7 @@ class RtcEngine {
      *          5: "Ethereal vocal effects.",
      *          6: "Hulk’s voice."
      *      ]
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static setLocalVoiceChanger(voiceChanger: number): Promise<any> {
         return Agora.setLocalVoiceChanger(voiceChanger);
@@ -1183,7 +1260,7 @@ class RtcEngine {
      * This method sets the preset local voice reverberation effect.
      *
      * @param preset integer
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static setLocalVoiceReverbPreset(preset: number): Promise<any> {
         return Agora.setLocalVoiceReverbPreset(preset);
@@ -1195,7 +1272,7 @@ class RtcEngine {
      * This method enables/disables stereo panning for remote users.
      *
      * @param enabled boolean
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static enableSoundPositionIndication(enabled: boolean): Promise<any> {
         return Agora.enableSoundPositionIndication(enabled);
@@ -1213,7 +1290,7 @@ class RtcEngine {
      *  -1.0: the remote sound comes from the left.
      *  1.0: the remote sound comes from the right.
      * @param gain float | Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<any> {
         return Agora.setRemoteVoicePosition(uid, pan, gain)
@@ -1228,7 +1305,7 @@ class RtcEngine {
      *
      * @event onLastmileQuality: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
      * @event onLastmileProbeResult: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static startLastmileProbeTest(config: LastmileProbeConfig): Promise<any> {
         return Agora.startLastmileProbeTest(config);
@@ -1239,7 +1316,7 @@ class RtcEngine {
      *
      * This method stop the lastmile probe test.
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static stopLastmileProbeTest(): Promise<any> {
         return Agora.stopLastmileProbeTest();
@@ -1254,7 +1331,7 @@ class RtcEngine {
      * @param uid number
      * @param userPriority number | The value range is  [50 is "user's priority is hgih", 100 is "the default user's priority is normal"]
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static setRemoteUserPriority(uid: number, userPrority: number): Promise<any> {
         return Agora.setRemoteUserPriority(uid, userPrority);
@@ -1272,7 +1349,7 @@ class RtcEngine {
      *
      * @param interval number
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static startEchoTestWithInterval(interval: number): Promise<any> {
         return Agora.startEchoTestWithInterval(interval)
@@ -1291,7 +1368,7 @@ class RtcEngine {
      *
      * @param config {@link CameraCapturerConfiguration}
      *
-     * @returns Promise<{success, value}>
+     * @return Promise<any>
      */
     static setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<any> {
         return Agora.setCameraCapturerConfiguration(config);
@@ -1303,7 +1380,7 @@ class RtcEngine {
      * note:
      * This method helps troubleshoot audio volume related issues.
      * 
-     * @returns Promise{<success, value}>
+     * @return Promise<any>
      */
     static getAudioMixingPlayoutVolume(): Promise<any> {
         return Agora.getAudioMixingPlayoutVolume();
@@ -1315,7 +1392,7 @@ class RtcEngine {
      * note:
      * This method helps troubleshoot audio volume related issues.
      * 
-     * @returns Promise{<success, value}>
+     * @return Promise<any>
      */
     static getAudioMixingPublishVolume(): Promise<any> {
         return Agora.getAudioMixingPublishVolume();
@@ -1328,7 +1405,7 @@ class RtcEngine {
      * This method needs you invoke registerMediaMetadataObserver success first and you could send media data through interval media observer feature.
      * The data have limit length is 1024 bytes, if you pass data length bigger than limit it will failed.
      * @param data String: 1024 bytes limit
-     * @returns Promise<{success}>
+     * @return Promise<any>
      */
     static sendMediaData(data: String): Promise<any> {
         return Agora.sendMediaData(data);
@@ -1346,7 +1423,7 @@ class RtcEngine {
      *        console.log("mediaMetaDataReceived", data);
      *      })
      * ```
-     * @returns Promise{<success, value}>
+     * @return Promise<any>
      */
     static registerMediaMetadataObserver(): Promise<any> {
         return Agora.registerMediaMetadataObserver();
@@ -1362,25 +1439,11 @@ class RtcEngine {
      *         console.log("your currrent camera", info);
      *      })
      * ```
-     * @returns Promise{cameraSupportInfo}>
+     * @return Promise{cameraSupportInfo}>
      */
     static async getCameraInfo(): Promise<any> {
-        let zoomSupported = await this.isCameraZoomSupported();
-        let torchSupported = await this.isCameraTorchSupported();
-        let focusSupported = await this.isCameraFocusSupported();
-        let exposurePositionSupported = await this.isCameraExposurePositionSupported();
-        let autoFocusFaceModeSupported = await this.isCameraAutoFocusFaceModeSupported();
-        let maxZoomFactor = await this.getCameraMaxZoomFactor();
-        return {
-            zoomSupported,
-            torchSupported,
-            focusSupported,
-            exposurePositionSupported,
-            autoFocusFaceModeSupported,
-            maxZoomFactor
-        }
+        return Agora.getCameraInfo();
     }
-
 }
 
 

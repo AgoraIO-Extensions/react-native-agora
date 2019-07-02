@@ -127,9 +127,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private static final String ErrorCodeInvalidArgument = "ErrorCodeInvalidArgument";
     private static final String ErrorCodeTimedOut = "ErrorCodeTimedOut";
     private static final String ErrorCodeAlreadyInUse = "ErrorCodeAlreadyInUse";
-//    private static String ErrorCodeAbort = "ErrorCodeAbort";
     private static final String ErrorCodeEncryptedStreamNotAllowedPublished = "ErrorCodeEncryptedStreamNotAllowedPublished";
-//    private static String ErrorCodeResourceLimited = "ErrorCodeResourceLimited";
     private static final String InjectStreamStatusStartSuccess = "InjectStreamStatusStartSuccess";
     private static final String InjectStreamStatusStartAlreadyExist = "InjectStreamStatusStartAlreadyExist";
     private static final String InjectStreamStatusStartUnauthorized = "InjectStreamStatusStartUnauthorized";
@@ -1084,80 +1082,61 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void renewToken(String token,
                            Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().renewToken(token);
-            if (res != 0) throw new ReactNativeAgoraException("renew token failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131002", e);
+        Integer res = AgoraManager.getInstance().renewToken(token);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void enableWebSdkInteroperability(boolean enabled, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().enableWebSdkInteroperability(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("enableWebSdkInteroperability Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131003", e);
+        Integer res = AgoraManager.getInstance().enableWebSdkInteroperability(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void getConnectionState(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().getConnectionState();
-            if (res != 0) throw new ReactNativeAgoraException("getConnectionState Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("state", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("141001", e);
+        Integer res = AgoraManager.getInstance().getConnectionState();
+        if (res == 0) {
+            promise.resolve(null);
+        } else  {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void setClientRole(int role) {
-        try {
-            int res = AgoraManager.getInstance().setClientRole(role);
-            if (res != 0) throw new ReactNativeAgoraException("setClientRole Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void setClientRole(int role, Promise promise) {
+        Integer res = AgoraManager.getInstance().setClientRole(role);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void joinChannel(ReadableMap options) {
-        try {
-            int res = AgoraManager.getInstance().joinChannel(options);
-            if (res != 0) throw new ReactNativeAgoraException("joinChannel Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            err.putInt("code", ((ReactNativeAgoraException) e).getCode());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void joinChannel(ReadableMap options, Promise promise) {
+        Integer res = AgoraManager.getInstance().joinChannel(options);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void leaveChannel(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().leaveChannel();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("141002", e);
+        Integer res = AgoraManager.getInstance().leaveChannel();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
@@ -1167,342 +1146,335 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startPreview() {
-        AgoraManager.getInstance().startPreview();
-    }
-
-    @ReactMethod
-    public void stopPreview() {
-        AgoraManager.getInstance().stopPreview();
-    }
-
-    @ReactMethod
-    public void setEnableSpeakerphone(boolean enabled) {
-        try {
-            int res = AgoraManager.getInstance().setEnableSpeakerphone(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("setEnableSpeakerphone Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void startPreview(Promise promise) {
+        Integer res = AgoraManager.getInstance().startPreview();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void setDefaultAudioRouteToSpeakerphone(boolean enabled) {
-        try {
-            int res = AgoraManager.getInstance().setDefaultAudioRouteToSpeakerphone(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("setDefaultAudioRouteToSpeakerphone Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void stopPreview(Promise promise) {
+        Integer res = AgoraManager.getInstance().stopPreview();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void enableVideo() {
-        AgoraManager.getInstance().mRtcEngine.enableVideo();
+    public void setEnableSpeakerphone(boolean enabled, Promise promise) {
+        Integer res = AgoraManager.getInstance().setEnableSpeakerphone(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
-    public void disableVideo() {
-        AgoraManager.getInstance().mRtcEngine.disableVideo();
+    public void setDefaultAudioRouteToSpeakerphone(boolean enabled, Promise promise) {
+        Integer res = AgoraManager.getInstance().setDefaultAudioRouteToSpeakerphone(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
-    public void enableLocalVideo(boolean enabled) {
-        AgoraManager.getInstance().mRtcEngine.enableLocalVideo(enabled);
+    public void enableVideo(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.enableVideo();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
-    public void muteLocalVideoStream(boolean muted) {
-        AgoraManager.getInstance().mRtcEngine.muteLocalVideoStream(muted);
+    public void disableVideo(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.disableVideo();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
-    public void muteAllRemoteVideoStreams(boolean muted) {
-        AgoraManager.getInstance().mRtcEngine.muteAllRemoteVideoStreams(muted);
+    public void enableLocalVideo(boolean enabled, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.enableLocalVideo(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
-    public void muteRemoteVideoStream(int uid, boolean muted) {
-        AgoraManager.getInstance().mRtcEngine.muteRemoteVideoStream(uid, muted);
+    public void muteLocalVideoStream(boolean muted, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.muteLocalVideoStream(muted);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void muteAllRemoteVideoStreams(boolean muted, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.muteAllRemoteVideoStreams(muted);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void muteRemoteVideoStream(int uid, boolean muted, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.muteRemoteVideoStream(uid, muted);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
     @ReactMethod
-    public void setDefaultMuteAllRemoteVideoStreams(boolean muted) {
-        AgoraManager.getInstance().mRtcEngine.setDefaultMuteAllRemoteVideoStreams(muted);
+    public void setDefaultMuteAllRemoteVideoStreams(boolean muted, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setDefaultMuteAllRemoteVideoStreams(muted);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
     public void switchCamera(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.switchCamera();
-            if (res != 0) throw new ReactNativeAgoraException("switchCamera Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.switchCamera();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void isCameraZoomSupported(Promise promise) {
-        try {
-            boolean res = AgoraManager.getInstance().mRtcEngine.isCameraZoomSupported();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putBoolean("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
-    }
-
-
-    @ReactMethod
-    public void isCameraTorchSupported(Promise promise) {
-        try {
-            boolean res = AgoraManager.getInstance().mRtcEngine.isCameraTorchSupported();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putBoolean("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
-    }
-
-    @ReactMethod
-    public void isCameraFocusSupported(Promise promise) {
-        try {
-            boolean res = AgoraManager.getInstance().mRtcEngine.isCameraFocusSupported();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putBoolean("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
-    }
-
-    @ReactMethod
-    public void isCameraExposurePositionSupported(Promise promise) {
-        try {
-            boolean res = AgoraManager.getInstance().mRtcEngine.isCameraExposurePositionSupported();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putBoolean("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
-    }
-
-
-    @ReactMethod
-    public void isCameraAutoFocusFaceModeSupported(Promise promise) {
-        try {
-            boolean res = AgoraManager.getInstance().mRtcEngine.isCameraAutoFocusFaceModeSupported();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putBoolean("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
+    public void getCameraInfo(Promise promise) {
+        WritableMap map = Arguments.createMap();
+        WritableMap supportMap = Arguments.createMap();
+        supportMap.putBoolean("zoom", AgoraManager.getInstance().mRtcEngine.isCameraZoomSupported());
+        supportMap.putBoolean("torch", AgoraManager.getInstance().mRtcEngine.isCameraTorchSupported());
+        supportMap.putBoolean("focusPositionInPreview", AgoraManager.getInstance().mRtcEngine.isCameraTorchSupported());
+        supportMap.putBoolean("exposurePosition", AgoraManager.getInstance().mRtcEngine.isCameraTorchSupported());
+        supportMap.putBoolean("autoFocusFaceMode", AgoraManager.getInstance().mRtcEngine.isCameraAutoFocusFaceModeSupported());
+//        supportMap.putDouble("maxZoomFactor", AgoraManager.getInstance().mRtcEngine.getCameraMaxZoomFactor());
+        map.putMap("support", supportMap);
+        promise.resolve(map);
     }
 
     @ReactMethod
     public void setCameraZoomFactor(float factor, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setCameraZoomFactor(factor);
-            if (res != 0) throw new ReactNativeAgoraException("setCameraZoomFactor Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
-    }
-
-    @ReactMethod
-    public void getCameraMaxZoomFactor(Promise promise) {
-        try {
-            double res = AgoraManager.getInstance().mRtcEngine.getCameraMaxZoomFactor();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putDouble("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setCameraZoomFactor(factor);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setCameraFocusPositionInPreview(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setCameraFocusPositionInPreview(
+        Integer res = AgoraManager.getInstance().mRtcEngine.setCameraFocusPositionInPreview(
                     (float)options.getDouble("x"),
                     (float)options.getDouble("y")
             );
-            if (res != 0) throw new ReactNativeAgoraException("setCameraFocusPositionInPreview Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setCameraExposurePosition(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setCameraExposurePosition(
-                    (float)options.getDouble("x"),
-                    (float)options.getDouble("y")
-            );
-            if (res != 0) throw new ReactNativeAgoraException("setCameraExposurePosition Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setCameraExposurePosition(
+                (float)options.getDouble("x"),
+                (float)options.getDouble("y")
+        );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setCameraTorchOn(boolean isOn, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setCameraTorchOn(isOn);
-            if (res != 0) throw new ReactNativeAgoraException("setCameraTorchOn Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setCameraTorchOn(isOn);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setCameraAutoFocusFaceModeEnabled(boolean enabled, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setCameraAutoFocusFaceModeEnabled(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("setCameraAutoFocusFaceModeEnabled Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setCameraAutoFocusFaceModeEnabled(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void getCallId(Promise promise) {
-        try {
-            String res = AgoraManager.getInstance().mRtcEngine.getCallId();
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putString("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
-        }
+        String res = AgoraManager.getInstance().mRtcEngine.getCallId();
+        WritableMap map = Arguments.createMap();
+        map.putString("id", res);
+        promise.resolve(map);
     }
 
     @ReactMethod
     public void setLog(String filePath, int level, int size, Promise promise) {
-        try {
-            int res = 0;
-            res = AgoraManager.getInstance().mRtcEngine.setLogFileSize(size);
-            if (res != 0) throw new ReactNativeAgoraException("setLogFileSize Failed", res);
-            res = AgoraManager.getInstance().mRtcEngine.setLogFilter(level);
-            if (res != 0) throw new ReactNativeAgoraException("setLogFilter Failed", res);
-            res = AgoraManager.getInstance().mRtcEngine.setLogFile(filePath);
-            if (res != 0) throw new ReactNativeAgoraException("setLogFile Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLogFileSize(size);
+        if (res < 0) {
+            promise.reject("-1", res.toString());
+            return;
         }
+        res = AgoraManager.getInstance().mRtcEngine.setLogFilter(level);
+        if (res < 0) {
+            promise.reject("-1", res.toString());
+            return;
+        }
+        res = AgoraManager.getInstance().mRtcEngine.setLogFile(filePath);
+        if (res < 0) {
+            promise.reject("-1", res.toString());
+            return;
+        }
+        promise.resolve(null);
     }
 
 
     @ReactMethod
-    public void enableAudio() {
-        AgoraManager.getInstance().mRtcEngine.enableAudio();
-    }
-
-    @ReactMethod
-    public void disableAudio() {
-        AgoraManager.getInstance().mRtcEngine.disableAudio();
-    }
-
-    @ReactMethod
-    public void muteAllRemoteAudioStreams(boolean muted) {
-        AgoraManager.getInstance().mRtcEngine.muteAllRemoteAudioStreams(muted);
-    }
-
-    @ReactMethod
-    public void muteRemoteAudioStream(int uid, boolean muted) {
-        AgoraManager.getInstance().mRtcEngine.muteRemoteAudioStream(uid, muted);
-    }
-
-    @ReactMethod
-    public void setDefaultMuteAllRemoteAudioStreams(boolean muted) {
-        AgoraManager.getInstance().mRtcEngine.setDefaultMuteAllRemoteAudioStreams(muted);
-    }
-
-    @ReactMethod
-    public void adjustRecordingSignalVolume(int volume) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.adjustRecordingSignalVolume(volume);
-            if (res != 0) throw new ReactNativeAgoraException("adjustRecordingSignalVolume Failed", res);
-        } catch(Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void enableAudio(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.enableAudio();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void adjustPlaybackSignalVolume(int volume) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.adjustPlaybackSignalVolume(volume);
-            if (res != 0) throw new ReactNativeAgoraException("adjustPlaybackSignalVolume Failed", res);
-        } catch(Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void disableAudio(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.disableAudio();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void enableAudioVolumeIndication(int interval, int smooth) {
-        AgoraManager.getInstance().mRtcEngine.enableAudioVolumeIndication(interval, smooth);
+    public void muteAllRemoteAudioStreams(boolean muted, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.muteAllRemoteAudioStreams(muted);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
-    public void enableLocalAudio(boolean enabled) {
-        AgoraManager.getInstance().mRtcEngine.enableLocalAudio(enabled);
+    public void muteRemoteAudioStream(int uid, boolean muted, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.muteRemoteAudioStream(uid, muted);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
-    public void muteLocalAudioStream(boolean enabled) {
-        AgoraManager.getInstance().mRtcEngine.muteLocalAudioStream(enabled);
+    public void setDefaultMuteAllRemoteAudioStreams(boolean muted, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setDefaultMuteAllRemoteAudioStreams(muted);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void adjustRecordingSignalVolume(int volume, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.adjustRecordingSignalVolume(volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void adjustPlaybackSignalVolume(int volume, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.adjustPlaybackSignalVolume(volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void enableAudioVolumeIndication(int interval, int smooth, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.enableAudioVolumeIndication(interval, smooth);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void enableLocalAudio(boolean enabled, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.enableLocalAudio(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void muteLocalAudioStream(boolean enabled, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.muteLocalAudioStream(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void createDataStream(ReadableMap options, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine
+                    .createDataStream(
+                            options.getBoolean("ordered"),
+                            options.getBoolean("reliable")
+                            );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
@@ -1513,368 +1485,281 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void enableInEarMonitoring(boolean enabled) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.enableInEarMonitoring(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("enableInEarMonitoring Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void enableInEarMonitoring(boolean enabled, Promise promise) {
+        Integer res  = AgoraManager.getInstance().mRtcEngine.enableInEarMonitoring(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void setInEarMonitoringVolume(int volume) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setInEarMonitoringVolume(volume);
-            if (res != 0) throw new ReactNativeAgoraException("setInEarMonitoringVolume Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void setInEarMonitoringVolume(int volume, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setInEarMonitoringVolume(volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void setLocalVoicePitch(double pitch) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setLocalVoicePitch(pitch);
-            if (res != 0) throw new ReactNativeAgoraException("setLocalVoicePitch Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void setLocalVoicePitch(double pitch, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLocalVoicePitch(pitch);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void setLocalVoiceEqualization(int band, int gain) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceEqualization(band, gain);
-            if (res != 0) throw new ReactNativeAgoraException("setLocalVoiceEqualization Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void setLocalVoiceEqualization(int band, int gain, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceEqualization(band, gain);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void setLocalVoiceReverb(int reverb, int value) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceReverb(reverb, value);
-            if (res != 0) throw new ReactNativeAgoraException("setLocalVoiceReverb Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void setLocalVoiceReverb(int reverb, int value, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceReverb(reverb, value);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void startAudioMixing(ReadableMap options) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.startAudioMixing(
+    public void startAudioMixing(ReadableMap options, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.startAudioMixing(
                     options.getString("filepath"),
                     options.getBoolean("loopback"),
                     options.getBoolean("replace"),
                     options.getInt("cycle")
-            );
-            if (res != 0) throw new ReactNativeAgoraException("startAudioMixing Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+        );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void stopAudioMixing() {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.stopAudioMixing();
-            if (res != 0) throw new ReactNativeAgoraException("stopAudioMixing Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void stopAudioMixing(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.stopAudioMixing();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void pauseAudioMixing() {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.pauseAudioMixing();
-            if (res != 0) throw new ReactNativeAgoraException("pauseAudioMixing Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void pauseAudioMixing(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.pauseAudioMixing();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void resumeAudioMixing() {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.resumeAudioMixing();
-            if (res != 0) throw new ReactNativeAgoraException("resumeAudioMixing Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void resumeAudioMixing(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.resumeAudioMixing();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void adjustAudioMixingVolume(int volume) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.adjustAudioMixingVolume(volume);
-            if (res != 0) throw new ReactNativeAgoraException("adjustAudioMixingVolume Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void adjustAudioMixingVolume(int volume, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.adjustAudioMixingVolume(volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void adjustAudioMixingPlayoutVolume(int volume) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.adjustAudioMixingPlayoutVolume(volume);
-            if (res != 0) throw new ReactNativeAgoraException("adjustAudioMixingPlayoutVolume Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void adjustAudioMixingPlayoutVolume(int volume, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.adjustAudioMixingPlayoutVolume(volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void adjustAudioMixingPublishVolume(int volume) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.adjustAudioMixingPublishVolume(volume);
-            if (res != 0) throw new ReactNativeAgoraException("adjustAudioMixingPublishVolume Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+    public void adjustAudioMixingPublishVolume(int volume, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.adjustAudioMixingPublishVolume(volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void getAudioMixingPlayoutVolume(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
-            if (res < 0) throw new ReactNativeAgoraException("getAudioMixingPlayoutVolume Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("-1", e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void getAudioMixingPublishVolume(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
-            if (res < 0) throw new ReactNativeAgoraException("getAudioMixingPublishVolume Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("-1", e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void getAudioMixingDuration(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingDuration();
-            if (res != 0) throw new ReactNativeAgoraException("getAudioMixingDuration Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("-1", e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingDuration();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void getAudioMixingCurrentPosition(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.getAudioMixingCurrentPosition();
-            if (res != 0) throw new ReactNativeAgoraException("getAudioMixingCurrentPosition Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131005", e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingCurrentPosition();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setAudioMixingPosition(int pos, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setAudioMixingPosition(pos);
-            if (res != 0) throw new ReactNativeAgoraException("setAudioMixingPosition Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131006", e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setAudioMixingPosition(pos);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void startAudioRecording(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .startAudioRecording(
                             options.getString("filepath"),
                             options.getInt("quality")
-                    );
-            if (res != 0) throw new ReactNativeAgoraException("startAudioRecording Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131007", e);
+        );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void stopAudioRecording(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .stopAudioRecording();
-            if (res != 0) throw new ReactNativeAgoraException("stopAudioRecording Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131008", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void stopEchoTest(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .stopEchoTest();
-            if (res != 0) throw new ReactNativeAgoraException("stopEchoTest Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131010", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void enableLastmileTest(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .enableLastmileTest();
-            if (res != 0) throw new ReactNativeAgoraException("enableLastmileTest Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131021", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void disableLastmileTest(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .disableLastmileTest();
-            if (res != 0) throw new ReactNativeAgoraException("disableLastmileTest Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131022", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setRecordingAudioFrameParameters(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .setRecordingAudioFrameParameters(
                             options.getInt("sampleRate"),
                             options.getInt("channel"),
                             options.getInt("mode"),
                             options.getInt("samplesPerCall")
-                    );
-            if (res != 0) throw new ReactNativeAgoraException("setRecordingAudioFrameParameters Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131023", e);
+        );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setPlaybackAudioFrameParameters(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .setPlaybackAudioFrameParameters(
                             options.getInt("sampleRate"),
                             options.getInt("channel"),
                             options.getInt("mode"),
                             options.getInt("samplesPerCall")
-                    );
-            if (res != 0) throw new ReactNativeAgoraException("setPlaybackAudioFrameParameters Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131024", e);
+        );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setMixedAudioFrameParameters(WritableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .setMixedAudioFrameParameters(
                             options.getInt("sampleRate"),
                             options.getInt("samplesPerCall")
                     );
-            if (res != 0) throw new ReactNativeAgoraException("setMixedAudioFrameParameters Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131025", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
@@ -1890,142 +1775,106 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addVideoWatermark(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .addVideoWatermark(createAgoraImage(options));
-            if (res != 0) throw new ReactNativeAgoraException("addVideoWatermark Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131026", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void clearVideoWatermarks(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .clearVideoWatermarks();
-            if (res != 0) throw new ReactNativeAgoraException("clearVideoWatermarks Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131027", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setLocalPublishFallbackOption(int option, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .setLocalPublishFallbackOption(option);
-            if (res != 0) throw new ReactNativeAgoraException("setLocalPublishFallbackOption Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131028", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setRemoteSubscribeFallbackOption(int option, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .setRemoteSubscribeFallbackOption(option);
-            if (res != 0) throw new ReactNativeAgoraException("setRemoteSubscribeFallbackOption Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131029", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void enableDualStreamMode(boolean enabled, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .enableDualStreamMode(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("enableDualStreamMode Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131028", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
 
     @ReactMethod
     public void setRemoteVideoStreamType(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .setRemoteVideoStreamType(
                             options.getInt("uid"),
                             options.getInt("streamType")
                         );
-            if (res != 0) throw new ReactNativeAgoraException("setRemoteVideoStreamType Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131029", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setRemoteDefaultVideoStreamType(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .setRemoteDefaultVideoStreamType(
                             options.getInt("streamType")
                     );
-            if (res != 0) throw new ReactNativeAgoraException("setRemoteDefaultVideoStreamType Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("-1", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void sendMediaData(String data, final Promise promise) {
         if (null == mediaObserver) {
-            promise.reject("-1", "sendMediaData failed");
+            promise.reject("-1", "-1");
         } else {
             mediaObserver.setMetadata(data.getBytes(Charset.forName("UTF-8")));
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
+            promise.resolve(null);
         }
     }
 
     @ReactMethod
     public void registerMediaMetadataObserver(final Promise promise) {
-        try {
-            mediaObserver = new MediaObserver(getReactApplicationContext());
-            int res = AgoraManager.getInstance().mRtcEngine
-                    .registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA);
-            if (res < 0) {
-                new ReactNativeAgoraException("registerMediaMetadataObserver Failed", res);
-            }
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("-1", e);
+        mediaObserver = new MediaObserver(getReactApplicationContext());
+        Integer res = AgoraManager.getInstance().mRtcEngine
+                .registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
@@ -2082,369 +1931,320 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addInjectStreamUrl(ReadableMap options, Promise promise) {
-        try {
-            LiveInjectStreamConfig injectstream = new LiveInjectStreamConfig();
-            ReadableMap config = options.getMap("config");
-            ReadableMap size = config.getMap("size");
-            injectstream.width = size.getInt("width");
-            injectstream.height = size.getInt("height");
-            injectstream.videoGop = config.getInt("videoGop");
-            injectstream.videoBitrate = config.getInt("videoBitrate");
-            injectstream.videoFramerate = config.getInt("videoFramerate");
-            injectstream.audioBitrate = config.getInt("audioBitrate");
-            injectstream.audioSampleRate = getAudioSampleRateEnum(config.getInt("audioSampleRate"));
-            injectstream.audioChannels = config.getInt("audioChannels");
+        LiveInjectStreamConfig injectstream = new LiveInjectStreamConfig();
+        ReadableMap config = options.getMap("config");
+        ReadableMap size = config.getMap("size");
+        injectstream.width = size.getInt("width");
+        injectstream.height = size.getInt("height");
+        injectstream.videoGop = config.getInt("videoGop");
+        injectstream.videoBitrate = config.getInt("videoBitrate");
+        injectstream.videoFramerate = config.getInt("videoFramerate");
+        injectstream.audioBitrate = config.getInt("audioBitrate");
+        injectstream.audioSampleRate = getAudioSampleRateEnum(config.getInt("audioSampleRate"));
+        injectstream.audioChannels = config.getInt("audioChannels");
 
-            int res = AgoraManager.getInstance().mRtcEngine
-                    .addInjectStreamUrl(
-                            options.getString("url"),
-                            injectstream
-                    );
-            if (res != 0) throw new ReactNativeAgoraException("addInjectStreamUrl Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131031", e);
+        Integer res = AgoraManager.getInstance().mRtcEngine
+                .addInjectStreamUrl(
+                        options.getString("url"),
+                        injectstream
+                );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void removeInjectStreamUrl(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .removeInjectStreamUrl(options.getString("url"));
-            if (res != 0) throw new ReactNativeAgoraException("removeInjectStreamUrl Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131032", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void addPublishStreamUrl(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .addPublishStreamUrl(
                             options.getString("url"),
                             options.getBoolean("enable")
                     );
-            if (res != 0) throw new ReactNativeAgoraException("addPublishStreamUrl Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131033", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void removePublishStreamUrl(ReadableMap options, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine
+        Integer res = AgoraManager.getInstance().mRtcEngine
                     .removePublishStreamUrl(options.getString("url"));
-            if (res != 0) throw new ReactNativeAgoraException("removePublishStreamUrl Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject("131034", e);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
-    public void setLiveTranscoding(ReadableMap options) {
-        try {
-            LiveTranscoding transcoding = new LiveTranscoding();
-            if (options.hasKey("size") && null != options.getMap("size")) {
-                ReadableMap size = options.getMap("size");
-                transcoding.width = size.getInt("width");
-                transcoding.height = size.getInt("height");
+    public void setLiveTranscoding(ReadableMap options, Promise promise) {
+        LiveTranscoding transcoding = new LiveTranscoding();
+        if (options.hasKey("size") && null != options.getMap("size")) {
+            ReadableMap size = options.getMap("size");
+            transcoding.width = size.getInt("width");
+            transcoding.height = size.getInt("height");
+        }
+        if (options.hasKey("videoBitrate")) {
+            transcoding.videoBitrate = options.getInt("videoBitrate");
+        }
+        if (options.hasKey("videoFramerate")) {
+            transcoding.videoFramerate = options.getInt("videoFramerate");
+        }
+        if (options.hasKey("lowLatency")) {
+            transcoding.lowLatency = options.getBoolean("lowLatency");
+        }
+        if (options.hasKey("videoGop")) {
+            transcoding.videoGop = options.getInt("videoGop");
+        }
+        if (options.hasKey("videoCodecProfile")) {
+            transcoding.videoCodecProfile = getLiveTranscodingVideoCodecProfileEnum(options.getInt("videoCodecProfile"));
+        }
+        if (options.hasKey("transcodingUsers")) {
+            ArrayList<LiveTranscoding.TranscodingUser> users = new ArrayList<LiveTranscoding.TranscodingUser>();
+            ReadableArray transcodingUsers = options.getArray("transcodingUsers");
+            for (int i = 0; i < transcodingUsers.size(); i++) {
+                ReadableMap _map = transcodingUsers.getMap(i);
+                LiveTranscoding.TranscodingUser user = new LiveTranscoding.TranscodingUser();
+                user.uid = _map.getInt("uid");
+                ReadableMap backgroundColor = _map.getMap("backgroundColor");
+                user.x = backgroundColor.getInt("x");
+                user.y = backgroundColor.getInt("y");
+                user.width = backgroundColor.getInt("width");
+                user.height = backgroundColor.getInt("height");
+                user.zOrder = _map.getInt("zOrder");
+                user.alpha = _map.getInt("alpha");
+                user.audioChannel = _map.getInt("audioChannel");
+                users.add(user);
             }
-            if (options.hasKey("videoBitrate")) {
-                transcoding.videoBitrate = options.getInt("videoBitrate");
-            }
-            if (options.hasKey("videoFramerate")) {
-                transcoding.videoFramerate = options.getInt("videoFramerate");
-            }
-            if (options.hasKey("lowLatency")) {
-                transcoding.lowLatency = options.getBoolean("lowLatency");
-            }
-            if (options.hasKey("videoGop")) {
-                transcoding.videoGop = options.getInt("videoGop");
-            }
-            if (options.hasKey("videoCodecProfile")) {
-                transcoding.videoCodecProfile = getLiveTranscodingVideoCodecProfileEnum(options.getInt("videoCodecProfile"));
-            }
-            if (options.hasKey("transcodingUsers")) {
-                ArrayList<LiveTranscoding.TranscodingUser> users = new ArrayList<LiveTranscoding.TranscodingUser>();
-                ReadableArray transcodingUsers = options.getArray("transcodingUsers");
-                for (int i = 0; i < transcodingUsers.size(); i++) {
-                    ReadableMap _map = transcodingUsers.getMap(i);
-                    LiveTranscoding.TranscodingUser user = new LiveTranscoding.TranscodingUser();
-                    user.uid = _map.getInt("uid");
-                    ReadableMap backgroundColor = _map.getMap("backgroundColor");
-                    user.x = backgroundColor.getInt("x");
-                    user.y = backgroundColor.getInt("y");
-                    user.width = backgroundColor.getInt("width");
-                    user.height = backgroundColor.getInt("height");
-                    user.zOrder = _map.getInt("zOrder");
-                    user.alpha = _map.getInt("alpha");
-                    user.audioChannel = _map.getInt("audioChannel");
-                    users.add(user);
-                }
-                transcoding.setUsers(users);
-            }
-            if (options.hasKey("transcodingExtraInfo")) {
-                transcoding.userConfigExtraInfo = options.getString("transcodingExtraInfo");
-            }
-            if (options.hasKey("watermark")) {
-                ReadableMap watermark = options.getMap("watermark");
-                WritableMap map = Arguments.createMap();
-                map.putString("url", watermark.getString("url"));
-                map.putString("x", watermark.getString("x"));
-                map.putString("y", watermark.getString("y"));
-                map.putString("width", watermark.getString("width"));
-                map.putString("height", watermark.getString("height"));
-                transcoding.watermark = createAgoraImage(map);
-            }
-            if (options.hasKey("backgroundImage")) {
-                ReadableMap watermark = options.getMap("backgroundImage");
-                WritableMap map = Arguments.createMap();
-                map.putString("url", watermark.getString("url"));
-                map.putString("x", watermark.getString("x"));
-                map.putString("y", watermark.getString("y"));
-                map.putString("width", watermark.getString("width"));
-                map.putString("height", watermark.getString("height"));
-                transcoding.backgroundImage = createAgoraImage(map);
-            }
-            if (options.hasKey("backgroundColor")) {
-                ReadableMap backgroundColor = options.getMap("backgroundColor");
-                transcoding.setBackgroundColor(
-                        backgroundColor.getInt("red"),
-                        backgroundColor.getInt("green"),
-                        backgroundColor.getInt("blue")
-                );
-            }
-            if (options.hasKey("audioSampleRate")) {
-                transcoding.audioSampleRate = getLiveTranscodingAudioSampleRateEnum(options.getInt("audioSampleRate"));
-            }
-            if (options.hasKey("audioBitrate")) {
-                transcoding.audioChannels = options.getInt("audioBitrate");
-            }
-            if (options.hasKey("audioChannels")) {
-                transcoding.audioChannels = options.getInt("audioChannel");
-            }
-            int res = AgoraManager.getInstance().mRtcEngine.setLiveTranscoding(transcoding);
-            if (res != 0) throw new ReactNativeAgoraException("setLiveTranscoding Failed", res);
-        } catch (Exception e) {
-            WritableMap err = Arguments.createMap();
-            err.putBoolean("success", false);
-            err.putString("message", e.toString());
-            sendEvent(getReactApplicationContext(), "error", err);
+            transcoding.setUsers(users);
+        }
+        if (options.hasKey("transcodingExtraInfo")) {
+            transcoding.userConfigExtraInfo = options.getString("transcodingExtraInfo");
+        }
+        if (options.hasKey("watermark")) {
+            ReadableMap watermark = options.getMap("watermark");
+            WritableMap map = Arguments.createMap();
+            map.putString("url", watermark.getString("url"));
+            map.putString("x", watermark.getString("x"));
+            map.putString("y", watermark.getString("y"));
+            map.putString("width", watermark.getString("width"));
+            map.putString("height", watermark.getString("height"));
+            transcoding.watermark = createAgoraImage(map);
+        }
+        if (options.hasKey("backgroundImage")) {
+            ReadableMap watermark = options.getMap("backgroundImage");
+            WritableMap map = Arguments.createMap();
+            map.putString("url", watermark.getString("url"));
+            map.putString("x", watermark.getString("x"));
+            map.putString("y", watermark.getString("y"));
+            map.putString("width", watermark.getString("width"));
+            map.putString("height", watermark.getString("height"));
+            transcoding.backgroundImage = createAgoraImage(map);
+        }
+        if (options.hasKey("backgroundColor")) {
+            ReadableMap backgroundColor = options.getMap("backgroundColor");
+            transcoding.setBackgroundColor(
+                    backgroundColor.getInt("red"),
+                    backgroundColor.getInt("green"),
+                    backgroundColor.getInt("blue")
+            );
+        }
+        if (options.hasKey("audioSampleRate")) {
+            transcoding.audioSampleRate = getLiveTranscodingAudioSampleRateEnum(options.getInt("audioSampleRate"));
+        }
+        if (options.hasKey("audioBitrate")) {
+            transcoding.audioChannels = options.getInt("audioBitrate");
+        }
+        if (options.hasKey("audioChannels")) {
+            transcoding.audioChannels = options.getInt("audioChannel");
+        }
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLiveTranscoding(transcoding);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void getEffectsVolume(Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            double res = manager.getEffectsVolume();
-            if (res < 0) throw new ReactNativeAgoraException("getEffectsVolume Failed", (int)res);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Double res = manager.getEffectsVolume();
+        if (res < 0) {
+            promise.reject("-1", res.toString());
+        } else {
             WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
             map.putDouble("value", res);
             promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
         }
     }
 
     @ReactMethod
     public void setEffectsVolume(double volume, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.setEffectsVolume(volume);
-            if (res != 0) throw new ReactNativeAgoraException("setEffectsVolume Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.setEffectsVolume(volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
 
     @ReactMethod
     public void setVolumeOfEffect(int soundId, double volume, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.setVolumeOfEffect(soundId, volume);
-            if (res != 0) throw new ReactNativeAgoraException("setVolumeOfEffect Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putDouble("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.setVolumeOfEffect(soundId, volume);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void playEffect(ReadableMap options, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.playEffect(
-                    options.getInt("soundid"),
-                    options.getString("filepath"),
-                    options.getInt("loopcount"),
-                    options.getDouble("pitch"),
-                    options.getDouble("pan"),
-                    options.getDouble("gain"),
-                    options.getBoolean("publish")
-            );
-            if (res != 0) throw new ReactNativeAgoraException("playEffect Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.playEffect(
+            options.getInt("soundid"),
+            options.getString("filepath"),
+            options.getInt("loopcount"),
+            options.getDouble("pitch"),
+            options.getDouble("pan"),
+            options.getDouble("gain"),
+            options.getBoolean("publish")
+        );
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
 
     @ReactMethod
     public void stopEffect(int soundId, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.stopEffect(soundId);
-            if (res != 0) throw new ReactNativeAgoraException("stopEffect Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.stopEffect(soundId);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void stopAllEffects(Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.stopAllEffects();
-            if (res != 0) throw new ReactNativeAgoraException("stopAllEffects Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.stopAllEffects();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void preloadEffect(int soundId, String filePath, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.preloadEffect(soundId, filePath);
-            if (res != 0) throw new ReactNativeAgoraException("preloadEffect Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.preloadEffect(soundId, filePath);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void unloadEffect(int soundId, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.unloadEffect(soundId);
-            if (res != 0) throw new ReactNativeAgoraException("unloadEffect Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.unloadEffect(soundId);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void pauseEffect(int soundId, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.pauseEffect(soundId);
-            if (res != 0) throw new ReactNativeAgoraException("pauseEffect Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.pauseEffect(soundId);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void pauseAllEffects(Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.pauseAllEffects();
-            if (res != 0) throw new ReactNativeAgoraException("pauseAllEffects Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.pauseAllEffects();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void resumeEffect(int soundId, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.resumeEffect(soundId);
-            if (res != 0) throw new ReactNativeAgoraException("resumeEffect Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.resumeEffect(soundId);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void resumeAllEffects(int soundId, Promise promise) {
-        try {
-            IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
-            int res = manager.resumeAllEffects();
-            if (res != 0) throw new ReactNativeAgoraException("resumeAllEffects Failed", (int)res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            map.putInt("value", res);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
+        Integer res = manager.resumeAllEffects();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     // set local video render mode
     @ReactMethod
-    public void setLocalRenderMode(int mode) {
-        AgoraManager.getInstance().mRtcEngine.setLocalRenderMode(mode);
+    public void setLocalRenderMode(int mode, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLocalRenderMode(mode);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    // set remote video render mode
+    @ReactMethod
+    public void setRemoteRenderMode(int uid, int mode, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setRemoteRenderMode(uid, mode);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
@@ -2459,171 +2259,137 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setLocalVideoMirrorMode(int mode, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setLocalVideoMirrorMode(mode);
-            if (res != 0) throw new ReactNativeAgoraException("setLocalVideoMirrorMode Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLocalVideoMirrorMode(mode);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setBeautyEffectOptions(boolean enabled, ReadableMap options, Promise promise) {
-        try {
-            BeautyOptions beautyOption = new BeautyOptions();
-            beautyOption.lighteningContrastLevel = options.getInt("lighteningContrastLevel");
-            beautyOption.lighteningLevel = (float) options.getDouble("lighteningLevel");
-            beautyOption.smoothnessLevel = (float) options.getDouble("smoothnessLevel");
-            beautyOption.rednessLevel = (float) options.getDouble("rednessLevel");
-            int res = AgoraManager.getInstance().mRtcEngine.setBeautyEffectOptions(true, beautyOption);
-            if (res != 0) throw new ReactNativeAgoraException("setBeautyEffectOptions Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        BeautyOptions beautyOption = new BeautyOptions();
+        beautyOption.lighteningContrastLevel = options.getInt("lighteningContrastLevel");
+        beautyOption.lighteningLevel = (float) options.getDouble("lighteningLevel");
+        beautyOption.smoothnessLevel = (float) options.getDouble("smoothnessLevel");
+        beautyOption.rednessLevel = (float) options.getDouble("rednessLevel");
+        Integer res = AgoraManager.getInstance().mRtcEngine.setBeautyEffectOptions(enabled, beautyOption);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setLocalVoiceChanger(int voiceChanger, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceChanger(voiceChanger);
-            if (res != 0) throw new ReactNativeAgoraException("setLocalVoiceChanger Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceChanger(voiceChanger);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setLocalVoiceReverbPreset(int preset, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceReverbPreset(preset);
-            if (res != 0) throw new ReactNativeAgoraException("setLocalVoiceReverbPreset Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setLocalVoiceReverbPreset(preset);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void enableSoundPositionIndication(boolean enabled, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.enableSoundPositionIndication(enabled);
-            if (res != 0) throw new ReactNativeAgoraException("enableSoundPositionIndication Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.enableSoundPositionIndication(enabled);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setRemoteVoicePosition(int uid, int pan, int gain, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setRemoteVoicePosition(uid, pan, gain);
-            if (res != 0) throw new ReactNativeAgoraException("setRemoteVoicePosition Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setRemoteVoicePosition(uid, pan, gain);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void startLastmileProbeTest(ReadableMap config, Promise promise) {
-        try {
-            LastmileProbeConfig probeConfig = new LastmileProbeConfig();
-            probeConfig.probeUplink = config.getBoolean("probeUplink");
-            probeConfig.probeDownlink = config.getBoolean("probeDownlink");
-            probeConfig.expectedDownlinkBitrate = config.getInt("expectedDownlinkBitrate");
-            probeConfig.expectedUplinkBitrate = config.getInt("expectedUplinkBitrate");
-            int res = AgoraManager.getInstance().mRtcEngine.startLastmileProbeTest(probeConfig);
-            if (res != 0) throw new ReactNativeAgoraException("startLastmileProbeTest Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        LastmileProbeConfig probeConfig = new LastmileProbeConfig();
+        probeConfig.probeUplink = config.getBoolean("probeUplink");
+        probeConfig.probeDownlink = config.getBoolean("probeDownlink");
+        probeConfig.expectedDownlinkBitrate = config.getInt("expectedDownlinkBitrate");
+        probeConfig.expectedUplinkBitrate = config.getInt("expectedUplinkBitrate");
+        Integer res = AgoraManager.getInstance().mRtcEngine.startLastmileProbeTest(probeConfig);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void stopLastmileProbeTest(Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.stopLastmileProbeTest();
-            if (res != 0) throw new ReactNativeAgoraException("stopLastmileProbeTest Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.stopLastmileProbeTest();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setRemoteUserPriority(int uid, int userPrority, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.setRemoteUserPriority(uid, userPrority);
-            if (res != 0) throw new ReactNativeAgoraException("setRemoteUserPriority Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setRemoteUserPriority(uid, userPrority);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void startEchoTestWithInterval(int interval, Promise promise) {
-        try {
-            int res = AgoraManager.getInstance().mRtcEngine.startEchoTest(interval);
-            if (res != 0) throw new ReactNativeAgoraException("startEchoTestWithInterval Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+        Integer res = AgoraManager.getInstance().mRtcEngine.startEchoTest(interval);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 
     @ReactMethod
     public void setCameraCapturerConfiguration(ReadableMap options, Promise promise) {
-        try {
-            CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_AUTO;
-            switch (options.getInt("preference")) {
-                case 0: {
-                    preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_AUTO;
-                    break;
-                }
-                case 1: {
-                    preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE;
-                    break;
-                }
-                case 2: {
-                    preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_PREVIEW;
-                    break;
-                }
+        CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_AUTO;
+        switch (options.getInt("preference")) {
+            case 0: {
+                preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_AUTO;
+                break;
             }
-            CameraCapturerConfiguration config = new CameraCapturerConfiguration(preference);
-
-            int res = AgoraManager.getInstance().mRtcEngine.setCameraCapturerConfiguration(config);
-            if (res != 0) throw new ReactNativeAgoraException("setCameraCapturerConfiguration Failed", res);
-            WritableMap map = Arguments.createMap();
-            map.putBoolean("success", true);
-            promise.resolve(map);
-        } catch (Exception e) {
-            promise.reject(e);
+            case 1: {
+                preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE;
+                break;
+            }
+            case 2: {
+                preference = CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.CAPTURER_OUTPUT_PREFERENCE_PREVIEW;
+                break;
+            }
+        }
+        CameraCapturerConfiguration config = new CameraCapturerConfiguration(preference);
+        Integer res = AgoraManager.getInstance().mRtcEngine.setCameraCapturerConfiguration(config);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
         }
     }
 

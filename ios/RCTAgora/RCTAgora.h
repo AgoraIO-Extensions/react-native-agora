@@ -13,7 +13,7 @@
 #import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
 
 @interface RCTAgora : RCTEventEmitter<RCTBridgeModule, AgoraMediaMetadataDelegate, AgoraMediaMetadataDataSource>
-- (void) sendEvent:(NSString *)msg params:(NSDictionary *)params;
+- (void) sendEvent:(NSString *_Nullable)msg params:(NSDictionary *_Nullable)params;
 - (NSInteger) metadataMaxSize;
 - (NSData *_Nullable)readyToSendMetadataAtTimestamp:(NSTimeInterval)timestamp;
 - (void)receiveMetadata:(NSData *_Nonnull)data fromUser:(NSInteger)uid atTimestamp:(NSTimeInterval)timestamp;

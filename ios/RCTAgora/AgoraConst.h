@@ -32,7 +32,6 @@ static NSString *AGActiveSpeaker = @"activeSpeaker";
 static NSString *AGFirstLocalAudioFrame = @"firstLocalAudioFrame";
 static NSString *AGFirstRemoteAudioFrame = @"firstRemoteAudioFrame";
 static NSString *AGFirstRemoteAudioDecoded = @"firstRemoteAudioDecoded";
-static NSString *AGVideoStopped = @"videoStopped";
 static NSString *AGFirstLocalVideoFrame = @"firstLocalVideoFrame";
 static NSString *AGFirstRemoteVideoDecoded = @"firstRemoteVideoDecoded";
 static NSString *AGFirstRemoteVideoFrame = @"firstRemoteVideoFrame";
@@ -46,7 +45,6 @@ static NSString *AGLocalPublishFallbackToAudioOnly = @"localPublishFallbackToAud
 static NSString *AGRemoteSubscribeFallbackToAudioOnly = @"remoteSubscribeFallbackToAudioOnly";
 
 static NSString *AGAudioRouteChanged = @"audioRouteChanged";
-static NSString *AGCameraReady = @"cameraReady";
 static NSString *AGCameraFocusAreaChanged = @"cameraFocusAreaChanged";
 static NSString *AGCameraExposureAreaChanged = @"cameraExposureAreaChanged";
 

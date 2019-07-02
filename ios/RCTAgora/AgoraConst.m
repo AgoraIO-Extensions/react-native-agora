@@ -48,7 +48,6 @@ static AgoraConst *_person;
                                   AGFirstLocalAudioFrame,
                                   AGFirstRemoteAudioFrame,
                                   AGFirstRemoteAudioDecoded,
-                                  AGVideoStopped,
                                   AGFirstLocalVideoFrame,
                                   AGFirstRemoteVideoDecoded,
                                   AGFirstRemoteVideoFrame,
@@ -62,7 +61,6 @@ static AgoraConst *_person;
                                   AGRemoteSubscribeFallbackToAudioOnly,
                                   
                                   AGAudioRouteChanged,
-                                  AGCameraReady,
                                   AGCameraFocusAreaChanged,
                                   AGCameraExposureAreaChanged,
                                   
