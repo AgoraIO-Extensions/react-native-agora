@@ -59,16 +59,22 @@ public class AgoraManager {
         switch (val) {
             case 1:
                 type = FRAME_RATE.FRAME_RATE_FPS_1;
+                break;
             case 7:
                 type = FRAME_RATE.FRAME_RATE_FPS_7;
+                break;
             case 10:
                 type = FRAME_RATE.FRAME_RATE_FPS_10;
+                break;
             case 15:
                 type = FRAME_RATE.FRAME_RATE_FPS_15;
+                break;
             case 24:
                 type = FRAME_RATE.FRAME_RATE_FPS_24;
+                break;
             case 30:
                 type = FRAME_RATE.FRAME_RATE_FPS_30;
+                break;
         }
         return type;
     }
@@ -78,10 +84,13 @@ public class AgoraManager {
         switch (val) {
             case 0:
                 type = ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE;
+                break;
             case 1:
                 type = ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE;
+                break;
             case 2:
                 type = ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT;
+                break;
         }
         return type;
     }
@@ -193,7 +202,7 @@ public class AgoraManager {
 
     /**
      * set local video render mode
-     * @param Integer renderMode
+     * @param renderMode Integer
      * @return result state
      */
     public int setLocalRenderMode(final Integer renderMode) {
@@ -250,12 +259,12 @@ public class AgoraManager {
         return mRtcEngine.disableLastmileTest();
     }
 
-    public void startPreview() {
-        mRtcEngine.startPreview();
+    public int startPreview() {
+        return mRtcEngine.startPreview();
     }
 
-    public void stopPreview() {
-        mRtcEngine.stopPreview();
+    public int stopPreview() {
+        return mRtcEngine.stopPreview();
     }
 
     public int leaveChannel() {

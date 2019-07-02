@@ -22,7 +22,6 @@ public class AgoraConst {
     public final static String AGActiveSpeaker = "activeSpeaker";
     public final static String AGFirstLocalAudioFrame = "firstLocalAudioFrame";
     public final static String AGFirstRemoteAudioFrame = "firstRemoteAudioFrame";
-    public final static String AGVideoStopped = "videoStopped";
     public final static String AGFirstLocalVideoFrame = "firstLocalVideoFrame";
     public final static String AGFirstRemoteVideoDecoded = "firstRemoteVideoDecoded";
     public final static String AGFirstRemoteVideoFrame = "firstRemoteVideoFrame";
@@ -41,7 +40,6 @@ public class AgoraConst {
     public final static String AGRemoteSubscribeFallbackToAudioOnly = "remoteSubscribeFallbackToAudioOnly";
 
     public final static String AGAudioRouteChanged = "audioRouteChanged";
-    public final static String AGCameraReady = "cameraReady";
     public final static String AGCameraFocusAreaChanged = "cameraFocusAreaChanged";
     public final static String AGCameraExposureAreaChanged = "cameraExposureAreaChanged";
 

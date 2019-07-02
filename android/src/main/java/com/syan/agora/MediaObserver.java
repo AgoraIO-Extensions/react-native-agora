@@ -54,6 +54,6 @@ public class MediaObserver implements IMetadataObserver {
         map.putString("uid", Integer.toString(uid));
         map.putString("ts", Long.toString(timeStampMs));
         reactCtx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit("mediaMetaDataReceived", map);
+                .emit(AgoraConst.AGMediaMetaDataReceived, map);
     }
 }
