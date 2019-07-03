@@ -35,12 +35,12 @@ Either way, then link with:
  `react-native link react-native-agora`
 
 ### iOS Installation
-  [中文](docs/IOS_INSTALLATION.zh.md)
-  [English](docs/IOS_INSTALLATION.md)
+  [中文](https://github.com/syanbo/react-native-agora/tree/master/docs/IOS_INSTALLATION.zh.md)
+  [English](https://github.com/syanbo/react-native-agora/tree/master/docs/IOS_INSTALLATION.md)
 
 ### Android Installation
-  [中文](docs/ANDROID_INSTALLATION.zh.md) 
-  [English](docs/ANDROID_INSTALLATION.md)
+  [中文](https://github.com/syanbo/react-native-agora/tree/master/docs/ANDROID_INSTALLATION.zh.md)
+  [English](https://github.com/syanbo/react-native-agora/tree/master/docs/ANDROID_INSTALLATION.md)
 
 ## Agora Native API Documentation
 
