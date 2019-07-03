@@ -14,9 +14,9 @@
 The react-native-agora is an open-source wrapper for react-native developers. This SDK takes advantage of React Native and Agora RTC Video SDKs on Android/iOS.
 
 ## Compatibility
-  * >= react native 0.55.x
-  * iOS SDK 8.0+
-  * Android 5.0+ x86 arm64 armv7a
+  * `>= react native 0.55.x`
+  * `iOS SDK 8.0+`
+  * `Android 5.0+ x86 arm64 armv7a`
 
 ## [quick start](https://github.com/AgoraIO-Community/Agora-RN-Quickstart)
 
@@ -45,13 +45,12 @@ Either way, then link with:
 ## Agora Native API Documentation
 
 ### Android
-  [中文](https://docs.agora.io/cn/Video/API%20Reference/java/index.html) 
+  [中文](https://docs.agora.io/cn/Video/API%20Reference/java/index.html)
   [English](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 
 ## iOS
   [中文](https://docs.agora.io/cn/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
   [English](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
-
 
 ## [API DOCS](https://syanbo.github.io/react-native-agora/globals.html)
 
