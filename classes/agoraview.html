@@ -74,7 +74,22 @@
 					<p>This class is used to rendering native sdk stream</p>
 					<dl class="tsd-comment-tags">
 						<dt>props</dt>
-						<dd><p>{@link AgoraViewProps}</p>
+						<dd><p><a href="../interfaces/agoraviewprops.html">AgoraViewProps</a></p>
+						</dd>
+						<dt>descrption</dt>
+						<dd><p>AgoraViewProps has four properties.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>number: mode, this property will setup video render mode. there is two avaliable mode {hidden: 1, fit: 2}, you could see more details <a href="#here">https://docs.agora.io/en/Interactive%20Broadcast/API%20Reference/java/classio_1_1agora_1_1rtc_1_1_rtc_engine.html#ac08882c4d0ec47b329900df169493673</a></p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>boolean: showLocalVideo, this property will render local video, NOTICE: IF YOU SET showLocalVideo YOU CANNOT SET remoteUid</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>number: remoteUid, this property will render video with remote uid, NOTICE: IF YOU SET remoteUid YOU CANNOT SET showLocalVideo</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>boolean: zOrderMediaOverlay, this property will working for android side and it likes zIndex behaviour on web side.</p>
 						</dd>
 					</dl>
 				</div>
@@ -97,7 +112,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Component</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>
+						<span class="tsd-signature-type">Component</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">AgoraView</span>
@@ -156,21 +171,21 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Agora<wbr>View<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="agoraview.html" class="tsd-signature-type">AgoraView</a></li>
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Agora<wbr>View<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AgoraViewProps</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="agoraview.html" class="tsd-signature-type">AgoraView</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Agora<wbr>View<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="agoraview.html" class="tsd-signature-type">AgoraView</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Agora<wbr>View<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="agoraview.html" class="tsd-signature-type">AgoraView</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from Component.__constructor</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:400</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:433</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>props: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>props: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="agoraview.html" class="tsd-signature-type">AgoraView</a></h4>
@@ -179,7 +194,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from Component.__constructor</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:402</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:435</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -194,7 +209,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>props: <span class="tsd-signature-type">AgoraViewProps</span></h5>
+									<h5>props: <a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> context: <span class="tsd-signature-type">any</span></h5>
@@ -214,7 +229,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Component.context</p>
 						<ul>
-							<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:400</li>
+							<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:433</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -237,11 +252,11 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="props" class="tsd-anchor"></a>
 					<h3>props</h3>
-					<div class="tsd-signature tsd-kind-icon">props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from Component.props</p>
 						<ul>
-							<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:425</li>
+							<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:458</li>
 						</ul>
 					</aside>
 				</section>
@@ -252,7 +267,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<aside class="tsd-sources">
 						<p>Inherited from Component.refs</p>
 						<ul>
-							<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:431</li>
+							<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:464</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -278,7 +293,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<aside class="tsd-sources">
 						<p>Inherited from Component.state</p>
 						<ul>
-							<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:426</li>
+							<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:459</li>
 						</ul>
 					</aside>
 				</section>
@@ -289,7 +304,7 @@ context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContex
 					<aside class="tsd-sources">
 						<p>Inherited from Component.contextType</p>
 						<ul>
-							<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:385</li>
+							<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:418</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -328,7 +343,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillMount</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:613</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:646</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -359,14 +374,14 @@ class Foo extends React.Component {
 					<a name="unsafe_componentwillreceiveprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> UNSAFE_<wbr>component<wbr>Will<wbr>Receive<wbr>Props</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">UNSAFE_<wbr>component<wbr>Will<wbr>Receive<wbr>Props<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">UNSAFE_<wbr>component<wbr>Will<wbr>Receive<wbr>Props<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillReceiveProps</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:645</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:678</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -394,7 +409,7 @@ class Foo extends React.Component {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>nextContext: <span class="tsd-signature-type">any</span></h5>
@@ -408,14 +423,14 @@ class Foo extends React.Component {
 					<a name="unsafe_componentwillupdate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> UNSAFE_<wbr>component<wbr>Will<wbr>Update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">UNSAFE_<wbr>component<wbr>Will<wbr>Update<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>, nextState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">UNSAFE_<wbr>component<wbr>Will<wbr>Update<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>, nextState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillUpdate</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:673</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:706</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -441,7 +456,7 @@ class Foo extends React.Component {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>nextState: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -465,7 +480,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.componentDidCatch</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:542</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:575</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -498,7 +513,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.componentDidMount</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:521</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:554</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -514,14 +529,14 @@ class Foo extends React.Component {
 					<a name="componentdidupdate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> component<wbr>Did<wbr>Update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">component<wbr>Did<wbr>Update<span class="tsd-signature-symbol">(</span>prevProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>, prevState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, snapshot<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">SS</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">component<wbr>Did<wbr>Update<span class="tsd-signature-symbol">(</span>prevProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>, prevState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, snapshot<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">SS</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from NewLifecycle.componentDidUpdate</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:584</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:617</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -533,7 +548,7 @@ class Foo extends React.Component {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>prevProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>prevProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>prevState: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -557,7 +572,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillMount</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:599</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:632</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -587,14 +602,14 @@ class Foo extends React.Component {
 					<a name="componentwillreceiveprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> component<wbr>Will<wbr>Receive<wbr>Props</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">component<wbr>Will<wbr>Receive<wbr>Props<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">component<wbr>Will<wbr>Receive<wbr>Props<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillReceiveProps</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:628</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:661</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -621,7 +636,7 @@ class Foo extends React.Component {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>nextContext: <span class="tsd-signature-type">any</span></h5>
@@ -642,7 +657,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.componentWillUnmount</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:537</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:570</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -659,14 +674,14 @@ class Foo extends React.Component {
 					<a name="componentwillupdate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> component<wbr>Will<wbr>Update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">component<wbr>Will<wbr>Update<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>, nextState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">component<wbr>Will<wbr>Update<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>, nextState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillUpdate</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:658</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:691</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -691,7 +706,7 @@ class Foo extends React.Component {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>nextState: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -715,7 +730,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from Component.forceUpdate</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:417</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:450</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -732,13 +747,13 @@ class Foo extends React.Component {
 					<a name="gethtmlprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> getHTMLProps</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">getHTMLProps<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AgoraViewProps</span></li>
+						<li class="tsd-signature tsd-kind-icon">getHTMLProps<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/1448fc0/src/AgoraView.native.tsx#L42">AgoraView.native.tsx:42</a></li>
+									<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/944b177/src/AgoraView.native.tsx#L48">AgoraView.native.tsx:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -747,7 +762,7 @@ class Foo extends React.Component {
 								</div>
 								<p>get agora view props</p>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AgoraViewProps</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -755,14 +770,14 @@ class Foo extends React.Component {
 					<a name="getsnapshotbeforeupdate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> get<wbr>Snapshot<wbr>Before<wbr>Update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Snapshot<wbr>Before<wbr>Update<span class="tsd-signature-symbol">(</span>prevProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>, prevState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Snapshot<wbr>Before<wbr>Update<span class="tsd-signature-symbol">(</span>prevProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>, prevState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SS</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from NewLifecycle.getSnapshotBeforeUpdate</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:578</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:611</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -777,7 +792,7 @@ class Foo extends React.Component {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>prevProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>prevProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>prevState: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -801,7 +816,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Overrides Component.render</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/1448fc0/src/AgoraView.native.tsx#L31">AgoraView.native.tsx:31</a></li>
+									<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/944b177/src/AgoraView.native.tsx#L37">AgoraView.native.tsx:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -825,7 +840,7 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Inherited from Component.setState</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:412</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:445</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -851,14 +866,14 @@ class Foo extends React.Component {
 					<a name="shouldcomponentupdate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> should<wbr>Component<wbr>Update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">should<wbr>Component<wbr>Update<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span>, nextState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">should<wbr>Component<wbr>Update<span class="tsd-signature-symbol">(</span>nextProps<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span>, nextState<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span>, nextContext<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.shouldComponentUpdate</p>
 								<ul>
-									<li>Defined in /Users/dengbo/Documents/GitHub/react-native-agora/node_modules/@types/react/index.d.ts:532</li>
+									<li>Defined in /Users/ly/Project/react-agora/node_modules/@types/react/index.d.ts:565</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -874,7 +889,7 @@ class Foo extends React.Component {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AgoraViewProps</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>nextProps: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/agoraviewprops.html" class="tsd-signature-type">AgoraViewProps</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>nextState: <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -976,6 +991,105 @@ class Foo extends React.Component {
 				<ul class="after-current">
 					<li class=" tsd-kind-class">
 						<a href="rtcengine.html" class="tsd-kind-icon">Rtc<wbr>Engine</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/agoraviewprops.html" class="tsd-kind-icon">Agora<wbr>View<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/audioframeoption.html" class="tsd-kind-icon">Audio<wbr>Frame<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/audiomixingoption.html" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/audiorecordingoption.html" class="tsd-kind-icon">Audio<wbr>Recording<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/backgroundimage.html" class="tsd-kind-icon">Background<wbr>Image</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/beautyoption.html" class="tsd-kind-icon">Beauty<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/cameracapturerconfiguration.html" class="tsd-kind-icon">Camera<wbr>Capturer<wbr>Configuration</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/color.html" class="tsd-kind-icon">Color</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/datastreamoption.html" class="tsd-kind-icon">Data<wbr>Stream<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/defaultvideostreamoption.html" class="tsd-kind-icon">Default<wbr>Video<wbr>Stream<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/imageoption.html" class="tsd-kind-icon">Image<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/injectstreamoption.html" class="tsd-kind-icon">Inject<wbr>Stream<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/lastmileprobeconfig.html" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/livetranscodingoption.html" class="tsd-kind-icon">Live<wbr>Transcoding<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/mixedaudioframeoption.html" class="tsd-kind-icon">Mixed<wbr>Audio<wbr>Frame<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/option.html" class="tsd-kind-icon">Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/playeffectoption.html" class="tsd-kind-icon">Play<wbr>Effect<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/positionoption.html" class="tsd-kind-icon">Position<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/publishstreamoption.html" class="tsd-kind-icon">Publish<wbr>Stream<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/publisherconfig.html" class="tsd-kind-icon">Publisher<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/rect.html" class="tsd-kind-icon">Rect</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/removeinjectstreamoption.html" class="tsd-kind-icon">Remove<wbr>Inject<wbr>Stream<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/removepublishstreamoption.html" class="tsd-kind-icon">Remove<wbr>Publish<wbr>Stream<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/size.html" class="tsd-kind-icon">Size</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/transcodinguser.html" class="tsd-kind-icon">Transcoding<wbr>User</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/videoencoderconfig.html" class="tsd-kind-icon">Video<wbr>Encoder<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/videooption.html" class="tsd-kind-icon">Video<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/videostreamoption.html" class="tsd-kind-icon">Video<wbr>Stream<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="../interfaces/voicedecorator.html" class="tsd-kind-icon">Voice<wbr>Decorator</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="../globals.html#callback" class="tsd-kind-icon">Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="../globals.html#nullable" class="tsd-kind-icon">Nullable</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#number" class="tsd-kind-icon">Number</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="../globals.html#string" class="tsd-kind-icon">String</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="../globals.html#agora" class="tsd-kind-icon">Agora</a>
