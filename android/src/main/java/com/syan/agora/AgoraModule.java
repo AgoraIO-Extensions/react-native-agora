@@ -160,7 +160,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         constants.put(FixedPortrait, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT.getValue());
         constants.put(Host, IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
         constants.put(Audience, IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_AUDIENCE);
-        constants.put(ChannelProfileCommunication, Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+        constants.put(ChannelProfileCommunication, Constants.CHANNEL_PROFILE_COMMUNICATION);
         constants.put(ChannelProfileLiveBroadcasting, Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
         constants.put(ChannelProfileGame, Constants.CHANNEL_PROFILE_GAME);
         constants.put(UserOfflineReasonQuit, Constants.USER_OFFLINE_QUIT);
