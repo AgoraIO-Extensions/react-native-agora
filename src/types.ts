@@ -1,5 +1,14 @@
-import { View, ViewProps } from 'react-native';
+import { ViewProps } from 'react-native';
 
+/**
+ * AgoraViewMode
+ * @mode hidden Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
+ * @mode FIT Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to the disparity in the aspect ratio are filled with black.
+ */
+export enum AgoraViewMode {
+  HIDDEN = 1,
+  FIT = 2
+}
 
 /**
  * VideoEncoderConfig details
@@ -19,15 +28,17 @@ export interface VideoEncoderConfig {
 }
 
 /**
- * Option is work for init method
- * @property: string appid Sets the appid
- * @property: number channelProfile Sets the channel mode. 0 is communication mode, 1 is broadcasting mode
- * @property: {@link VideoEncoderConfig} sets video encoding config
- * @property: mode is optional sets only enable video / audio, 0 is audio mode, 1 is video mode
- * @property: clientRole is only work in live mode, 1 is host, 2 is audience
- * @property: dualStream is optional parameter only for enable for detail see {@link https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableDualStreamMode:}
- * @property: audioProfile {@link https://docs.agora.io/en/Video/API%20Reference/oc/Constants/AgoraAudioProfile.html}
- * @property: audioScenario {@link https://docs.agora.io/en/Video/API%20Reference/oc/Constants/AgoraAudioScenario.html}
+ * Option is used to {@link init}
+ * @member {@link appid} Sets the appid
+ * @member {@link channelProfile} Number channelProfile Sets the channel mode. 0 is communication mode, 1 is broadcasting mode
+ * @member {@link VideoEncoderConfig} sets video encoding config
+ * @member {@link dualStream} is optional parameter only for enable for detail see [more](https://docs.agora.io/en/Video/API%20Reference/oc/Classes/AgoraRtcEngineKit.html#//api/name/enableDualStreamMode)
+ * @member {@link mode} is optional sets only enable video / audio, 0 is audio mode, 1 is video mode
+ * @member {@link clientRole} is only work in live mode, 1 is host, 2 is audience
+ * @member {@link audioProfile} Sets audio profile to agora rtc sdk See more [details](https://docs.agora.io/en/Video/API%20Reference/oc/Constants/AgoraAudioProfile.html)
+ * @member {@link audioScenario} Sets audio scenario to agora rtc sdk more [details](https://docs.agora.io/en/Video/API%20Reference/oc/Constants/AgoraAudioScenario.html)
+ * @member {@link beauty} {@link BeautyOption}
+ * @member {@link voice} {@link VoiceDecorator}
  */
 export interface Option {
   appid: String,
@@ -45,10 +56,11 @@ export interface Option {
 /**
  * VoiceDecorator is decorate local audio voice
  *
- * @property type: string | the range values ['changer' | 'reverbPreset'] This property is the identifier for audio voice decorator
- * @property value: number | the value for voice parameter option.
- * type 'reverbPreset' range values: [0 is "off", 1 is "popular", 2 is "rnb", 3 is "rock", 4 is "hiphop", 5 is "vocal concert", 6 is "KTV", 7 is "studio"]
- * type 'changer' range values: [0 is "off", 1 is "old man", 2 is "baby boy", 3 is "baby girl", 4 is "zhubajie", 5 is "ethereal", 6 is "hulk"]
+ * @description
+ *   type 'reverbPreset' range values: [0 is "off", 1 is "popular", 2 is "rnb", 3 is "rock", 4 is "hiphop", 5 is "vocal concert", 6 is "KTV", 7 is "studio"]
+ *   type 'changer' range values: [0 is "off", 1 is "old man", 2 is "baby boy", 3 is "baby girl", 4 is "zhubajie", 5 is "ethereal", 6 is "hulk"]
+ * @member type: string | the range values ['changer' | 'reverbPreset'] This property is the identifier for audio voice decorator
+ * @member value: number | the value for voice parameter option.
  */
 export interface VoiceDecorator {
   type: string,
@@ -76,13 +88,6 @@ export interface BackgroundImage {
   height: number
 }
 
-export interface Rect {
-  x: number,
-  y: number,
-  width: number,
-  height: number
-}
-
 export interface Size {
   width: number,
   height: number
@@ -90,9 +95,12 @@ export interface Size {
 
 export interface TranscodingUser {
   uid: number,
-  zOrder: number,
-  rect: Rect,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
   alpha: number,
+  zOrder: number,
   audioChannel: number
 }
 
@@ -103,21 +111,68 @@ export interface Color {
   alpha: number
 }
 
+export enum VideoCodecProfile {
+  BASELINE = 66,
+  MAIN = 77,
+  HIGH = 100
+}
+
+export enum AudioCodecProfile {
+  LC_AAC = 0,
+  HE_AAC = 1
+}
+
+export enum AudioSampleRate {
+  TYPE_32000 = 32000,
+  TYPE_44100 = 44100,
+  TYPE_48000 = 48000,
+}
+
+/**
+ * AgoraChannelStereo
+ * @note Agora’s self-defined audio channel type. We recommend choosing ONE or TWO. Special players are required if you choose TRHEE, FOUR or FIVE:
+ */
+export enum AudioChannelStereo {
+  ONE = 1,
+  TWO = 2,
+  TRHEE = 3,
+  FOUR = 4,
+  FIVE = 5
+}
+
+/**
+ * @member {@link size} {@link Size}
+ * @member {@link videoBitrate} integer number
+ * @member {@link videoFramerate} integer number
+ * @member {@link lowLatency} boolean
+ * @member {@link videoGop} number
+ * @member {@link videoCodecProfile} {@link VideoCodecProfile}
+ * @member {@link audioCodecProfile} {@link AudioCodecProfile}
+ * @member {@link audioSampleRate} {@link AudioSampleRate}
+ * @member {@link watermark} {@link BackgroundImage}
+ * @member {@link backgroundImage} {@link BackgroundImage}
+ * @member {@link backgroundColor} Standard RGB hex number: e.g. 0xffffff 
+ * @member {@link audioBitrate} number
+ * @member {@link audioChannels} {@link AudioChannelStereo}
+ * @member {@link transcodingUsers} Array,{@link TranscodingUser}>,
+ * @member {@link transcodingExtraInfo} string
+ */
 export interface LiveTranscodingOption {
   size: Size,
   videoBitrate: number,
   videoFramerate: number,
   lowLatency: boolean,
   videoGop: number,
-  videoCodecProfile: number,
-  transcodingUsers: Array<TranscodingUser>,
-  transcodingExtraInfo: string,
+  videoCodecProfile: VideoCodecProfile,
+  audioCodecProfile: AudioCodecProfile,
+  audioSampleRate: AudioSampleRate,
   watermark: BackgroundImage,
   backgroundImage: BackgroundImage,
-  backgroundColor: Color,
-  audioSampleRate: number,
+  backgroundColor: number,
   audioBitrate: number,
-  audioChannels: number,
+  audioChannels: AudioChannelStereo,
+  transcodingUsers: Array<TranscodingUser>,
+  transcodingExtraInfo: string,
 }
 
 export interface VideoOption {
