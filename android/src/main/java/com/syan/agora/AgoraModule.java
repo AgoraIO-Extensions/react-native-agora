@@ -1927,6 +1927,19 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         return type;
     }
 
+    public LiveTranscoding.AudioCodecProfileType getLiveTranscodingAudioCodecProfileEnum (int val) {
+        LiveTranscoding.AudioCodecProfileType type = LiveTranscoding.AudioCodecProfileType.LC_AAC;
+        switch (Integer.valueOf(val)) {
+            case 0:
+                type = LiveTranscoding.AudioCodecProfileType.LC_AAC;
+                break;
+            case 1:
+                type = LiveTranscoding.AudioCodecProfileType.HE_AAC;
+                break;
+        }
+        return type;
+    }
+
 
 
     @ReactMethod
@@ -1994,7 +2007,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setLiveTranscoding(ReadableMap options, Promise promise) {
         LiveTranscoding transcoding = new LiveTranscoding();
-        if (options.hasKey("size") && null != options.getMap("size")) {
+        if (options.hasKey("size")) {
             ReadableMap size = options.getMap("size");
             transcoding.width = size.getInt("width");
             transcoding.height = size.getInt("height");
@@ -2014,64 +2027,61 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         if (options.hasKey("videoCodecProfile")) {
             transcoding.videoCodecProfile = getLiveTranscodingVideoCodecProfileEnum(options.getInt("videoCodecProfile"));
         }
+        if (options.hasKey("audioCodecProfile")) {
+            transcoding.audioCodecProfile = getLiveTranscodingAudioCodecProfileEnum(options.getInt("audioCodecProfile"));
+        }
+        if (options.hasKey("audioSampleRate")) {
+            transcoding.audioSampleRate = getLiveTranscodingAudioSampleRateEnum(options.getInt("audioSampleRate"));
+        }
+        if (options.hasKey("watermark")) {
+            ReadableMap watermark = options.getMap("watermark");
+            WritableMap map = Arguments.createMap();
+            map.putString("url", watermark.getString("url"));
+            map.putInt("x", watermark.getInt("x"));
+            map.putInt("y", watermark.getInt("y"));
+            map.putInt("width", watermark.getInt("width"));
+            map.putInt("height", watermark.getInt("height"));
+            transcoding.watermark = createAgoraImage(map);
+        }
+        if (options.hasKey("backgroundImage")) {
+            ReadableMap image = options.getMap("backgroundImage");
+            WritableMap map = Arguments.createMap();
+            map.putString("url", image.getString("url"));
+            map.putInt("x", image.getInt("x"));
+            map.putInt("y", image.getInt("y"));
+            map.putInt("width", image.getInt("width"));
+            map.putInt("height", image.getInt("height"));
+            transcoding.backgroundImage = createAgoraImage(map);
+        }
+        if (options.hasKey("backgroundColor")) {
+            transcoding.setBackgroundColor(options.getInt("backgroundColor"));
+        }
+        if (options.hasKey("audioBitrate")) {
+            transcoding.audioBitrate = options.getInt("audioBitrate");
+        }
+        if (options.hasKey("audioChannels")) {
+            transcoding.audioChannels = options.getInt("audioChannels");
+        }
         if (options.hasKey("transcodingUsers")) {
             ArrayList<LiveTranscoding.TranscodingUser> users = new ArrayList<LiveTranscoding.TranscodingUser>();
             ReadableArray transcodingUsers = options.getArray("transcodingUsers");
             for (int i = 0; i < transcodingUsers.size(); i++) {
-                ReadableMap _map = transcodingUsers.getMap(i);
+                ReadableMap optionUser = transcodingUsers.getMap(i);
                 LiveTranscoding.TranscodingUser user = new LiveTranscoding.TranscodingUser();
-                user.uid = _map.getInt("uid");
-                ReadableMap backgroundColor = _map.getMap("backgroundColor");
-                user.x = backgroundColor.getInt("x");
-                user.y = backgroundColor.getInt("y");
-                user.width = backgroundColor.getInt("width");
-                user.height = backgroundColor.getInt("height");
-                user.zOrder = _map.getInt("zOrder");
-                user.alpha = _map.getInt("alpha");
-                user.audioChannel = _map.getInt("audioChannel");
+                user.uid = optionUser.getInt("uid");
+                user.x = optionUser.getInt("x");
+                user.y = optionUser.getInt("y");
+                user.width = optionUser.getInt("width");
+                user.height = optionUser.getInt("height");
+                user.zOrder = optionUser.getInt("zOrder");
+                user.alpha = (float) optionUser.getDouble("alpha");
+                user.audioChannel = optionUser.getInt("audioChannel");
                 users.add(user);
             }
             transcoding.setUsers(users);
         }
         if (options.hasKey("transcodingExtraInfo")) {
             transcoding.userConfigExtraInfo = options.getString("transcodingExtraInfo");
-        }
-        if (options.hasKey("watermark")) {
-            ReadableMap watermark = options.getMap("watermark");
-            WritableMap map = Arguments.createMap();
-            map.putString("url", watermark.getString("url"));
-            map.putString("x", watermark.getString("x"));
-            map.putString("y", watermark.getString("y"));
-            map.putString("width", watermark.getString("width"));
-            map.putString("height", watermark.getString("height"));
-            transcoding.watermark = createAgoraImage(map);
-        }
-        if (options.hasKey("backgroundImage")) {
-            ReadableMap watermark = options.getMap("backgroundImage");
-            WritableMap map = Arguments.createMap();
-            map.putString("url", watermark.getString("url"));
-            map.putString("x", watermark.getString("x"));
-            map.putString("y", watermark.getString("y"));
-            map.putString("width", watermark.getString("width"));
-            map.putString("height", watermark.getString("height"));
-            transcoding.backgroundImage = createAgoraImage(map);
-        }
-        if (options.hasKey("backgroundColor")) {
-            ReadableMap backgroundColor = options.getMap("backgroundColor");
-            transcoding.setBackgroundColor(
-                    backgroundColor.getInt("red"),
-                    backgroundColor.getInt("green"),
-                    backgroundColor.getInt("blue")
-            );
-        }
-        if (options.hasKey("audioSampleRate")) {
-            transcoding.audioSampleRate = getLiveTranscodingAudioSampleRateEnum(options.getInt("audioSampleRate"));
-        }
-        if (options.hasKey("audioBitrate")) {
-            transcoding.audioChannels = options.getInt("audioBitrate");
-        }
-        if (options.hasKey("audioChannels")) {
-            transcoding.audioChannels = options.getInt("audioChannel");
         }
         Integer res = AgoraManager.getInstance().mRtcEngine.setLiveTranscoding(transcoding);
         if (res == 0) {
