@@ -36,10 +36,10 @@
   }
 }
 
--(void)setRemoteUid:(NSInteger)remoteUid {
+-(void)setRemoteUid:(NSUInteger)remoteUid {
   _remoteUid = remoteUid;
   AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
-  if (_remoteUid > 0) {
+  if (_remoteUid != 0) {
     canvas.uid = _remoteUid;
     canvas.view = self;
     canvas.renderMode = _renderMode;
