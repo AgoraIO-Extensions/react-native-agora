@@ -7,6 +7,9 @@ import { Option, Callback, AudioMixingOption, PlayEffectOption, AudioRecordingOp
  * Other methods of the RtcEngine object serve for agora native sdk and set up error logging.
  */
 declare class RtcEngine {
+    /**
+     * @ignore AG_PREFIX
+     */
     private static readonly AG_PREFIX;
     /**
      * Creates a RtcEngine Object internal.
@@ -26,13 +29,14 @@ declare class RtcEngine {
      * @param token
      * @param info
      */
-    static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): void;
+    static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any>;
     /**
      * add event listener
      *
      * This method subscribes specified eventType and run listener. You should call this method at first.
      *
-     * @events
+     * @event listener
+     *
      * ---
      * name | description | usage |
      * error | occurs when emit error  | on("error", evt) |
@@ -106,6 +110,7 @@ declare class RtcEngine {
      * networkTypeChanged | occurs when the device network type changed | on("networkTypeChanged", evt) |
      * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) |
      * ---
+     *
      * @param eventType
      * @param listener
      * @return any
@@ -262,6 +267,10 @@ declare class RtcEngine {
      * @return Promise<any>
      */
     static muteAllRemoteVideoStreams(muted: boolean): Promise<any>;
+    /**
+     * @ignore Uint32ToInt32
+     */
+    private static Uint32ToInt32;
     /**
      * mute specified remote video stream.
      *
@@ -956,8 +965,8 @@ declare class RtcEngine {
      *
      * @param config LastmileProbeConfig {@link LastmileProbeConfig}
      *
-     * @event onLastmileQuality: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
-     * @event onLastmileProbeResult: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
+     * event onLastmileQuality: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
+     * event onLastmileProbeResult: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
      * @return Promise<any>
      */
     static startLastmileProbeTest(config: LastmileProbeConfig): Promise<any>;

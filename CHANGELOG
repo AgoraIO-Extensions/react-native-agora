@@ -1,5 +1,10 @@
 ## THE CHANGELOG
 
+#### 2.4.1-alpha.3
+- refactor setLiveTranscoding: rename ios & android native parameters. export enum for javascript/typescript api.
+- fix negative number case in android platform.
+- improve api doc.
+
 #### 2.4.1-alpha.2
 - deprecated `sendMessage` & `createDataStream` & `removeAllListeners` & `off`
 - refactor event system
