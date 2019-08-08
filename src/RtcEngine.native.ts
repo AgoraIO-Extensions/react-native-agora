@@ -40,6 +40,9 @@ const AgoraEventEmitter = new NativeEventEmitter(Agora);
  */
 class RtcEngine {
 
+    /**
+     * @ignore AG_PREFIX
+     */ 
     private static readonly AG_PREFIX: string = 'ag_rtc';
 
     /**
@@ -63,7 +66,7 @@ class RtcEngine {
      * @param token
      * @param info
      */
-    public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): void {
+    public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any> {
         return Agora.joinChannel({channelName, uid, token, info});
     }
 
@@ -72,7 +75,8 @@ class RtcEngine {
      *
      * This method subscribes specified eventType and run listener. You should call this method at first.
      * 
-     * @events
+     * @event listener
+     * 
      * ---
      * name | description | usage |
      * error | occurs when emit error  | on("error", evt) |
@@ -146,11 +150,80 @@ class RtcEngine {
      * networkTypeChanged | occurs when the device network type changed | on("networkTypeChanged", evt) | 
      * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) | 
      * ---
+     * 
      * @param eventType
      * @param listener
      * @return any
      */
     public static on(eventType: string, listener: (...args: any[]) => any): any {
+        // convert int32 to uint32
+        if ([
+            'joinChannelSuccess',
+            'rejoinChannelSuccess',
+            'userJoined',
+            'userOffline',
+            'occurStreamMessageError',
+            'receiveStreamMessage',
+            'activeSpeaker',
+            'firstRemoteAudioFrame',
+            'firstRemoteVideoDecoded',
+            'firstRemoteVideoFrame',
+            'userMuteAudio',
+            'userMuteVideo',
+            'userEnableVideo',
+            'userEnableLocalVideo',
+            'videoSizeChanged',
+            'firstRemoteAudioDecoded',
+            'remoteVideoStateChanged',
+            'remoteSubscribeFallbackToAudioOnly',
+            'networkQuality',
+            'streamInjectedStatus',
+        ].indexOf(eventType) != -1) {
+            AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
+                const uint32_uid = new Uint32Array(1);
+                uint32_uid[0] = args.uid;
+                args.uid = uint32_uid[0];
+
+                // convert int32 streamId to uint32 
+                if(args.streamId) {
+                    const uint32_streamId = new Uint32Array(1);
+                    uint32_streamId[0] = args.streamId;
+                    args.streamId = uint32_streamId[0];
+                }
+                listener(args);
+            });
+            return;
+        }
+
+        if (['audioVolumeIndication'].indexOf(eventType) != -1) {
+            AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
+                args.speakers.map((speaker: any) => {
+                    const uint32_uid = new Uint32Array(1);
+                    uint32_uid[0] = speaker.uid;
+                    return {
+                        ...speaker,
+                        uid: uint32_uid[0]
+                    }
+                })
+                listener(args);
+            });
+            return;
+        }
+
+        if ([
+            'remoteAudioStats',
+            'remoteVideoStats',
+            'audioTransportStatsOfUid',
+            'videoTransportStatsOfUid',   
+        ].indexOf(eventType) != -1) {
+            AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
+                const uint32_uid = new Uint32Array(1);
+                uint32_uid[0] = args.stats.uid;
+                args.stats.uid = uint32_uid[0];
+                listener(args);
+            });
+            return;
+        }
         AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, listener);
     }
 
@@ -256,7 +329,8 @@ class RtcEngine {
      * @return Promise<any>
      */
     public static setRemoteRenderMode(uid: number, mode: number): Promise<any> {
-        return Agora.setRemoteRenderMode(uid, mode);
+        let uint32 = Platform.OS === 'android' ? this.Uint32ToInt32(uid) : uid;
+        return Agora.setRemoteRenderMode(uint32, mode);
     }
 
     /**
@@ -367,6 +441,15 @@ class RtcEngine {
     }
 
     /**
+     * @ignore Uint32ToInt32
+     */
+    private static Uint32ToInt32(num: number) {
+        const int32 = new Int32Array(1);
+        int32[0] = num;
+        return int32[0];
+    }
+
+    /**
      * mute specified remote video stream.
      *
      * This method mutes remote video stream by the number of uid and boolean parameter.
@@ -375,7 +458,8 @@ class RtcEngine {
      * @return Promise<any>
      */
     public static muteRemoteVideoStream(uid: number, muted: boolean): Promise<any> {
-        return Agora.muteRemoteVideoStream(uid, muted);
+        let uint32 = Platform.OS === 'android' ? this.Uint32ToInt32(uid) : uid;
+        return Agora.muteRemoteVideoStream(uint32, muted);
     }
 
     /**
@@ -451,7 +535,8 @@ class RtcEngine {
      * @return Promise<any>
      */
     public static muteRemoteAudioStream(uid: number, muted: boolean): Promise<any> {
-        return Agora.muteRemoteAudioStream(uid, muted);
+        let uint32 = Platform.OS === 'android' ? this.Uint32ToInt32(uid) : uid;
+        return Agora.muteRemoteAudioStream(uint32, muted);
     }
 
     /**
@@ -1293,7 +1378,8 @@ class RtcEngine {
      * @return Promise<any>
      */
     static setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<any> {
-        return Agora.setRemoteVoicePosition(uid, pan, gain)
+        let uint32 = Platform.OS === 'android' ? this.Uint32ToInt32(uid) : uid;
+        return Agora.setRemoteVoicePosition(uint32, pan, gain)
     }
 
     /**
@@ -1303,8 +1389,8 @@ class RtcEngine {
      *
      * @param config LastmileProbeConfig {@link LastmileProbeConfig}
      *
-     * @event onLastmileQuality: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
-     * @event onLastmileProbeResult: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
+     * event onLastmileQuality: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
+     * event onLastmileProbeResult: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
      * @return Promise<any>
      */
     static startLastmileProbeTest(config: LastmileProbeConfig): Promise<any> {
@@ -1334,7 +1420,8 @@ class RtcEngine {
      * @return Promise<any>
      */
     static setRemoteUserPriority(uid: number, userPrority: number): Promise<any> {
-        return Agora.setRemoteUserPriority(uid, userPrority);
+        let uint32 = Platform.OS === 'android' ? this.Uint32ToInt32(uid) : uid;
+        return Agora.setRemoteUserPriority(uint32, userPrority);
     }
 
     /**
@@ -1445,8 +1532,5 @@ class RtcEngine {
         return Agora.getCameraInfo();
     }
 }
-
-
-
 
 export default RtcEngine;

@@ -50,7 +50,7 @@ public class AgoraViewManager extends SimpleViewManager<AgoraVideoView> {
     @ReactProp(name = "remoteUid")
     public void setRemoteUid(final AgoraVideoView agoraVideoView, final int remoteUid) {
         agoraVideoView.setRemoteUid(remoteUid);
-        if (remoteUid > 0) {
+        if (remoteUid != 0) {
             AgoraManager.getInstance().setupRemoteVideo(remoteUid, agoraVideoView.getRenderMode());
             surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
             surfaceView.setZOrderMediaOverlay(agoraVideoView.getZOrderMediaOverlay());
