@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
         sp.source_files = './ios/RCTAgora/libs/AgoraRtcCryptoLoader.framework/**/*.{c,h,m,mm,S,cpp}'
         sp.vendored_libraries = 'libcrypto.a'
     end
-      
+
     s.dependency 'React'
-    s.dependency "AgoraRtcEngine_iOS", "2.4.1"
+    s.dependency "AgoraRtcEngine_iOS", "2.8"
 end

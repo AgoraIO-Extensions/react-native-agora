@@ -35,6 +35,8 @@ static AgoraConst *_person;
                                   AGRejoinChannelSuccess,
                                   AGLeaveChannel,
                                   AGClientRoleChanged,
+                                  AGLocalUserRegistered,
+                                  AGUserInfoUpdated,
                                   AGUserJoined,
                                   AGUserOffline,
                                   AGConnectionStateChanged,
