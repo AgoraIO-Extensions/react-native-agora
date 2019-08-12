@@ -118,7 +118,7 @@ class RtcEngine {
         if (Platform.OS === 'android') {
             const _uid = this.Uint32ToInt32(uid);
             let result = await Agora.getUserInfoByUid(_uid);
-            result.uid = this.Uint32ToInt32(result.uid);
+            result.uid = this.Int32ToUint32(result.uid);
             return result;
         }
         return Agora.getUserInfoByUid(uid);
@@ -134,7 +134,7 @@ class RtcEngine {
     public static async getUserInfoByUserAccount(userAccount: string): Promise<AgoraUserInfo> {
         if (Platform.OS === 'android') {
             let result = await Agora.getUserInfoByUserAccount(userAccount);
-            result.uid = this.Uint32ToInt32(result.uid);
+            result.uid = this.Int32ToUint32(result.uid);
             return result;
         }
         return Agora.getUserInfoByUserAccount(userAccount);
@@ -253,15 +253,10 @@ class RtcEngine {
             'localUserRegistered'
         ].indexOf(eventType) != -1) {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
-                const uint32_uid = new Uint32Array(1);
-                uint32_uid[0] = args.uid;
-                args.uid = uint32_uid[0];
-
+                args.uid = this.Int32ToUint32(args.uid);
                 // convert int32 streamId to uint32 
                 if(args.streamId) {
-                    const uint32_streamId = new Uint32Array(1);
-                    uint32_streamId[0] = args.streamId;
-                    args.streamId = uint32_streamId[0];
+                    args.streamId = this.Int32ToUint32(args.streamId);
                 }
                 listener(args);
             });
@@ -270,13 +265,8 @@ class RtcEngine {
 
         if (['userInfoUpdated'].indexOf(eventType) != -1) {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
-                const uint32_uid = new Uint32Array(1);
-                uint32_uid[0] = args.uid;
-                args.uid = uint32_uid[0];
-
-                const uint32_peer_uid = new Uint32Array(1);
-                uint32_peer_uid[0] = args.peer.uid;
-                args.peer.uid = uint32_peer_uid[0];
+                args.uid = this.Int32ToUint32(args.uid);
+                args.peer.uid = this.Int32ToUint32(args.peer.uid);
                 listener(args);
             });
             return;
@@ -285,11 +275,10 @@ class RtcEngine {
         if (['audioVolumeIndication'].indexOf(eventType) != -1) {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
                 args.speakers.map((speaker: any) => {
-                    const uint32_uid = new Uint32Array(1);
-                    uint32_uid[0] = speaker.uid;
+                    const uid = this.Int32ToUint32(speaker.uid);
                     return {
                         ...speaker,
-                        uid: uint32_uid[0]
+                        uid
                     }
                 })
                 listener(args);
@@ -304,9 +293,7 @@ class RtcEngine {
             'videoTransportStatsOfUid',   
         ].indexOf(eventType) != -1) {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
-                const uint32_uid = new Uint32Array(1);
-                uint32_uid[0] = args.stats.uid;
-                args.stats.uid = uint32_uid[0];
+                args.stats.uid = this.Int32ToUint32(args.stats.uid);
                 listener(args);
             });
             return;
@@ -534,6 +521,15 @@ class RtcEngine {
         const int32 = new Int32Array(1);
         int32[0] = num;
         return int32[0];
+    }
+
+    /**
+     * @ignore Int32ToUint32
+     */
+    private static Int32ToUint32(num: number) {
+        const uint32 = new Uint32Array(1);
+        uint32[0] = num;
+        return uint32[0];
     }
 
     /**
