@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TranscodingUser | react-native-agora</title>
+	<title>AgoraViewMode | react-native-agora</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,123 +56,64 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="transcodinguser.html">TranscodingUser</a>
+					<a href="agoraviewmode.html">AgoraViewMode</a>
 				</li>
 			</ul>
-			<h1>Interface TranscodingUser</h1>
+			<h1>Enumeration AgoraViewMode</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">TranscodingUser</span>
-					</li>
-				</ul>
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>AgoraViewMode</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>mode</dt>
+						<dd><p>hidden Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.</p>
+						</dd>
+						<dt>mode</dt>
+						<dd><p>FIT Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to the disparity in the aspect ratio are filled with black.</p>
+						</dd>
+					</dl>
+				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#alpha" class="tsd-kind-icon">alpha</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#audiochannel" class="tsd-kind-icon">audio<wbr>Channel</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#height" class="tsd-kind-icon">height</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#uid" class="tsd-kind-icon">uid</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#width" class="tsd-kind-icon">width</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#x" class="tsd-kind-icon">x</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#y" class="tsd-kind-icon">y</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="transcodinguser.html#zorder" class="tsd-kind-icon">z<wbr>Order</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="agoraviewmode.html#fit" class="tsd-kind-icon">FIT</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="agoraviewmode.html#hidden" class="tsd-kind-icon">HIDDEN</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="alpha" class="tsd-anchor"></a>
-					<h3>alpha</h3>
-					<div class="tsd-signature tsd-kind-icon">alpha<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="fit" class="tsd-anchor"></a>
+					<h3>FIT</h3>
+					<div class="tsd-signature tsd-kind-icon">FIT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;2</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L112">types.ts:112</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L10">types.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="audiochannel" class="tsd-anchor"></a>
-					<h3>audio<wbr>Channel</h3>
-					<div class="tsd-signature tsd-kind-icon">audio<wbr>Channel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="hidden" class="tsd-anchor"></a>
+					<h3>HIDDEN</h3>
+					<div class="tsd-signature tsd-kind-icon">HIDDEN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L114">types.ts:114</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="height" class="tsd-anchor"></a>
-					<h3>height</h3>
-					<div class="tsd-signature tsd-kind-icon">height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L111">types.ts:111</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="uid" class="tsd-anchor"></a>
-					<h3>uid</h3>
-					<div class="tsd-signature tsd-kind-icon">uid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L107">types.ts:107</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="width" class="tsd-anchor"></a>
-					<h3>width</h3>
-					<div class="tsd-signature tsd-kind-icon">width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L110">types.ts:110</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="x" class="tsd-anchor"></a>
-					<h3>x</h3>
-					<div class="tsd-signature tsd-kind-icon">x<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L108">types.ts:108</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="y" class="tsd-anchor"></a>
-					<h3>y</h3>
-					<div class="tsd-signature tsd-kind-icon">y<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L109">types.ts:109</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="zorder" class="tsd-anchor"></a>
-					<h3>z<wbr>Order</h3>
-					<div class="tsd-signature tsd-kind-icon">z<wbr>Order<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L113">types.ts:113</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/f036b50/src/types.ts#L9">types.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -190,32 +131,14 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="transcodinguser.html" class="tsd-kind-icon">Transcoding<wbr>User</a>
+					<li class="current tsd-kind-enum">
+						<a href="agoraviewmode.html" class="tsd-kind-icon">Agora<wbr>View<wbr>Mode</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#alpha" class="tsd-kind-icon">alpha</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="agoraviewmode.html#fit" class="tsd-kind-icon">FIT</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#audiochannel" class="tsd-kind-icon">audio<wbr>Channel</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#height" class="tsd-kind-icon">height</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#uid" class="tsd-kind-icon">uid</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#width" class="tsd-kind-icon">width</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#x" class="tsd-kind-icon">x</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#y" class="tsd-kind-icon">y</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="transcodinguser.html#zorder" class="tsd-kind-icon">z<wbr>Order</a>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="agoraviewmode.html#hidden" class="tsd-kind-icon">HIDDEN</a>
 							</li>
 						</ul>
 					</li>
