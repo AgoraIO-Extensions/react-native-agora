@@ -11,6 +11,16 @@ export enum AgoraViewMode {
 }
 
 /**
+ * AgoraUserInfo
+ * @property uid: number
+ * @property userAccount: string
+ */
+export interface AgoraUserInfo {
+  uid: number
+  userAccount: string
+};
+
+/**
  * VideoEncoderConfig details
  * @property width: number | The encoder video's width
  * @property height: number | The encoder video's height
@@ -161,7 +171,7 @@ export interface LiveTranscodingOption {
   size: Size,
   videoBitrate: number,
   videoFramerate: number,
-  lowLatency: boolean,
+  lowLatency: boolean, // @deprecate lowLatency
   videoGop: number,
   videoCodecProfile: VideoCodecProfile,
   audioCodecProfile: AudioCodecProfile,

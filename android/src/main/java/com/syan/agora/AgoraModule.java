@@ -30,6 +30,7 @@ import io.agora.rtc.RtcEngine;
 import io.agora.rtc.internal.LastmileProbeConfig;
 import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.live.LiveTranscoding;
+import io.agora.rtc.models.UserInfo;
 import io.agora.rtc.video.AgoraImage;
 import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.CameraCapturerConfiguration;
@@ -141,6 +142,9 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     private static final String InjectStreamStatusBroken = "InjectStreamStatusBroken";
     private static final String AgoraAudioMode = "AudioMode";
     private static final String AgoraVideoMode = "VideoMode";
+
+    private RtcEngine rtcEngine;
+    private String appId;
 
     public AgoraModule(ReactApplicationContext context) {
         super(context);
@@ -375,6 +379,35 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putInt("oldRole", oldRole);
                     map.putInt("newRole", newRole);
                     sendEvent(getReactApplicationContext(), AGClientRoleChanged, map);
+                }
+            });
+        }
+
+        @Override
+        public void onLocalUserRegistered(final int uid, final String userAccount) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putInt("uid", uid);
+                    map.putString("userAccount", userAccount);
+                    sendEvent(getReactApplicationContext(), AGLocalUserRegistered, map);
+                }
+            });
+        }
+
+        @Override
+        public void onUserInfoUpdated(final int uid, final UserInfo peer) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    WritableMap map = Arguments.createMap();
+                    map.putInt("uid", uid);
+                    WritableMap peerInfo = Arguments.createMap();
+                    peerInfo.putInt("uid", peer.uid);
+                    peerInfo.putString("userAccount", peer.userAccount);
+                    map.putMap("peer", peerInfo);
+                    sendEvent(getReactApplicationContext(), AGUserInfoUpdated, map);
                 }
             });
         }
@@ -775,6 +808,11 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("networkTransportDelay", stats.networkTransportDelay);
                     statsMap.putInt("jitterBufferDelay", stats.jitterBufferDelay);
                     statsMap.putInt("audioLossRate", stats.audioLossRate);
+                    statsMap.putInt("totalFrozenTime", stats.totalFrozenTime);
+                    statsMap.putInt("frozenRate", stats.frozenRate);
+                    statsMap.putInt("numChannels", stats.numChannels);
+                    statsMap.putInt("receivedSampleRate", stats.receivedSampleRate);
+                    statsMap.putInt("receivedBitrate", stats.receivedBitrate);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
                     sendEvent(getReactApplicationContext(), AGRemoteAudioStats, map);
@@ -865,6 +903,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("receivedBitrate", stats.receivedBitrate);
                     statsMap.putInt("rendererOutputFrameRate", stats.rendererOutputFrameRate);
                     statsMap.putInt("rxStreamType", stats.rxStreamType);
+                    statsMap.putInt("totalFrozenTime", stats.totalFrozenTime);
+                    statsMap.putInt("frozenRate", stats.frozenRate);
                     WritableMap map = Arguments.createMap();
                     map.putMap("stats", statsMap);
                     sendEvent(getReactApplicationContext(), AGRemoteVideoStats, map);
@@ -1077,6 +1117,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void init(ReadableMap options) {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
+        appId = options.getString("appid");
+        rtcEngine = AgoraManager.getInstance().mRtcEngine;
     }
 
     @ReactMethod
@@ -1125,6 +1167,58 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         Integer res = AgoraManager.getInstance().joinChannel(options);
         if (res == 0) {
             promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void registerLocalUserAccount(ReadableMap options, Promise promise) {
+        Integer res = rtcEngine.registerLocalUserAccount(appId, options.getString("userAccount"));
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void joinChannelWithUserAccount(ReadableMap options, Promise promise) {
+        String token = null;
+        if (options.hasKey("token")) {
+            token = options.getString("token");
+        }
+        Integer res = rtcEngine.joinChannelWithUserAccount(token, options.getString("channelName"), options.getString("userAccount"));
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void getUserInfoByUid(Integer uid, Promise promise) {
+        UserInfo info = new UserInfo();
+        Integer res = rtcEngine.getUserInfoByUid(uid, info);
+        if (res == 0) {
+            WritableMap map = Arguments.createMap();
+            map.putInt("uid", info.uid);
+            map.putString("userAccount", info.userAccount);
+            promise.resolve(map);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void getUserInfoByUserAccount(String userAccount, Promise promise) {
+        UserInfo info = new UserInfo();
+        Integer res = rtcEngine.getUserInfoByUserAccount(userAccount, info);
+        if (res == 0) {
+            WritableMap map = Arguments.createMap();
+            map.putInt("uid", info.uid);
+            map.putString("userAccount", info.userAccount);
+            promise.resolve(map);
         } else {
             promise.reject("-1", res.toString());
         }
@@ -2017,9 +2111,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
         if (options.hasKey("videoFramerate")) {
             transcoding.videoFramerate = options.getInt("videoFramerate");
-        }
-        if (options.hasKey("lowLatency")) {
-            transcoding.lowLatency = options.getBoolean("lowLatency");
         }
         if (options.hasKey("videoGop")) {
             transcoding.videoGop = options.getInt("videoGop");
