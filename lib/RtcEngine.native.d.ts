@@ -320,6 +320,10 @@ declare class RtcEngine {
      */
     private static Uint32ToInt32;
     /**
+     * @ignore Int32ToUint32
+     */
+    private static Int32ToUint32;
+    /**
      * mute specified remote video stream.
      *
      * This method mutes remote video stream by the number of uid and boolean parameter.
