@@ -7,6 +7,7 @@ import {
 import {
     Option, Callback,
     VideoOption,
+    AgoraUserInfo,
     AudioMixingOption,
     DataStreamOption,
     PlayEffectOption,
@@ -68,6 +69,75 @@ class RtcEngine {
      */
     public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any> {
         return Agora.joinChannel({channelName, uid, token, info});
+    }
+
+    /**
+     * Registers a user account.
+     * 
+     * Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the `on("localUserRegistered", callback)` on the local client, reporting the user ID and user account of the local user.
+     * To join a channel with a user account, you can choose either of the following:
+     * Call the {@link registerLocalUserAccount} method to create a user account, and then the {@link joinChannelWithUserAccount} method to join the channel.
+     * Call the {@link joinChannelWithUserAccount} method to join the channel.
+     * 
+     * @note To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
+     * 
+     * @param userAccount
+     * @returns Promise<any>
+     */
+    public static registerLocalUserAccount(userAccount: string): Promise<any> {
+        return Agora.registerLocalUserAccount({userAccount});
+    }
+
+    /**
+     * Joins the channel with a user account.
+     * 
+     * After the user successfully joins the channel, the SDK triggers the following callbacks:
+     *
+     * The local client: `on("localUserRegistered", callback)` and `on("joinChannelSuccess", callback)`.
+     * The remote client: `on("userJoined", callback)` and `on("userInfoUpdated", callback)`, if the user joining the channel is in the Communication profile, or is a BROADCASTER in the Live Broadcast profile.
+     * 
+     * @note To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
+     * 
+     * @param channelName
+     * @param userAccount
+     * @param token
+     * @returns Promise<any>
+     */
+    public static joinChannelWithUserAccount(channelName: string, userAccount: string, token: string): Promise<any> {
+        return Agora.joinChannelWithUserAccount({channelName, userAccount, token});
+    }
+
+    /**
+     * Gets the user information by passing in the user account.
+     * 
+     * After receiving the "userInfoUpdated" callback, you can call this method to get the user ID of the remote user from the {@link AgoraUserInfo} object by passing in the userAccount.
+     * @param uid 
+     * @returns Promise<{@link AgoraUserInfo}>
+     */
+    public static async getUserInfoByUid(uid: number): Promise<AgoraUserInfo> {
+        if (Platform.OS === 'android') {
+            const _uid = this.Uint32ToInt32(uid);
+            let result = await Agora.getUserInfoByUid(_uid);
+            result.uid = this.Uint32ToInt32(result.uid);
+            return result;
+        }
+        return Agora.getUserInfoByUid(uid);
+    }
+
+    /**
+     * Gets the user information by passing in the user account.
+     * 
+     * After receiving the "userInfoUpdated" callback, you can call this method to get the user ID of the remote user from the {@link AgoraUserInfo} object by passing in the userAccount.
+     * @param userAccount 
+     * @returns Promise<{@link AgoraUserInfo}>
+     */
+    public static async getUserInfoByUserAccount(userAccount: string): Promise<AgoraUserInfo> {
+        if (Platform.OS === 'android') {
+            let result = await Agora.getUserInfoByUserAccount(userAccount);
+            result.uid = this.Uint32ToInt32(result.uid);
+            return result;
+        }
+        return Agora.getUserInfoByUserAccount(userAccount);
     }
 
     /**
@@ -149,6 +219,8 @@ class RtcEngine {
      * localVideoChanged | occurs when the local video changed  | on("localVideoChanged", evt) | 
      * networkTypeChanged | occurs when the device network type changed | on("networkTypeChanged", evt) | 
      * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) | 
+     * localUserRegistered | occurs when you register user account success | on("localUserRegistered", evt) |
+     * userInfoUpdated | occurs when you peer side using user account join channel | on("userInfoUpdated", evt) |
      * ---
      * 
      * @param eventType
@@ -178,6 +250,7 @@ class RtcEngine {
             'remoteSubscribeFallbackToAudioOnly',
             'networkQuality',
             'streamInjectedStatus',
+            'localUserRegistered'
         ].indexOf(eventType) != -1) {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
                 const uint32_uid = new Uint32Array(1);
@@ -190,6 +263,20 @@ class RtcEngine {
                     uint32_streamId[0] = args.streamId;
                     args.streamId = uint32_streamId[0];
                 }
+                listener(args);
+            });
+            return;
+        }
+
+        if (['userInfoUpdated'].indexOf(eventType) != -1) {
+            AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
+                const uint32_uid = new Uint32Array(1);
+                uint32_uid[0] = args.uid;
+                args.uid = uint32_uid[0];
+
+                const uint32_peer_uid = new Uint32Array(1);
+                uint32_peer_uid[0] = args.peer.uid;
+                args.peer.uid = uint32_peer_uid[0];
                 listener(args);
             });
             return;

@@ -17,6 +17,7 @@
 
 @interface RCTAgora ()
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
+@property (strong, nonatomic) NSString *appId;
 @property (strong, nonatomic) NSData *metadata;
 @end
 
@@ -176,6 +177,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   [AgoraConst share].appid = options[@"appid"];
   
   self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:options[@"appid"] delegate:self];
+  self.appId = options[@"appid"];
   
   [AgoraConst share].rtcEngine = self.rtcEngine;
   
@@ -296,6 +298,63 @@ RCT_EXPORT_METHOD(joinChannel:(NSDictionary *)options
     resolve(nil);
   } else {
     reject(@(-1).stringValue, @(res).stringValue, nil);
+  }
+}
+
+// register user account
+RCT_EXPORT_METHOD(registerLocalUserAccount:(NSDictionary *)options
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSInteger res = [self.rtcEngine registerLocalUserAccount:options[@"userAccount"] appId:self.appId];
+  if (res == 0) {
+    resolve(nil);
+  } else {
+    reject(@(-1).stringValue, @(res).stringValue, nil);
+  }
+}
+
+// join channel with user account
+RCT_EXPORT_METHOD(joinChannelWithUserAccount:(NSDictionary *)options
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSString *token = [options objectForKey:@"token"] != nil ? options[@"token"] : nil;
+  NSInteger res = [self.rtcEngine joinChannelByUserAccount:options[@"userAccount"] token:token channelId:options[@"channelName"] joinSuccess:nil];
+  if (res == 0) {
+    resolve(nil);
+  } else {
+    reject(@(-1).stringValue, @(res).stringValue, nil);
+  }
+}
+
+// get user info by uid
+RCT_EXPORT_METHOD(getUserInfoByUid:(NSUInteger)uid
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  AgoraErrorCode code = 0;
+  AgoraUserInfo *info = [self.rtcEngine getUserInfoByUid:uid withError:&code];
+  if ((int)code == 0) {
+    resolve(@{
+        @"uid": @(info.uid),
+        @"userAccount": info.userAccount
+    });
+  } else {
+    reject(@(-1).stringValue, @((int)code).stringValue, nil);
+  }
+}
+
+// get user info by user account
+RCT_EXPORT_METHOD(getUserInfoByUserAccount:(NSString *)userAccount
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  AgoraErrorCode code = 0;
+  AgoraUserInfo *info = [self.rtcEngine getUserInfoByUserAccount:userAccount withError:&code];
+  if ((int)code == 0) {
+    resolve(@{
+              @"uid": @(info.uid),
+              @"userAccount": info.userAccount
+              });
+  } else {
+    reject(@(-1).stringValue, @((int)code).stringValue, nil);
   }
 }
 
@@ -1400,9 +1459,6 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options
   if ([options objectForKey:@"videoFramerate"]) {
     transcoding.videoFramerate = [options[@"videoFramerate"] integerValue];
   }
-  if ([options objectForKey:@"lowLatancy"]) {
-    transcoding.lowLatency = [options[@"lowLatancy"] boolValue];
-  }
   if ([options objectForKey:@"videoGop"]) {
     transcoding.videoGop = [options[@"videoGop"] integerValue];
   }
@@ -1714,6 +1770,23 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                         }];
 }
 
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didRegisteredLocalUser:(NSString *_Nonnull)userAccount withUid:(NSUInteger)uid {
+  [self sendEvent:AGLocalUserRegistered params:@{
+                                                 @"uid": @(uid),
+                                                 @"userAccount": userAccount
+                                                 }];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didUpdatedUserInfo:(AgoraUserInfo *_Nonnull)userInfo withUid:(NSUInteger)uid {
+  [self sendEvent:AGUserInfoUpdated params:@{
+                                                 @"uid": @(uid),
+                                                 @"peer": @{
+                                                     @"uid": @(userInfo.uid),
+                                                     @"userAccount": userInfo.userAccount
+                                                 }}];
+}
+
+
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
   [self sendEvent:AGUserOffline params:@{
                                          @"uid": @(uid),
@@ -1905,7 +1978,12 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                                   @"quality": @(stats.quality),
                                                   @"networkTransportDelay": @(stats.networkTransportDelay),
                                                   @"jitterBufferDelay": @(stats.jitterBufferDelay),
-                                                  @"audioLossRate": @(stats.audioLossRate)
+                                                  @"audioLossRate": @(stats.audioLossRate),
+                                                  @"totalFrozenTime": @(stats.totalFrozenTime),
+                                                  @"frozenRate": @(stats.frozenRate),
+                                                  @"numChannels": @(stats.numChannels),
+                                                  @"receivedSampleRate": @(stats.receivedSampleRate),
+                                                  @"receivedBitrate": @(stats.receivedBitrate),
                                                   }
                                               }];
 }
@@ -1965,7 +2043,9 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                                   @"receivedBitrate": @(stats.receivedBitrate),
                                                   @"rendererOutputFrameRate": @(stats.rendererOutputFrameRate),
                                                   @"rxStreamType": @(stats.rxStreamType),
-                                                  @"decoderOutputFrameRate": @(stats.decoderOutputFrameRate)
+                                                  @"decoderOutputFrameRate": @(stats.decoderOutputFrameRate),
+                                                  @"totalFrozenTime": @(stats.totalFrozenTime),
+                                                  @"frozenRate": @(stats.frozenRate)
                                                   }
                                               }];
 }

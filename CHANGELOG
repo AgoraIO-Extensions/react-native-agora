@@ -1,5 +1,13 @@
 ## THE CHANGELOG
 
+#### 2.8.0-alpha.1
+  - add `string uid` api support
+  - android: deprecate `lowLatency` member of LiveTranscoding
+  - add methods `getUserInfoByUserAccount`, `getUserInfoByUid`, `joinChannelWithUserAccount`, `registerLocalUserAccount`
+  - add events `localUserRegistered`, `userInfoUpdated`
+  - android: upgrade native sdk to 2.8.2
+  - ios: upgrade native sdk to 2.8.0
+
 #### 2.4.1-alpha.3
 - refactor setLiveTranscoding: rename ios & android native parameters. export enum for javascript/typescript api.
 - fix negative number case in android platform.

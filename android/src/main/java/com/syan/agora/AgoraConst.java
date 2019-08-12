@@ -10,6 +10,8 @@ public class AgoraConst {
     public final static String AGRejoinChannelSuccess = "rejoinChannelSuccess";
     public final static String AGLeaveChannel = "leaveChannel";
     public final static String AGClientRoleChanged = "clientRoleChanged";
+    public final static String AGLocalUserRegistered = "localUserRegistered";
+    public final static String AGUserInfoUpdated = "userInfoUpdated";
     public final static String AGUserJoined = "userJoined";
     public final static String AGUserOffline = "userOffline";
     public final static String AGConnectionStateChanged = "connectionStateChanged";
