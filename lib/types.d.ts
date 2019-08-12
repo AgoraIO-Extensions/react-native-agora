@@ -9,6 +9,15 @@ export declare enum AgoraViewMode {
     FIT = 2
 }
 /**
+ * AgoraUserInfo
+ * @property uid: number
+ * @property userAccount: string
+ */
+export interface AgoraUserInfo {
+    uid: number;
+    userAccount: string;
+}
+/**
  * VideoEncoderConfig details
  * @property width: number | The encoder video's width
  * @property height: number | The encoder video's height

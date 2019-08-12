@@ -1,4 +1,4 @@
-import { Option, Callback, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
+import { Option, Callback, AgoraUserInfo, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
 /**
  * RtcEngine is the javascript object for control agora native sdk through react native bridge.
  *
@@ -30,6 +30,52 @@ declare class RtcEngine {
      * @param info
      */
     static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any>;
+    /**
+     * Registers a user account.
+     *
+     * Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the `on("localUserRegistered", callback)` on the local client, reporting the user ID and user account of the local user.
+     * To join a channel with a user account, you can choose either of the following:
+     * Call the {@link registerLocalUserAccount} method to create a user account, and then the {@link joinChannelWithUserAccount} method to join the channel.
+     * Call the {@link joinChannelWithUserAccount} method to join the channel.
+     *
+     * @note To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
+     *
+     * @param userAccount
+     * @returns Promise<any>
+     */
+    static registerLocalUserAccount(userAccount: string): Promise<any>;
+    /**
+     * Joins the channel with a user account.
+     *
+     * After the user successfully joins the channel, the SDK triggers the following callbacks:
+     *
+     * The local client: `on("localUserRegistered", callback)` and `on("joinChannelSuccess", callback)`.
+     * The remote client: `on("userJoined", callback)` and `on("userInfoUpdated", callback)`, if the user joining the channel is in the Communication profile, or is a BROADCASTER in the Live Broadcast profile.
+     *
+     * @note To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
+     *
+     * @param channelName
+     * @param userAccount
+     * @param token
+     * @returns Promise<any>
+     */
+    static joinChannelWithUserAccount(channelName: string, userAccount: string, token: string): Promise<any>;
+    /**
+     * Gets the user information by passing in the user account.
+     *
+     * After receiving the "userInfoUpdated" callback, you can call this method to get the user ID of the remote user from the {@link AgoraUserInfo} object by passing in the userAccount.
+     * @param uid
+     * @returns Promise<{@link AgoraUserInfo}>
+     */
+    static getUserInfoByUid(uid: number): Promise<AgoraUserInfo>;
+    /**
+     * Gets the user information by passing in the user account.
+     *
+     * After receiving the "userInfoUpdated" callback, you can call this method to get the user ID of the remote user from the {@link AgoraUserInfo} object by passing in the userAccount.
+     * @param userAccount
+     * @returns Promise<{@link AgoraUserInfo}>
+     */
+    static getUserInfoByUserAccount(userAccount: string): Promise<AgoraUserInfo>;
     /**
      * add event listener
      *
@@ -109,6 +155,8 @@ declare class RtcEngine {
      * localVideoChanged | occurs when the local video changed  | on("localVideoChanged", evt) |
      * networkTypeChanged | occurs when the device network type changed | on("networkTypeChanged", evt) |
      * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) |
+     * localUserRegistered | occurs when you register user account success | on("localUserRegistered", evt) |
+     * userInfoUpdated | occurs when you peer side using user account join channel | on("userInfoUpdated", evt) |
      * ---
      *
      * @param eventType
@@ -271,6 +319,10 @@ declare class RtcEngine {
      * @ignore Uint32ToInt32
      */
     private static Uint32ToInt32;
+    /**
+     * @ignore Int32ToUint32
+     */
+    private static Int32ToUint32;
     /**
      * mute specified remote video stream.
      *
