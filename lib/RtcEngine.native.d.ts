@@ -35,6 +35,21 @@ declare class RtcEngine {
      */
     static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any>;
     /**
+     * switch to specified channel
+     *
+     * This method will switch channel smoothly than you invoke leaveChannel & joinChannel.
+     * Otherwise, it will invoke error by the event
+     * It will occurs two events:
+     * Occurs leaveChannel when achieve leaving stage
+     * Occurs joinChannelSuccess when achieve joining stage
+     * @param channelName
+     * @param token
+     */
+    static switchChannel(channelName: string, token?: string): Promise<any>;
+    static startChannelMediaRelay(): void;
+    static updateChannelMediaRelay(): void;
+    static stopChannelMediaRelay(): void;
+    /**
      * Registers a user account.
      *
      * Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the `on("localUserRegistered", callback)` on the local client, reporting the user ID and user account of the local user.
@@ -117,21 +132,19 @@ declare class RtcEngine {
      * connectionLost | occurs when sdk connection lost | on("connectionLost", evt) |
      * tokenPrivilegeWillExpire | occurs when token will expire | on("tokenPrivilegeWillExpire", evt) |
      * requestToken | occurs when token expired | on("requestToken") |
-     * microphoneEnabled | occurs when microphone enable state changed | on("microphoneEnabled", evt) |
+     * localAudioStateChanged | occurs when local audio device state changed | on("localAudioStateChanged", (state, errorCode) => {}) |
      * audioVolumeIndication | occurs when audio volume indication changed | on("audioVolumeIndication", evt) |
      * activeSpeaker | occurs when detect active speaker | on("activeSpeaker", evt) |
      * firstLocalAudioFrame | occurs when sent first audio frame on local | on("firstLocalAudioFrame", evt) |
      * firstRemoteAudioFrame | occurs when received first audio frame from remote side | on("firstRemoteAudioFrame", evt) |
      * firstRemoteAudioDecoded | occurs when first remote audio decoded | on("firstRemoteAudioDecoded", evt) |
      * firstLocalVideoFrame | occurs when sent first video frame on local | on("firstLocalVideoFrame", evt) |
-     * firstRemoteVideoDecoded | occurs when received first video frame from remote side decoded | on("firstRemoteVideoDecoded", evt) |
      * firstRemoteVideoFrame | occurs when received first video frame from remote side | on("firstRemoteVideoFrame", evt) |
      * userMuteAudio | occurs when user mute audio | on("userMuteAudio", evt) |
-     * userMuteVideo | occurs when user mute video | on("userMuteVideo", evt) |
-     * userEnableVideo | occurs when remote side's user change video enable state | on("userEnableVideo", evt) |
-     * userEnableLocalVideo | occurs when user change video enable state on local | on("userEnableLocalVideo", evt) |
      * videoSizeChanged | occurs when change local or remote side video size or rotation | on("videoSizeChanged", evt) |
      * remoteVideoStateChanged | occurs when remote video state has any changed | on("remoteVideoStateChanged", evt) |
+     * remoteAudioStateChanged | occurs when remote audio state has any changed | on("remoteAudioStateChanged", evt) |
+     * localAudioStats | occurs when engine start to report local audio stats | on("localAudioStats", evt) |
      * localPublishFallbackToAudioOnly | occurs when published stream from local side fallback to audio stream | on("localPublishFallbackToAudioOnly", evt) |
      * remoteSubscribeFallbackToAudioOnly | occurs when subscribed side's stream fallback to audio stream | on("remoteSubscribeFallbackToAudioOnly", evt) |
      * audioRouteChanged | occurs when local audio route changed | on("audioRouteChanged", evt) |
@@ -143,8 +156,6 @@ declare class RtcEngine {
      * localVideoStats | occurs when reports local video statistics | on("localVideoStats", evt) |
      * remoteVideoStats | occurs when reports remote video statistics| on("remoteVideoStats", evt) |
      * remoteAudioStats | occurs when reports remote audio statistics| on("remoteAudioStats", evt) |
-     * audioTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote audio stream. | on("audioTransportStatsOfUid", evt) |
-     * videoTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote video stream.| on("videoTransportStatsOfUid", evt) |
      * audioEffectFinish | occurs when the local audio effect playback finishes. | on("audioEffectFinish", evt) |
      * streamPublished | occurs when addPublishStreamUrl success| on("streamPublished", evt) |
      * streamUnpublish | occurs when removePublishStreamUrl success| on("streamUnpublish", evt) |

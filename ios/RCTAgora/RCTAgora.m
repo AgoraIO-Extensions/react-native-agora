@@ -301,6 +301,18 @@ RCT_EXPORT_METHOD(joinChannel:(NSDictionary *)options
   }
 }
 
+// switch channel
+RCT_EXPORT_METHOD(switchChannel:(NSDictionary *)options
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSInteger res = [self.rtcEngine switchChannelByToken:options[@"token"] channelId:options[@"channelName"] joinSuccess:nil];
+  if (res == 0) {
+    resolve(nil);
+  } else {
+    reject(@(-1).stringValue, @(res).stringValue, nil);
+  }
+}
+
 // register user account
 RCT_EXPORT_METHOD(registerLocalUserAccount:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
@@ -362,20 +374,26 @@ RCT_EXPORT_METHOD(getUserInfoByUserAccount:(NSString *)userAccount
 RCT_EXPORT_METHOD(leaveChannel
                   :(RCTPromiseResolveBlock) resolve
                   reject:(RCTPromiseRejectBlock) reject) {
-  NSInteger res = [self.rtcEngine leaveChannel:^(AgoraChannelStats * _Nonnull stat) {
+  NSInteger res = [self.rtcEngine leaveChannel:^(AgoraChannelStats * _Nonnull stats) {
     [self sendEvent:AGLeaveChannel params:@{
                                             @"message": @"leaveChannel",
-                                            @"duration": @(stat.duration),
-                                            @"txBytes": @(stat.txBytes),
-                                            @"rxBytes": @(stat.rxBytes),
-                                            @"txAudioKBitrate": @(stat.txAudioKBitrate),
-                                            @"rxAudioKBitrate": @(stat.rxAudioKBitrate),
-                                            @"txVideoKBitrate": @(stat.txVideoKBitrate),
-                                            @"rxVideoKBitrate": @(stat.rxVideoKBitrate),
-                                            @"lastmileDelay": @(stat.lastmileDelay),
-                                            @"userCount": @(stat.userCount),
-                                            @"cpuAppUsage": @(stat.cpuAppUsage),
-                                            @"cpuTotalUsage": @(stat.cpuTotalUsage)
+                                            @"duration": @(stats.duration),
+                                            @"txBytes": @(stats.txBytes),
+                                            @"rxBytes": @(stats.rxBytes),
+                                            @"txAudioBytes": @(stats.txAudioBytes),
+                                            @"txVideoBytes": @(stats.txVideoBytes),
+                                            @"rxAudioBytes": @(stats.rxAudioBytes),
+                                            @"rxVideoBytes": @(stats.rxVideoBytes),
+                                            @"txPacketLossRate": @(stats.txPacketLossRate),
+                                            @"rxPacketLossRate": @(stats.rxPacketLossRate),
+                                            @"txAudioKBitrate": @(stats.txAudioKBitrate),
+                                            @"rxAudioKBitrate": @(stats.rxAudioKBitrate),
+                                            @"txVideoKBitrate": @(stats.txVideoKBitrate),
+                                            @"rxVideoKBitrate": @(stats.rxVideoKBitrate),
+                                            @"lastmileDelay": @(stats.lastmileDelay),
+                                            @"userCount": @(stats.userCount),
+                                            @"cpuAppUsage": @(stats.cpuAppUsage),
+                                            @"cpuTotalUsage": @(stats.cpuTotalUsage)
                                             }];
   }];
   if (res == 0) {
@@ -1744,6 +1762,12 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                               @"duration": @(stats.duration),
                                               @"txBytes": @(stats.txBytes),
                                               @"rxBytes": @(stats.rxBytes),
+                                              @"txAudioBytes": @(stats.txAudioBytes),
+                                              @"txVideoBytes": @(stats.txVideoBytes),
+                                              @"rxAudioBytes": @(stats.rxAudioBytes),
+                                              @"rxVideoBytes": @(stats.rxVideoBytes),
+                                              @"txPacketLossRate": @(stats.txPacketLossRate),
+                                              @"rxPacketLossRate": @(stats.rxPacketLossRate),
                                               @"txAudioKBitrate": @(stats.txAudioKBitrate),
                                               @"rxAudioKBitrate": @(stats.rxVideoKBitrate),
                                               @"txVideoKBitrate": @(stats.txVideoKBitrate),
@@ -1825,10 +1849,28 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                           }];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didMicrophoneEnabled:(BOOL)enabled {
-  [self sendEvent:AGMicrophoneEnabled params:@{
-                                               @"enabled": @(enabled)
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine localAudioStateChange:(AgoraAudioLocalState)state error:(AgoraAudioLocalError)error {
+  [self sendEvent:AGLocalAudioStateChanged params:@{
+                                               @"state": @(state),
+                                               @"error": @(error)
                                                }];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteAudioStateChangedOfUid:(NSUInteger)uid state:(AgoraAudioRemoteState)state reason:(AgoraAudioRemoteStateReason)reason elapsed:(NSInteger)elapsed {
+  [self sendEvent:AGRemoteAudioStateChanged params:@{
+                                                    @"uid": @(uid),
+                                                    @"state": @(state),
+                                                    @"reason": @(reason),
+                                                    @"elapsed": @(elapsed)
+                                                    }];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine localAudioStats:(AgoraRtcLocalAudioStats *_Nonnull)stats {
+  [self sendEvent:AGLocalAudioStats params:@{
+                                                     @"numChannels": @(stats.numChannels),
+                                                     @"sentSampleRate": @(stats.sentSampleRate),
+                                                     @"sentBitrate": @(stats.sentBitrate),
+                                                     }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine reportAudioVolumeIndicationOfSpeakers:(NSArray<AgoraRtcAudioVolumeInfo*> *_Nonnull)speakers totalVolume:(NSInteger)totalVolume {
@@ -1879,15 +1921,6 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                                   }];
 }
 
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine firstRemoteVideoDecodedOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
-  [self sendEvent:AGFirstRemoteVideoDecoded params:@{
-                                                     @"uid": @(uid),
-                                                     @"width": @(size.width),
-                                                     @"height": @(size.height),
-                                                     @"elapsed": @(elapsed)
-                                                     }];
-}
-
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine firstRemoteVideoFrameOfUid:(NSUInteger)uid size:(CGSize)size elapsed:(NSInteger)elapsed {
   [self sendEvent:AGFirstRemoteVideoFrame params:@{
                                                    @"uid": @(uid),
@@ -1901,27 +1934,6 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                            @"muted": @(muted),
                                            @"uid": @(uid)
                                            }];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didVideoMuted:(BOOL)muted byUid:(NSUInteger)uid {
-  [self sendEvent:AGUserMuteVideo params:@{
-                                           @"muted": @(muted),
-                                           @"uid": @(uid)
-                                           }];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didVideoEnabled:(BOOL)enabled byUid:(NSUInteger)uid {
-  [self sendEvent:AGUserEnableVideo params:@{
-                                             @"enabled": @(enabled),
-                                             @"uid": @(uid)
-                                             }];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didLocalVideoEnabled:(BOOL)enabled byUid:(NSUInteger)uid {
-  [self sendEvent:AGUserEnableLocalVideo params:@{
-                                                  @"enabled": @(enabled),
-                                                  @"uid": @(uid)
-                                                  }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine videoSizeChangedOfUid:(NSUInteger)uid size:(CGSize)size rotation:(NSInteger)rotation {
@@ -1992,10 +2004,14 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
   [self sendEvent:AGRtcStats params:@{
                                       @"stats": @{
                                           @"duration": @(stats.duration),
-                                          @"txPacketLossRate": @(stats.txPacketLossRate),
-                                          @"rxPacketLossRate": @(stats.rxPacketLossRate),
                                           @"txBytes": @(stats.txBytes),
                                           @"rxBytes": @(stats.rxBytes),
+                                          @"txAudioBytes": @(stats.txAudioBytes),
+                                          @"txVideoBytes": @(stats.txVideoBytes),
+                                          @"rxAudioBytes": @(stats.rxAudioBytes),
+                                          @"rxVideoBytes": @(stats.rxVideoBytes),
+                                          @"txPacketLossRate": @(stats.txPacketLossRate),
+                                          @"rxPacketLossRate": @(stats.rxPacketLossRate),
                                           @"txAudioKBitrate": @(stats.txAudioKBitrate),
                                           @"rxAudioKBitrate": @(stats.rxAudioKBitrate),
                                           @"txVideoKBitrate": @(stats.txVideoKBitrate),
@@ -2048,24 +2064,6 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
                                                   @"frozenRate": @(stats.frozenRate)
                                                   }
                                               }];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine audioTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
-  [self sendEvent:AGAudioTransportStatsOfUid params:@{
-                                                      @"uid": @(uid),
-                                                      @"delay": @(delay),
-                                                      @"lost": @(lost),
-                                                      @"rxKBitrate": @(rxKBitRate)
-                                                      }];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine videoTransportStatsOfUid:(NSUInteger)uid delay:(NSUInteger)delay lost:(NSUInteger)lost rxKBitRate:(NSUInteger)rxKBitRate {
-  [self sendEvent:AGVideoTransportStatsOfUid params:@{
-                                                      @"uid": @(uid),
-                                                      @"delay": @(delay),
-                                                      @"lost": @(lost),
-                                                      @"rxKBitrate": @(rxKBitRate)
-                                                      }];
 }
 
 - (void)rtcEngineRemoteAudioMixingDidStart:(AgoraRtcEngineKit *_Nonnull)engine {
