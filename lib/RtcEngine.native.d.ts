@@ -419,7 +419,7 @@ declare class RtcEngine {
      * @param callback
      * @return any
      */
-    static methodisSpeakerphoneEnabled(callback: Callback<any>): any;
+    static isSpeakerphoneEnabled(callback: Callback<any>): any;
     /**
      * enable in-ear monitor
      *
@@ -566,7 +566,7 @@ declare class RtcEngine {
     /**
      * stop play effect for audio mixing
      *
-     * This methods stops the specified effect for audio mixing file by soundid.
+     * This methods stops the specified effect for audio mixing file by soundId.
      * @param sounid
      * @return Promise<{success, value}>
      */
@@ -581,25 +581,25 @@ declare class RtcEngine {
     /**
      * preload effect for audio mixing file.
      *
-     * This methods preloads the specified audio mixing file to memory by the soundid
-     * @param soundid
-     * @param filepath
+     * This methods preloads the specified audio mixing file to memory by the soundId
+     * @param soundId
+     * @param filePath
      * @return Promise<{success, value}>
      */
-    static preloadEffect(soundId: number, filepath: string): Promise<any>;
+    static preloadEffect(soundId: number, filePath: string): Promise<any>;
     /**
      * unload effect
      *
-     * This methods unload the already loaded audio mixing file from memory by the soundid.
-     * @param soundid
+     * This methods unload the already loaded audio mixing file from memory by the soundId.
+     * @param soundId
      * @return Promise<{success, value}>
      */
     static unloadEffect(soundId: number): Promise<any>;
     /**
-     * pause the specified effect for audio mixing by soundid
+     * pause the specified effect for audio mixing by soundId
      *
-     * This method pauses the specified effect for audio mixing by soundid.
-     * @param soundid
+     * This method pauses the specified effect for audio mixing by soundId.
+     * @param soundId
      * @return Promise<{success, value}>
      */
     static pauseEffect(soundId: number): Promise<any>;
@@ -607,15 +607,15 @@ declare class RtcEngine {
      * pause all effects for audio mixing
      *
      * This method pause all effects for audio mixing.
-     * @param soundid
+     * @param soundId
      * @return Promise<{success, value}>
      */
     static pauseAllEffects(): Promise<any>;
     /**
-     * resume audio mixing effect by the specified soundid
+     * resume audio mixing effect by the specified soundId
      *
-     * This method resumes audio mixing effect by the specified soundid
-     * @param soundid
+     * This method resumes audio mixing effect by the specified soundId
+     * @param soundId
      * @return Promise<{success, value}>
      */
     static resumeEffect(soundId: number): Promise<any>;
@@ -728,7 +728,7 @@ declare class RtcEngine {
      *
      * @return Promise<{success, value}>
      */
-    static removclearVideoWatermarkse(): Promise<any>;
+    static clearVideoWatermarks(): Promise<any>;
     /**
      * set local publish fallback
      *
@@ -897,12 +897,12 @@ declare class RtcEngine {
      *
      * This method sets the log file generated path and specified the log level.
      *
-     * @param filepath string
+     * @param filePath string
      * @param level enum
      * @param maxfileSize integer (KB)
      * @return Promise<{success, value}>
      */
-    static setLog(filepath: string, level: number, maxfileSize: number): Promise<any>;
+    static setLog(filePath: string, level: number, maxfileSize: number): Promise<any>;
     /**
      * add publish stream url
      *
@@ -1037,17 +1037,17 @@ declare class RtcEngine {
      *
      * This method sets the priority of a remote user's media stream.
      * @param uid number
-     * @param userPriority number | The value range is  [50 is "user's priority is hgih", 100 is "the default user's priority is normal"]
+     * @param userPriority number | The value range is  [50 is "user's priority is high", 100 is "the default user's priority is normal"]
      *
      * @return Promise<any>
      */
-    static setRemoteUserPriority(uid: number, userPrority: number): Promise<any>;
+    static setRemoteUserPriority(uid: number, userPriority: number): Promise<any>;
     /**
      * start an audio call test.
      *
      * note:
      *   Call this method before joining a channel.
-     *   After calling this method, call the stopEchoTest method to end the test. Otherwise, the app cannot run the next echo test, or call the joinchannel method.
+     *   After calling this method, call the stopEchoTest method to end the test. Otherwise, the app cannot run the next echo test, or call the joinChannel method.
      *   In the Live-broadcast profile, only a host can call this method.
      * This method will start an audio call test with interval parameter.
      * In the audio call test, you record your voice. If the recording plays back within the set time interval, the audio devices and the network connection are working properly.
