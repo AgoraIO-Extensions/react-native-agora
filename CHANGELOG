@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 2.9.0-alpha.1
+  - fix typo: rename `methodisSpeakerphoneEnabled` to `isSpeakerphoneEnabled`
+
 #### 2.8.0-alpha.1
   - add `string uid` api support
   - android: deprecate `lowLatency` member of LiveTranscoding
