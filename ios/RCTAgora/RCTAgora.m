@@ -671,7 +671,7 @@ RCT_EXPORT_METHOD(enableAudioVolumeIndication: (NSInteger) interval smooth:(NSIn
 }
 
 // is speaker phone enabled
-RCT_EXPORT_METHOD(methodisSpeakerphoneEnabled:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(isSpeakerphoneEnabled:(RCTResponseSenderBlock)callback) {
   callback(@[@{@"status": @([self.rtcEngine isSpeakerphoneEnabled])}]);
 }
 
