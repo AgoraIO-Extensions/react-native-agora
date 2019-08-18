@@ -379,6 +379,7 @@ class RtcEngine {
      * @return void
      */
     public static destroy() {
+        Agora.removeAllListeners();
         return Agora.destroy();
     }
 
