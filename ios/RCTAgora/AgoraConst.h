@@ -68,6 +68,9 @@ static NSString *AGStreamInjectedStatus = @"streamInjectedStatus";
 static NSString *AGReceiveStreamMessage = @"receiveStreamMessage";
 static NSString *AGOccurStreamMessageError = @"occurStreamMessageError";
 
+static NSString *AGReceivedChannelMediaRelay = @"receivedChannelMediaRelay";
+static NSString *AGMediaRelayStateChanged = @"mediaRelayStateChanged";
+
 static NSString *AGMediaEngineLoaded = @"mediaEngineLoaded";
 static NSString *AGMediaEngineStartCall = @"mediaEngineStartCall";
 

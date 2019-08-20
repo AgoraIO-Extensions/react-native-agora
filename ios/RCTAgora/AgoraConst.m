@@ -85,6 +85,9 @@ static AgoraConst *_person;
                                   AGReceiveStreamMessage,
                                   AGOccurStreamMessageError,
                                   
+                                  AGReceivedChannelMediaRelay,
+                                  AGMediaRelayStateChanged,
+                                  
                                   AGMediaEngineLoaded,
                                   AGMediaEngineStartCall,
                                   AGIntervalTest,
