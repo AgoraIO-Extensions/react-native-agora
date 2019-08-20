@@ -50,7 +50,6 @@ public class AgoraVideoView extends LinearLayout {
     private Integer renderMode = 1;
     private Integer remoteUid;
     private boolean zOrderMediaOverlay;
-    private SurfaceView surfaceView;
 
     public AgoraVideoView(Context context) {
         super(context);
