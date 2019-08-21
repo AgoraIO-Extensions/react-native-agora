@@ -19,7 +19,6 @@ public class AgoraConst {
     public final static String AGTokenPrivilegeWillExpire = "tokenPrivilegeWillExpire";
     public final static String AGRequestToken = "requestToken";
 
-    public final static String AGMicrophoneEnabled = "microphoneEnabled";
     public final static String AGAudioVolumeIndication = "audioVolumeIndication";
     public final static String AGActiveSpeaker = "activeSpeaker";
     public final static String AGFirstLocalAudioFrame = "firstLocalAudioFrame";

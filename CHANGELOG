@@ -2,6 +2,21 @@
 
 #### 2.9.0-alpha.1
   - fix typo: rename `methodisSpeakerphoneEnabled` to `isSpeakerphoneEnabled`
+  - events deprecated & instead:
+    * `microphoneEnabled` instead `localAudioStateChanged`
+    * `audioTransportStatsOfUid` instead `remoteAudioStats`
+    * `videoTransportStatsOfUid` instead `remoteVideoStats`
+    * `userMuteVideo`, `userEnableVideo`, `userEnableLocalVideo` & `firstRemoteVideoDecoded` instead `remoteVideoStateChanged`
+  - events enhancement:
+    * `rtcStats`, `leaveChannel` add channel stats `txAudioBytes`, `txVideoBytes`, `rxAudioBytes`, `rxVideoBytes`, `txPacketLossRate`, `rxPacketLossRate`
+  - new events:
+    * `remoteAudioStateChanged` subscribe for remote audio state
+    * `localAudioStateChanged` subscribe for local audio state
+    * `localAudioStats` subscribe for local audio stats
+    * `mediaRelayStateChanged`, `receivedChannelMediaRelay`
+  - new apis:
+    * `switchChannel` switch to specified channel
+    * `startChannelMediaRelay`, `updateChannelMediaRelay`, `stopChannelMediaRelay` relay media streams operation for across channels.
 
 #### 2.8.0-alpha.1
   - add `string uid` api support

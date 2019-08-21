@@ -50,7 +50,7 @@ class RtcEngine {
      * @ignore AG_PREFIX
      */ 
     private static readonly AG_PREFIX: string = 'ag_rtc';
-
+    
     /**
      * Creates a RtcEngine Object internal.
      *
@@ -406,7 +406,7 @@ class RtcEngine {
             for (let eventType of this._eventTypes) {
                 AgoraEventEmitter.removeAllListeners(eventType);
             }
-            this._eventTypes.clear()
+            this._eventTypes.clear();
         }
         return Agora.destroy();
     }
