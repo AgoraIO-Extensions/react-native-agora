@@ -42,6 +42,11 @@ const AgoraEventEmitter = new NativeEventEmitter(Agora);
 class RtcEngine {
 
     /**
+     * @ignore eventTypes
+     */
+    private static readonly _eventTypes: Set<string> = new Set<string>();
+
+    /**
      * @ignore AG_PREFIX
      */ 
     private static readonly AG_PREFIX: string = 'ag_rtc';
@@ -228,6 +233,7 @@ class RtcEngine {
      * @return any
      */
     public static on(eventType: string, listener: (...args: any[]) => any): any {
+        this._eventTypes.add(`${RtcEngine.AG_PREFIX}${eventType}`);
         // convert int32 to uint32
         if ([
             'joinChannelSuccess',
@@ -379,7 +385,12 @@ class RtcEngine {
      * @return void
      */
     public static destroy() {
-        Agora.removeAllListeners();
+        if (this._eventTypes.size) {
+            for (let eventType of this._eventTypes) {
+                AgoraEventEmitter.removeAllListeners(eventType);
+            }
+            this._eventTypes.clear()
+        }
         return Agora.destroy();
     }
 
