@@ -2,6 +2,7 @@ package com.syan.agora;
 
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
+import android.view.SurfaceView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -491,19 +492,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     map.putString("message", "RequestToken");
                     sendEvent(getReactApplicationContext(), AGRequestToken, map);
                 }
-            });
-        }
-
-        @Override
-        public void onMicrophoneEnabled(final boolean enabled) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    WritableMap map = Arguments.createMap();
-                    map.putBoolean("enabled", enabled);
-                    sendEvent(getReactApplicationContext(), AGMicrophoneEnabled, map);
-                }
-
             });
         }
 
@@ -2071,6 +2059,33 @@ public class AgoraModule extends ReactContextBaseJavaModule {
             promise.resolve(null);
         } else {
             promise.reject("-1", res.toString());
+        }
+    }
+
+    private static boolean recording = false;
+
+    // TODO: need implementation
+    @ReactMethod
+    public void startAVRecording(final ReadableMap option, final Promise promise) {
+        String path = option.getString("path");
+        Integer uid = option.getInt("uid");
+        String format = option.getString("format");
+        if (true == recording) {
+            promise.reject("-1", "recording already started");
+        }
+        SurfaceView view = AgoraManager.getInstance().getSurfaceView(uid);
+        if (null == view) {
+            promise.reject("-1", "recording already started");
+        }
+    }
+
+    // TODO: need implementation
+    @ReactMethod
+    public void stopAVRecording(final Promise promise) {
+        if (false == recording) {
+            promise.reject("-1", "recording didn't start");
+        } else {
+            promise.resolve(null);
         }
     }
 
