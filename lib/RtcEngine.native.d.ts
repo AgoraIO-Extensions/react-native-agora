@@ -8,6 +8,10 @@ import { Option, Callback, AgoraUserInfo, AudioMixingOption, PlayEffectOption, A
  */
 declare class RtcEngine {
     /**
+     * @ignore eventTypes
+     */
+    private static readonly _eventTypes;
+    /**
      * @ignore AG_PREFIX
      */
     private static readonly AG_PREFIX;
