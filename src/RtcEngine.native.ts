@@ -25,7 +25,8 @@ import {
     PositionOption,
     BeautyOption,
     LastmileProbeConfig,
-    CameraCapturerConfiguration
+    CameraCapturerConfiguration,
+    ChannelMediaConfiguration
 } from "./types";
 
 
@@ -74,6 +75,69 @@ class RtcEngine {
      */
     public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any> {
         return Agora.joinChannel({channelName, uid, token, info});
+    }
+
+    /**
+     * switch to specified channel
+     *
+     * This method will switch channel smoothly than you invoke leaveChannel & joinChannel.
+     * Otherwise, it will invoke error by the event
+     * It will occurs two events:
+     * Occurs leaveChannel when achieve leaving stage
+     * Occurs joinChannelSuccess when achieve joining stage
+     * @param channelName
+     * @param token
+     */
+    public static switchChannel(channelName: string, token?: string): Promise<any> {
+        return Agora.switchChannel({channelName, token});
+    }
+    
+    /**
+     * Starts to relay media streams across channels.
+     * 
+     * This method will start relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static startChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
+        return Agora.startChannelMediaRelay(config);
+    }
+
+    /**
+     * Remove to relay media streams across channels.
+     * 
+     * This method will remove & update relay media stream across specified channels. (maximum support relay 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static removeChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
+        return Agora.removeChannelMediaRelay(config);
+    }
+
+    /**
+     * Updates to relay media streams across channels.
+     * 
+     * This method will update relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static updateChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
+        return Agora.updateChannelMediaRelay(config);
+    }
+
+    /**
+     * Stop to relay media streams across channels.
+     * 
+     * This method will stop relay media stream across specified channels.
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static stopChannelMediaRelay(): Promise<any> {
+        return Agora.stopChannelMediaRelay();
     }
 
     /**
@@ -182,21 +246,19 @@ class RtcEngine {
      * connectionLost | occurs when sdk connection lost | on("connectionLost", evt) |
      * tokenPrivilegeWillExpire | occurs when token will expire | on("tokenPrivilegeWillExpire", evt) |
      * requestToken | occurs when token expired | on("requestToken") |
-     * microphoneEnabled | occurs when microphone enable state changed | on("microphoneEnabled", evt) |
+     * localAudioStateChanged | occurs when local audio device state changed | on("localAudioStateChanged", (state, errorCode) => {}) |
      * audioVolumeIndication | occurs when audio volume indication changed | on("audioVolumeIndication", evt) |
      * activeSpeaker | occurs when detect active speaker | on("activeSpeaker", evt) |
      * firstLocalAudioFrame | occurs when sent first audio frame on local | on("firstLocalAudioFrame", evt) |
      * firstRemoteAudioFrame | occurs when received first audio frame from remote side | on("firstRemoteAudioFrame", evt) |
      * firstRemoteAudioDecoded | occurs when first remote audio decoded | on("firstRemoteAudioDecoded", evt) |
      * firstLocalVideoFrame | occurs when sent first video frame on local | on("firstLocalVideoFrame", evt) |
-     * firstRemoteVideoDecoded | occurs when received first video frame from remote side decoded | on("firstRemoteVideoDecoded", evt) |
      * firstRemoteVideoFrame | occurs when received first video frame from remote side | on("firstRemoteVideoFrame", evt) |
      * userMuteAudio | occurs when user mute audio | on("userMuteAudio", evt) |
-     * userMuteVideo | occurs when user mute video | on("userMuteVideo", evt) |
-     * userEnableVideo | occurs when remote side's user change video enable state | on("userEnableVideo", evt) |
-     * userEnableLocalVideo | occurs when user change video enable state on local | on("userEnableLocalVideo", evt) |
      * videoSizeChanged | occurs when change local or remote side video size or rotation | on("videoSizeChanged", evt) |
      * remoteVideoStateChanged | occurs when remote video state has any changed | on("remoteVideoStateChanged", evt) |
+     * remoteAudioStateChanged | occurs when remote audio state has any changed | on("remoteAudioStateChanged", evt) |
+     * localAudioStats | occurs when engine start to report local audio stats | on("localAudioStats", evt) |
      * localPublishFallbackToAudioOnly | occurs when published stream from local side fallback to audio stream | on("localPublishFallbackToAudioOnly", evt) |
      * remoteSubscribeFallbackToAudioOnly | occurs when subscribed side's stream fallback to audio stream | on("remoteSubscribeFallbackToAudioOnly", evt) |
      * audioRouteChanged | occurs when local audio route changed | on("audioRouteChanged", evt) |
@@ -208,8 +270,6 @@ class RtcEngine {
      * localVideoStats | occurs when reports local video statistics | on("localVideoStats", evt) | 
      * remoteVideoStats | occurs when reports remote video statistics| on("remoteVideoStats", evt) | 
      * remoteAudioStats | occurs when reports remote audio statistics| on("remoteAudioStats", evt) | 
-     * audioTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote audio stream. | on("audioTransportStatsOfUid", evt) | 
-     * videoTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote video stream.| on("videoTransportStatsOfUid", evt) | 
      * audioEffectFinish | occurs when the local audio effect playback finishes. | on("audioEffectFinish", evt) | 
      * streamPublished | occurs when addPublishStreamUrl success| on("streamPublished", evt) | 
      * streamUnpublish | occurs when removePublishStreamUrl success| on("streamUnpublish", evt) | 
@@ -226,6 +286,8 @@ class RtcEngine {
      * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) | 
      * localUserRegistered | occurs when you register user account success | on("localUserRegistered", evt) |
      * userInfoUpdated | occurs when you peer side using user account join channel | on("userInfoUpdated", evt) |
+     * receivedChannelMediaRelay | occurs when you received channel media relay | on('receivedChannelMediaRelay", evt)|
+     * mediaRelayStateChanged | occurs when you received remote media relay state changed | on('mediaRelayStateChanged", evt)|
      * ---
      * 
      * @param eventType
@@ -244,15 +306,11 @@ class RtcEngine {
             'receiveStreamMessage',
             'activeSpeaker',
             'firstRemoteAudioFrame',
-            'firstRemoteVideoDecoded',
             'firstRemoteVideoFrame',
             'userMuteAudio',
-            'userMuteVideo',
-            'userEnableVideo',
-            'userEnableLocalVideo',
             'videoSizeChanged',
-            'firstRemoteAudioDecoded',
             'remoteVideoStateChanged',
+            'remoteAudioStateChanged',
             'remoteSubscribeFallbackToAudioOnly',
             'networkQuality',
             'streamInjectedStatus',
@@ -295,8 +353,6 @@ class RtcEngine {
         if ([
             'remoteAudioStats',
             'remoteVideoStats',
-            'audioTransportStatsOfUid',
-            'videoTransportStatsOfUid',   
         ].indexOf(eventType) != -1) {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
                 args.stats.uid = this.Int32ToUint32(args.stats.uid);
@@ -389,7 +445,7 @@ class RtcEngine {
             for (let eventType of this._eventTypes) {
                 AgoraEventEmitter.removeAllListeners(eventType);
             }
-            this._eventTypes.clear()
+            this._eventTypes.clear();
         }
         return Agora.destroy();
     }
