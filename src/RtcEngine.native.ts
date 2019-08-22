@@ -50,7 +50,7 @@ class RtcEngine {
      * @ignore AG_PREFIX
      */ 
     private static readonly AG_PREFIX: string = 'ag_rtc';
-    
+
     /**
      * Creates a RtcEngine Object internal.
      *
@@ -249,6 +249,8 @@ class RtcEngine {
      * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) | 
      * localUserRegistered | occurs when you register user account success | on("localUserRegistered", evt) |
      * userInfoUpdated | occurs when you peer side using user account join channel | on("userInfoUpdated", evt) |
+     * receivedChannelMediaRelay | occurs when you received channel media relay | on('receivedChannelMediaRelay", evt)|
+     * mediaRelayStateChanged | occurs when you received remote media relay state changed | on('mediaRelayStateChanged", evt)|
      * ---
      * 
      * @param eventType
