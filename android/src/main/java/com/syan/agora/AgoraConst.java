@@ -19,18 +19,13 @@ public class AgoraConst {
     public final static String AGTokenPrivilegeWillExpire = "tokenPrivilegeWillExpire";
     public final static String AGRequestToken = "requestToken";
 
-    public final static String AGMicrophoneEnabled = "microphoneEnabled";
     public final static String AGAudioVolumeIndication = "audioVolumeIndication";
     public final static String AGActiveSpeaker = "activeSpeaker";
     public final static String AGFirstLocalAudioFrame = "firstLocalAudioFrame";
     public final static String AGFirstRemoteAudioFrame = "firstRemoteAudioFrame";
     public final static String AGFirstLocalVideoFrame = "firstLocalVideoFrame";
-    public final static String AGFirstRemoteVideoDecoded = "firstRemoteVideoDecoded";
     public final static String AGFirstRemoteVideoFrame = "firstRemoteVideoFrame";
     public final static String AGUserMuteAudio = "userMuteAudio";
-    public final static String AGUserMuteVideo = "userMuteVideo";
-    public final static String AGUserEnableVideo = "userEnableVideo";
-    public final static String AGUserEnableLocalVideo = "userEnableLocalVideo";
     public final static String AGVideoSizeChanged = "videoSizeChanged";
     public final static String AGRtmpStreamingStateChanged = "rtmpStreamingStateChanged";
     public final static String AGNetworkTypeChanged = "networkTypeChanged";
@@ -44,6 +39,11 @@ public class AgoraConst {
     public final static String AGAudioRouteChanged = "audioRouteChanged";
     public final static String AGCameraFocusAreaChanged = "cameraFocusAreaChanged";
     public final static String AGCameraExposureAreaChanged = "cameraExposureAreaChanged";
+    public final static String AGRemoteAudioStateChanged = "remoteAudioStateChanged";
+    public final static String AGLocalAudioStateChanged = "localAudioStateChanged";
+    public final static String AGLocalAudioStats = "localAudioStats";
+    public final static String AGMediaRelayStateChanged = "mediaRelayStateChanged";
+    public final static String AGReceivedChannelMediaRelay = "receivedChannelMediaRelay";
 
     public final static String AGRtcStats = "rtcStats";
     public final static String AGLastmileQuality = "lastmileQuality";
@@ -51,8 +51,6 @@ public class AgoraConst {
     public final static String AGLocalVideoStats = "localVideoStats";
     public final static String AGRemoteVideoStats = "remoteVideoStats";
     public final static String AGRemoteAudioStats = "remoteAudioStats";
-    public final static String AGAudioTransportStatsOfUid = "audioTransportStatsOfUid";
-    public final static String AGVideoTransportStatsOfUid = "videoTransportStatsOfUid";
 
     public final static String AGRemoteAudioMixingStart = "remoteAudioMixingStart";
     public final static String AGRemoteAudioMixingFinish = "remoteAudioMixingFinish";

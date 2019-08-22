@@ -1,4 +1,4 @@
-import { Option, Callback, AgoraUserInfo, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
+import { Option, Callback, AgoraUserInfo, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration, ChannelMediaConfiguration } from "./types";
 /**
  * RtcEngine is the javascript object for control agora native sdk through react native bridge.
  *
@@ -34,6 +34,54 @@ declare class RtcEngine {
      * @param info
      */
     static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any>;
+    /**
+     * switch to specified channel
+     *
+     * This method will switch channel smoothly than you invoke leaveChannel & joinChannel.
+     * Otherwise, it will invoke error by the event
+     * It will occurs two events:
+     * Occurs leaveChannel when achieve leaving stage
+     * Occurs joinChannelSuccess when achieve joining stage
+     * @param channelName
+     * @param token
+     */
+    static switchChannel(channelName: string, token?: string): Promise<any>;
+    /**
+     * Starts to relay media streams across channels.
+     *
+     * This method will start relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static startChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
+    /**
+     * Remove to relay media streams across channels.
+     *
+     * This method will remove & update relay media stream across specified channels. (maximum support relay 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static removeChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
+    /**
+     * Updates to relay media streams across channels.
+     *
+     * This method will update relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static updateChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
+    /**
+     * Stop to relay media streams across channels.
+     *
+     * This method will stop relay media stream across specified channels.
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static stopChannelMediaRelay(): Promise<any>;
     /**
      * Registers a user account.
      *
@@ -117,21 +165,19 @@ declare class RtcEngine {
      * connectionLost | occurs when sdk connection lost | on("connectionLost", evt) |
      * tokenPrivilegeWillExpire | occurs when token will expire | on("tokenPrivilegeWillExpire", evt) |
      * requestToken | occurs when token expired | on("requestToken") |
-     * microphoneEnabled | occurs when microphone enable state changed | on("microphoneEnabled", evt) |
+     * localAudioStateChanged | occurs when local audio device state changed | on("localAudioStateChanged", (state, errorCode) => {}) |
      * audioVolumeIndication | occurs when audio volume indication changed | on("audioVolumeIndication", evt) |
      * activeSpeaker | occurs when detect active speaker | on("activeSpeaker", evt) |
      * firstLocalAudioFrame | occurs when sent first audio frame on local | on("firstLocalAudioFrame", evt) |
      * firstRemoteAudioFrame | occurs when received first audio frame from remote side | on("firstRemoteAudioFrame", evt) |
      * firstRemoteAudioDecoded | occurs when first remote audio decoded | on("firstRemoteAudioDecoded", evt) |
      * firstLocalVideoFrame | occurs when sent first video frame on local | on("firstLocalVideoFrame", evt) |
-     * firstRemoteVideoDecoded | occurs when received first video frame from remote side decoded | on("firstRemoteVideoDecoded", evt) |
      * firstRemoteVideoFrame | occurs when received first video frame from remote side | on("firstRemoteVideoFrame", evt) |
      * userMuteAudio | occurs when user mute audio | on("userMuteAudio", evt) |
-     * userMuteVideo | occurs when user mute video | on("userMuteVideo", evt) |
-     * userEnableVideo | occurs when remote side's user change video enable state | on("userEnableVideo", evt) |
-     * userEnableLocalVideo | occurs when user change video enable state on local | on("userEnableLocalVideo", evt) |
      * videoSizeChanged | occurs when change local or remote side video size or rotation | on("videoSizeChanged", evt) |
      * remoteVideoStateChanged | occurs when remote video state has any changed | on("remoteVideoStateChanged", evt) |
+     * remoteAudioStateChanged | occurs when remote audio state has any changed | on("remoteAudioStateChanged", evt) |
+     * localAudioStats | occurs when engine start to report local audio stats | on("localAudioStats", evt) |
      * localPublishFallbackToAudioOnly | occurs when published stream from local side fallback to audio stream | on("localPublishFallbackToAudioOnly", evt) |
      * remoteSubscribeFallbackToAudioOnly | occurs when subscribed side's stream fallback to audio stream | on("remoteSubscribeFallbackToAudioOnly", evt) |
      * audioRouteChanged | occurs when local audio route changed | on("audioRouteChanged", evt) |
@@ -143,8 +189,6 @@ declare class RtcEngine {
      * localVideoStats | occurs when reports local video statistics | on("localVideoStats", evt) |
      * remoteVideoStats | occurs when reports remote video statistics| on("remoteVideoStats", evt) |
      * remoteAudioStats | occurs when reports remote audio statistics| on("remoteAudioStats", evt) |
-     * audioTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote audio stream. | on("audioTransportStatsOfUid", evt) |
-     * videoTransportStatsOfUid | occurs when reports  transport-layer statistics of each remote video stream.| on("videoTransportStatsOfUid", evt) |
      * audioEffectFinish | occurs when the local audio effect playback finishes. | on("audioEffectFinish", evt) |
      * streamPublished | occurs when addPublishStreamUrl success| on("streamPublished", evt) |
      * streamUnpublish | occurs when removePublishStreamUrl success| on("streamUnpublish", evt) |
@@ -161,6 +205,8 @@ declare class RtcEngine {
      * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) |
      * localUserRegistered | occurs when you register user account success | on("localUserRegistered", evt) |
      * userInfoUpdated | occurs when you peer side using user account join channel | on("userInfoUpdated", evt) |
+     * receivedChannelMediaRelay | occurs when you received channel media relay | on('receivedChannelMediaRelay", evt)|
+     * mediaRelayStateChanged | occurs when you received remote media relay state changed | on('mediaRelayStateChanged", evt)|
      * ---
      *
      * @param eventType
