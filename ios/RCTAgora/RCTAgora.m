@@ -318,18 +318,21 @@ RCT_EXPORT_METHOD(startChannelMediaRelay:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   AgoraChannelMediaRelayConfiguration *config = [[AgoraChannelMediaRelayConfiguration alloc] init];
-  
   AgoraChannelMediaRelayInfo *src = [config sourceInfo];
   NSDictionary *srcOption = options[@"src"];
-  src.channelName = srcOption[@"channelName"];
-  src.uid = [srcOption[@"uid"] integerValue];
-  src.token = srcOption[@"token"];
-  AgoraChannelMediaRelayInfo *dst = [[AgoraChannelMediaRelayInfo alloc] init];
-  NSDictionary *dstOption = options[@"dst"];
-  dst.channelName = dstOption[@"channelName"];
-  dst.uid = [dstOption[@"uid"] integerValue];
-  dst.token = dstOption[@"token"];
-  [config setDestinationInfo:dst forChannelName:dstOption[@"channelName"]];
+  if (srcOption != nil) {
+    src.channelName = srcOption[@"channelName"];
+    src.uid = [srcOption[@"uid"] integerValue];
+    src.token = srcOption[@"token"];
+  }
+  NSArray *channels = options[@"channels"];
+  for (NSDictionary *channel in channels) {
+    AgoraChannelMediaRelayInfo *dst = [[AgoraChannelMediaRelayInfo alloc] init];
+    dst.channelName = channel[@"channelName"];
+    dst.uid = [channel[@"uid"] integerValue];
+    dst.token = channel[@"token"];
+    [config setDestinationInfo:dst forChannelName:dst.channelName];
+  }
   NSInteger res = [self.rtcEngine startChannelMediaRelay:config];
   if (res == 0) {
     resolve(nil);
@@ -343,18 +346,47 @@ RCT_EXPORT_METHOD(updateChannelMediaRelay:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   AgoraChannelMediaRelayConfiguration *config = [[AgoraChannelMediaRelayConfiguration alloc] init];
-  
   AgoraChannelMediaRelayInfo *src = [config sourceInfo];
   NSDictionary *srcOption = options[@"src"];
-  src.channelName = srcOption[@"channelName"];
-  src.uid = [srcOption[@"uid"] integerValue];
-  src.token = srcOption[@"token"];
-  AgoraChannelMediaRelayInfo *dst = [[AgoraChannelMediaRelayInfo alloc] init];
-  NSDictionary *dstOption = options[@"dst"];
-  dst.channelName = dstOption[@"channelName"];
-  dst.uid = [dstOption[@"uid"] integerValue];
-  dst.token = dstOption[@"token"];
-  [config setDestinationInfo:dst forChannelName:dstOption[@"channelName"]];
+  if (srcOption != nil) {
+    src.channelName = srcOption[@"channelName"];
+    src.uid = [srcOption[@"uid"] integerValue];
+    src.token = srcOption[@"token"];
+  }
+  NSArray *channels = options[@"channels"];
+  for (NSDictionary *channel in channels) {
+    AgoraChannelMediaRelayInfo *dst = [[AgoraChannelMediaRelayInfo alloc] init];
+    dst.channelName = channel[@"channelName"];
+    dst.uid = [channel[@"uid"] integerValue];
+    dst.token = channel[@"token"];
+    [config setDestinationInfo:dst forChannelName:dst.channelName];
+  }
+  NSInteger res = [self.rtcEngine updateChannelMediaRelay:config];
+  if (res == 0) {
+    resolve(nil);
+  } else {
+    reject(@(-1).stringValue, @(res).stringValue, nil);
+  }
+}
+
+// removeChannelMediaRelay
+RCT_EXPORT_METHOD(removeChannelMediaRelay:(NSDictionary *)options
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  AgoraChannelMediaRelayConfiguration *config = [[AgoraChannelMediaRelayConfiguration alloc] init];
+  AgoraChannelMediaRelayInfo *src = [config sourceInfo];
+  NSDictionary *srcOption = options[@"src"];
+  if (srcOption != nil) {
+    src.channelName = srcOption[@"channelName"];
+    src.uid = [srcOption[@"uid"] integerValue];
+    src.token = srcOption[@"token"];
+  }
+  NSArray *channels = options[@"channels"];
+  for (NSDictionary *channel in channels) {
+    if (channel[@"channelName"] != nil) {
+      [config removeDestinationInfoForChannelName:channel[@"channelName"]];
+    }
+  }
   NSInteger res = [self.rtcEngine updateChannelMediaRelay:config];
   if (res == 0) {
     resolve(nil);
@@ -407,9 +439,9 @@ RCT_EXPORT_METHOD(getUserInfoByUid:(NSUInteger)uid
   AgoraUserInfo *info = [self.rtcEngine getUserInfoByUid:uid withError:&code];
   if ((int)code == 0) {
     resolve(@{
-        @"uid": @(info.uid),
-        @"userAccount": info.userAccount
-    });
+              @"uid": @(info.uid),
+              @"userAccount": info.userAccount
+              });
   } else {
     reject(@(-1).stringValue, @((int)code).stringValue, nil);
   }
@@ -1864,10 +1896,10 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didUpdatedUserInfo:(AgoraUserInfo *_Nonnull)userInfo withUid:(NSUInteger)uid {
   [self sendEvent:AGUserInfoUpdated params:@{
-                                                 @"uid": @(uid),
-                                                 @"peer": @{
-                                                     @"uid": @(userInfo.uid),
-                                                     @"userAccount": userInfo.userAccount
+                                             @"uid": @(uid),
+                                             @"peer": @{
+                                                 @"uid": @(userInfo.uid),
+                                                 @"userAccount": userInfo.userAccount
                                                  }}];
 }
 
@@ -1912,26 +1944,26 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine localAudioStateChange:(AgoraAudioLocalState)state error:(AgoraAudioLocalError)error {
   [self sendEvent:AGLocalAudioStateChanged params:@{
-                                               @"state": @(state),
-                                               @"errorCode": @(error)
-                                               }];
+                                                    @"state": @(state),
+                                                    @"errorCode": @(error)
+                                                    }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine remoteAudioStateChangedOfUid:(NSUInteger)uid state:(AgoraAudioRemoteState)state reason:(AgoraAudioRemoteStateReason)reason elapsed:(NSInteger)elapsed {
   [self sendEvent:AGRemoteAudioStateChanged params:@{
-                                                    @"uid": @(uid),
-                                                    @"state": @(state),
-                                                    @"reason": @(reason),
-                                                    @"elapsed": @(elapsed)
-                                                    }];
+                                                     @"uid": @(uid),
+                                                     @"state": @(state),
+                                                     @"reason": @(reason),
+                                                     @"elapsed": @(elapsed)
+                                                     }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine localAudioStats:(AgoraRtcLocalAudioStats *_Nonnull)stats {
   [self sendEvent:AGLocalAudioStats params:@{
-                                                     @"numChannels": @(stats.numChannels),
-                                                     @"sentSampleRate": @(stats.sentSampleRate),
-                                                     @"sentBitrate": @(stats.sentBitrate),
-                                                     }];
+                                             @"numChannels": @(stats.numChannels),
+                                             @"sentSampleRate": @(stats.sentSampleRate),
+                                             @"sentBitrate": @(stats.sentBitrate),
+                                             }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine reportAudioVolumeIndicationOfSpeakers:(NSArray<AgoraRtcAudioVolumeInfo*> *_Nonnull)speakers totalVolume:(NSInteger)totalVolume {
@@ -2193,13 +2225,13 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
   [self sendEvent:AGMediaRelayStateChanged params:@{
                                                     @"state": @(state),
                                                     @"errorCode": @(error),
-                                                   }];
+                                                    }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine didReceiveChannelMediaRelayEvent:(AgoraChannelMediaRelayEvent)event {
   [self sendEvent:AGReceivedChannelMediaRelay params:@{
-                                                  @"event": @(event),
-                                                  }];
+                                                       @"event": @(event),
+                                                       }];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *_Nonnull)engine receiveStreamMessageFromUid:(NSUInteger)uid streamId:(NSInteger)streamId data:(NSData *_Nonnull)data {

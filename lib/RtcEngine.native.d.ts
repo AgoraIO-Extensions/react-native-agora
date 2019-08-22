@@ -1,4 +1,4 @@
-import { Option, Callback, AgoraUserInfo, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration } from "./types";
+import { Option, Callback, AgoraUserInfo, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration, ChannelMediaConfiguration } from "./types";
 /**
  * RtcEngine is the javascript object for control agora native sdk through react native bridge.
  *
@@ -46,9 +46,42 @@ declare class RtcEngine {
      * @param token
      */
     static switchChannel(channelName: string, token?: string): Promise<any>;
-    static startChannelMediaRelay(): void;
-    static updateChannelMediaRelay(): void;
-    static stopChannelMediaRelay(): void;
+    /**
+     * Starts to relay media streams across channels.
+     *
+     * This method will start relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static startChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
+    /**
+     * Remove to relay media streams across channels.
+     *
+     * This method will remove & update relay media stream across specified channels. (maximum support relay 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static removeChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
+    /**
+     * Updates to relay media streams across channels.
+     *
+     * This method will update relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static updateChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
+    /**
+     * Stop to relay media streams across channels.
+     *
+     * This method will stop relay media stream across specified channels.
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    static stopChannelMediaRelay(): Promise<any>;
     /**
      * Registers a user account.
      *

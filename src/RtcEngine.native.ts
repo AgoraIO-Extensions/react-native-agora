@@ -25,7 +25,8 @@ import {
     PositionOption,
     BeautyOption,
     LastmileProbeConfig,
-    CameraCapturerConfiguration
+    CameraCapturerConfiguration,
+    ChannelMediaConfiguration
 } from "./types";
 
 
@@ -91,16 +92,52 @@ class RtcEngine {
         return Agora.switchChannel({channelName, token});
     }
     
-    public static startChannelMediaRelay() {
-
+    /**
+     * Starts to relay media streams across channels.
+     * 
+     * This method will start relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static startChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
+        return Agora.startChannelMediaRelay(config);
     }
 
-    public static updateChannelMediaRelay() {
-
+    /**
+     * Remove to relay media streams across channels.
+     * 
+     * This method will remove & update relay media stream across specified channels. (maximum support relay 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static removeChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
+        return Agora.removeChannelMediaRelay(config);
     }
 
-    public static stopChannelMediaRelay() {
-        
+    /**
+     * Updates to relay media streams across channels.
+     * 
+     * This method will update relay media stream across specified channels. (maximum support 4 channels)
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static updateChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
+        return Agora.updateChannelMediaRelay(config);
+    }
+
+    /**
+     * Stop to relay media streams across channels.
+     * 
+     * This method will stop relay media stream across specified channels.
+     * It will occurs event:
+     *  Occurs onChannelMediaRelayStateChanged
+     * @param config
+     */
+    public static stopChannelMediaRelay(): Promise<any> {
+        return Agora.stopChannelMediaRelay();
     }
 
     /**
