@@ -16,7 +16,7 @@
     * `mediaRelayStateChanged`, `receivedChannelMediaRelay`
   - new apis:
     * `switchChannel` switch to specified channel
-    * `startChannelMediaRelay`, `updateChannelMediaRelay`, `stopChannelMediaRelay` relay media streams operation for across channels.
+    * `startChannelMediaRelay`, `updateChannelMediaRelay`, `stopChannelMediaRelay`, `removeChannelMediaRelay` relay media streams operation for across channels.
 
 #### 2.8.0-alpha.1
   - add `string uid` api support

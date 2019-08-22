@@ -44,9 +44,6 @@ static AgoraConst *_person;
                                   AGTokenPrivilegeWillExpire,
                                   AGRequestToken,
                                   
-                                  AGLocalAudioStateChanged,
-                                  AGRemoteAudioStateChanged,
-                                  AGLocalAudioStats,
                                   AGAudioVolumeIndication,
                                   AGActiveSpeaker,
                                   AGFirstLocalAudioFrame,
@@ -70,6 +67,11 @@ static AgoraConst *_person;
                                   AGLocalVideoStats,
                                   AGRemoteVideoStats,
                                   AGRemoteAudioStats,
+                                  AGLocalAudioStateChanged,
+                                  AGRemoteAudioStateChanged,
+                                  AGLocalAudioStats,
+                                  AGMediaRelayStateChanged,
+                                  AGReceivedChannelMediaRelay,
                                   
                                   AGAudioMixingStateChanged,
                                   AGRemoteAudioMixingStart,
@@ -84,9 +86,6 @@ static AgoraConst *_person;
                                   
                                   AGReceiveStreamMessage,
                                   AGOccurStreamMessageError,
-                                  
-                                  AGReceivedChannelMediaRelay,
-                                  AGMediaRelayStateChanged,
                                   
                                   AGMediaEngineLoaded,
                                   AGMediaEngineStartCall,

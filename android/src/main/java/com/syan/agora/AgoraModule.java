@@ -1110,6 +1110,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
         appId = options.getString("appid");
         rtcEngine = AgoraManager.getInstance().mRtcEngine;
+        rtcEngine.setParameters("{\"rtc.log_filter\": 65535}");
     }
 
     @ReactMethod
@@ -1254,35 +1255,66 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         RtcEngine.destroy();
     }
 
-
-
     @ReactMethod
     public void startChannelMediaRelay(ReadableMap options, Promise promise) {
         ChannelMediaRelayConfiguration config = new ChannelMediaRelayConfiguration();
-        ReadableMap srcOption = options.getMap("src");
         ChannelMediaInfo src = config.getSrcChannelMediaInfo();
-        if (srcOption.hasKey("token")) {
-            src.token = srcOption.getString("token");
+        if (options.hasKey("src")) {
+            ReadableMap srcOption = options.getMap("src");
+            if (srcOption.hasKey("token")) {
+                src.token = srcOption.getString("token");
+            }
+            if (srcOption.hasKey("channelName")) {
+                src.channelName = srcOption.getString("channelName");
+            }
         }
-        if (srcOption.hasKey("channelName")) {
-            src.channelName = srcOption.getString("channelName");
+        ReadableArray dstMediaInfo = options.getArray("channels");
+        for (int i = 0; i < dstMediaInfo.size(); i++) {
+            ReadableMap dst = dstMediaInfo.getMap(i);
+            String channelName = null;
+            String token = null;
+            Integer uid = 0;
+            if (dst.hasKey("token")) {
+                token = token;
+            }
+            if (dst.hasKey("channelName")) {
+                channelName = dst.getString("channelName");
+            }
+            if (dst.hasKey("uid")) {
+                uid = dst.getInt("uid");
+            }
+            config.setDestChannelInfo(channelName, new ChannelMediaInfo(channelName, token, uid));
         }
-        ReadableMap dstMediaInfo = options.getMap("dst");
-        String dstChannelName = null;
-        Integer dstUid = 0;
-        String dstToken = null;
-        if (dstMediaInfo.hasKey("token")) {
-            dstToken = options.getString("token");
-        }
-        if (dstMediaInfo.hasKey("channelName")) {
-            dstChannelName = options.getString("channelName");
-        }
-        if (dstMediaInfo.hasKey("uid")) {
-            dstUid = options.getInt("uid");
-        }
-        ChannelMediaInfo dest = new ChannelMediaInfo(dstChannelName, dstToken, dstUid);
-        config.setDestChannelInfo(dest.channelName, dest);
         Integer res = AgoraManager.getInstance().mRtcEngine.startChannelMediaRelay(config);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
+
+    @ReactMethod
+    public void removeChannelMediaRelay(ReadableMap options, Promise promise) {
+        ChannelMediaRelayConfiguration config = new ChannelMediaRelayConfiguration();
+        ChannelMediaInfo src = config.getSrcChannelMediaInfo();
+        if (options.hasKey("src")) {
+            ReadableMap srcOption = options.getMap("src");
+            if (srcOption.hasKey("token")) {
+                src.token = srcOption.getString("token");
+            }
+            if (srcOption.hasKey("channelName")) {
+                src.channelName = srcOption.getString("channelName");
+            }
+        }
+        ReadableArray dstMediaInfo = options.getArray("channels");
+        for (int i = 0; i < dstMediaInfo.size(); i++) {
+            ReadableMap dst = dstMediaInfo.getMap(i);
+            if (dst.hasKey("channelName")) {
+                channelName = dst.getString("channelName");
+                config.removeDestChannelInfo(channelName);
+            }
+        }
+        Integer res = AgoraManager.getInstance().mRtcEngine.updateChannelMediaRelay(config);
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1293,29 +1325,33 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void updateChannelMediaRelay(ReadableMap options, Promise promise) {
         ChannelMediaRelayConfiguration config = new ChannelMediaRelayConfiguration();
-        ReadableMap srcOption = options.getMap("src");
         ChannelMediaInfo src = config.getSrcChannelMediaInfo();
-        if (srcOption.hasKey("token")) {
-            src.token = srcOption.getString("token");
+        if (options.hasKey("src")) {
+            ReadableMap srcOption = options.getMap("src");
+            if (srcOption.hasKey("token")) {
+                src.token = srcOption.getString("token");
+            }
+            if (srcOption.hasKey("channelName")) {
+                src.channelName = srcOption.getString("channelName");
+            }
         }
-        if (srcOption.hasKey("channelName")) {
-            src.channelName = srcOption.getString("channelName");
+        ReadableArray dstMediaInfo = options.getArray("channels");
+        for (int i = 0; i < dstMediaInfo.size(); i++) {
+            ReadableMap dst = dstMediaInfo.getMap(i);
+            String channelName = null;
+            String token = null;
+            Integer uid = 0;
+            if (dst.hasKey("token")) {
+                token = token;
+            }
+            if (dst.hasKey("channelName")) {
+                channelName = dst.getString("channelName");
+            }
+            if (dst.hasKey("uid")) {
+                uid = dst.getInt("uid");
+            }
+            config.setDestChannelInfo(src.channelName, new ChannelMediaInfo(channelName, token, uid));
         }
-        ReadableMap dstMediaInfo = options.getMap("dst");
-        String dstChannelName = null;
-        Integer dstUid = 0;
-        String dstToken = null;
-        if (dstMediaInfo.hasKey("token")) {
-            dstToken = options.getString("token");
-        }
-        if (dstMediaInfo.hasKey("channelName")) {
-            dstChannelName = options.getString("channelName");
-        }
-        if (dstMediaInfo.hasKey("uid")) {
-            dstUid = options.getInt("uid");
-        }
-        ChannelMediaInfo dest = new ChannelMediaInfo(dstChannelName, dstToken, dstUid);
-        config.setDestChannelInfo(dest.channelName, dest);
         Integer res = AgoraManager.getInstance().mRtcEngine.updateChannelMediaRelay(config);
         if (res == 0) {
             promise.resolve(null);
@@ -1325,8 +1361,13 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void stopChannelMediaRelay() {
-        AgoraManager.getInstance().mRtcEngine.stopChannelMediaRelay();
+    public void stopChannelMediaRelay(Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.stopChannelMediaRelay();
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
     }
 
     @ReactMethod
@@ -1475,9 +1516,9 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setCameraFocusPositionInPreview(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine.setCameraFocusPositionInPreview(
-                    (float)options.getDouble("x"),
-                    (float)options.getDouble("y")
-            );
+                (float)options.getDouble("x"),
+                (float)options.getDouble("y")
+        );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1650,10 +1691,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void createDataStream(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .createDataStream(
-                            options.getBoolean("ordered"),
-                            options.getBoolean("reliable")
-                            );
+                .createDataStream(
+                        options.getBoolean("ordered"),
+                        options.getBoolean("reliable")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1721,10 +1762,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void startAudioMixing(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine.startAudioMixing(
-                    options.getString("filepath"),
-                    options.getBoolean("loopback"),
-                    options.getBoolean("replace"),
-                    options.getInt("cycle")
+                options.getString("filepath"),
+                options.getBoolean("loopback"),
+                options.getBoolean("replace"),
+                options.getInt("cycle")
         );
         if (res == 0) {
             promise.resolve(null);
@@ -1846,10 +1887,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void startAudioRecording(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .startAudioRecording(
-                            options.getString("filepath"),
-                            options.getInt("quality")
-        );
+                .startAudioRecording(
+                        options.getString("filepath"),
+                        options.getInt("quality")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1860,7 +1901,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void stopAudioRecording(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .stopAudioRecording();
+                .stopAudioRecording();
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1871,7 +1912,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void stopEchoTest(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .stopEchoTest();
+                .stopEchoTest();
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1882,7 +1923,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void enableLastmileTest(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .enableLastmileTest();
+                .enableLastmileTest();
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1893,7 +1934,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void disableLastmileTest(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .disableLastmileTest();
+                .disableLastmileTest();
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1904,12 +1945,12 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setRecordingAudioFrameParameters(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .setRecordingAudioFrameParameters(
-                            options.getInt("sampleRate"),
-                            options.getInt("channel"),
-                            options.getInt("mode"),
-                            options.getInt("samplesPerCall")
-        );
+                .setRecordingAudioFrameParameters(
+                        options.getInt("sampleRate"),
+                        options.getInt("channel"),
+                        options.getInt("mode"),
+                        options.getInt("samplesPerCall")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1920,12 +1961,12 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setPlaybackAudioFrameParameters(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .setPlaybackAudioFrameParameters(
-                            options.getInt("sampleRate"),
-                            options.getInt("channel"),
-                            options.getInt("mode"),
-                            options.getInt("samplesPerCall")
-        );
+                .setPlaybackAudioFrameParameters(
+                        options.getInt("sampleRate"),
+                        options.getInt("channel"),
+                        options.getInt("mode"),
+                        options.getInt("samplesPerCall")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1936,10 +1977,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setMixedAudioFrameParameters(WritableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .setMixedAudioFrameParameters(
-                            options.getInt("sampleRate"),
-                            options.getInt("samplesPerCall")
-                    );
+                .setMixedAudioFrameParameters(
+                        options.getInt("sampleRate"),
+                        options.getInt("samplesPerCall")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1960,7 +2001,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addVideoWatermark(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .addVideoWatermark(createAgoraImage(options));
+                .addVideoWatermark(createAgoraImage(options));
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1971,7 +2012,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearVideoWatermarks(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .clearVideoWatermarks();
+                .clearVideoWatermarks();
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1982,7 +2023,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setLocalPublishFallbackOption(int option, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .setLocalPublishFallbackOption(option);
+                .setLocalPublishFallbackOption(option);
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1993,7 +2034,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setRemoteSubscribeFallbackOption(int option, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .setRemoteSubscribeFallbackOption(option);
+                .setRemoteSubscribeFallbackOption(option);
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2004,7 +2045,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void enableDualStreamMode(boolean enabled, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .enableDualStreamMode(enabled);
+                .enableDualStreamMode(enabled);
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2016,10 +2057,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setRemoteVideoStreamType(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .setRemoteVideoStreamType(
-                            options.getInt("uid"),
-                            options.getInt("streamType")
-                        );
+                .setRemoteVideoStreamType(
+                        options.getInt("uid"),
+                        options.getInt("streamType")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2030,9 +2071,9 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setRemoteDefaultVideoStreamType(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .setRemoteDefaultVideoStreamType(
-                            options.getInt("streamType")
-                    );
+                .setRemoteDefaultVideoStreamType(
+                        options.getInt("streamType")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2182,7 +2223,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeInjectStreamUrl(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .removeInjectStreamUrl(options.getString("url"));
+                .removeInjectStreamUrl(options.getString("url"));
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2193,10 +2234,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addPublishStreamUrl(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .addPublishStreamUrl(
-                            options.getString("url"),
-                            options.getBoolean("enable")
-                    );
+                .addPublishStreamUrl(
+                        options.getString("url"),
+                        options.getBoolean("enable")
+                );
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2207,7 +2248,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removePublishStreamUrl(ReadableMap options, Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine
-                    .removePublishStreamUrl(options.getString("url"));
+                .removePublishStreamUrl(options.getString("url"));
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2339,13 +2380,13 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     public void playEffect(ReadableMap options, Promise promise) {
         IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
         Integer res = manager.playEffect(
-            options.getInt("soundid"),
-            options.getString("filepath"),
-            options.getInt("loopcount"),
-            options.getDouble("pitch"),
-            options.getDouble("pan"),
-            options.getDouble("gain"),
-            options.getBoolean("publish")
+                options.getInt("soundid"),
+                options.getString("filepath"),
+                options.getInt("loopcount"),
+                options.getDouble("pitch"),
+                options.getDouble("pan"),
+                options.getDouble("gain"),
+                options.getBoolean("publish")
         );
         if (res == 0) {
             promise.resolve(null);
