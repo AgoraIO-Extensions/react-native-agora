@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "2.8.0-alpha.1",
+  "version": "2.8.0-alpha.2",
   "description": "React Native around the Agora RTC SDKs for Android and iOS agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
