@@ -58,6 +58,7 @@ class RtcEngine {
      * This method creates and start event observer. You should call this method once.
      * @example `RtcEngine.init(option)`
      * @param options Defines the property of the client, see {@link Option} for details.
+     * @returns any
      */
     public static init(options: Option): void {
         Agora.init(options);
@@ -72,6 +73,7 @@ class RtcEngine {
      * @param uid
      * @param token
      * @param info
+     * @returns Promise<any>
      */
     public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any> {
         return Agora.joinChannel({channelName, uid, token, info});
@@ -85,8 +87,9 @@ class RtcEngine {
      * It will occurs two events:
      * Occurs leaveChannel when achieve leaving stage
      * Occurs joinChannelSuccess when achieve joining stage
-     * @param channelName
-     * @param token
+     * @param channelName {@link string}
+     * @param token {@link string}
+     * @returns Promise<any>
      */
     public static switchChannel(channelName: string, token?: string): Promise<any> {
         return Agora.switchChannel({channelName, token});
@@ -99,7 +102,8 @@ class RtcEngine {
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
      *  Occurs receivedChannelMediaRelay when peer channel received this message
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     public static startChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
         return Agora.startChannelMediaRelay(config);
@@ -111,7 +115,8 @@ class RtcEngine {
      * This method will remove & update relay media stream across specified channels. (maximum support relay 4 channels)
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     public static removeChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
         return Agora.removeChannelMediaRelay(config);
@@ -123,7 +128,8 @@ class RtcEngine {
      * This method will update relay media stream across specified channels. (maximum support 4 channels)
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     public static updateChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any> {
         return Agora.updateChannelMediaRelay(config);
@@ -135,7 +141,8 @@ class RtcEngine {
      * This method will stop relay media stream across specified channels.
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     public static stopChannelMediaRelay(): Promise<any> {
         return Agora.stopChannelMediaRelay();
