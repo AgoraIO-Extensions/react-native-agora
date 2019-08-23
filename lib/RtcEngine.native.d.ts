@@ -42,8 +42,8 @@ declare class RtcEngine {
      * It will occurs two events:
      * Occurs leaveChannel when achieve leaving stage
      * Occurs joinChannelSuccess when achieve joining stage
-     * @param channelName
-     * @param token
+     * @param channelName {@link string}
+     * @param token {@link string}
      */
     static switchChannel(channelName: string, token?: string): Promise<any>;
     /**
@@ -53,7 +53,7 @@ declare class RtcEngine {
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
      *  Occurs receivedChannelMediaRelay when peer channel received this message
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
      */
     static startChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
     /**
@@ -62,7 +62,7 @@ declare class RtcEngine {
      * This method will remove & update relay media stream across specified channels. (maximum support relay 4 channels)
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
      */
     static removeChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
     /**
@@ -71,7 +71,7 @@ declare class RtcEngine {
      * This method will update relay media stream across specified channels. (maximum support 4 channels)
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
      */
     static updateChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
     /**
@@ -80,7 +80,7 @@ declare class RtcEngine {
      * This method will stop relay media stream across specified channels.
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
-     * @param config
+     * @param config {@link ChannelMediaConfiguration}
      */
     static stopChannelMediaRelay(): Promise<any>;
     /**
