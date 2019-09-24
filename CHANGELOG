@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 2.9.0-alpha.2
+  - fix ios dictionary stringValue type cast
+
 #### 2.9.0-alpha.1
   - fix typo: rename `methodisSpeakerphoneEnabled` to `isSpeakerphoneEnabled`
   - events deprecated & instead:
