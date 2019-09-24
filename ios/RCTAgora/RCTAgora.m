@@ -228,9 +228,9 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     }
   }
   if (options[@"secret"] != nil) {
-    [self.rtcEngine setEncryptionSecret:[options[@"secret"] stringValue]];
+    [self.rtcEngine setEncryptionSecret:[options[@"secret"]]];
     if (options[@"secretMode"] != nil) {
-      [self.rtcEngine setEncryptionMode:[options[@"secretMode"] stringValue]];
+      [self.rtcEngine setEncryptionMode:[options[@"secretMode"]]];
     }
   }
   
@@ -1374,7 +1374,7 @@ RCT_EXPORT_METHOD(addInjectStreamUrl
   config.audioBitrate = [options[@"config"][@"audioBitrate"] integerValue];
   config.audioChannels = [options[@"config"][@"audioChannels"] integerValue];
   
-  NSInteger res = [self.rtcEngine addInjectStreamUrl:[options[@"url"] stringValue]
+  NSInteger res = [self.rtcEngine addInjectStreamUrl:[options[@"url"]]
                                               config:config];
   if (res == 0) {
     resolve(nil);
@@ -1630,7 +1630,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options
     transcoding.transcodingUsers = transcodingUsers;
   }
   if ([options objectForKey:@"transcodingExtraInfo"]) {
-    transcoding.transcodingExtraInfo = [options[@"transcodingExtraInfo"] stringValue];
+    transcoding.transcodingExtraInfo = [options[@"transcodingExtraInfo"]];
   }
   
   NSInteger res = [self.rtcEngine setLiveTranscoding:transcoding];
