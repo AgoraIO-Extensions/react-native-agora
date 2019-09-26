@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 2.9.0-alpha.3
+  - hotfix ios compile error
+
 #### 2.9.0-alpha.2
   - fix ios dictionary stringValue type cast
 
