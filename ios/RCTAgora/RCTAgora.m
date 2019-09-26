@@ -228,9 +228,9 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     }
   }
   if (options[@"secret"] != nil) {
-    [self.rtcEngine setEncryptionSecret:[options[@"secret"]]];
+    [self.rtcEngine setEncryptionSecret:options[@"secret"]];
     if (options[@"secretMode"] != nil) {
-      [self.rtcEngine setEncryptionMode:[options[@"secretMode"]]];
+      [self.rtcEngine setEncryptionMode:options[@"secretMode"]];
     }
   }
   
@@ -851,7 +851,7 @@ RCT_EXPORT_METHOD(setLocalVoiceReverb:(NSInteger)reverb value:(NSInteger)value
 RCT_EXPORT_METHOD(startAudioMixing:(NSDictionary *) options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine startAudioMixing:[options[@"filepath"]]
+  NSInteger res = [self.rtcEngine startAudioMixing:options[@"filepath"]
                                           loopback:[options[@"loopback"] boolValue]
                                            replace:[options[@"replace"] boolValue]
                                              cycle:[options[@"cycle"] integerValue]];
@@ -1038,7 +1038,7 @@ RCT_EXPORT_METHOD(playEffect
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   NSInteger res = [self.rtcEngine playEffect:(int)[options[@"soundid"] integerValue]
-                                    filePath:[options[@"filepath"]]
+                                    filePath:options[@"filepath"]
                                    loopCount:(int)[options[@"loopcount"] integerValue]
                                        pitch:[options[@"pitch"] doubleValue]
                                          pan:[options[@"pan"] doubleValue]
@@ -1157,7 +1157,7 @@ RCT_EXPORT_METHOD(startAudioRecording:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
   AgoraAudioRecordingQuality qualityType = (AgoraAudioRecordingQuality)[options[@"quality"] integerValue];
-  NSInteger res = [self.rtcEngine startAudioRecording:[options[@"filepath"]] quality:qualityType];
+  NSInteger res = [self.rtcEngine startAudioRecording:options[@"filepath"] quality:qualityType];
   if (res == 0) {
     resolve(nil);
   } else {
@@ -1374,7 +1374,7 @@ RCT_EXPORT_METHOD(addInjectStreamUrl
   config.audioBitrate = [options[@"config"][@"audioBitrate"] integerValue];
   config.audioChannels = [options[@"config"][@"audioChannels"] integerValue];
   
-  NSInteger res = [self.rtcEngine addInjectStreamUrl:[options[@"url"]]
+  NSInteger res = [self.rtcEngine addInjectStreamUrl:options[@"url"]
                                               config:config];
   if (res == 0) {
     resolve(nil);
@@ -1630,7 +1630,7 @@ RCT_EXPORT_METHOD(setLiveTranscoding:(NSDictionary *)options
     transcoding.transcodingUsers = transcodingUsers;
   }
   if ([options objectForKey:@"transcodingExtraInfo"]) {
-    transcoding.transcodingExtraInfo = [options[@"transcodingExtraInfo"]];
+    transcoding.transcodingExtraInfo = options[@"transcodingExtraInfo"];
   }
   
   NSInteger res = [self.rtcEngine setLiveTranscoding:transcoding];
