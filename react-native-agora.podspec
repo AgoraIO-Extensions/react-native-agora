@@ -9,16 +9,11 @@ Pod::Spec.new do |s|
     s.homepage       = package['homepage']
     s.license        = package['license']
     s.authors        = package["authors"]
-    s.platform       = :ios, "7.0"
+    s.platform       = :ios, "8.0"
 
     s.source         = { :git => package["repository"]["url"] }
     s.source_files   = 'ios/RCTAgora/*.{h,m}'
 
-    s.subspec 'AgoraRtcCryptoLoader' do |sp|
-        sp.source_files = './ios/RCTAgora/libs/AgoraRtcCryptoLoader.framework/**/*.{c,h,m,mm,S,cpp}'
-        sp.vendored_libraries = 'libcrypto.a'
-    end
-
     s.dependency 'React'
-    s.dependency "AgoraRtcEngine_iOS", "2.9"
+    s.dependency "AgoraRtcEngine_iOS", "2.9.1"
 end

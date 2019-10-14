@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 2.9.1-alpha.1
+  - support 2.9.1 native sdk
+
 #### 2.9.0-alpha.3
   - hotfix ios compile error
 

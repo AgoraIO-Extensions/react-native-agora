@@ -11,6 +11,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTView.h>
+#import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
 #import "AgoraConst.h"
 
 #define MAX_DATA_LENGTH 1024
@@ -181,6 +182,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   
   [AgoraConst share].rtcEngine = self.rtcEngine;
   
+  [self.rtcEngine setAppType:AgoraRtc_APP_TYPE_REACTNATIVE];
   //channel mode
   [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
   //enable dual stream
@@ -770,10 +772,11 @@ RCT_EXPORT_METHOD(adjustPlaybackSignalVolume: (NSInteger) volume
 }
 
 // enable audio volume indication
-RCT_EXPORT_METHOD(enableAudioVolumeIndication: (NSInteger) interval smooth:(NSInteger)smooth
+RCT_EXPORT_METHOD(enableAudioVolumeIndication: (NSInteger) interval smooth:(NSInteger)smooth 
+                  report_vad:(BOOL)report_vad
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine enableAudioVolumeIndication:interval smooth:smooth];
+  NSInteger res = [self.rtcEngine enableAudioVolumeIndication:interval smooth:smooth report_vad:report_vad];
   if (res == 0) {
     resolve(nil);
   } else {
@@ -1269,13 +1272,22 @@ RCT_EXPORT_METHOD(setMixedAudioFrameParametersWithSampleRate
 RCT_EXPORT_METHOD(addVideoWatermark:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine addVideoWatermark:[self makeAgoraImage:@{
-                                                                           @"url": options[@"url"],
-                                                                           @"x": options[@"x"],
-                                                                           @"y": options[@"y"],
-                                                                           @"width": options[@"width"],
-                                                                           @"height": options[@"height"]
-                                                                           }]];
+    NSString *urlStr = options[@"url"];
+    NSDictionary *watermarkOptions = options[@"options"];
+    WatermarkOptions *watermarkOpts = [WatermarkOptions new];
+    watermarkOpts.visibleInPreview = [watermarkOptions[@"visibleInPreview"] boolValue];
+    NSDictionary *optionPortrait = watermarkOptions[@"positionInPortraitMode"];
+    watermarkOpts.positionInPortraitMode = CGRectMake((CGFloat)[optionPortrait[@"x"] floatValue],
+                               (CGFloat)[optionPortrait[@"y"] floatValue],
+                               (CGFloat)[optionPortrait[@"width"] floatValue],
+                               (CGFloat)[optionPortrait[@"height"] floatValue]);
+    NSDictionary *optionLandscape = watermarkOptions[@"positionInLandscapeMode"];
+    watermarkOpts.positionInLandscapeMode = CGRectMake((CGFloat)[optionLandscape[@"x"] floatValue],
+                               (CGFloat)[optionLandscape[@"y"] floatValue],
+                               (CGFloat)[optionLandscape[@"width"] floatValue],
+                               (CGFloat)[optionLandscape[@"height"] floatValue]);
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSInteger res = [self.rtcEngine addVideoWatermark:url options:watermarkOpts];
   if (res == 0) {
     resolve(nil);
   } else {
@@ -1755,6 +1767,7 @@ RCT_EXPORT_METHOD(setCameraCapturerConfiguration:(NSDictionary *)config
   
   AgoraCameraCapturerConfiguration* configuration = [[AgoraCameraCapturerConfiguration alloc] init];
   configuration.preference = [config[@"preference"] integerValue];
+  configuration.cameraDirection = [config[@"cameraDirection"] integerValue];
   
   NSInteger res = [self.rtcEngine setCameraCapturerConfiguration:configuration];
   if (res == 0) {
@@ -1786,6 +1799,32 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
   } else {
     reject(@(-1).stringValue, @(-1).stringValue, nil);
   }
+}
+
+RCT_EXPORT_METHOD(setParameters:(NSString *)paramStr
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSInteger res = [self.rtcEngine setParameters:paramStr];
+  if (res == 0) {
+    resolve(nil);
+  } else {
+    reject(@(-1).stringValue, @(-1).stringValue, nil);
+  }
+}
+
+RCT_EXPORT_METHOD(getParameter:(NSString *)paramStr
+                  args:(NSString *)args
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSString *res = [self.rtcEngine getParameter:paramStr args:args];
+  resolve(res);
+}
+
+RCT_EXPORT_METHOD(getParameters:(NSString *)paramStr
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject) {
+  NSString *res = [self.rtcEngine getParameters:paramStr];
+  resolve(res);
 }
 
 - (NSArray<NSString *> *)supportedEvents {
@@ -1971,7 +2010,8 @@ RCT_EXPORT_METHOD(registerMediaMetadataObserver
   for (AgoraRtcAudioVolumeInfo *speaker in speakers) {
     [result addObject:@{
                         @"uid": @(speaker.uid),
-                        @"volume": @(speaker.volume)
+                        @"volume": @(speaker.volume),
+                        @"vad": @(speaker.vad),
                         }];
   }
   [self sendEvent:AGAudioVolumeIndication params:@{
