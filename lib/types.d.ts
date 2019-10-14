@@ -204,6 +204,7 @@ export interface VideoOption {
 }
 export interface AudioRecordingOption {
     filepath: String;
+    sampleRate: number;
     quality: number;
 }
 export declare type Callback<T> = (err: any, data: any) => T;
@@ -248,11 +249,19 @@ export interface MixedAudioFrameOption {
     samplesPerCall: number;
 }
 export interface ImageOption {
-    url: String;
-    height: number;
-    width: number;
-    x: number;
-    y: number;
+    visibleInPreview: boolean;
+    positionInPortraitMode: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    };
+    positionInLandscapeMode: {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    };
 }
 export interface VideoStreamOption {
     uid: number;
@@ -322,4 +331,5 @@ export interface LastmileProbeConfig {
  */
 export interface CameraCapturerConfiguration {
     preference: number;
+    cameraDirection: number;
 }
