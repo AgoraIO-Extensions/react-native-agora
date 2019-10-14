@@ -728,8 +728,8 @@ class RtcEngine {
      * @param smooth
      * @return Promise<any>
      */
-    public static enableAudioVolumeIndication(interval: number, smooth: number): Promise<any> {
-        return Agora.enableAudioVolumeIndication(interval, smooth);
+    public static enableAudioVolumeIndication(interval: number, smooth: number, vad: boolean): Promise<any> {
+        return Agora.enableAudioVolumeIndication(interval, smooth, vad);
     }
 
     /**
@@ -1154,8 +1154,8 @@ class RtcEngine {
      * @param options {@link ImageOption}
      * @return Promise<{success, value}>
      */
-    public static addVideoWatermark(options: ImageOption): Promise<any> {
-        return Agora.addVideoWatermark(options);
+    public static addVideoWatermark(url: string, options: ImageOption): Promise<any> {
+        return Agora.addVideoWatermark({url, options});
     }
 
     /**
@@ -1685,10 +1685,39 @@ class RtcEngine {
      *         console.log("your currrent camera", info);
      *      })
      * ```
-     * @return Promise{cameraSupportInfo}>
+     * @return Promise<{cameraSupportInfo}>
      */
     static async getCameraInfo(): Promise<any> {
         return Agora.getCameraInfo();
+    }
+
+    /**
+     * Set Private Parameters
+     * @param paramsStr 
+     * @return Promise<bool>
+     */
+    static async setParameters(paramsStr: string): Promise<any> {
+        return Agora.setParameters(paramsStr);
+    }
+
+    /**
+     * Get Private Parameter
+     * @param paramsStr 
+     * @param args 
+     * @return Promise<string>
+     */
+    static async getParameter(paramsStr: string, args: string): Promise<string> {
+        return Agora.getParameter(paramsStr, args);
+    }
+
+    /**
+     * Get Private Parameters
+     * @param paramsStr 
+     * @param args 
+     * @return Promise<string>
+     */
+    static async getParameters(paramsStr: string): Promise<string> {
+        return Agora.getParameters(paramsStr);
     }
 }
 
