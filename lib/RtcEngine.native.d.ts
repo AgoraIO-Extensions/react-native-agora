@@ -21,6 +21,7 @@ declare class RtcEngine {
      * This method creates and start event observer. You should call this method once.
      * @example `RtcEngine.init(option)`
      * @param options Defines the property of the client, see {@link Option} for details.
+     * @returns any
      */
     static init(options: Option): void;
     /**
@@ -32,6 +33,7 @@ declare class RtcEngine {
      * @param uid
      * @param token
      * @param info
+     * @returns Promise<any>
      */
     static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any>;
     /**
@@ -44,6 +46,7 @@ declare class RtcEngine {
      * Occurs joinChannelSuccess when achieve joining stage
      * @param channelName {@link string}
      * @param token {@link string}
+     * @returns Promise<any>
      */
     static switchChannel(channelName: string, token?: string): Promise<any>;
     /**
@@ -54,6 +57,7 @@ declare class RtcEngine {
      *  Occurs mediaRelayStateChanged
      *  Occurs receivedChannelMediaRelay when peer channel received this message
      * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     static startChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
     /**
@@ -63,6 +67,7 @@ declare class RtcEngine {
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
      * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     static removeChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
     /**
@@ -72,6 +77,7 @@ declare class RtcEngine {
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
      * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     static updateChannelMediaRelay(config: ChannelMediaConfiguration): Promise<any>;
     /**
@@ -81,6 +87,7 @@ declare class RtcEngine {
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
      * @param config {@link ChannelMediaConfiguration}
+     * @returns Promise<any>
      */
     static stopChannelMediaRelay(): Promise<any>;
     /**
@@ -462,7 +469,7 @@ declare class RtcEngine {
      * @param smooth
      * @return Promise<any>
      */
-    static enableAudioVolumeIndication(interval: number, smooth: number): Promise<any>;
+    static enableAudioVolumeIndication(interval: number, smooth: number, vad: boolean): Promise<any>;
     /**
      * check for mobile phone speaker enabled
      *
@@ -771,7 +778,7 @@ declare class RtcEngine {
      * @param options {@link ImageOption}
      * @return Promise<{success, value}>
      */
-    static addVideoWatermark(options: ImageOption): Promise<any>;
+    static addVideoWatermark(url: string, options: ImageOption): Promise<any>;
     /**
      * clear video watermarks
      *
@@ -1177,8 +1184,28 @@ declare class RtcEngine {
      *         console.log("your currrent camera", info);
      *      })
      * ```
-     * @return Promise{cameraSupportInfo}>
+     * @return Promise<{cameraSupportInfo}>
      */
     static getCameraInfo(): Promise<any>;
+    /**
+     * Set Private Parameters
+     * @param paramsStr
+     * @return Promise<bool>
+     */
+    static setParameters(paramsStr: string): Promise<any>;
+    /**
+     * Get Private Parameter
+     * @param paramsStr
+     * @param args
+     * @return Promise<string>
+     */
+    static getParameter(paramsStr: string, args: string): Promise<string>;
+    /**
+     * Get Private Parameters
+     * @param paramsStr
+     * @param args
+     * @return Promise<string>
+     */
+    static getParameters(paramsStr: string): Promise<string>;
 }
 export default RtcEngine;

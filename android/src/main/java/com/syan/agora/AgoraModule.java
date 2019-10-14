@@ -28,6 +28,7 @@ import io.agora.rtc.IAudioEffectManager;
 import io.agora.rtc.IMetadataObserver;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
+import io.agora.rtc.RtcEngineEx;
 import io.agora.rtc.internal.LastmileProbeConfig;
 import io.agora.rtc.live.LiveInjectStreamConfig;
 import io.agora.rtc.live.LiveTranscoding;
@@ -38,6 +39,7 @@ import io.agora.rtc.video.CameraCapturerConfiguration;
 import io.agora.rtc.video.ChannelMediaInfo;
 import io.agora.rtc.video.ChannelMediaRelayConfiguration;
 import io.agora.rtc.video.VideoEncoderConfiguration;
+import io.agora.rtc.video.WatermarkOptions;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 import static com.syan.agora.AgoraConst.*;
@@ -506,6 +508,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                         WritableMap obj = Arguments.createMap();
                         obj.putInt("uid", speakers[i].uid);
                         obj.putInt("volume", speakers[i].volume);
+                        obj.putInt("vad", speakers[i].vad);
                         arr.pushMap(obj);
                     }
 
@@ -1105,11 +1108,16 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     };
 
+    public void setAppType(RtcEngineEx engineEx) {
+        engineEx.setAppType(8);
+    }
+
     @ReactMethod
     public void init(ReadableMap options) {
         AgoraManager.getInstance().init(getReactApplicationContext(), mRtcEventHandler, options);
         appId = options.getString("appid");
         rtcEngine = AgoraManager.getInstance().mRtcEngine;
+        setAppType((RtcEngineEx) rtcEngine);
     }
 
     @ReactMethod
@@ -1658,8 +1666,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void enableAudioVolumeIndication(int interval, int smooth, Promise promise) {
-        Integer res = AgoraManager.getInstance().mRtcEngine.enableAudioVolumeIndication(interval, smooth);
+    public void enableAudioVolumeIndication(int interval, int smooth, boolean vad, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.enableAudioVolumeIndication(interval, smooth, vad);
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -1888,6 +1896,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         Integer res = AgoraManager.getInstance().mRtcEngine
                 .startAudioRecording(
                         options.getString("filepath"),
+                        options.getInt("sampleRate"),
                         options.getInt("quality")
                 );
         if (res == 0) {
@@ -1999,8 +2008,28 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addVideoWatermark(ReadableMap options, Promise promise) {
+        String url = options.getString("url");
+        ReadableMap watermarkOptions = options.getMap("options");
+        ReadableMap positionLandscapeOptions = watermarkOptions.getMap("positionInPortraitMode");
+        WatermarkOptions watermarkOpts = new WatermarkOptions();
+        WatermarkOptions.Rectangle landscapePosition = new WatermarkOptions.Rectangle();
+        landscapePosition.height = positionLandscapeOptions.getInt("height");
+        landscapePosition.width = positionLandscapeOptions.getInt("width");
+        landscapePosition.x = positionLandscapeOptions.getInt("x");
+        landscapePosition.y = positionLandscapeOptions.getInt("y");
+
+        ReadableMap positionPortraitOptions = watermarkOptions.getMap("positionInPortraitMode");
+        WatermarkOptions.Rectangle portraitPosition = new WatermarkOptions.Rectangle();
+        portraitPosition.height = positionPortraitOptions.getInt("height");
+        portraitPosition.width = positionPortraitOptions.getInt("width");
+        portraitPosition.x = positionPortraitOptions.getInt("x");
+        portraitPosition.y = positionPortraitOptions.getInt("y");
+
+        watermarkOpts.positionInLandscapeMode = landscapePosition;
+        watermarkOpts.visibleInPreview = watermarkOptions.getBoolean("visibleInPreview");
+        watermarkOpts.positionInPortraitMode = portraitPosition;
         Integer res = AgoraManager.getInstance().mRtcEngine
-                .addVideoWatermark(createAgoraImage(options));
+                .addVideoWatermark(url, watermarkOpts);
         if (res == 0) {
             promise.resolve(null);
         } else {
@@ -2642,7 +2671,18 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                 break;
             }
         }
-        CameraCapturerConfiguration config = new CameraCapturerConfiguration(preference);
+        CameraCapturerConfiguration.CAMERA_DIRECTION cameraDirection = CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR;
+        switch (options.getInt("cameraDirection")) {
+            case 0: {
+                cameraDirection = CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_REAR;
+                break;
+            }
+            case 1: {
+                cameraDirection = CameraCapturerConfiguration.CAMERA_DIRECTION.CAMERA_FRONT;
+                break;
+            }
+        }
+        CameraCapturerConfiguration config = new CameraCapturerConfiguration(preference, cameraDirection);
         Integer res = AgoraManager.getInstance().mRtcEngine.setCameraCapturerConfiguration(config);
         if (res == 0) {
             promise.resolve(null);
@@ -2651,8 +2691,27 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
+    public void setParameters(String paramStr, Promise promise) {
+        Integer res = AgoraManager.getInstance().mRtcEngine.setParameters(paramStr);
+        if (res == 0) {
+            promise.resolve(null);
+        } else {
+            promise.reject("-1", res.toString());
+        }
+    }
 
     @ReactMethod
+    public void getParameter(String paramStr, String args, Promise promise) {
+        String res = AgoraManager.getInstance().mRtcEngine.getParameter(paramStr, args);
+        promise.resolve(res);
+    }
+
+    @ReactMethod
+    public void getParameters(String str, Promise promise) {
+        String res = AgoraManager.getInstance().mRtcEngine.getParameters(str);
+        promise.resolve(res);
+    }
 
     private void sendEvent(ReactContext reactContext,
                            String eventName,
