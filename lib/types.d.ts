@@ -78,8 +78,8 @@ export interface Option {
     appid: String;
     channelProfile: number;
     videoEncoderConfig: VideoEncoderConfig;
-    dualStream: boolean;
-    mode: number;
+    dualStream?: boolean;
+    mode?: number;
     clientRole: number;
     audioProfile: number;
     audioScenario: number;
