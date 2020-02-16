@@ -1,5 +1,12 @@
 ## THE CHANGELOG
 
+
+#### 2.9.1-alpha.3
+  - upgrade android sdk to 2.9.4
+
+#### 2.9.1-alpha.2
+  - upgrade 2.9.2 fro android
+
 #### 2.9.1-alpha.1
   - support 2.9.1 native sdk
 
