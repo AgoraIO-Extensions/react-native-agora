@@ -811,7 +811,7 @@ public class AgoraModule extends ReactContextBaseJavaModule {
                     statsMap.putInt("rxVideoBytes", stats.rxVideoBytes);
                     statsMap.putInt("txKBitRate", stats.txKBitRate);
                     statsMap.putInt("rxKBitRate", stats.rxKBitRate);
-                    statsMap.putInt("rxVideoKBitRate", stats.rxVideoKBitRate);
+                    statsMap.putInt("txAudioKBitRate", stats.txAudioKBitRate);
                     statsMap.putInt("rxAudioKBitRate", stats.rxAudioKBitRate);
                     statsMap.putInt("txVideoKBitRate", stats.txVideoKBitRate);
                     statsMap.putInt("rxVideoKBitRate", stats.rxVideoKBitRate);
