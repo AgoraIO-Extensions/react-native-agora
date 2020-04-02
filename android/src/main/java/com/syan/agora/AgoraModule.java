@@ -1144,11 +1144,9 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getConnectionState(Promise promise) {
         Integer res = AgoraManager.getInstance().getConnectionState();
-        if (res == 0) {
-            promise.resolve(null);
-        } else  {
-            promise.reject("-1", res.toString());
-        }
+        WritableMap map = Arguments.createMap();
+        map.putInt("state", res);
+        promise.resolve(map);
     }
 
     @ReactMethod
