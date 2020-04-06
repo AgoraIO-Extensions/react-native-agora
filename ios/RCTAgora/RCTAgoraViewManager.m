@@ -22,7 +22,11 @@ RCT_CUSTOM_VIEW_PROPERTY(showLocalVideo, BOOL, RCTAgoraVideoView) {
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(remoteUid, NSInteger, RCTAgoraVideoView) {
-  view.remoteUid = [RCTConvert NSInteger:json];
+  if ([json isKindOfClass:[NSString class]]) {
+    view.remoteUid = [[RCTConvert NSString:json] integerValue];
+  } else {
+    view.remoteUid = [RCTConvert NSInteger:json];
+  }
 }
 
 - (UIView *)view {
