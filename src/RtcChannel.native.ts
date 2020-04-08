@@ -48,6 +48,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     destroy(): Promise<void> {
+        this.removeAllListeners();
         RtcChannel.channels.delete(this._channelId);
         return RtcChannelModule.destroy(this._channelId)
     }

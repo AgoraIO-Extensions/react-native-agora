@@ -76,3 +76,4 @@ android/bin
 yarn.lock
 package-lock.json
 docs/api
+lib/
