@@ -59,7 +59,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     destroy(): Promise<void> {
         RtcChannel.destroyAll();
-        engine?.removeAllListeners();
+        this.removeAllListeners();
         engine = null;
         return RtcEngineModule.destroy()
     }
