@@ -1,7 +1,6 @@
 import { AudioProfile, AudioRecordingQuality, AudioReverbPreset, AudioReverbType, AudioScenario, AudioVoiceChanger, BeautyOptions, CameraCapturerConfiguration, ChannelMediaRelayConfiguration, ChannelProfile, ClientRole, ConnectionStateType, EncryptionMode, LastmileProbeConfig, LiveInjectStreamConfig, LiveTranscoding, LogFilter, Rate, StreamFallbackOptions, String, UserInfo, UserPriority, VideoEncoderConfiguration, VideoStreamType, WatermarkOptions } from "./Types";
 import { RtcEngineEvents, Subscription } from "./RtcEvents";
 export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface, RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface, RtcMediaRelayInterface, RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface, RtcFallbackInterface, RtcTestInterface, RtcMediaMetadataInterface, RtcWatermarkInterface, RtcEncryptionInterface, RtcAudioRecorderInterface, RtcInjectStreamInterface, RtcCameraInterface, RtcStreamMessageInterface {
-    private static engine;
     private _listeners;
     static instance(): RtcEngine;
     static create(appId: string): Promise<RtcEngine>;
