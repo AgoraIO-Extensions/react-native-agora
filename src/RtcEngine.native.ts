@@ -32,34 +32,35 @@ import RtcChannel from "./RtcChannel.native";
 const {RtcEngineModule} = NativeModules;
 const RtcEngineEvent = new NativeEventEmitter(RtcEngineModule);
 
+let engine: RtcEngine | null;
+
 export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
     RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
     RtcMediaRelayInterface, RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface,
     RtcFallbackInterface, RtcTestInterface, RtcMediaMetadataInterface, RtcWatermarkInterface, RtcEncryptionInterface,
     RtcAudioRecorderInterface, RtcInjectStreamInterface, RtcCameraInterface, RtcStreamMessageInterface {
 
-    private static engine: RtcEngine | null;
     private _listeners = new Map<string, Map<Listener, Listener>>();
 
     static instance(): RtcEngine {
-        if (RtcEngine.engine) {
-            return RtcEngine.engine as RtcEngine;
+        if (engine) {
+            return engine as RtcEngine;
         } else {
             throw new Error('please create RtcEngine first')
         }
     }
 
     static async create(appId: string): Promise<RtcEngine> {
-        if (RtcEngine.engine) return RtcEngine.engine;
+        if (engine) return engine;
         await RtcEngineModule.create(appId);
-        RtcEngine.engine = new RtcEngine();
-        return RtcEngine.engine
+        engine = new RtcEngine();
+        return engine
     }
 
     destroy(): Promise<void> {
         RtcChannel.destroyAll();
-        RtcEngine.engine?.removeAllListeners();
-        RtcEngine.engine = null;
+        engine?.removeAllListeners();
+        engine = null;
         return RtcEngineModule.destroy()
     }
 

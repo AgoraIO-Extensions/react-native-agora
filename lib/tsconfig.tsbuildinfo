@@ -98,8 +98,8 @@
         "signature": "84eeedd6088fa40d9cd1f38a93de31166409011e01975f7c3bbd52968a201d40"
       },
       "../src/rtcengine.native.ts": {
-        "version": "7c1f28d32bd7427a97da0a06422326c5275030e974937d8af63401e929ae4908",
-        "signature": "7bb1b270810ccfb7e151a77d87a668f937e64e8a96a5f268cac9e859dc98074f"
+        "version": "04d43260826a31354bca5f96c6a886f7489597afd3d1d72661b1b086fec85ede",
+        "signature": "983e9779fb1118897bf503c7a24a653d41517aaa19753550c415b3ad1e9d469f"
       },
       "../src/rtcchannel.native.ts": {
         "version": "3bc73f885bef37f6d1765984ec68387754e79d4b79f89a98fe8274a136dc9155",
