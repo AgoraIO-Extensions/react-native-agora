@@ -1,3 +1,5 @@
-export { default as AgoraView } from './AgoraView.native';
-export { default as RtcEngine } from './RtcEngine.native';
-export * from "./types";
+import RtcEngine from './RtcEngine.native';
+import { RtcPreviewView, RtcRemoteView } from './RtcRenderView.native';
+import * as Types from './Types';
+export default RtcEngine;
+export { RtcPreviewView, RtcRemoteView, Types };

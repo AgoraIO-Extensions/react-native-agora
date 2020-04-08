@@ -6,11 +6,10 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "pu": "npm publish",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tslint",
-    "build": "tsc",
-    "doc": "typedoc --out docs/api ./src"
+    "build": "rm -rf lib && tsc",
+    "doc": "typedoc --out docs/api ./src",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "repository": {
     "type": "git",
@@ -40,38 +39,30 @@
     "react-native": ">=0.55.0"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.13",
-    "@types/react": "^16.3.0",
-    "@types/react-native": "^0.55.0",
-    "@types/react-test-renderer": "^16.0.3",
-    "react": "16.3.1",
-    "react-native": "0.55.0",
-    "react-native-typescript-transformer": "^1.2.11",
-    "ts-jest": "^23.10.5",
-    "tslint": "^5.12.1",
-    "typedoc": "0.15.0",
-    "typedoc-plugin-no-inherit": "^1.1.9",
-    "typescript": "^3.2.4"
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "@types/jest": "^24.0.24",
+    "@types/react-native": "^0.60.25",
+    "@types/react-test-renderer": "16.9.1",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.9.0",
+    "typescript": "^3.7.3"
   },
   "jest": {
     "preset": "react-native",
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
-    ],
-    "transform": {
-      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "testPathIgnorePatterns": [
-      "\\.snap$",
-      "<rootDir>/node_modules/"
-    ],
-    "cacheDirectory": ".jest/cache"
-  },
-  "dependencies": {
-    "tslib": "^1.9.3"
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
