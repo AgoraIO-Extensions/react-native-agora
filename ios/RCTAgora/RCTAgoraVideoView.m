@@ -27,8 +27,8 @@
 
 - (void)setShowLocalVideo:(BOOL)showLocalVideo {
   _showLocalVideo = showLocalVideo;
-  AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
   if (_showLocalVideo) {
+    AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
     canvas.uid = [AgoraConst share].localUid;
     canvas.view = self;
     canvas.renderMode = _renderMode;
@@ -38,22 +38,23 @@
 
 -(void)setRemoteUid:(NSUInteger)remoteUid {
   _remoteUid = remoteUid;
-  AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
   if (_remoteUid != 0) {
+    AgoraRtcVideoCanvas *canvas = [[AgoraRtcVideoCanvas alloc] init];
     canvas.uid = _remoteUid;
     canvas.view = self;
     canvas.renderMode = _renderMode;
     [_rtcEngine setupRemoteVideo:canvas];
-    return;
   }
 }
 
--(void) willMoveToSuperview:(UIView *)newSuperview {
-  [super willMoveToSuperview:newSuperview];
-  if (_remoteUid > 0) {
-    [_rtcEngine setRemoteRenderMode:_remoteUid mode:_renderMode];
-  } else {
-    [_rtcEngine setLocalRenderMode:_renderMode];
+-(void) didMoveToWindow {
+  [super didMoveToWindow];
+  if (self.window != nil) {
+    if (_remoteUid > 0) {
+      [_rtcEngine setRemoteRenderMode:_remoteUid mode:_renderMode];
+    } else {
+      [_rtcEngine setLocalRenderMode:_renderMode];
+    }
   }
 }
 
