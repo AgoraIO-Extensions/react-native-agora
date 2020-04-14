@@ -73,5 +73,10 @@
   },
   "dependencies": {
     "tslib": "^1.9.3"
-  }
+  },
+   "files": [
+    "android",
+    "ios",
+    "react-native-agora.podspec"
+  ]
 }
