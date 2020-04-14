@@ -77,6 +77,8 @@
    "files": [
     "android",
     "ios",
+    "lib",
+    "index.js",
     "react-native-agora.podspec"
   ]
 }
