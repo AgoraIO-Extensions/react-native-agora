@@ -2,6 +2,7 @@ package io.agora.rtc.base
 
 import io.agora.rtc.Constants
 import io.agora.rtc.RtcEngine
+import kotlin.math.abs
 
 abstract class Callback<T> {
     fun code(code: Int?, data: (() -> T?)? = null) {

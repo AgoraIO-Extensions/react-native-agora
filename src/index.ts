@@ -1,10 +1,12 @@
 import RtcEngine from './RtcEngine.native'
-import {RtcPreviewView, RtcRemoteView} from './RtcRenderView.native'
+import RtcChannel from './RtcChannel.native'
+import {RtcLocalView, RtcRemoteView} from './RtcRenderView.native'
 import * as Types from './Types'
 
 export default RtcEngine
 export {
-    RtcPreviewView,
+    RtcChannel,
+    RtcLocalView,
     RtcRemoteView,
     Types
 }

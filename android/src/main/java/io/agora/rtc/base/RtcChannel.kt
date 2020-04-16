@@ -45,11 +45,10 @@ interface RtcChannelInterface<Map, Callback> :
 
 class RtcChannelManager {
     private val rtcChannelMap = Collections.synchronizedMap(mutableMapOf<String, RtcChannel>())
-    private var mediaObserverMap = Collections.synchronizedMap(mutableMapOf<String, MediaObserver>())
+    private val mediaObserverMap = Collections.synchronizedMap(mutableMapOf<String, MediaObserver>())
 
     fun create(engine: RtcEngine, channelId: String, emit: (methodName: String, data: Map<String, Any?>?) -> Unit) {
-        val rtcChannel = engine.createRtcChannel(channelId)
-        rtcChannel?.let {
+        engine.createRtcChannel(channelId)?.let {
             it.setRtcChannelEventHandler(RtcChannelEventHandler { methodName, data -> emit(methodName, data) })
             rtcChannelMap[channelId] = it
         }
@@ -66,6 +65,7 @@ class RtcChannelManager {
 
     fun release() {
         rtcChannelMap.forEach { it.value.destroy() }
+        rtcChannelMap.clear()
         mediaObserverMap.clear()
     }
 
@@ -94,12 +94,20 @@ class RtcChannelManager {
         return Constants.ERR_NOT_INITIALIZED
     }
 
-    fun setMaxMetadataSize(channelId: String, @IntRange(from = 0, to = 1024) size: Int) {
-        mediaObserverMap[channelId]?.let { it.maxMetadataSize = size }
+    fun setMaxMetadataSize(channelId: String, @IntRange(from = 0, to = 1024) size: Int): Int {
+        mediaObserverMap[channelId]?.let {
+            it.maxMetadataSize = size
+            return@setMaxMetadataSize 0
+        }
+        return Constants.ERR_NOT_INITIALIZED
     }
 
-    fun addMetadata(channelId: String, metadata: String) {
-        mediaObserverMap[channelId]?.addMetadata(metadata)
+    fun addMetadata(channelId: String, metadata: String): Int {
+        mediaObserverMap[channelId]?.let {
+            it.addMetadata(metadata)
+            return@addMetadata 0
+        }
+        return Constants.ERR_NOT_INITIALIZED
     }
 
     interface RtcAudioInterface<Callback> {

@@ -1,7 +1,6 @@
 package io.agora.rtc.base
 
 import android.graphics.Rect
-import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.IRtcEngineEventHandler.*
 import io.agora.rtc.models.UserInfo
 
@@ -57,7 +56,7 @@ fun Rect.toMap(): Map<String, Any?> {
     )
 }
 
-fun IRtcEngineEventHandler.RemoteAudioStats.toMap(): Map<String, Any?> {
+fun RemoteAudioStats.toMap(): Map<String, Any?> {
     return hashMapOf(
             "uid" to uid,
             "quality" to quality,

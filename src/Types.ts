@@ -2350,7 +2350,6 @@ export interface Color {
  * @property videoCodecProfile: int | Video codec profile type: VideoCodecProfileType. Set it as BASELINE, MAIN, or HIGH (default). If you set this parameter to other values, Agora adjusts it to the default value HIGH.
  * @property backgroundColor: int | Sets the background color.
  * @property userConfigExtraInfo: string | Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
- * @property metadata: string | The metadata sent to the CDN live client.
  * @property transcodingUsers: array | Sets the background color.
  */
 export interface LiveTranscoding {
@@ -2370,8 +2369,6 @@ export interface LiveTranscoding {
     videoCodecProfile?: VideoCodecProfileType
     backgroundColor?: Color
     userConfigExtraInfo?: string
-    /** @deprecated */
-    metadata?: string
     transcodingUsers: [TranscodingUser]
 }
 

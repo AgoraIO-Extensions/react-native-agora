@@ -12,16 +12,17 @@ import {
     VideoStreamType
 } from "./Types";
 import {Listener, RtcChannelEvents, Subscription} from "./RtcEvents";
-import RtcEngine from "./RtcEngine.native";
 
 const {RtcChannelModule} = NativeModules;
+const Prefix = RtcChannelModule.prefix
 const RtcChannelEvent = new NativeEventEmitter(RtcChannelModule);
+
+const channels = new Map<string, RtcChannel>();
 
 export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
     RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface, RtcFallbackInterface,
     RtcMediaMetadataInterface, RtcEncryptionInterface, RtcInjectStreamInterface, RtcStreamMessageInterface {
 
-    private static channels = new Map<string, RtcChannel>();
     private readonly _channelId: string;
     private _listeners = new Map<string, Map<any, Listener>>();
 
@@ -30,35 +31,31 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     static async create(channelId: string): Promise<RtcChannel> {
-        if (RtcEngine.instance()) {
-            if (RtcChannel.channels.get(channelId)) return RtcChannel.channels.get(channelId) as RtcChannel;
-            await RtcChannelModule.create(channelId);
-            RtcChannel.channels.set(channelId, new RtcChannel(channelId));
-            return RtcChannel.channels.get(channelId) as RtcChannel
-        } else {
-            throw new Error('please create RtcEngine first')
-        }
+        if (channels.get(channelId)) return channels.get(channelId) as RtcChannel;
+        await RtcChannelModule.create(channelId);
+        channels.set(channelId, new RtcChannel(channelId));
+        return channels.get(channelId) as RtcChannel
     }
 
     static destroyAll() {
-        RtcChannel.channels.forEach(async (value, key) => {
+        channels.forEach(async (value, key) => {
             await value.destroy()
         });
-        RtcChannel.channels.clear()
+        channels.clear()
     }
 
     destroy(): Promise<void> {
         this.removeAllListeners();
-        RtcChannel.channels.delete(this._channelId);
+        channels.delete(this._channelId);
         return RtcChannelModule.destroy(this._channelId)
     }
 
     addListener<EventType extends keyof RtcChannelEvents>(event: EventType, listener: RtcChannelEvents[EventType]): Subscription {
         const callback = (res: any) => {
-            const {channelId, ...other} = res;
+            const {channelId, data} = res;
             if (channelId === this._channelId) {
                 // @ts-ignore
-                listener(...Object.values(other))
+                listener(...data)
             }
         };
         let map = this._listeners.get(event);
@@ -66,7 +63,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
             map = new Map<Listener, Listener>();
             this._listeners.set(event, map)
         }
-        RtcChannelEvent.addListener(event, callback);
+        RtcChannelEvent.addListener(Prefix + event, callback);
         map.set(listener, callback);
         return {
             remove: () => {
@@ -78,19 +75,19 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     removeListener<EventType extends keyof RtcChannelEvents>(event: EventType, listener: RtcChannelEvents[EventType]) {
         const map = this._listeners.get(event);
         if (map === undefined) return;
-        RtcChannelEvent.removeListener(event, map.get(listener) as Listener);
+        RtcChannelEvent.removeListener(Prefix + event, map.get(listener) as Listener);
         map.delete(listener)
     }
 
     removeAllListeners<EventType extends keyof RtcChannelEvents>(event?: EventType) {
         if (event === undefined) {
             this._listeners.forEach((value, key) => {
-                RtcChannelEvent.removeAllListeners(key);
+                RtcChannelEvent.removeAllListeners(Prefix + key);
             });
             this._listeners.clear();
             return
         }
-        RtcChannelEvent.removeAllListeners(event);
+        RtcChannelEvent.removeAllListeners(Prefix + event);
         this._listeners.delete(event as string)
     }
 

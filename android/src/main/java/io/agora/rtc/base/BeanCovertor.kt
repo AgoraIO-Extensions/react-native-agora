@@ -85,13 +85,10 @@ fun mapToLiveTranscoding(map: Map<*, *>): LiveTranscoding {
         (map["videoCodecProfile"] as? Number)?.let { videoCodecProfile = intToVideoCodecProfile(it.toInt()) }
         (map["backgroundColor"] as? Map<*, *>)?.let { backgroundColor = mapToColor(it) }
         (map["userConfigExtraInfo"] as? String)?.let { userConfigExtraInfo = it }
-        (map["metadata"] as? String)?.let { metadata = it }
         (map["transcodingUsers"] as? List<*>)?.let { list ->
-            users = arrayListOf<TranscodingUser>().apply {
-                list.forEach { item ->
-                    (item as? Map<*, *>)?.let {
-                        add(mapToTranscodingUser(it))
-                    }
+            list.forEach { item ->
+                (item as? Map<*, *>)?.let {
+                    addUser(mapToTranscodingUser(it))
                 }
             }
         }
