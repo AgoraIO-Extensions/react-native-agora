@@ -13,10 +13,10 @@ class PromiseCallback(
         promise?.resolve(Arguments.makeNativeMap(data))
     }
 
-    fun <T> resolve(engine: T?, data: (engine: T) -> Any?) {
-        if (engine != null) {
+    fun <E> resolve(e: E?, data: (e: E) -> Any?) {
+        if (e != null) {
             try {
-                val res = data(engine)
+                val res = data(e)
                 if (res is Unit) {
                     promise?.resolve(null)
                 } else {

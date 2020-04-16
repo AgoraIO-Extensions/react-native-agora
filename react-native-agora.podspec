@@ -10,10 +10,11 @@ Pod::Spec.new do |s|
     s.license        = package['license']
     s.authors        = package["authors"]
     s.platform       = :ios, "8.0"
+    s.static_framework = true
 
     s.source         = { :git => package["repository"]["url"] }
-    s.source_files   = 'ios/RCTAgora/*.{h,m}'
+    s.source_files   = 'ios/RCTAgora/*/*.{h,m,swift}'
 
     s.dependency 'React'
-    s.dependency "AgoraRtcEngine_iOS", "2.9.1"
+    s.dependency "AgoraRtcEngine_iOS_Crypto", "3.0.0"
 end

@@ -1,10 +1,13 @@
 package io.agora.rtc.react
 
 import com.facebook.react.bridge.*
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.*
+import io.agora.rtc.react.RCTRtcChannelModule.Companion.REACT_CLASS
 
+@ReactModule(name = REACT_CLASS)
 class RCTRtcChannelModule(
         reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext),
@@ -17,6 +20,12 @@ class RCTRtcChannelModule(
 
     override fun getName(): String {
         return REACT_CLASS
+    }
+
+    override fun getConstants(): MutableMap<String, Any> {
+        return mutableMapOf(
+                "prefix" to RtcChannelEventHandler.PREFIX
+        )
     }
 
     override fun onCatalystInstanceDestroy() {
@@ -134,12 +143,12 @@ class RCTRtcChannelModule(
 
     @ReactMethod
     override fun setMaxMetadataSize(channelId: String, size: Int, callback: Promise?) {
-        PromiseCallback(callback).resolve(manager[channelId]) { manager.setMaxMetadataSize(channelId, size) }
+        PromiseCallback(callback).code(manager.setMaxMetadataSize(channelId, size))
     }
 
     @ReactMethod
     override fun sendMetadata(channelId: String, metadata: String, callback: Promise?) {
-        PromiseCallback(callback).resolve(manager[channelId]) { manager.addMetadata(channelId, metadata) }
+        PromiseCallback(callback).code(manager.addMetadata(channelId, metadata))
     }
 
     @ReactMethod

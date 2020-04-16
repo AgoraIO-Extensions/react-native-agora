@@ -25,6 +25,12 @@ class RCTRtcEngineModule(
         return REACT_CLASS
     }
 
+    override fun getConstants(): MutableMap<String, Any> {
+        return mutableMapOf(
+                "prefix" to RtcEngineEventHandler.PREFIX
+        )
+    }
+
     override fun onCatalystInstanceDestroy() {
         super.onCatalystInstanceDestroy()
         destroy(null)
@@ -50,6 +56,7 @@ class RCTRtcEngineModule(
     @ReactMethod
     override fun destroy(callback: Promise?) {
         RtcEngine.destroy()
+        engine = null
         callback?.resolve(null)
     }
 

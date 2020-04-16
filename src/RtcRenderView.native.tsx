@@ -1,18 +1,25 @@
 import React, {Component} from "react";
 import {requireNativeComponent, ViewProps} from "react-native";
 
-export interface RtcSurfaceViewProps extends ViewProps {
+interface RtcUidProps {
+    uid: number;
+}
+
+interface RtcSurfaceViewProps extends ViewProps {
     zOrderMediaOverlay?: boolean;
     zOrderOnTop?: boolean;
     renderMode?: number;
     channelId?: string;
     mirrorMode?: number;
-    uid?: number;
+}
+
+interface RtcTextureViewProps extends ViewProps {
+    mirror?: number;
 }
 
 const RCTRtcSurfaceView = requireNativeComponent('RCTAgoraRtcSurfaceView');
 
-class RtcSurfaceView extends Component<RtcSurfaceViewProps, {}> {
+class RtcSurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
     render() {
         return (
             <RCTRtcSurfaceView {...this.props}/>
@@ -20,14 +27,9 @@ class RtcSurfaceView extends Component<RtcSurfaceViewProps, {}> {
     }
 }
 
-export interface RtcTextureViewProps extends ViewProps {
-    mirror?: number;
-    uid?: number;
-}
-
 const RCTRtcTextureView = requireNativeComponent('RCTAgoraRtcTextureView');
 
-class RtcTextureView extends Component<RtcTextureViewProps, {}> {
+class RtcTextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
     render() {
         return (
             <RCTRtcTextureView {...this.props}/>
@@ -35,7 +37,7 @@ class RtcTextureView extends Component<RtcTextureViewProps, {}> {
     }
 }
 
-export namespace RtcPreviewView {
+export namespace RtcLocalView {
     export class SurfaceView extends Component<RtcSurfaceViewProps, {}> {
         render() {
             return (
@@ -58,7 +60,7 @@ export namespace RtcPreviewView {
 }
 
 export namespace RtcRemoteView {
-    export class SurfaceView extends Component<RtcSurfaceViewProps, {}> {
+    export class SurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
         render() {
             return (
                 <RtcSurfaceView {...this.props}/>
@@ -66,7 +68,7 @@ export namespace RtcRemoteView {
         }
     }
 
-    export class TextureView extends Component<RtcTextureViewProps, {}> {
+    export class TextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
         render() {
             return (
                 <RtcTextureView {...this.props}/>

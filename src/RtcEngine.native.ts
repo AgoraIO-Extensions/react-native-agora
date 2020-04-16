@@ -30,9 +30,10 @@ import {Listener, RtcEngineEvents, Subscription} from "./RtcEvents";
 import RtcChannel from "./RtcChannel.native";
 
 const {RtcEngineModule} = NativeModules;
+const Prefix = RtcEngineModule.prefix
 const RtcEngineEvent = new NativeEventEmitter(RtcEngineModule);
 
-let engine: RtcEngine | null;
+let engine: RtcEngine | undefined;
 
 export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
     RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
@@ -60,15 +61,16 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     destroy(): Promise<void> {
         RtcChannel.destroyAll();
         this.removeAllListeners();
-        engine = null;
+        engine = undefined;
         return RtcEngineModule.destroy()
     }
 
     addListener<EventType extends keyof RtcEngineEvents>(event: EventType, listener: RtcEngineEvents[EventType]): Subscription {
         const callback = (res: any) => {
-            if (res['channelId'] === undefined) {
+            const {channelId, data} = res;
+            if (channelId === undefined) {
                 // @ts-ignore
-                listener(...Object.values(res))
+                listener(...data)
             }
         };
         let map = this._listeners.get(event);
@@ -76,7 +78,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
             map = new Map<Listener, Listener>();
             this._listeners.set(event, map)
         }
-        RtcEngineEvent.addListener(event, callback);
+        RtcEngineEvent.addListener(Prefix + event, callback);
         map.set(listener, callback);
         return {
             remove: () => {
@@ -88,19 +90,19 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     removeListener<EventType extends keyof RtcEngineEvents>(event: EventType, listener: RtcEngineEvents[EventType]) {
         const map = this._listeners.get(event);
         if (map === undefined) return;
-        RtcEngineEvent.removeListener(event, map.get(listener) as Listener);
+        RtcEngineEvent.removeListener(Prefix + event, map.get(listener) as Listener);
         map.delete(listener)
     }
 
     removeAllListeners<EventType extends keyof RtcEngineEvents>(event?: EventType) {
         if (event === undefined) {
             this._listeners.forEach((value, key) => {
-                RtcEngineEvent.removeAllListeners(key);
+                RtcEngineEvent.removeAllListeners(Prefix + key);
             });
             this._listeners.clear();
             return
         }
-        RtcEngineEvent.removeAllListeners(event);
+        RtcEngineEvent.removeAllListeners(Prefix + event);
         this._listeners.delete(event as string)
     }
 

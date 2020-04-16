@@ -7,14 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		085CF7D72204A7B7002075D5 /* AgoraRtcCryptoLoader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 085CF7D52204A7B7002075D5 /* AgoraRtcCryptoLoader.framework */; };
-		085CF7D82204A7B7002075D5 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 085CF7D62204A7B7002075D5 /* libcrypto.a */; };
-		08B28CF72211239F00E57CEB /* AgoraRtcEngineKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B28CF62211239F00E57CEB /* AgoraRtcEngineKit.framework */; };
-		23AF28211EEFECD800D771AB /* RCTAgora.m in Sources */ = {isa = PBXBuildFile; fileRef = 23AF28201EEFECD800D771AB /* RCTAgora.m */; };
-		23AF28221EEFECD800D771AB /* RCTAgora.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 23AF281F1EEFECD800D771AB /* RCTAgora.h */; };
-		23C20DD11F0A6ED80095F60C /* AgoraConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DCC1F0A6ED80095F60C /* AgoraConst.m */; };
-		23C20DD21F0A6ED80095F60C /* RCTAgoraVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */; };
-		23C20DD31F0A6ED80095F60C /* RCTAgoraViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */; };
+		1A45C581640E7C3FBB9D579A /* PromiseCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A45C7B1B9089BE0BFF40263 /* PromiseCallback.swift */; };
+		1A45C6657713C1AE152EDF65 /* RCTRtcChannelModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A45C650CE72423A94DC0E8A /* RCTRtcChannelModuleBridge.m */; };
+		1A45C83BB272B3DBD0CDD4F5 /* RtcChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A45C4ECABE114F83C0B3FFA /* RtcChannel.swift */; };
+		1A45C895AAEE8A5E083E7B9B /* RCTAgoraRtcSurfaceViewManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A45C695FA59E55507607007 /* RCTAgoraRtcSurfaceViewManagerBridge.m */; };
+		1A45C8C8FA7B421E2B2EDBAE /* RtcEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A45C12DB8F4B671C19B2C2F /* RtcEngine.swift */; };
+		1A45CA2D9CA0BB857DD657DF /* RCTAgoraRtcSurfaceViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A45C63C1875BDBCD490DE3E /* RCTAgoraRtcSurfaceViewManager.swift */; };
+		1A45CD0A9E39889BEA11E665 /* RCTRtcChannelModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A45C2C85237577C2A168E5F /* RCTRtcChannelModule.swift */; };
+		1A45CDA17965EE8EA9FD8830 /* RtcEngineEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A45CBF1EB30CE148807E778 /* RtcEngineEventHandler.swift */; };
+		F52A357C243F33060059123E /* Callback.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52A357B243F33060059123E /* Callback.swift */; };
+		F52A357E244060460059123E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52A357D244060460059123E /* Extensions.swift */; };
+		F52A3580244066090059123E /* MediaObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52A357F244066090059123E /* MediaObserver.swift */; };
+		F52A358224406A910059123E /* RtcChannelEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52A358124406A910059123E /* RtcChannelEventHandler.swift */; };
+		F532DED724445E0400715966 /* BeanCovertor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F532DED624445E0400715966 /* BeanCovertor.swift */; };
+		F532E02F2445BDDB00715966 /* RCTRtcEngineModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F532E02E2445BDDB00715966 /* RCTRtcEngineModule.swift */; };
+		F532E0322445BE6100715966 /* RCTRtcEngineModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F532E0312445BE6100715966 /* RCTRtcEngineModuleBridge.m */; };
+		F532E03D2446FB6D00715966 /* RtcSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F532E03C2446FB6D00715966 /* RtcSurfaceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,25 +32,30 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				23AF28221EEFECD800D771AB /* RCTAgora.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		085CF7D52204A7B7002075D5 /* AgoraRtcCryptoLoader.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AgoraRtcCryptoLoader.framework; sourceTree = "<group>"; };
-		085CF7D62204A7B7002075D5 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
-		08B28CF62211239F00E57CEB /* AgoraRtcEngineKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraRtcEngineKit.framework; path = ../samples/simpleDemo/ios/Pods/AgoraRtcEngine_iOS/AgoraRtcEngineKit.framework; sourceTree = "<group>"; };
+		1A45C12DB8F4B671C19B2C2F /* RtcEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RtcEngine.swift; sourceTree = "<group>"; };
+		1A45C2C85237577C2A168E5F /* RCTRtcChannelModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTRtcChannelModule.swift; sourceTree = "<group>"; };
+		1A45C4ECABE114F83C0B3FFA /* RtcChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RtcChannel.swift; sourceTree = "<group>"; };
+		1A45C63C1875BDBCD490DE3E /* RCTAgoraRtcSurfaceViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCTAgoraRtcSurfaceViewManager.swift; sourceTree = "<group>"; };
+		1A45C650CE72423A94DC0E8A /* RCTRtcChannelModuleBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTRtcChannelModuleBridge.m; sourceTree = "<group>"; };
+		1A45C695FA59E55507607007 /* RCTAgoraRtcSurfaceViewManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAgoraRtcSurfaceViewManagerBridge.m; sourceTree = "<group>"; };
+		1A45C7B1B9089BE0BFF40263 /* PromiseCallback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseCallback.swift; sourceTree = "<group>"; };
+		1A45CBF1EB30CE148807E778 /* RtcEngineEventHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RtcEngineEventHandler.swift; sourceTree = "<group>"; };
 		23AF281C1EEFECD800D771AB /* libRCTAgora.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTAgora.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		23AF281F1EEFECD800D771AB /* RCTAgora.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTAgora.h; sourceTree = "<group>"; };
-		23AF28201EEFECD800D771AB /* RCTAgora.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAgora.m; sourceTree = "<group>"; };
-		23C20DCB1F0A6ED80095F60C /* AgoraConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraConst.h; sourceTree = "<group>"; };
-		23C20DCC1F0A6ED80095F60C /* AgoraConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraConst.m; sourceTree = "<group>"; };
-		23C20DCD1F0A6ED80095F60C /* RCTAgoraVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAgoraVideoView.h; sourceTree = "<group>"; };
-		23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAgoraVideoView.m; sourceTree = "<group>"; };
-		23C20DCF1F0A6ED80095F60C /* RCTAgoraViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAgoraViewManager.h; sourceTree = "<group>"; };
-		23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAgoraViewManager.m; sourceTree = "<group>"; };
+		F52A357B243F33060059123E /* Callback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Callback.swift; sourceTree = "<group>"; };
+		F52A357D244060460059123E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		F52A357F244066090059123E /* MediaObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaObserver.swift; sourceTree = "<group>"; };
+		F52A358124406A910059123E /* RtcChannelEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtcChannelEventHandler.swift; sourceTree = "<group>"; };
+		F532DED624445E0400715966 /* BeanCovertor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeanCovertor.swift; sourceTree = "<group>"; };
+		F532E02E2445BDDB00715966 /* RCTRtcEngineModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCTRtcEngineModule.swift; sourceTree = "<group>"; };
+		F532E0312445BE6100715966 /* RCTRtcEngineModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTRtcEngineModuleBridge.m; sourceTree = "<group>"; };
+		F532E0332445BEA200715966 /* RCTAgora-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCTAgora-bridging-header.h"; sourceTree = "<group>"; };
+		F532E03C2446FB6D00715966 /* RtcSurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RtcSurfaceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,30 +63,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08B28CF72211239F00E57CEB /* AgoraRtcEngineKit.framework in Frameworks */,
-				085CF7D82204A7B7002075D5 /* libcrypto.a in Frameworks */,
-				085CF7D72204A7B7002075D5 /* AgoraRtcCryptoLoader.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		085CF7D42204A787002075D5 /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				085CF7D52204A7B7002075D5 /* AgoraRtcCryptoLoader.framework */,
-				085CF7D62204A7B7002075D5 /* libcrypto.a */,
-			);
-			path = libs;
-			sourceTree = "<group>";
-		};
 		08B28CF52211239F00E57CEB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				08B28CF62211239F00E57CEB /* AgoraRtcEngineKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1A45C5B4F6A3DDAC155D26E5 /* React */ = {
+			isa = PBXGroup;
+			children = (
+				1A45C7B1B9089BE0BFF40263 /* PromiseCallback.swift */,
+				F532E02E2445BDDB00715966 /* RCTRtcEngineModule.swift */,
+				F532E0312445BE6100715966 /* RCTRtcEngineModuleBridge.m */,
+				F532E0332445BEA200715966 /* RCTAgora-bridging-header.h */,
+				1A45C2C85237577C2A168E5F /* RCTRtcChannelModule.swift */,
+				1A45C650CE72423A94DC0E8A /* RCTRtcChannelModuleBridge.m */,
+				1A45C63C1875BDBCD490DE3E /* RCTAgoraRtcSurfaceViewManager.swift */,
+				1A45C695FA59E55507607007 /* RCTAgoraRtcSurfaceViewManagerBridge.m */,
+			);
+			path = React;
 			sourceTree = "<group>";
 		};
 		23AF28131EEFECD800D771AB = {
@@ -96,17 +111,26 @@
 		23AF281E1EEFECD800D771AB /* RCTAgora */ = {
 			isa = PBXGroup;
 			children = (
-				085CF7D42204A787002075D5 /* libs */,
-				23C20DCB1F0A6ED80095F60C /* AgoraConst.h */,
-				23C20DCC1F0A6ED80095F60C /* AgoraConst.m */,
-				23C20DCD1F0A6ED80095F60C /* RCTAgoraVideoView.h */,
-				23C20DCE1F0A6ED80095F60C /* RCTAgoraVideoView.m */,
-				23C20DCF1F0A6ED80095F60C /* RCTAgoraViewManager.h */,
-				23C20DD01F0A6ED80095F60C /* RCTAgoraViewManager.m */,
-				23AF281F1EEFECD800D771AB /* RCTAgora.h */,
-				23AF28201EEFECD800D771AB /* RCTAgora.m */,
+				F52A3574243EFBB40059123E /* Base */,
+				1A45C5B4F6A3DDAC155D26E5 /* React */,
 			);
 			path = RCTAgora;
+			sourceTree = "<group>";
+		};
+		F52A3574243EFBB40059123E /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				F532DED624445E0400715966 /* BeanCovertor.swift */,
+				F52A357B243F33060059123E /* Callback.swift */,
+				F52A357D244060460059123E /* Extensions.swift */,
+				F52A357F244066090059123E /* MediaObserver.swift */,
+				F52A358124406A910059123E /* RtcChannelEventHandler.swift */,
+				1A45CBF1EB30CE148807E778 /* RtcEngineEventHandler.swift */,
+				1A45C4ECABE114F83C0B3FFA /* RtcChannel.swift */,
+				1A45C12DB8F4B671C19B2C2F /* RtcEngine.swift */,
+				F532E03C2446FB6D00715966 /* RtcSurfaceView.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +165,7 @@
 					23AF281B1EEFECD800D771AB = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 342K4Q49RK;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -150,6 +175,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 23AF28131EEFECD800D771AB;
@@ -167,10 +193,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23C20DD21F0A6ED80095F60C /* RCTAgoraVideoView.m in Sources */,
-				23C20DD31F0A6ED80095F60C /* RCTAgoraViewManager.m in Sources */,
-				23C20DD11F0A6ED80095F60C /* AgoraConst.m in Sources */,
-				23AF28211EEFECD800D771AB /* RCTAgora.m in Sources */,
+				F52A357C243F33060059123E /* Callback.swift in Sources */,
+				F52A358224406A910059123E /* RtcChannelEventHandler.swift in Sources */,
+				F532E03D2446FB6D00715966 /* RtcSurfaceView.swift in Sources */,
+				F52A3580244066090059123E /* MediaObserver.swift in Sources */,
+				F52A357E244060460059123E /* Extensions.swift in Sources */,
+				F532DED724445E0400715966 /* BeanCovertor.swift in Sources */,
+				1A45CDA17965EE8EA9FD8830 /* RtcEngineEventHandler.swift in Sources */,
+				1A45C83BB272B3DBD0CDD4F5 /* RtcChannel.swift in Sources */,
+				1A45C8C8FA7B421E2B2EDBAE /* RtcEngine.swift in Sources */,
+				F532E02F2445BDDB00715966 /* RCTRtcEngineModule.swift in Sources */,
+				F532E0322445BE6100715966 /* RCTRtcEngineModuleBridge.m in Sources */,
+				1A45C581640E7C3FBB9D579A /* PromiseCallback.swift in Sources */,
+				1A45CD0A9E39889BEA11E665 /* RCTRtcChannelModule.swift in Sources */,
+				1A45C6657713C1AE152EDF65 /* RCTRtcChannelModuleBridge.m in Sources */,
+				1A45CA2D9CA0BB857DD657DF /* RCTAgoraRtcSurfaceViewManager.swift in Sources */,
+				1A45C895AAEE8A5E083E7B9B /* RCTAgoraRtcSurfaceViewManagerBridge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,12 +326,14 @@
 		23AF28261EEFECD800D771AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
+					"$(PROJECT_DIR)/RCTAgora",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -301,6 +341,7 @@
 					"\"$(SRCROOT)/../../react-native/Libraries\"/**",
 					"$(SRCROOT)/../../../ios/Pods/**",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -310,18 +351,23 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "RCTAgora/React/RCTAgora-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		23AF28271EEFECD800D771AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 342K4Q49RK;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(PROJECT_DIR)/RCTAgora/libs/**",
+					"$(PROJECT_DIR)/RCTAgora",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -329,6 +375,7 @@
 					"\"$(SRCROOT)/../../react-native/Libraries\"/**",
 					"$(SRCROOT)/../../../ios/Pods/**",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -338,6 +385,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "RCTAgora/React/RCTAgora-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
