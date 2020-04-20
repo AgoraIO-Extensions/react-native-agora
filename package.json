@@ -75,8 +75,6 @@
     "tslib": "^1.9.3"
   },
      "files": [
-    "react-native-agora.podspec", 
-    "android",
-    "ios",
+    "react-native-agora.podspec",
   ]
 }
