@@ -1,10 +1,10 @@
-# Android 开发搭建指南
+# Android Installation v1
 
-# 环境准备
+# Prerequisites
 * Android SDK
 * Android Studio
 
-# Step 1. 新增 `AndroidManifest.xml`
+# Step 1. Add `AndroidManifest.xml`
 ```xml
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 <uses-permission android:name="android.permission.CAMERA" />
@@ -12,7 +12,7 @@
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
-# 当您在写混淆代码时，请在``添加以下代码:
-```script
-    -keep class io.agora.**{*;}
+# Obfuscation Code Edit `android/proguard-rules.pro`
+```java
+-keep class io.agora.**{*;}
 ```
