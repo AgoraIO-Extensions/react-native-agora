@@ -1,4 +1,5 @@
-# iOS 开发搭建指南
+# iOS 开发搭建指南 v2
+
 #### 最低兼容
 * >= React Native 0.55.x
 * iOS SDK 8.0+
@@ -46,14 +47,14 @@ $ pod init
 $ pod install
 ```
 当你在安装pod过程中，遇到问题如下的报错时：
-![Step 5](./IOS_INSTALLATION/05.png)
+![Step 5](imgs/05.png)
 你需要打开`Podfile`并且如下图所示的蓝色部分。
 
 #### *选中这部分*
-![Step 5](./IOS_INSTALLATION/05a.png)
+![Step 5](imgs/05a.png)
 
 #### *删除后*
-![Step 5](./IOS_INSTALLATION/05b.png)
+![Step 5](imgs/05b.png)
 
 在`Podfile`底部加入以下代码：
 ```sh
@@ -76,66 +77,66 @@ post_install do |installer|
 end
 ```
 这是最终修改好的`Podfile`，如图所示。
-![Step 5](./IOS_INSTALLATION/05c.png)
+![Step 5](imgs/05c.png)
 之后你就可以执行安装命令：
 ```
 $ pod install
 ```
 
 #### 6. 在你项目的ios目录里，打开Xcode工程文件 *[项目名].xcworkspace 
-![Step 6](./IOS_INSTALLATION/06.png)
+![Step 6](imgs/06.png)
 
 #### 7. 展开你的项目目录，并且右键点击*"Libraries"* 目录并且选择*"add file to [project name]"*
-![Step 7](./IOS_INSTALLATION/07.png)
+![Step 7](imgs/07.png)
 
 #### 8. 按照下图去找到RCTAgora lib
-![Step 8](./IOS_INSTALLATION/08a.png)
+![Step 8](imgs/08a.png)
 你可以沿路径找到：node_modules => react-native-agora => ios => RCTAgora.xcodeproj
 
 请按照如图所示的方式确认你已经配好编译环境
-![Step 8](./IOS_INSTALLATION/08b.png)
+![Step 8](imgs/08b.png)
 
 如果下图所示的文件是灰色的，请确保它的路径是在你的目录里的。
 请检查`RCTAgora.xcodeproj`是否在`Libraries`目录中。
-![Step 8](./IOS_INSTALLATION/08c.png)
+![Step 8](imgs/08c.png)
 
 #### 9. 检查你的Framework是否已经成功设置
 展开你的 "Frameworks" 目录，如果看到红色的 "AgoraRtcEngineKit.framework"，你需要按照以下步骤重新把它载入到编译环境。
-![Step 9](./IOS_INSTALLATION/9a.png)
+![Step 9](imgs/9a.png)
 单击右键并删除。
 单击左键 "RCTAgora.xcodeproj" 找到并点击 "Build Phases"
-![Step 9](./IOS_INSTALLATION/9b.png)
+![Step 9](imgs/9b.png)
 在列表里找到 "AgoraRtcEngineKit.framework" 单击左键 找到 "-"(减号按钮) 把它从列表里删除。
-![Step 9](./IOS_INSTALLATION/9c.png)
+![Step 9](imgs/9c.png)
 然后点击"+"(加号按钮) 点击"Add other..."按钮。
-![Step 9](./IOS_INSTALLATION/9d.png)
+![Step 9](imgs/9d.png)
 按照图下方式，找到"AgoraRtcEngineKit.framework"
-![Step 9](./IOS_INSTALLATION/9e.png)
+![Step 9](imgs/9e.png)
 你可以沿路径找到: ios => Pods => AgoraRtcEngine_iOS => AgoraRtcEngineKit.framework 并且点击 "add"
 
 #### 10. 最后我们需要连接Library
 点击你的项目左侧，并且点击"Build Phases"然后展开"Link Binary With Libraries"接着点击"+"(加号按钮）
 click on your project on the left and then click on "Build Phases" and then expand "Link Binary With Libraries" and then click on the "+"(plug sign)
-![Step 10](./IOS_INSTALLATION/10a.png)
+![Step 10](imgs/10a.png)
 找到 libRCTAgora 并且点击"add"
-![Step 10](./IOS_INSTALLATION/10b.png)
+![Step 10](imgs/10b.png)
 如果你无法在列表里找到它，表明你还没安装它。
 
 ----------------------------------------------
 ### 常见故障排除
 
 如果你遇到类似的报错：
-![Step t1](./IOS_INSTALLATION/t01.png)
-![Step t2](./IOS_INSTALLATION/t02.png)
+![Step t1](imgs/t01.png)
+![Step t2](imgs/t02.png)
 
 可能是因为你有一些框架已经导入了相同的头文件，例如firestore库也会引入time.h, 
 
 展开你项目里的"Libraries" 并且点击"RCTAgora.xcodeproj"。然后点击"Build settings" 并且找到"Header search paths"，按照以下方法设置。 
-![Step t3](./IOS_INSTALLATION/t03.png)
+![Step t3](imgs/t03.png)
 双击当前选中的路径
-![Step t4](./IOS_INSTALLATION/t04.png)
+![Step t4](imgs/t04.png)
 把路径里的"recursive"修改成"non-recursive"
-![Step t5](./IOS_INSTALLATION/t05.png)
+![Step t5](imgs/t05.png)
 
 
 

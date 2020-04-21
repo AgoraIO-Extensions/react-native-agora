@@ -27,11 +27,11 @@ Either way, then link with:
 
  `react-native link react-native-agora`
 
-### [iOS Installation](docs/IOS_INSTALLATION.md)
-### [iOS 开发环境安装指南](docs/IOS_INSTALLATION.zh.md)
+### [iOS Installation](installation.ios.md)
+### [iOS 开发环境安装指南](installation.ios.zh.md)
 
-### [Android Installation](docs/ANDROID_INSTALLATION.md)
-### [Android 开发环境安装指南](docs/ANDROID_INSTALLATION.zh.md)
+### [Android Installation](installation.android.md)
+### [Android 开发环境安装指南](installation.android.zh.md)
 
 ## Documentation
 
@@ -116,7 +116,7 @@ RtcEngine.eventEmitter({
 - 更新示例 React-Native为0.51
 - 优化代码
 
-[Samples](./samples/README.md)
+[Samples](../../samples/README.md)
 
 
 ## 更新信息
