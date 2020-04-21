@@ -35,7 +35,7 @@ class RCTRtcChannelModule(
 
     private fun emit(methodName: String, data: Map<String, Any?>?) {
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("$RtcChannelEventHandler.PREFIX$methodName", Arguments.makeNativeMap(data))
+                .emit("${RtcEngineEventHandler.PREFIX}$methodName", Arguments.makeNativeMap(data))
     }
 
     private fun engine(): RtcEngine? {
