@@ -41,7 +41,7 @@ class RtcChannelEventHandler: NSObject {
         "StreamMessageError": "StreamMessageError",
         "ChannelMediaRelayStateChanged": "ChannelMediaRelayStateChanged",
         "ChannelMediaRelayEvent": "ChannelMediaRelayEvent",
-        "MetadataReceived" to "MetadataReceived",
+        "MetadataReceived": "MetadataReceived",
     ]
 
     var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
