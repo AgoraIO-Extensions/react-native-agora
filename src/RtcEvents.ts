@@ -91,6 +91,7 @@ type TransportStatsCallback = (uid: number, delay: number, lost: number, rxKBitR
 type UidWithEnabledCallback = (uid: number, enabled: boolean) => void
 type EnabledCallback = (enabled: boolean) => void
 type AudioQualityCallback = (uid: number, quality: number, delay: number, lost: number) => void
+type MetadataCallback = (buffer: string, uid: number, timeStampMs: number) => void
 
 export interface RtcEngineEvents {
     /**
@@ -172,6 +173,11 @@ export interface RtcEngineEvents {
      * - A remote user/host rejoins the channel after a network interruption.
      * - The host injects an online media stream into the channel by calling the addInjectStreamUrl method.
      * @see RtcEngine.addInjectStreamUrl
+     * Note
+     * - In the Live Broadcast profile:
+     * -- The host receives the onUserJoined callback when another host joins the channel.
+     * -- The audience in the channel receives the onUserJoined callback when a new host joins the channel.
+     * -- When a web application joins the channel, the onUserJoined callback is triggered as long as the web application publishes streams.
      */
     UserJoined: UidWithElapsedCallback
 
@@ -239,6 +245,10 @@ export interface RtcEngineEvents {
      * Reports which user is the loudest speaker.
      * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling enableAudioVolumeIndication, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
      * @see RtcEngine.enableAudioVolumeIndication
+     * Note
+     * - To receive this callback, you need to call enableAudioVolumeIndication.
+     * @see RtcEngine.enableAudioVolumeIndication
+     * - This callback returns the user ID of the user with the highest voice volume during a period of time, instead of at the moment.
      */
     ActiveSpeaker: UidCallback
 
@@ -254,7 +264,19 @@ export interface RtcEngineEvents {
     FirstLocalVideoFrame: VideoFrameCallback
 
     /**
-     * TODO
+     * Occurs when a remote user stops/resumes sending the video stream.
+     * @deprecated This callback is deprecated. Use the onRemoteVideoStateChanged callback with the following parameters for the same function:
+     * @see RemoteVideoStateChanged
+     * - Stopped(0) and RemoteMuted(5).
+     * @see VideoRemoteState.Stopped
+     * @see VideoRemoteStateReason.RemoteMuted
+     * - Decoding(2) and RemoteUnmuted(6).
+     * @see VideoRemoteState.Decoding
+     * @see VideoRemoteStateReason.RemoteUnmuted
+     * The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the muteLocalVideoStream method.
+     * @see RtcEngine.muteLocalVideoStream
+     * Note
+     * - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
      */
     UserMuteVideo: UidWithMutedCallback
 
@@ -298,7 +320,7 @@ export interface RtcEngineEvents {
 
     /**
      * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
-     * If you call setLocalPublishFallbackOption and set option as STREAM_FALLBACK_OPTION_AUDIO_ONLY(2), this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+     * If you call setLocalPublishFallbackOption and set option as AudioOnly(2), this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
      * @see RtcEngine.setLocalPublishFallbackOption
      * @see StreamFallbackOptions.AudioOnly
      */
@@ -306,7 +328,7 @@ export interface RtcEngineEvents {
 
     /**
      * Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
-     * If you call setRemoteSubscribeFallbackOption and set option as STREAM_FALLBACK_OPTION_AUDIO_ONLY(2), this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.
+     * If you call setRemoteSubscribeFallbackOption and set option as AudioOnly(2), this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.
      * @see RtcEngine.setRemoteSubscribeFallbackOption
      * @see StreamFallbackOptions.AudioOnly
      */
@@ -336,6 +358,7 @@ export interface RtcEngineEvents {
 
     /**
      * Reports the statistics of the RtcEngine once every two seconds.
+     * @see RtcEngine
      */
     RtcStats: RtcStatsCallback
 
@@ -382,7 +405,15 @@ export interface RtcEngineEvents {
     RemoteAudioStats: RemoteAudioStatsCallback
 
     /**
-     * TODO
+     * Occurs when the audio mixing file playback finishes.
+     * @deprecated This callback is deprecated. Use onAudioMixingStateChanged instead.
+     * @see AudioMixingStateChanged
+     * You can start an audio mixing file playback by calling the startAudioMixing method. This callback is triggered when the audio mixing file playback finishes.
+     * @see RtcEngine.startAudioMixing
+     * If the startAudioMixing method call fails, an AudioMixingOpenError warning returns in the onWarning callback.
+     * @see RtcEngine.startAudioMixing
+     * @see WarningCode.AudioMixingOpenError
+     * @see Warning
      */
     AudioMixingFinished: EmptyCallback
 
@@ -464,99 +495,217 @@ export interface RtcEngineEvents {
     ChannelMediaRelayEvent: MediaRelayEventCallback
 
     /**
-     * TODO
+     * Occurs when the first remote video frame is rendered.
+     * @deprecated Use Starting(1) or Decoding(2) in the onRemoteVideoStateChanged callback instead.
+     * @see VideoRemoteState.Starting
+     * @see VideoRemoteState.Decoding
+     * @see RemoteVideoStateChanged
+     * This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
      */
     FirstRemoteVideoFrame: VideoFrameWithUidCallback
 
     /**
-     * TODO
+     * Occurs when the first remote audio frame is received.
+     * @deprecated Use Starting(1) in onRemoteAudioStateChanged instead.
+     * @see AudioRemoteState.Starting
+     * @see RemoteAudioStateChanged
      */
     FirstRemoteAudioFrame: UidWithElapsedCallback
 
     /**
-     * TODO
+     * Occurs when the engine receives the first audio frame from a specified remote user.
+     * @deprecated Use Decoding(2) in onRemoteAudioStateChanged instead.
+     * @see VideoRemoteState.Decoding
+     * @see RemoteAudioStateChanged
+     * This callback is triggered in either of the following scenarios：
+     * - The remote user joins the channel and sends the audio stream.
+     * - The remote user stops sending the audio stream and re-sends it after 15 seconds. Possible reasons include:
+     * -- The remote user leaves channel.
+     * -- The remote user drops offline.
+     * -- The remote user calls the muteLocalAudioStream method.
+     * @see RtcEngine.muteLocalAudioStream
+     * -- The remote user calls the disableAudio method.
+     * @see RtcEngine.disableAudio
      */
     FirstRemoteAudioDecoded: UidWithElapsedCallback
 
     /**
-     * TODO
+     * Occurs when a remote user stops/resumes sending the audio stream.
+     * @deprecated Use the onRemoteAudioStateChanged callback with the following parameters instead:
+     * @see RemoteAudioStateChanged
+     * - Stopped(0) and RemoteMuted(5).
+     * @see VideoRemoteState.Stopped
+     * @see VideoRemoteStateReason.RemoteMuted
+     * - Decoding(2) and RemoteUnmuted(6).
+     * @see VideoRemoteState.Decoding
+     * @see VideoRemoteStateReason.RemoteUnmuted
+     * The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the muteLocalAudioStream method.
+     * @see RtcEngine.muteLocalAudioStream
+     * Note
+     * - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
      */
     UserMuteAudio: UidWithMutedCallback
 
     /**
-     * TODO
+     * Reports the result of calling the addPublishStreamUrl method.
+     * @see RtcEngine.addPublishStreamUrl
+     * @deprecated Use onRtmpStreamingStateChanged instead.
+     * @see RtmpStreamingStateChanged
+     * This callback indicates whether you have successfully added an RTMP stream to the CDN.
      */
     StreamPublished: UrlWithErrorCallback
 
     /**
-     * TODO
+     * Reports the result of calling the removePublishStreamUrl method.
+     * @see RtcEngine.removePublishStreamUrl
+     * @deprecated Use onRtmpStreamingStateChanged instead.
+     * @see RtmpStreamingStateChanged
+     * This callback indicates whether you have successfully removed an RTMP stream from the CDN.
      */
     StreamUnpublished: UrlCallback
 
     /**
-     * TODO
+     * Reports the transport-layer statistics of each remote audio stream.
+     * @deprecated This callback is deprecated. Use onRemoteAudioStats instead.
+     * @see RemoteAudioStats
+     * This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user.
      */
     RemoteAudioTransportStats: TransportStatsCallback
 
     /**
-     * TODO
+     * Reports the transport-layer statistics of each remote video stream.
+     * @deprecated This callback is deprecated. Use onRemoteVideoStats instead.
+     * @see RemoteVideoStats
+     * This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user.
      */
     RemoteVideoTransportStats: TransportStatsCallback
 
     /**
-     * TODO
+     * Occurs when a remote user enables/disables the video module.
+     * @deprecated This callback is deprecated and replaced by the onRemoteVideoStateChanged callback with the following parameters:
+     * @see RemoteVideoStateChanged
+     * - Stopped(0) and RemoteMuted(5).
+     * @see VideoRemoteState.Stopped
+     * @see VideoRemoteStateReason.RemoteMuted
+     * - Decoding(2) and RemoteUnmuted(6).
+     * @see VideoRemoteState.Decoding
+     * @see VideoRemoteStateReason.RemoteUnmuted
+     * Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.
+     * The SDK triggers this callback when the remote user enables or disables the video module by calling the enableVideo or disableVideo method.
+     * @see RtcEngine.enableVideo
+     * @see RtcEngine.disableVideo
+     * Note
+     * - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
      */
     UserEnableVideo: UidWithEnabledCallback
 
     /**
-     * TODO
+     * Occurs when a remote user enables/disables the local video capture function.
+     * @deprecated This callback is deprecated and replaced by the onRemoteVideoStateChanged callback with the following parameters:
+     * @see RemoteVideoStateChanged
+     * - Stopped(0) and RemoteMuted(5).
+     * @see VideoRemoteState.Stopped
+     * @see VideoRemoteStateReason.RemoteMuted
+     * - Decoding(2) and RemoteUnmuted(6).
+     * @see VideoRemoteState.Decoding
+     * @see VideoRemoteStateReason.RemoteUnmuted
+     * The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the enableLocalVideo method.
+     * @see RtcEngine.enableLocalVideo
+     * This callback is only applicable to the scenario when the remote user only wants to watch the remote video without sending any video stream to the other user.
      */
     UserEnableLocalVideo: UidWithEnabledCallback
 
     /**
-     * TODO
+     * Occurs when the first remote video frame is received and decoded.
+     * @deprecated This callback is deprecated. Use Starting(1) or Decoding(2) in the onRemoteVideoStateChanged callback instead.
+     * @see VideoRemoteState.Starting
+     * @see VideoRemoteState.Decoding
+     * @see RemoteVideoStateChanged
+     * This callback is triggered in either of the following scenarios:
+     * - The remote user joins the channel and sends the video stream.
+     * - The remote user stops sending the video stream and re-sends it after 15 seconds. Possible reasons include:
+     * -- The remote user leaves channel.
+     * -- The remote user drops offline.
+     * -- The remote user calls the muteLocalVideoStream method.
+     * @see RtcEngine.muteLocalVideoStream
+     * -- The remote user calls the disableVideo method.
+     * @see RtcEngine.disableVideo
      */
     FirstRemoteVideoDecoded: VideoFrameWithUidCallback
 
     /**
-     * TODO
+     * Occurs when the microphone is enabled/disabled.
+     * @deprecated This callback is deprecated. Use Stopped(0) or Recording(1) in the onLocalAudioStateChanged callback instead.
+     * @see AudioLocalState.Stopped
+     * @see AudioLocalState.Recording
+     * @see LocalAudioStateChanged
+     * The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling the enableLocalAudio method.
+     * @see RtcEngine.enableLocalAudio
      */
     MicrophoneEnabled: EnabledCallback
 
     /**
-     * TODO
+     * Occurs when the connection between the SDK and the server is interrupted.
+     * @deprecated Use onConnectionStateChanged instead.
+     * @see ConnectionStateChanged
+     * The SDK triggers this callback when it loses connection to the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. This callback is different from onConnectionLost:
+     * @see ConnectionLost
+     * - The SDK triggers the onConnectionInterrupted callback when the SDK loses connection with the server for more than four seconds after it joins the channel.
+     * @see ConnectionInterrupted
+     * - The SDK triggers the onConnectionLost callback when it loses connection with the server for more than 10 seconds, regardless of whether it joins the channel or not.
+     * @see ConnectionLost
+     * If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
      */
     ConnectionInterrupted: EmptyCallback
 
     /**
-     * TODO
+     * Occurs when your connection is banned by the Agora Server.
+     * @deprecated Use onConnectionStateChanged instead.
+     * @see ConnectionStateChanged
      */
     ConnectionBanned: EmptyCallback
 
     /**
-     * TODO
+     * Reports the statistics of the audio stream from each remote user/host.
+     * @deprecated Use onRemoteAudioStats instead.
+     * @see RemoteAudioStats
+     * The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple remote users/hosts sending audio streams, the SDK trggers this callback as many times.
      */
     AudioQuality: AudioQualityCallback
 
     /**
-     * TODO
+     * Occurs when the camera is turned on and ready to capture video.
+     * @deprecated Use Capturing(1) in the onLocalVideoStateChanged callback instead. If the camera fails to turn on, fix the error reported in the onError callback.
+     * @see LocalVideoStreamState.Capturing
+     * @see LocalVideoStateChanged
+     * @see Error
      */
     CameraReady: EmptyCallback
 
     /**
-     * TODO
+     * Occurs when the video stops playing.
+     * @deprecated Use Stopped(0) in the onLocalVideoStateChanged callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
+     * @see LocalVideoStreamState.Stopped
+     * @see LocalVideoStateChanged
      */
     VideoStopped: EmptyCallback
+
+    /**
+     * Occurs when the local user receives the metadata.
+     */
+    MetadataReceived: MetadataCallback
 }
 
 export interface RtcChannelEvents {
     /**
      * Reports the warning code of the RtcChannel instance.
+     * @see RtcChannel
      */
     Warning: WarningCallback
 
     /**
      * Reports the error code of the RtcChannel instance.
+     * @see RtcChannel
      */
     Error: ErrorCallback
 
@@ -592,6 +741,11 @@ export interface RtcChannelEvents {
      * Occurs when a remote user (Communication) or a broadcaster (Live-Broadcast) joins the channel.
      * - Communication profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
      * - Live-Broadcast profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
+     * Note
+     * - In the Live-Broadcast profile:
+     * -- The host receives this callback when another host joins the channel.
+     * -- The audience in the channel receives this callback when a new host joins the channel.
+     * -- When a web app joins the channel, this callback is triggered as long as the web app publishes streams.
      */
     UserJoined: UidWithElapsedCallback
 
@@ -635,6 +789,10 @@ export interface RtcChannelEvents {
      * Reports which user is the loudest speaker.
      * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling enableAudioVolumeIndication, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
      * @see RtcChannel.enableAudioVolumeIndication
+     * Note
+     * - To receive this callback, you need to call enableAudioVolumeIndication.
+     * @see RtcEngine.enableAudioVolumeIndication
+     * - This callback reports the ID of the user with the highest voice volume during a period of time, instead of at the moment.
      */
     ActiveSpeaker: UidCallback
 
@@ -654,12 +812,18 @@ export interface RtcChannelEvents {
      */
     RemoteAudioStateChanged: RemoteAudioStateCallback
 
-    RemoteSubscribeFallbackToAudioOnly: FallbackWithUidCallback
+    /**
+     * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
+     * If you call setLocalPublishFallbackOption and set option as AudioOnly(2), this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+     * @see RtcEngine.setLocalPublishFallbackOption
+     * @see StreamFallbackOptions.AudioOnly
+     */
+    LocalPublishFallbackToAudioOnly: FallbackCallback
 
     /**
      * Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
      * If you call setRemoteSubscribeFallbackOption and set option as AudioOnly(2), this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
-     * @see RtcChannel.setRemoteSubscribeFallbackOption
+     * @see RtcEngine.setRemoteSubscribeFallbackOption
      * @see StreamFallbackOptions.AudioOnly
      * Note
      * - Once the remote media stream is switched to the low stream due to poor network conditions, you can monitor the stream switch between a high and low stream in the onRemoteVideoStats callback.
@@ -669,6 +833,7 @@ export interface RtcChannelEvents {
 
     /**
      * Reports the statistics of the RtcEngine once every two seconds.
+     * @see RtcEngine
      */
     RtcStats: RtcStatsCallback
 
@@ -738,4 +903,9 @@ export interface RtcChannelEvents {
      * Reports events during the media stream relay.
      */
     ChannelMediaRelayEvent: MediaRelayEventCallback
+
+    /**
+     * Occurs when the local user receives the metadata.
+     */
+    MetadataReceived: MetadataCallback
 }

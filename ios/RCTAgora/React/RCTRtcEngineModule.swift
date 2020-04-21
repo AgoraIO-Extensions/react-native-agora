@@ -53,7 +53,7 @@ class RCTRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     private func emit(_ methodName: String, _ data: Dictionary<String, Any?>?) {
-        sendEvent(withName: methodName, body: data)
+        sendEvent(withName: "\(RtcEngineEventHandler.PREFIX)\(methodName)", body: data)
     }
 
     func create(_ appId: String, _ callback: PromiseCallback?) {

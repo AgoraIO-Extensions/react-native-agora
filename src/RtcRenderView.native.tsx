@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {requireNativeComponent, ViewProps} from "react-native";
 
+import {VideoMirrorMode, VideoRenderMode} from "./Types";
+
 interface RtcUidProps {
     uid: number;
 }
@@ -8,13 +10,13 @@ interface RtcUidProps {
 interface RtcSurfaceViewProps extends ViewProps {
     zOrderMediaOverlay?: boolean;
     zOrderOnTop?: boolean;
-    renderMode?: number;
+    renderMode?: VideoRenderMode;
     channelId?: string;
-    mirrorMode?: number;
+    mirrorMode?: VideoMirrorMode;
 }
 
 interface RtcTextureViewProps extends ViewProps {
-    mirror?: number;
+    mirror?: boolean;
 }
 
 const RCTRtcSurfaceView = requireNativeComponent('RCTAgoraRtcSurfaceView');

@@ -78,12 +78,13 @@ class RtcEngineEventHandler(
                 "ConnectionBanned" to "ConnectionBanned",
                 "AudioQuality" to "AudioQuality",
                 "CameraReady" to "CameraReady",
-                "VideoStopped" to "VideoStopped"
+                "VideoStopped" to "VideoStopped",
+                "MetadataReceived" to "MetadataReceived"
         )
     }
 
     private fun callback(methodName: String, vararg data: Any?) {
-        emitter("$PREFIX$methodName", hashMapOf("data" to data.toList()))
+        emitter(methodName, hashMapOf("data" to data.toList()))
     }
 
     override fun onWarning(@Annotations.AgoraWarningCode warn: Int) {

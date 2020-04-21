@@ -54,7 +54,7 @@ class RCTRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     private func emit(_ methodName: String, _ data: Dictionary<String, Any?>?) {
-        sendEvent(withName: methodName, body: data)
+        sendEvent(withName: "\(RtcChannelEventHandler.PREFIX)\(methodName)", body: data)
     }
 
     private func engine() -> AgoraRtcEngineKit? {

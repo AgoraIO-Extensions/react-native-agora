@@ -23,7 +23,6 @@ typings/
 typings.json
 
 # node.js
-lib/
 node_modules/
 __tests__/
 yarn.lock
