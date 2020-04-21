@@ -41,6 +41,7 @@ class RtcChannelEventHandler: NSObject {
         "StreamMessageError": "StreamMessageError",
         "ChannelMediaRelayStateChanged": "ChannelMediaRelayStateChanged",
         "ChannelMediaRelayEvent": "ChannelMediaRelayEvent",
+        "MetadataReceived" to "MetadataReceived",
     ]
 
     var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
@@ -50,7 +51,7 @@ class RtcChannelEventHandler: NSObject {
     }
 
     private func callback(_ methodName: String, _ channel: AgoraRtcChannel, _ data: Any?...) {
-        emitter("\(RtcChannelEventHandler.PREFIX)\(methodName)", [
+        emitter(methodName, [
             "channelId": channel.getId(),
             "data": data
         ])

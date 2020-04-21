@@ -252,44 +252,6 @@ class RtcEngineManager {
         fun stopLastmileProbeTest(callback: Callback?)
     }
 
-    interface RtcCustomVideoInterface {
-        fun setVideoSource(source: IVideoSource?): Int
-
-        fun setLocalVideoRenderer(render: IVideoSink?): Int
-
-        fun setRemoteVideoRenderer(uid: Int, render: IVideoSink?): Int
-    }
-
-    interface RtcExternalVideoInterface {
-        fun setExternalVideoSource(enable: Boolean, useTexture: Boolean, pushMode: Boolean)
-
-        fun pushExternalVideoFrame(frame: AgoraVideoFrame?): Boolean
-
-        fun isTextureEncodeSupported(): Boolean
-    }
-
-    interface RtcExternalAudioInterface {
-        fun setExternalAudioSource(enabled: Boolean, sampleRate: Int, channels: Int): Int
-
-        fun pushExternalAudioFrame(data: ByteArray?, timestamp: Long): Int
-    }
-
-    interface RtcCustomAudioInterface {
-        fun setExternalAudioSink(enabled: Boolean, sampleRate: Int, channels: Int): Int
-
-        fun pullPlaybackAudioFrame(data: ByteArray?, lengthInByte: Int): Int
-    }
-
-    interface RtcAudioRawDataInterface {
-        fun registerAudioFrameObserver(observer: IAudioFrameObserver?): Int
-
-        fun setRecordingAudioFrameParameters(sampleRate: Int, channel: Int, @Annotations.AgoraAudioRawFrameOperationMode mode: Int, samplesPerCall: Int): Int
-
-        fun setPlaybackAudioFrameParameters(sampleRate: Int, channel: Int, @Annotations.AgoraAudioRawFrameOperationMode mode: Int, samplesPerCall: Int): Int
-
-        fun setMixedAudioFrameParameters(sampleRate: Int, samplesPerCall: Int): Int
-    }
-
     interface RtcMediaMetadataInterface<Callback> {
         fun registerMediaMetadataObserver(callback: Callback?)
 

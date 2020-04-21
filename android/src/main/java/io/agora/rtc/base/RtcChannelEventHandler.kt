@@ -39,12 +39,13 @@ class RtcChannelEventHandler(
                 "StreamMessage" to "StreamMessage",
                 "StreamMessageError" to "StreamMessageError",
                 "ChannelMediaRelayStateChanged" to "ChannelMediaRelayStateChanged",
-                "ChannelMediaRelayEvent" to "ChannelMediaRelayEvent"
+                "ChannelMediaRelayEvent" to "ChannelMediaRelayEvent",
+                "MetadataReceived" to "MetadataReceived"
         )
     }
 
     private fun callback(methodName: String, channel: RtcChannel, vararg data: Any?) {
-        emitter("$PREFIX$methodName", hashMapOf(
+        emitter(methodName, hashMapOf(
                 "channelId" to channel.channelId(),
                 "data" to data.toList()
         ))

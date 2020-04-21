@@ -80,6 +80,7 @@ class RtcEngineEventHandler: NSObject {
         "AudioQuality": "AudioQuality",
         "CameraReady": "CameraReady",
         "VideoStopped": "VideoStopped",
+        "MetadataReceived" to "MetadataReceived",
     ]
 
     var emitter: (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void
@@ -89,7 +90,7 @@ class RtcEngineEventHandler: NSObject {
     }
 
     private func callback(_ methodName: String, _ data: Any?...) {
-        emitter("\(RtcEngineEventHandler.PREFIX)\(methodName)", ["data": data])
+        emitter(methodName, ["data": data])
     }
 }
 

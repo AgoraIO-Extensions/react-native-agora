@@ -231,6 +231,7 @@ export enum AudioProfile {
 /**
  * Use mode of the onRecordAudioFrame callback.
  * @enum {number}
+ * TODO setPlaybackAudioFrameParameters
  */
 export enum AudioRawFrameOperationMode {
     /**
@@ -411,6 +412,10 @@ export enum AudioReverbType {
  */
 export enum AudioSampleRateType {
     /**
+     * 16 kHz.
+     */
+    Type16000 = 16000,
+    /**
      * 32 kHz.
      */
     Type32000 = 32000,
@@ -458,6 +463,7 @@ export enum AudioScenario {
 /**
  * Audio session restriction.
  * @enum {number}
+ * TODO iOS setAudioSessionOperationRestriction
  */
 export enum AudioSessionOperationRestriction {
     /**
@@ -874,21 +880,21 @@ export enum DegradationPreference {
 
 /**
  * Encryption mode
- * @enum {number}
+ * @enum {string}
  */
 export enum EncryptionMode {
     /**
      * (Default) 128-bit AES encryption, XTS mode.
      */
-    AES128XTS = 1,
+    AES128XTS = 'aes-128-xts',
     /**
      * 256-bit AES encryption, XTS mode.
      */
-    AES256XTS = 2,
+    AES256XTS = 'aes-256-xts',
     /**
      * 128-bit AES encryption, ECB mode.
      */
-    AES128ECB = 3,
+    AES128ECB = 'aes-128-ecb',
 }
 
 /**
@@ -1416,6 +1422,7 @@ export enum LogFilter {
 /**
  * Media device type.
  * @enum {number}
+ * TODO MacOS AgoraMediaDeviceType
  */
 export enum MediaDeviceType {
     /**
@@ -1443,6 +1450,7 @@ export enum MediaDeviceType {
 /**
  * Media type.
  * @enum {number}
+ * TODO LiveEngine
  */
 export enum MediaType {
     /**
@@ -1466,6 +1474,7 @@ export enum MediaType {
 /**
  * The metadata type.
  * @enum {number}
+ * TODO registerMediaMetadataObserver
  */
 export enum MetadataType {
     /**
@@ -1559,6 +1568,7 @@ export enum NetworkType {
 /**
  * Default camera position
  * @enum {number}
+ * TODO AgoraRtcDefaultCamera
  */
 export enum RtcDefaultCameraPosition {
     /**
@@ -1574,6 +1584,7 @@ export enum RtcDefaultCameraPosition {
 /**
  * Lifecycle of the CDN live video stream.
  * @enum {number}
+ * TODO AgoraPublisherConfiguration
  */
 export enum RtmpStreamLifeCycle {
     /**
@@ -1735,6 +1746,7 @@ export enum UserPriority {
 /**
  * Video buffer type
  * @enum {number}
+ * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
  */
 export enum VideoBufferType {
     /**
@@ -1769,6 +1781,7 @@ export enum VideoCodecProfileType {
 /**
  * The content hint for screen sharing.
  * @enum {number}
+ * TODO MacOS setScreenCaptureContentHint
  */
 export enum VideoContentHint {
     /**
@@ -1884,6 +1897,7 @@ export enum VideoOutputOrientationMode {
 /**
  * Video pixel format.
  * @enum {number}
+ * TODO iOS AgoraVideoSinkProtocol
  */
 export enum VideoPixelFormat {
     /**
@@ -2026,6 +2040,7 @@ export enum VideoRenderMode {
 /**
  * Video rotation.
  * @enum {number}
+ * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
  */
 export enum VideoRotation {
     /**
