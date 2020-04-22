@@ -81,6 +81,13 @@ const RtcEngine = require('react-native-agora');
 RtcEngine.create('YOUR APP ID');
 ```
 
+## Using TypeScript
+
+We suggest you use TypeScript to develop, or use TypeScript eslint to lint your code.
+
+* [Getting Started with TypeScript](https://reactnative.dev/docs/typescript#getting-started-with-typescript)
+* [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project)
+
 ## Troubleshooting
 
 ### RCT_EXTERN_MODULE Swift modules broken in Xcode 10.2
