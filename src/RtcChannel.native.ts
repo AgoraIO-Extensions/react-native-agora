@@ -13,9 +13,9 @@ import {
 } from "./Types";
 import {Listener, RtcChannelEvents, Subscription} from "./RtcEvents";
 
-const {RtcChannelModule} = NativeModules;
-const Prefix = RtcChannelModule.prefix
-const RtcChannelEvent = new NativeEventEmitter(RtcChannelModule);
+const {AgoraRtcChannelModule} = NativeModules;
+const Prefix = AgoraRtcChannelModule.prefix
+const RtcChannelEvent = new NativeEventEmitter(AgoraRtcChannelModule);
 
 const channels = new Map<string, RtcChannel>();
 
@@ -49,7 +49,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      */
     static async create(channelId: string): Promise<RtcChannel> {
         if (channels.get(channelId)) return channels.get(channelId) as RtcChannel;
-        await RtcChannelModule.create(channelId);
+        await AgoraRtcChannelModule.create(channelId);
         channels.set(channelId, new RtcChannel(channelId));
         return channels.get(channelId) as RtcChannel
     }
@@ -68,7 +68,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     destroy(): Promise<void> {
         this.removeAllListeners();
         channels.delete(this._channelId);
-        return RtcChannelModule.destroy(this._channelId)
+        return AgoraRtcChannelModule.destroy(this._channelId)
     }
 
     /**
@@ -143,7 +143,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @see ClientRole
      */
     setClientRole(role: ClientRole): Promise<void> {
-        return RtcChannelModule.setClientRole(this._channelId, role)
+        return AgoraRtcChannelModule.setClientRole(this._channelId, role)
     }
 
     /**
@@ -163,7 +163,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @see ChannelMediaOptions
      */
     joinChannel(token: String, optionalInfo: String, optionalUid: number, options: ChannelMediaOptions): Promise<void> {
-        return RtcChannelModule.joinChannel(this._channelId, token, optionalInfo, optionalUid, options)
+        return AgoraRtcChannelModule.joinChannel(this._channelId, token, optionalInfo, optionalUid, options)
     }
 
     /**
@@ -187,7 +187,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @see ChannelMediaOptions
      */
     joinChannelWithUserAccount(token: String, userAccount: string, options: ChannelMediaOptions): Promise<void> {
-        return RtcChannelModule.joinChannelWithUserAccount(this._channelId, token, userAccount, options)
+        return AgoraRtcChannelModule.joinChannelWithUserAccount(this._channelId, token, userAccount, options)
     }
 
     /**
@@ -199,7 +199,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @see RtcChannelEvents.UserOffline
      */
     leaveChannel(): Promise<void> {
-        return RtcChannelModule.leaveChannel(this._channelId)
+        return AgoraRtcChannelModule.leaveChannel(this._channelId)
     }
 
     /**
@@ -214,14 +214,14 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @param token The new token.
      */
     renewToken(token: string): Promise<void> {
-        return RtcChannelModule.renewToken(this._channelId, token)
+        return AgoraRtcChannelModule.renewToken(this._channelId, token)
     }
 
     /**
      * Gets the connection state of the SDK.
      */
     getConnectionState(): Promise<ConnectionStateType> {
-        return RtcChannelModule.getConnectionState(this._channelId)
+        return AgoraRtcChannelModule.getConnectionState(this._channelId)
     }
 
     /**
@@ -234,7 +234,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * - You can publish a stream to only one channel at a time. For details, see the advanced guide Join Multiple Channels.
      */
     publish(): Promise<void> {
-        return RtcChannelModule.publish(this._channelId)
+        return AgoraRtcChannelModule.publish(this._channelId)
     }
 
     /**
@@ -243,122 +243,122 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @see ErrorCode.Refused
      */
     unpublish(): Promise<void> {
-        return RtcChannelModule.unpublish(this._channelId)
+        return AgoraRtcChannelModule.unpublish(this._channelId)
     }
 
     /**
      * Gets the current call ID.
      */
     getCallId(): Promise<string> {
-        return RtcChannelModule.getCallId(this._channelId)
+        return AgoraRtcChannelModule.getCallId(this._channelId)
     }
 
     adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void> {
-        return RtcChannelModule.adjustUserPlaybackSignalVolume(this._channelId, uid, volume)
+        return AgoraRtcChannelModule.adjustUserPlaybackSignalVolume(this._channelId, uid, volume)
     }
 
     muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
-        return RtcChannelModule.muteRemoteAudioStream(this._channelId, uid, muted)
+        return AgoraRtcChannelModule.muteRemoteAudioStream(this._channelId, uid, muted)
     }
 
     muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return RtcChannelModule.muteAllRemoteAudioStreams(this._channelId, muted)
+        return AgoraRtcChannelModule.muteAllRemoteAudioStreams(this._channelId, muted)
     }
 
     setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return RtcChannelModule.setDefaultMuteAllRemoteAudioStreams(this._channelId, muted)
+        return AgoraRtcChannelModule.setDefaultMuteAllRemoteAudioStreams(this._channelId, muted)
     }
 
     muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return RtcChannelModule.muteAllRemoteVideoStreams(this._channelId, muted)
+        return AgoraRtcChannelModule.muteAllRemoteVideoStreams(this._channelId, muted)
     }
 
     muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
-        return RtcChannelModule.muteRemoteVideoStream(this._channelId, uid, muted)
+        return AgoraRtcChannelModule.muteRemoteVideoStream(this._channelId, uid, muted)
     }
 
     setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return RtcChannelModule.setDefaultMuteAllRemoteVideoStreams(this._channelId, muted)
+        return AgoraRtcChannelModule.setDefaultMuteAllRemoteVideoStreams(this._channelId, muted)
     }
 
     setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void> {
-        return RtcChannelModule.setRemoteVoicePosition(this._channelId, uid, pan, gain);
+        return AgoraRtcChannelModule.setRemoteVoicePosition(this._channelId, uid, pan, gain);
     }
 
     addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
-        return RtcChannelModule.addPublishStreamUrl(this._channelId, url, transcodingEnabled);
+        return AgoraRtcChannelModule.addPublishStreamUrl(this._channelId, url, transcodingEnabled);
     }
 
     removePublishStreamUrl(url: string): Promise<void> {
-        return RtcChannelModule.removePublishStreamUrl(this._channelId, url);
+        return AgoraRtcChannelModule.removePublishStreamUrl(this._channelId, url);
     }
 
     setLiveTranscoding(transcoding: LiveTranscoding): Promise<void> {
-        return RtcChannelModule.setLiveTranscoding(this._channelId, transcoding);
+        return AgoraRtcChannelModule.setLiveTranscoding(this._channelId, transcoding);
     }
 
     startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return RtcChannelModule.startChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
+        return AgoraRtcChannelModule.startChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
     }
 
     stopChannelMediaRelay(): Promise<void> {
-        return RtcChannelModule.stopChannelMediaRelay(this._channelId);
+        return AgoraRtcChannelModule.stopChannelMediaRelay(this._channelId);
     }
 
     updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return RtcChannelModule.updateChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
+        return AgoraRtcChannelModule.updateChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
     }
 
     setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void> {
-        return RtcChannelModule.setRemoteDefaultVideoStreamType(this._channelId, streamType);
+        return AgoraRtcChannelModule.setRemoteDefaultVideoStreamType(this._channelId, streamType);
     }
 
     setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void> {
-        return RtcChannelModule.setRemoteVideoStreamType(this._channelId, uid, streamType);
+        return AgoraRtcChannelModule.setRemoteVideoStreamType(this._channelId, uid, streamType);
     }
 
     setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void> {
-        return RtcChannelModule.setRemoteUserPriority(this._channelId, uid, userPriority);
+        return AgoraRtcChannelModule.setRemoteUserPriority(this._channelId, uid, userPriority);
     }
 
     registerMediaMetadataObserver(): Promise<void> {
-        return RtcChannelModule.registerMediaMetadataObserver(this._channelId);
+        return AgoraRtcChannelModule.registerMediaMetadataObserver(this._channelId);
     }
 
     sendMetadata(metadata: string): Promise<void> {
-        return RtcChannelModule.sendMetadata(this._channelId, metadata);
+        return AgoraRtcChannelModule.sendMetadata(this._channelId, metadata);
     }
 
     setMaxMetadataSize(size: number): Promise<void> {
-        return RtcChannelModule.setMaxMetadataSize(this._channelId, size);
+        return AgoraRtcChannelModule.setMaxMetadataSize(this._channelId, size);
     }
 
     unregisterMediaMetadataObserver(): Promise<void> {
-        return RtcChannelModule.unregisterMediaMetadataObserver(this._channelId);
+        return AgoraRtcChannelModule.unregisterMediaMetadataObserver(this._channelId);
     }
 
     setEncryptionMode(encryptionMode: EncryptionMode): Promise<void> {
-        return RtcChannelModule.setEncryptionMode(this._channelId, encryptionMode);
+        return AgoraRtcChannelModule.setEncryptionMode(this._channelId, encryptionMode);
     }
 
     setEncryptionSecret(secret: string): Promise<void> {
-        return RtcChannelModule.setEncryptionSecret(this._channelId, secret);
+        return AgoraRtcChannelModule.setEncryptionSecret(this._channelId, secret);
     }
 
     addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void> {
-        return RtcChannelModule.addInjectStreamUrl(this._channelId, url, config);
+        return AgoraRtcChannelModule.addInjectStreamUrl(this._channelId, url, config);
     }
 
     removeInjectStreamUrl(url: string): Promise<void> {
-        return RtcChannelModule.removeInjectStreamUrl(this._channelId, url);
+        return AgoraRtcChannelModule.removeInjectStreamUrl(this._channelId, url);
     }
 
     createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
-        return RtcChannelModule.createDataStream(this._channelId, reliable, ordered);
+        return AgoraRtcChannelModule.createDataStream(this._channelId, reliable, ordered);
     }
 
     sendStreamMessage(streamId: number, message: string): Promise<void> {
-        return RtcChannelModule.sendStreamMessage(this._channelId, streamId, message);
+        return AgoraRtcChannelModule.sendStreamMessage(this._channelId, streamId, message);
     }
 }
 

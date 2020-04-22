@@ -70,6 +70,118 @@ protocol RtcEngineInterface:
     func setParameters(_ parameters: String, _ callback: Callback?)
 }
 
+class RtcEngineManager {
+    private var _engine: AgoraRtcEngineKit?
+    private var delegate: RtcEngineEventHandler?
+    private var mediaObserver: MediaObserver?
+
+    func create(_ appId: String, _ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
+        delegate = RtcEngineEventHandler() { methodName, data in
+            emit(methodName, data)
+        }
+        _engine = AgoraRtcEngineKit.sharedEngine(withAppId: appId, delegate: delegate)
+        _engine?.setAppType(.APP_TYPE_REACTNATIVE)
+    }
+
+    func destroy() {
+        AgoraRtcEngineKit.destroy()
+        _engine = nil
+        delegate = nil
+    }
+
+    func release() {
+        destroy()
+        mediaObserver = nil
+    }
+
+    var engine: AgoraRtcEngineKit? {
+        return _engine
+    }
+
+    func getUserInfoByUserAccount(_ userAccount: String) -> Dictionary<String, Any?>? {
+        if let engine = _engine {
+            let userInfo = engine.getUserInfo(byUserAccount: userAccount, withError: nil)
+            return userInfo?.toMap()
+        }
+        return nil
+    }
+
+    func getUserInfoByUid(_ uid: Int) -> Dictionary<String, Any?>? {
+        if let engine = _engine {
+            let userInfo = engine.getUserInfo(byUid: UInt(uid), withError: nil)
+            return userInfo?.toMap()
+        }
+        return nil
+    }
+
+    func registerMediaMetadataObserver(_ emit: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) -> Int32 {
+        if let engine = _engine {
+            let mediaObserver = MediaObserver() { methodName, data in
+                emit(methodName, data)
+            }
+            let res = engine.setMediaMetadataDelegate(mediaObserver, with: .video)
+            if res {
+                self.mediaObserver = mediaObserver
+                return 0
+            } else {
+                return Int32(AgoraErrorCode.noPermission.rawValue)
+            }
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+
+    func unregisterMediaMetadataObserver() -> Int32 {
+        if let engine = _engine {
+            let res = engine.setMediaMetadataDelegate(nil, with: .video)
+            if res {
+                mediaObserver = nil
+                return 0
+            } else {
+                return Int32(AgoraErrorCode.noPermission.rawValue)
+            }
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+
+    func setMaxMetadataSize(_ size: Int) -> Int32 {
+        if let observer = mediaObserver {
+            observer.setMaxMetadataSize(size: size)
+            return 0
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+
+    func addMetadata(_ metadata: String) -> Int32 {
+        if let observer = mediaObserver {
+            observer.addMetadata(metadata: metadata)
+            return 0
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+
+    func createDataStream(_ reliable: Bool, _ ordered: Bool) -> Int32 {
+        if let engine = _engine {
+            var streamId = 0
+            let res = engine.createDataStream(&streamId, reliable: reliable, ordered: ordered)
+            if res == 0 {
+                return Int32(streamId)
+            }
+            return res
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+
+    func sendStreamMessage(_ streamId: Int, _ message: String) -> Int32 {
+        if let engine = _engine {
+            if let data = message.data(using: .utf8) {
+                return engine.sendStreamMessage(streamId, data: data)
+            }
+            return Int32(AgoraErrorCode.invalidArgument.rawValue)
+        }
+        return Int32(AgoraErrorCode.notInitialized.rawValue)
+    }
+}
+
 protocol RtcEngineUserInfoInterface {
     associatedtype Callback
 

@@ -18,11 +18,11 @@ protocol Callback: class {
 }
 
 extension Callback {
-    func code(_ code: Int32?, _ data: (() -> Self.T?)? = nil) {
+    func code(_ code: Int32?) {
         let newCode: Int = Int(code ?? Int32(AgoraErrorCode.notInitialized.rawValue))
         if newCode == 0 {
-            success(data?())
-        } else {
+            success(nil)
+        } else if newCode < 0 {
             failure(String(newCode), AgoraRtcEngineKit.getErrorDescription(abs(newCode)) ?? "")
         }
     }

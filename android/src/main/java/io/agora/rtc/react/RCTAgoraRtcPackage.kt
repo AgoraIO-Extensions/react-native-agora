@@ -9,8 +9,8 @@ import com.facebook.react.uimanager.ViewManager
 class RCTAgoraRtcPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
         return listOf(
-                RCTRtcEngineModule(reactContext),
-                RCTRtcChannelModule(reactContext)
+                RCTAgoraRtcEngineModule(reactContext),
+                RCTAgoraRtcChannelModule(reactContext)
         )
     }
 

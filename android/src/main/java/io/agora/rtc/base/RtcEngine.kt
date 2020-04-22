@@ -1,11 +1,13 @@
 package io.agora.rtc.base
 
+import android.content.Context
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import io.agora.rtc.IAudioFrameObserver
-import io.agora.rtc.mediaio.IVideoSink
-import io.agora.rtc.mediaio.IVideoSource
-import io.agora.rtc.video.AgoraVideoFrame
+import io.agora.rtc.Constants
+import io.agora.rtc.IMetadataObserver
+import io.agora.rtc.RtcEngine
+import io.agora.rtc.RtcEngineEx
+import io.agora.rtc.models.UserInfo
 
 interface RtcEngineInterface<Map, Callback> :
         RtcEngineManager.RtcUserInfoInterface<Callback>,
@@ -66,6 +68,99 @@ interface RtcEngineInterface<Map, Callback> :
 }
 
 class RtcEngineManager {
+    private var engine: RtcEngine? = null
+    private var mediaObserver: MediaObserver? = null
+
+    fun create(context: Context, appId: String, emit: (methodName: String, data: Map<String, Any?>?) -> Unit) {
+        engine = RtcEngineEx.create(context, appId, RtcEngineEventHandler { methodName, data ->
+            emit(methodName, data)
+        })
+        (engine as? RtcEngineEx)?.setAppType(8)
+    }
+
+    fun destroy() {
+        RtcEngine.destroy()
+        engine = null
+    }
+
+    fun release() {
+        destroy()
+        mediaObserver = null
+    }
+
+    fun engine(): RtcEngine? {
+        return engine
+    }
+
+    fun getUserInfoByUserAccount(userAccount: String): Map<String, Any?>? {
+        engine?.let {
+            val userInfo = UserInfo()
+            it.getUserInfoByUserAccount(userAccount, userInfo)
+            return@getUserInfoByUserAccount userInfo.toMap()
+        }
+        return null
+    }
+
+    fun getUserInfoByUid(uid: Int): Map<String, Any?>? {
+        engine?.let {
+            val userInfo = UserInfo()
+            it.getUserInfoByUid(uid, userInfo)
+            return@getUserInfoByUid userInfo.toMap()
+        }
+        return null
+    }
+
+    fun registerMediaMetadataObserver(emit: (methodName: String, data: Map<String, Any?>?) -> Unit): Int {
+        engine?.let {
+            val mediaObserver = MediaObserver { methodName, data ->
+                emit(methodName, data)
+            }
+            val res = it.registerMediaMetadataObserver(mediaObserver, IMetadataObserver.VIDEO_METADATA)
+            if (res == 0) this.mediaObserver = mediaObserver
+            return@registerMediaMetadataObserver res
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
+    fun unregisterMediaMetadataObserver(): Int {
+        engine?.let {
+            val res = it.registerMediaMetadataObserver(null, IMetadataObserver.VIDEO_METADATA)
+            if (res == 0) mediaObserver = null
+            return@unregisterMediaMetadataObserver res
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
+    fun setMaxMetadataSize(@IntRange(from = 0, to = 1024) size: Int): Int {
+        mediaObserver?.let {
+            it.maxMetadataSize = size
+            return@setMaxMetadataSize 0
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
+    fun addMetadata(metadata: String): Int {
+        mediaObserver?.let {
+            it.addMetadata(metadata)
+            return@addMetadata 0
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
+    fun createDataStream(reliable: Boolean, ordered: Boolean): Int {
+        engine?.let {
+            return@createDataStream it.createDataStream(reliable, ordered)
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
+    fun sendStreamMessage(streamId: Int, message: String): Int {
+        engine?.let {
+            return@sendStreamMessage it.sendStreamMessage(streamId, message.toByteArray())
+        }
+        return Constants.ERR_NOT_INITIALIZED
+    }
+
     interface RtcUserInfoInterface<Callback> {
         fun registerLocalUserAccount(appId: String, userAccount: String, callback: Callback?)
 
