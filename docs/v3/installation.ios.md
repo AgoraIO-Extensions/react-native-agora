@@ -1,6 +1,6 @@
 # iOS Installation v3
 
-## Minimum compatibility
+## Prerequisites
 
 * iOS SDK 9.0+
 * Xcode
