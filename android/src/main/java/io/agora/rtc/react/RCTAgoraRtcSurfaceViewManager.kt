@@ -53,6 +53,6 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
     }
 
     private fun getEngine(): RtcEngine? {
-        return reactContext?.getNativeModule(RCTRtcEngineModule::class.java)?.engine
+        return reactContext?.getNativeModule(RCTAgoraRtcEngineModule::class.java)?.engine()
     }
 }

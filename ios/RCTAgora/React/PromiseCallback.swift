@@ -21,10 +21,6 @@ class PromiseCallback: NSObject, Callback {
         self.reject = reject
     }
 
-    func success(_ data: Dictionary<String, Any?>?) {
-        resolve?(data)
-    }
-
     func resolve<E>(_ e: E?, _ data: (_ e: E) throws -> Any?) {
         if let `e` = e {
             do {
@@ -41,6 +37,10 @@ class PromiseCallback: NSObject, Callback {
             let code = AgoraErrorCode.notInitialized.rawValue
             failure(String(code), AgoraRtcEngineKit.getErrorDescription(code) ?? "")
         }
+    }
+
+    func success(_ data: Dictionary<String, Any?>?) {
+        resolve?(data)
     }
 
     func failure(_ code: String, _ message: String) {

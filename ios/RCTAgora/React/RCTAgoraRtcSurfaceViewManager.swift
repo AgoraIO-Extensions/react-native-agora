@@ -26,7 +26,7 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
     }
 
     private func engine() -> AgoraRtcEngineKit? {
-        (bridge.module(for: RCTRtcEngineModule.classForCoder()) as? RCTRtcEngineModule)?.engine
+        (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
 }
 

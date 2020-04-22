@@ -1,5 +1,5 @@
 //
-//  RCTRtcChannelModule.swift
+//  RCTAgoraRtcChannelModule.swift
 //  RCTAgora
 //
 //  Created by LXH on 2020/4/15.
@@ -9,9 +9,9 @@
 import Foundation
 import AgoraRtcKit
 
-@objc(RCTRtcChannelModule)
-class RCTRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
-    static let REACT_CLASS = "RCTRtcChannelModule"
+@objc(RCTAgoraRtcChannelModule)
+class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
+    static let REACT_CLASS = "RCTAgoraRtcChannelModule"
 
     typealias Map = NSDictionary
     typealias Callback = PromiseCallback
@@ -19,14 +19,9 @@ class RCTRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     private lazy var manager: RtcChannelManager = {
         RtcChannelManager()
     }()
-    private lazy var delegate: RtcChannelEventHandler = {
-        RtcChannelEventHandler() { [weak self] (methodName, data) in
-            self?.emit(methodName, data)
-        }
-    }()
 
     override class func moduleName() -> String! {
-        RCTRtcChannelModule.REACT_CLASS
+        RCTAgoraRtcChannelModule.REACT_CLASS
     }
 
     override func constantsToExport() -> [AnyHashable: Any]! {
@@ -58,7 +53,7 @@ class RCTRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     private func engine() -> AgoraRtcEngineKit? {
-        (bridge.module(for: RCTRtcEngineModule.classForCoder()) as? RCTRtcEngineModule)?.engine
+        (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
 
     func create(_ channelId: String, _ callback: PromiseCallback?) {
@@ -228,7 +223,7 @@ class RCTRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 }
 
-extension RCTRtcChannelModule {
+extension RCTAgoraRtcChannelModule {
     @objc func create(_ channelId: String, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         create(channelId, PromiseCallback(resolve, reject))
     }

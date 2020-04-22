@@ -31,9 +31,9 @@ import {
 import {Listener, RtcEngineEvents, Subscription} from "./RtcEvents";
 import RtcChannel from "./RtcChannel.native";
 
-const {RtcEngineModule} = NativeModules;
-const Prefix = RtcEngineModule.prefix
-const RtcEngineEvent = new NativeEventEmitter(RtcEngineModule);
+const {AgoraRtcEngineModule} = NativeModules;
+const Prefix = AgoraRtcEngineModule.prefix
+const RtcEngineEvent = new NativeEventEmitter(AgoraRtcEngineModule);
 
 let engine: RtcEngine | undefined;
 
@@ -65,7 +65,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      */
     static async create(appId: string): Promise<RtcEngine> {
         if (engine) return engine;
-        await RtcEngineModule.create(appId);
+        await AgoraRtcEngineModule.create(appId);
         engine = new RtcEngine();
         return engine
     }
@@ -82,7 +82,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
         RtcChannel.destroyAll();
         this.removeAllListeners();
         engine = undefined;
-        return RtcEngineModule.destroy()
+        return AgoraRtcEngineModule.destroy()
     }
 
     /**
@@ -149,7 +149,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @see ChannelProfile
      */
     setChannelProfile(profile: ChannelProfile): Promise<void> {
-        return RtcEngineModule.setChannelProfile(profile)
+        return AgoraRtcEngineModule.setChannelProfile(profile)
     }
 
     /**
@@ -166,7 +166,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @see ClientRole
      */
     setClientRole(role: ClientRole): Promise<void> {
-        return RtcEngineModule.setClientRole(role)
+        return AgoraRtcEngineModule.setClientRole(role)
     }
 
     /**
@@ -203,7 +203,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @see RtcEngineEvents.JoinChannelSuccess
      */
     joinChannel(token: String, channelName: string, optionalInfo: String, optionalUid: number): Promise<void> {
-        return RtcEngineModule.joinChannel(token, channelName, optionalInfo, optionalUid)
+        return AgoraRtcEngineModule.joinChannel(token, channelName, optionalInfo, optionalUid)
     }
 
     /**
@@ -227,7 +227,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
      */
     switchChannel(token: String, channelName: string): Promise<void> {
-        return RtcEngineModule.switchChannel(token, channelName)
+        return AgoraRtcEngineModule.switchChannel(token, channelName)
     }
 
     /**
@@ -248,7 +248,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @see RtcEngine.removeInjectStreamUrl
      */
     leaveChannel(): Promise<void> {
-        return RtcEngineModule.leaveChannel()
+        return AgoraRtcEngineModule.leaveChannel()
     }
 
     /**
@@ -263,7 +263,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param token The new token.
      */
     renewToken(token: string): Promise<void> {
-        return RtcEngineModule.renewToken(token)
+        return AgoraRtcEngineModule.renewToken(token)
     }
 
     /**
@@ -276,14 +276,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - false: (Default) Disable.
      */
     enableWebSdkInteroperability(enabled: boolean): Promise<void> {
-        return RtcEngineModule.enableWebSdkInteroperability(enabled)
+        return AgoraRtcEngineModule.enableWebSdkInteroperability(enabled)
     }
 
     /**
      * Gets the connection state of the SDK.
      */
     getConnectionState(): Promise<ConnectionStateType> {
-        return RtcEngineModule.getConnectionState()
+        return AgoraRtcEngineModule.getConnectionState()
     }
 
     /**
@@ -294,7 +294,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * The rate and complain methods require the callId parameter retrieved from the getCallId method during a call. callId is passed as an argument into the rate and complain methods after the call ends.
      */
     getCallId(): Promise<string> {
-        return RtcEngineModule.getCallId()
+        return AgoraRtcEngineModule.getCallId()
     }
 
     /**
@@ -306,7 +306,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param description (Optional) The description of the rating. The string length must be less than 800 bytes.
      */
     rate(callId: string, rating: Rate, description?: string): Promise<void> {
-        return RtcEngineModule.rate(callId, rating, description)
+        return AgoraRtcEngineModule.rate(callId, rating, description)
     }
 
     /**
@@ -316,7 +316,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param description (Optional) The description of the complaint. The string length must be less than 800 bytes.
      */
     complain(callId: string, description: string): Promise<void> {
-        return RtcEngineModule.complain(callId, description)
+        return AgoraRtcEngineModule.complain(callId, description)
     }
 
     /**
@@ -328,7 +328,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param filePath File path of the log file. The string of the log file is in UTF-8. The default file path is /storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log.
      */
     setLogFile(filePath: string): Promise<void> {
-        return RtcEngineModule.setLogFile(filePath)
+        return AgoraRtcEngineModule.setLogFile(filePath)
     }
 
     /**
@@ -338,7 +338,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @see LogFilter
      */
     setLogFilter(filter: LogFilter): Promise<void> {
-        return RtcEngineModule.setLogFilter(filter)
+        return AgoraRtcEngineModule.setLogFilter(filter)
     }
 
     /**
@@ -347,7 +347,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param fileSizeInKBytes The SDK log file size (KB).
      */
     setLogFileSize(fileSizeInKBytes: number): Promise<void> {
-        return RtcEngineModule.setLogFileSize(fileSizeInKBytes)
+        return AgoraRtcEngineModule.setLogFileSize(fileSizeInKBytes)
     }
 
     /**
@@ -356,431 +356,431 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param parameters Sets the parameter as a JSON string in the specified format.
      */
     setParameters(parameters: string): Promise<void> {
-        return RtcEngineModule.setParameters(parameters)
+        return AgoraRtcEngineModule.setParameters(parameters)
     }
 
     getUserInfoByUid(uid: number): Promise<UserInfo> {
-        return RtcEngineModule.getUserInfoByUid(uid)
+        return AgoraRtcEngineModule.getUserInfoByUid(uid)
     }
 
     getUserInfoByUserAccount(userAccount: string): Promise<UserInfo> {
-        return RtcEngineModule.getUserInfoByUserAccount(userAccount)
+        return AgoraRtcEngineModule.getUserInfoByUserAccount(userAccount)
     }
 
     joinChannelWithUserAccount(token: String, channelName: string, userAccount: string): Promise<void> {
-        return RtcEngineModule.joinChannelWithUserAccount(token, channelName, userAccount);
+        return AgoraRtcEngineModule.joinChannelWithUserAccount(token, channelName, userAccount);
     }
 
     registerLocalUserAccount(appId: string, userAccount: string): Promise<void> {
-        return RtcEngineModule.registerLocalUserAccount(appId, userAccount);
+        return AgoraRtcEngineModule.registerLocalUserAccount(appId, userAccount);
     }
 
     adjustPlaybackSignalVolume(volume: number): Promise<void> {
-        return RtcEngineModule.adjustPlaybackSignalVolume(volume);
+        return AgoraRtcEngineModule.adjustPlaybackSignalVolume(volume);
     }
 
     adjustRecordingSignalVolume(volume: number): Promise<void> {
-        return RtcEngineModule.adjustRecordingSignalVolume(volume);
+        return AgoraRtcEngineModule.adjustRecordingSignalVolume(volume);
     }
 
     adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void> {
-        return RtcEngineModule.adjustUserPlaybackSignalVolume(uid, volume);
+        return AgoraRtcEngineModule.adjustUserPlaybackSignalVolume(uid, volume);
     }
 
     disableAudio(): Promise<void> {
-        return RtcEngineModule.disableAudio();
+        return AgoraRtcEngineModule.disableAudio();
     }
 
     enableAudio(): Promise<void> {
-        return RtcEngineModule.enableAudio();
+        return AgoraRtcEngineModule.enableAudio();
     }
 
     enableAudioVolumeIndication(interval: number, smooth: number, report_vad: boolean): Promise<void> {
-        return RtcEngineModule.enableAudioVolumeIndication(interval, smooth, report_vad);
+        return AgoraRtcEngineModule.enableAudioVolumeIndication(interval, smooth, report_vad);
     }
 
     enableLocalAudio(enabled: boolean): Promise<void> {
-        return RtcEngineModule.enableLocalAudio(enabled);
+        return AgoraRtcEngineModule.enableLocalAudio(enabled);
     }
 
     muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return RtcEngineModule.muteAllRemoteAudioStreams(muted);
+        return AgoraRtcEngineModule.muteAllRemoteAudioStreams(muted);
     }
 
     muteLocalAudioStream(muted: boolean): Promise<void> {
-        return RtcEngineModule.muteLocalAudioStream(muted);
+        return AgoraRtcEngineModule.muteLocalAudioStream(muted);
     }
 
     muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
-        return RtcEngineModule.muteRemoteAudioStream(uid, muted);
+        return AgoraRtcEngineModule.muteRemoteAudioStream(uid, muted);
     }
 
     setAudioProfile(profile: AudioProfile, scenario: AudioScenario): Promise<void> {
-        return RtcEngineModule.setAudioProfile(profile, scenario);
+        return AgoraRtcEngineModule.setAudioProfile(profile, scenario);
     }
 
     setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return RtcEngineModule.setDefaultMuteAllRemoteAudioStreams(muted);
+        return AgoraRtcEngineModule.setDefaultMuteAllRemoteAudioStreams(muted);
     }
 
     disableVideo(): Promise<void> {
-        return RtcEngineModule.disableVideo();
+        return AgoraRtcEngineModule.disableVideo();
     }
 
     enableLocalVideo(enabled: boolean): Promise<void> {
-        return RtcEngineModule.enableLocalVideo(enabled);
+        return AgoraRtcEngineModule.enableLocalVideo(enabled);
     }
 
     enableVideo(): Promise<void> {
-        return RtcEngineModule.enableVideo();
+        return AgoraRtcEngineModule.enableVideo();
     }
 
     muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return RtcEngineModule.muteAllRemoteVideoStreams(muted);
+        return AgoraRtcEngineModule.muteAllRemoteVideoStreams(muted);
     }
 
     muteLocalVideoStream(muted: boolean): Promise<void> {
-        return RtcEngineModule.muteLocalVideoStream(muted);
+        return AgoraRtcEngineModule.muteLocalVideoStream(muted);
     }
 
     muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
-        return RtcEngineModule.muteRemoteVideoStream(uid, muted);
+        return AgoraRtcEngineModule.muteRemoteVideoStream(uid, muted);
     }
 
     setBeautyEffectOptions(enabled: boolean, options: BeautyOptions): Promise<void> {
-        return RtcEngineModule.setBeautyEffectOptions(enabled, options);
+        return AgoraRtcEngineModule.setBeautyEffectOptions(enabled, options);
     }
 
     setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return RtcEngineModule.setDefaultMuteAllRemoteVideoStreams(muted);
+        return AgoraRtcEngineModule.setDefaultMuteAllRemoteVideoStreams(muted);
     }
 
     setVideoEncoderConfiguration(config: VideoEncoderConfiguration): Promise<void> {
-        return RtcEngineModule.setVideoEncoderConfiguration(config);
+        return AgoraRtcEngineModule.setVideoEncoderConfiguration(config);
     }
 
     adjustAudioMixingPlayoutVolume(volume: number): Promise<void> {
-        return RtcEngineModule.adjustAudioMixingPlayoutVolume(volume);
+        return AgoraRtcEngineModule.adjustAudioMixingPlayoutVolume(volume);
     }
 
     adjustAudioMixingPublishVolume(volume: number): Promise<void> {
-        return RtcEngineModule.adjustAudioMixingPublishVolume(volume);
+        return AgoraRtcEngineModule.adjustAudioMixingPublishVolume(volume);
     }
 
     adjustAudioMixingVolume(volume: number): Promise<void> {
-        return RtcEngineModule.adjustAudioMixingVolume(volume);
+        return AgoraRtcEngineModule.adjustAudioMixingVolume(volume);
     }
 
     getAudioMixingCurrentPosition(): Promise<number> {
-        return RtcEngineModule.getAudioMixingCurrentPosition();
+        return AgoraRtcEngineModule.getAudioMixingCurrentPosition();
     }
 
     getAudioMixingDuration(): Promise<number> {
-        return RtcEngineModule.getAudioMixingDuration();
+        return AgoraRtcEngineModule.getAudioMixingDuration();
     }
 
     getAudioMixingPlayoutVolume(): Promise<number> {
-        return RtcEngineModule.getAudioMixingPlayoutVolume();
+        return AgoraRtcEngineModule.getAudioMixingPlayoutVolume();
     }
 
     getAudioMixingPublishVolume(): Promise<number> {
-        return RtcEngineModule.getAudioMixingPublishVolume();
+        return AgoraRtcEngineModule.getAudioMixingPublishVolume();
     }
 
     pauseAudioMixing(): Promise<void> {
-        return RtcEngineModule.pauseAudioMixing();
+        return AgoraRtcEngineModule.pauseAudioMixing();
     }
 
     resumeAudioMixing(): Promise<void> {
-        return RtcEngineModule.resumeAudioMixing();
+        return AgoraRtcEngineModule.resumeAudioMixing();
     }
 
     setAudioMixingPosition(pos: number): Promise<void> {
-        return RtcEngineModule.setAudioMixingPosition(pos);
+        return AgoraRtcEngineModule.setAudioMixingPosition(pos);
     }
 
     startAudioMixing(filePath: string, loopback: boolean, replace: boolean, cycle: number): Promise<void> {
-        return RtcEngineModule.startAudioMixing(filePath, loopback, replace, cycle);
+        return AgoraRtcEngineModule.startAudioMixing(filePath, loopback, replace, cycle);
     }
 
     stopAudioMixing(): Promise<void> {
-        return RtcEngineModule.stopAudioMixing();
+        return AgoraRtcEngineModule.stopAudioMixing();
     }
 
     getEffectsVolume(): Promise<number> {
-        return RtcEngineModule.getEffectsVolume();
+        return AgoraRtcEngineModule.getEffectsVolume();
     }
 
     pauseAllEffects(): Promise<void> {
-        return RtcEngineModule.pauseAllEffects();
+        return AgoraRtcEngineModule.pauseAllEffects();
     }
 
     pauseEffect(soundId: number): Promise<void> {
-        return RtcEngineModule.pauseEffect(soundId);
+        return AgoraRtcEngineModule.pauseEffect(soundId);
     }
 
     playEffect(soundId: number, filePath: String, loopCount: number, pitch: number, pan: number, gain: number, publish: Boolean): Promise<void> {
-        return RtcEngineModule.playEffect(soundId, filePath, loopCount, pitch, pan, gain, publish);
+        return AgoraRtcEngineModule.playEffect(soundId, filePath, loopCount, pitch, pan, gain, publish);
     }
 
     preloadEffect(soundId: number, filePath: String): Promise<void> {
-        return RtcEngineModule.preloadEffect(soundId, filePath);
+        return AgoraRtcEngineModule.preloadEffect(soundId, filePath);
     }
 
     resumeAllEffects(): Promise<void> {
-        return RtcEngineModule.resumeAllEffects();
+        return AgoraRtcEngineModule.resumeAllEffects();
     }
 
     resumeEffect(soundId: number): Promise<void> {
-        return RtcEngineModule.resumeEffect(soundId);
+        return AgoraRtcEngineModule.resumeEffect(soundId);
     }
 
     setEffectsVolume(volume: number): Promise<void> {
-        return RtcEngineModule.setEffectsVolume(volume);
+        return AgoraRtcEngineModule.setEffectsVolume(volume);
     }
 
     setVolumeOfEffect(soundId: number, volume: number): Promise<void> {
-        return RtcEngineModule.setVolumeOfEffect(soundId, volume);
+        return AgoraRtcEngineModule.setVolumeOfEffect(soundId, volume);
     }
 
     stopAllEffects(): Promise<void> {
-        return RtcEngineModule.stopAllEffects();
+        return AgoraRtcEngineModule.stopAllEffects();
     }
 
     stopEffect(soundId: number): Promise<void> {
-        return RtcEngineModule.stopEffect(soundId);
+        return AgoraRtcEngineModule.stopEffect(soundId);
     }
 
     unloadEffect(soundId: number): Promise<void> {
-        return RtcEngineModule.unloadEffect(soundId);
+        return AgoraRtcEngineModule.unloadEffect(soundId);
     }
 
     setLocalVoiceChanger(voiceChanger: AudioVoiceChanger): Promise<void> {
-        return RtcEngineModule.setLocalVoiceChanger(voiceChanger);
+        return AgoraRtcEngineModule.setLocalVoiceChanger(voiceChanger);
     }
 
     setLocalVoiceEqualization(bandFrequency: AudioEqualizationBandFrequency, bandGain: number): Promise<void> {
-        return RtcEngineModule.setLocalVoiceEqualization(bandFrequency, bandGain);
+        return AgoraRtcEngineModule.setLocalVoiceEqualization(bandFrequency, bandGain);
     }
 
     setLocalVoicePitch(pitch: number): Promise<void> {
-        return RtcEngineModule.setLocalVoicePitch(pitch);
+        return AgoraRtcEngineModule.setLocalVoicePitch(pitch);
     }
 
     setLocalVoiceReverb(reverbKey: AudioReverbType, value: number): Promise<void> {
-        return RtcEngineModule.setLocalVoiceReverb(reverbKey, value);
+        return AgoraRtcEngineModule.setLocalVoiceReverb(reverbKey, value);
     }
 
     setLocalVoiceReverbPreset(preset: AudioReverbPreset): Promise<void> {
-        return RtcEngineModule.setLocalVoiceReverbPreset(preset);
+        return AgoraRtcEngineModule.setLocalVoiceReverbPreset(preset);
     }
 
     enableSoundPositionIndication(enabled: boolean): Promise<void> {
-        return RtcEngineModule.enableSoundPositionIndication(enabled);
+        return AgoraRtcEngineModule.enableSoundPositionIndication(enabled);
     }
 
     setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void> {
-        return RtcEngineModule.setRemoteVoicePosition(uid, pan, gain);
+        return AgoraRtcEngineModule.setRemoteVoicePosition(uid, pan, gain);
     }
 
     addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
-        return RtcEngineModule.addPublishStreamUrl(url, transcodingEnabled);
+        return AgoraRtcEngineModule.addPublishStreamUrl(url, transcodingEnabled);
     }
 
     removePublishStreamUrl(url: string): Promise<void> {
-        return RtcEngineModule.removePublishStreamUrl(url);
+        return AgoraRtcEngineModule.removePublishStreamUrl(url);
     }
 
     setLiveTranscoding(transcoding: LiveTranscoding): Promise<void> {
-        return RtcEngineModule.setLiveTranscoding(transcoding);
+        return AgoraRtcEngineModule.setLiveTranscoding(transcoding);
     }
 
     startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return RtcEngineModule.startChannelMediaRelay(channelMediaRelayConfiguration);
+        return AgoraRtcEngineModule.startChannelMediaRelay(channelMediaRelayConfiguration);
     }
 
     stopChannelMediaRelay(): Promise<void> {
-        return RtcEngineModule.stopChannelMediaRelay();
+        return AgoraRtcEngineModule.stopChannelMediaRelay();
     }
 
     updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return RtcEngineModule.updateChannelMediaRelay(channelMediaRelayConfiguration);
+        return AgoraRtcEngineModule.updateChannelMediaRelay(channelMediaRelayConfiguration);
     }
 
     isSpeakerphoneEnabled(): Promise<boolean> {
-        return RtcEngineModule.isSpeakerphoneEnabled();
+        return AgoraRtcEngineModule.isSpeakerphoneEnabled();
     }
 
     setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker: boolean): Promise<void> {
-        return RtcEngineModule.setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker);
+        return AgoraRtcEngineModule.setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker);
     }
 
     setEnableSpeakerphone(enabled: boolean): Promise<void> {
-        return RtcEngineModule.setEnableSpeakerphone(enabled);
+        return AgoraRtcEngineModule.setEnableSpeakerphone(enabled);
     }
 
     enableInEarMonitoring(enabled: boolean): Promise<void> {
-        return RtcEngineModule.enableInEarMonitoring(enabled);
+        return AgoraRtcEngineModule.enableInEarMonitoring(enabled);
     }
 
     setInEarMonitoringVolume(volume: number): Promise<void> {
-        return RtcEngineModule.setInEarMonitoringVolume(volume);
+        return AgoraRtcEngineModule.setInEarMonitoringVolume(volume);
     }
 
     enableDualStreamMode(enabled: boolean): Promise<void> {
-        return RtcEngineModule.enableDualStreamMode(enabled);
+        return AgoraRtcEngineModule.enableDualStreamMode(enabled);
     }
 
     setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void> {
-        return RtcEngineModule.setRemoteDefaultVideoStreamType(streamType);
+        return AgoraRtcEngineModule.setRemoteDefaultVideoStreamType(streamType);
     }
 
     setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void> {
-        return RtcEngineModule.setRemoteVideoStreamType(uid, streamType);
+        return AgoraRtcEngineModule.setRemoteVideoStreamType(uid, streamType);
     }
 
     setLocalPublishFallbackOption(option: StreamFallbackOptions): Promise<void> {
-        return RtcEngineModule.setLocalPublishFallbackOption(option);
+        return AgoraRtcEngineModule.setLocalPublishFallbackOption(option);
     }
 
     setRemoteSubscribeFallbackOption(option: StreamFallbackOptions): Promise<void> {
-        return RtcEngineModule.setRemoteSubscribeFallbackOption(option);
+        return AgoraRtcEngineModule.setRemoteSubscribeFallbackOption(option);
     }
 
     setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void> {
-        return RtcEngineModule.setRemoteUserPriority(uid, userPriority);
+        return AgoraRtcEngineModule.setRemoteUserPriority(uid, userPriority);
     }
 
     disableLastmileTest(): Promise<void> {
-        return RtcEngineModule.disableLastmileTest();
+        return AgoraRtcEngineModule.disableLastmileTest();
     }
 
     enableLastmileTest(): Promise<void> {
-        return RtcEngineModule.enableLastmileTest();
+        return AgoraRtcEngineModule.enableLastmileTest();
     }
 
     startEchoTest(intervalInSeconds: number): Promise<void> {
-        return RtcEngineModule.startEchoTest(intervalInSeconds);
+        return AgoraRtcEngineModule.startEchoTest(intervalInSeconds);
     }
 
     startLastmileProbeTest(config: LastmileProbeConfig): Promise<void> {
-        return RtcEngineModule.startLastmileProbeTest(config);
+        return AgoraRtcEngineModule.startLastmileProbeTest(config);
     }
 
     stopEchoTest(): Promise<void> {
-        return RtcEngineModule.stopEchoTest();
+        return AgoraRtcEngineModule.stopEchoTest();
     }
 
     stopLastmileProbeTest(): Promise<void> {
-        return RtcEngineModule.stopLastmileProbeTest();
+        return AgoraRtcEngineModule.stopLastmileProbeTest();
     }
 
     registerMediaMetadataObserver(): Promise<void> {
-        return RtcEngineModule.registerMediaMetadataObserver();
+        return AgoraRtcEngineModule.registerMediaMetadataObserver();
     }
 
     sendMetadata(metadata: string): Promise<void> {
-        return RtcEngineModule.sendMetadata(metadata);
+        return AgoraRtcEngineModule.sendMetadata(metadata);
     }
 
     setMaxMetadataSize(size: number): Promise<void> {
-        return RtcEngineModule.setMaxMetadataSize(size);
+        return AgoraRtcEngineModule.setMaxMetadataSize(size);
     }
 
     unregisterMediaMetadataObserver(): Promise<void> {
-        return RtcEngineModule.unregisterMediaMetadataObserver();
+        return AgoraRtcEngineModule.unregisterMediaMetadataObserver();
     }
 
     addVideoWatermark(watermarkUrl: string, options: WatermarkOptions): Promise<void> {
-        return RtcEngineModule.addVideoWatermark(watermarkUrl, options);
+        return AgoraRtcEngineModule.addVideoWatermark(watermarkUrl, options);
     }
 
     clearVideoWatermarks(): Promise<void> {
-        return RtcEngineModule.clearVideoWatermarks();
+        return AgoraRtcEngineModule.clearVideoWatermarks();
     }
 
     setEncryptionMode(encryptionMode: EncryptionMode): Promise<void> {
-        return RtcEngineModule.setEncryptionMode(encryptionMode);
+        return AgoraRtcEngineModule.setEncryptionMode(encryptionMode);
     }
 
     setEncryptionSecret(secret: string): Promise<void> {
-        return RtcEngineModule.setEncryptionSecret(secret);
+        return AgoraRtcEngineModule.setEncryptionSecret(secret);
     }
 
     startAudioRecording(filePath: string, sampleRate: AudioSampleRateType, quality: AudioRecordingQuality): Promise<void> {
-        return RtcEngineModule.startAudioRecording(filePath, sampleRate, quality);
+        return AgoraRtcEngineModule.startAudioRecording(filePath, sampleRate, quality);
     }
 
     stopAudioRecording(): Promise<void> {
-        return RtcEngineModule.stopAudioRecording();
+        return AgoraRtcEngineModule.stopAudioRecording();
     }
 
     addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void> {
-        return RtcEngineModule.addInjectStreamUrl(url, config);
+        return AgoraRtcEngineModule.addInjectStreamUrl(url, config);
     }
 
     removeInjectStreamUrl(url: string): Promise<void> {
-        return RtcEngineModule.removeInjectStreamUrl(url);
+        return AgoraRtcEngineModule.removeInjectStreamUrl(url);
     }
 
     getCameraMaxZoomFactor(): Promise<number> {
-        return RtcEngineModule.getCameraMaxZoomFactor();
+        return AgoraRtcEngineModule.getCameraMaxZoomFactor();
     }
 
     isCameraAutoFocusFaceModeSupported(): Promise<boolean> {
-        return RtcEngineModule.isCameraAutoFocusFaceModeSupported();
+        return AgoraRtcEngineModule.isCameraAutoFocusFaceModeSupported();
     }
 
     isCameraExposurePositionSupported(): Promise<boolean> {
-        return RtcEngineModule.isCameraExposurePositionSupported();
+        return AgoraRtcEngineModule.isCameraExposurePositionSupported();
     }
 
     isCameraFocusSupported(): Promise<boolean> {
-        return RtcEngineModule.isCameraFocusSupported();
+        return AgoraRtcEngineModule.isCameraFocusSupported();
     }
 
     isCameraTorchSupported(): Promise<boolean> {
-        return RtcEngineModule.isCameraTorchSupported();
+        return AgoraRtcEngineModule.isCameraTorchSupported();
     }
 
     isCameraZoomSupported(): Promise<boolean> {
-        return RtcEngineModule.isCameraZoomSupported();
+        return AgoraRtcEngineModule.isCameraZoomSupported();
     }
 
     setCameraAutoFocusFaceModeEnabled(enabled: boolean): Promise<void> {
-        return RtcEngineModule.setCameraAutoFocusFaceModeEnabled(enabled);
+        return AgoraRtcEngineModule.setCameraAutoFocusFaceModeEnabled(enabled);
     }
 
     setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<void> {
-        return RtcEngineModule.setCameraCapturerConfiguration(config);
+        return AgoraRtcEngineModule.setCameraCapturerConfiguration(config);
     }
 
     setCameraExposurePosition(positionXinView: number, positionYinView: number): Promise<void> {
-        return RtcEngineModule.setCameraExposurePosition(positionXinView, positionYinView);
+        return AgoraRtcEngineModule.setCameraExposurePosition(positionXinView, positionYinView);
     }
 
     setCameraFocusPositionInPreview(positionX: number, positionY: number): Promise<void> {
-        return RtcEngineModule.setCameraFocusPositionInPreview(positionX, positionY);
+        return AgoraRtcEngineModule.setCameraFocusPositionInPreview(positionX, positionY);
     }
 
     setCameraTorchOn(isOn: boolean): Promise<void> {
-        return RtcEngineModule.setCameraTorchOn(isOn);
+        return AgoraRtcEngineModule.setCameraTorchOn(isOn);
     }
 
     setCameraZoomFactor(factor: number): Promise<void> {
-        return RtcEngineModule.setCameraZoomFactor(factor);
+        return AgoraRtcEngineModule.setCameraZoomFactor(factor);
     }
 
     switchCamera(): Promise<void> {
-        return RtcEngineModule.switchCamera();
+        return AgoraRtcEngineModule.switchCamera();
     }
 
     createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
-        return RtcEngineModule.createDataStream(reliable, ordered);
+        return AgoraRtcEngineModule.createDataStream(reliable, ordered);
     }
 
     sendStreamMessage(streamId: number, message: string): Promise<void> {
-        return RtcEngineModule.sendStreamMessage(streamId, message);
+        return AgoraRtcEngineModule.sendStreamMessage(streamId, message);
     }
 }
 

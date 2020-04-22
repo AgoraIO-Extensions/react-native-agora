@@ -4,3 +4,4 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 #import <React/RCTUIManager.h>
+#import "AgoraRtcEngineKit.h"

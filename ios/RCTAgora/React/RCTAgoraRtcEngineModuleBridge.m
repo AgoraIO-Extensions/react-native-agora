@@ -1,5 +1,5 @@
 //
-//  RCTRtcEngineModuleBridge.m
+//  RCTAgoraRtcEngineModuleBridge.m
 //  RCTAgora
 //
 //  Created by LXH on 2020/4/14.
@@ -9,7 +9,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(RCTRtcEngineModule, NSObject)
+@interface RCT_EXTERN_MODULE(RCTAgoraRtcEngineModule, NSObject)
 
 RCT_EXTERN_METHOD(create:
     (NSString *) appId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)

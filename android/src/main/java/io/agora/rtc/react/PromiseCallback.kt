@@ -9,10 +9,6 @@ import io.agora.rtc.base.Callback
 class PromiseCallback(
         private val promise: Promise?
 ) : Callback<Map<String, Any?>>() {
-    override fun success(data: Map<String, Any?>?) {
-        promise?.resolve(Arguments.makeNativeMap(data))
-    }
-
     fun <E> resolve(e: E?, data: (e: E) -> Any?) {
         if (e != null) {
             try {
@@ -29,6 +25,10 @@ class PromiseCallback(
             val code = Constants.ERR_NOT_INITIALIZED
             failure(code.toString(), RtcEngine.getErrorDescription(code))
         }
+    }
+
+    override fun success(data: Map<String, Any?>?) {
+        promise?.resolve(Arguments.makeNativeMap(data))
     }
 
     override fun failure(code: String, message: String) {

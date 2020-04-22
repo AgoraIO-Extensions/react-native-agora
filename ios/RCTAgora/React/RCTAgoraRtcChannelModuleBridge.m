@@ -1,5 +1,5 @@
 //
-//  RCTRtcChannelModuleBridge.m
+//  RCTAgoraRtcChannelModuleBridge.m
 //  RCTAgora
 //
 //  Created by LXH on 2020/4/15.
@@ -9,7 +9,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(RCTRtcChannelModule, NSObject)
+@interface RCT_EXTERN_MODULE(RCTAgoraRtcChannelModule, NSObject)
 
 RCT_EXTERN_METHOD(create:
     (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)

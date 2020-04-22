@@ -9,23 +9,19 @@
 import Foundation
 import AgoraRtcKit
 
-@objc(RCTRtcEngineModule)
-class RCTRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
-    static let REACT_CLASS = "RCTRtcEngineModule"
+@objc(RCTAgoraRtcEngineModule)
+class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
+    static let REACT_CLASS = "RCTAgoraRtcEngineModule"
 
     typealias Map = NSDictionary
     typealias Callback = PromiseCallback
 
-    var engine: AgoraRtcEngineKit?
-    private var mediaObserver: MediaObserver?
-    private lazy var delegate: RtcEngineEventHandler = {
-        RtcEngineEventHandler() { [weak self] (methodName, data) in
-            self?.emit(methodName, data)
-        }
+    private lazy var manager: RtcEngineManager = {
+        RtcEngineManager()
     }()
 
     override class func moduleName() -> String! {
-        RCTRtcEngineModule.REACT_CLASS
+        RCTAgoraRtcEngineModule.REACT_CLASS
     }
 
     override func constantsToExport() -> [AnyHashable: Any]! {
@@ -33,7 +29,7 @@ class RCTRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     deinit {
-        destroy(nil)
+        manager.release()
     }
 
     override class func requiresMainQueueSetup() -> Bool {
@@ -56,15 +52,19 @@ class RCTRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
         sendEvent(withName: "\(RtcEngineEventHandler.PREFIX)\(methodName)", body: data)
     }
 
+    var engine: AgoraRtcEngineKit? {
+        return manager.engine
+    }
+
     func create(_ appId: String, _ callback: PromiseCallback?) {
-        engine = AgoraRtcEngineKit.sharedEngine(withAppId: appId, delegate: delegate)
+        manager.create(appId) { [weak self] (methodName, data) in
+            self?.emit(methodName, data)
+        }
         callback?.resolve(engine) { e in nil }
     }
 
     func destroy(_ callback: PromiseCallback?) {
-        callback?.resolve(engine) { e in nil }
-        AgoraRtcEngineKit.destroy()
-        engine = nil
+        callback?.resolve(engine) { e in manager.destroy() }
     }
 
     func setChannelProfile(_ profile: Int, _ callback: PromiseCallback?) {
@@ -141,13 +141,13 @@ class RCTRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
 
     func getUserInfoByUserAccount(_ userAccount: String, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getUserInfo(byUserAccount: userAccount, withError: nil)
+            manager.getUserInfoByUserAccount(userAccount)
         }
     }
 
     func getUserInfoByUid(_ uid: Int, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getUserInfo(byUid: UInt(uid), withError: nil)
+            manager.getUserInfoByUid(uid)
         }
     }
 
@@ -464,31 +464,21 @@ class RCTRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func registerMediaMetadataObserver(_ callback: PromiseCallback?) {
-        mediaObserver = MediaObserver() { [weak self] (methodName, data) in
+        callback?.code(manager.registerMediaMetadataObserver() { [weak self] (methodName, data) in
             self?.emit(methodName, data)
-        }
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.setMediaMetadataDelegate(mediaObserver, with: .video)
-        }
+        })
     }
 
     func unregisterMediaMetadataObserver(_ callback: PromiseCallback?) {
-        mediaObserver = nil
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.setMediaMetadataDelegate(mediaObserver, with: .video)
-        }
+        callback?.code(manager.unregisterMediaMetadataObserver())
     }
 
     func setMaxMetadataSize(_ size: Int, _ callback: PromiseCallback?) {
-        callback?.resolve(mediaObserver) { (observer: MediaObserver) in
-            observer.setMaxMetadataSize(size: size)
-        }
+        callback?.code(manager.setMaxMetadataSize(size))
     }
 
     func sendMetadata(_ metadata: String, _ callback: PromiseCallback?) {
-        callback?.resolve(mediaObserver) { (observer: MediaObserver) in
-            observer.addMetadata(metadata: metadata)
-        }
+        callback?.code(manager.addMetadata(metadata))
     }
 
     func addVideoWatermark(_ watermarkUrl: String, _ options: NSDictionary, _ callback: PromiseCallback?) {
@@ -594,19 +584,20 @@ class RCTRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func createDataStream(_ reliable: Bool, _ ordered: Bool, _ callback: PromiseCallback?) {
-        var streamId = 0
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.createDataStream(&streamId, reliable: reliable, ordered: ordered)
-            return streamId
+        let streamId = manager.createDataStream(reliable, ordered)
+        if streamId <= 0 {
+            callback?.code(streamId)
+        } else {
+            callback?.resolve(engine, { e in streamId})
         }
     }
 
     func sendStreamMessage(_ streamId: Int, _ message: String, _ callback: PromiseCallback?) {
-        callback?.code(engine?.sendStreamMessage(streamId, data: message.data(using: .utf8)!))
+        callback?.code(manager.sendStreamMessage(streamId, message))
     }
 }
 
-extension RCTRtcEngineModule {
+extension RCTAgoraRtcEngineModule {
     @objc func create(_ appId: String, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         create(appId, PromiseCallback(resolve, reject))
     }

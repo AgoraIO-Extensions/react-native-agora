@@ -5,15 +5,15 @@ import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.*
-import io.agora.rtc.react.RCTRtcChannelModule.Companion.REACT_CLASS
+import io.agora.rtc.react.RCTAgoraRtcChannelModule.Companion.REACT_CLASS
 
 @ReactModule(name = REACT_CLASS)
-class RCTRtcChannelModule(
+class RCTAgoraRtcChannelModule(
         reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext),
         RtcChannelInterface<ReadableMap, Promise> {
     companion object {
-        const val REACT_CLASS = "RCTRtcChannelModule"
+        const val REACT_CLASS = "RCTAgoraRtcChannelModule"
     }
 
     private val manager = RtcChannelManager()
@@ -39,7 +39,7 @@ class RCTRtcChannelModule(
     }
 
     private fun engine(): RtcEngine? {
-        return reactApplicationContext.getNativeModule(RCTRtcEngineModule::class.java).engine
+        return reactApplicationContext.getNativeModule(RCTAgoraRtcEngineModule::class.java).engine()
     }
 
     @ReactMethod
