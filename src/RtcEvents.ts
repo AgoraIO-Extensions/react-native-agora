@@ -93,6 +93,11 @@ type EnabledCallback = (enabled: boolean) => void
 type AudioQualityCallback = (uid: number, quality: number, delay: number, lost: number) => void
 type MetadataCallback = (buffer: string, uid: number, timeStampMs: number) => void
 
+/**
+ * The SDK uses the RtcEngineEvents interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
+ * All methods in this interface class have their (empty) default implementations, and the application can inherit only some of the required events instead of all of them.
+ * In the callbacks, the application should avoid time-consuming tasks or call blocking APIs (such as SendMessage), otherwise, the SDK may not work properly.
+ */
 export interface RtcEngineEvents {
     /**
      * Reports a warning during SDK runtime.
@@ -696,6 +701,9 @@ export interface RtcEngineEvents {
     MetadataReceived: MetadataCallback
 }
 
+/**
+ * The RtcChannelEvents interface.
+ */
 export interface RtcChannelEvents {
     /**
      * Reports the warning code of the RtcChannel instance.

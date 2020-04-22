@@ -37,6 +37,9 @@ const RtcEngineEvent = new NativeEventEmitter(RtcEngineModule);
 
 let engine: RtcEngine | undefined;
 
+/**
+ * RtcEngine is the main class of the Agora SDK.
+ */
 export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
     RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
     RtcMediaRelayInterface, RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface,

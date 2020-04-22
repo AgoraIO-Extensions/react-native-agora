@@ -19,6 +19,9 @@ const RtcChannelEvent = new NativeEventEmitter(RtcChannelModule);
 
 const channels = new Map<string, RtcChannel>();
 
+/**
+ * The RtcChannel class.
+ */
 export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
     RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface, RtcFallbackInterface,
     RtcMediaMetadataInterface, RtcEncryptionInterface, RtcInjectStreamInterface, RtcStreamMessageInterface {
