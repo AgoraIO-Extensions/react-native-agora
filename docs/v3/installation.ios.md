@@ -26,6 +26,14 @@ cd node_modules/react-native-agora
 sh ./install.sh
 ```
 
+Embedding the frameworks because they are dynamic libraries. The framework's path at:
+
+```shell script
+node_modules/react-native-agora/ios/RCTAgora/Libs/*.framework
+```
+
+[Apple Official Doc](https://developer.apple.com/library/archive/technotes/tn2435/_index.html#//apple_ref/doc/uid/DTS40017543-CH1-EMBED_IN_APP_SECTION)
+
 ### Using with CocoaPods. (**recommended**)
 
 Install CocoaPods.
