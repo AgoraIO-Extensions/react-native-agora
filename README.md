@@ -17,11 +17,11 @@ This SDK takes advantage of React Native and Agora RTC Video SDK on Android && i
 Install `react-native-agora`(^3.0.0):
 
 ```shell script
-yarn add react-native-agora
+yarn add react-native-agora@beta
 ```
 or
 ```shell script
-npm i --save react-native-agora
+npm i --save react-native-agora@beta
 ```
 
 Go to your ios folder and run:
@@ -40,17 +40,11 @@ pod install
 Install `react-native-agora`(^3.0.0):
 
 ```shell script
-yarn add react-native-agora
+yarn add react-native-agora@beta
 ```
 or
 ```shell script
-npm i --save react-native-agora
-```
-
-Use `react-native link` to add the library to your project:
-
-```shell script
-react-native link react-native-agora
+npm i --save react-native-agora@beta
 ```
 
 **_ IMPORTANT _**
@@ -89,6 +83,27 @@ We suggest you use TypeScript to develop, or use TypeScript eslint to lint your 
 * [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project)
 
 ## Troubleshooting
+
+### Pod install failed (React Native >= 0.62.0) 
+
+The error log:
+
+```
+[!] The 'xxx' target has libraries with conflicting names: libcrypto.a.
+```
+
+You should disable Flipper, you can found it in the Podfile, and comment the code about Flipper in AppDelegate
+
+```
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable these next few lines.
+  add_flipper_pods!
+  post_install do |installer|
+    flipper_post_install(installer)
+  end
+```
 
 ### RCT_EXTERN_MODULE Swift modules broken in Xcode 10.2
 

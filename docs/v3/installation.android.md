@@ -4,6 +4,7 @@
 
 * Android SDK 28+
 * Android Studio
+* Kotlin
 
 ## Step 1. Migrating to AndroidX.
 
@@ -13,7 +14,19 @@ Android Studio -> Refactor -> Migrate to AndroidX... -> Migrate
 
 [Google Official Doc](https://developer.android.com/jetpack/androidx/migrate)
 
-## Step 2. Define the `react-native-agora` project in `android/settings.gradle`:
+## Step 2. Link the library.
+
+### Automatic
+
+Use `react-native link` to add the library to your project:
+
+```shell script
+react-native link react-native-agora
+```
+
+### Manual
+
+Define the `react-native-agora` project in `android/settings.gradle`:
 
 ```groovy
 ...
@@ -21,7 +34,7 @@ include ':react-native-agora'
 project(':react-native-agora').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-agora/android')
 ```
 
-## Step 3. Add the `react-native-agora` as an dependency of your app in `android/app/build.gradle`:
+Add the `react-native-agora` as a dependency of your app in `android/app/build.gradle`:
 
 ```groovy
 ...
@@ -31,7 +44,23 @@ dependencies {
 }
 ```
 
-## Step 4. If you've defined *[project-wide properties](https://developer.android.com/studio/build/gradle-tips.html)* (**recommended**) in your root `build.gradle`, this library will detect the presence of the following properties:
+Add `import io.agora.rtc.react.RCTAgoraRtcPackage;` and `new RCTAgoraRtcPackage()` in your `MainApplication.java`:
+
+```java
+import io.agora.rtc.react.RCTAgoraRtcPackage;
+...
+    @Override
+    protected List<ReactPackage> getPackages() {
+        return Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                new RCTAgoraRtcPackage()
+        );
+    }
+```
+
+## Step 3. Add ext Config. (**recommended**)
+
+If you've defined *[project-wide properties](https://developer.android.com/studio/build/gradle-tips.html)* in your root `build.gradle`, this library will detect the presence of the following properties:
 
 ```groovy
 buildscript {...}
@@ -62,7 +91,9 @@ buildscript {
 ...
 ```
 
-## Step 5. Add `android:networkSecurityConfig` to your manifest file (`android/app/src/main/AndroidManifest.xml`):
+## Step 4. Add Network Security Config.
+
+Add `android:networkSecurityConfig` to your manifest file (`android/app/src/main/AndroidManifest.xml`):
 
 ```xml
 <application android:networkSecurityConfig="@xml/network_security_config">
@@ -71,17 +102,3 @@ buildscript {
 ```
 
 [Google Official Doc](https://developer.android.com/training/articles/security-config)
-
-## Step 6. Add `import io.agora.rtc.react.RCTAgoraRtcPackage;` and `new RCTAgoraRtcPackage()` in your `MainApplication.java`:
-
-```java
-import io.agora.rtc.react.RCTAgoraRtcPackage;
-...
-    @Override
-    protected List<ReactPackage> getPackages() {
-        return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new RCTAgoraRtcPackage()
-        );
-    }
-```
