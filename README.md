@@ -1,6 +1,7 @@
 ##### 有任何问题欢迎加入QQ群进行反馈  471757030
 
 ## [for 3.0.0 beta version](https://github.com/syanbo/react-native-agora/tree/beta/3.0.0)
+### We suggest you use the beta version and welcome to communicate with us by creating issues.
 ## [for 1.x old version](README.old.md)
 
 # react-native-agora
