@@ -10,12 +10,12 @@
 
 @interface RCT_EXTERN_MODULE(RCTAgoraRtcSurfaceViewManager, NSObject)
 
-RCT_EXPORT_VIEW_PROPERTY(renderMode, int)
+RCT_EXPORT_VIEW_PROPERTY(renderMode, NSInteger)
 
 RCT_EXPORT_VIEW_PROPERTY(channelId, NSString)
 
-RCT_EXPORT_VIEW_PROPERTY(mirrorMode, int)
+RCT_EXPORT_VIEW_PROPERTY(mirrorMode, NSInteger)
 
-RCT_EXPORT_VIEW_PROPERTY(uid, int)
+RCT_EXPORT_VIEW_PROPERTY(uid, NSInteger)
 
 @end
