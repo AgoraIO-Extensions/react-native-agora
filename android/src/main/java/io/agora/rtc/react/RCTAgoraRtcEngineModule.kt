@@ -43,8 +43,8 @@ class RCTAgoraRtcEngineModule(
     }
 
     @ReactMethod
-    override fun create(appId: String, callback: Promise?) {
-        manager.create(reactApplicationContext.applicationContext, appId) { methodName, data ->
+    override fun create(appId: String, areaCode: Int, callback: Promise?) {
+        manager.create(reactApplicationContext.applicationContext, appId, areaCode, Annotations.AgoraRtcAppType.REACTNATIVE) { methodName, data ->
             emit(methodName, data)
         }
         PromiseCallback(callback).resolve(engine()) {}
@@ -142,12 +142,12 @@ class RCTAgoraRtcEngineModule(
 
     @ReactMethod
     override fun getUserInfoByUserAccount(userAccount: String, callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { manager.getUserInfoByUserAccount(userAccount) }
+        PromiseCallback(callback).resolve(engine()) { Arguments.makeNativeMap(manager.getUserInfoByUserAccount(userAccount)) }
     }
 
     @ReactMethod
     override fun getUserInfoByUid(uid: Int, callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { manager.getUserInfoByUid(uid) }
+        PromiseCallback(callback).resolve(engine()) { Arguments.makeNativeMap(manager.getUserInfoByUid(uid)) }
     }
 
     @ReactMethod
@@ -313,6 +313,11 @@ class RCTAgoraRtcEngineModule(
     @ReactMethod
     override fun setAudioMixingPosition(pos: Int, callback: Promise?) {
         PromiseCallback(callback).code(engine()?.setAudioMixingPosition(pos))
+    }
+
+    @ReactMethod
+    override fun setAudioMixingPitch(pitch: Int, callback: Promise?) {
+        PromiseCallback(callback).code(engine()?.setAudioMixingPitch(pitch))
     }
 
     @ReactMethod
@@ -633,6 +638,11 @@ class RCTAgoraRtcEngineModule(
     @ReactMethod
     override fun setCameraExposurePosition(positionXinView: Float, positionYinView: Float, callback: Promise?) {
         PromiseCallback(callback).code(engine()?.setCameraExposurePosition(positionXinView, positionYinView))
+    }
+
+    @ReactMethod
+    override fun enableFaceDetection(enable: Boolean, callback: Promise?) {
+        PromiseCallback(callback).code(engine()?.enableFaceDetection(enable))
     }
 
     @ReactMethod

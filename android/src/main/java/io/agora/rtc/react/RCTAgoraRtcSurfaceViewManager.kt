@@ -3,6 +3,7 @@ package io.agora.rtc.react
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
+import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcSurfaceView
 
@@ -39,7 +40,7 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
 
     @ReactProp(name = "channelId")
     fun setChannelId(view: RtcSurfaceView, channelId: String) {
-        getEngine()?.let { view.setChannelId(it, channelId) }
+        getEngine()?.let { view.setChannel(it, getChannel(channelId)) }
     }
 
     @ReactProp(name = "mirrorMode")
@@ -54,5 +55,9 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
 
     private fun getEngine(): RtcEngine? {
         return reactContext?.getNativeModule(RCTAgoraRtcEngineModule::class.java)?.engine()
+    }
+
+    private fun getChannel(channelId: String): RtcChannel? {
+        return reactContext?.getNativeModule(RCTAgoraRtcChannelModule::class.java)?.channel(channelId)
     }
 }

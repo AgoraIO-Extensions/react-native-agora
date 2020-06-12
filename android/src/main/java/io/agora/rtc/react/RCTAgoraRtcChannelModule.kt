@@ -3,6 +3,7 @@ package io.agora.rtc.react
 import com.facebook.react.bridge.*
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.*
 import io.agora.rtc.react.RCTAgoraRtcChannelModule.Companion.REACT_CLASS
@@ -42,6 +43,10 @@ class RCTAgoraRtcChannelModule(
         return reactApplicationContext.getNativeModule(RCTAgoraRtcEngineModule::class.java).engine()
     }
 
+    fun channel(channelId: String): RtcChannel? {
+        return manager[channelId]
+    }
+
     @ReactMethod
     override fun create(channelId: String, callback: Promise?) {
         PromiseCallback(callback).resolve(engine()) {
@@ -63,72 +68,72 @@ class RCTAgoraRtcChannelModule(
 
     @ReactMethod
     override fun joinChannel(channelId: String, token: String?, optionalInfo: String?, optionalUid: Int, options: ReadableMap, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.joinChannel(token, optionalInfo, optionalUid, mapToChannelMediaOptions(options.toHashMap())))
+        PromiseCallback(callback).code(channel(channelId)?.joinChannel(token, optionalInfo, optionalUid, mapToChannelMediaOptions(options.toHashMap())))
     }
 
     @ReactMethod
     override fun joinChannelWithUserAccount(channelId: String, token: String?, userAccount: String, options: ReadableMap, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.joinChannelWithUserAccount(token, userAccount, mapToChannelMediaOptions(options.toHashMap())))
+        PromiseCallback(callback).code(channel(channelId)?.joinChannelWithUserAccount(token, userAccount, mapToChannelMediaOptions(options.toHashMap())))
     }
 
     @ReactMethod
     override fun leaveChannel(channelId: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.leaveChannel())
+        PromiseCallback(callback).code(channel(channelId)?.leaveChannel())
     }
 
     @ReactMethod
     override fun renewToken(channelId: String, token: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.renewToken(token))
+        PromiseCallback(callback).code(channel(channelId)?.renewToken(token))
     }
 
     @ReactMethod
     override fun getConnectionState(channelId: String, callback: Promise?) {
-        PromiseCallback(callback).resolve(manager[channelId]) { it.connectionState }
+        PromiseCallback(callback).resolve(channel(channelId)) { it.connectionState }
     }
 
     @ReactMethod
     override fun publish(channelId: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.publish())
+        PromiseCallback(callback).code(channel(channelId)?.publish())
     }
 
     @ReactMethod
     override fun unpublish(channelId: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.unpublish())
+        PromiseCallback(callback).code(channel(channelId)?.unpublish())
     }
 
     @ReactMethod
     override fun getCallId(channelId: String, callback: Promise?) {
-        PromiseCallback(callback).resolve(manager[channelId]) { it.callId }
+        PromiseCallback(callback).resolve(channel(channelId)) { it.callId }
     }
 
     @ReactMethod
     override fun setLiveTranscoding(channelId: String, transcoding: ReadableMap, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setLiveTranscoding(mapToLiveTranscoding(transcoding.toHashMap())))
+        PromiseCallback(callback).code(channel(channelId)?.setLiveTranscoding(mapToLiveTranscoding(transcoding.toHashMap())))
     }
 
     @ReactMethod
     override fun addPublishStreamUrl(channelId: String, url: String, transcodingEnabled: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.addPublishStreamUrl(url, transcodingEnabled))
+        PromiseCallback(callback).code(channel(channelId)?.addPublishStreamUrl(url, transcodingEnabled))
     }
 
     @ReactMethod
     override fun removePublishStreamUrl(channelId: String, url: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.removePublishStreamUrl(url))
+        PromiseCallback(callback).code(channel(channelId)?.removePublishStreamUrl(url))
     }
 
     @ReactMethod
     override fun startChannelMediaRelay(channelId: String, channelMediaRelayConfiguration: ReadableMap, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration.toHashMap())))
+        PromiseCallback(callback).code(channel(channelId)?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration.toHashMap())))
     }
 
     @ReactMethod
     override fun updateChannelMediaRelay(channelId: String, channelMediaRelayConfiguration: ReadableMap, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration.toHashMap())))
+        PromiseCallback(callback).code(channel(channelId)?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration.toHashMap())))
     }
 
     @ReactMethod
     override fun stopChannelMediaRelay(channelId: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.stopChannelMediaRelay())
+        PromiseCallback(callback).code(channel(channelId)?.stopChannelMediaRelay())
     }
 
     @ReactMethod
@@ -153,86 +158,86 @@ class RCTAgoraRtcChannelModule(
 
     @ReactMethod
     override fun setEncryptionSecret(channelId: String, secret: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setEncryptionSecret(secret))
+        PromiseCallback(callback).code(channel(channelId)?.setEncryptionSecret(secret))
     }
 
     @ReactMethod
     override fun setEncryptionMode(channelId: String, encryptionMode: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setEncryptionMode(encryptionMode))
+        PromiseCallback(callback).code(channel(channelId)?.setEncryptionMode(encryptionMode))
     }
 
     @ReactMethod
     override fun addInjectStreamUrl(channelId: String, url: String, config: ReadableMap, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.addInjectStreamUrl(url, mapToLiveInjectStreamConfig(config.toHashMap())))
+        PromiseCallback(callback).code(channel(channelId)?.addInjectStreamUrl(url, mapToLiveInjectStreamConfig(config.toHashMap())))
     }
 
     @ReactMethod
     override fun removeInjectStreamUrl(channelId: String, url: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.removeInjectStreamUrl(url))
+        PromiseCallback(callback).code(channel(channelId)?.removeInjectStreamUrl(url))
     }
 
     @ReactMethod
     override fun createDataStream(channelId: String, reliable: Boolean, ordered: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.createDataStream(reliable, ordered))
+        PromiseCallback(callback).code(channel(channelId)?.createDataStream(reliable, ordered))
     }
 
     @ReactMethod
     override fun sendStreamMessage(channelId: String, streamId: Int, message: String, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.sendStreamMessage(streamId, message.toByteArray()))
+        PromiseCallback(callback).code(channel(channelId)?.sendStreamMessage(streamId, message.toByteArray()))
     }
 
     @ReactMethod
     override fun adjustUserPlaybackSignalVolume(channelId: String, uid: Int, volume: Int, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.adjustUserPlaybackSignalVolume(uid, volume))
+        PromiseCallback(callback).code(channel(channelId)?.adjustUserPlaybackSignalVolume(uid, volume))
     }
 
     @ReactMethod
     override fun muteRemoteAudioStream(channelId: String, uid: Int, muted: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.muteRemoteAudioStream(uid, muted))
+        PromiseCallback(callback).code(channel(channelId)?.muteRemoteAudioStream(uid, muted))
     }
 
     @ReactMethod
     override fun muteAllRemoteAudioStreams(channelId: String, muted: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.muteAllRemoteAudioStreams(muted))
+        PromiseCallback(callback).code(channel(channelId)?.muteAllRemoteAudioStreams(muted))
     }
 
     @ReactMethod
     override fun setDefaultMuteAllRemoteAudioStreams(channelId: String, muted: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setDefaultMuteAllRemoteAudioStreams(muted))
+        PromiseCallback(callback).code(channel(channelId)?.setDefaultMuteAllRemoteAudioStreams(muted))
     }
 
     @ReactMethod
     override fun muteRemoteVideoStream(channelId: String, uid: Int, muted: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.muteRemoteVideoStream(uid, muted))
+        PromiseCallback(callback).code(channel(channelId)?.muteRemoteVideoStream(uid, muted))
     }
 
     @ReactMethod
     override fun muteAllRemoteVideoStreams(channelId: String, muted: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.muteAllRemoteVideoStreams(muted))
+        PromiseCallback(callback).code(channel(channelId)?.muteAllRemoteVideoStreams(muted))
     }
 
     @ReactMethod
     override fun setDefaultMuteAllRemoteVideoStreams(channelId: String, muted: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setDefaultMuteAllRemoteVideoStreams(muted))
+        PromiseCallback(callback).code(channel(channelId)?.setDefaultMuteAllRemoteVideoStreams(muted))
     }
 
     @ReactMethod
     override fun setRemoteVoicePosition(channelId: String, uid: Int, pan: Double, gain: Double, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setRemoteVoicePosition(uid, pan, gain))
+        PromiseCallback(callback).code(channel(channelId)?.setRemoteVoicePosition(uid, pan, gain))
     }
 
     @ReactMethod
     override fun setRemoteVideoStreamType(channelId: String, uid: Int, streamType: Int, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setRemoteVideoStreamType(uid, streamType))
+        PromiseCallback(callback).code(channel(channelId)?.setRemoteVideoStreamType(uid, streamType))
     }
 
     @ReactMethod
     override fun setRemoteDefaultVideoStreamType(channelId: String, streamType: Int, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setRemoteDefaultVideoStreamType(streamType))
+        PromiseCallback(callback).code(channel(channelId)?.setRemoteDefaultVideoStreamType(streamType))
     }
 
     @ReactMethod
     override fun setRemoteUserPriority(channelId: String, uid: Int, userPriority: Int, callback: Promise?) {
-        PromiseCallback(callback).code(manager[channelId]?.setRemoteUserPriority(uid, userPriority))
+        PromiseCallback(callback).code(channel(channelId)?.setRemoteUserPriority(uid, userPriority))
     }
 }

@@ -14,6 +14,7 @@ import {
     ConnectionChangedReason,
     ConnectionStateType,
     ErrorCode,
+    FacePositionInfo,
     InjectStreamStatus,
     LastmileProbeResult,
     LocalAudioStats,
@@ -92,6 +93,7 @@ type UidWithEnabledCallback = (uid: number, enabled: boolean) => void
 type EnabledCallback = (enabled: boolean) => void
 type AudioQualityCallback = (uid: number, quality: number, delay: number, lost: number) => void
 type MetadataCallback = (buffer: string, uid: number, timeStampMs: number) => void
+type FacePositionCallback = (imageWidth: number, imageHeight: number, faces: [FacePositionInfo]) => void
 
 /**
  * The SDK uses the RtcEngineEvents interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
@@ -360,6 +362,20 @@ export interface RtcEngineEvents {
      * @see RtcEngine.setCameraExposurePosition
      */
     CameraExposureAreaChanged: RectCallback
+
+    /**
+     * Reports the face detection result of the local user.
+     * Once you enable face detection by calling enableFaceDetection, you can get the following information on the local user in real-time:
+     * @see RtcEngine#enableFaceDetection
+     * - The width and height of the local video.
+     * - The position of the human face in the local video.
+     * - The distance between the human face and the device screen. This value is based on the fitting calculation of the local video size and the position of the human face.
+     * Note
+     * - If the SDK does not detect a face, it reduces the frequency of this callback to reduce power consumption on the local device.
+     * - The SDK stops triggering this callback when a human face is in close proximity to the screen.
+     * - On Android, the distance value reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.
+     */
+    FacePositionChanged: FacePositionCallback
 
     /**
      * Reports the statistics of the RtcEngine once every two seconds.

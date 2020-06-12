@@ -1,4 +1,31 @@
 /**
+ * IP areas
+ * @enum {number}
+ */
+export enum IPAreaCode {
+    /**
+     * Mainland China
+     */
+    AREA_CN = 1 << 0,
+    /**
+     * North America
+     */
+    AREA_NA = 1 << 1,
+    /**
+     * AREA_EUR
+     */
+    AREA_EUR = 1 << 2,
+    /**
+     * Asia, excluding Mainland China
+     */
+    AREA_AS = 1 << 3,
+    /**
+     * (Default) Global
+     */
+    AREA_GLOBAL = 0xFFFFFFFF,
+}
+
+/**
  * Audio codec profile.
  * @enum {number}
  */
@@ -348,35 +375,73 @@ export enum AudioReverbPreset {
     /**
      * The original voice (no local voice reverberation).
      */
-    Off = 0,
+    Off = 0x00000000,
     /**
      * Pop music
      */
-    Popular = 1,
+    Popular = 0x00000001,
     /**
      * R&B
      */
-    RnB = 2,
+    RnB = 0x00000002,
     /**
      * Rock music
      */
-    Rock = 3,
+    Rock = 0x00000003,
     /**
      * Hip-hop music
      */
-    HipHop = 4,
+    HipHop = 0x00000004,
     /**
      * Pop concert
      */
-    VocalConcert = 5,
+    VocalConcert = 0x00000005,
     /**
      * Karaoke
      */
-    KTV = 6,
+    KTV = 0x00000006,
     /**
      * Recording studio
      */
-    Studio = 7,
+    Studio = 0x00000007,
+    /**
+     * The reverberation style typical of a KTV venue (enhanced).
+     */
+    FX_KTV = 0x00100001,
+    /**
+     * The reverberation style typical of a concert hall (enhanced).
+     */
+    FX_VOCAL_CONCERT = 0x00100002,
+    /**
+     * The reverberation style typical of an uncle’s voice.
+     */
+    FX_UNCLE = 0x00100003,
+    /**
+     * The reverberation style typical of a sister’s voice.
+     */
+    FX_SISTER = 0x00100004,
+    /**
+     * The reverberation style typical of a recording studio (enhanced).
+     */
+    FX_STUDIO = 0x00100005,
+    /**
+     * The reverberation style typical of popular music (enhanced).
+     */
+    FX_POPULAR = 0x00100006,
+    /**
+     * The reverberation style typical of R&B music (enhanced).
+     */
+    FX_RNB = 0x00100007,
+    /**
+     * The reverberation style typical of the vintage phonograph.
+     */
+    FX_PHONOGRAPH = 0x00100008,
+    /**
+     * The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the profile parameter in setAudioProfile as MusicHighQualityStereo(5).
+     * @see RtcEngine#setAudioProfile
+     * @see AudioProfile.MusicHighQualityStereo
+     */
+    VIRTUAL_STEREO = 0x00200001,
 }
 
 /**
@@ -496,31 +561,79 @@ export enum AudioVoiceChanger {
     /**
      * The original voice (no local voice change).
      */
-    Off = 0,
+    Off = 0x00000000,
     /**
      * An old man’s voice.
      */
-    OldMan = 1,
+    OldMan = 0x00000001,
     /**
      * A little boy’s voice.
      */
-    BabyBoy = 2,
+    BabyBoy = 0x00000002,
     /**
      * A little girl’s voice.
      */
-    BabyGirl = 3,
+    BabyGirl = 0x00000003,
     /**
      * TBD
      */
-    ZhuBaJie = 4,
+    ZhuBaJie = 0x00000004,
     /**
      * Ethereal vocal effects.
      */
-    Ethereal = 5,
+    Ethereal = 0x00000005,
     /**
      * Hulk’s voice.
      */
-    Hulk = 6,
+    Hulk = 0x00000006,
+    /**
+     * A more vigorous voice.
+     */
+    BEAUTY_VIGOROUS = 0x00100001,
+    /**
+     * A deeper voice.
+     */
+    BEAUTY_DEEP = 0x00100002,
+    /**
+     * A mellower voice.
+     */
+    BEAUTY_MELLOW = 0x00100003,
+    /**
+     * Falsetto.
+     */
+    BEAUTY_FALSETTO = 0x00100004,
+    /**
+     * A fuller voice.
+     */
+    BEAUTY_FULL = 0x00100005,
+    /**
+     * A clearer voice.
+     */
+    BEAUTY_CLEAR = 0x00100006,
+    /**
+     * A more resounding voice.
+     */
+    BEAUTY_RESOUNDING = 0x00100007,
+    /**
+     * A more ringing voice.
+     */
+    BEAUTY_RINGING = 0x00100008,
+    /**
+     * A more spatially resonant voice.
+     */
+    BEAUTY_SPACIAL = 0x00100009,
+    /**
+     * (For male only) A more magnetic voice. Do not use it when the speaker is a female; otherwise, voice distortion occurs.
+     */
+    GENERAL_BEAUTY_VOICE_MALE_MAGNETIC = 0x00200001,
+    /**
+     * (For female only) A fresher voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
+     */
+    GENERAL_BEAUTY_VOICE_FEMALE_FRESH = 0x00200002,
+    /**
+     * (For female only) A more vital voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
+     */
+    GENERAL_BEAUTY_VOICE_FEMALE_VITALITY = 0x00200003,
 }
 
 /**
@@ -2035,6 +2148,10 @@ export enum VideoRenderMode {
      * @deprecated
      */
     Adaptive = 3,
+    /**
+     * The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
+     */
+    FILL = 4,
 }
 
 /**
@@ -2644,6 +2761,7 @@ export interface LocalVideoStats {
  * @property receivedBitrate: int | The average bitrate (Kbps) of the received audio stream in the reported interval.
  * @property totalFrozenTime: int | The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In the reported interval, audio freeze occurs when the audio frame loss rate reaches 4%. totalFrozenTime = The audio freeze time × 2 × 1000 (ms).
  * @property frozenRate: int | The total audio freeze time as a percentage (%) of the total time when the audio is available.
+ * @property totalActiveTime: int | The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the Live-broadcast profile neither stops sending the audio stream nor disables the audio module after joining the channel.
  */
 export interface RemoteAudioStats {
     uid: number
@@ -2656,6 +2774,7 @@ export interface RemoteAudioStats {
     receivedBitrate: number
     totalFrozenTime: number
     frozenRate: number
+    totalActiveTime: number
 }
 
 /**
@@ -2671,6 +2790,7 @@ export interface RemoteAudioStats {
  * @property rxStreamType: int | Video stream type (high-stream or low-stream).
  * @property totalFrozenTime: int | The total freeze time (ms) of the remote video stream after the remote user joins the channel.
  * @property frozenRate: int | The total video freeze time as a percentage (%) of the total time when the video is available.
+ * @property totalActiveTime: int | The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the Live-broadcast profile neither stops sending the video stream nor disables the video module after joining the channel.
  */
 export interface RemoteVideoStats {
     uid: number
@@ -2687,4 +2807,21 @@ export interface RemoteVideoStats {
     rxStreamType: VideoStreamType
     totalFrozenTime: number
     frozenRate: number
+    totalActiveTime: number
+}
+
+/**
+ * The information of the detected human face.
+ * @property x: int | The x coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the x coordinate represents the relative lateral displacement of the top left corner of the human face to the origin.
+ * @property y: int | The y coordinate (px) of the human face in the local video. Taking the top left corner of the captured video as the origin, the y coordinate represents the relative longitudinal displacement of the top left corner of the human face to the origin.
+ * @property width: int | The width (px) of the human face in the captured video.
+ * @property height: int | The height (px) of the human face in the captured video.
+ * @property distance: int | The distance (cm) between the human face and the screen.
+ */
+export interface FacePositionInfo {
+    x: number
+    y: number
+    width: number
+    height: number
+    distance: number
 }

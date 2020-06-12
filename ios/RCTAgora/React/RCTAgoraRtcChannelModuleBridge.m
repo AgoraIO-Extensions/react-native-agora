@@ -12,7 +12,7 @@
 @interface RCT_EXTERN_MODULE(RCTAgoraRtcChannelModule, NSObject)
 
 RCT_EXTERN_METHOD(create:
-    (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(int) areaCode :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(destroy:
     (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
