@@ -15,6 +15,7 @@ import {
     ClientRole,
     ConnectionStateType,
     EncryptionMode,
+    IPAreaCode,
     LastmileProbeConfig,
     LiveInjectStreamConfig,
     LiveTranscoding,
@@ -59,11 +60,36 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Creates an RtcEngine instance.
      * @see RtcEngine
-     * The Agora SDK only supports one RtcEngine instance at a time, therefore the app should create one RtcEngine object only. Unless otherwise specified:
-     * - All called methods provided by the RtcEngine class are executed asynchronously. We recommend calling the interface methods in the same thread.
-     * @param appId The App ID issued to you by Agora. Apply for a new App ID from Agora if it is missing from your kit.
+     * Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
+     * Note
+     * - You must create an RtcEngine instance before calling any other method.
+     * - You can create an RtcEngine instance either by calling this method or by calling create2. The difference between create2 and this method is that create2 enables you to specify the connection area.
+     * @see RtcEngine#createWithAreaCode
+     * - The Agora RTC Native SDK supports creating only one RtcEngine instance for an app for now.
+     * @param appId The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one RtcEngine instance. To change your App ID, call destroy to destroy the current RtcEngine instance, and after destroy returns 0, call create to create an RtcEngine instance with the new App ID.
      */
     static async create(appId: string): Promise<RtcEngine> {
+        return RtcEngine.createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL)
+    }
+
+    /**
+     * Creates an RtcEngine instance.
+     * @see RtcEngine
+     * Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
+     * Note
+     * - You must create an RtcEngine instance before calling any other method.
+     * - You can create an RtcEngine instance either by calling this method or by calling create1. The difference between create1 and this method is that this method enables you to specify the connection area.
+     * @see RtcEngine#create
+     * - The Agora RTC Native SDK supports creating only one RtcEngine instance for an app for now.
+     * @param appId The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one RtcEngine instance. To change your App ID, call destroy to destroy the current RtcEngine instance and after destroy returns 0, call create to create an RtcEngine instance with the new App ID.
+     * @param areaCode The area of connection. This advanced feature applies to scenarios that have regional restrictions.
+     * You can use the bitwise OR operator (|) to specify multiple areas. For details, see IPAreaCode.
+     * @see IPAreaCode
+     * After specifying the area of connection:
+     * - When the app that integrates the Agora SDK is used within the specified area, it connects to the Agora servers within the specified area under normal circumstances.
+     * - When the app that integrates the Agora SDK is used out of the specified area, it connects to the Agora servers either in the specified area or in the area where the app is located.
+     */
+    static async createWithAreaCode(appId: string, areaCode: IPAreaCode): Promise<RtcEngine> {
         if (engine) return engine;
         await AgoraRtcEngineModule.create(appId);
         engine = new RtcEngine();
@@ -495,6 +521,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
         return AgoraRtcEngineModule.resumeAudioMixing();
     }
 
+    setAudioMixingPitch(pitch: number): Promise<void> {
+        return AgoraRtcEngineModule.setAudioMixingPitch(pitch);
+    }
+
     setAudioMixingPosition(pos: number): Promise<void> {
         return AgoraRtcEngineModule.setAudioMixingPosition(pos);
     }
@@ -721,6 +751,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     removeInjectStreamUrl(url: string): Promise<void> {
         return AgoraRtcEngineModule.removeInjectStreamUrl(url);
+    }
+
+    enableFaceDetection(enable: boolean): Promise<void> {
+        return AgoraRtcEngineModule.enableFaceDetection(enable)
     }
 
     getCameraMaxZoomFactor(): Promise<number> {
@@ -1267,6 +1301,16 @@ interface RtcAudioMixingInterface {
      * @param pos The playback starting position (ms) of the audio mixing file.
      */
     setAudioMixingPosition(pos: number): Promise<void>;
+
+    /**
+     * Sets the pitch of the local music file.
+     * When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only.
+     * Note
+     * - Call this method after calling startAudioMixing.
+     * @see RtcEngine#startAudioMixing
+     * @param pitch Sets the pitch of the local music file by chromatic scale. The default value is 0, which means keep the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
+     */
+    setAudioMixingPitch(pitch: number): Promise<void>;
 }
 
 interface RtcAudioEffectInterface {
@@ -1971,6 +2015,19 @@ interface RtcCameraInterface {
      * @param positionYinView The vertical coordinate of the touch point in the view.
      */
     setCameraExposurePosition(positionXinView: number, positionYinView: number): Promise<void>;
+
+    /**
+     * Enables/Disables face detection for the local user.
+     * Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following aspects:
+     * @see RtcEngineEvents.FacePositionChanged
+     * - The width and height of the local video.
+     * - The position of the human face in the local video.
+     * - The distance between the human face and the device screen.
+     * @param enable Determines whether to enable the face detection function for the local user:
+     * - true: Enable face detection.
+     * - false: (Default) Disable face detection.
+     */
+    enableFaceDetection(enable: boolean): Promise<void>;
 
     /**
      * Enables the camera flash function.

@@ -42,7 +42,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
 
     override func supportedEvents() -> [String]! {
         var events = [String]()
-        RtcEngineEventHandler.EVENTS.forEach { key, value in
+        RtcEngineEvents.toMap().forEach { key, value in
             events.append("\(RtcEngineEventHandler.PREFIX)\(value)")
         }
         return events
@@ -56,8 +56,8 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
         return manager.engine
     }
 
-    func create(_ appId: String, _ callback: PromiseCallback?) {
-        manager.create(appId) { [weak self] (methodName, data) in
+    func create(_ appId: String, _ areaCode: Int, _ callback: PromiseCallback?) {
+        manager.create(appId, Int32(areaCode), .APP_TYPE_REACTNATIVE) { [weak self] (methodName, data) in
             self?.emit(methodName, data)
         }
         callback?.resolve(engine) { e in nil }
@@ -289,6 +289,10 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
 
     func setAudioMixingPosition(_ pos: Int, _ callback: PromiseCallback?) {
         callback?.code(engine?.setAudioMixingPosition(pos))
+    }
+    
+    func setAudioMixingPitch(_ pitch: Int, _ callback: PromiseCallback?) {
+        callback?.code(engine?.setAudioMixingPitch(pitch))
     }
 
     func getEffectsVolume(_ callback: PromiseCallback?) {
@@ -530,7 +534,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func isCameraFocusSupported(_ callback: PromiseCallback?) {
-
+        // TODO Not in iOS
     }
 
     func isCameraExposurePositionSupported(_ callback: PromiseCallback?) {
@@ -552,7 +556,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func getCameraMaxZoomFactor(_ callback: PromiseCallback?) {
-
+        // TODO Not in iOS
     }
 
     func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: PromiseCallback?) {
@@ -564,6 +568,12 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraExposurePosition(CGPoint(x: CGFloat(positionXinView), y: CGFloat(positionYinView)))
+        }
+    }
+    
+    func enableFaceDetection(_ enable: Bool, _ callback: PromiseCallback?) {
+        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
+            engine.enableFaceDetection(enable)
         }
     }
 
@@ -598,8 +608,8 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
 }
 
 extension RCTAgoraRtcEngineModule {
-    @objc func create(_ appId: String, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
-        create(appId, PromiseCallback(resolve, reject))
+    @objc func create(_ appId: String, _ areaCode: Int, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
+        create(appId, areaCode, PromiseCallback(resolve, reject))
     }
 
     @objc func destroy(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
@@ -812,6 +822,10 @@ extension RCTAgoraRtcEngineModule {
 
     @objc func setAudioMixingPosition(_ pos: Int, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         setAudioMixingPosition(pos, PromiseCallback(resolve, reject))
+    }
+    
+    @objc func setAudioMixingPitch(_ pitch: Int, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
+        setAudioMixingPitch(pitch, PromiseCallback(resolve, reject))
     }
 
     @objc func getEffectsVolume(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
@@ -1043,7 +1057,7 @@ extension RCTAgoraRtcEngineModule {
     }
 
     @objc func isCameraFocusSupported(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
-
+        // TODO Not in iOS
     }
 
     @objc func isCameraExposurePositionSupported(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
@@ -1059,7 +1073,7 @@ extension RCTAgoraRtcEngineModule {
     }
 
     @objc func getCameraMaxZoomFactor(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
-
+        // TODO Not in iOS
     }
 
     @objc func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
@@ -1068,6 +1082,10 @@ extension RCTAgoraRtcEngineModule {
 
     @objc func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         setCameraExposurePosition(positionXinView, positionYinView, PromiseCallback(resolve, reject))
+    }
+    
+    @objc func enableFaceDetection(_ enable: Bool, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
+        enableFaceDetection(enable, PromiseCallback(resolve, reject))
     }
 
     @objc func setCameraTorchOn(_ isOn: Bool, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {

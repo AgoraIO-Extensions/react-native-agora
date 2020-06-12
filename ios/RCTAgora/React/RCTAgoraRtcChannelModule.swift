@@ -42,7 +42,7 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
 
     override func supportedEvents() -> [String]! {
         var events = [String]()
-        RtcChannelEventHandler.EVENTS.forEach { key, value in
+        RtcChannelEvents.toMap().forEach { key, value in
             events.append("\(RtcChannelEventHandler.PREFIX)\(value)")
         }
         return events
@@ -54,6 +54,10 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
 
     private func engine() -> AgoraRtcEngineKit? {
         (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
+    }
+    
+    func channel(_ channelId: String) -> AgoraRtcChannel? {
+        manager[channelId]
     }
 
     func create(_ channelId: String, _ callback: PromiseCallback?) {
@@ -69,111 +73,111 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     func setClientRole(_ channelId: String, _ role: Int, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setClientRole(AgoraClientRole(rawValue: role)!))
+        callback?.code(channel(channelId)?.setClientRole(AgoraClientRole(rawValue: role)!))
     }
 
     func joinChannel(_ channelId: String, _ token: String?, _ optionalInfo: String?, _ optionalUid: Int, _ options: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.join(byToken: token, info: optionalInfo, uid: UInt(optionalUid), options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.join(byToken: token, info: optionalInfo, uid: UInt(optionalUid), options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
     }
 
     func joinChannelWithUserAccount(_ channelId: String, _ token: String?, _ userAccount: String, _ options: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.join(byUserAccount: userAccount, token: token, options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.join(byUserAccount: userAccount, token: token, options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
     }
 
     func leaveChannel(_ channelId: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.leave())
+        callback?.code(channel(channelId)?.leave())
     }
 
     func renewToken(_ channelId: String, _ token: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.renewToken(token))
+        callback?.code(channel(channelId)?.renewToken(token))
     }
 
     func getConnectionState(_ channelId: String, _ callback: PromiseCallback?) {
-        callback?.resolve(manager[channelId]) { (channel: AgoraRtcChannel) in
+        callback?.resolve(channel(channelId)) { (channel: AgoraRtcChannel) in
             channel.getConnectionState()
         }
     }
 
     func publish(_ channelId: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.publish())
+        callback?.code(channel(channelId)?.publish())
     }
 
     func unpublish(_ channelId: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.unpublish())
+        callback?.code(channel(channelId)?.unpublish())
     }
 
     func getCallId(_ channelId: String, _ callback: PromiseCallback?) {
-        callback?.resolve(manager[channelId]) { (channel: AgoraRtcChannel) in
+        callback?.resolve(channel(channelId)) { (channel: AgoraRtcChannel) in
             channel.getCallId()
         }
     }
 
     func adjustUserPlaybackSignalVolume(_ channelId: String, _ uid: Int, _ volume: Int, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.adjustUserPlaybackSignalVolume(UInt(uid), volume: Int32(volume)))
+        callback?.code(channel(channelId)?.adjustUserPlaybackSignalVolume(UInt(uid), volume: Int32(volume)))
     }
 
     func muteRemoteAudioStream(_ channelId: String, _ uid: Int, _ muted: Bool, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.muteRemoteAudioStream(UInt(uid), mute: muted))
+        callback?.code(channel(channelId)?.muteRemoteAudioStream(UInt(uid), mute: muted))
     }
 
     func muteAllRemoteAudioStreams(_ channelId: String, _ muted: Bool, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.muteAllRemoteAudioStreams(muted))
+        callback?.code(channel(channelId)?.muteAllRemoteAudioStreams(muted))
     }
 
     func setDefaultMuteAllRemoteAudioStreams(_ channelId: String, _ muted: Bool, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setDefaultMuteAllRemoteAudioStreams(muted))
+        callback?.code(channel(channelId)?.setDefaultMuteAllRemoteAudioStreams(muted))
     }
 
     func muteRemoteVideoStream(_ channelId: String, _ uid: Int, _ muted: Bool, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.muteRemoteVideoStream(UInt(uid), mute: muted))
+        callback?.code(channel(channelId)?.muteRemoteVideoStream(UInt(uid), mute: muted))
     }
 
     func muteAllRemoteVideoStreams(_ channelId: String, _ muted: Bool, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.muteAllRemoteVideoStreams(muted))
+        callback?.code(channel(channelId)?.muteAllRemoteVideoStreams(muted))
     }
 
     func setDefaultMuteAllRemoteVideoStreams(_ channelId: String, _ muted: Bool, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setDefaultMuteAllRemoteVideoStreams(muted))
+        callback?.code(channel(channelId)?.setDefaultMuteAllRemoteVideoStreams(muted))
     }
 
     func setRemoteVoicePosition(_ channelId: String, _ uid: Int, _ pan: Double, _ gain: Double, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setRemoteVoicePosition(UInt(uid), pan: pan, gain: gain))
+        callback?.code(channel(channelId)?.setRemoteVoicePosition(UInt(uid), pan: pan, gain: gain))
     }
 
     func setLiveTranscoding(_ channelId: String, _ transcoding: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
     }
 
     func addPublishStreamUrl(_ channelId: String, _ url: String, _ transcodingEnabled: Bool, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.addPublishStreamUrl(url, transcodingEnabled: transcodingEnabled))
+        callback?.code(channel(channelId)?.addPublishStreamUrl(url, transcodingEnabled: transcodingEnabled))
     }
 
     func removePublishStreamUrl(_ channelId: String, _ url: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.removePublishStreamUrl(url))
+        callback?.code(channel(channelId)?.removePublishStreamUrl(url))
     }
 
     func startChannelMediaRelay(_ channelId: String, _ channelMediaRelayConfiguration: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.startMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.startMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func updateChannelMediaRelay(_ channelId: String, _ channelMediaRelayConfiguration: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.updateMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.updateMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func stopChannelMediaRelay(_ channelId: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.stopMediaRelay())
+        callback?.code(channel(channelId)?.stopMediaRelay())
     }
 
     func setRemoteVideoStreamType(_ channelId: String, _ uid: Int, _ streamType: Int, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setRemoteVideoStream(UInt(uid), type: AgoraVideoStreamType(rawValue: streamType)!))
+        callback?.code(channel(channelId)?.setRemoteVideoStream(UInt(uid), type: AgoraVideoStreamType(rawValue: streamType)!))
     }
 
     func setRemoteDefaultVideoStreamType(_ channelId: String, _ streamType: Int, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setRemoteDefaultVideoStreamType(AgoraVideoStreamType(rawValue: streamType)!))
+        callback?.code(channel(channelId)?.setRemoteDefaultVideoStreamType(AgoraVideoStreamType(rawValue: streamType)!))
     }
 
     func setRemoteUserPriority(_ channelId: String, _ uid: Int, _ userPriority: Int, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setRemoteUserPriority(UInt(uid), type: AgoraUserPriority(rawValue: userPriority)!))
+        callback?.code(channel(channelId)?.setRemoteUserPriority(UInt(uid), type: AgoraUserPriority(rawValue: userPriority)!))
     }
 
     func registerMediaMetadataObserver(_ channelId: String, _ callback: PromiseCallback?) {
@@ -195,31 +199,31 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     func setEncryptionSecret(_ channelId: String, _ secret: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setEncryptionSecret(secret))
+        callback?.code(channel(channelId)?.setEncryptionSecret(secret))
     }
 
     func setEncryptionMode(_ channelId: String, _ encryptionMode: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.setEncryptionMode(encryptionMode))
+        callback?.code(channel(channelId)?.setEncryptionMode(encryptionMode))
     }
 
     func addInjectStreamUrl(_ channelId: String, _ url: String, _ config: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
     }
 
     func removeInjectStreamUrl(_ channelId: String, _ url: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.removeInjectStreamUrl(url))
+        callback?.code(channel(channelId)?.removeInjectStreamUrl(url))
     }
 
     func createDataStream(_ channelId: String, _ reliable: Bool, _ ordered: Bool, _ callback: PromiseCallback?) {
         var streamId = 0
-        callback?.resolve(manager[channelId]) { (channel: AgoraRtcChannel) in
+        callback?.resolve(channel(channelId)) { (channel: AgoraRtcChannel) in
             channel.createDataStream(&streamId, reliable: reliable, ordered: ordered)
             return streamId
         }
     }
 
     func sendStreamMessage(_ channelId: String, _ streamId: Int, _ message: String, _ callback: PromiseCallback?) {
-        callback?.code(manager[channelId]?.sendStreamMessage(streamId, data: message.data(using: .utf8)!))
+        callback?.code(channel(channelId)?.sendStreamMessage(streamId, data: message.data(using: .utf8)!))
     }
 }
 

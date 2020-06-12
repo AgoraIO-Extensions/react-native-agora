@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
     s.source_files   = 'ios/RCTAgora/**/*.{h,m,swift}'
 
     s.dependency 'React'
-    s.dependency "AgoraRtcEngine_iOS_Crypto", "3.0.0"
+    s.dependency "AgoraRtcEngine_iOS_Crypto", "3.0.1"
 end

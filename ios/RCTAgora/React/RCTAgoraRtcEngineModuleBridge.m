@@ -173,6 +173,9 @@ RCT_EXTERN_METHOD(getAudioMixingCurrentPosition:
 RCT_EXTERN_METHOD(setAudioMixingPosition:
     (int) pos :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
+RCT_EXTERN_METHOD(setAudioMixingPitch:
+    (int) pitch :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+
 RCT_EXTERN_METHOD(getEffectsVolume:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
@@ -364,6 +367,9 @@ RCT_EXTERN_METHOD(setCameraFocusPositionInPreview:
 
 RCT_EXTERN_METHOD(setCameraExposurePosition:
     (float) positionXinView :(float) positionYinView :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+
+RCT_EXTERN_METHOD(enableFaceDetection:
+    (BOOL) enable :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setCameraTorchOn:
     (BOOL) isOn :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
