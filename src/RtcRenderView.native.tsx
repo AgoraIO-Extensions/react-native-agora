@@ -44,6 +44,7 @@ interface RtcSurfaceViewProps extends ViewProps {
  * @property mirror: boolean | The video mirror.
  */
 interface RtcTextureViewProps extends ViewProps {
+    channelId?: string;
     mirror?: boolean;
 }
 

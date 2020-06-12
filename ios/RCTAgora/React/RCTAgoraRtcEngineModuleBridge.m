@@ -12,19 +12,19 @@
 @interface RCT_EXTERN_MODULE(RCTAgoraRtcEngineModule, NSObject)
 
 RCT_EXTERN_METHOD(create:
-    (NSString *) appId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) appId :(NSInteger) areaCode :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(destroy:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setChannelProfile:
-    (int) profile :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) profile :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setClientRole:
-    (int) role :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) role :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(joinChannel:
-    (NSString *) token :(NSString *) channelName :(NSString *) optionalInfo :(int) optionalUid :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) token :(NSString *) channelName :(NSString *) optionalInfo :(NSInteger) optionalUid :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(switchChanne:
     (NSString *) token :(NSString *) channelName :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -45,7 +45,7 @@ RCT_EXTERN_METHOD(getCallId:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(rate:
-    (NSString *) callId :(int) rating :(NSString *) description :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) callId :(NSInteger) rating :(NSString *) description :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(complain:
     (NSString *) callId :(NSString *) description :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -54,10 +54,10 @@ RCT_EXTERN_METHOD(setLogFile:
     (NSString *) filePath :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLogFilter:
-    (int) filter :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) filter :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLogFileSize:
-    (int) fileSizeInKBytes :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) fileSizeInKBytes :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setParameters:
     (NSString *) parameters :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -72,7 +72,7 @@ RCT_EXTERN_METHOD(getUserInfoByUserAccount:
     (NSString *) userAccount :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(getUserInfoByUid:
-    (int) uid :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) uid :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(enableAudio:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -81,16 +81,16 @@ RCT_EXTERN_METHOD(disableAudio:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setAudioProfile:
-    (int) profile :(int) scenario :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) profile :(NSInteger) scenario :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(adjustRecordingSignalVolume:
-    (int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(adjustUserPlaybackSignalVolume:
-    (int) uid :(int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) uid :(NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(adjustPlaybackSignalVolume:
-    (int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(enableLocalAudio:
     (BOOL) enabled :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -99,7 +99,7 @@ RCT_EXTERN_METHOD(muteLocalAudioStream:
     (BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteRemoteAudioStream:
-    (int) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteAllRemoteAudioStreams:
     (BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -108,7 +108,7 @@ RCT_EXTERN_METHOD(setDefaultMuteAllRemoteAudioStreams:
     (BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(enableAudioVolumeIndication:
-    (int) interval :(int) smooth :(BOOL) report_vad :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) interval :(NSInteger) smooth :(BOOL) report_vad :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(enableVideo:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -126,7 +126,7 @@ RCT_EXTERN_METHOD(muteLocalVideoStream:
     (BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteRemoteVideoStream:
-    (int) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteAllRemoteVideoStreams:
     (BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -138,7 +138,7 @@ RCT_EXTERN_METHOD(setBeautyEffectOptions:
     (BOOL) enabled :(NSDictionary *) options :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(startAudioMixing:
-    (NSString *) filePath :(BOOL) loopback :(BOOL) replace :(int) cycle :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) filePath :(BOOL) loopback :(BOOL) replace :(NSInteger) cycle :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(stopAudioMixing:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -150,13 +150,13 @@ RCT_EXTERN_METHOD(resumeAudioMixing:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(adjustAudioMixingVolume:
-    (int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(adjustAudioMixingPlayoutVolume:
-    (int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(adjustAudioMixingPublishVolume:
-    (int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(getAudioMixingPlayoutVolume:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -171,10 +171,10 @@ RCT_EXTERN_METHOD(getAudioMixingCurrentPosition:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setAudioMixingPosition:
-    (int) pos :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) pos :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setAudioMixingPitch:
-    (int) pitch :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) pitch :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(getEffectsVolume:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -183,55 +183,55 @@ RCT_EXTERN_METHOD(setEffectsVolume:
     (double) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setVolumeOfEffect:
-    (int) soundId :(double) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) soundId :(double) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(playEffect:
-    (int) soundId :(NSString *) filePath :(int) loopCount :(double) pitch :(double) pan :(double) gain :(BOOL) publish :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) soundId :(NSString *) filePath :(NSInteger) loopCount :(double) pitch :(double) pan :(double) gain :(BOOL) publish :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(stopEffect:
-    (int) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(stopAllEffects:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(preloadEffect:
-    (int) soundId :(NSString *) filePath :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) soundId :(NSString *) filePath :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(unloadEffect:
-    (int) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(pauseEffect:
-    (int) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(pauseAllEffects:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(resumeEffect:
-    (int) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) soundId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(resumeAllEffects:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLocalVoiceChanger:
-    (int) voiceChanger :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) voiceChanger :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLocalVoiceReverbPreset:
-    (int) preset :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) preset :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLocalVoicePitch:
     (double) pitch :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLocalVoiceEqualization:
-    (int) bandFrequency :(int) bandGain :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) bandFrequency :(NSInteger) bandGain :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLocalVoiceReverb:
-    (int) reverbKey :(int) value :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) reverbKey :(NSInteger) value :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(enableSoundPositionIndication:
     (BOOL) enabled :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteVoicePosition:
-    (int) uid :(double) pan :(double) gain :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) uid :(double) pan :(double) gain :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLiveTranscoding:
     (NSDictionary *) transcoding :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -264,28 +264,28 @@ RCT_EXTERN_METHOD(enableInEarMonitoring:
     (BOOL) enabled :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setInEarMonitoringVolume:
-    (int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(enableDualStreamMode:
     (BOOL) enabled :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteVideoStreamType:
-    (int) uid :(int) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) uid :(NSInteger) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteDefaultVideoStreamType:
-    (int) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLocalPublishFallbackOption:
-    (int) option :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) option :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteSubscribeFallbackOption:
-    (int) option :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) option :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteUserPriority:
-    (int) uid :(int) userPriority :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) uid :(NSInteger) userPriority :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(startEchoTest:
-    (int) intervalInSeconds :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) intervalInSeconds :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(stopEchoTest:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -309,10 +309,10 @@ RCT_EXTERN_METHOD(unregisterMediaMetadataObserver:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setMaxMetadataSize:
-    (int) size :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) size :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(sendMetadata:
-    (int) metadata :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) metadata :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(addVideoWatermark:
     (NSString *) watermarkUrl :(NSDictionary *) options :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -327,7 +327,7 @@ RCT_EXTERN_METHOD(setEncryptionMode:
     (NSString *) encryptionMode :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(startAudioRecording:
-    (NSString *) filePath :(int) sampleRate :(int) quality :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) filePath :(NSInteger) sampleRate :(NSInteger) quality :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(stopAudioRecording:
     (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -384,6 +384,6 @@ RCT_EXTERN_METHOD(createDataStream:
     (BOOL) reliable :(BOOL) ordered :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(sendStreamMessage:
-    (int) streamId :(NSString *) message :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSInteger) streamId :(NSString *) message :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 @end

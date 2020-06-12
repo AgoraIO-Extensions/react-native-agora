@@ -12,16 +12,16 @@
 @interface RCT_EXTERN_MODULE(RCTAgoraRtcChannelModule, NSObject)
 
 RCT_EXTERN_METHOD(create:
-    (NSString *) channelId :(int) areaCode :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(destroy:
     (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setClientRole:
-    (NSString *) channelId :(int) role :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) role :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(joinChannel:
-    (NSString *) channelId :(NSString *) token :(NSString *) optionalInfo :(int) optionalUid :(NSDictionary *) options :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSString *) token :(NSString *) optionalInfo :(NSInteger) optionalUid :(NSDictionary *) options :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(joinChannelWithUserAccount:
     (NSString *) channelId :(NSString *) token :(NSString *) userAccount :(NSDictionary *) options :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -45,10 +45,10 @@ RCT_EXTERN_METHOD(getCallId:
     (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(adjustUserPlaybackSignalVolume:
-    (NSString *) channelId :(int) uid :(int) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) uid :(NSInteger) volume :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteRemoteAudioStream:
-    (NSString *) channelId :(int) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteAllRemoteAudioStreams:
     (NSString *) channelId :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -57,7 +57,7 @@ RCT_EXTERN_METHOD(setDefaultMuteAllRemoteAudioStreams:
     (NSString *) channelId :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteRemoteVideoStream:
-    (NSString *) channelId :(int) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) uid :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(muteAllRemoteVideoStreams:
     (NSString *) channelId :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -66,7 +66,7 @@ RCT_EXTERN_METHOD(setDefaultMuteAllRemoteVideoStreams:
     (NSString *) channelId :(BOOL) muted :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteVoicePosition:
-    (NSString *) channelId :(int) uid :(double) pan :(double) gain :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) uid :(double) pan :(double) gain :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setLiveTranscoding:
     (NSString *) channelId :(NSDictionary *) transcoding :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -87,13 +87,13 @@ RCT_EXTERN_METHOD(stopChannelMediaRelay:
     (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteVideoStreamType:
-    (NSString *) channelId :(int) uid :(int) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) uid :(NSInteger) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteDefaultVideoStreamType:
-    (NSString *) channelId :(int) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) streamType :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setRemoteUserPriority:
-    (NSString *) channelId :(int) uid :(int) userPriority :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) uid :(NSInteger) userPriority :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(registerMediaMetadataObserver:
     (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -102,7 +102,7 @@ RCT_EXTERN_METHOD(unregisterMediaMetadataObserver:
     (NSString *) channelId :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(setMaxMetadataSize:
-    (NSString *) channelId :(int) size :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) size :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(sendMetadata:
     (NSString *) channelId :(NSString *) metadata :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
@@ -123,6 +123,6 @@ RCT_EXTERN_METHOD(createDataStream:
     (NSString *) channelId :(BOOL) reliable :(BOOL) ordered :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(sendStreamMessage:
-    (NSString *) channelId :(int) streamId :(NSString *) message :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) channelId :(NSInteger) streamId :(NSString *) message :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 @end

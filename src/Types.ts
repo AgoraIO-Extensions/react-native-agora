@@ -22,7 +22,7 @@ export enum IPAreaCode {
     /**
      * (Default) Global
      */
-    AREA_GLOBAL = 0xFFFFFFFF,
+    AREA_GLOBAL = -1,
 }
 
 /**

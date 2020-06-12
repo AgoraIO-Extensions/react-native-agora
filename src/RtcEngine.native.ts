@@ -91,7 +91,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      */
     static async createWithAreaCode(appId: string, areaCode: IPAreaCode): Promise<RtcEngine> {
         if (engine) return engine;
-        await AgoraRtcEngineModule.create(appId);
+        await AgoraRtcEngineModule.create(appId, areaCode);
         engine = new RtcEngine();
         return engine
     }
