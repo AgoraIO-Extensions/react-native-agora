@@ -29,7 +29,7 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
     private func engine() -> AgoraRtcEngineKit? {
         (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
-    
+
     private func channel(_ channelId: String) -> AgoraRtcChannel? {
         (bridge.module(for: RCTAgoraRtcChannelModule.classForCoder()) as? RCTAgoraRtcChannelModule)?.channel(channelId)
     }
@@ -43,7 +43,7 @@ class RtcView: RtcSurfaceView {
     func setEngine(_ getEngine: @escaping () -> AgoraRtcEngineKit?) {
         self.getEngine = getEngine
     }
-    
+
     func setChannel(_ getChannel: @escaping (_ channelId: String) -> AgoraRtcChannel?) {
         self.getChannel = getChannel
     }
@@ -60,7 +60,7 @@ class RtcView: RtcSurfaceView {
         }
     }
 
-    @objc func setMirroMode(_ mirrorMode: Int) {
+    @objc func setMirrorMode(_ mirrorMode: Int) {
         if let engine = getEngine?() {
             setMirroMode(engine, mirrorMode)
         }
