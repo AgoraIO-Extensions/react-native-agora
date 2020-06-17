@@ -49,7 +49,7 @@ class RtcEngine {
 
     /**
      * @ignore AG_PREFIX
-     */ 
+     */
     private static readonly AG_PREFIX: string = 'ag_rtc';
 
     /**
@@ -94,10 +94,10 @@ class RtcEngine {
     public static switchChannel(channelName: string, token?: string): Promise<any> {
         return Agora.switchChannel({channelName, token});
     }
-    
+
     /**
      * Starts to relay media streams across channels.
-     * 
+     *
      * This method will start relay media stream across specified channels. (maximum support 4 channels)
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
@@ -111,7 +111,7 @@ class RtcEngine {
 
     /**
      * Remove to relay media streams across channels.
-     * 
+     *
      * This method will remove & update relay media stream across specified channels. (maximum support relay 4 channels)
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
@@ -124,7 +124,7 @@ class RtcEngine {
 
     /**
      * Updates to relay media streams across channels.
-     * 
+     *
      * This method will update relay media stream across specified channels. (maximum support 4 channels)
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
@@ -137,7 +137,7 @@ class RtcEngine {
 
     /**
      * Stop to relay media streams across channels.
-     * 
+     *
      * This method will stop relay media stream across specified channels.
      * It will occurs event:
      *  Occurs mediaRelayStateChanged
@@ -150,14 +150,14 @@ class RtcEngine {
 
     /**
      * Registers a user account.
-     * 
+     *
      * Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the `on("localUserRegistered", callback)` on the local client, reporting the user ID and user account of the local user.
      * To join a channel with a user account, you can choose either of the following:
      * Call the {@link registerLocalUserAccount} method to create a user account, and then the {@link joinChannelWithUserAccount} method to join the channel.
      * Call the {@link joinChannelWithUserAccount} method to join the channel.
-     * 
+     *
      * @note To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
-     * 
+     *
      * @param userAccount
      * @returns Promise<any>
      */
@@ -167,14 +167,14 @@ class RtcEngine {
 
     /**
      * Joins the channel with a user account.
-     * 
+     *
      * After the user successfully joins the channel, the SDK triggers the following callbacks:
      *
      * The local client: `on("localUserRegistered", callback)` and `on("joinChannelSuccess", callback)`.
      * The remote client: `on("userJoined", callback)` and `on("userInfoUpdated", callback)`, if the user joining the channel is in the Communication profile, or is a BROADCASTER in the Live Broadcast profile.
-     * 
+     *
      * @note To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
-     * 
+     *
      * @param channelName
      * @param userAccount
      * @param token
@@ -186,9 +186,9 @@ class RtcEngine {
 
     /**
      * Gets the user information by passing in the user account.
-     * 
+     *
      * After receiving the "userInfoUpdated" callback, you can call this method to get the user ID of the remote user from the {@link AgoraUserInfo} object by passing in the userAccount.
-     * @param uid 
+     * @param uid
      * @returns Promise<{@link AgoraUserInfo}>
      */
     public static async getUserInfoByUid(uid: number): Promise<AgoraUserInfo> {
@@ -203,9 +203,9 @@ class RtcEngine {
 
     /**
      * Gets the user information by passing in the user account.
-     * 
+     *
      * After receiving the "userInfoUpdated" callback, you can call this method to get the user ID of the remote user from the {@link AgoraUserInfo} object by passing in the userAccount.
-     * @param userAccount 
+     * @param userAccount
      * @returns Promise<{@link AgoraUserInfo}>
      */
     public static async getUserInfoByUserAccount(userAccount: string): Promise<AgoraUserInfo> {
@@ -221,9 +221,9 @@ class RtcEngine {
      * add event listener
      *
      * This method subscribes specified eventType and run listener. You should call this method at first.
-     * 
+     *
      * @event listener
-     * 
+     *
      * ---
      * name | description | usage |
      * error | occurs when emit error  | on("error", evt) |
@@ -272,32 +272,32 @@ class RtcEngine {
      * audioRouteChanged | occurs when local audio route changed | on("audioRouteChanged", evt) |
      * cameraFocusAreaChanged | occurs when a camera focus area changed | on("cameraFocusAreaChanged", evt) |
      * cameraExposureAreaChanged | occurs when a camera exposure area changed | on("cameraExposureAreaChanged", evt) |
-     * rtcStats | occurs when reports the statistics of the current call session once every two seconds. | on("rtcStats", evt) | 
-     * lastmileQuality | occurs when reports the last mile network quality of the local user once every two seconds before the user joins a channel.| on("lastmileQuality", evt) | 
-     * networkQuality | occurs when reports the last mile network quality of each user in the channel once every two seconds.| on("networkQuality", evt) | 
-     * localVideoStats | occurs when reports local video statistics | on("localVideoStats", evt) | 
-     * remoteVideoStats | occurs when reports remote video statistics| on("remoteVideoStats", evt) | 
-     * remoteAudioStats | occurs when reports remote audio statistics| on("remoteAudioStats", evt) | 
-     * audioEffectFinish | occurs when the local audio effect playback finishes. | on("audioEffectFinish", evt) | 
-     * streamPublished | occurs when addPublishStreamUrl success| on("streamPublished", evt) | 
-     * streamUnpublish | occurs when removePublishStreamUrl success| on("streamUnpublish", evt) | 
-     * transcodingUpdate | occurs when the cdn live streaming settings are updated | on("transcodingUpdate", evt) | 
-     * streamInjectedStatus | occurs when report the status of online injecting stream to a live broadcast | on("streamInjectedStatus", evt) | 
-     * mediaEngineLoaded | occurs when the media engine loaded | on("mediaEngineLoaded", evt) | 
-     * mediaEngineStartCall | occurs when the media engine call starts | on("mediaEngineStartCall", evt) | 
-     * startEchoTestWithInterval | occurs when startEchoTestWithInterval success | on("startEchoTestWithInterval", evt) | 
-     * audioMixingStateChanged | occurs when reports the local audio mixing state changed | on("audioMixingStateChanged", evt) | 
-     * lastmileProbeTestResult | occurs when reports the last-mile network probe result.| on("lastmileProbeTestResult", evt) | 
-     * rtmpStreamingStateChanged | occurs when reports the rtmp injecting stream state changed | on("rtmpStreamingStateChanged", evt) | 
-     * localVideoChanged | occurs when the local video changed  | on("localVideoChanged", evt) | 
-     * networkTypeChanged | occurs when the device network type changed | on("networkTypeChanged", evt) | 
-     * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) | 
+     * rtcStats | occurs when reports the statistics of the current call session once every two seconds. | on("rtcStats", evt) |
+     * lastmileQuality | occurs when reports the last mile network quality of the local user once every two seconds before the user joins a channel.| on("lastmileQuality", evt) |
+     * networkQuality | occurs when reports the last mile network quality of each user in the channel once every two seconds.| on("networkQuality", evt) |
+     * localVideoStats | occurs when reports local video statistics | on("localVideoStats", evt) |
+     * remoteVideoStats | occurs when reports remote video statistics| on("remoteVideoStats", evt) |
+     * remoteAudioStats | occurs when reports remote audio statistics| on("remoteAudioStats", evt) |
+     * audioEffectFinish | occurs when the local audio effect playback finishes. | on("audioEffectFinish", evt) |
+     * streamPublished | occurs when addPublishStreamUrl success| on("streamPublished", evt) |
+     * streamUnpublish | occurs when removePublishStreamUrl success| on("streamUnpublish", evt) |
+     * transcodingUpdate | occurs when the cdn live streaming settings are updated | on("transcodingUpdate", evt) |
+     * streamInjectedStatus | occurs when report the status of online injecting stream to a live broadcast | on("streamInjectedStatus", evt) |
+     * mediaEngineLoaded | occurs when the media engine loaded | on("mediaEngineLoaded", evt) |
+     * mediaEngineStartCall | occurs when the media engine call starts | on("mediaEngineStartCall", evt) |
+     * startEchoTestWithInterval | occurs when startEchoTestWithInterval success | on("startEchoTestWithInterval", evt) |
+     * audioMixingStateChanged | occurs when reports the local audio mixing state changed | on("audioMixingStateChanged", evt) |
+     * lastmileProbeTestResult | occurs when reports the last-mile network probe result.| on("lastmileProbeTestResult", evt) |
+     * rtmpStreamingStateChanged | occurs when reports the rtmp injecting stream state changed | on("rtmpStreamingStateChanged", evt) |
+     * localVideoChanged | occurs when the local video changed  | on("localVideoChanged", evt) |
+     * networkTypeChanged | occurs when the device network type changed | on("networkTypeChanged", evt) |
+     * mediaMetaDataReceived | occurs when you received media meta data from the remote side through sendMediaData | on("mediaMetaDataReceived", evt) |
      * localUserRegistered | occurs when you register user account success | on("localUserRegistered", evt) |
      * userInfoUpdated | occurs when you peer side using user account join channel | on("userInfoUpdated", evt) |
      * receivedChannelMediaRelay | occurs when you received channel media relay | on('receivedChannelMediaRelay", evt)|
      * mediaRelayStateChanged | occurs when you received remote media relay state changed | on('mediaRelayStateChanged", evt)|
      * ---
-     * 
+     *
      * @param eventType
      * @param listener
      * @return any
@@ -326,7 +326,7 @@ class RtcEngine {
         ].indexOf(eventType) != -1) {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
                 args.uid = this.Int32ToUint32(args.uid);
-                // convert int32 streamId to uint32 
+                // convert int32 streamId to uint32
                 if(args.streamId) {
                     args.streamId = this.Int32ToUint32(args.streamId);
                 }
@@ -380,7 +380,7 @@ class RtcEngine {
 
     /**
      * @deprecated off
-     * @param mode 
+     * @param mode
      */
     static off(evt: any) {
         console.warn("off method already deprecated");
@@ -726,6 +726,7 @@ class RtcEngine {
      * This method enables audio volume by interval and smooth
      * @param interval
      * @param smooth
+     * @param vad
      * @return Promise<any>
      */
     public static enableAudioVolumeIndication(interval: number, smooth: number, vad: boolean): Promise<any> {
@@ -1268,12 +1269,12 @@ class RtcEngine {
 
     /**
      * @deprecated setupLocalVideo
-     * setupLocalVideo 
+     * setupLocalVideo
      */
 
     /**
      * @deprecated setupRemoteVideo
-     * setupRemoteVideo 
+     * setupRemoteVideo
      */
 
 
@@ -1622,10 +1623,10 @@ class RtcEngine {
 
     /**
      * Gets the audio mixing volume for local playback.
-     * 
+     *
      * note:
      * This method helps troubleshoot audio volume related issues.
-     * 
+     *
      * @return Promise<any>
      */
     static getAudioMixingPlayoutVolume(): Promise<any> {
@@ -1634,10 +1635,10 @@ class RtcEngine {
 
     /**
      * Gets the audio mixing volume for publishing.
-     * 
+     *
      * note:
      * This method helps troubleshoot audio volume related issues.
-     * 
+     *
      * @return Promise<any>
      */
     static getAudioMixingPublishVolume(): Promise<any> {
@@ -1646,7 +1647,7 @@ class RtcEngine {
 
     /**
      * sendMediaData for media observer.
-     * 
+     *
      * note:
      * This method needs you invoke registerMediaMetadataObserver success first and you could send media data through interval media observer feature.
      * The data have limit length is 1024 bytes, if you pass data length bigger than limit it will failed.
@@ -1659,7 +1660,7 @@ class RtcEngine {
 
     /**
      * Registers the metadata observer.
-     * 
+     *
      * note:
      * This method only work in live mode
      * This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
@@ -1677,7 +1678,7 @@ class RtcEngine {
 
     /**
      * Get local device camera support info
-     * 
+     *
      * note:
      * This method returns your current device camera support info.
      * ```javascript
@@ -1693,7 +1694,7 @@ class RtcEngine {
 
     /**
      * Set Private Parameters
-     * @param paramsStr 
+     * @param paramsStr
      * @return Promise<bool>
      */
     static async setParameters(paramsStr: string): Promise<any> {
@@ -1702,8 +1703,8 @@ class RtcEngine {
 
     /**
      * Get Private Parameter
-     * @param paramsStr 
-     * @param args 
+     * @param paramsStr
+     * @param args
      * @return Promise<string>
      */
     static async getParameter(paramsStr: string, args: string): Promise<string> {
@@ -1712,8 +1713,8 @@ class RtcEngine {
 
     /**
      * Get Private Parameters
-     * @param paramsStr 
-     * @param args 
+     * @param paramsStr
+     * @param args
      * @return Promise<string>
      */
     static async getParameters(paramsStr: string): Promise<string> {

@@ -1842,8 +1842,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getAudioMixingPlayoutVolume(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
-        if (res == 0) {
-            promise.resolve(null);
+        if (res >= 0) {
+            promise.resolve(res);
         } else {
             promise.reject("-1", res.toString());
         }
@@ -1851,9 +1851,9 @@ public class AgoraModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getAudioMixingPublishVolume(Promise promise) {
-        Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPlayoutVolume();
-        if (res == 0) {
-            promise.resolve(null);
+        Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingPublishVolume();
+        if (res >= 0) {
+            promise.resolve(res);
         } else {
             promise.reject("-1", res.toString());
         }
@@ -1862,8 +1862,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getAudioMixingDuration(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingDuration();
-        if (res == 0) {
-            promise.resolve(null);
+        if (res >= 0) {
+            promise.resolve(res);
         } else {
             promise.reject("-1", res.toString());
         }
@@ -1872,8 +1872,8 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getAudioMixingCurrentPosition(Promise promise) {
         Integer res = AgoraManager.getInstance().mRtcEngine.getAudioMixingCurrentPosition();
-        if (res == 0) {
-            promise.resolve(null);
+        if (res >= 0) {
+            promise.resolve(res);
         } else {
             promise.reject("-1", res.toString());
         }
@@ -2370,12 +2370,10 @@ public class AgoraModule extends ReactContextBaseJavaModule {
     public void getEffectsVolume(Promise promise) {
         IAudioEffectManager manager = AgoraManager.getInstance().mRtcEngine.getAudioEffectManager();
         Double res = manager.getEffectsVolume();
-        if (res < 0) {
-            promise.reject("-1", res.toString());
+        if (res >= 0) {
+            promise.resolve(res);
         } else {
-            WritableMap map = Arguments.createMap();
-            map.putDouble("value", res);
-            promise.resolve(map);
+            promise.reject("-1", res.toString());
         }
     }
 
