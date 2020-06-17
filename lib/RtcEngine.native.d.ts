@@ -467,6 +467,7 @@ declare class RtcEngine {
      * This method enables audio volume by interval and smooth
      * @param interval
      * @param smooth
+     * @param vad
      * @return Promise<any>
      */
     static enableAudioVolumeIndication(interval: number, smooth: number, vad: boolean): Promise<any>;
