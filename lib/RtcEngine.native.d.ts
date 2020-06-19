@@ -1013,7 +1013,7 @@ declare class RtcEngine {
      *
      * This method enables/disables image enhancement and sets the options.
      *
-     * @param enable boolean
+     * @param enabled boolean
      * @param options {@link BeautyOptions}
      * @return Promise<any>
      */
