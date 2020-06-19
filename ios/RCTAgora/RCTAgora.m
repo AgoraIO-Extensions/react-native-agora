@@ -1636,7 +1636,12 @@ RCT_EXPORT_METHOD(setBeautyEffectOptions:(BOOL) enabled
                   options:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine setBeautyEffectOptions:enabled options:options];
+  AgoraBeautyOptions *beautyOption = [[AgoraBeautyOptions alloc] init];
+  beautyOption.lighteningContrastLevel = [options[@"lighteningContrastLevel"] integerValue];
+  beautyOption.lighteningLevel = [options[@"lighteningLevel"] floatValue];
+  beautyOption.smoothnessLevel = [options[@"smoothnessLevel"] floatValue];
+  beautyOption.rednessLevel = [options[@"rednessLevel"] floatValue];
+  NSInteger res = [self.rtcEngine setBeautyEffectOptions:enabled options:beautyOption];
   if (res == 0) {
     resolve(nil);
   } else {

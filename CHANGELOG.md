@@ -1,5 +1,16 @@
 ## THE CHANGELOG
 
+#### 2.9.1-alpha.7
+  - fix `setBeautyEffectOptions` bugs
+
+#### 2.9.1-alpha.6
+  - fix bugs
+
+#### 2.9.1-alpha.5
+  - upgrade android sdk to 2.9.4
+
+#### 2.9.1-alpha.4
+  - remove `AgoraRtcCryptoLoader` `libcrypto`
 
 #### 2.9.1-alpha.3
   - upgrade android sdk to 2.9.4
@@ -77,7 +88,7 @@
 - support 2.4.0-alpha.5 bugfix Android & iOS side not support fit mode and hidden mode. 
   1. Deprecate & Remove: setupLocalVideo & setupRemoteVideo
   2. rename iOS side constants
-  ```javascript
+  ```
   "AgoraVideoMirrorModeAuto" to "VideoMirrorModeAuto"
   "AgoraVideoMirrorModeEnabled" to "VideoMirrorModeEnabled"
   "AgoraVideoMirrorModeDisabled" to "VideoMirrorModeDisabled"
