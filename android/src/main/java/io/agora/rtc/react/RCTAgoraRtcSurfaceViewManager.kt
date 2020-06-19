@@ -34,8 +34,8 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
     }
 
     @ReactProp(name = "renderMode")
-    fun setRenderMode(view: RtcSurfaceView, mirrorMode: Int) {
-        getEngine()?.let { view.setRenderMode(it, mirrorMode) }
+    fun setRenderMode(view: RtcSurfaceView, renderMode: Int) {
+        getEngine()?.let { view.setRenderMode(it, renderMode) }
     }
 
     @ReactProp(name = "channelId")

@@ -1,5 +1,36 @@
 ## THE CHANGELOG
 
+#### 3.0.1-beta.4
+  - fix android `setCameraCapturerConfiguration` bug
+
+#### 3.0.1-beta.3
+  - fix iOS `mirrorMode` bug
+
+#### 3.0.1-beta.2
+  - fix `createWithAreaCode` bug
+  - fix render black screen bug
+
+#### 3.0.1-beta.1
+  - support 3.0.1 native sdk
+
+#### 3.0.0-beta.6
+  - fix iOS link bug
+
+#### 3.0.0-beta.5
+  - optimize doc
+
+#### 3.0.0-beta.4
+  - optimize code
+
+#### 3.0.0-beta.3
+  - optimize doc
+
+#### 3.0.0-beta.2
+  - optimize
+
+#### 3.0.0-beta.1
+  - support 3.0.0 native sdk
+
 #### 2.9.1-alpha.1
   - support 2.9.1 native sdk
 
@@ -57,7 +88,7 @@
   6. Add event `rtmpStreamingStateChanged` for rtmp streaming troubleshooting
   7. Add event `audioCodecProfile` on `liveTranscoding` interface.
   8. Add event `networkTypeChanged` for network troubleshooting.
-  9. Add method `registerMediaMetadataObserver` method, this method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes. note: Call this method before the joinChannel method. and applies to `channelProfile` with 1. 
+  9. Add method `registerMediaMetadataObserver` method, this method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes. note: Call this method before the joinChannel method. and applies to `channelProfile` with 1.
   10. Add method `sendMediaData`, this method enables you send media data under the live broadcast mode (`channelProfile` = 1) note: call this method after the `registerMediaMetadataObserver` method.
   11. Add event `audioMixingStateChanged` and Deprecate event 'localAudioMixingFinish`.
   11. Add `firstRemoteAudioDecoded` event you can get more detail [here](https://docs.agora.io/en/Interactive%20Broadcast/release_android_video?platform=Android#v241)
@@ -67,7 +98,7 @@
 - support 2.4.0-alpha.2 using 0.55.1 as peerDependency and support typescript
 - support 2.4.0-alpha.3 bugfix iOS receiveStreamMessage data is null
 - support 2.4.0-alpha.4 bugfix iOS videoSizeChanged field rotation typo
-- support 2.4.0-alpha.5 bugfix Android & iOS side not support fit mode and hidden mode. 
+- support 2.4.0-alpha.5 bugfix Android & iOS side not support fit mode and hidden mode.
   1. Deprecate & Remove: setupLocalVideo & setupRemoteVideo
   2. rename iOS side constants
   ```javascript
