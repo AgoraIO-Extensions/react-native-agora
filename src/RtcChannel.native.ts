@@ -54,6 +54,10 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
         return channels.get(channelId) as RtcChannel
     }
 
+    /**
+     * Destroys all RtcChannel instance.
+     * @see RtcChannel
+     */
     static destroyAll() {
         channels.forEach(async (value, key) => {
             await value.destroy()

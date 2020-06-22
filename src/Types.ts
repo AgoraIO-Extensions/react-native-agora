@@ -2389,7 +2389,7 @@ export interface VideoDimensions {
  * Definition of VideoEncoderConfiguration.
  * @property dimensions: object | The video frame dimensions (px), which is used to specify the video quality and measured by the total number of pixels along a frame's width and height. The default value is 640 × 360.
  * @property frameRate: int | The video frame rate (fps). The default value is 15. Users can either set the frame rate manually or choose from the following options. We do not recommend setting this to a value greater than 30.
- * @property minFrameRate: int | The minimum video encoder frame rate (fps). The default value is DEFAULT_MIN_FRAMERATE(-1) (the SDK uses the lowest encoder frame rate).
+ * @property minFrameRate: int | The minimum video encoder frame rate (fps). The default value is Min(-1) (the SDK uses the lowest encoder frame rate).
  * @property bitrate: int | Bitrate of the video (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
  * @property minBitrate: int | The minimum encoding bitrate (Kbps). The Agora SDK automatically adjusts the encoding bitrate to adapt to the network conditions. Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and hence sacrifice the smoothness of the video transmission. That said, unless you have special requirements for image quality, Agora does not recommend changing this value.
  * @property orientationMode: int | The orientation mode.
@@ -2410,9 +2410,9 @@ export interface VideoEncoderConfiguration {
 /**
  * Sets the image enhancement options.
  * @property lighteningContrastLevel: int | The lightening contrast level.
- * @property lighteningLevel: int | The brightness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.7.
- * @property smoothnessLevel: int | The sharpness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.5. This parameter is usually used to remove blemishes.
- * @property rednessLevel: int | The redness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.1. This parameter adjusts the red saturation level.
+ * @property lighteningLevel: float | The brightness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.7.
+ * @property smoothnessLevel: float | The sharpness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.5. This parameter is usually used to remove blemishes.
+ * @property rednessLevel: float | The redness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.1. This parameter adjusts the red saturation level.
  */
 export interface BeautyOptions {
     lighteningContrastLevel?: LighteningContrastLevel
@@ -2452,13 +2452,19 @@ export interface TranscodingUser {
     uid: number
     x: number
     y: number
-    width: number
-    height: number
-    zOrder: number
+    width?: number
+    height?: number
+    zOrder?: number
     alpha?: number
-    audioChannel: AudioChannel
+    audioChannel?: AudioChannel
 }
 
+/**
+ * Color.
+ * @property red: int | Red.
+ * @property green: int | Green.
+ * @property blue: int | Blue.
+ */
 export interface Color {
     red: number
     green: number
@@ -2482,7 +2488,7 @@ export interface Color {
  * @property videoCodecProfile: int | Video codec profile type: VideoCodecProfileType. Set it as BASELINE, MAIN, or HIGH (default). If you set this parameter to other values, Agora adjusts it to the default value HIGH.
  * @property backgroundColor: int | Sets the background color.
  * @property userConfigExtraInfo: string | Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
- * @property transcodingUsers: array | Sets the background color.
+ * @property transcodingUsers: array | An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
  */
 export interface LiveTranscoding {
     width?: number
@@ -2578,8 +2584,8 @@ export interface WatermarkOptions {
  * @property audioChannels: int | Audio channels to add into the broadcast. The value ranges between 1 and 2. The default value is 1.
  */
 export interface LiveInjectStreamConfig {
-    width: number
-    height: number
+    width?: number
+    height?: number
     videoGop?: number
     videoFramerate?: VideoFrameRate
     videoBitrate?: number
@@ -2674,6 +2680,13 @@ export interface AudioVolumeInfo {
     channelId: string
 }
 
+/**
+ * Rect.
+ * @property left: int | Left.
+ * @property top: int | Top.
+ * @property right: int | Right.
+ * @property bottom: int | Bottom.
+ */
 export interface Rect {
     left: number
     top: number
