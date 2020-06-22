@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.0.1-beta.5
+  - fix lib ignore bug
+
 #### 3.0.1-beta.4
   - fix android `setCameraCapturerConfiguration` bug
 
