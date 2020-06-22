@@ -1,36 +1,31 @@
-import {
-    NativeModules,
-    NativeEventEmitter,
-    Platform
-} from 'react-native';
+import {NativeEventEmitter, NativeModules, Platform} from 'react-native';
 
 import {
-    Option, Callback,
-    VideoOption,
     AgoraUserInfo,
-    AudioMixingOption,
-    DataStreamOption,
-    PlayEffectOption,
-    AudioRecordingOption,
     AudioFrameOption,
-    MixedAudioFrameOption,
-    ImageOption,
-    VideoStreamOption,
-    DefaultVideoStreamOption,
-    InjectStreamOption,
-    RemoveInjectStreamOption,
-    PublishStreamOption,
-    RemovePublishStreamOption,
-    LiveTranscodingOption,
-    PositionOption,
+    AudioMixingOption,
+    AudioRecordingOption,
     BeautyOption,
-    LastmileProbeConfig,
+    Callback,
     CameraCapturerConfiguration,
-    ChannelMediaConfiguration
+    ChannelMediaConfiguration,
+    DefaultVideoStreamOption,
+    ImageOption,
+    InjectStreamOption,
+    LastmileProbeConfig,
+    LiveTranscodingOption,
+    MixedAudioFrameOption,
+    Option,
+    PlayEffectOption,
+    PositionOption,
+    PublishStreamOption,
+    RemoveInjectStreamOption,
+    RemovePublishStreamOption,
+    VideoStreamOption
 } from "./types";
 
 
-const { Agora } = NativeModules;
+const {Agora} = NativeModules;
 const AgoraEventEmitter = new NativeEventEmitter(Agora);
 
 /**
@@ -75,7 +70,7 @@ class RtcEngine {
      * @param info
      * @returns Promise<any>
      */
-    public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any> {
+    public static joinChannel(channelName: string, uid?: number, token?: string, info?: string): Promise<any> {
         return Agora.joinChannel({channelName, uid, token, info});
     }
 
@@ -327,7 +322,7 @@ class RtcEngine {
             AgoraEventEmitter.addListener(`${RtcEngine.AG_PREFIX}${eventType}`, (args) => {
                 args.uid = this.Int32ToUint32(args.uid);
                 // convert int32 streamId to uint32
-                if(args.streamId) {
+                if (args.streamId) {
                     args.streamId = this.Int32ToUint32(args.streamId);
                 }
                 listener(args);
@@ -790,7 +785,7 @@ class RtcEngine {
      * @return Promise<any>
      */
     public static setLocalVoiceEqualization(band: number, gain: number) {
-        Agora.setLocalVoiceEqualization(band ,gain);
+        Agora.setLocalVoiceEqualization(band, gain);
     }
 
     /**
@@ -898,186 +893,186 @@ class RtcEngine {
      * This method sets audio mixing position by the parameter pos
      * @param pos
      */
-     public static setAudioMixingPosition(pos: number): Promise<any> {
-         return Agora.setAudioMixingPosition(pos);
-     }
+    public static setAudioMixingPosition(pos: number): Promise<any> {
+        return Agora.setAudioMixingPosition(pos);
+    }
 
-     /**
-      * get effects of volume
-      *
-      * This methods get audio mixing effects volume value.
-      * @return Promise<{success, value}>
-      */
-     public static getEffectsVolume(): Promise<any> {
-         return Agora.getEffectsVolume();
-     }
+    /**
+     * get effects of volume
+     *
+     * This methods get audio mixing effects volume value.
+     * @return Promise<{success, value}>
+     */
+    public static getEffectsVolume(): Promise<any> {
+        return Agora.getEffectsVolume();
+    }
 
-     /**
-      * set effects volume
-      *
-      * This methods set audio mixing effects volume by float parameter.
-      * @param volume
-      * @return Promise<{success, value}>
-      */
-     public static setEffectsVolume(volume: number): Promise<any> {
+    /**
+     * set effects volume
+     *
+     * This methods set audio mixing effects volume by float parameter.
+     * @param volume
+     * @return Promise<{success, value}>
+     */
+    public static setEffectsVolume(volume: number): Promise<any> {
         return Agora.setEffectsVolume(volume);
-     }
+    }
 
-     /**
-      * set volume for playing effects.
-      *
-      * This methods set for playing audio mixing effects
-      * @return Promise<{success, value}>
-      */
-     public static setVolumeOfEffect(volume: number): Promise<any> {
+    /**
+     * set volume for playing effects.
+     *
+     * This methods set for playing audio mixing effects
+     * @return Promise<{success, value}>
+     */
+    public static setVolumeOfEffect(volume: number): Promise<any> {
         return Agora.setVolumeOfEffect(volume);
-     }
+    }
 
-     /**
-      * play specified effect for audio mixing
-      *
-      * This methos plays the specified effect of audio mixing file by option config.
-      * @param options {@link PlayEffectOption}
-      * @return Promise<{success, value}>
-      */
-     public static playEffect(options: PlayEffectOption): Promise<any> {
+    /**
+     * play specified effect for audio mixing
+     *
+     * This methos plays the specified effect of audio mixing file by option config.
+     * @param options {@link PlayEffectOption}
+     * @return Promise<{success, value}>
+     */
+    public static playEffect(options: PlayEffectOption): Promise<any> {
         return Agora.playEffect(options);
-     }
+    }
 
-     /**
-      * stop play effect for audio mixing
-      *
-      * This methods stops the specified effect for audio mixing file by soundId.
-      * @param sounid
-      * @return Promise<{success, value}>
-      */
-     public static stopEffect(soundId: number): Promise<any> {
+    /**
+     * stop play effect for audio mixing
+     *
+     * This methods stops the specified effect for audio mixing file by soundId.
+     * @param sounid
+     * @return Promise<{success, value}>
+     */
+    public static stopEffect(soundId: number): Promise<any> {
         return Agora.stopEffect(soundId);
-     }
+    }
 
-     /**
-      * stop play all for effect audio mixing.
-      *
-      * This methods stops all effect audio mixing.
-      * @return Promise<{success, value}>
-      */
-     public static stopAllEffects(): Promise<any> {
+    /**
+     * stop play all for effect audio mixing.
+     *
+     * This methods stops all effect audio mixing.
+     * @return Promise<{success, value}>
+     */
+    public static stopAllEffects(): Promise<any> {
         return Agora.stopAllEffects();
-     }
+    }
 
-     /**
-      * preload effect for audio mixing file.
-      *
-      * This methods preloads the specified audio mixing file to memory by the soundId
-      * @param soundId
-      * @param filePath
-      * @return Promise<{success, value}>
-      */
-     public static preloadEffect(soundId: number, filePath: string): Promise<any> {
+    /**
+     * preload effect for audio mixing file.
+     *
+     * This methods preloads the specified audio mixing file to memory by the soundId
+     * @param soundId
+     * @param filePath
+     * @return Promise<{success, value}>
+     */
+    public static preloadEffect(soundId: number, filePath: string): Promise<any> {
         return Agora.preloadEffect(soundId, filePath);
-     }
+    }
 
-     /**
-      * unload effect
-      *
-      * This methods unload the already loaded audio mixing file from memory by the soundId.
-      * @param soundId
-      * @return Promise<{success, value}>
-      */
-     public static unloadEffect(soundId: number): Promise<any> {
-         return Agora.unloadEffect(soundId);
-     }
+    /**
+     * unload effect
+     *
+     * This methods unload the already loaded audio mixing file from memory by the soundId.
+     * @param soundId
+     * @return Promise<{success, value}>
+     */
+    public static unloadEffect(soundId: number): Promise<any> {
+        return Agora.unloadEffect(soundId);
+    }
 
-     /**
-      * pause the specified effect for audio mixing by soundId
-      *
-      * This method pauses the specified effect for audio mixing by soundId.
-      * @param soundId
-      * @return Promise<{success, value}>
-      */
-     public static pauseEffect(soundId: number): Promise<any> {
+    /**
+     * pause the specified effect for audio mixing by soundId
+     *
+     * This method pauses the specified effect for audio mixing by soundId.
+     * @param soundId
+     * @return Promise<{success, value}>
+     */
+    public static pauseEffect(soundId: number): Promise<any> {
         return Agora.pauseEffect(soundId);
-     }
+    }
 
-     /**
-      * pause all effects for audio mixing
-      *
-      * This method pause all effects for audio mixing.
-      * @param soundId
-      * @return Promise<{success, value}>
-      */
-     public static pauseAllEffects(): Promise<any> {
+    /**
+     * pause all effects for audio mixing
+     *
+     * This method pause all effects for audio mixing.
+     * @param soundId
+     * @return Promise<{success, value}>
+     */
+    public static pauseAllEffects(): Promise<any> {
         return Agora.pauseAllEffects();
-     }
+    }
 
-     /**
-      * resume audio mixing effect by the specified soundId
-      *
-      * This method resumes audio mixing effect by the specified soundId
-      * @param soundId
-      * @return Promise<{success, value}>
-      */
-     public static resumeEffect(soundId: number): Promise<any> {
+    /**
+     * resume audio mixing effect by the specified soundId
+     *
+     * This method resumes audio mixing effect by the specified soundId
+     * @param soundId
+     * @return Promise<{success, value}>
+     */
+    public static resumeEffect(soundId: number): Promise<any> {
         return Agora.resumeEffect(soundId);
-     }
+    }
 
-     /**
-      * resume all audio mixing effects.
-      *
-      * This method resumes all audio mixing effects.
-      * @return Promise<{success, value}>
-      */
-     public static resumeAllEffects(): Promise<any> {
+    /**
+     * resume all audio mixing effects.
+     *
+     * This method resumes all audio mixing effects.
+     * @return Promise<{success, value}>
+     */
+    public static resumeAllEffects(): Promise<any> {
         return Agora.resumeAllEffects();
-     }
+    }
 
-     /**
-      * start audio recording by quality
-      *
-      * This method start audio recording by quality config
-      * @param options {@link AudioRecordingOption}
-      * @return Promise<{success, value}>
-      */
-     public static startAudioRecording(options: AudioRecordingOption): Promise<any> {
+    /**
+     * start audio recording by quality
+     *
+     * This method start audio recording by quality config
+     * @param options {@link AudioRecordingOption}
+     * @return Promise<{success, value}>
+     */
+    public static startAudioRecording(options: AudioRecordingOption): Promise<any> {
         return Agora.startAudioRecording(options);
-     }
+    }
 
-     /**
-      * stop audio recording
-      *
-      * This method stops audio recording.
-      * @return Promise<{success, value}>
-      */
-     public static stopAudioRecording(): Promise<any> {
+    /**
+     * stop audio recording
+     *
+     * This method stops audio recording.
+     * @return Promise<{success, value}>
+     */
+    public static stopAudioRecording(): Promise<any> {
         return Agora.stopAudioRecording();
-     }
+    }
 
-     /**
-      * set audio session operation restriction
-      *
-      * The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
-      * You can call this method at any time to return the control of the audio sessions to the SDK.
-      * This method restricts the SDK’s manipulation of the audio session. Any operation to the audio session relies solely on the app, other apps, or third-party components.
-      * @notice iOS support only
-      */
-     public static setAudioSessionOperationRestriction() {
-         if (Platform.OS != 'ios') throw Error(`setAudioSessionOperationRestriction is not support on your platform. Please check the details in react-native-agora docs`);
-         Agora.setAudioSessionOperationRestriction();
-     }
+    /**
+     * set audio session operation restriction
+     *
+     * The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
+     * You can call this method at any time to return the control of the audio sessions to the SDK.
+     * This method restricts the SDK’s manipulation of the audio session. Any operation to the audio session relies solely on the app, other apps, or third-party components.
+     * @notice iOS support only
+     */
+    public static setAudioSessionOperationRestriction() {
+        if (Platform.OS != 'ios') throw Error(`setAudioSessionOperationRestriction is not support on your platform. Please check the details in react-native-agora docs`);
+        Agora.setAudioSessionOperationRestriction();
+    }
 
     /**
      * @deprecated startEchoTest
      * startEchoTest
      */
 
-     /**
-      * @deprecated isCameraAutoFocusFaceModeSupported
-      * @deprecated isCameraExposurePositionSupported
-      * @deprecated isCameraFocusSupported
-      * @deprecated isCameraTorchSupported
-      * @deprecated isCameraZoomSupported
-      * instead use {@method getCameraInfo}
-      */
+    /**
+     * @deprecated isCameraAutoFocusFaceModeSupported
+     * @deprecated isCameraExposurePositionSupported
+     * @deprecated isCameraFocusSupported
+     * @deprecated isCameraTorchSupported
+     * @deprecated isCameraZoomSupported
+     * instead use {@method getCameraInfo}
+     */
 
     /**
      * stop echo test
@@ -1461,9 +1456,9 @@ class RtcEngine {
      * @return Promise<any>
      */
 
-     public static muteLocalAudioStream(enabled: boolean): Promise<any> {
+    public static muteLocalAudioStream(enabled: boolean): Promise<any> {
         return Agora.muteLocalAudioStream(enabled);
-     }
+    }
 
     /**
      * video pre-process/post-process
