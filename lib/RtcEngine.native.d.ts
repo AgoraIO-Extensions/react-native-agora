@@ -1,4 +1,4 @@
-import { Option, Callback, AgoraUserInfo, AudioMixingOption, PlayEffectOption, AudioRecordingOption, AudioFrameOption, MixedAudioFrameOption, ImageOption, VideoStreamOption, DefaultVideoStreamOption, InjectStreamOption, RemoveInjectStreamOption, PublishStreamOption, RemovePublishStreamOption, LiveTranscodingOption, PositionOption, BeautyOption, LastmileProbeConfig, CameraCapturerConfiguration, ChannelMediaConfiguration } from "./types";
+import { AgoraUserInfo, AudioFrameOption, AudioMixingOption, AudioRecordingOption, BeautyOption, Callback, CameraCapturerConfiguration, ChannelMediaConfiguration, DefaultVideoStreamOption, ImageOption, InjectStreamOption, LastmileProbeConfig, LiveTranscodingOption, MixedAudioFrameOption, Option, PlayEffectOption, PositionOption, PublishStreamOption, RemoveInjectStreamOption, RemovePublishStreamOption, VideoStreamOption } from "./types";
 /**
  * RtcEngine is the javascript object for control agora native sdk through react native bridge.
  *
@@ -35,7 +35,7 @@ declare class RtcEngine {
      * @param info
      * @returns Promise<any>
      */
-    static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any>;
+    static joinChannel(channelName: string, uid?: number, token?: string, info?: string): Promise<any>;
     /**
      * switch to specified channel
      *
