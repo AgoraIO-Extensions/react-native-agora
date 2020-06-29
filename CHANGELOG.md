@@ -1,5 +1,9 @@
 ## THE CHANGELOG
 
+#### 3.0.1-beta.6
+  - support 3.0.1.1 native sdk
+  - fix iOS `RtcChannelEvent` `NetworkQuality` crash
+
 #### 3.0.1-beta.5
   - fix lib ignore bug
 
@@ -104,7 +108,7 @@
 - support 2.4.0-alpha.5 bugfix Android & iOS side not support fit mode and hidden mode.
   1. Deprecate & Remove: setupLocalVideo & setupRemoteVideo
   2. rename iOS side constants
-  ```javascript
+  ```
   "AgoraVideoMirrorModeAuto" to "VideoMirrorModeAuto"
   "AgoraVideoMirrorModeEnabled" to "VideoMirrorModeEnabled"
   "AgoraVideoMirrorModeDisabled" to "VideoMirrorModeDisabled"
