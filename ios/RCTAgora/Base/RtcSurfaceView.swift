@@ -33,7 +33,7 @@ class RtcSurfaceView: UIView {
         }
     }
 
-    func setMirroMode(_ engine: AgoraRtcEngineKit, _ mirrorMode: Int) {
+    func setMirrorMode(_ engine: AgoraRtcEngineKit, _ mirrorMode: Int) {
         canvas.mirrorMode = AgoraVideoMirrorMode(rawValue: UInt(mirrorMode))!
         setupRenderMode(engine)
     }
@@ -46,7 +46,7 @@ class RtcSurfaceView: UIView {
             engine.setupRemoteVideo(canvas)
         }
     }
-    
+
     private func setupRenderMode(_ engine: AgoraRtcEngineKit) {
         if canvas.uid == 0 {
             engine.setLocalRenderMode(canvas.renderMode, mirrorMode: canvas.mirrorMode)
