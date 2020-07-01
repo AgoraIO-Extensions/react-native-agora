@@ -62,7 +62,7 @@ class RtcView: RtcSurfaceView {
 
     @objc func setMirrorMode(_ mirrorMode: Int) {
         if let engine = getEngine?() {
-            setMirroMode(engine, mirrorMode)
+            setMirrorMode(engine, mirrorMode)
         }
     }
 
