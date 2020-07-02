@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.0.1-beta.7
+  - fix lib ignore bug
+
 #### 3.0.1-beta.6
   - support 3.0.1.1 native sdk
   - fix iOS `RtcChannelEvent` `NetworkQuality` crash
