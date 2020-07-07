@@ -15,6 +15,8 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
 
     typealias Map = NSDictionary
     typealias Callback = PromiseCallback
+    
+    private var hasListeners = false
 
     private lazy var manager: RtcChannelManager = {
         RtcChannelManager()
@@ -47,9 +49,19 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
         }
         return events
     }
+    
+    override func startObserving() {
+        hasListeners = true
+    }
+    
+    override func stopObserving() {
+        hasListeners = false
+    }
 
     private func emit(_ methodName: String, _ data: Dictionary<String, Any?>?) {
-        sendEvent(withName: "\(RtcChannelEventHandler.PREFIX)\(methodName)", body: data)
+        if hasListeners {
+            sendEvent(withName: "\(RtcChannelEventHandler.PREFIX)\(methodName)", body: data)
+        }
     }
 
     private func engine() -> AgoraRtcEngineKit? {

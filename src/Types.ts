@@ -2507,7 +2507,7 @@ export interface LiveTranscoding {
     videoCodecProfile?: VideoCodecProfileType
     backgroundColor?: Color
     userConfigExtraInfo?: string
-    transcodingUsers: [TranscodingUser]
+    transcodingUsers: TranscodingUser[]
 }
 
 /**
@@ -2529,7 +2529,7 @@ export interface ChannelMediaInfo {
  */
 export interface ChannelMediaRelayConfiguration {
     srcInfo: ChannelMediaInfo
-    destInfos: [ChannelMediaInfo]
+    destInfos: ChannelMediaInfo[]
 }
 
 /**

@@ -1,5 +1,9 @@
 ## THE CHANGELOG
 
+#### 3.0.1-beta.8
+  - fix iOS event warn
+  - fix ts array declare error
+
 #### 3.0.1-beta.7
   - fix lib ignore bug
 
