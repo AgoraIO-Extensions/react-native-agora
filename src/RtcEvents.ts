@@ -56,7 +56,7 @@ type UserOfflineCallback = (uid: number, reason: UserOfflineReason) => void
 type ConnectionStateCallback = (state: ConnectionStateType, reason: ConnectionChangedReason) => void
 type NetworkTypeCallback = (type: NetworkType) => void
 type TokenCallback = (token: string) => void
-type AudioVolumeCallback = (speakers: [AudioVolumeInfo], totalVolume: number) => void
+type AudioVolumeCallback = (speakers: AudioVolumeInfo[], totalVolume: number) => void
 type UidCallback = (uid: number) => void
 type ElapsedCallback = (elapsed: number) => void
 type VideoFrameCallback = (width: number, height: number, elapsed: number) => void
@@ -93,7 +93,7 @@ type UidWithEnabledCallback = (uid: number, enabled: boolean) => void
 type EnabledCallback = (enabled: boolean) => void
 type AudioQualityCallback = (uid: number, quality: number, delay: number, lost: number) => void
 type MetadataCallback = (buffer: string, uid: number, timeStampMs: number) => void
-type FacePositionCallback = (imageWidth: number, imageHeight: number, faces: [FacePositionInfo]) => void
+type FacePositionCallback = (imageWidth: number, imageHeight: number, faces: FacePositionInfo[]) => void
 
 /**
  * The SDK uses the RtcEngineEvents interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
