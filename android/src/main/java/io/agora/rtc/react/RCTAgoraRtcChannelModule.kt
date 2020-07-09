@@ -178,12 +178,12 @@ class RCTAgoraRtcChannelModule(
 
     @ReactMethod
     override fun createDataStream(channelId: String, reliable: Boolean, ordered: Boolean, callback: Promise?) {
-        PromiseCallback(callback).code(channel(channelId)?.createDataStream(reliable, ordered))
+        PromiseCallback(callback).code(manager.createDataStream(channelId, reliable, ordered)) { it }
     }
 
     @ReactMethod
     override fun sendStreamMessage(channelId: String, streamId: Int, message: String, callback: Promise?) {
-        PromiseCallback(callback).code(channel(channelId)?.sendStreamMessage(streamId, message.toByteArray()))
+        PromiseCallback(callback).code(manager.sendStreamMessage(channelId, streamId, message))
     }
 
     @ReactMethod

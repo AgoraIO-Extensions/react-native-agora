@@ -477,10 +477,6 @@ export enum AudioReverbType {
  */
 export enum AudioSampleRateType {
     /**
-     * 16 kHz.
-     */
-    Type16000 = 16000,
-    /**
      * 32 kHz.
      */
     Type32000 = 32000,
@@ -2380,9 +2376,14 @@ export interface UserInfo {
  * @property width: int | The video resolution on the horizontal axis.
  * @property height: int | The video resolution on the vertical axis.
  */
-export interface VideoDimensions {
+export class VideoDimensions {
     width: number
     height: number
+
+    constructor(width: number, height: number) {
+        this.width = width;
+        this.height = height;
+    }
 }
 
 /**
@@ -2396,7 +2397,7 @@ export interface VideoDimensions {
  * @property degradationPrefer: int | The video encoding degradation preference under limited bandwidth.
  * @property mirrorMode: int | Sets the mirror mode of the published local video stream.
  */
-export interface VideoEncoderConfiguration {
+export class VideoEncoderConfiguration {
     dimensions?: VideoDimensions
     frameRate?: VideoFrameRate
     minFrameRate?: VideoFrameRate
@@ -2405,6 +2406,17 @@ export interface VideoEncoderConfiguration {
     orientationMode?: VideoOutputOrientationMode
     degradationPrefer?: DegradationPreference
     mirrorMode?: VideoMirrorMode
+
+    constructor({dimensions, frameRate, minFrameRate, bitrate, minBitrate, orientationMode, degradationPrefer, mirrorMode}: { dimensions?: VideoDimensions, frameRate?: VideoFrameRate, minFrameRate?: VideoFrameRate, bitrate?: BitRate | number, minBitrate?: number, orientationMode?: VideoOutputOrientationMode, degradationPrefer?: DegradationPreference, mirrorMode?: VideoMirrorMode }) {
+        this.dimensions = dimensions;
+        this.frameRate = frameRate;
+        this.minFrameRate = minFrameRate;
+        this.bitrate = bitrate;
+        this.minBitrate = minBitrate;
+        this.orientationMode = orientationMode;
+        this.degradationPrefer = degradationPrefer;
+        this.mirrorMode = mirrorMode;
+    }
 }
 
 /**
@@ -2414,11 +2426,18 @@ export interface VideoEncoderConfiguration {
  * @property smoothnessLevel: float | The sharpness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.5. This parameter is usually used to remove blemishes.
  * @property rednessLevel: float | The redness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.1. This parameter adjusts the red saturation level.
  */
-export interface BeautyOptions {
+export class BeautyOptions {
     lighteningContrastLevel?: LighteningContrastLevel
     lighteningLevel?: number
     smoothnessLevel?: number
     rednessLevel?: number
+
+    constructor({lighteningContrastLevel, lighteningLevel, smoothnessLevel, rednessLevel}: { lighteningContrastLevel?: LighteningContrastLevel, lighteningLevel?: number, smoothnessLevel?: number, rednessLevel?: number }) {
+        this.lighteningContrastLevel = lighteningContrastLevel;
+        this.lighteningLevel = lighteningLevel;
+        this.smoothnessLevel = smoothnessLevel;
+        this.rednessLevel = rednessLevel;
+    }
 }
 
 /**
@@ -2429,12 +2448,20 @@ export interface BeautyOptions {
  * @property width: int | Width of the image on the broadcasting video.
  * @property height: int | Height of the image on the broadcasting video.
  */
-export interface AgoraImage {
+export class AgoraImage {
     url: string
     x: number
     y: number
     width: number
     height: number
+
+    constructor(url: string, x: number, y: number, width: number, height: number) {
+        this.url = url;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
 }
 
 /**
@@ -2448,7 +2475,7 @@ export interface AgoraImage {
  * @property alpha: float | The transparency of the video frame of the user in the CDN live stream that ranges between 0.0 and 1.0. 0.0 means that the video frame is completely transparent and 1.0 means opaque. The default value is 1.0.
  * @property audioChannel: int | The audio channel ranging between 0 and 5. The default value is 0.
  */
-export interface TranscodingUser {
+export class TranscodingUser {
     uid: number
     x: number
     y: number
@@ -2457,6 +2484,17 @@ export interface TranscodingUser {
     zOrder?: number
     alpha?: number
     audioChannel?: AudioChannel
+
+    constructor(uid: number, x: number, y: number, {width, height, zOrder, alpha, audioChannel}: { width?: number, height?: number, zOrder?: number, alpha?: number, audioChannel?: AudioChannel }) {
+        this.uid = uid;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.zOrder = zOrder;
+        this.alpha = alpha;
+        this.audioChannel = audioChannel;
+    }
 }
 
 /**
@@ -2465,10 +2503,16 @@ export interface TranscodingUser {
  * @property green: int | Green.
  * @property blue: int | Blue.
  */
-export interface Color {
+export class Color {
     red: number
     green: number
     blue: number
+
+    constructor(red: number, green: number, blue: number) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+    }
 }
 
 /**
@@ -2490,7 +2534,7 @@ export interface Color {
  * @property userConfigExtraInfo: string | Reserved property. Extra user-defined information to send the Supplemental Enhancement Information (SEI) for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
  * @property transcodingUsers: array | An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
  */
-export interface LiveTranscoding {
+export class LiveTranscoding {
     width?: number
     height?: number
     videoBitrate?: number
@@ -2502,12 +2546,31 @@ export interface LiveTranscoding {
     backgroundImage?: AgoraImage
     audioSampleRate?: AudioSampleRateType
     audioBitrate?: number
-    audioChannels?: number
+    audioChannels?: AudioChannel
     audioCodecProfile?: AudioCodecProfileType
     videoCodecProfile?: VideoCodecProfileType
     backgroundColor?: Color
     userConfigExtraInfo?: string
     transcodingUsers: TranscodingUser[]
+
+    constructor(transcodingUsers: TranscodingUser[], {width, height, videoBitrate, videoFramerate, lowLatency, videoGop, watermark, backgroundImage, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, videoCodecProfile, backgroundColor, userConfigExtraInfo}: { width?: number, height?: number, videoBitrate?: number, videoFramerate?: VideoFrameRate, lowLatency?: boolean, videoGop?: number, watermark?: AgoraImage, backgroundImage?: AgoraImage, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel, audioCodecProfile?: AudioCodecProfileType, videoCodecProfile?: VideoCodecProfileType, backgroundColor?: Color, userConfigExtraInfo?: string, }) {
+        this.width = width;
+        this.height = height;
+        this.videoBitrate = videoBitrate;
+        this.videoFramerate = videoFramerate;
+        this.lowLatency = lowLatency;
+        this.videoGop = videoGop;
+        this.watermark = watermark;
+        this.backgroundImage = backgroundImage;
+        this.audioSampleRate = audioSampleRate;
+        this.audioBitrate = audioBitrate;
+        this.audioChannels = audioChannels;
+        this.audioCodecProfile = audioCodecProfile;
+        this.videoCodecProfile = videoCodecProfile;
+        this.backgroundColor = backgroundColor;
+        this.userConfigExtraInfo = userConfigExtraInfo;
+        this.transcodingUsers = transcodingUsers;
+    }
 }
 
 /**
@@ -2516,10 +2579,16 @@ export interface LiveTranscoding {
  * @property token: string | The token that enables the user to join the channel.
  * @property uid: int | The user ID.
  */
-export interface ChannelMediaInfo {
+export class ChannelMediaInfo {
     channelName?: string
     token?: string
     uid: number
+
+    constructor(uid: number, {channelName, token}: { channelName?: string, token?: string }) {
+        this.channelName = channelName;
+        this.token = token;
+        this.uid = uid;
+    }
 }
 
 /**
@@ -2527,9 +2596,14 @@ export interface ChannelMediaInfo {
  * @property srcInfo: object | Sets the information of the source channel.
  * @property destInfos: array | Sets the information of the destination channel.
  */
-export interface ChannelMediaRelayConfiguration {
+export class ChannelMediaRelayConfiguration {
     srcInfo: ChannelMediaInfo
     destInfos: ChannelMediaInfo[]
+
+    constructor(srcInfo: ChannelMediaInfo, destInfos: ChannelMediaInfo[]) {
+        this.srcInfo = srcInfo;
+        this.destInfos = destInfos;
+    }
 }
 
 /**
@@ -2539,11 +2613,18 @@ export interface ChannelMediaRelayConfiguration {
  * @property expectedUplinkBitrate: int | The expected maximum sending bitrate in bps in range of [100000, 5000000]. It is recommended to set this value according to the required bitrate of selected video profile.
  * @property expectedDownlinkBitrate: int | The expected maximum receive bitrate in bps in range of [100000, 5000000].
  */
-export interface LastmileProbeConfig {
+export class LastmileProbeConfig {
     probeUplink: boolean
     probeDownlink: boolean
     expectedUplinkBitrate: number
     expectedDownlinkBitrate: number
+
+    constructor(probeUplink: boolean, probeDownlink: boolean, expectedUplinkBitrate: number, expectedDownlinkBitrate: number) {
+        this.probeUplink = probeUplink;
+        this.probeDownlink = probeDownlink;
+        this.expectedUplinkBitrate = expectedUplinkBitrate;
+        this.expectedDownlinkBitrate = expectedDownlinkBitrate;
+    }
 }
 
 /**
@@ -2553,11 +2634,18 @@ export interface LastmileProbeConfig {
  * @property width: int | The width (pixels) of the watermark image.
  * @property height: int | The height (pixels) of the watermark image.
  */
-export interface Rectangle {
+export class Rectangle {
     x: number
     y: number
     width: number
     height: number
+
+    constructor(x: number, y: number, width: number, height: number) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
 }
 
 /**
@@ -2566,10 +2654,16 @@ export interface Rectangle {
  * @property positionInLandscapeMode: object | The watermark position in the landscape mode.
  * @property positionInPortraitMode: object | The watermark position in the portrait mode.
  */
-export interface WatermarkOptions {
+export class WatermarkOptions {
     visibleInPreview?: boolean
     positionInLandscapeMode: Rectangle
     positionInPortraitMode: Rectangle
+
+    constructor(positionInLandscapeMode: Rectangle, positionInPortraitMode: Rectangle, visibleInPreview?: boolean) {
+        this.visibleInPreview = visibleInPreview;
+        this.positionInLandscapeMode = positionInLandscapeMode;
+        this.positionInPortraitMode = positionInPortraitMode;
+    }
 }
 
 /**
@@ -2583,7 +2677,7 @@ export interface WatermarkOptions {
  * @property audioBitrate: int | Audio bitrate of the added stream to the broadcast. The default value is 48.
  * @property audioChannels: int | Audio channels to add into the broadcast. The value ranges between 1 and 2. The default value is 1.
  */
-export interface LiveInjectStreamConfig {
+export class LiveInjectStreamConfig {
     width?: number
     height?: number
     videoGop?: number
@@ -2591,7 +2685,18 @@ export interface LiveInjectStreamConfig {
     videoBitrate?: number
     audioSampleRate?: AudioSampleRateType
     audioBitrate?: number
-    audioChannels?: number
+    audioChannels?: AudioChannel
+
+    constructor({width, height, videoGop, videoFramerate, videoBitrate, audioSampleRate, audioBitrate, audioChannels}: { width?: number, height?: number, videoGop?: number, videoFramerate?: VideoFrameRate, videoBitrate?: number, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel }) {
+        this.width = width;
+        this.height = height;
+        this.videoGop = videoGop;
+        this.videoFramerate = videoFramerate;
+        this.videoBitrate = videoBitrate;
+        this.audioSampleRate = audioSampleRate;
+        this.audioBitrate = audioBitrate;
+        this.audioChannels = audioChannels;
+    }
 }
 
 /**
@@ -2599,9 +2704,14 @@ export interface LiveInjectStreamConfig {
  * @property preference: int | The camera capturer configuration.
  * @property cameraDirection: int | The camera direction.
  */
-export interface CameraCapturerConfiguration {
+export class CameraCapturerConfiguration {
     preference: CameraCaptureOutputPreference
     cameraDirection: CameraDirection
+
+    constructor(preference: CameraCaptureOutputPreference, cameraDirection: CameraDirection) {
+        this.preference = preference;
+        this.cameraDirection = cameraDirection;
+    }
 }
 
 /**
@@ -2609,9 +2719,14 @@ export interface CameraCapturerConfiguration {
  * @property autoSubscribeAudio: boolean | Determines whether to subscribe to audio streams when the user joins the channel.
  * @property autoSubscribeVideo: boolean | Determines whether to subscribe to video streams when the user joins the channel.
  */
-export interface ChannelMediaOptions {
+export class ChannelMediaOptions {
     autoSubscribeAudio: boolean
     autoSubscribeVideo: boolean
+
+    constructor(autoSubscribeAudio: boolean, autoSubscribeVideo: boolean) {
+        this.autoSubscribeAudio = autoSubscribeAudio;
+        this.autoSubscribeVideo = autoSubscribeVideo;
+    }
 }
 
 /**

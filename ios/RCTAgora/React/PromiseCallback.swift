@@ -11,8 +11,6 @@ import AgoraRtcKit
 
 @objc(PromiseCallback)
 class PromiseCallback: NSObject, Callback {
-    typealias T = Dictionary<String, Any?>
-
     private var resolve: RCTPromiseResolveBlock?
     private var reject: RCTPromiseRejectBlock?
 
@@ -21,25 +19,7 @@ class PromiseCallback: NSObject, Callback {
         self.reject = reject
     }
 
-    func resolve<E>(_ e: E?, _ data: (_ e: E) throws -> Any?) {
-        if let `e` = e {
-            do {
-                let res = try data(e)
-                if res is Void {
-                    resolve?(nil)
-                } else {
-                    resolve?(res)
-                }
-            } catch let err {
-                reject?(nil, nil, err)
-            }
-        } else {
-            let code = AgoraErrorCode.notInitialized.rawValue
-            failure(String(code), AgoraRtcEngineKit.getErrorDescription(code) ?? "")
-        }
-    }
-
-    func success(_ data: Dictionary<String, Any?>?) {
+    func success(_ data: Any?) {
         resolve?(data)
     }
 
