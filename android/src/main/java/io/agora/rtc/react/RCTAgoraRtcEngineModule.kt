@@ -142,12 +142,12 @@ class RCTAgoraRtcEngineModule(
 
     @ReactMethod
     override fun getUserInfoByUserAccount(userAccount: String, callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { Arguments.makeNativeMap(manager.getUserInfoByUserAccount(userAccount)) }
+        PromiseCallback(callback).resolve(engine()) { manager.getUserInfoByUserAccount(userAccount) }
     }
 
     @ReactMethod
     override fun getUserInfoByUid(uid: Int, callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { Arguments.makeNativeMap(manager.getUserInfoByUid(uid)) }
+        PromiseCallback(callback).resolve(engine()) { manager.getUserInfoByUid(uid) }
     }
 
     @ReactMethod
@@ -292,22 +292,22 @@ class RCTAgoraRtcEngineModule(
 
     @ReactMethod
     override fun getAudioMixingPlayoutVolume(callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { it.audioMixingPlayoutVolume }
+        PromiseCallback(callback).code(engine()?.audioMixingPlayoutVolume) { it }
     }
 
     @ReactMethod
     override fun getAudioMixingPublishVolume(callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { it.audioMixingPublishVolume }
+        PromiseCallback(callback).code(engine()?.audioMixingPublishVolume) { it }
     }
 
     @ReactMethod
     override fun getAudioMixingDuration(callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { it.audioMixingDuration }
+        PromiseCallback(callback).code(engine()?.audioMixingDuration) { it }
     }
 
     @ReactMethod
     override fun getAudioMixingCurrentPosition(callback: Promise?) {
-        PromiseCallback(callback).resolve(engine()) { it.audioMixingCurrentPosition }
+        PromiseCallback(callback).code(engine()?.audioMixingCurrentPosition) { it }
     }
 
     @ReactMethod
@@ -662,12 +662,7 @@ class RCTAgoraRtcEngineModule(
 
     @ReactMethod
     override fun createDataStream(reliable: Boolean, ordered: Boolean, callback: Promise?) {
-        val streamId = manager.createDataStream(reliable, ordered)
-        if (streamId <= 0) {
-            PromiseCallback(callback).code(streamId)
-        } else {
-            PromiseCallback(callback).resolve(engine()) { streamId }
-        }
+        PromiseCallback(callback).code(manager.createDataStream(reliable, ordered)) { it }
     }
 
     @ReactMethod

@@ -1,5 +1,10 @@
 ## THE CHANGELOG
 
+#### 3.0.1-beta.9
+  - add `constructor` for typescript
+  - fix Android `mapToChannelMediaInfo` crash
+  - fix iOS `switchChannel` `sendMetadata` crash
+
 #### 3.0.1-beta.8
   - fix iOS event warn
   - fix ts array declare error

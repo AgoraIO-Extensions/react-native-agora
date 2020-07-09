@@ -15,7 +15,7 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
 
     typealias Map = NSDictionary
     typealias Callback = PromiseCallback
-    
+
     private var hasListeners = false
 
     private lazy var manager: RtcChannelManager = {
@@ -49,11 +49,11 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
         }
         return events
     }
-    
+
     override func startObserving() {
         hasListeners = true
     }
-    
+
     override func stopObserving() {
         hasListeners = false
     }
@@ -67,7 +67,7 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     private func engine() -> AgoraRtcEngineKit? {
         (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
-    
+
     func channel(_ channelId: String) -> AgoraRtcChannel? {
         manager[channelId]
     }
@@ -89,11 +89,11 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     func joinChannel(_ channelId: String, _ token: String?, _ optionalInfo: String?, _ optionalUid: Int, _ options: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(channel(channelId)?.join(byToken: token, info: optionalInfo, uid: UInt(optionalUid), options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.join(byToken: token, info: optionalInfo, uid: UInt(optionalUid), options: mapToChannelMediaOptions(options as! Dictionary<String, Any>)))
     }
 
     func joinChannelWithUserAccount(_ channelId: String, _ token: String?, _ userAccount: String, _ options: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(channel(channelId)?.join(byUserAccount: userAccount, token: token, options: mapToChannelMediaOptions(map: options as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.join(byUserAccount: userAccount, token: token, options: mapToChannelMediaOptions(options as! Dictionary<String, Any>)))
     }
 
     func leaveChannel(_ channelId: String, _ callback: PromiseCallback?) {
@@ -157,7 +157,7 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     func setLiveTranscoding(_ channelId: String, _ transcoding: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(channel(channelId)?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.setLiveTranscoding(mapToLiveTranscoding(transcoding as! Dictionary<String, Any>)))
     }
 
     func addPublishStreamUrl(_ channelId: String, _ url: String, _ transcodingEnabled: Bool, _ callback: PromiseCallback?) {
@@ -169,11 +169,11 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     func startChannelMediaRelay(_ channelId: String, _ channelMediaRelayConfiguration: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(channel(channelId)?.startMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.startMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func updateChannelMediaRelay(_ channelId: String, _ channelMediaRelayConfiguration: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(channel(channelId)?.updateMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.updateMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func stopChannelMediaRelay(_ channelId: String, _ callback: PromiseCallback?) {
@@ -219,7 +219,7 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     func addInjectStreamUrl(_ channelId: String, _ url: String, _ config: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(channel(channelId)?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
+        callback?.code(channel(channelId)?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(config as! Dictionary<String, Any>)))
     }
 
     func removeInjectStreamUrl(_ channelId: String, _ url: String, _ callback: PromiseCallback?) {
@@ -227,15 +227,11 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     func createDataStream(_ channelId: String, _ reliable: Bool, _ ordered: Bool, _ callback: PromiseCallback?) {
-        var streamId = 0
-        callback?.resolve(channel(channelId)) { (channel: AgoraRtcChannel) in
-            channel.createDataStream(&streamId, reliable: reliable, ordered: ordered)
-            return streamId
-        }
+        callback?.code(manager.createDataStream(channelId, reliable, ordered)) { it in it }
     }
 
     func sendStreamMessage(_ channelId: String, _ streamId: Int, _ message: String, _ callback: PromiseCallback?) {
-        callback?.code(channel(channelId)?.sendStreamMessage(streamId, data: message.data(using: .utf8)!))
+        callback?.code(manager.sendStreamMessage(channelId, streamId, message))
     }
 }
 

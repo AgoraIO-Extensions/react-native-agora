@@ -15,7 +15,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
 
     typealias Map = NSDictionary
     typealias Callback = PromiseCallback
-    
+
     private var hasListeners = false
 
     private lazy var manager: RtcEngineManager = {
@@ -49,11 +49,11 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
         }
         return events
     }
-    
+
     override func startObserving() {
         hasListeners = true
     }
-    
+
     override func stopObserving() {
         hasListeners = false
     }
@@ -220,7 +220,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func setVideoEncoderConfiguration(_ config: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(map: config as! Dictionary<String, Any>)))
+        callback?.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(config as! Dictionary<String, Any>)))
     }
 
     func enableLocalVideo(_ enabled: Bool, _ callback: PromiseCallback?) {
@@ -244,7 +244,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func setBeautyEffectOptions(_ enabled: Bool, _ options: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.setBeautyEffectOptions(enabled, options: mapToBeautyOptions(map: options as! Dictionary<String, Any>)))
+        callback?.code(engine?.setBeautyEffectOptions(enabled, options: mapToBeautyOptions(options as! Dictionary<String, Any>)))
     }
 
     func startAudioMixing(_ filePath: String, _ loopback: Bool, _ replace: Bool, _ cycle: Int, _ callback: PromiseCallback?) {
@@ -276,33 +276,25 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func getAudioMixingPlayoutVolume(_ callback: PromiseCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingPlayoutVolume()
-        }
+        callback?.code(engine?.getAudioMixingPlayoutVolume()){ it in it}
     }
 
     func getAudioMixingPublishVolume(_ callback: PromiseCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingPublishVolume()
-        }
+        callback?.code(engine?.getAudioMixingPublishVolume()) { it in it}
     }
 
     func getAudioMixingDuration(_ callback: PromiseCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingDuration()
-        }
+        callback?.code(engine?.getAudioMixingDuration()) { it in it }
     }
 
     func getAudioMixingCurrentPosition(_ callback: PromiseCallback?) {
-        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
-            engine.getAudioMixingCurrentPosition()
-        }
+        callback?.code(engine?.getAudioMixingCurrentPosition()) { it in it }
     }
 
     func setAudioMixingPosition(_ pos: Int, _ callback: PromiseCallback?) {
         callback?.code(engine?.setAudioMixingPosition(pos))
     }
-    
+
     func setAudioMixingPitch(_ pitch: Int, _ callback: PromiseCallback?) {
         callback?.code(engine?.setAudioMixingPitch(pitch))
     }
@@ -386,7 +378,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func setLiveTranscoding(_ transcoding: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.setLiveTranscoding(mapToLiveTranscoding(map: transcoding as! Dictionary<String, Any>)))
+        callback?.code(engine?.setLiveTranscoding(mapToLiveTranscoding(transcoding as! Dictionary<String, Any>)))
     }
 
     func addPublishStreamUrl(_ url: String, _ transcodingEnabled: Bool, _ callback: PromiseCallback?) {
@@ -398,11 +390,11 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func startChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        callback?.code(engine?.startChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func updateChannelMediaRelay(_ channelMediaRelayConfiguration: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(map: channelMediaRelayConfiguration as! Dictionary<String, Any>)))
+        callback?.code(engine?.updateChannelMediaRelay(mapToChannelMediaRelayConfiguration(channelMediaRelayConfiguration as! Dictionary<String, Any>)))
     }
 
     func stopChannelMediaRelay(_ callback: PromiseCallback?) {
@@ -472,7 +464,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func startLastmileProbeTest(_ config: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(map: config as! Dictionary<String, Any>)))
+        callback?.code(engine?.startLastmileProbeTest(mapToLastmileProbeConfig(config as! Dictionary<String, Any>)))
     }
 
     func stopLastmileProbeTest(_ callback: PromiseCallback?) {
@@ -498,7 +490,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func addVideoWatermark(_ watermarkUrl: String, _ options: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.addVideoWatermark(URL(string: watermarkUrl)!, options: mapToWatermarkOptions(map: options as! Dictionary<String, Any>)))
+        callback?.code(engine?.addVideoWatermark(URL(string: watermarkUrl)!, options: mapToWatermarkOptions(options as! Dictionary<String, Any>)))
     }
 
     func clearVideoWatermarks(_ callback: PromiseCallback?) {
@@ -522,7 +514,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     func addInjectStreamUrl(_ url: String, _ config: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(map: config as! Dictionary<String, Any>)))
+        callback?.code(engine?.addInjectStreamUrl(url, config: mapToLiveInjectStreamConfig(config as! Dictionary<String, Any>)))
     }
 
     func removeInjectStreamUrl(_ url: String, _ callback: PromiseCallback?) {
@@ -547,6 +539,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
 
     func isCameraFocusSupported(_ callback: PromiseCallback?) {
         // TODO Not in iOS
+        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in nil }
     }
 
     func isCameraExposurePositionSupported(_ callback: PromiseCallback?) {
@@ -564,54 +557,56 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     func setCameraZoomFactor(_ factor: Float, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraZoomFactor(CGFloat(factor))
+            return nil
         }
     }
 
     func getCameraMaxZoomFactor(_ callback: PromiseCallback?) {
         // TODO Not in iOS
+        callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in nil }
     }
 
     func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraFocusPositionInPreview(CGPoint(x: CGFloat(positionX), y: CGFloat(positionY)))
+            return nil
         }
     }
 
     func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraExposurePosition(CGPoint(x: CGFloat(positionXinView), y: CGFloat(positionYinView)))
+            return nil
         }
     }
-    
+
     func enableFaceDetection(_ enable: Bool, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.enableFaceDetection(enable)
+            return nil
         }
     }
 
     func setCameraTorchOn(_ isOn: Bool, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraTorchOn(isOn)
+            return nil
         }
     }
 
     func setCameraAutoFocusFaceModeEnabled(_ enabled: Bool, _ callback: PromiseCallback?) {
         callback?.resolve(engine) { (engine: AgoraRtcEngineKit) in
             engine.setCameraAutoFocusFaceModeEnabled(enabled)
+            return nil
         }
     }
 
     func setCameraCapturerConfiguration(_ config: NSDictionary, _ callback: PromiseCallback?) {
-        callback?.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(map: config as! Dictionary<String, Any>)))
+        callback?.code(engine?.setCameraCapturerConfiguration(mapToCameraCapturerConfiguration(config as! Dictionary<String, Any>)))
     }
 
     func createDataStream(_ reliable: Bool, _ ordered: Bool, _ callback: PromiseCallback?) {
-        let streamId = manager.createDataStream(reliable, ordered)
-        if streamId <= 0 {
-            callback?.code(streamId)
-        } else {
-            callback?.resolve(engine, { e in streamId})
-        }
+        callback?.code(manager.createDataStream(reliable, ordered)) { it in it }
     }
 
     func sendStreamMessage(_ streamId: Int, _ message: String, _ callback: PromiseCallback?) {
@@ -835,7 +830,7 @@ extension RCTAgoraRtcEngineModule {
     @objc func setAudioMixingPosition(_ pos: Int, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         setAudioMixingPosition(pos, PromiseCallback(resolve, reject))
     }
-    
+
     @objc func setAudioMixingPitch(_ pitch: Int, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         setAudioMixingPitch(pitch, PromiseCallback(resolve, reject))
     }
@@ -1070,6 +1065,7 @@ extension RCTAgoraRtcEngineModule {
 
     @objc func isCameraFocusSupported(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         // TODO Not in iOS
+        isCameraFocusSupported(PromiseCallback(resolve, reject))
     }
 
     @objc func isCameraExposurePositionSupported(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
@@ -1086,6 +1082,7 @@ extension RCTAgoraRtcEngineModule {
 
     @objc func getCameraMaxZoomFactor(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         // TODO Not in iOS
+        getCameraMaxZoomFactor(PromiseCallback(resolve, reject))
     }
 
     @objc func setCameraFocusPositionInPreview(_ positionX: Float, _ positionY: Float, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
@@ -1095,7 +1092,7 @@ extension RCTAgoraRtcEngineModule {
     @objc func setCameraExposurePosition(_ positionXinView: Float, _ positionYinView: Float, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         setCameraExposurePosition(positionXinView, positionYinView, PromiseCallback(resolve, reject))
     }
-    
+
     @objc func enableFaceDetection(_ enable: Bool, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         enableFaceDetection(enable, PromiseCallback(resolve, reject))
     }

@@ -26,7 +26,7 @@ RCT_EXTERN_METHOD(setClientRole:
 RCT_EXTERN_METHOD(joinChannel:
     (NSString *) token :(NSString *) channelName :(NSString *) optionalInfo :(NSInteger) optionalUid :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
-RCT_EXTERN_METHOD(switchChanne:
+RCT_EXTERN_METHOD(switchChannel:
     (NSString *) token :(NSString *) channelName :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(leaveChannel:
@@ -312,7 +312,7 @@ RCT_EXTERN_METHOD(setMaxMetadataSize:
     (NSInteger) size :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(sendMetadata:
-    (NSInteger) metadata :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+    (NSString *) metadata :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 RCT_EXTERN_METHOD(addVideoWatermark:
     (NSString *) watermarkUrl :(NSDictionary *) options :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
