@@ -1,0 +1,551 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>RtcStats | react-native-agora</title>
+	<meta name="description" content="Documentation for react-native-agora">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">react-native-agora</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="rtcstats.html">RtcStats</a>
+				</li>
+			</ul>
+			<h1>Interface RtcStats</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Statistics of RTCEngine.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>property</dt>
+						<dd><p>totalDuration: int | Call duration in seconds, represented by an aggregate value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>txBytes: int | Total number of bytes transmitted, represented by an aggregate value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>rxBytes: int | Total number of bytes received, represented by an aggregate value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>txAudioBytes: int | Total number of audio bytes sent (bytes), represented by an aggregate value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>txVideoBytes: int | Total number of video bytes sent (bytes), represented by an aggregate value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>rxAudioBytes: int | Total number of audio bytes received (bytes), represented by an aggregate value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>rxVideoBytes: int | Total number of video bytes received (bytes), represented by an aggregate value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>txKBitRate: int | Transmission bitrate in Kbps, represented by an instantaneous value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>rxKBitRate: int | Receive bitrate (Kbps), represented by an instantaneous value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>txAudioKBitRate: int | The transmission bitrate of the audio packet (Kbps), represented by an instantaneous value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>rxAudioKBitRate: int | Audio receive bitrate (Kbps), represented by an instantaneous value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>txVideoKBitRate: int | Video transmission bitrate (Kbps), represented by an instantaneous value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>rxVideoKBitRate: int | Video receive bitrate (Kbps), represented by an instantaneous value.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>users: int | The number of users in the channel.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>lastmileDelay: int | Client-server latency.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>txPacketLossRate: int | The packet loss rate (%) from the local client to Agora&#39;s edge server, before network countermeasures.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>rxPacketLossRate: int | The packet loss rate (%) from Agora&#39;s edge server to the local client, before network countermeasures.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>cpuTotalUsage: float | System CPU usage (%).</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>cpuAppUsage: float | Application CPU usage (%).</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>gatewayRtt: int | The round-trip time delay from the client to the local router.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>memoryAppUsageRatio: float | The memory usage ratio of the app (%).</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>memoryTotalUsageRatio: float | The memory usage ratio of the system (%).</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>memoryAppUsageInKbytes: int | The memory usage of the app (KB).</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">RtcStats</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#cpuappusage" class="tsd-kind-icon">cpu<wbr>App<wbr>Usage</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#cputotalusage" class="tsd-kind-icon">cpu<wbr>Total<wbr>Usage</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#gatewayrtt" class="tsd-kind-icon">gateway<wbr>Rtt</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#lastmiledelay" class="tsd-kind-icon">lastmile<wbr>Delay</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#memoryappusageinkbytes" class="tsd-kind-icon">memory<wbr>App<wbr>Usage<wbr>InKbytes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#memoryappusageratio" class="tsd-kind-icon">memory<wbr>App<wbr>Usage<wbr>Ratio</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#memorytotalusageratio" class="tsd-kind-icon">memory<wbr>Total<wbr>Usage<wbr>Ratio</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#rxaudiobytes" class="tsd-kind-icon">rx<wbr>Audio<wbr>Bytes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#rxaudiokbitrate" class="tsd-kind-icon">rx<wbr>AudioKBit<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#rxbytes" class="tsd-kind-icon">rx<wbr>Bytes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#rxkbitrate" class="tsd-kind-icon">rxKBit<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#rxpacketlossrate" class="tsd-kind-icon">rx<wbr>Packet<wbr>Loss<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#rxvideobytes" class="tsd-kind-icon">rx<wbr>Video<wbr>Bytes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#rxvideokbitrate" class="tsd-kind-icon">rx<wbr>VideoKBit<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#totalduration" class="tsd-kind-icon">total<wbr>Duration</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#txaudiobytes" class="tsd-kind-icon">tx<wbr>Audio<wbr>Bytes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#txaudiokbitrate" class="tsd-kind-icon">tx<wbr>AudioKBit<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#txbytes" class="tsd-kind-icon">tx<wbr>Bytes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#txkbitrate" class="tsd-kind-icon">txKBit<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#txpacketlossrate" class="tsd-kind-icon">tx<wbr>Packet<wbr>Loss<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#txvideobytes" class="tsd-kind-icon">tx<wbr>Video<wbr>Bytes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#txvideokbitrate" class="tsd-kind-icon">tx<wbr>VideoKBit<wbr>Rate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcstats.html#users" class="tsd-kind-icon">users</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="cpuappusage" class="tsd-anchor"></a>
+					<h3>cpu<wbr>App<wbr>Usage</h3>
+					<div class="tsd-signature tsd-kind-icon">cpu<wbr>App<wbr>Usage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2777">src/Types.ts:2777</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="cputotalusage" class="tsd-anchor"></a>
+					<h3>cpu<wbr>Total<wbr>Usage</h3>
+					<div class="tsd-signature tsd-kind-icon">cpu<wbr>Total<wbr>Usage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2776">src/Types.ts:2776</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="gatewayrtt" class="tsd-anchor"></a>
+					<h3>gateway<wbr>Rtt</h3>
+					<div class="tsd-signature tsd-kind-icon">gateway<wbr>Rtt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2778">src/Types.ts:2778</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="lastmiledelay" class="tsd-anchor"></a>
+					<h3>lastmile<wbr>Delay</h3>
+					<div class="tsd-signature tsd-kind-icon">lastmile<wbr>Delay<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2773">src/Types.ts:2773</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="memoryappusageinkbytes" class="tsd-anchor"></a>
+					<h3>memory<wbr>App<wbr>Usage<wbr>InKbytes</h3>
+					<div class="tsd-signature tsd-kind-icon">memory<wbr>App<wbr>Usage<wbr>InKbytes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2781">src/Types.ts:2781</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="memoryappusageratio" class="tsd-anchor"></a>
+					<h3>memory<wbr>App<wbr>Usage<wbr>Ratio</h3>
+					<div class="tsd-signature tsd-kind-icon">memory<wbr>App<wbr>Usage<wbr>Ratio<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2779">src/Types.ts:2779</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="memorytotalusageratio" class="tsd-anchor"></a>
+					<h3>memory<wbr>Total<wbr>Usage<wbr>Ratio</h3>
+					<div class="tsd-signature tsd-kind-icon">memory<wbr>Total<wbr>Usage<wbr>Ratio<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2780">src/Types.ts:2780</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rxaudiobytes" class="tsd-anchor"></a>
+					<h3>rx<wbr>Audio<wbr>Bytes</h3>
+					<div class="tsd-signature tsd-kind-icon">rx<wbr>Audio<wbr>Bytes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2764">src/Types.ts:2764</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rxaudiokbitrate" class="tsd-anchor"></a>
+					<h3>rx<wbr>AudioKBit<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">rx<wbr>AudioKBit<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2769">src/Types.ts:2769</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rxbytes" class="tsd-anchor"></a>
+					<h3>rx<wbr>Bytes</h3>
+					<div class="tsd-signature tsd-kind-icon">rx<wbr>Bytes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2761">src/Types.ts:2761</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rxkbitrate" class="tsd-anchor"></a>
+					<h3>rxKBit<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">rxKBit<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2767">src/Types.ts:2767</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rxpacketlossrate" class="tsd-anchor"></a>
+					<h3>rx<wbr>Packet<wbr>Loss<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">rx<wbr>Packet<wbr>Loss<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2775">src/Types.ts:2775</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rxvideobytes" class="tsd-anchor"></a>
+					<h3>rx<wbr>Video<wbr>Bytes</h3>
+					<div class="tsd-signature tsd-kind-icon">rx<wbr>Video<wbr>Bytes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2765">src/Types.ts:2765</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rxvideokbitrate" class="tsd-anchor"></a>
+					<h3>rx<wbr>VideoKBit<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">rx<wbr>VideoKBit<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2771">src/Types.ts:2771</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="totalduration" class="tsd-anchor"></a>
+					<h3>total<wbr>Duration</h3>
+					<div class="tsd-signature tsd-kind-icon">total<wbr>Duration<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2759">src/Types.ts:2759</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="txaudiobytes" class="tsd-anchor"></a>
+					<h3>tx<wbr>Audio<wbr>Bytes</h3>
+					<div class="tsd-signature tsd-kind-icon">tx<wbr>Audio<wbr>Bytes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2762">src/Types.ts:2762</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="txaudiokbitrate" class="tsd-anchor"></a>
+					<h3>tx<wbr>AudioKBit<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">tx<wbr>AudioKBit<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2768">src/Types.ts:2768</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="txbytes" class="tsd-anchor"></a>
+					<h3>tx<wbr>Bytes</h3>
+					<div class="tsd-signature tsd-kind-icon">tx<wbr>Bytes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2760">src/Types.ts:2760</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="txkbitrate" class="tsd-anchor"></a>
+					<h3>txKBit<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">txKBit<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2766">src/Types.ts:2766</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="txpacketlossrate" class="tsd-anchor"></a>
+					<h3>tx<wbr>Packet<wbr>Loss<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">tx<wbr>Packet<wbr>Loss<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2774">src/Types.ts:2774</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="txvideobytes" class="tsd-anchor"></a>
+					<h3>tx<wbr>Video<wbr>Bytes</h3>
+					<div class="tsd-signature tsd-kind-icon">tx<wbr>Video<wbr>Bytes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2763">src/Types.ts:2763</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="txvideokbitrate" class="tsd-anchor"></a>
+					<h3>tx<wbr>VideoKBit<wbr>Rate</h3>
+					<div class="tsd-signature tsd-kind-icon">tx<wbr>VideoKBit<wbr>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2770">src/Types.ts:2770</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="users" class="tsd-anchor"></a>
+					<h3>users</h3>
+					<div class="tsd-signature tsd-kind-icon">users<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L2772">src/Types.ts:2772</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
+						<a href="rtcstats.html" class="tsd-kind-icon">Rtc<wbr>Stats</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#cpuappusage" class="tsd-kind-icon">cpu<wbr>App<wbr>Usage</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#cputotalusage" class="tsd-kind-icon">cpu<wbr>Total<wbr>Usage</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#gatewayrtt" class="tsd-kind-icon">gateway<wbr>Rtt</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#lastmiledelay" class="tsd-kind-icon">lastmile<wbr>Delay</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#memoryappusageinkbytes" class="tsd-kind-icon">memory<wbr>App<wbr>Usage<wbr>InKbytes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#memoryappusageratio" class="tsd-kind-icon">memory<wbr>App<wbr>Usage<wbr>Ratio</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#memorytotalusageratio" class="tsd-kind-icon">memory<wbr>Total<wbr>Usage<wbr>Ratio</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#rxaudiobytes" class="tsd-kind-icon">rx<wbr>Audio<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#rxaudiokbitrate" class="tsd-kind-icon">rx<wbr>AudioKBit<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#rxbytes" class="tsd-kind-icon">rx<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#rxkbitrate" class="tsd-kind-icon">rxKBit<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#rxpacketlossrate" class="tsd-kind-icon">rx<wbr>Packet<wbr>Loss<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#rxvideobytes" class="tsd-kind-icon">rx<wbr>Video<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#rxvideokbitrate" class="tsd-kind-icon">rx<wbr>VideoKBit<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#totalduration" class="tsd-kind-icon">total<wbr>Duration</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#txaudiobytes" class="tsd-kind-icon">tx<wbr>Audio<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#txaudiokbitrate" class="tsd-kind-icon">tx<wbr>AudioKBit<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#txbytes" class="tsd-kind-icon">tx<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#txkbitrate" class="tsd-kind-icon">txKBit<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#txpacketlossrate" class="tsd-kind-icon">tx<wbr>Packet<wbr>Loss<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#txvideobytes" class="tsd-kind-icon">tx<wbr>Video<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#txvideokbitrate" class="tsd-kind-icon">tx<wbr>VideoKBit<wbr>Rate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcstats.html#users" class="tsd-kind-icon">users</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

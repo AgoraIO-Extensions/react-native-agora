@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>react-native-agora</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for react-native-agora">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> react-native-agora</h1>
+			<h1>react-native-agora</h1>
 		</div>
 	</div>
 </header>
@@ -64,12 +64,6 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#有任何问题欢迎加入qq群进行反馈--471757030" id="有任何问题欢迎加入qq群进行反馈--471757030" style="color: inherit; text-decoration: none;">
-					<h5>有任何问题欢迎加入QQ群进行反馈  471757030</h5>
-				</a>
-				<a href="#a-hrefreadmeoldmdfor-1x-old-versiona" id="a-hrefreadmeoldmdfor-1x-old-versiona" style="color: inherit; text-decoration: none;">
-					<h2><a href="README.old.md">for 1.x old version</a></h2>
-				</a>
 				<a href="#react-native-agora" id="react-native-agora" style="color: inherit; text-decoration: none;">
 					<h1>react-native-agora</h1>
 				</a>
@@ -78,64 +72,125 @@
 					<a href="https://www.npmjs.com/package/react-native-agora"><img src="https://img.shields.io/npm/dt/react-native-agora.svg" alt="npm"></a>
 					<a href="https://github.com/syanbo/react-native-agora/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/react-native-agora.svg" alt="npm"></a>
 				<a href="https://gitter.im/react-native-agora/community"><img src="https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg" alt="join chat"></a></p>
-				<a href="#description" id="description" style="color: inherit; text-decoration: none;">
-					<h2>Description</h2>
-				</a>
-				<p>The react-native-agora is an open-source wrapper for react-native developers. This SDK takes advantage of React Native and Agora RTC Video SDKs on Android/iOS.</p>
-				<a href="#compatibility" id="compatibility" style="color: inherit; text-decoration: none;">
-					<h2>Compatibility</h2>
-				</a>
-				<ul>
-					<li><code>&gt;= react native 0.55.x</code></li>
-					<li><code>iOS SDK 8.0+</code></li>
-					<li><code>Android 5.0+ x86 arm64 armv7a</code></li>
-				</ul>
-				<a href="#a-hrefhttpsgithubcomagoraio-communityagora-rn-quickstartquick-starta" id="a-hrefhttpsgithubcomagoraio-communityagora-rn-quickstartquick-starta" style="color: inherit; text-decoration: none;">
-					<h2><a href="https://github.com/AgoraIO-Community/Agora-RN-Quickstart">quick start</a></h2>
-				</a>
+				<p>The <em>react-native-agora</em> is an open-source wrapper for React Native developers. </p>
+				<p>This SDK takes advantage of React Native and Agora RTC Video SDK on Android &amp;&amp; iOS.</p>
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h2>Installation</h2>
 				</a>
-				<p>Install with npm:</p>
-				<p> <code>npm install --save react-native-agora</code></p>
-				<p>Or, install with yarn:</p>
-				<p> <code>yarn add react-native-agora</code></p>
-				<p>Either way, then link with:</p>
-				<p> <code>react-native link react-native-agora</code></p>
-				<a href="#ios-installation" id="ios-installation" style="color: inherit; text-decoration: none;">
-					<h3>iOS Installation</h3>
+				<a href="#installing-react-native-gt-0600" id="installing-react-native-gt-0600" style="color: inherit; text-decoration: none;">
+					<h3>Installing (React Native &gt;= 0.60.0)</h3>
 				</a>
-				<p>  <a href="https://github.com/syanbo/react-native-agora/tree/master/docs/IOS_INSTALLATION.zh.md">中文</a>
-				<a href="https://github.com/syanbo/react-native-agora/tree/master/docs/IOS_INSTALLATION.md">English</a></p>
-				<a href="#android-installation" id="android-installation" style="color: inherit; text-decoration: none;">
-					<h3>Android Installation</h3>
+				<p>Install <code>react-native-agora</code>(^3.0.0):</p>
+				<pre><code class="language-shell">yarn add react-native-agora</code></pre>
+				<p>or</p>
+				<pre><code class="language-shell">npm i --save react-native-agora</code></pre>
+				<p>Go to your ios folder and run:</p>
+				<pre><code class="language-shell">cd ios
+pod install</code></pre>
+				<p><strong>_ IMPORTANT _</strong></p>
+				<p><a href="https://github.com/react-native-community/cli/blob/master/docs/autolinking.md">Native Modules are now Autolinked.</a></p>
+				<a href="#installing-react-native--059x" id="installing-react-native--059x" style="color: inherit; text-decoration: none;">
+					<h3>Installing (React Native == 0.59.x)</h3>
 				</a>
-				<p>  <a href="https://github.com/syanbo/react-native-agora/tree/master/docs/ANDROID_INSTALLATION.zh.md">中文</a>
-				<a href="https://github.com/syanbo/react-native-agora/tree/master/docs/ANDROID_INSTALLATION.md">English</a></p>
-				<a href="#agora-native-api-documentation" id="agora-native-api-documentation" style="color: inherit; text-decoration: none;">
-					<h2>Agora Native API Documentation</h2>
+				<p>Install <code>react-native-agora</code>(^3.0.0):</p>
+				<pre><code class="language-shell">yarn add react-native-agora</code></pre>
+				<p>or</p>
+				<pre><code class="language-shell">npm i --save react-native-agora</code></pre>
+				<p><strong>_ IMPORTANT _</strong></p>
+				<p><a href="./docs/v3/installation.android.md">Android Installation</a></p>
+				<p><a href="./docs/v3/installation.ios.md">iOS Installation</a></p>
+				<a href="#installing-react-native-lt-058x" id="installing-react-native-lt-058x" style="color: inherit; text-decoration: none;">
+					<h3>Installing (React Native &lt;= 0.58.x)</h3>
 				</a>
-				<a href="#android" id="android" style="color: inherit; text-decoration: none;">
-					<h3>Android</h3>
+				<p><strong>_ IMPORTANT _</strong></p>
+				<p>We no longer support, you can try the older version.</p>
+				<p><a href="./docs/v1/README.md">Install <code>react-native-agora</code>(^1.0.0)</a></p>
+				<p><a href="./docs/v2/README.md">Install <code>react-native-agora</code>(^2.0.0)</a></p>
+				<a href="#general-usage" id="general-usage" style="color: inherit; text-decoration: none;">
+					<h2>General Usage</h2>
 				</a>
-				<p>  <a href="https://docs.agora.io/cn/Video/API%20Reference/java/index.html">中文</a>
-				<a href="https://docs.agora.io/en/Video/API%20Reference/java/index.html">English</a></p>
-				<a href="#ios" id="ios" style="color: inherit; text-decoration: none;">
-					<h2>iOS</h2>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> RtcEngine <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native-agora'</span>;
+RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
+				<p>or</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> RtcEngine = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-native-agora'</span>);
+RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
+				<a href="#using-typescript" id="using-typescript" style="color: inherit; text-decoration: none;">
+					<h2>Using TypeScript</h2>
 				</a>
-				<p>  <a href="https://docs.agora.io/cn/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html">中文</a>
-				<a href="https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html">English</a></p>
-				<a href="#a-hrefhttpssyanbogithubioreact-native-agoraglobalshtmlapi-docsa" id="a-hrefhttpssyanbogithubioreact-native-agoraglobalshtmlapi-docsa" style="color: inherit; text-decoration: none;">
-					<h2><a href="https://syanbo.github.io/react-native-agora/globals.html">API DOCS</a></h2>
+				<p>We suggest you use TypeScript to develop, or use TypeScript eslint to lint your code.</p>
+				<ul>
+					<li><a href="https://reactnative.dev/docs/typescript#getting-started-with-typescript">Getting Started with TypeScript</a></li>
+					<li><a href="https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project">Adding TypeScript to an Existing Project</a></li>
+				</ul>
+				<a href="#troubleshooting" id="troubleshooting" style="color: inherit; text-decoration: none;">
+					<h2>Troubleshooting</h2>
 				</a>
+				<a href="#pod-install-failed-react-native-gt-0620" id="pod-install-failed-react-native-gt-0620" style="color: inherit; text-decoration: none;">
+					<h3>Pod install failed (React Native &gt;= 0.62.0)</h3>
+				</a>
+				<p>The error log:</p>
+				<pre><code>[!] The <span class="hljs-string">'xxx'</span> target <span class="hljs-keyword">has</span> libraries <span class="hljs-keyword">with</span> conflicting names: libcrypto.a.</code></pre><p>You should disable Flipper, you can found it in the Podfile, and comment the code about Flipper in AppDelegate</p>
+				<pre><code>  # Enables Flipper.
+  #
+  #<span class="hljs-built_in"> Note </span>that <span class="hljs-keyword">if</span> you have use_frameworks! enabled, Flipper will <span class="hljs-keyword">not</span> work <span class="hljs-keyword">and</span>
+  # you should <span class="hljs-builtin-name">disable</span> these next few lines.
+  add_flipper_pods!
+  post_install <span class="hljs-keyword">do</span> |installer|
+    flipper_post_install(installer)
+  end</code></pre>
+				<a href="#rct_extern_module-swift-modules-broken-in-xcode-102" id="rct_extern_module-swift-modules-broken-in-xcode-102" style="color: inherit; text-decoration: none;">
+					<h3>RCT_EXTERN_MODULE Swift modules broken in Xcode 10.2</h3>
+				</a>
+				<p>The error log:</p>
+				<pre><code>Swift <span class="hljs-keyword">class</span> <span class="hljs-symbol">extensions</span> <span class="hljs-symbol">and</span> <span class="hljs-symbol">categories</span> <span class="hljs-symbol">on</span> <span class="hljs-symbol">Swift</span> <span class="hljs-symbol">classes</span> <span class="hljs-symbol">are</span> <span class="hljs-symbol">not</span> <span class="hljs-symbol">allowed</span> <span class="hljs-symbol">to</span> <span class="hljs-symbol">have</span> +<span class="hljs-symbol">load</span> <span class="hljs-symbol">methods</span></code></pre><p>Fixed in React Native 0.59.3.</p>
+				<p>Source: <a href="https://github.com/facebook/react-native/issues/24139">https://github.com/facebook/react-native/issues/24139</a></p>
+				<a href="#xcode-11-beta-app-launch-crash" id="xcode-11-beta-app-launch-crash" style="color: inherit; text-decoration: none;">
+					<h3>XCode 11 Beta App Launch Crash</h3>
+				</a>
+				<p>The error log:</p>
+				<pre><code>Exception <span class="hljs-string">'*** -[__NSArrayM objectAtIndexedSubscript:]: index 1 beyond bounds [0 .. 0]'</span> was thrown <span class="hljs-keyword">while</span> invoking getCurrentAppState <span class="hljs-keyword">on</span> target AppState <span class="hljs-keyword">with</span> <span class="hljs-keyword">params</span> (
+<span class="hljs-number">2</span>,
+<span class="hljs-number">3</span>
+)</code></pre><p>Fixed in React Native 0.59.9.</p>
+				<p>Source: <a href="https://github.com/facebook/react-native/issues/25154">https://github.com/facebook/react-native/issues/25154</a></p>
+				<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+					<h2>API</h2>
+				</a>
+				<ul>
+					<li><a href="https://syanbo.github.io/react-native-agora/globals.html">React Native API</a></li>
+					<li><a href="https://docs.agora.io/en/Video/API%20Reference/java/index.html">Android API</a></li>
+					<li><a href="https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html">iOS API</a></li>
+				</ul>
 				<a href="#resources" id="resources" style="color: inherit; text-decoration: none;">
 					<h2>Resources</h2>
 				</a>
 				<ul>
-					<li>Complete <a href="https://docs.agora.io/en/">API documentation</a> at the Developer Center</li>
+					<li>Complete <a href="https://docs.agora.io/en/">API Doc</a> at the Developer Center</li>
 					<li><a href="https://github.com/syanbo/react-native-agora/issues">File bugs about this sample</a></li>
 					<li><a href="https://facebook.github.io/react-native/docs/getting-started.html">React Native Getting Started</a></li>
 				</ul>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<pre><code>Copyright (c) 2020 luxuhui
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to <span class="hljs-keyword">use</span>, copy, <span class="hljs-keyword">modify</span>, <span class="hljs-keyword">merge</span>, publish, <span class="hljs-keyword">distribute</span>, sublicense, <span class="hljs-keyword">and</span>/<span class="hljs-keyword">or</span> sell
+copies <span class="hljs-keyword">of</span> the Software, <span class="hljs-keyword">and</span> <span class="hljs-keyword">to</span> permit persons <span class="hljs-keyword">to</span> whom the Software <span class="hljs-keyword">is</span>
+furnished <span class="hljs-keyword">to</span> <span class="hljs-keyword">do</span> so, subject <span class="hljs-keyword">to</span> the <span class="hljs-keyword">following</span> conditions:
+
+The above copyright <span class="hljs-keyword">notice</span> <span class="hljs-keyword">and</span> this permission <span class="hljs-keyword">notice</span> shall be included <span class="hljs-keyword">in</span> <span class="hljs-keyword">all</span>
+copies <span class="hljs-keyword">or</span> substantial portions <span class="hljs-keyword">of</span> the Software.
+
+THE SOFTWARE <span class="hljs-keyword">IS</span> PROVIDED <span class="hljs-string">"AS IS"</span>, <span class="hljs-keyword">WITHOUT</span> WARRANTY <span class="hljs-keyword">OF</span> <span class="hljs-keyword">ANY</span> KIND, EXPRESS <span class="hljs-keyword">OR</span>
+IMPLIED, <span class="hljs-keyword">INCLUDING</span> BUT <span class="hljs-keyword">NOT</span> LIMITED <span class="hljs-keyword">TO</span> THE WARRANTIES <span class="hljs-keyword">OF</span> MERCHANTABILITY,
+FITNESS <span class="hljs-keyword">FOR</span> A PARTICULAR PURPOSE <span class="hljs-keyword">AND</span> NONINFRINGEMENT. <span class="hljs-keyword">IN</span> <span class="hljs-keyword">NO</span> <span class="hljs-keyword">EVENT</span> SHALL THE
+<span class="hljs-keyword">AUTHORS</span> <span class="hljs-keyword">OR</span> COPYRIGHT HOLDERS BE LIABLE <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">ANY</span> CLAIM, DAMAGES <span class="hljs-keyword">OR</span> OTHER
+LIABILITY, WHETHER <span class="hljs-keyword">IN</span> AN <span class="hljs-keyword">ACTION</span> <span class="hljs-keyword">OF</span> CONTRACT, TORT <span class="hljs-keyword">OR</span> OTHERWISE, ARISING <span class="hljs-keyword">FROM</span>,
+<span class="hljs-keyword">OUT</span> <span class="hljs-keyword">OF</span> <span class="hljs-keyword">OR</span> <span class="hljs-keyword">IN</span> <span class="hljs-keyword">CONNECTION</span> <span class="hljs-keyword">WITH</span> THE SOFTWARE <span class="hljs-keyword">OR</span> THE <span class="hljs-keyword">USE</span> <span class="hljs-keyword">OR</span> OTHER DEALINGS <span class="hljs-keyword">IN</span> THE
+SOFTWARE.</code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -144,144 +199,576 @@
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/rtclocalview.html">Rtc<wbr>Local<wbr>View</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="modules/rtcremoteview.html">Rtc<wbr>Remote<wbr>View</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
-						<a href="enums/agoraviewmode.html" class="tsd-kind-icon">Agora<wbr>View<wbr>Mode</a>
+						<a href="enums/audiochannel.html" class="tsd-kind-icon">Audio<wbr>Channel</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/audiochannelstereo.html" class="tsd-kind-icon">Audio<wbr>Channel<wbr>Stereo</a>
+						<a href="enums/audiocodecprofiletype.html" class="tsd-kind-icon">Audio<wbr>Codec<wbr>Profile<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/audiocodecprofile.html" class="tsd-kind-icon">Audio<wbr>Codec<wbr>Profile</a>
+						<a href="enums/audioequalizationbandfrequency.html" class="tsd-kind-icon">Audio<wbr>Equalization<wbr>Band<wbr>Frequency</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/audiosamplerate.html" class="tsd-kind-icon">Audio<wbr>Sample<wbr>Rate</a>
+						<a href="enums/audiolocalerror.html" class="tsd-kind-icon">Audio<wbr>Local<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-enum">
-						<a href="enums/videocodecprofile.html" class="tsd-kind-icon">Video<wbr>Codec<wbr>Profile</a>
+						<a href="enums/audiolocalstate.html" class="tsd-kind-icon">Audio<wbr>Local<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiomixingerrorcode.html" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>Error<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiomixingstatecode.html" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>State<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiooutputrouting.html" class="tsd-kind-icon">Audio<wbr>Output<wbr>Routing</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audioprofile.html" class="tsd-kind-icon">Audio<wbr>Profile</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiorawframeoperationmode.html" class="tsd-kind-icon">Audio<wbr>Raw<wbr>Frame<wbr>Operation<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiorecordingquality.html" class="tsd-kind-icon">Audio<wbr>Recording<wbr>Quality</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audioremotestate.html" class="tsd-kind-icon">Audio<wbr>Remote<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audioremotestatereason.html" class="tsd-kind-icon">Audio<wbr>Remote<wbr>State<wbr>Reason</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audioreverbpreset.html" class="tsd-kind-icon">Audio<wbr>Reverb<wbr>Preset</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audioreverbtype.html" class="tsd-kind-icon">Audio<wbr>Reverb<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiosampleratetype.html" class="tsd-kind-icon">Audio<wbr>Sample<wbr>Rate<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audioscenario.html" class="tsd-kind-icon">Audio<wbr>Scenario</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiosessionoperationrestriction.html" class="tsd-kind-icon">Audio<wbr>Session<wbr>Operation<wbr>Restriction</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/audiovoicechanger.html" class="tsd-kind-icon">Audio<wbr>Voice<wbr>Changer</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/bitrate.html" class="tsd-kind-icon">Bit<wbr>Rate</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/cameracaptureoutputpreference.html" class="tsd-kind-icon">Camera<wbr>Capture<wbr>Output<wbr>Preference</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/cameradirection.html" class="tsd-kind-icon">Camera<wbr>Direction</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/channelmediarelayerror.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/channelmediarelayevent.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/channelmediarelaystate.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/channelprofile.html" class="tsd-kind-icon">Channel<wbr>Profile</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/clientrole.html" class="tsd-kind-icon">Client<wbr>Role</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/connectionchangedreason.html" class="tsd-kind-icon">Connection<wbr>Changed<wbr>Reason</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/connectionstatetype.html" class="tsd-kind-icon">Connection<wbr>State<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/degradationpreference.html" class="tsd-kind-icon">Degradation<wbr>Preference</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/encryptionmode.html" class="tsd-kind-icon">Encryption<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/errorcode.html" class="tsd-kind-icon">Error<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/ipareacode.html" class="tsd-kind-icon">IPArea<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/injectstreamstatus.html" class="tsd-kind-icon">Inject<wbr>Stream<wbr>Status</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/lastmileproberesultstate.html" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Result<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/lighteningcontrastlevel.html" class="tsd-kind-icon">Lightening<wbr>Contrast<wbr>Level</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/localvideostreamerror.html" class="tsd-kind-icon">Local<wbr>Video<wbr>Stream<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/localvideostreamstate.html" class="tsd-kind-icon">Local<wbr>Video<wbr>Stream<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/logfilter.html" class="tsd-kind-icon">Log<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/mediadevicetype.html" class="tsd-kind-icon">Media<wbr>Device<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/mediatype.html" class="tsd-kind-icon">Media<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/metadatatype.html" class="tsd-kind-icon">Metadata<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/networkquality.html" class="tsd-kind-icon">Network<wbr>Quality</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/networktype.html" class="tsd-kind-icon">Network<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/rtcdefaultcameraposition.html" class="tsd-kind-icon">Rtc<wbr>Default<wbr>Camera<wbr>Position</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/rtmpstreamlifecycle.html" class="tsd-kind-icon">Rtmp<wbr>Stream<wbr>Life<wbr>Cycle</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/rtmpstreamingerrorcode.html" class="tsd-kind-icon">Rtmp<wbr>Streaming<wbr>Error<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/rtmpstreamingstate.html" class="tsd-kind-icon">Rtmp<wbr>Streaming<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/streamfallbackoptions.html" class="tsd-kind-icon">Stream<wbr>Fallback<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/userofflinereason.html" class="tsd-kind-icon">User<wbr>Offline<wbr>Reason</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/userpriority.html" class="tsd-kind-icon">User<wbr>Priority</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videobuffertype.html" class="tsd-kind-icon">Video<wbr>Buffer<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videocodecprofiletype.html" class="tsd-kind-icon">Video<wbr>Codec<wbr>Profile<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videocodectype.html" class="tsd-kind-icon">Video<wbr>Codec<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videocontenthint.html" class="tsd-kind-icon">Video<wbr>Content<wbr>Hint</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videoframerate.html" class="tsd-kind-icon">Video<wbr>Frame<wbr>Rate</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videomirrormode.html" class="tsd-kind-icon">Video<wbr>Mirror<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videooutputorientationmode.html" class="tsd-kind-icon">Video<wbr>Output<wbr>Orientation<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videopixelformat.html" class="tsd-kind-icon">Video<wbr>Pixel<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videoqualityadaptindication.html" class="tsd-kind-icon">Video<wbr>Quality<wbr>Adapt<wbr>Indication</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videoremotestate.html" class="tsd-kind-icon">Video<wbr>Remote<wbr>State</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videoremotestatereason.html" class="tsd-kind-icon">Video<wbr>Remote<wbr>State<wbr>Reason</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videorendermode.html" class="tsd-kind-icon">Video<wbr>Render<wbr>Mode</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videorotation.html" class="tsd-kind-icon">Video<wbr>Rotation</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/videostreamtype.html" class="tsd-kind-icon">Video<wbr>Stream<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum">
+						<a href="enums/warningcode.html" class="tsd-kind-icon">Warning<wbr>Code</a>
 					</li>
 					<li class=" tsd-kind-class">
-						<a href="classes/agoraview.html" class="tsd-kind-icon">Agora<wbr>View</a>
+						<a href="classes/agoraimage.html" class="tsd-kind-icon">Agora<wbr>Image</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/beautyoptions.html" class="tsd-kind-icon">Beauty<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/cameracapturerconfiguration.html" class="tsd-kind-icon">Camera<wbr>Capturer<wbr>Configuration</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/channelmediainfo.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/channelmediaoptions.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/channelmediarelayconfiguration.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>Configuration</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/color.html" class="tsd-kind-icon">Color</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/lastmileprobeconfig.html" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/liveinjectstreamconfig.html" class="tsd-kind-icon">Live<wbr>Inject<wbr>Stream<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/livetranscoding.html" class="tsd-kind-icon">Live<wbr>Transcoding</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/rectangle.html" class="tsd-kind-icon">Rectangle</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/rtcchannel.html" class="tsd-kind-icon">Rtc<wbr>Channel</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/rtcengine.html" class="tsd-kind-icon">Rtc<wbr>Engine</a>
 					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/agorauserinfo.html" class="tsd-kind-icon">Agora<wbr>User<wbr>Info</a>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/rtcsurfaceview.html" class="tsd-kind-icon">Rtc<wbr>Surface<wbr>View</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/rtctextureview.html" class="tsd-kind-icon">Rtc<wbr>Texture<wbr>View</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/transcodinguser.html" class="tsd-kind-icon">Transcoding<wbr>User</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/videodimensions.html" class="tsd-kind-icon">Video<wbr>Dimensions</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/videoencoderconfiguration.html" class="tsd-kind-icon">Video<wbr>Encoder<wbr>Configuration</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/watermarkoptions.html" class="tsd-kind-icon">Watermark<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/agoraviewprops.html" class="tsd-kind-icon">Agora<wbr>View<wbr>Props</a>
+						<a href="interfaces/audiovolumeinfo.html" class="tsd-kind-icon">Audio<wbr>Volume<wbr>Info</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/audioframeoption.html" class="tsd-kind-icon">Audio<wbr>Frame<wbr>Option</a>
+						<a href="interfaces/facepositioninfo.html" class="tsd-kind-icon">Face<wbr>Position<wbr>Info</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/audiomixingoption.html" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>Option</a>
+						<a href="interfaces/lastmileprobeonewayresult.html" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>One<wbr>Way<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/audiorecordingoption.html" class="tsd-kind-icon">Audio<wbr>Recording<wbr>Option</a>
+						<a href="interfaces/lastmileproberesult.html" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/backgroundimage.html" class="tsd-kind-icon">Background<wbr>Image</a>
+						<a href="interfaces/localaudiostats.html" class="tsd-kind-icon">Local<wbr>Audio<wbr>Stats</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/beautyoption.html" class="tsd-kind-icon">Beauty<wbr>Option</a>
+						<a href="interfaces/localvideostats.html" class="tsd-kind-icon">Local<wbr>Video<wbr>Stats</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/cameracapturerconfiguration.html" class="tsd-kind-icon">Camera<wbr>Capturer<wbr>Configuration</a>
+						<a href="interfaces/rect.html" class="tsd-kind-icon">Rect</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/channelmediaconfiguration.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Configuration</a>
+						<a href="interfaces/remoteaudiostats.html" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Stats</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/channelmediainfo.html" class="tsd-kind-icon">Channel<wbr>Media<wbr>Info</a>
+						<a href="interfaces/remotevideostats.html" class="tsd-kind-icon">Remote<wbr>Video<wbr>Stats</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/color.html" class="tsd-kind-icon">Color</a>
+						<a href="interfaces/rtcaudioeffectinterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Effect<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/datastreamoption.html" class="tsd-kind-icon">Data<wbr>Stream<wbr>Option</a>
+						<a href="interfaces/rtcaudiointerface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/defaultvideostreamoption.html" class="tsd-kind-icon">Default<wbr>Video<wbr>Stream<wbr>Option</a>
+						<a href="interfaces/rtcaudiomixinginterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Mixing<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/imageoption.html" class="tsd-kind-icon">Image<wbr>Option</a>
+						<a href="interfaces/rtcaudiorecorderinterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Recorder<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/injectstreamoption.html" class="tsd-kind-icon">Inject<wbr>Stream<wbr>Option</a>
+						<a href="interfaces/rtcaudiorouteinterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Route<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/lastmileprobeconfig.html" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Config</a>
+						<a href="interfaces/rtccamerainterface.html" class="tsd-kind-icon">Rtc<wbr>Camera<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/livetranscodingoption.html" class="tsd-kind-icon">Live<wbr>Transcoding<wbr>Option</a>
+						<a href="interfaces/rtcchannelevents.html" class="tsd-kind-icon">Rtc<wbr>Channel<wbr>Events</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/mixedaudioframeoption.html" class="tsd-kind-icon">Mixed<wbr>Audio<wbr>Frame<wbr>Option</a>
+						<a href="interfaces/rtcdualstreaminterface.html" class="tsd-kind-icon">Rtc<wbr>Dual<wbr>Stream<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/option.html" class="tsd-kind-icon">Option</a>
+						<a href="interfaces/rtcearmonitoringinterface.html" class="tsd-kind-icon">Rtc<wbr>Ear<wbr>Monitoring<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/playeffectoption.html" class="tsd-kind-icon">Play<wbr>Effect<wbr>Option</a>
+						<a href="interfaces/rtcencryptioninterface.html" class="tsd-kind-icon">Rtc<wbr>Encryption<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/positionoption.html" class="tsd-kind-icon">Position<wbr>Option</a>
+						<a href="interfaces/rtcengineevents.html" class="tsd-kind-icon">Rtc<wbr>Engine<wbr>Events</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/publishstreamoption.html" class="tsd-kind-icon">Publish<wbr>Stream<wbr>Option</a>
+						<a href="interfaces/rtcfallbackinterface.html" class="tsd-kind-icon">Rtc<wbr>Fallback<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/publisherconfig.html" class="tsd-kind-icon">Publisher<wbr>Config</a>
+						<a href="interfaces/rtcinjectstreaminterface.html" class="tsd-kind-icon">Rtc<wbr>Inject<wbr>Stream<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/removeinjectstreamoption.html" class="tsd-kind-icon">Remove<wbr>Inject<wbr>Stream<wbr>Option</a>
+						<a href="interfaces/rtcmediametadatainterface.html" class="tsd-kind-icon">Rtc<wbr>Media<wbr>Metadata<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/removepublishstreamoption.html" class="tsd-kind-icon">Remove<wbr>Publish<wbr>Stream<wbr>Option</a>
+						<a href="interfaces/rtcmediarelayinterface.html" class="tsd-kind-icon">Rtc<wbr>Media<wbr>Relay<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/size.html" class="tsd-kind-icon">Size</a>
+						<a href="interfaces/rtcpublishstreaminterface.html" class="tsd-kind-icon">Rtc<wbr>Publish<wbr>Stream<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/transcodinguser.html" class="tsd-kind-icon">Transcoding<wbr>User</a>
+						<a href="interfaces/rtcstats.html" class="tsd-kind-icon">Rtc<wbr>Stats</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/videoencoderconfig.html" class="tsd-kind-icon">Video<wbr>Encoder<wbr>Config</a>
+						<a href="interfaces/rtcstreammessageinterface.html" class="tsd-kind-icon">Rtc<wbr>Stream<wbr>Message<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/videooption.html" class="tsd-kind-icon">Video<wbr>Option</a>
+						<a href="interfaces/rtcsurfaceviewprops.html" class="tsd-kind-icon">Rtc<wbr>Surface<wbr>View<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/videostreamoption.html" class="tsd-kind-icon">Video<wbr>Stream<wbr>Option</a>
+						<a href="interfaces/rtctestinterface.html" class="tsd-kind-icon">Rtc<wbr>Test<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/voicedecorator.html" class="tsd-kind-icon">Voice<wbr>Decorator</a>
+						<a href="interfaces/rtctextureviewprops.html" class="tsd-kind-icon">Rtc<wbr>Texture<wbr>View<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="globals.html#callback" class="tsd-kind-icon">Callback</a>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rtcuidprops.html" class="tsd-kind-icon">Rtc<wbr>Uid<wbr>Props</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
-						<a href="globals.html#nullable" class="tsd-kind-icon">Nullable</a>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rtcuserinfointerface.html" class="tsd-kind-icon">Rtc<wbr>User<wbr>Info<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rtcvideointerface.html" class="tsd-kind-icon">Rtc<wbr>Video<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rtcvoicechangerinterface.html" class="tsd-kind-icon">Rtc<wbr>Voice<wbr>Changer<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rtcvoicepositioninterface.html" class="tsd-kind-icon">Rtc<wbr>Voice<wbr>Position<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/rtcwatermarkinterface.html" class="tsd-kind-icon">Rtc<wbr>Watermark<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/subscription.html" class="tsd-kind-icon">Subscription</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/userinfo.html" class="tsd-kind-icon">User<wbr>Info</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#number" class="tsd-kind-icon">Number</a>
+						<a href="globals.html#apicallcallback" class="tsd-kind-icon">Api<wbr>Call<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#audiomixingstatecallback" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#audioqualitycallback" class="tsd-kind-icon">Audio<wbr>Quality<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#audioroutecallback" class="tsd-kind-icon">Audio<wbr>Route<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#audiovolumecallback" class="tsd-kind-icon">Audio<wbr>Volume<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#clientrolecallback" class="tsd-kind-icon">Client<wbr>Role<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#connectionstatecallback" class="tsd-kind-icon">Connection<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#elapsedcallback" class="tsd-kind-icon">Elapsed<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#emptycallback" class="tsd-kind-icon">Empty<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#enabledcallback" class="tsd-kind-icon">Enabled<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#errorcallback" class="tsd-kind-icon">Error<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#facepositioncallback" class="tsd-kind-icon">Face<wbr>Position<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#fallbackcallback" class="tsd-kind-icon">Fallback<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#fallbackwithuidcallback" class="tsd-kind-icon">Fallback<wbr>With<wbr>Uid<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#lastmileprobecallback" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#listener" class="tsd-kind-icon">Listener</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#localaudiostatecallback" class="tsd-kind-icon">Local<wbr>Audio<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#localaudiostatscallback" class="tsd-kind-icon">Local<wbr>Audio<wbr>Stats<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#localvideostatecallback" class="tsd-kind-icon">Local<wbr>Video<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#localvideostatscallback" class="tsd-kind-icon">Local<wbr>Video<wbr>Stats<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#mediarelayeventcallback" class="tsd-kind-icon">Media<wbr>Relay<wbr>Event<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#mediarelaystatecallback" class="tsd-kind-icon">Media<wbr>Relay<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#metadatacallback" class="tsd-kind-icon">Metadata<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#networkqualitycallback" class="tsd-kind-icon">Network<wbr>Quality<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#networkqualitywithuidcallback" class="tsd-kind-icon">Network<wbr>Quality<wbr>With<wbr>Uid<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#networktypecallback" class="tsd-kind-icon">Network<wbr>Type<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#rate" class="tsd-kind-icon">Rate</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#rectcallback" class="tsd-kind-icon">Rect<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#remoteaudiostatecallback" class="tsd-kind-icon">Remote<wbr>Audio<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#remoteaudiostatscallback" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Stats<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#remotevideostatecallback" class="tsd-kind-icon">Remote<wbr>Video<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#remotevideostatscallback" class="tsd-kind-icon">Remote<wbr>Video<wbr>Stats<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#rtcstatscallback" class="tsd-kind-icon">Rtc<wbr>Stats<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#rtmpstreamingstatecallback" class="tsd-kind-icon">Rtmp<wbr>Streaming<wbr>State<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#soundidcallback" class="tsd-kind-icon">Sound<wbr>IdCallback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#streaminjectedstatuscallback" class="tsd-kind-icon">Stream<wbr>Injected<wbr>Status<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#streammessagecallback" class="tsd-kind-icon">Stream<wbr>Message<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#streammessageerrorcallback" class="tsd-kind-icon">Stream<wbr>Message<wbr>Error<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#string" class="tsd-kind-icon">String</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#agora" class="tsd-kind-icon">Agora</a>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#tokencallback" class="tsd-kind-icon">Token<wbr>Callback</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#agoraeventemitter" class="tsd-kind-icon">Agora<wbr>Event<wbr>Emitter</a>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#transportstatscallback" class="tsd-kind-icon">Transport<wbr>Stats<wbr>Callback</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#rctagoraview" class="tsd-kind-icon">RCTAgora<wbr>View</a>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#uidcallback" class="tsd-kind-icon">Uid<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#uidwithelapsedandchannelcallback" class="tsd-kind-icon">Uid<wbr>With<wbr>Elapsed<wbr>And<wbr>Channel<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#uidwithelapsedcallback" class="tsd-kind-icon">Uid<wbr>With<wbr>Elapsed<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#uidwithenabledcallback" class="tsd-kind-icon">Uid<wbr>With<wbr>Enabled<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#uidwithmutedcallback" class="tsd-kind-icon">Uid<wbr>With<wbr>Muted<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#urlcallback" class="tsd-kind-icon">Url<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#urlwitherrorcallback" class="tsd-kind-icon">Url<wbr>With<wbr>Error<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#useraccountcallback" class="tsd-kind-icon">User<wbr>Account<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#userinfocallback" class="tsd-kind-icon">User<wbr>Info<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#userofflinecallback" class="tsd-kind-icon">User<wbr>Offline<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#videoframecallback" class="tsd-kind-icon">Video<wbr>Frame<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#videoframewithuidcallback" class="tsd-kind-icon">Video<wbr>Frame<wbr>With<wbr>Uid<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#videosizecallback" class="tsd-kind-icon">Video<wbr>Size<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="globals.html#warningcallback" class="tsd-kind-icon">Warning<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#agorartcchannelmodule" class="tsd-kind-icon">Agora<wbr>Rtc<wbr>Channel<wbr>Module</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#agorartcenginemodule" class="tsd-kind-icon">Agora<wbr>Rtc<wbr>Engine<wbr>Module</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#prefix" class="tsd-kind-icon">Prefix</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#rctrtcsurfaceview" class="tsd-kind-icon">RCTRtc<wbr>Surface<wbr>View</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#rctrtctextureview" class="tsd-kind-icon">RCTRtc<wbr>Texture<wbr>View</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#rtcchannelevent" class="tsd-kind-icon">Rtc<wbr>Channel<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#rtcengineevent" class="tsd-kind-icon">Rtc<wbr>Engine<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#channels" class="tsd-kind-icon">channels</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#engine" class="tsd-kind-icon">engine</a>
 					</li>
 				</ul>
 			</nav>
@@ -293,57 +780,24 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>

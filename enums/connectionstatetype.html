@@ -1,0 +1,330 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ConnectionStateType | react-native-agora</title>
+	<meta name="description" content="Documentation for react-native-agora">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">react-native-agora</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="connectionstatetype.html">ConnectionStateType</a>
+				</li>
+			</ul>
+			<h1>Enumeration ConnectionStateType</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Connection states.</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Enumeration members</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="connectionstatetype.html#connected" class="tsd-kind-icon">Connected</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="connectionstatetype.html#connecting" class="tsd-kind-icon">Connecting</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="connectionstatetype.html#disconnected" class="tsd-kind-icon">Disconnected</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="connectionstatetype.html#failed" class="tsd-kind-icon">Failed</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="connectionstatetype.html#reconnecting" class="tsd-kind-icon">Reconnecting</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="connected" class="tsd-anchor"></a>
+					<h3>Connected</h3>
+					<div class="tsd-signature tsd-kind-icon">Connected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 3</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L950">src/Types.ts:950</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The SDK is connected to Agora&#39;s edge server and joins a channel. You can now publish or subscribe to a media stream in the channel.
+							If the connection to the channel is lost because, for example, the network is down or switched, the SDK automatically tries to reconnect and triggers:</p>
+							<ul>
+								<li>The onConnectionStateChanged callback, and switches to the Reconnecting state.</li>
+							</ul>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>RtcEngineEvents.onConnectionStateChanged</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>ConnectionStateType.Reconnecting</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="connecting" class="tsd-anchor"></a>
+					<h3>Connecting</h3>
+					<div class="tsd-signature tsd-kind-icon">Connecting<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L942">src/Types.ts:942</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The SDK is connecting to Agora&#39;s edge server.</p>
+							<ul>
+								<li>When the app calls joinChannel, the SDK starts to establish a connection to the specified channel, triggers the onConnectionStateChanged callback, and switches to the Connecting state.</li>
+							</ul>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>RtcEngine.joinChannel</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>RtcEngineEvents.onConnectionStateChanged</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>ConnectionStateType.Connecting</p>
+								<ul>
+									<li>When the SDK successfully joins the channel, the SDK triggers the onConnectionStateChanged callback and switches to the Connected state.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p>RtcEngineEvents.onConnectionStateChanged</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>ConnectionStateType.Connected</p>
+								<ul>
+									<li>After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the onJoinChannelSuccess callback.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p>RtcEngineEvents.onJoinChannelSuccess</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="disconnected" class="tsd-anchor"></a>
+					<h3>Disconnected</h3>
+					<div class="tsd-signature tsd-kind-icon">Disconnected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L929">src/Types.ts:929</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The SDK is disconnected from Agora&#39;s edge server.</p>
+							<ul>
+								<li>This is the initial state before joinChannel.</li>
+							</ul>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>RtcEngine.joinChannel</p>
+								<ul>
+									<li>The SDK also enters this state when the app calls leaveChannel.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p>RtcEngine.leaveChannel</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="failed" class="tsd-anchor"></a>
+					<h3>Failed</h3>
+					<div class="tsd-signature tsd-kind-icon">Failed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 5</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L968">src/Types.ts:968</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The SDK fails to connect to Agora&#39;s edge server or join the channel.
+							You must call leaveChannel to leave this state, and call joinChannel again to rejoin the channel.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>RtcEngine.leaveChannel</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>RtcEngine.joinChannel
+								If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the onConnectionStateChanged callbacks.</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>RtcEngineEvents.onConnectionStateChanged</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="reconnecting" class="tsd-anchor"></a>
+					<h3>Reconnecting</h3>
+					<div class="tsd-signature tsd-kind-icon">Reconnecting<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 4</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/Types.ts#L959">src/Types.ts:959</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.</p>
+							<ul>
+								<li>If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora’s edge server, the SDK triggers the onConnectionLost callback, stays in the Reconnecting state, and keeps rejoining the channel.</li>
+							</ul>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p>RtcEngineEvents.onConnectionLost</p>
+								<ul>
+									<li>If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the onConnectionStateChanged callback, switches to the Failed state, and stops rejoining the channel.</li>
+								</ul>
+							</dd>
+							<dt>see</dt>
+							<dd><p>RtcEngineEvents.onConnectionStateChanged</p>
+							</dd>
+							<dt>see</dt>
+							<dd><p>ConnectionStateType.Failed</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum">
+						<a href="connectionstatetype.html" class="tsd-kind-icon">Connection<wbr>State<wbr>Type</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="connectionstatetype.html#connected" class="tsd-kind-icon">Connected</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="connectionstatetype.html#connecting" class="tsd-kind-icon">Connecting</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="connectionstatetype.html#disconnected" class="tsd-kind-icon">Disconnected</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="connectionstatetype.html#failed" class="tsd-kind-icon">Failed</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="connectionstatetype.html#reconnecting" class="tsd-kind-icon">Reconnecting</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

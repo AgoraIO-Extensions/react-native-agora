@@ -1,0 +1,1443 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>RtcSurfaceViewProps | react-native-agora</title>
+	<meta name="description" content="Documentation for react-native-agora">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">react-native-agora</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>
+				</li>
+			</ul>
+			<h1>Interface RtcSurfaceViewProps</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Properties of the SurfaceView.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>property</dt>
+						<dd><p>zOrderMediaOverlay: boolean | Control whether the surface view&#39;s surface is placed on top of another regular surface view in the window (but still behind the window itself).</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>zOrderOnTop: boolean | Control whether the surface view&#39;s surface is placed on top of its window.</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>renderMode: number | The rendering mode of the video view.</p>
+						</dd>
+						<dt>see</dt>
+						<dd><p>VideoRenderMode</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>channelId: string | The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:</p>
+							<ul>
+								<li>All lowercase English letters: a to z.</li>
+								<li>All uppercase English letters: A to Z.</li>
+								<li>All numeric characters: 0 to 9.</li>
+								<li>The space character.</li>
+								<li>Punctuation characters and other symbols, including: &quot;!&quot;, &quot;#&quot;, &quot;$&quot;, &quot;%&quot;, &quot;&amp;&quot;, &quot;(&quot;, &quot;)&quot;, &quot;+&quot;, &quot;-&quot;, &quot;:&quot;, &quot;;&quot;, &quot;&lt;&quot;, &quot;=&quot;, &quot;.&quot;, &quot;&gt;&quot;, &quot;?&quot;, &quot;@&quot;, &quot;[&quot;, &quot;]&quot;, &quot;^&quot;, &quot;_&quot;, &quot; {&quot;, &quot;}&quot;, &quot;|&quot;, &quot;~&quot;, &quot;,&quot;.
+								Note</li>
+								<li>The default value is the empty string &quot;&quot;. Use the default value if the user joins the channel using the joinChannel method in the RtcEngine class.</li>
+							</ul>
+						</dd>
+						<dt>see</dt>
+						<dd><p>RtcEngine.joinChannel</p>
+							<ul>
+								<li>If the user joins the channel using the joinChannel method in the RtcChannel class, set this parameter as the channelId of the RtcChannel object.</li>
+							</ul>
+						</dd>
+						<dt>see</dt>
+						<dd><p>RtcChannel.joinChannel</p>
+						</dd>
+						<dt>property</dt>
+						<dd><p>mirrorMode: number | The video mirror mode.</p>
+						</dd>
+						<dt>see</dt>
+						<dd><p>VideoMirrorMode</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="tsd-signature-type">ViewProps</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">RtcSurfaceViewProps</span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilityactions" class="tsd-kind-icon">accessibility<wbr>Actions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilitycomponenttype" class="tsd-kind-icon">accessibility<wbr>Component<wbr>Type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilityelementshidden" class="tsd-kind-icon">accessibility<wbr>Elements<wbr>Hidden</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilityhint" class="tsd-kind-icon">accessibility<wbr>Hint</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilityignoresinvertcolors" class="tsd-kind-icon">accessibility<wbr>Ignores<wbr>Invert<wbr>Colors</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilitylabel" class="tsd-kind-icon">accessibility<wbr>Label</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilityliveregion" class="tsd-kind-icon">accessibility<wbr>Live<wbr>Region</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilityrole" class="tsd-kind-icon">accessibility<wbr>Role</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilitystate" class="tsd-kind-icon">accessibility<wbr>State</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilitystates" class="tsd-kind-icon">accessibility<wbr>States</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilitytraits" class="tsd-kind-icon">accessibility<wbr>Traits</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessibilityviewismodal" class="tsd-kind-icon">accessibility<wbr>View<wbr>IsModal</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#accessible" class="tsd-kind-icon">accessible</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcsurfaceviewprops.html#channelid" class="tsd-kind-icon">channel<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#collapsable" class="tsd-kind-icon">collapsable</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#hastvpreferredfocus" class="tsd-kind-icon">hasTVPreferred<wbr>Focus</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#hitslop" class="tsd-kind-icon">hit<wbr>Slop</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#importantforaccessibility" class="tsd-kind-icon">important<wbr>For<wbr>Accessibility</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#istvselectable" class="tsd-kind-icon">isTVSelectable</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcsurfaceviewprops.html#mirrormode" class="tsd-kind-icon">mirror<wbr>Mode</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#nativeid" class="tsd-kind-icon">nativeID</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#needsoffscreenalphacompositing" class="tsd-kind-icon">needs<wbr>Offscreen<wbr>Alpha<wbr>Compositing</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onaccessibilityaction" class="tsd-kind-icon">on<wbr>Accessibility<wbr>Action</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onaccessibilitytap" class="tsd-kind-icon">on<wbr>Accessibility<wbr>Tap</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onlayout" class="tsd-kind-icon">on<wbr>Layout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onmagictap" class="tsd-kind-icon">on<wbr>Magic<wbr>Tap</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onmoveshouldsetresponder" class="tsd-kind-icon">on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onmoveshouldsetrespondercapture" class="tsd-kind-icon">on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onresponderend" class="tsd-kind-icon">on<wbr>Responder<wbr>End</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onrespondergrant" class="tsd-kind-icon">on<wbr>Responder<wbr>Grant</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onrespondermove" class="tsd-kind-icon">on<wbr>Responder<wbr>Move</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onresponderreject" class="tsd-kind-icon">on<wbr>Responder<wbr>Reject</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onresponderrelease" class="tsd-kind-icon">on<wbr>Responder<wbr>Release</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onresponderstart" class="tsd-kind-icon">on<wbr>Responder<wbr>Start</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onresponderterminate" class="tsd-kind-icon">on<wbr>Responder<wbr>Terminate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onresponderterminationrequest" class="tsd-kind-icon">on<wbr>Responder<wbr>Termination<wbr>Request</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onstartshouldsetresponder" class="tsd-kind-icon">on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#onstartshouldsetrespondercapture" class="tsd-kind-icon">on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#ontouchcancel" class="tsd-kind-icon">on<wbr>Touch<wbr>Cancel</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#ontouchend" class="tsd-kind-icon">on<wbr>Touch<wbr>End</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#ontouchendcapture" class="tsd-kind-icon">on<wbr>Touch<wbr>End<wbr>Capture</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#ontouchmove" class="tsd-kind-icon">on<wbr>Touch<wbr>Move</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#ontouchstart" class="tsd-kind-icon">on<wbr>Touch<wbr>Start</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#pointerevents" class="tsd-kind-icon">pointer<wbr>Events</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#removeclippedsubviews" class="tsd-kind-icon">remove<wbr>Clipped<wbr>Subviews</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcsurfaceviewprops.html#rendermode" class="tsd-kind-icon">render<wbr>Mode</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#rendertohardwaretextureandroid" class="tsd-kind-icon">render<wbr>ToHardware<wbr>Texture<wbr>Android</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#shouldrasterizeios" class="tsd-kind-icon">should<wbr>RasterizeIOS</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#style" class="tsd-kind-icon">style</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#testid" class="tsd-kind-icon">testID</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#tvparallaxmagnification" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Magnification</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#tvparallaxproperties" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Properties</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#tvparallaxshiftdistancex" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Shift<wbr>DistanceX</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#tvparallaxshiftdistancey" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Shift<wbr>DistanceY</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rtcsurfaceviewprops.html#tvparallaxtiltangle" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Tilt<wbr>Angle</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcsurfaceviewprops.html#zordermediaoverlay" class="tsd-kind-icon">z<wbr>Order<wbr>Media<wbr>Overlay</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcsurfaceviewprops.html#zorderontop" class="tsd-kind-icon">z<wbr>Order<wbr>OnTop</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilityactions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Actions</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Actions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AccessibilityActionInfo</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilityactions">accessibilityActions</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1985</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Provides an array of custom actions available for accessibility.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilitycomponenttype" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Component<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Component<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"button"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"radiobutton_checked"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"radiobutton_unchecked"</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilitycomponenttype">accessibilityComponentType</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2128</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>In some cases, we also want to alert the end user of the type of selected component (i.e., that it is a “button”).
+								If we were using native buttons, this would work automatically. Since we are using javascript, we need to
+								provide a bit more context for TalkBack. To do so, you must specify the ‘accessibilityComponentType’ property
+							for any UI component. For instances, we support ‘button’, ‘radiobutton_checked’ and ‘radiobutton_unchecked’ and so on.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>android</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilityelementshidden" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Elements<wbr>Hidden</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Elements<wbr>Hidden<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilityelementshidden">accessibilityElementsHidden</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2158</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A Boolean value indicating whether the accessibility elements contained within this accessibility element
+							are hidden to the screen reader.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilityhint" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Hint</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Hint<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilityhint">accessibilityHint</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2009</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>An accessibility hint helps users understand what will happen when they perform an action on the accessibility element when that result is not obvious from the accessibility label.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilityignoresinvertcolors" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Ignores<wbr>Invert<wbr>Colors</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Ignores<wbr>Invert<wbr>Colors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilityignoresinvertcolors">accessibilityIgnoresInvertColors</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2189</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://facebook.github.io/react-native/docs/accessibility#accessibilityignoresinvertcolorsios">https://facebook.github.io/react-native/docs/accessibility#accessibilityignoresinvertcolorsios</a></p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilitylabel" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Label</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilitylabel">accessibilityLabel</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1991</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Overrides the text that&#39;s read by the screen reader when the user interacts with the element. By default, the
+							label is constructed by traversing all the children and accumulating all the Text nodes separated by space.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilityliveregion" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Live<wbr>Region</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Live<wbr>Region<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"polite"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"assertive"</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilityliveregion">accessibilityLiveRegion</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2136</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Indicates to accessibility services whether the user should be notified when this view changes.
+								Works for Android API &gt;= 19 only.
+							See <a href="http://developer.android.com/reference/android/view/View.html#attr_android:accessibilityLiveRegion">http://developer.android.com/reference/android/view/View.html#attr_android:accessibilityLiveRegion</a> for references.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>android</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilityrole" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Role</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AccessibilityRole</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilityrole">accessibilityRole</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1996</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Accessibility Role tells a person using either VoiceOver on iOS or TalkBack on Android the type of element that is focused on.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilitystate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>State</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>State<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AccessibilityState</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilitystate">accessibilityState</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2005</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Accessibility State tells a person using either VoiceOver on iOS or TalkBack on Android the state of the element currently focused on.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilitystates" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>States</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>States<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AccessibilityStates</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilitystates">accessibilityStates</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2001</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Accessibility State tells a person using either VoiceOver on iOS or TalkBack on Android the state of the element currently focused on.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>deprecated:</dt>
+							<dd><p>accessibilityState available in 0.60+</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilitytraits" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>Traits</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>Traits<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AccessibilityTrait</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AccessibilityTrait</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilitytraits">accessibilityTraits</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2165</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Accessibility traits tell a person using VoiceOver what kind of element they have selected.
+							Is this element a label? A button? A header? These questions are answered by accessibilityTraits.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessibilityviewismodal" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessibility<wbr>View<wbr>IsModal</h3>
+					<div class="tsd-signature tsd-kind-icon">accessibility<wbr>View<wbr>IsModal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessibilityviewismodal">accessibilityViewIsModal</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2171</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A Boolean value indicating whether VoiceOver should ignore the elements within views that are siblings of the receiver.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="accessible" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> accessible</h3>
+					<div class="tsd-signature tsd-kind-icon">accessible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#accessible">accessible</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1980</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When true, indicates that the view is an accessibility element.
+							By default, all the touchable elements are accessible.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="channelid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> channel<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">channel<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/RtcRenderView.native.tsx#L38">src/RtcRenderView.native.tsx:38</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="collapsable" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> collapsable</h3>
+					<div class="tsd-signature tsd-kind-icon">collapsable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#collapsable">collapsable</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1938</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Views that are only used to layout their children or otherwise don&#39;t draw anything
+								may be automatically removed from the native hierarchy as an optimization.
+							Set this property to false to disable this optimization and ensure that this View exists in the native view hierarchy.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="hastvpreferredfocus" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hasTVPreferred<wbr>Focus</h3>
+					<div class="tsd-signature tsd-kind-icon">hasTVPreferred<wbr>Focus<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#hastvpreferredfocus">hasTVPreferredFocus</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1880</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><em>(Apple TV only)</em> May be set to true to force the Apple TV focus engine to move focus to this view.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="hitslop" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hit<wbr>Slop</h3>
+					<div class="tsd-signature tsd-kind-icon">hit<wbr>Slop<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Insets</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#hitslop">hitSlop</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2230</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>This defines how far a touch event can start away from the view.
+								Typical interface guidelines recommend touch targets that are at least
+								30 - 40 points/density-independent pixels. If a Touchable view has
+								a height of 20 the touchable height can be extended to 40 with
+								hitSlop={{top: 10, bottom: 10, left: 0, right: 0}}
+								NOTE The touch area never extends past the parent view bounds and
+								the Z-index of sibling views always takes precedence if a touch
+							hits two overlapping views.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="importantforaccessibility" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> important<wbr>For<wbr>Accessibility</h3>
+					<div class="tsd-signature tsd-kind-icon">important<wbr>For<wbr>Accessibility<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"auto"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"yes"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"no"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"no-hide-descendants"</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#importantforaccessibility">importantForAccessibility</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2149</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Controls how view is important for accessibility which is if it fires accessibility events
+								and if it is reported to accessibility services that query the screen.
+							Works for Android only. See <a href="http://developer.android.com/reference/android/R.attr.html#importantForAccessibility">http://developer.android.com/reference/android/R.attr.html#importantForAccessibility</a> for references.</p>
+						</div>
+						<p>Possible values:
+							&#39;auto&#39; - The system determines whether the view is important for accessibility - default (recommended).
+							&#39;yes&#39; - The view is important for accessibility.
+							&#39;no&#39; - The view is not important for accessibility.
+						&#39;no-hide-descendants&#39; - The view is not important for accessibility, nor are any of its descendant views.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="istvselectable" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> isTVSelectable</h3>
+					<div class="tsd-signature tsd-kind-icon">isTVSelectable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#istvselectable">isTVSelectable</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1873</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><em>(Apple TV only)</em> When set to true, this view will be focusable
+							and navigable using the Apple TV remote.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="mirrormode" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> mirror<wbr>Mode</h3>
+					<div class="tsd-signature tsd-kind-icon">mirror<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/videomirrormode.html" class="tsd-signature-type">VideoMirrorMode</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/RtcRenderView.native.tsx#L39">src/RtcRenderView.native.tsx:39</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="nativeid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> nativeID</h3>
+					<div class="tsd-signature tsd-kind-icon">nativeID<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#nativeid">nativeID</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2282</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Used to reference react managed views from native code.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="needsoffscreenalphacompositing" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> needs<wbr>Offscreen<wbr>Alpha<wbr>Compositing</h3>
+					<div class="tsd-signature tsd-kind-icon">needs<wbr>Offscreen<wbr>Alpha<wbr>Compositing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#needsoffscreenalphacompositing">needsOffscreenAlphaCompositing</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1954</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether this view needs to rendered offscreen and composited with an alpha in order to preserve 100% correct colors and blending behavior.
+								The default (false) falls back to drawing the component and its children
+								with an alpha applied to the paint used to draw each element instead of rendering the full component offscreen and compositing it back with an alpha value.
+								This default may be noticeable and undesired in the case where the View you are setting an opacity on
+							has multiple overlapping elements (e.g. multiple overlapping Views, or text and a background).</p>
+						</div>
+						<p>Rendering offscreen to preserve correct alpha behavior is extremely expensive
+							and hard to debug for non-native developers, which is why it is not turned on by default.
+							If you do need to enable this property for an animation,
+							consider combining it with renderToHardwareTextureAndroid if the view contents are static (i.e. it doesn&#39;t need to be redrawn each frame).
+							If that property is enabled, this View will be rendered off-screen once,
+						saved in a hardware texture, and then composited onto the screen with an alpha each frame without having to switch rendering targets on the GPU.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onaccessibilityaction" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Accessibility<wbr>Action</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Accessibility<wbr>Action<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AccessibilityActionEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onaccessibilityaction">onAccessibilityAction</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2014</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When <code>accessible</code> is true, the system will try to invoke this function when the user performs an accessibility custom action.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onaccessibilitytap" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Accessibility<wbr>Tap</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Accessibility<wbr>Tap<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onaccessibilitytap">onAccessibilityTap</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2177</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When <code>accessible</code> is true, the system will try to invoke this function when the user performs accessibility tap gesture.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onlayout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Layout</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Layout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">LayoutChangeEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onlayout">onLayout</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2237</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Invoked on mount and layout changes with</p>
+						</div>
+						<p>{nativeEvent: { layout: {x, y, width, height}}}.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onmagictap" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Magic<wbr>Tap</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Magic<wbr>Tap<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onmagictap">onMagicTap</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2183</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>When accessible is true, the system will invoke this function when the user performs the magic tap gesture.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onmoveshouldsetresponder" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onmoveshouldsetresponder">onMoveShouldSetResponder</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1703</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Called for every touch move on the View when it is not the responder: does this view want to &quot;claim&quot; touch responsiveness?</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onmoveshouldsetrespondercapture" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onmoveshouldsetrespondercapture">onMoveShouldSetResponderCapture</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1779</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>onStartShouldSetResponder and onMoveShouldSetResponder are called with a bubbling pattern,
+								where the deepest node is called first.
+								That means that the deepest component will become responder when multiple Views return true for *ShouldSetResponder handlers.
+							This is desirable in most cases, because it makes sure all controls and buttons are usable.</p>
+						</div>
+						<p>However, sometimes a parent will want to make sure that it becomes responder.
+							This can be handled by using the capture phase.
+							Before the responder system bubbles up from the deepest component,
+							it will do a capture phase, firing on*ShouldSetResponderCapture.
+							So if a parent View wants to prevent the child from becoming responder on a touch start,
+						it should have a onStartShouldSetResponderCapture handler which returns true.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onresponderend" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>End</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>End<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onresponderend">onResponderEnd</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1709</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If the View returns true and attempts to become the responder, one of the following will happen:</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onrespondergrant" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>Grant</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>Grant<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onrespondergrant">onResponderGrant</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1715</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The View is now responding for touch events.
+							This is the time to highlight and show the user what is happening</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onrespondermove" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>Move</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>Move<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onrespondermove">onResponderMove</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1729</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The user is moving their finger</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onresponderreject" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>Reject</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>Reject<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onresponderreject">onResponderReject</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1720</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Something else is the responder right now and will not release it</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onresponderrelease" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>Release</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>Release<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onresponderrelease">onResponderRelease</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1734</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Fired at the end of the touch, ie &quot;touchUp&quot;</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onresponderstart" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>Start</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>Start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onresponderstart">onResponderStart</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1736</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onresponderterminate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>Terminate</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>Terminate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onresponderterminate">onResponderTerminate</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1749</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The responder has been taken from the View.
+								Might be taken by other views after a call to onResponderTerminationRequest,
+							or might be taken by the OS without asking (happens with control center/ notification center on iOS)</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onresponderterminationrequest" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Responder<wbr>Termination<wbr>Request</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Responder<wbr>Termination<wbr>Request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onresponderterminationrequest">onResponderTerminationRequest</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1742</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p> Something else wants to become responder.
+							Should this view release the responder? Returning true allows release</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onstartshouldsetresponder" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onstartshouldsetresponder">onStartShouldSetResponder</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1698</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Does this view want to become responder on the start of a touch?</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="onstartshouldsetrespondercapture" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#onstartshouldsetrespondercapture">onStartShouldSetResponderCapture</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1764</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>onStartShouldSetResponder and onMoveShouldSetResponder are called with a bubbling pattern,
+								where the deepest node is called first.
+								That means that the deepest component will become responder when multiple Views return true for *ShouldSetResponder handlers.
+							This is desirable in most cases, because it makes sure all controls and buttons are usable.</p>
+						</div>
+						<p>However, sometimes a parent will want to make sure that it becomes responder.
+							This can be handled by using the capture phase.
+							Before the responder system bubbles up from the deepest component,
+							it will do a capture phase, firing on*ShouldSetResponderCapture.
+							So if a parent View wants to prevent the child from becoming responder on a touch start,
+						it should have a onStartShouldSetResponderCapture handler which returns true.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="ontouchcancel" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Touch<wbr>Cancel</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Touch<wbr>Cancel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#ontouchcancel">onTouchCancel</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:450</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="ontouchend" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Touch<wbr>End</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Touch<wbr>End<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#ontouchend">onTouchEnd</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:449</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="ontouchendcapture" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Touch<wbr>End<wbr>Capture</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Touch<wbr>End<wbr>Capture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#ontouchendcapture">onTouchEndCapture</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:451</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="ontouchmove" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Touch<wbr>Move</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Touch<wbr>Move<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#ontouchmove">onTouchMove</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:448</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="ontouchstart" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Touch<wbr>Start</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Touch<wbr>Start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GestureResponderEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#ontouchstart">onTouchStart</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:447</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="pointerevents" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> pointer<wbr>Events</h3>
+					<div class="tsd-signature tsd-kind-icon">pointer<wbr>Events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"box-none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"box-only"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"auto"</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#pointerevents">pointerEvents</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2262</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>In the absence of auto property, none is much like CSS&#39;s none value. box-none is as if you had applied the CSS class:</p>
+						</div>
+						<p>.box-none {
+							pointer-events: none;
+							}
+							.box-none * {
+							pointer-events: all;
+						}</p>
+						<p>box-only is the equivalent of</p>
+						<p>.box-only {
+							pointer-events: all;
+							}
+							.box-only * {
+							pointer-events: none;
+						}</p>
+						<p>But since pointerEvents does not affect layout/appearance, and we are already deviating from the spec by adding additional modes,
+						we opt to not include pointerEvents on style. On some platforms, we would need to implement it as a className anyways. Using style or not is an implementation detail of the platform.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="removeclippedsubviews" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> remove<wbr>Clipped<wbr>Subviews</h3>
+					<div class="tsd-signature tsd-kind-icon">remove<wbr>Clipped<wbr>Subviews<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#removeclippedsubviews">removeClippedSubviews</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2270</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>This is a special performance property exposed by RCTView and is useful for scrolling content when there are many subviews,
+								most of which are offscreen. For this property to be effective, it must be applied to a view that contains many subviews that extend outside its bound.
+							The subviews must also have overflow: hidden, as should the containing view (or one of its superviews).</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rendermode" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> render<wbr>Mode</h3>
+					<div class="tsd-signature tsd-kind-icon">render<wbr>Mode<span class="tsd-signature-symbol">:</span> <a href="../enums/videorendermode.html" class="tsd-signature-type">VideoRenderMode</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/RtcRenderView.native.tsx#L37">src/RtcRenderView.native.tsx:37</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="rendertohardwaretextureandroid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> render<wbr>ToHardware<wbr>Texture<wbr>Android</h3>
+					<div class="tsd-signature tsd-kind-icon">render<wbr>ToHardware<wbr>Texture<wbr>Android<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#rendertohardwaretextureandroid">renderToHardwareTextureAndroid</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1963</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether this view should render itself (and all of its children) into a single hardware texture on the GPU.</p>
+						</div>
+						<p>On Android, this is useful for animations and interactions that only modify opacity, rotation, translation, and/or scale:
+							in those cases, the view doesn&#39;t have to be redrawn and display lists don&#39;t need to be re-executed. The texture can just be
+						re-used and re-composited with different parameters. The downside is that this can use up limited video memory, so this prop should be set back to false at the end of the interaction/animation.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="shouldrasterizeios" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> should<wbr>RasterizeIOS</h3>
+					<div class="tsd-signature tsd-kind-icon">should<wbr>RasterizeIOS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#shouldrasterizeios">shouldRasterizeIOS</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1929</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether this view should be rendered as a bitmap before compositing.</p>
+						</div>
+						<p>On iOS, this is useful for animations and interactions that do not modify this component&#39;s dimensions nor its children;
+							for example, when translating the position of a static view, rasterization allows the renderer to reuse a cached bitmap of a static view
+						and quickly composite it during each frame.</p>
+						<p>Rasterization incurs an off-screen drawing pass and the bitmap consumes memory.
+						Test and measure when using this property.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="style" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> style</h3>
+					<div class="tsd-signature tsd-kind-icon">style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StyleProp</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ViewStyle</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#style">style</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2272</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="testid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> testID</h3>
+					<div class="tsd-signature tsd-kind-icon">testID<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#testid">testID</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:2277</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Used to locate this view in end-to-end tests.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tvparallaxmagnification" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tv<wbr>Parallax<wbr>Magnification</h3>
+					<div class="tsd-signature tsd-kind-icon">tv<wbr>Parallax<wbr>Magnification<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#tvparallaxmagnification">tvParallaxMagnification</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1915</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><em>(Apple TV only)</em> May be used to change the appearance of the Apple TV parallax effect when this view goes in or out of focus.  Defaults to 1.0.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tvparallaxproperties" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tv<wbr>Parallax<wbr>Properties</h3>
+					<div class="tsd-signature tsd-kind-icon">tv<wbr>Parallax<wbr>Properties<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TVParallaxProperties</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#tvparallaxproperties">tvParallaxProperties</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1887</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><em>(Apple TV only)</em> Object with properties to control Apple TV parallax effects.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tvparallaxshiftdistancex" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tv<wbr>Parallax<wbr>Shift<wbr>DistanceX</h3>
+					<div class="tsd-signature tsd-kind-icon">tv<wbr>Parallax<wbr>Shift<wbr>DistanceX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#tvparallaxshiftdistancex">tvParallaxShiftDistanceX</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1894</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><em>(Apple TV only)</em> May be used to change the appearance of the Apple TV parallax effect when this view goes in or out of focus.  Defaults to 2.0.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tvparallaxshiftdistancey" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tv<wbr>Parallax<wbr>Shift<wbr>DistanceY</h3>
+					<div class="tsd-signature tsd-kind-icon">tv<wbr>Parallax<wbr>Shift<wbr>DistanceY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#tvparallaxshiftdistancey">tvParallaxShiftDistanceY</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1901</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><em>(Apple TV only)</em> May be used to change the appearance of the Apple TV parallax effect when this view goes in or out of focus.  Defaults to 2.0.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="tvparallaxtiltangle" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tv<wbr>Parallax<wbr>Tilt<wbr>Angle</h3>
+					<div class="tsd-signature tsd-kind-icon">tv<wbr>Parallax<wbr>Tilt<wbr>Angle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="rtcsurfaceviewprops.html">RtcSurfaceViewProps</a>.<a href="rtcsurfaceviewprops.html#tvparallaxtiltangle">tvParallaxTiltAngle</a></p>
+						<ul>
+							<li>Defined in node_modules/@types/react-native/index.d.ts:1908</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><em>(Apple TV only)</em> May be used to change the appearance of the Apple TV parallax effect when this view goes in or out of focus.  Defaults to 0.05.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>platform</dt>
+							<dd><p>ios</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="zordermediaoverlay" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> z<wbr>Order<wbr>Media<wbr>Overlay</h3>
+					<div class="tsd-signature tsd-kind-icon">z<wbr>Order<wbr>Media<wbr>Overlay<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/RtcRenderView.native.tsx#L35">src/RtcRenderView.native.tsx:35</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="zorderontop" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> z<wbr>Order<wbr>OnTop</h3>
+					<div class="tsd-signature tsd-kind-icon">z<wbr>Order<wbr>OnTop<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/44a3a31/src/RtcRenderView.native.tsx#L36">src/RtcRenderView.native.tsx:36</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
+						<a href="rtcsurfaceviewprops.html" class="tsd-kind-icon">Rtc<wbr>Surface<wbr>View<wbr>Props</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilityactions" class="tsd-kind-icon">accessibility<wbr>Actions</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilitycomponenttype" class="tsd-kind-icon">accessibility<wbr>Component<wbr>Type</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilityelementshidden" class="tsd-kind-icon">accessibility<wbr>Elements<wbr>Hidden</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilityhint" class="tsd-kind-icon">accessibility<wbr>Hint</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilityignoresinvertcolors" class="tsd-kind-icon">accessibility<wbr>Ignores<wbr>Invert<wbr>Colors</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilitylabel" class="tsd-kind-icon">accessibility<wbr>Label</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilityliveregion" class="tsd-kind-icon">accessibility<wbr>Live<wbr>Region</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilityrole" class="tsd-kind-icon">accessibility<wbr>Role</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilitystate" class="tsd-kind-icon">accessibility<wbr>State</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilitystates" class="tsd-kind-icon">accessibility<wbr>States</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilitytraits" class="tsd-kind-icon">accessibility<wbr>Traits</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessibilityviewismodal" class="tsd-kind-icon">accessibility<wbr>View<wbr>IsModal</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#accessible" class="tsd-kind-icon">accessible</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcsurfaceviewprops.html#channelid" class="tsd-kind-icon">channel<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#collapsable" class="tsd-kind-icon">collapsable</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#hastvpreferredfocus" class="tsd-kind-icon">hasTVPreferred<wbr>Focus</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#hitslop" class="tsd-kind-icon">hit<wbr>Slop</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#importantforaccessibility" class="tsd-kind-icon">important<wbr>For<wbr>Accessibility</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#istvselectable" class="tsd-kind-icon">isTVSelectable</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcsurfaceviewprops.html#mirrormode" class="tsd-kind-icon">mirror<wbr>Mode</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#nativeid" class="tsd-kind-icon">nativeID</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#needsoffscreenalphacompositing" class="tsd-kind-icon">needs<wbr>Offscreen<wbr>Alpha<wbr>Compositing</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onaccessibilityaction" class="tsd-kind-icon">on<wbr>Accessibility<wbr>Action</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onaccessibilitytap" class="tsd-kind-icon">on<wbr>Accessibility<wbr>Tap</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onlayout" class="tsd-kind-icon">on<wbr>Layout</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onmagictap" class="tsd-kind-icon">on<wbr>Magic<wbr>Tap</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onmoveshouldsetresponder" class="tsd-kind-icon">on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onmoveshouldsetrespondercapture" class="tsd-kind-icon">on<wbr>Move<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onresponderend" class="tsd-kind-icon">on<wbr>Responder<wbr>End</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onrespondergrant" class="tsd-kind-icon">on<wbr>Responder<wbr>Grant</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onrespondermove" class="tsd-kind-icon">on<wbr>Responder<wbr>Move</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onresponderreject" class="tsd-kind-icon">on<wbr>Responder<wbr>Reject</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onresponderrelease" class="tsd-kind-icon">on<wbr>Responder<wbr>Release</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onresponderstart" class="tsd-kind-icon">on<wbr>Responder<wbr>Start</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onresponderterminate" class="tsd-kind-icon">on<wbr>Responder<wbr>Terminate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onresponderterminationrequest" class="tsd-kind-icon">on<wbr>Responder<wbr>Termination<wbr>Request</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onstartshouldsetresponder" class="tsd-kind-icon">on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#onstartshouldsetrespondercapture" class="tsd-kind-icon">on<wbr>Start<wbr>Should<wbr>Set<wbr>Responder<wbr>Capture</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#ontouchcancel" class="tsd-kind-icon">on<wbr>Touch<wbr>Cancel</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#ontouchend" class="tsd-kind-icon">on<wbr>Touch<wbr>End</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#ontouchendcapture" class="tsd-kind-icon">on<wbr>Touch<wbr>End<wbr>Capture</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#ontouchmove" class="tsd-kind-icon">on<wbr>Touch<wbr>Move</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#ontouchstart" class="tsd-kind-icon">on<wbr>Touch<wbr>Start</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#pointerevents" class="tsd-kind-icon">pointer<wbr>Events</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#removeclippedsubviews" class="tsd-kind-icon">remove<wbr>Clipped<wbr>Subviews</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcsurfaceviewprops.html#rendermode" class="tsd-kind-icon">render<wbr>Mode</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#rendertohardwaretextureandroid" class="tsd-kind-icon">render<wbr>ToHardware<wbr>Texture<wbr>Android</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#shouldrasterizeios" class="tsd-kind-icon">should<wbr>RasterizeIOS</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#style" class="tsd-kind-icon">style</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#testid" class="tsd-kind-icon">testID</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#tvparallaxmagnification" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Magnification</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#tvparallaxproperties" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Properties</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#tvparallaxshiftdistancex" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Shift<wbr>DistanceX</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#tvparallaxshiftdistancey" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Shift<wbr>DistanceY</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="rtcsurfaceviewprops.html#tvparallaxtiltangle" class="tsd-kind-icon">tv<wbr>Parallax<wbr>Tilt<wbr>Angle</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcsurfaceviewprops.html#zordermediaoverlay" class="tsd-kind-icon">z<wbr>Order<wbr>Media<wbr>Overlay</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rtcsurfaceviewprops.html#zorderontop" class="tsd-kind-icon">z<wbr>Order<wbr>OnTop</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
