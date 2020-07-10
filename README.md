@@ -17,11 +17,11 @@ This SDK takes advantage of React Native and Agora RTC Video SDK on Android && i
 Install `react-native-agora`(^3.0.0):
 
 ```shell script
-yarn add react-native-agora@beta
+yarn add react-native-agora
 ```
 or
 ```shell script
-npm i --save react-native-agora@beta
+npm i --save react-native-agora
 ```
 
 Go to your ios folder and run:
@@ -40,11 +40,11 @@ pod install
 Install `react-native-agora`(^3.0.0):
 
 ```shell script
-yarn add react-native-agora@beta
+yarn add react-native-agora
 ```
 or
 ```shell script
-npm i --save react-native-agora@beta
+npm i --save react-native-agora
 ```
 
 **_ IMPORTANT _**

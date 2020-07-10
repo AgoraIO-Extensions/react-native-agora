@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.0.1-rc.1
+  - prerelease 3.0.1-rc.1
+
 #### 3.0.1-beta.9
   - add `constructor` for typescript
   - fix Android `mapToChannelMediaInfo` crash
