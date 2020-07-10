@@ -50,6 +50,24 @@
 #### 3.0.0-beta.1
   - support 3.0.0 native sdk
 
+#### 2.9.1-alpha.7
+  - fix `setBeautyEffectOptions` bugs
+
+#### 2.9.1-alpha.6
+  - fix bugs
+
+#### 2.9.1-alpha.5
+  - upgrade android sdk to 2.9.4
+
+#### 2.9.1-alpha.4
+  - remove `AgoraRtcCryptoLoader` `libcrypto`
+
+#### 2.9.1-alpha.3
+  - upgrade android sdk to 2.9.4
+
+#### 2.9.1-alpha.2
+  - upgrade 2.9.2 fro android
+
 #### 2.9.1-alpha.1
   - support 2.9.1 native sdk
 
