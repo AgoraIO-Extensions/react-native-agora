@@ -222,6 +222,14 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     func setVideoEncoderConfiguration(_ config: NSDictionary, _ callback: PromiseCallback?) {
         callback?.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(config as! Dictionary<String, Any>)))
     }
+    
+    func startPreview(_ callback: PromiseCallback?) {
+        callback?.code(engine?.startPreview())
+    }
+    
+    func stopPreview(_ callback: PromiseCallback?) {
+        callback?.code(engine?.stopPreview())
+    }
 
     func enableLocalVideo(_ enabled: Bool, _ callback: PromiseCallback?) {
         callback?.code(engine?.enableLocalVideo(enabled))
@@ -757,6 +765,14 @@ extension RCTAgoraRtcEngineModule {
 
     @objc func setVideoEncoderConfiguration(_ config: NSDictionary, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         setVideoEncoderConfiguration(config, PromiseCallback(resolve, reject))
+    }
+    
+    @objc func startPreview(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
+        startPreview(PromiseCallback(resolve, reject))
+    }
+
+    @objc func stopPreview(_ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
+        stopPreview(PromiseCallback(resolve, reject))
     }
 
     @objc func enableLocalVideo(_ enabled: Bool, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {

@@ -147,7 +147,7 @@ Source: https://github.com/facebook/react-native/issues/25154
 License
 --------
 
-    Copyright (c) 2020 luxuhui
+    Copyright (c) 2020 syanbo luxuhui
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
