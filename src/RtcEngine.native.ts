@@ -1,4 +1,4 @@
-import {NativeEventEmitter, NativeModules} from "react-native";
+import { NativeEventEmitter, NativeModules } from "react-native";
 import {
     AudioEqualizationBandFrequency,
     AudioProfile,
@@ -29,10 +29,10 @@ import {
     VideoStreamType,
     WatermarkOptions
 } from "./Types";
-import {Listener, RtcEngineEvents, Subscription} from "./RtcEvents";
+import { Listener, RtcEngineEvents, Subscription } from "./RtcEvents";
 import RtcChannel from "./RtcChannel.native";
 
-const {AgoraRtcEngineModule} = NativeModules;
+const { AgoraRtcEngineModule } = NativeModules;
 const Prefix = AgoraRtcEngineModule.prefix
 const RtcEngineEvent = new NativeEventEmitter(AgoraRtcEngineModule);
 
@@ -119,7 +119,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      */
     addListener<EventType extends keyof RtcEngineEvents>(event: EventType, listener: RtcEngineEvents[EventType]): Subscription {
         const callback = (res: any) => {
-            const {channelId, data} = res;
+            const { channelId, data } = res;
             if (channelId === undefined) {
                 // @ts-ignore
                 listener(...data)
@@ -483,6 +483,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     setVideoEncoderConfiguration(config: VideoEncoderConfiguration): Promise<void> {
         return AgoraRtcEngineModule.setVideoEncoderConfiguration(config);
+    }
+
+    startPreview(): Promise<void> {
+        return AgoraRtcEngineModule.startPreview();
+    }
+    stopPreview(): Promise<void> {
+        return AgoraRtcEngineModule.stopPreview();
     }
 
     adjustAudioMixingPlayoutVolume(volume: number): Promise<void> {
@@ -1118,6 +1125,26 @@ interface RtcVideoInterface {
      * @see VideoEncoderConfiguration
      */
     setVideoEncoderConfiguration(config: VideoEncoderConfiguration): Promise<void>;
+
+    /**
+     * Starts the local video preview before joining a channel.
+     * Before calling this method, you must:
+     * - Create the RtcLocalView.
+     * @see RtcLocalView
+     * - Call the enableVideo method to enable the video.
+     * @see RtcEngine.enableVideo
+     * Note
+     * - By default, the local preview enables the mirror mode.
+     * - Once you call this method to start the local video preview, if you leave the channel by calling the leaveChannel method, the local video preview remains until you call the stopPreview method to disable it.
+     * @see RtcEngine.leaveChannel
+     * @see RtcEngine.stopPreview
+     */
+    startPreview(): Promise<void>;
+
+    /**
+     * Stops the local video preview and the video.
+     */
+    stopPreview(): Promise<void>;
 
     /**
      * Disables/Re-enables the local video capture.
