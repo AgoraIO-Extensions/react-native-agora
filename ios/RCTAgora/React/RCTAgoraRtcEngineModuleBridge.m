@@ -119,6 +119,12 @@ RCT_EXTERN_METHOD(disableVideo:
 RCT_EXTERN_METHOD(setVideoEncoderConfiguration:
     (NSDictionary *) config :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
+RCT_EXTERN_METHOD(startPreview:
+    (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+
+RCT_EXTERN_METHOD(stopPreview:
+    (RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+
 RCT_EXTERN_METHOD(enableLocalVideo:
     (BOOL) enabled :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
@@ -387,3 +393,4 @@ RCT_EXTERN_METHOD(sendStreamMessage:
     (NSInteger) streamId :(NSString *) message :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 @end
+

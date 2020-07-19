@@ -226,6 +226,16 @@ class RCTAgoraRtcEngineModule(
     }
 
     @ReactMethod
+    override fun startPreview(callback: Promise?) {
+        PromiseCallback(callback).code(engine()?.startPreview())
+    }
+
+    @ReactMethod
+    override fun stopPreview(callback: Promise?) {
+        PromiseCallback(callback).code(engine()?.stopPreview())
+    }
+
+    @ReactMethod
     override fun enableLocalVideo(enabled: Boolean, callback: Promise?) {
         PromiseCallback(callback).code(engine()?.enableLocalVideo(enabled))
     }

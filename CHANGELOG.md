@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.0.1-rc.2
+  - add `startPreview` `stopPreview`
+
 #### 3.0.1-rc.1
   - prerelease 3.0.1-rc.1
 
