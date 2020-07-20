@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 2.9.1-alpha.8
+  - fix `joinChannel` param `info` type
+
 #### 2.9.1-alpha.7
   - fix `setBeautyEffectOptions` bugs
 

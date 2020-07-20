@@ -75,7 +75,7 @@ class RtcEngine {
      * @param info
      * @returns Promise<any>
      */
-    public static joinChannel(channelName: string, uid?: number, token?: string, info?: Object): Promise<any> {
+    public static joinChannel(channelName: string, uid?: number, token?: string, info?: string): Promise<any> {
         return Agora.joinChannel({channelName, uid, token, info});
     }
 
