@@ -1,13 +1,13 @@
 import React, {Component} from "react";
-import {Platform, requireNativeComponent, ViewProps} from "react-native";
+import {requireNativeComponent, ViewProps} from "react-native";
 
-import {VideoMirrorMode, VideoRenderMode} from "./Types";
+import {VideoMirrorMode, VideoRenderMode} from "./Enums";
 
 /**
  * Properties of the uid.
  * @property uid: int | User ID.
  */
-interface RtcUidProps {
+export interface RtcUidProps {
     uid: number;
 }
 
@@ -31,7 +31,7 @@ interface RtcUidProps {
  * @property mirrorMode: number | The video mirror mode.
  * @see VideoMirrorMode
  */
-interface RtcSurfaceViewProps extends ViewProps {
+export interface RtcSurfaceViewProps extends ViewProps {
     zOrderMediaOverlay?: boolean;
     zOrderOnTop?: boolean;
     renderMode?: VideoRenderMode;
@@ -54,14 +54,20 @@ interface RtcSurfaceViewProps extends ViewProps {
  * @see RtcChannel.joinChannel
  * @property mirror: boolean | The video mirror.
  */
-interface RtcTextureViewProps extends ViewProps {
+export interface RtcTextureViewProps extends ViewProps {
     channelId?: string;
     mirror?: boolean;
 }
 
+/**
+ * @ignore
+ */
 const RCTRtcSurfaceView = requireNativeComponent('RCTAgoraRtcSurfaceView');
 
-class RtcSurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
+/**
+ * @ignore
+ */
+export class RtcSurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
     render() {
         return (
             <RCTRtcSurfaceView {...this.props}/>
@@ -69,78 +75,18 @@ class RtcSurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
     }
 }
 
+/**
+ * @ignore
+ */
 const RCTRtcTextureView = requireNativeComponent('RCTAgoraRtcTextureView');
 
-class RtcTextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
+/**
+ * @ignore
+ */
+export class RtcTextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
     render() {
         return (
             <RCTRtcTextureView {...this.props}/>
         )
-    }
-}
-
-/**
- * View for preview local video.
- */
-export namespace RtcLocalView {
-    /**
-     * Use SurfaceView in Android.
-     * Use UIView in iOS.
-     */
-    export class SurfaceView extends Component<RtcSurfaceViewProps, {}> {
-        render() {
-            return (
-                <RtcSurfaceView
-                    {...this.props}
-                    uid={0}/>
-            );
-        }
-    }
-
-    /**
-     * Use TextureView in Android.
-     * Not support for iOS.
-     */
-    export class TextureView extends Component<RtcTextureViewProps, {}> {
-        render() {
-            if (Platform.OS === 'ios')
-                throw new Error('TextureView not support for iOS')
-            return (
-                <RtcTextureView
-                    {...this.props}
-                    uid={0}/>
-            );
-        }
-    }
-}
-
-/**
- * View for render remote video.
- */
-export namespace RtcRemoteView {
-    /**
-     * Use SurfaceView in Android.
-     * Use UIView in iOS.
-     */
-    export class SurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
-        render() {
-            return (
-                <RtcSurfaceView {...this.props}/>
-            );
-        }
-    }
-
-    /**
-     * Use TextureView in Android.
-     * Not support for iOS.
-     */
-    export class TextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
-        render() {
-            if (Platform.OS === 'ios')
-                throw new Error('TextureView not support for iOS')
-            return (
-                <RtcTextureView {...this.props}/>
-            );
-        }
     }
 }

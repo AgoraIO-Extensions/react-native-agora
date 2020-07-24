@@ -7,7 +7,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "doc": "typedoc --out docs/api ./src",
+    "doc": "typedoc ./src",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepublish": "npm run build"
