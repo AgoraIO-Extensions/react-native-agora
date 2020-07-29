@@ -134,7 +134,7 @@ Source: https://github.com/facebook/react-native/issues/25154
 
 ## API
 
-* [React Native API](https://syanbo.github.io/react-native-agora/globals.html)
+* [React Native API](https://agoraio-community.github.io/react-native-agora/globals.html)
 * [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 * [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
