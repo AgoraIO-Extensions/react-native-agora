@@ -1,5 +1,6 @@
 package io.agora.rtc.react
 
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
@@ -23,21 +24,17 @@ class RCTAgoraRtcTextureViewManager : SimpleViewManager<RtcTextureView>() {
         return REACT_CLASS
     }
 
-    @ReactProp(name = "channelId")
-    fun setChannelId(view: RtcTextureView, channelId: String) {
+    @ReactProp(name = "data")
+    fun setData(view: RtcTextureView, data: ReadableMap) {
+        val channel = data.getString("channelId")?.let { getChannel(it) }
         getEngine()?.let {
-            view.setChannel(it, getChannel(channelId))
+            view.setData(it, channel, data.getInt("uid"))
         }
     }
 
     @ReactProp(name = "mirror")
     fun setMirror(view: RtcTextureView, mirror: Boolean) {
         getEngine()?.let { view.setMirror(it, mirror) }
-    }
-
-    @ReactProp(name = "uid")
-    fun setUid(view: RtcTextureView, uid: Int) {
-        getEngine()?.let { view.setUid(it, uid) }
     }
 
     private fun getEngine(): RtcEngine? {
