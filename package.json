@@ -1,13 +1,13 @@
 {
   "name": "react-native-agora",
-  "version": "3.0.1-rc.2",
+  "version": "3.0.1-rc.3",
   "description": "React Native around the Agora RTC SDKs for Android and iOS agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "doc": "typedoc --out docs/api ./src",
+    "doc": "typedoc ./src",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepublish": "npm run build"

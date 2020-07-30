@@ -1,5 +1,10 @@
 ## THE CHANGELOG
 
+#### 3.0.1-rc.3
+  - fix multiple channel render bug
+  - remove `Types` from export, you can import enum or class by `import {} from 'react-native-agora'`
+  - optimize ts code and doc
+
 #### 3.0.1-rc.2
   - add `startPreview` `stopPreview`
 

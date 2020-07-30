@@ -1,4 +1,5 @@
 import {NativeEventEmitter, NativeModules} from "react-native";
+
 import {
     ChannelMediaOptions,
     ChannelMediaRelayConfiguration,
@@ -7,16 +8,29 @@ import {
     EncryptionMode,
     LiveInjectStreamConfig,
     LiveTranscoding,
-    String,
     UserPriority,
     VideoStreamType
-} from "./Types";
+} from "../Types";
 import {Listener, RtcChannelEvents, Subscription} from "./RtcEvents";
 
-const {AgoraRtcChannelModule} = NativeModules;
-const Prefix = AgoraRtcChannelModule.prefix
+const {
+    /**
+     * @ignore
+     */
+    AgoraRtcChannelModule
+} = NativeModules;
+/**
+ * @ignore
+ */
+const Prefix = AgoraRtcChannelModule.prefix;
+/**
+ * @ignore
+ */
 const RtcChannelEvent = new NativeEventEmitter(AgoraRtcChannelModule);
 
+/**
+ * @ignore
+ */
 const channels = new Map<string, RtcChannel>();
 
 /**
@@ -25,10 +39,18 @@ const channels = new Map<string, RtcChannel>();
 export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
     RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface, RtcFallbackInterface,
     RtcMediaMetadataInterface, RtcEncryptionInterface, RtcInjectStreamInterface, RtcStreamMessageInterface {
-
+    /**
+     * @ignore
+     */
     private readonly _channelId: string;
+    /**
+     * @ignore
+     */
     private _listeners = new Map<string, Map<any, Listener>>();
 
+    /**
+     * @ignore
+     */
     private constructor(channelId: string) {
         this._channelId = channelId;
     }
@@ -166,7 +188,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @param options The channel media options.
      * @see ChannelMediaOptions
      */
-    joinChannel(token: String, optionalInfo: String, optionalUid: number, options: ChannelMediaOptions): Promise<void> {
+    joinChannel(token: string | null, optionalInfo: string | null, optionalUid: number, options: ChannelMediaOptions): Promise<void> {
         return AgoraRtcChannelModule.joinChannel(this._channelId, token, optionalInfo, optionalUid, options)
     }
 
@@ -190,7 +212,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @param options The channel media options.
      * @see ChannelMediaOptions
      */
-    joinChannelWithUserAccount(token: String, userAccount: string, options: ChannelMediaOptions): Promise<void> {
+    joinChannelWithUserAccount(token: string | null, userAccount: string, options: ChannelMediaOptions): Promise<void> {
         return AgoraRtcChannelModule.joinChannelWithUserAccount(this._channelId, token, userAccount, options)
     }
 
@@ -257,116 +279,6 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
         return AgoraRtcChannelModule.getCallId(this._channelId)
     }
 
-    adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void> {
-        return AgoraRtcChannelModule.adjustUserPlaybackSignalVolume(this._channelId, uid, volume)
-    }
-
-    muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.muteRemoteAudioStream(this._channelId, uid, muted)
-    }
-
-    muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.muteAllRemoteAudioStreams(this._channelId, muted)
-    }
-
-    setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.setDefaultMuteAllRemoteAudioStreams(this._channelId, muted)
-    }
-
-    muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.muteAllRemoteVideoStreams(this._channelId, muted)
-    }
-
-    muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.muteRemoteVideoStream(this._channelId, uid, muted)
-    }
-
-    setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.setDefaultMuteAllRemoteVideoStreams(this._channelId, muted)
-    }
-
-    setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void> {
-        return AgoraRtcChannelModule.setRemoteVoicePosition(this._channelId, uid, pan, gain);
-    }
-
-    addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
-        return AgoraRtcChannelModule.addPublishStreamUrl(this._channelId, url, transcodingEnabled);
-    }
-
-    removePublishStreamUrl(url: string): Promise<void> {
-        return AgoraRtcChannelModule.removePublishStreamUrl(this._channelId, url);
-    }
-
-    setLiveTranscoding(transcoding: LiveTranscoding): Promise<void> {
-        return AgoraRtcChannelModule.setLiveTranscoding(this._channelId, transcoding);
-    }
-
-    startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return AgoraRtcChannelModule.startChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
-    }
-
-    stopChannelMediaRelay(): Promise<void> {
-        return AgoraRtcChannelModule.stopChannelMediaRelay(this._channelId);
-    }
-
-    updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return AgoraRtcChannelModule.updateChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
-    }
-
-    setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void> {
-        return AgoraRtcChannelModule.setRemoteDefaultVideoStreamType(this._channelId, streamType);
-    }
-
-    setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void> {
-        return AgoraRtcChannelModule.setRemoteVideoStreamType(this._channelId, uid, streamType);
-    }
-
-    setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void> {
-        return AgoraRtcChannelModule.setRemoteUserPriority(this._channelId, uid, userPriority);
-    }
-
-    registerMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcChannelModule.registerMediaMetadataObserver(this._channelId);
-    }
-
-    sendMetadata(metadata: string): Promise<void> {
-        return AgoraRtcChannelModule.sendMetadata(this._channelId, metadata);
-    }
-
-    setMaxMetadataSize(size: number): Promise<void> {
-        return AgoraRtcChannelModule.setMaxMetadataSize(this._channelId, size);
-    }
-
-    unregisterMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcChannelModule.unregisterMediaMetadataObserver(this._channelId);
-    }
-
-    setEncryptionMode(encryptionMode: EncryptionMode): Promise<void> {
-        return AgoraRtcChannelModule.setEncryptionMode(this._channelId, encryptionMode);
-    }
-
-    setEncryptionSecret(secret: string): Promise<void> {
-        return AgoraRtcChannelModule.setEncryptionSecret(this._channelId, secret);
-    }
-
-    addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void> {
-        return AgoraRtcChannelModule.addInjectStreamUrl(this._channelId, url, config);
-    }
-
-    removeInjectStreamUrl(url: string): Promise<void> {
-        return AgoraRtcChannelModule.removeInjectStreamUrl(this._channelId, url);
-    }
-
-    createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
-        return AgoraRtcChannelModule.createDataStream(this._channelId, reliable, ordered);
-    }
-
-    sendStreamMessage(streamId: number, message: string): Promise<void> {
-        return AgoraRtcChannelModule.sendStreamMessage(this._channelId, streamId, message);
-    }
-}
-
-interface RtcAudioInterface {
     /**
      * Adjusts the playback volume of a specified remote user.
      * You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
@@ -379,7 +291,9 @@ interface RtcAudioInterface {
      * - 0: Mute.
      * - 100: The original volume.
      */
-    adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void>;
+    adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void> {
+        return AgoraRtcChannelModule.adjustUserPlaybackSignalVolume(this._channelId, uid, volume)
+    }
 
     /**
      * Stops/Resumes receiving the audio stream of the specified user.
@@ -388,7 +302,9 @@ interface RtcAudioInterface {
      * - true: Stop receiving the audio stream of the user.
      * - false: (Default) Receive the audio stream of the user.
      */
-    muteRemoteAudioStream(uid: number, muted: boolean): Promise<void>;
+    muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
+        return AgoraRtcChannelModule.muteRemoteAudioStream(this._channelId, uid, muted)
+    }
 
     /**
      * Stops/Resumes receiving all remote audio streams.
@@ -396,7 +312,9 @@ interface RtcAudioInterface {
      * - true: Stop receiving all remote audio streams.
      * - false: (Default) Receive all remote audio streams.
      */
-    muteAllRemoteAudioStreams(muted: boolean): Promise<void>;
+    muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
+        return AgoraRtcChannelModule.muteAllRemoteAudioStreams(this._channelId, muted)
+    }
 
     /**
      * Sets whether to receive all remote audio streams by default.
@@ -404,18 +322,9 @@ interface RtcAudioInterface {
      * - true: Stop receiving all remote audio streams by default.
      * - false: (Default) Receive all remote audio streams by default.
      */
-    setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void>;
-}
-
-interface RtcVideoInterface {
-    /**
-     * Stops/Resumes receiving the video stream of the specified user.
-     * @param uid ID of the remote user whose video stream you want to mute.
-     * @param muted Determines whether to receive/stop receiving the video stream of the specified user:
-     * - true: Stop receiving the video stream of the user.
-     * - false: (Default) Receive the video stream of the user.
-     */
-    muteRemoteVideoStream(uid: number, muted: boolean): Promise<void>;
+    setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
+        return AgoraRtcChannelModule.setDefaultMuteAllRemoteAudioStreams(this._channelId, muted)
+    }
 
     /**
      * Stops/Resumes receiving all remote video streams.
@@ -423,7 +332,20 @@ interface RtcVideoInterface {
      * - true: Stop receiving all remote video streams.
      * - false: (Default) Receive all remote video streams.
      */
-    muteAllRemoteVideoStreams(muted: boolean): Promise<void>;
+    muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
+        return AgoraRtcChannelModule.muteAllRemoteVideoStreams(this._channelId, muted)
+    }
+
+    /**
+     * Stops/Resumes receiving the video stream of the specified user.
+     * @param uid ID of the remote user whose video stream you want to mute.
+     * @param muted Determines whether to receive/stop receiving the video stream of the specified user:
+     * - true: Stop receiving the video stream of the user.
+     * - false: (Default) Receive the video stream of the user.
+     */
+    muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
+        return AgoraRtcChannelModule.muteRemoteVideoStream(this._channelId, uid, muted)
+    }
 
     /**
      * Sets whether to receive all remote video streams by default.
@@ -431,10 +353,10 @@ interface RtcVideoInterface {
      * - true: Stop receiving all remote video streams by default.
      * - false: (Default) Receive all remote video streams by default.
      */
-    setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void>;
-}
+    setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
+        return AgoraRtcChannelModule.setDefaultMuteAllRemoteVideoStreams(this._channelId, muted)
+    }
 
-interface RtcVoicePositionInterface {
     /**
      * Sets the sound position of a remote user.
      * When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
@@ -449,24 +371,9 @@ interface RtcVoicePositionInterface {
      * - 1.0: The remote sound comes from the right.
      * @param gain Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
      */
-    setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void>;
-}
-
-interface RtcPublishStreamInterface {
-    /**
-     * Sets the video layout and audio settings for CDN live.
-     * The SDK triggers the onTranscodingUpdated callback when you call this method to update the LiveTranscodingclass. If you call this method to set the LiveTranscoding class for the first time, the SDK does not trigger the onTranscodingUpdated callback.
-     * @see RtcChannelEvents.TranscodingUpdated
-     * Note
-     * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites.
-     * - Ensure that the user joins a channel before calling this method.
-     * - This method can only be called by a broadcaster in a Live-Broadcast channel.
-     * - Ensure that you call this method before calling the addPublishStreamUrl method.
-     * @see RtcChannel.addPublishStreamUrl
-     * @param transcoding Sets the CDN live audio/video transcoding settings.
-     * @see LiveTranscoding
-     */
-    setLiveTranscoding(transcoding: LiveTranscoding): Promise<void>;
+    setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void> {
+        return AgoraRtcChannelModule.setRemoteVoicePosition(this._channelId, uid, pan, gain);
+    }
 
     /**
      * Publishes the local stream to the CDN.
@@ -483,7 +390,9 @@ interface RtcPublishStreamInterface {
      * - true: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple broadcasters in CDN live.
      * - false: Disable transcoding.
      */
-    addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void>;
+    addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
+        return AgoraRtcChannelModule.addPublishStreamUrl(this._channelId, url, transcodingEnabled);
+    }
 
     /**
      * Removes an RTMP stream from the CDN.
@@ -496,10 +405,27 @@ interface RtcPublishStreamInterface {
      * - This method removes only one stream HTTP/HTTPS URL address each time it is called.
      * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
      */
-    removePublishStreamUrl(url: string): Promise<void>;
-}
+    removePublishStreamUrl(url: string): Promise<void> {
+        return AgoraRtcChannelModule.removePublishStreamUrl(this._channelId, url);
+    }
 
-interface RtcMediaRelayInterface {
+    /**
+     * Sets the video layout and audio settings for CDN live.
+     * The SDK triggers the onTranscodingUpdated callback when you call this method to update the LiveTranscodingclass. If you call this method to set the LiveTranscoding class for the first time, the SDK does not trigger the onTranscodingUpdated callback.
+     * @see RtcChannelEvents.TranscodingUpdated
+     * Note
+     * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites.
+     * - Ensure that the user joins a channel before calling this method.
+     * - This method can only be called by a broadcaster in a Live-Broadcast channel.
+     * - Ensure that you call this method before calling the addPublishStreamUrl method.
+     * @see RtcChannel.addPublishStreamUrl
+     * @param transcoding Sets the CDN live audio/video transcoding settings.
+     * @see LiveTranscoding
+     */
+    setLiveTranscoding(transcoding: LiveTranscoding): Promise<void> {
+        return AgoraRtcChannelModule.setLiveTranscoding(this._channelId, transcoding);
+    }
+
     /**
      * Starts to relay media streams across channels.
      * After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks report the state and events of the media stream relay.
@@ -519,22 +445,9 @@ interface RtcMediaRelayInterface {
      * @param channelMediaRelayConfiguration The configuration of the media stream relay.
      * @see ChannelMediaRelayConfiguration
      */
-    startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>;
-
-    /**
-     * Updates the channels for media relay.
-     * After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the updateChannelMediaRelay method.
-     * After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the UpdateDestinationChannel(7) state code.
-     * @see RtcChannelEvents.ChannelMediaRelayEvent
-     * @see ChannelMediaRelayEvent.UpdateDestinationChannel
-     * Note
-     * - Call this method after the startChannelMediaRelay method to update the destination channel.
-     * @see RtcChannel.startChannelMediaRelay
-     * - This method supports adding at most four destination channels in the relay.
-     * @param channelMediaRelayConfiguration The media stream relay configuration.
-     * @see ChannelMediaRelayConfiguration
-     */
-    updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>;
+    startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
+        return AgoraRtcChannelModule.startChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
+    }
 
     /**
      * Stops the media stream relay.
@@ -550,10 +463,36 @@ interface RtcMediaRelayInterface {
      * @see ChannelMediaRelayError.ServerConnectionLost
      * @see RtcChannel.leaveChannel
      */
-    stopChannelMediaRelay(): Promise<void>;
-}
+    stopChannelMediaRelay(): Promise<void> {
+        return AgoraRtcChannelModule.stopChannelMediaRelay(this._channelId);
+    }
 
-interface RtcDualStreamInterface {
+    /**
+     * Updates the channels for media relay.
+     * After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the updateChannelMediaRelay method.
+     * After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the UpdateDestinationChannel(7) state code.
+     * @see RtcChannelEvents.ChannelMediaRelayEvent
+     * @see ChannelMediaRelayEvent.UpdateDestinationChannel
+     * Note
+     * - Call this method after the startChannelMediaRelay method to update the destination channel.
+     * @see RtcChannel.startChannelMediaRelay
+     * - This method supports adding at most four destination channels in the relay.
+     * @param channelMediaRelayConfiguration The media stream relay configuration.
+     * @see ChannelMediaRelayConfiguration
+     */
+    updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
+        return AgoraRtcChannelModule.updateChannelMediaRelay(this._channelId, channelMediaRelayConfiguration);
+    }
+
+    /**
+     * Sets the default video-stream type of the remote video stream when the remote user sends dual streams.
+     * @param streamType Sets the default video-stream type.
+     * @see VideoStreamType
+     */
+    setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void> {
+        return AgoraRtcChannelModule.setRemoteDefaultVideoStreamType(this._channelId, streamType);
+    }
+
     /**
      * Sets the video stream type of the remote video stream when the remote user sends dual streams.
      * This method allows the app to adjust the corresponding video-stream type based on the size of the video window to reduce the bandwidth and resources.
@@ -565,17 +504,10 @@ interface RtcDualStreamInterface {
      * @param streamType Sets the video-stream type.
      * @see VideoStreamType
      */
-    setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void>;
+    setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void> {
+        return AgoraRtcChannelModule.setRemoteVideoStreamType(this._channelId, uid, streamType);
+    }
 
-    /**
-     * Sets the default video-stream type of the remote video stream when the remote user sends dual streams.
-     * @param streamType Sets the default video-stream type.
-     * @see VideoStreamType
-     */
-    setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void>;
-}
-
-interface RtcFallbackInterface {
     /**
      * Sets the priority of a remote user's media stream.
      * Use this method with the setRemoteSubscribeFallbackOption method. If a remote video stream experiences the fallback, the SDK ensures the high-priority user gets the best possible stream quality.
@@ -586,10 +518,10 @@ interface RtcFallbackInterface {
      * @param userPriority The priority of the remote user.
      * @see UserPriority
      */
-    setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void>;
-}
+    setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void> {
+        return AgoraRtcChannelModule.setRemoteUserPriority(this._channelId, uid, userPriority);
+    }
 
-interface RtcMediaMetadataInterface {
     /**
      * Registers the metadata observer.
      * A successful call of this method triggers the getMaxMetadataSize callback.
@@ -601,36 +533,21 @@ interface RtcMediaMetadataInterface {
      * - This method applies to the Live-Broadcast profile only.
      * @see ChannelProfile.LiveBroadcasting
      */
-    registerMediaMetadataObserver(): Promise<void>;
+    registerMediaMetadataObserver(): Promise<void> {
+        return AgoraRtcChannelModule.registerMediaMetadataObserver(this._channelId);
+    }
 
-    /**
-     * TODO
-     */
-    unregisterMediaMetadataObserver(): Promise<void>;
+    sendMetadata(metadata: string): Promise<void> {
+        return AgoraRtcChannelModule.sendMetadata(this._channelId, metadata);
+    }
 
-    /**
-     * TODO
-     * @param size
-     */
-    setMaxMetadataSize(size: number): Promise<void>;
+    setMaxMetadataSize(size: number): Promise<void> {
+        return AgoraRtcChannelModule.setMaxMetadataSize(this._channelId, size);
+    }
 
-    /**
-     * TODO
-     * @param metadata
-     */
-    sendMetadata(metadata: string): Promise<void>;
-}
-
-interface RtcEncryptionInterface {
-    /**
-     * Enables built-in encryption with an encryption password before joining a channel.
-     * All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
-     * Note
-     * - For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
-     * - Do not use this method for CDN live streaming.
-     * @param secret The encryption password.
-     */
-    setEncryptionSecret(secret: string): Promise<void>;
+    unregisterMediaMetadataObserver(): Promise<void> {
+        return AgoraRtcChannelModule.unregisterMediaMetadataObserver(this._channelId);
+    }
 
     /**
      * Sets the built-in encryption mode.
@@ -643,10 +560,22 @@ interface RtcEncryptionInterface {
      * @param encryptionMode Sets the encryption mode.
      * @see EncryptionMode
      */
-    setEncryptionMode(encryptionMode: EncryptionMode): Promise<void>;
-}
+    setEncryptionMode(encryptionMode: EncryptionMode): Promise<void> {
+        return AgoraRtcChannelModule.setEncryptionMode(this._channelId, encryptionMode);
+    }
 
-interface RtcInjectStreamInterface {
+    /**
+     * Enables built-in encryption with an encryption password before joining a channel.
+     * All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
+     * Note
+     * - For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
+     * - Do not use this method for CDN live streaming.
+     * @param secret The encryption password.
+     */
+    setEncryptionSecret(secret: string): Promise<void> {
+        return AgoraRtcChannelModule.setEncryptionSecret(this._channelId, secret);
+    }
+
     /**
      * Injects an online media stream to a Live-Broadcast channel.
      * If this method call succeeds, the server pulls the voice or video stream and injects it into a live channel. This applies to scenarios where all audience members in the channel can watch a live show and interact with each other.
@@ -668,7 +597,9 @@ interface RtcInjectStreamInterface {
      * @param config The LiveInjectStreamConfig object, which contains the configuration information for the added voice or video stream.
      * @see LiveInjectStreamConfig
      */
-    addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void>;
+    addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void> {
+        return AgoraRtcChannelModule.addInjectStreamUrl(this._channelId, url, config);
+    }
 
     /**
      * Removes the injected online media stream from a Live-Broadcast channel.
@@ -678,10 +609,10 @@ interface RtcInjectStreamInterface {
      * @see RtcChannelEvents.UserJoined
      * @param url The URL address to be removed.
      */
-    removeInjectStreamUrl(url: string): Promise<void>;
-}
+    removeInjectStreamUrl(url: string): Promise<void> {
+        return AgoraRtcChannelModule.removeInjectStreamUrl(this._channelId, url);
+    }
 
-interface RtcStreamMessageInterface {
     /**
      * Creates a data stream.
      * Each user can create up to five data streams during the life cycle of the RtcChannel instance.
@@ -696,7 +627,9 @@ interface RtcStreamMessageInterface {
      * - true: The recipients receive the data in the sent order.
      * - false: The recipients do not receive the data in the sent order.
      */
-    createDataStream(reliable: boolean, ordered: boolean): Promise<number>;
+    createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
+        return AgoraRtcChannelModule.createDataStream(this._channelId, reliable, ordered);
+    }
 
     /**
      * Sends the data stream message.
@@ -712,5 +645,116 @@ interface RtcStreamMessageInterface {
      * @see RtcChannel.createDataStream
      * @param message The message data.
      */
+    sendStreamMessage(streamId: number, message: string): Promise<void> {
+        return AgoraRtcChannelModule.sendStreamMessage(this._channelId, streamId, message);
+    }
+}
+
+/**
+ * @ignore
+ */
+interface RtcAudioInterface {
+    adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void>;
+
+    muteRemoteAudioStream(uid: number, muted: boolean): Promise<void>;
+
+    muteAllRemoteAudioStreams(muted: boolean): Promise<void>;
+
+    setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcVideoInterface {
+    muteRemoteVideoStream(uid: number, muted: boolean): Promise<void>;
+
+    muteAllRemoteVideoStreams(muted: boolean): Promise<void>;
+
+    setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcVoicePositionInterface {
+    setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcPublishStreamInterface {
+    setLiveTranscoding(transcoding: LiveTranscoding): Promise<void>;
+
+    addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void>;
+
+    removePublishStreamUrl(url: string): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcMediaRelayInterface {
+    startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>;
+
+    updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>;
+
+    stopChannelMediaRelay(): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcDualStreamInterface {
+    setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void>;
+
+    setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcFallbackInterface {
+    setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcMediaMetadataInterface {
+    registerMediaMetadataObserver(): Promise<void>;
+
+    unregisterMediaMetadataObserver(): Promise<void>;
+
+    setMaxMetadataSize(size: number): Promise<void>;
+
+    sendMetadata(metadata: string): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcEncryptionInterface {
+    setEncryptionSecret(secret: string): Promise<void>;
+
+    setEncryptionMode(encryptionMode: EncryptionMode): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcInjectStreamInterface {
+    addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void>;
+
+    removeInjectStreamUrl(url: string): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcStreamMessageInterface {
+    createDataStream(reliable: boolean, ordered: boolean): Promise<number>;
+
     sendStreamMessage(streamId: number, message: string): Promise<void>;
 }
