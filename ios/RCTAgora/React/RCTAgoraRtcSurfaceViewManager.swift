@@ -54,21 +54,19 @@ class RtcView: RtcSurfaceView {
         }
     }
 
-    @objc func setChannelId(_ channelId: String) {
-        if let engine = getEngine?(), let channel = getChannel?(channelId) {
-            setChannel(engine, channel)
+    @objc func setData(_ data: NSDictionary) {
+        var channel: AgoraRtcChannel? = nil
+        if let channelId = data["channelId"] as? String {
+            channel = getChannel?(channelId)
+        }
+        if let engine = getEngine?() {
+            setData(engine, channel, data["uid"] as! Int)
         }
     }
 
     @objc func setMirrorMode(_ mirrorMode: Int) {
         if let engine = getEngine?() {
             setMirrorMode(engine, mirrorMode)
-        }
-    }
-
-    @objc func setUid(_ uid: Int) {
-        if let engine = getEngine?() {
-            setUid(engine, uid)
         }
     }
 }
