@@ -151,7 +151,7 @@ React Native 0.59.9 已修复。
 * [反馈问题](https://github.com/AgoraIO-Community/react-native-agora/issues)
 * [React Native 快速开始](https://facebook.github.io/react-native/docs/getting-started.html)
 
-许可证
+开源许可
 --------
 
     Copyright (c) 2020 syanbo luxuhui
