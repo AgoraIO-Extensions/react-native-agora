@@ -5,101 +5,101 @@
 [![npm](https://img.shields.io/npm/dt/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
 [![npm](https://img.shields.io/npm/l/react-native-agora.svg)](LICENSE)
 
-[中文](README.zh.md)
+[English](README.md)
 
-This SDK takes advantage of React Native and Agora RTC Video SDK on Android && iOS.
+此 SDK 基于 React Native 和 Agora Android 和 iOS 的视频 SDK 实现。
 
-## Community Contributor
+## 社区贡献者
 
-The community developer [Syanbo](https://github.com/syanbo) developed 1.0 version React Native SDK based on the Agora Native SDK from 2016 to 2017. As the community's demand for React Native SDK keeps growing, Agora has achieved official cooperation with Syanbo, this project now is officially maintained by Agora. Thanks to Syanbo for his long-term contributions to React Native SDK.
+声网社区开发者 [Syanbo](https://github.com/syanbo) 于 2016 年 - 2017 年期间，基于声网 Native SDK 独自完成了最初的 1.0 版本 React Native SDK。随着社区对于 React Native SDK 的需求增长，声网官方与 Syanbo 达成正式合作关系，目前该项目由声网官方进行更新维护。感谢 Syanbo 对于该项目长期以来的贡献。
 
-## Release Note
-[Changelog](CHANGELOG.md)
+## 发版说明
+[变更日志](CHANGELOG.md)
 
-## Installation
+## 集成文档
 
-### Installing (React Native >= 0.60.0)
+### 安装在 (React Native >= 0.60.0)
 
-Install `react-native-agora`(^3.0.0):
+安装 `react-native-agora`(^3.0.0)：
 
 ```shell script
 yarn add react-native-agora
 ```
-or
+或者
 ```shell script
 npm i --save react-native-agora
 ```
 
-Go to your **ios** folder and run:
+前往你的 **ios** 目录并执行:
 
 ```shell script
 pod install
 ```
 
-**_ IMPORTANT _**
+**_ 重要信息 _**
 
-[Native Modules are now Autolinked.](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md)
+[原生模块现在已经是自动链接](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md)
 
-[Migrating to Swift.](https://github.com/AgoraIO-Community/react-native-agora/blob/master/docs/v3/installation.ios.md#step-1-migrating-to-swift)
+[迁移至Swift](https://github.com/AgoraIO-Community/react-native-agora/blob/master/docs/v3/installation.ios.md#step-1-migrating-to-swift)
 
-### Installing (React Native == 0.59.x)
+### 安装在 (React Native == 0.59.x)
 
-Install `react-native-agora`(^3.0.0):
+安装 `react-native-agora`(^3.0.0)：
 
 ```shell script
 yarn add react-native-agora
 ```
-or
+或者
 ```shell script
 npm i --save react-native-agora
 ```
 
-**_ IMPORTANT _**
+**_ 重要信息 _**
 
-[Android Installation](./docs/v3/installation.android.md)
+[Android 集成文档](./docs/v3/installation.android.md)
 
-[iOS Installation](./docs/v3/installation.ios.md)
+[iOS 集成文档](./docs/v3/installation.ios.md)
 
-### Installing (React Native <= 0.58.x)
+### 安装在 (React Native <= 0.58.x)
 
-**_ IMPORTANT _**
+**_ 重要信息 _**
 
-We no longer support, you can try the older version.
+我们已经不再支持，你可以尝试老版本。
 
-[Install `react-native-agora`(^1.0.0)](./docs/v1/README.md)
+[安装 `react-native-agora`(^1.0.0)](./docs/v1/README.md)
 
-[Install `react-native-agora`(^2.0.0)](./docs/v2/README.md)
+[安装 `react-native-agora`(^2.0.0)](./docs/v2/README.md)
 
-## General Usage
+## 如何使用
 
 ```javascript
 import RtcEngine from 'react-native-agora';
 RtcEngine.create('YOUR APP ID');
 ```
-or
+或者
 ```javascript
 const RtcEngine = require('react-native-agora');
 RtcEngine.create('YOUR APP ID');
 ```
 
-## Using TypeScript
+## 使用 TypeScript
 
-We suggest you use TypeScript to develop, or use TypeScript eslint to lint your code.
+我们建议你使用 TypeScript 进行开发，或者使用 TypeScript eslint 来检查你的代码。
 
-* [Getting Started with TypeScript](https://reactnative.dev/docs/typescript#getting-started-with-typescript)
-* [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project)
+* [快速开始 TypeScript](https://reactnative.dev/docs/typescript#getting-started-with-typescript)
+* [将 TypeScript 添加至现有项目](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project)
 
-## Troubleshooting
+## 常见错误
 
-### Pod install failed (React Native >= 0.62.0) 
+### Pod install 失败 (React Native >= 0.62.0) 
 
-The error log:
+错误日志：
 
 ```
 [!] The 'xxx' target has libraries with conflicting names: libcrypto.a.
 ```
 
-You should disable Flipper, you can found it in the Podfile, and comment the code about Flipper in AppDelegate.
+你应该禁用 Flipper， 你可以在 Podfile 中找到它， 并且注释掉 AppDelegate 中有关 Flipper 的代码。
 
 ```
   # Enables Flipper.
@@ -114,19 +114,19 @@ You should disable Flipper, you can found it in the Podfile, and comment the cod
 
 ### RCT_EXTERN_MODULE Swift modules broken in Xcode 10.2
 
-The error log:
+错误日志：
 
 ```
 Swift class extensions and categories on Swift classes are not allowed to have +load methods
 ```
 
-Fixed in React Native 0.59.3.
+React Native 0.59.3 已修复。
 
-Source: https://github.com/facebook/react-native/issues/24139
+参考：https://github.com/facebook/react-native/issues/24139
 
 ### XCode 11 Beta App Launch Crash
 
-The error log:
+错误日志：
 
 ```
 Exception '*** -[__NSArrayM objectAtIndexedSubscript:]: index 1 beyond bounds [0 .. 0]' was thrown while invoking getCurrentAppState on target AppState with params (
@@ -135,23 +135,23 @@ Exception '*** -[__NSArrayM objectAtIndexedSubscript:]: index 1 beyond bounds [0
 )
 ```
 
-Fixed in React Native 0.59.9.
+React Native 0.59.9 已修复。
 
-Source: https://github.com/facebook/react-native/issues/25154
+参考：https://github.com/facebook/react-native/issues/25154
 
-## API
+## API文档
 
 * [React Native API](https://agoraio-community.github.io/react-native-agora/globals.html)
 * [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 * [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
-## Resources
+## 资源
 
-* Complete [API Doc](https://docs.agora.io/en/) at the Developer Center
-* [File bugs about this sample](https://github.com/AgoraIO-Community/react-native-agora/issues)
-* [React Native Getting Started](https://facebook.github.io/react-native/docs/getting-started.html)
+* 完整的 [API Doc](https://docs.agora.io/cn/) 在开发者中心
+* [反馈问题](https://github.com/AgoraIO-Community/react-native-agora/issues)
+* [React Native 快速开始](https://facebook.github.io/react-native/docs/getting-started.html)
 
-License
+许可证
 --------
 
     Copyright (c) 2020 syanbo luxuhui
