@@ -69,10 +69,10 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The SDK uses the RtcEngineEvents interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
-							All methods in this interface class have their (empty) default implementations, and the application can inherit only some of the required events instead of all of them.
-						In the callbacks, the application should avoid time-consuming tasks or call blocking APIs (such as SendMessage), otherwise, the SDK may not work properly.</p>
+						<p>The SDK uses the RtcEngineEvents interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.</p>
 					</div>
+					<p>All methods in this interface class have their (empty) default implementations, and the application can inherit only some of the required events instead of all of them.</p>
+					<p>In the callbacks, the application should avoid time-consuming tasks or call blocking APIs (such as SendMessage), otherwise, the SDK may not work properly.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -88,123 +88,113 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Events</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#activespeaker" class="tsd-kind-icon">Active<wbr>Speaker</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#apicallexecuted" class="tsd-kind-icon">Api<wbr>Call<wbr>Executed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#audioeffectfinished" class="tsd-kind-icon">Audio<wbr>Effect<wbr>Finished</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#audiomixingfinished" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>Finished</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#audiomixingstatechanged" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#audioquality" class="tsd-kind-icon">Audio<wbr>Quality</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#audioroutechanged" class="tsd-kind-icon">Audio<wbr>Route<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#audiovolumeindication" class="tsd-kind-icon">Audio<wbr>Volume<wbr>Indication</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#cameraexposureareachanged" class="tsd-kind-icon">Camera<wbr>Exposure<wbr>Area<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#camerafocusareachanged" class="tsd-kind-icon">Camera<wbr>Focus<wbr>Area<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#cameraready" class="tsd-kind-icon">Camera<wbr>Ready</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#channelmediarelayevent" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>Event</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#channelmediarelaystatechanged" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#clientrolechanged" class="tsd-kind-icon">Client<wbr>Role<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#connectionbanned" class="tsd-kind-icon">Connection<wbr>Banned</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#connectioninterrupted" class="tsd-kind-icon">Connection<wbr>Interrupted</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#connectionlost" class="tsd-kind-icon">Connection<wbr>Lost</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#connectionstatechanged" class="tsd-kind-icon">Connection<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#error" class="tsd-kind-icon">Error</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#facepositionchanged" class="tsd-kind-icon">Face<wbr>Position<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#firstlocalaudioframe" class="tsd-kind-icon">First<wbr>Local<wbr>Audio<wbr>Frame</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#firstlocalvideoframe" class="tsd-kind-icon">First<wbr>Local<wbr>Video<wbr>Frame</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremoteaudiodecoded" class="tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Decoded</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremoteaudioframe" class="tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Frame</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremotevideodecoded" class="tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Decoded</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremotevideoframe" class="tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Frame</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#joinchannelsuccess" class="tsd-kind-icon">Join<wbr>Channel<wbr>Success</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#lastmileproberesult" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Result</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#lastmilequality" class="tsd-kind-icon">Lastmile<wbr>Quality</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#leavechannel" class="tsd-kind-icon">Leave<wbr>Channel</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#localaudiostatechanged" class="tsd-kind-icon">Local<wbr>Audio<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#localaudiostats" class="tsd-kind-icon">Local<wbr>Audio<wbr>Stats</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#localpublishfallbacktoaudioonly" class="tsd-kind-icon">Local<wbr>Publish<wbr>Fallback<wbr>ToAudio<wbr>Only</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#localuserregistered" class="tsd-kind-icon">Local<wbr>User<wbr>Registered</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#localvideostatechanged" class="tsd-kind-icon">Local<wbr>Video<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#localvideostats" class="tsd-kind-icon">Local<wbr>Video<wbr>Stats</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#mediaengineloadsuccess" class="tsd-kind-icon">Media<wbr>Engine<wbr>Load<wbr>Success</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#mediaenginestartcallsuccess" class="tsd-kind-icon">Media<wbr>Engine<wbr>Start<wbr>Call<wbr>Success</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#metadatareceived" class="tsd-kind-icon">Metadata<wbr>Received</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#microphoneenabled" class="tsd-kind-icon">Microphone<wbr>Enabled</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#networkquality" class="tsd-kind-icon">Network<wbr>Quality</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#networktypechanged" class="tsd-kind-icon">Network<wbr>Type<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#rejoinchannelsuccess" class="tsd-kind-icon">Rejoin<wbr>Channel<wbr>Success</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#remoteaudiostatechanged" class="tsd-kind-icon">Remote<wbr>Audio<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#remoteaudiostats" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Stats</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#remoteaudiotransportstats" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Transport<wbr>Stats</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#remotesubscribefallbacktoaudioonly" class="tsd-kind-icon">Remote<wbr>Subscribe<wbr>Fallback<wbr>ToAudio<wbr>Only</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#remotevideostatechanged" class="tsd-kind-icon">Remote<wbr>Video<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#remotevideostats" class="tsd-kind-icon">Remote<wbr>Video<wbr>Stats</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#remotevideotransportstats" class="tsd-kind-icon">Remote<wbr>Video<wbr>Transport<wbr>Stats</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#requesttoken" class="tsd-kind-icon">Request<wbr>Token</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#rtcstats" class="tsd-kind-icon">Rtc<wbr>Stats</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#rtmpstreamingstatechanged" class="tsd-kind-icon">Rtmp<wbr>Streaming<wbr>State<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#streaminjectedstatus" class="tsd-kind-icon">Stream<wbr>Injected<wbr>Status</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#streammessage" class="tsd-kind-icon">Stream<wbr>Message</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#streammessageerror" class="tsd-kind-icon">Stream<wbr>Message<wbr>Error</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#streampublished" class="tsd-kind-icon">Stream<wbr>Published</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#streamunpublished" class="tsd-kind-icon">Stream<wbr>Unpublished</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#tokenprivilegewillexpire" class="tsd-kind-icon">Token<wbr>Privilege<wbr>Will<wbr>Expire</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#transcodingupdated" class="tsd-kind-icon">Transcoding<wbr>Updated</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#userenablelocalvideo" class="tsd-kind-icon">User<wbr>Enable<wbr>Local<wbr>Video</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#userenablevideo" class="tsd-kind-icon">User<wbr>Enable<wbr>Video</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#userinfoupdated" class="tsd-kind-icon">User<wbr>Info<wbr>Updated</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#userjoined" class="tsd-kind-icon">User<wbr>Joined</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#usermuteaudio" class="tsd-kind-icon">User<wbr>Mute<wbr>Audio</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#usermutevideo" class="tsd-kind-icon">User<wbr>Mute<wbr>Video</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#useroffline" class="tsd-kind-icon">User<wbr>Offline</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#videosizechanged" class="tsd-kind-icon">Video<wbr>Size<wbr>Changed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#videostopped" class="tsd-kind-icon">Video<wbr>Stopped</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rtcengineevents.html#warning" class="tsd-kind-icon">Warning</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#activespeaker" class="tsd-kind-icon">Active<wbr>Speaker</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#apicallexecuted" class="tsd-kind-icon">Api<wbr>Call<wbr>Executed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#audioeffectfinished" class="tsd-kind-icon">Audio<wbr>Effect<wbr>Finished</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#audiomixingfinished" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>Finished</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#audiomixingstatechanged" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#audioquality" class="tsd-kind-icon">Audio<wbr>Quality</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#audioroutechanged" class="tsd-kind-icon">Audio<wbr>Route<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#audiovolumeindication" class="tsd-kind-icon">Audio<wbr>Volume<wbr>Indication</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#cameraexposureareachanged" class="tsd-kind-icon">Camera<wbr>Exposure<wbr>Area<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#camerafocusareachanged" class="tsd-kind-icon">Camera<wbr>Focus<wbr>Area<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#cameraready" class="tsd-kind-icon">Camera<wbr>Ready</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#channelmediarelayevent" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>Event</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#channelmediarelaystatechanged" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#clientrolechanged" class="tsd-kind-icon">Client<wbr>Role<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#connectionbanned" class="tsd-kind-icon">Connection<wbr>Banned</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#connectioninterrupted" class="tsd-kind-icon">Connection<wbr>Interrupted</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#connectionlost" class="tsd-kind-icon">Connection<wbr>Lost</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#connectionstatechanged" class="tsd-kind-icon">Connection<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#error" class="tsd-kind-icon">Error</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#facepositionchanged" class="tsd-kind-icon">Face<wbr>Position<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#firstlocalaudioframe" class="tsd-kind-icon">First<wbr>Local<wbr>Audio<wbr>Frame</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#firstlocalvideoframe" class="tsd-kind-icon">First<wbr>Local<wbr>Video<wbr>Frame</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremoteaudiodecoded" class="tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Decoded</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremoteaudioframe" class="tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Frame</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremotevideodecoded" class="tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Decoded</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#firstremotevideoframe" class="tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Frame</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#joinchannelsuccess" class="tsd-kind-icon">Join<wbr>Channel<wbr>Success</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#lastmileproberesult" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Result</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#lastmilequality" class="tsd-kind-icon">Lastmile<wbr>Quality</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#leavechannel" class="tsd-kind-icon">Leave<wbr>Channel</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#localaudiostatechanged" class="tsd-kind-icon">Local<wbr>Audio<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#localaudiostats" class="tsd-kind-icon">Local<wbr>Audio<wbr>Stats</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#localpublishfallbacktoaudioonly" class="tsd-kind-icon">Local<wbr>Publish<wbr>Fallback<wbr>ToAudio<wbr>Only</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#localuserregistered" class="tsd-kind-icon">Local<wbr>User<wbr>Registered</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#localvideostatechanged" class="tsd-kind-icon">Local<wbr>Video<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#localvideostats" class="tsd-kind-icon">Local<wbr>Video<wbr>Stats</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#mediaengineloadsuccess" class="tsd-kind-icon">Media<wbr>Engine<wbr>Load<wbr>Success</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#mediaenginestartcallsuccess" class="tsd-kind-icon">Media<wbr>Engine<wbr>Start<wbr>Call<wbr>Success</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#metadatareceived" class="tsd-kind-icon">Metadata<wbr>Received</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#microphoneenabled" class="tsd-kind-icon">Microphone<wbr>Enabled</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#networkquality" class="tsd-kind-icon">Network<wbr>Quality</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#networktypechanged" class="tsd-kind-icon">Network<wbr>Type<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#rejoinchannelsuccess" class="tsd-kind-icon">Rejoin<wbr>Channel<wbr>Success</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#remoteaudiostatechanged" class="tsd-kind-icon">Remote<wbr>Audio<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#remoteaudiostats" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Stats</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#remoteaudiotransportstats" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Transport<wbr>Stats</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#remotesubscribefallbacktoaudioonly" class="tsd-kind-icon">Remote<wbr>Subscribe<wbr>Fallback<wbr>ToAudio<wbr>Only</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#remotevideostatechanged" class="tsd-kind-icon">Remote<wbr>Video<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#remotevideostats" class="tsd-kind-icon">Remote<wbr>Video<wbr>Stats</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#remotevideotransportstats" class="tsd-kind-icon">Remote<wbr>Video<wbr>Transport<wbr>Stats</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#requesttoken" class="tsd-kind-icon">Request<wbr>Token</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#rtcstats" class="tsd-kind-icon">Rtc<wbr>Stats</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#rtmpstreamingstatechanged" class="tsd-kind-icon">Rtmp<wbr>Streaming<wbr>State<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#streaminjectedstatus" class="tsd-kind-icon">Stream<wbr>Injected<wbr>Status</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#streammessage" class="tsd-kind-icon">Stream<wbr>Message</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#streammessageerror" class="tsd-kind-icon">Stream<wbr>Message<wbr>Error</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#streampublished" class="tsd-kind-icon">Stream<wbr>Published</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#streamunpublished" class="tsd-kind-icon">Stream<wbr>Unpublished</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#tokenprivilegewillexpire" class="tsd-kind-icon">Token<wbr>Privilege<wbr>Will<wbr>Expire</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#transcodingupdated" class="tsd-kind-icon">Transcoding<wbr>Updated</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#userenablelocalvideo" class="tsd-kind-icon">User<wbr>Enable<wbr>Local<wbr>Video</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#userenablevideo" class="tsd-kind-icon">User<wbr>Enable<wbr>Video</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#userinfoupdated" class="tsd-kind-icon">User<wbr>Info<wbr>Updated</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#userjoined" class="tsd-kind-icon">User<wbr>Joined</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#usermuteaudio" class="tsd-kind-icon">User<wbr>Mute<wbr>Audio</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#usermutevideo" class="tsd-kind-icon">User<wbr>Mute<wbr>Video</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#useroffline" class="tsd-kind-icon">User<wbr>Offline</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#videosizechanged" class="tsd-kind-icon">Video<wbr>Size<wbr>Changed</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#videostopped" class="tsd-kind-icon">Video<wbr>Stopped</a></li>
+								<li class="tsd-kind-event tsd-parent-kind-interface"><a href="rtcengineevents.html#warning" class="tsd-kind-icon">Warning</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<h2>Events</h2>
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="activespeaker" class="tsd-anchor"></a>
 					<h3>Active<wbr>Speaker</h3>
 					<div class="tsd-signature tsd-kind-icon">Active<wbr>Speaker<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidcallback" class="tsd-signature-type">UidCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L260">src/RtcEvents.ts:260</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L308">src/src/RtcEvents.ts:308</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports which user is the loudest speaker.
-							This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling enableAudioVolumeIndication, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.</p>
+							<p>Reports which user is the loudest speaker.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableAudioVolumeIndication
-								Note</p>
-								<ul>
-									<li>To receive this callback, you need to call enableAudioVolumeIndication.</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableAudioVolumeIndication</p>
-								<ul>
-									<li>This callback returns the user ID of the user with the highest voice volume during a period of time, instead of at the moment.</li>
-								</ul>
-							</dd>
-						</dl>
+						<p>This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling <a href="../classes/rtcengine.html#enableaudiovolumeindication">RtcEngine.enableAudioVolumeIndication</a>, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.</p>
+						<p><strong>Note</strong></p>
+						<ul>
+							<li>To receive this callback, you need to call <a href="../classes/rtcengine.html#enableaudiovolumeindication">RtcEngine.enableAudioVolumeIndication</a>.</li>
+							<li>This callback returns the user ID of the user with the highest voice volume during a period of time, instead of at the moment.</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="apicallexecuted" class="tsd-anchor"></a>
 					<h3>Api<wbr>Call<wbr>Executed</h3>
 					<div class="tsd-signature tsd-kind-icon">Api<wbr>Call<wbr>Executed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#apicallcallback" class="tsd-signature-type">ApiCallCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L126">src/RtcEvents.ts:126</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L139">src/src/RtcEvents.ts:139</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,34 +203,29 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="audioeffectfinished" class="tsd-anchor"></a>
 					<h3>Audio<wbr>Effect<wbr>Finished</h3>
 					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Effect<wbr>Finished<span class="tsd-signature-symbol">:</span> <a href="../globals.html#soundidcallback" class="tsd-signature-type">SoundIdCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L457">src/RtcEvents.ts:457</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L552">src/src/RtcEvents.ts:552</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the audio effect file playback finishes.
-							You can start a local audio effect playback by calling the playEffect method. This callback is triggered when the local audio effect file playback finishes.</p>
+							<p>Occurs when the audio effect file playback finishes.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.playEffect</p>
-							</dd>
-						</dl>
+						<p>You can start a local audio effect playback by calling the <a href="../classes/rtcengine.html#playeffect">RtcEngine.playEffect</a> method. This callback is triggered when the local audio effect file playback finishes.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="audiomixingfinished" class="tsd-anchor"></a>
 					<h3>Audio<wbr>Mixing<wbr>Finished</h3>
 					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Mixing<wbr>Finished<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L439">src/RtcEvents.ts:439</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L531">src/src/RtcEvents.ts:531</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -249,64 +234,41 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated. Use onAudioMixingStateChanged instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>AudioMixingStateChanged
-								You can start an audio mixing file playback by calling the startAudioMixing method. This callback is triggered when the audio mixing file playback finishes.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.startAudioMixing
-								If the startAudioMixing method call fails, an AudioMixingOpenError warning returns in the onWarning callback.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.startAudioMixing</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>WarningCode.AudioMixingOpenError</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>Warning</p>
+							<dd><p>This callback is deprecated. Use <a href="rtcengineevents.html#audiomixingstatechanged">AudioMixingStateChanged</a> instead.</p>
+								<p>You can start an audio mixing file playback by calling the <a href="../classes/rtcengine.html#startaudiomixing">RtcEngine.startAudioMixing</a> method. This callback is triggered when the audio mixing file playback finishes.</p>
+								<p>If the <a href="../classes/rtcengine.html#startaudiomixing">RtcEngine.startAudioMixing</a> method call fails, an <a href="../enums/warningcode.html#audiomixingopenerror">WarningCode.AudioMixingOpenError</a> warning returns in the <a href="rtcengineevents.html#warning">Warning</a> callback.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="audiomixingstatechanged" class="tsd-anchor"></a>
 					<h3>Audio<wbr>Mixing<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Mixing<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#audiomixingstatecallback" class="tsd-signature-type">AudioMixingStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L450">src/RtcEvents.ts:450</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L543">src/src/RtcEvents.ts:543</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the state of the local user&#39;s audio mixing file changes.
-							When you call the startAudioMixing method and the state of audio mixing file changes, the Agora SDK triggers this callback.</p>
+							<p>Occurs when the state of the local user&#39;s audio mixing file changes.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.startAudioMixing</p>
-								<ul>
-									<li>When the audio mixing file plays, pauses playing, or stops playing, this callback returns 710, 711, or 713 in state, and 0 in errorCode.</li>
-									<li>When exceptions occur during playback, this callback returns 714 in state and an error in errorCode.</li>
-									<li>If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns AudioMixingOpenError = 701.</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>WarningCode.AudioMixingOpenError</p>
-							</dd>
-						</dl>
+						<p>When you call the <a href="../classes/rtcengine.html#startaudiomixing">RtcEngine.startAudioMixing</a> method and the state of audio mixing file changes, the Agora SDK triggers this callback.</p>
+						<ul>
+							<li>When the audio mixing file plays, pauses playing, or stops playing, this callback returns 710, 711, or 713 in state, and 0 in errorCode.</li>
+							<li>When exceptions occur during playback, this callback returns 714 in state and an error in errorCode.</li>
+							<li>If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns <a href="../enums/warningcode.html#audiomixingopenerror">WarningCode.AudioMixingOpenError</a>.</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="audioquality" class="tsd-anchor"></a>
 					<h3>Audio<wbr>Quality</h3>
 					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Quality<span class="tsd-signature-symbol">:</span> <a href="../globals.html#audioqualitycallback" class="tsd-signature-type">AudioQualityCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L695">src/RtcEvents.ts:695</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L823">src/src/RtcEvents.ts:823</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -315,130 +277,98 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use onRemoteAudioStats instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteAudioStats
-								The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple remote users/hosts sending audio streams, the SDK trggers this callback as many times.</p>
+							<dd><p>Use <a href="rtcengineevents.html#remoteaudiostats">RemoteAudioStats</a> instead.</p>
+								<p>The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple remote users/hosts sending audio streams, the SDK trggers this callback as many times.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="audioroutechanged" class="tsd-anchor"></a>
 					<h3>Audio<wbr>Route<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Route<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#audioroutecallback" class="tsd-signature-type">AudioRouteCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L350">src/RtcEvents.ts:350</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L417">src/src/RtcEvents.ts:417</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the local audio playback route changes.
-								This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.
-							The definition of the routing is listed as follows:</p>
+							<p>Occurs when the local audio playback route changes.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>AudioOutputRouting</p>
-							</dd>
-						</dl>
+						<p>This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.</p>
+						<p>The definition of the routing is listed as follows:</p>
+						<ul>
+							<li><a href="../enums/audiooutputrouting.html">AudioOutputRouting</a></li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="audiovolumeindication" class="tsd-anchor"></a>
 					<h3>Audio<wbr>Volume<wbr>Indication</h3>
 					<div class="tsd-signature tsd-kind-icon">Audio<wbr>Volume<wbr>Indication<span class="tsd-signature-symbol">:</span> <a href="../globals.html#audiovolumecallback" class="tsd-signature-type">AudioVolumeCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L249">src/RtcEvents.ts:249</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L295">src/src/RtcEvents.ts:295</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports which users are speaking and the speakers&#39; volume, and whether the local user is speaking.
-								This callback reports the IDs and volumes of the loudest speakers (at most 3) at the moment in the channel, and whether the local user is speaking.
-							By default, this callback is disabled. You can enable it by calling the enableAudioVolumeIndication method. Once enabled, this callback is triggered at the set interval, regardless of whether a user speaks or not.</p>
+							<p>Reports which users are speaking and the speakers&#39; volume, and whether the local user is speaking.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableAudioVolumeIndication
-									The SDK triggers two independent onAudioVolumeIndication callbacks at one time, which separately report the volume information of the local user and all the remote speakers. For more information, see the detailed parameter descriptions.
-								Note</p>
-								<ul>
-									<li>To enable the voice activity detection of the local user, ensure that you set report_vad(true) in the enableAudioVolumeIndication method.</li>
+						<p>This callback reports the IDs and volumes of the loudest speakers (at most 3) at the moment in the channel, and whether the local user is speaking.</p>
+						<p>By default, this callback is disabled. You can enable it by calling the <a href="../classes/rtcengine.html#enableaudiovolumeindication">RtcEngine.enableAudioVolumeIndication</a> method. Once enabled, this callback is triggered at the set interval, regardless of whether a user speaks or not.</p>
+						<p>The SDK triggers two independent onAudioVolumeIndication callbacks at one time, which separately report the volume information of the local user and all the remote speakers. For more information, see the detailed parameter descriptions.</p>
+						<p><strong>Note</strong></p>
+						<ul>
+							<li>To enable the voice activity detection of the local user, ensure that you set report_vad(true) in the <a href="../classes/rtcengine.html#enableaudiovolumeindication">RtcEngine.enableAudioVolumeIndication</a> method.</li>
+							<li>Calling the <a href="../classes/rtcengine.html#mutelocalaudiostream">RtcEngine.muteLocalAudioStream</a> method affects the SDK&#39;s behavior.<ul>
+									<li>If the local user calls the <a href="../classes/rtcengine.html#mutelocalaudiostream">RtcEngine.muteLocalAudioStream</a> method, the SDK stops triggering the local user&#39;s callback.</li>
+									<li>20 seconds after a remote speaker calls the <a href="../classes/rtcengine.html#mutelocalaudiostream">RtcEngine.muteLocalAudioStream</a> method, the remote speakers&#39; callback does not include information of this remote user; 20 seconds after all remote users call the the muteLocalAudioStream method, the SDK stops triggering the remote speakers&#39; callback.</li>
 								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableAudioVolumeIndication</p>
-								<ul>
-									<li>Calling the muteLocalAudioStream method affects the SDK&#39;s behavior.</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.muteLocalAudioStream
-								-- If the local user calls the muteLocalAudioStream method, the SDK stops triggering the local user&#39;s callback.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.muteLocalAudioStream
-								-- 20 seconds after a remote speaker calls the muteLocalAudioStream method, the remote speakers&#39; callback does not include information of this remote user; 20 seconds after all remote users call the the muteLocalAudioStream method, the SDK stops triggering the remote speakers&#39; callback.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.muteLocalAudioStream</p>
-							</dd>
-						</dl>
+							</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="cameraexposureareachanged" class="tsd-anchor"></a>
 					<h3>Camera<wbr>Exposure<wbr>Area<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Camera<wbr>Exposure<wbr>Area<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rectcallback" class="tsd-signature-type">RectCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L364">src/RtcEvents.ts:364</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L435">src/src/RtcEvents.ts:435</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The camera exposure area has changed.
-							The SDK triggers this callback when the local user changes the camera exposure position by calling the setCameraExposurePosition method.</p>
+							<p>The camera exposure area has changed.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.setCameraExposurePosition</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback when the local user changes the camera exposure position by calling the <a href="../classes/rtcengine.html#setcameraexposureposition">RtcEngine.setCameraExposurePosition</a> method.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="camerafocusareachanged" class="tsd-anchor"></a>
 					<h3>Camera<wbr>Focus<wbr>Area<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Camera<wbr>Focus<wbr>Area<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rectcallback" class="tsd-signature-type">RectCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L357">src/RtcEvents.ts:357</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L426">src/src/RtcEvents.ts:426</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the camera focus area is changed.
-							The SDK triggers this callback when the local user changes the camera focus position by calling the setCameraFocusPositionInPreview method.</p>
+							<p>Occurs when the camera focus area is changed.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.setCameraFocusPositionInPreview</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback when the local user changes the camera focus position by calling the <a href="../classes/rtcengine.html#setcamerafocuspositioninpreview">RtcEngine.setCameraFocusPositionInPreview</a> method.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="cameraready" class="tsd-anchor"></a>
 					<h3>Camera<wbr>Ready</h3>
 					<div class="tsd-signature tsd-kind-icon">Camera<wbr>Ready<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L704">src/RtcEvents.ts:704</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L832">src/src/RtcEvents.ts:832</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -447,27 +377,18 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use Capturing(1) in the onLocalVideoStateChanged callback instead. If the camera fails to turn on, fix the error reported in the onError callback.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>LocalVideoStreamState.Capturing</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>LocalVideoStateChanged</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>Error</p>
+							<dd><p>Use <a href="../enums/localvideostreamstate.html#capturing">LocalVideoStreamState.Capturing</a> in the <a href="rtcengineevents.html#localvideostatechanged">LocalVideoStateChanged</a> callback instead. If the camera fails to turn on, fix the error reported in the <a href="rtcengineevents.html#error">Error</a> callback.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="channelmediarelayevent" class="tsd-anchor"></a>
 					<h3>Channel<wbr>Media<wbr>Relay<wbr>Event</h3>
 					<div class="tsd-signature tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>Event<span class="tsd-signature-symbol">:</span> <a href="../globals.html#mediarelayeventcallback" class="tsd-signature-type">MediaRelayEventCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L516">src/RtcEvents.ts:516</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L630">src/src/RtcEvents.ts:630</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -476,50 +397,45 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="channelmediarelaystatechanged" class="tsd-anchor"></a>
 					<h3>Channel<wbr>Media<wbr>Relay<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#mediarelaystatecallback" class="tsd-signature-type">MediaRelayStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L511">src/RtcEvents.ts:511</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L623">src/src/RtcEvents.ts:623</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the state of the media stream relay changes.
-							The SDK reports the state of the current media relay and possible error messages in this callback.</p>
+							<p>Occurs when the state of the media stream relay changes.</p>
 						</div>
+						<p>The SDK reports the state of the current media relay and possible error messages in this callback.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="clientrolechanged" class="tsd-anchor"></a>
 					<h3>Client<wbr>Role<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Client<wbr>Role<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#clientrolecallback" class="tsd-signature-type">ClientRoleCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L169">src/RtcEvents.ts:169</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L197">src/src/RtcEvents.ts:197</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the user role switches in a live broadcast. For example, from a host to an audience or vice versa.
-							The SDK triggers this callback when the local user switches the user role by calling the setClientRole method after joining the channel.</p>
+							<p>Occurs when the user role switches in a live broadcast. For example, from a host to an audience or vice versa.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.setClientRole</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback when the local user switches the user role by calling the <a href="../classes/rtcengine.html#setclientrole">RtcEngine.setClientRole</a> method after joining the channel.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="connectionbanned" class="tsd-anchor"></a>
 					<h3>Connection<wbr>Banned</h3>
 					<div class="tsd-signature tsd-kind-icon">Connection<wbr>Banned<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L687">src/RtcEvents.ts:687</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L812">src/src/RtcEvents.ts:812</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -528,21 +444,18 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use onConnectionStateChanged instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>ConnectionStateChanged</p>
+							<dd><p>Use <a href="rtcengineevents.html#connectionstatechanged">ConnectionStateChanged</a> instead.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="connectioninterrupted" class="tsd-anchor"></a>
 					<h3>Connection<wbr>Interrupted</h3>
 					<div class="tsd-signature tsd-kind-icon">Connection<wbr>Interrupted<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L680">src/RtcEvents.ts:680</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L803">src/src/RtcEvents.ts:803</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -551,134 +464,101 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use onConnectionStateChanged instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>ConnectionStateChanged
-								The SDK triggers this callback when it loses connection to the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. This callback is different from onConnectionLost:</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>ConnectionLost</p>
+							<dd><p>Use <a href="rtcengineevents.html#connectionstatechanged">ConnectionStateChanged</a> instead.</p>
+								<p>The SDK triggers this callback when it loses connection to the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. This callback is different from <a href="rtcengineevents.html#connectionlost">ConnectionLost</a>:</p>
 								<ul>
-									<li>The SDK triggers the onConnectionInterrupted callback when the SDK loses connection with the server for more than four seconds after it joins the channel.</li>
+									<li>The SDK triggers the <a href="rtcengineevents.html#connectioninterrupted">ConnectionInterrupted</a> callback when the SDK loses connection with the server for more than four seconds after it joins the channel.</li>
+									<li>The SDK triggers the <a href="rtcengineevents.html#connectionlost">ConnectionLost</a> callback when it loses connection with the server for more than 10 seconds, regardless of whether it joins the channel or not.</li>
 								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>ConnectionInterrupted</p>
-								<ul>
-									<li>The SDK triggers the onConnectionLost callback when it loses connection with the server for more than 10 seconds, regardless of whether it joins the channel or not.</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>ConnectionLost
-								If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora&#39;s edge server, the SDK stops rejoining the channel.</p>
+								<p>If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora&#39;s edge server, the SDK stops rejoining the channel.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="connectionlost" class="tsd-anchor"></a>
 					<h3>Connection<wbr>Lost</h3>
 					<div class="tsd-signature tsd-kind-icon">Connection<wbr>Lost<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L217">src/RtcEvents.ts:217</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L258">src/src/RtcEvents.ts:258</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the SDK cannot reconnect to Agora&#39;s edge server 10 seconds after its connection to the server is interrupted.
-							The SDK triggers this callback when it cannot connect to the server 10 seconds after calling joinChannel(), regardless of whether it is in the channel or not.</p>
+							<p>Occurs when the SDK cannot reconnect to Agora&#39;s edge server 10 seconds after its connection to the server is interrupted.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.joinChannel
-								If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora&#39;s edge server, the SDK stops rejoining the channel.</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback when it cannot connect to the server 10 seconds after calling <a href="../classes/rtcengine.html#joinchannel">RtcEngine.joinChannel</a>, regardless of whether it is in the channel or not.</p>
+						<p>If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora&#39;s edge server, the SDK stops rejoining the channel.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="connectionstatechanged" class="tsd-anchor"></a>
 					<h3>Connection<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Connection<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#connectionstatecallback" class="tsd-signature-type">ConnectionStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L203">src/RtcEvents.ts:203</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L238">src/src/RtcEvents.ts:238</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the network connection state changes.
-							The Agora SDK returns this callback to report on the current network connection state when it changes, and the reason to such change.</p>
+							<p>Occurs when the network connection state changes.</p>
 						</div>
+						<p>The Agora SDK returns this callback to report on the current network connection state when it changes, and the reason to such change.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="error" class="tsd-anchor"></a>
 					<h3>Error</h3>
 					<div class="tsd-signature tsd-kind-icon">Error<span class="tsd-signature-symbol">:</span> <a href="../globals.html#errorcallback" class="tsd-signature-type">ErrorCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L121">src/RtcEvents.ts:121</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L132">src/src/RtcEvents.ts:132</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports an error during SDK runtime.
-								In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.
-							For example, the SDK reports an StartCall error when failing to initialize a call. The app informs the user that the call initialization failed and invokes the leaveChannel method to leave the channel. For detailed error codes, see Error Codes.</p>
+							<p>Reports an error during SDK runtime.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>ErrorCode.StartCall</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.leaveChannel</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>ErrorCode</p>
-							</dd>
-						</dl>
+						<p>In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.</p>
+						<p>For example, the SDK reports an <a href="../enums/errorcode.html#startcall">ErrorCode.StartCall</a> error when failing to initialize a call. The app informs the user that the call initialization failed and invokes the <a href="../classes/rtcengine.html#leavechannel">RtcEngine.leaveChannel</a> method to leave the channel. For detailed error codes, see <a href="../enums/errorcode.html">ErrorCode</a>.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="facepositionchanged" class="tsd-anchor"></a>
 					<h3>Face<wbr>Position<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Face<wbr>Position<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#facepositioncallback" class="tsd-signature-type">FacePositionCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L378">src/RtcEvents.ts:378</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L452">src/src/RtcEvents.ts:452</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the face detection result of the local user.
-							Once you enable face detection by calling enableFaceDetection, you can get the following information on the local user in real-time:</p>
+							<p>Reports the face detection result of the local user.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine#enableFaceDetection</p>
-								<ul>
-									<li>The width and height of the local video.</li>
-									<li>The position of the human face in the local video.</li>
-									<li>The distance between the human face and the device screen. This value is based on the fitting calculation of the local video size and the position of the human face.
-									Note</li>
-									<li>If the SDK does not detect a face, it reduces the frequency of this callback to reduce power consumption on the local device.</li>
-									<li>The SDK stops triggering this callback when a human face is in close proximity to the screen.</li>
-									<li>On Android, the distance value reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.</li>
-								</ul>
-							</dd>
-						</dl>
+						<p>Once you enable face detection by calling <a href="../classes/rtcengine.html#enablefacedetection">RtcEngine.enableFaceDetection</a>, you can get the following information on the local user in real-time:</p>
+						<ul>
+							<li>The width and height of the local video.</li>
+							<li>The position of the human face in the local video.</li>
+							<li>The distance between the human face and the device screen. This value is based on the fitting calculation of the local video size and the position of the human face.</li>
+						</ul>
+						<p><strong>Note</strong></p>
+						<ul>
+							<li>If the SDK does not detect a face, it reduces the frequency of this callback to reduce power consumption on the local device.</li>
+							<li>The SDK stops triggering this callback when a human face is in close proximity to the screen.</li>
+							<li>On Android, the distance value reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="firstlocalaudioframe" class="tsd-anchor"></a>
 					<h3>First<wbr>Local<wbr>Audio<wbr>Frame</h3>
 					<div class="tsd-signature tsd-kind-icon">First<wbr>Local<wbr>Audio<wbr>Frame<span class="tsd-signature-symbol">:</span> <a href="../globals.html#elapsedcallback" class="tsd-signature-type">ElapsedCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L265">src/RtcEvents.ts:265</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L315">src/src/RtcEvents.ts:315</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -687,29 +567,29 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="firstlocalvideoframe" class="tsd-anchor"></a>
 					<h3>First<wbr>Local<wbr>Video<wbr>Frame</h3>
 					<div class="tsd-signature tsd-kind-icon">First<wbr>Local<wbr>Video<wbr>Frame<span class="tsd-signature-symbol">:</span> <a href="../globals.html#videoframecallback" class="tsd-signature-type">VideoFrameCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L271">src/RtcEvents.ts:271</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L324">src/src/RtcEvents.ts:324</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the first local video frame is rendered.
-							This callback is triggered after the first local video frame is rendered on the local video window.</p>
+							<p>Occurs when the first local video frame is rendered.</p>
 						</div>
+						<p>This callback is triggered after the first local video frame is rendered on the local video window.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="firstremoteaudiodecoded" class="tsd-anchor"></a>
 					<h3>First<wbr>Remote<wbr>Audio<wbr>Decoded</h3>
 					<div class="tsd-signature tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Decoded<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithelapsedcallback" class="tsd-signature-type">UidWithElapsedCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L551">src/RtcEvents.ts:551</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L667">src/src/RtcEvents.ts:667</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -718,48 +598,29 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use Decoding(2) in onRemoteAudioStateChanged instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Decoding</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteAudioStateChanged
-								This callback is triggered in either of the following scenarios：</p>
+							<dd><p>Use <a href="../enums/videoremotestate.html#decoding">VideoRemoteState.Decoding</a> in <a href="rtcengineevents.html#remoteaudiostatechanged">RemoteAudioStateChanged</a> instead.</p>
+								<p>This callback is triggered in either of the following scenarios：</p>
 								<ul>
 									<li>The remote user joins the channel and sends the audio stream.</li>
-									<li>The remote user stops sending the audio stream and re-sends it after 15 seconds. Possible reasons include:</li>
-									<li><ul>
+									<li>The remote user stops sending the audio stream and re-sends it after 15 seconds. Possible reasons include:<ul>
 											<li>The remote user leaves channel.</li>
-										</ul>
-									</li>
-									<li><ul>
 											<li>The remote user drops offline.</li>
-										</ul>
-									</li>
-									<li><ul>
-											<li>The remote user calls the muteLocalAudioStream method.</li>
+											<li>The remote user calls the <a href="../classes/rtcengine.html#mutelocalaudiostream">RtcEngine.muteLocalAudioStream</a> method.</li>
+											<li>The remote user calls the <a href="../classes/rtcengine.html#disableaudio">RtcEngine.disableAudio</a> method.</li>
 										</ul>
 									</li>
 								</ul>
 							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.muteLocalAudioStream
-								-- The remote user calls the disableAudio method.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.disableAudio</p>
-							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="firstremoteaudioframe" class="tsd-anchor"></a>
 					<h3>First<wbr>Remote<wbr>Audio<wbr>Frame</h3>
 					<div class="tsd-signature tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Frame<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithelapsedcallback" class="tsd-signature-type">UidWithElapsedCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L534">src/RtcEvents.ts:534</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L650">src/src/RtcEvents.ts:650</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -768,24 +629,18 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use Starting(1) in onRemoteAudioStateChanged instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>AudioRemoteState.Starting</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteAudioStateChanged</p>
+							<dd><p>Use <a href="../enums/audioremotestate.html#starting">AudioRemoteState.Starting</a> in <a href="rtcengineevents.html#remoteaudiostatechanged">RemoteAudioStateChanged</a> instead.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="firstremotevideodecoded" class="tsd-anchor"></a>
 					<h3>First<wbr>Remote<wbr>Video<wbr>Decoded</h3>
 					<div class="tsd-signature tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Decoded<span class="tsd-signature-symbol">:</span> <a href="../globals.html#videoframewithuidcallback" class="tsd-signature-type">VideoFrameWithUidCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L655">src/RtcEvents.ts:655</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L777">src/src/RtcEvents.ts:777</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -794,51 +649,29 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated. Use Starting(1) or Decoding(2) in the onRemoteVideoStateChanged callback instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Starting</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Decoding</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteVideoStateChanged
-								This callback is triggered in either of the following scenarios:</p>
+							<dd><p>This callback is deprecated. Use <a href="../enums/videoremotestate.html#starting">VideoRemoteState.Starting</a> or <a href="../enums/videoremotestate.html#decoding">VideoRemoteState.Decoding</a> in the <a href="rtcengineevents.html#remotevideostatechanged">RemoteVideoStateChanged</a> callback instead.</p>
+								<p>This callback is triggered in either of the following scenarios:</p>
 								<ul>
 									<li>The remote user joins the channel and sends the video stream.</li>
-									<li>The remote user stops sending the video stream and re-sends it after 15 seconds. Possible reasons include:</li>
-									<li><ul>
+									<li>The remote user stops sending the video stream and re-sends it after 15 seconds. Possible reasons include:<ul>
 											<li>The remote user leaves channel.</li>
-										</ul>
-									</li>
-									<li><ul>
 											<li>The remote user drops offline.</li>
-										</ul>
-									</li>
-									<li><ul>
-											<li>The remote user calls the muteLocalVideoStream method.</li>
+											<li>The remote user calls the <a href="../classes/rtcengine.html#mutelocalvideostream">RtcEngine.muteLocalVideoStream</a> method.</li>
+											<li>The remote user calls the <a href="../classes/rtcengine.html#disablevideo">RtcEngine.disableVideo</a> method.</li>
 										</ul>
 									</li>
 								</ul>
 							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.muteLocalVideoStream
-								-- The remote user calls the disableVideo method.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.disableVideo</p>
-							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="firstremotevideoframe" class="tsd-anchor"></a>
 					<h3>First<wbr>Remote<wbr>Video<wbr>Frame</h3>
 					<div class="tsd-signature tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Frame<span class="tsd-signature-symbol">:</span> <a href="../globals.html#videoframewithuidcallback" class="tsd-signature-type">VideoFrameWithUidCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L526">src/RtcEvents.ts:526</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L641">src/src/RtcEvents.ts:641</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -847,141 +680,104 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use Starting(1) or Decoding(2) in the onRemoteVideoStateChanged callback instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Starting</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Decoding</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteVideoStateChanged
-								This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.</p>
+							<dd><p>Use <a href="../enums/videoremotestate.html#starting">VideoRemoteState.Starting</a> or <a href="../enums/videoremotestate.html#decoding">VideoRemoteState.Decoding</a> in the <a href="rtcengineevents.html#remotevideostatechanged">RemoteVideoStateChanged</a> callback instead.</p>
+								<p>This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="joinchannelsuccess" class="tsd-anchor"></a>
 					<h3>Join<wbr>Channel<wbr>Success</h3>
 					<div class="tsd-signature tsd-kind-icon">Join<wbr>Channel<wbr>Success<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithelapsedandchannelcallback" class="tsd-signature-type">UidWithElapsedAndChannelCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L134">src/RtcEvents.ts:134</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L150">src/src/RtcEvents.ts:150</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the local user joins a specified channel.
-								The channel name assignment is based on channelName specified in the joinChannel method.
-							If the uid is not specified when joinChannel is called, the server automatically assigns a uid.</p>
+							<p>Occurs when the local user joins a specified channel.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.joinChannel</p>
-							</dd>
-						</dl>
+						<p>The channel name assignment is based on channelName specified in the joinChannel method.</p>
+						<p>If the uid is not specified when <a href="../classes/rtcengine.html#joinchannel">RtcEngine.joinChannel</a> is called, the server automatically assigns a uid.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="lastmileproberesult" class="tsd-anchor"></a>
 					<h3>Lastmile<wbr>Probe<wbr>Result</h3>
 					<div class="tsd-signature tsd-kind-icon">Lastmile<wbr>Probe<wbr>Result<span class="tsd-signature-symbol">:</span> <a href="../globals.html#lastmileprobecallback" class="tsd-signature-type">LastmileProbeCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L403">src/RtcEvents.ts:403</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L484">src/src/RtcEvents.ts:484</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the last-mile network probe result.
-							The SDK triggers this callback within 30 seconds after the app calls the startLastmileProbeTest method.</p>
+							<p>Reports the last-mile network probe result.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.startLastmileProbeTest</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback within 30 seconds after the app calls the <a href="../classes/rtcengine.html#startlastmileprobetest">RtcEngine.startLastmileProbeTest</a> method.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="lastmilequality" class="tsd-anchor"></a>
 					<h3>Lastmile<wbr>Quality</h3>
 					<div class="tsd-signature tsd-kind-icon">Lastmile<wbr>Quality<span class="tsd-signature-symbol">:</span> <a href="../globals.html#networkqualitycallback" class="tsd-signature-type">NetworkQualityCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L390">src/RtcEvents.ts:390</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L466">src/src/RtcEvents.ts:466</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora&#39;s edge server. After the application calls the enableLastmileTest method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.</p>
+							<p>Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora&#39;s edge server. After the application calls the <a href="../classes/rtcengine.html#enablelastmiletest">RtcEngine.enableLastmileTest</a> method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableLastmileTest</p>
-							</dd>
-						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="leavechannel" class="tsd-anchor"></a>
 					<h3>Leave<wbr>Channel</h3>
 					<div class="tsd-signature tsd-kind-icon">Leave<wbr>Channel<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rtcstatscallback" class="tsd-signature-type">RtcStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L148">src/RtcEvents.ts:148</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L170">src/src/RtcEvents.ts:170</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when a user leaves the channel.
-								When the app calls the leaveChannel method, the SDK uses this callback to notify the app when the user leaves the channel.
-							With this callback, the application retrieves the channel information, such as the call duration and statistics.</p>
+							<p>Occurs when a user leaves the channel.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.leaveChannel</p>
-							</dd>
-						</dl>
+						<p>When the app calls the <a href="../classes/rtcengine.html#leavechannel">RtcEngine.leaveChannel</a> method, the SDK uses this callback to notify the app when the user leaves the channel.</p>
+						<p>With this callback, the application retrieves the channel information, such as the call duration and statistics.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="localaudiostatechanged" class="tsd-anchor"></a>
 					<h3>Local<wbr>Audio<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Local<wbr>Audio<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#localaudiostatecallback" class="tsd-signature-type">LocalAudioStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L326">src/RtcEvents.ts:326</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L387">src/src/RtcEvents.ts:387</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the local audio stream state changes.
-								This callback indicates the state change of the local audio stream, including the state of the audio recording and encoding, and allows you to troubleshoot issues when exceptions occur.
-							Note</p>
-							<ul>
-								<li>When the state is Failed(3), see the error parameter for details.</li>
-							</ul>
+							<p>Occurs when the local audio stream state changes.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>AudioLocalState.Failed</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>AudioLocalError</p>
-							</dd>
-						</dl>
+						<p>This callback indicates the state change of the local audio stream, including the state of the audio recording and encoding, and allows you to troubleshoot issues when exceptions occur.</p>
+						<p><strong>Note</strong></p>
+						<ul>
+							<li>When the state is <a href="../enums/audiolocalstate.html#failed">AudioLocalState.Failed</a>, see the error parameter for details.</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="localaudiostats" class="tsd-anchor"></a>
 					<h3>Local<wbr>Audio<wbr>Stats</h3>
 					<div class="tsd-signature tsd-kind-icon">Local<wbr>Audio<wbr>Stats<span class="tsd-signature-symbol">:</span> <a href="../globals.html#localaudiostatscallback" class="tsd-signature-type">LocalAudioStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L414">src/RtcEvents.ts:414</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L500">src/src/RtcEvents.ts:500</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -990,108 +786,81 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="localpublishfallbacktoaudioonly" class="tsd-anchor"></a>
 					<h3>Local<wbr>Publish<wbr>Fallback<wbr>ToAudio<wbr>Only</h3>
 					<div class="tsd-signature tsd-kind-icon">Local<wbr>Publish<wbr>Fallback<wbr>ToAudio<wbr>Only<span class="tsd-signature-symbol">:</span> <a href="../globals.html#fallbackcallback" class="tsd-signature-type">FallbackCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L334">src/RtcEvents.ts:334</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L396">src/src/RtcEvents.ts:396</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
-							If you call setLocalPublishFallbackOption and set option as AudioOnly(2), this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.</p>
+							<p>Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.setLocalPublishFallbackOption</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>StreamFallbackOptions.AudioOnly</p>
-							</dd>
-						</dl>
+						<p>If you call <a href="../classes/rtcengine.html#setlocalpublishfallbackoption">RtcEngine.setLocalPublishFallbackOption</a> and set option as <a href="../enums/streamfallbackoptions.html#audioonly">StreamFallbackOptions.AudioOnly</a>, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="localuserregistered" class="tsd-anchor"></a>
 					<h3>Local<wbr>User<wbr>Registered</h3>
 					<div class="tsd-signature tsd-kind-icon">Local<wbr>User<wbr>Registered<span class="tsd-signature-symbol">:</span> <a href="../globals.html#useraccountcallback" class="tsd-signature-type">UserAccountCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L155">src/RtcEvents.ts:155</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L179">src/src/RtcEvents.ts:179</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the local user registers a user account.
-							This callback is triggered when the local user successfully registers a user account by calling the registerLocalUserAccount method, or joins a channel by calling the joinChannelWithUserAccount method. This callback reports the user ID and user account of the local user.</p>
+							<p>Occurs when the local user registers a user account.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.joinChannelWithUserAccount</p>
-							</dd>
-						</dl>
+						<p>This callback is triggered when the local user successfully registers a user account by calling the <a href="../classes/rtcengine.html#registerlocaluseraccount">RtcEngine.registerLocalUserAccount</a> method, or joins a channel by calling the <a href="../classes/rtcengine.html#joinchannelwithuseraccount">RtcEngine.joinChannelWithUserAccount</a> method. This callback reports the user ID and user account of the local user.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="localvideostatechanged" class="tsd-anchor"></a>
 					<h3>Local<wbr>Video<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Local<wbr>Video<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#localvideostatecallback" class="tsd-signature-type">LocalVideoStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L310">src/RtcEvents.ts:310</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L366">src/src/RtcEvents.ts:366</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the local video state changes.
-							The SDK returns the current video state in this callback. When the state is Failed(3), see the error parameter for details.</p>
+							<p>Occurs when the local video state changes.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>LocalVideoStreamState.Failed</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>LocalVideoStreamError
-								Note</p>
-								<ul>
-									<li>This callback reports the current state of the local video, which keeps changing throughout the RtcEngine life cycle. We recommend maintaining the states reported in this callback, and check the local video state before starting the local camera. If the SDK reports CaptureFailure(4), the local camera is occupied by either the system or a third-party app. To access the camera, call enableLocalVideo (false) first, and then enableLocalVideo (video).</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>LocalVideoStreamError.CaptureFailure</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableLocalVideo</p>
-							</dd>
-						</dl>
+						<p>The SDK returns the current video state in this callback. When the state is <a href="../enums/localvideostreamstate.html#failed">LocalVideoStreamState.Failed</a>, see the error parameter for details.</p>
+						<p><strong>Note</strong></p>
+						<ul>
+							<li>This callback reports the current state of the local video, which keeps changing throughout the RtcEngine life cycle. We recommend maintaining the states reported in this callback, and check the local video state before starting the local camera. If the SDK reports <a href="../enums/localvideostreamerror.html#capturefailure">LocalVideoStreamError.CaptureFailure</a>, the local camera is occupied by either the system or a third-party app. To access the camera, call <a href="../classes/rtcengine.html#enablelocalvideo">RtcEngine.enableLocalVideo</a> (false) first, and then <a href="../classes/rtcengine.html#enablelocalvideo">RtcEngine.enableLocalVideo</a> (video).</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="localvideostats" class="tsd-anchor"></a>
 					<h3>Local<wbr>Video<wbr>Stats</h3>
 					<div class="tsd-signature tsd-kind-icon">Local<wbr>Video<wbr>Stats<span class="tsd-signature-symbol">:</span> <a href="../globals.html#localvideostatscallback" class="tsd-signature-type">LocalVideoStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L409">src/RtcEvents.ts:409</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L493">src/src/RtcEvents.ts:493</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the statistics of the local video streams.
-							The SDK triggers this callback once every two seconds for each user/host. If there are multiple users/hosts in the channel, the SDK triggers this callback as many times.</p>
+							<p>Reports the statistics of the local video streams.</p>
 						</div>
+						<p>The SDK triggers this callback once every two seconds for each user/host. If there are multiple users/hosts in the channel, the SDK triggers this callback as many times.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="mediaengineloadsuccess" class="tsd-anchor"></a>
 					<h3>Media<wbr>Engine<wbr>Load<wbr>Success</h3>
 					<div class="tsd-signature tsd-kind-icon">Media<wbr>Engine<wbr>Load<wbr>Success<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L500">src/RtcEvents.ts:500</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L607">src/src/RtcEvents.ts:607</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1100,13 +869,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="mediaenginestartcallsuccess" class="tsd-anchor"></a>
 					<h3>Media<wbr>Engine<wbr>Start<wbr>Call<wbr>Success</h3>
 					<div class="tsd-signature tsd-kind-icon">Media<wbr>Engine<wbr>Start<wbr>Call<wbr>Success<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L505">src/RtcEvents.ts:505</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L614">src/src/RtcEvents.ts:614</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1115,13 +884,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="metadatareceived" class="tsd-anchor"></a>
 					<h3>Metadata<wbr>Received</h3>
 					<div class="tsd-signature tsd-kind-icon">Metadata<wbr>Received<span class="tsd-signature-symbol">:</span> <a href="../globals.html#metadatacallback" class="tsd-signature-type">MetadataCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L717">src/RtcEvents.ts:717</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L848">src/src/RtcEvents.ts:848</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1130,13 +899,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="microphoneenabled" class="tsd-anchor"></a>
 					<h3>Microphone<wbr>Enabled</h3>
 					<div class="tsd-signature tsd-kind-icon">Microphone<wbr>Enabled<span class="tsd-signature-symbol">:</span> <a href="../globals.html#enabledcallback" class="tsd-signature-type">EnabledCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L666">src/RtcEvents.ts:666</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L788">src/src/RtcEvents.ts:788</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1145,112 +914,100 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated. Use Stopped(0) or Recording(1) in the onLocalAudioStateChanged callback instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>AudioLocalState.Stopped</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>AudioLocalState.Recording</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>LocalAudioStateChanged
-								The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling the enableLocalAudio method.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableLocalAudio</p>
+							<dd><p>This callback is deprecated. Use <a href="../enums/audiolocalstate.html#stopped">AudioLocalState.Stopped</a> or <a href="../enums/audiolocalstate.html#recording">AudioLocalState.Recording</a> in the <a href="rtcengineevents.html#localaudiostatechanged">LocalAudioStateChanged</a> callback instead.</p>
+								<p>The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling the <a href="../classes/rtcengine.html#enablelocalaudio">RtcEngine.enableLocalAudio</a> method.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="networkquality" class="tsd-anchor"></a>
 					<h3>Network<wbr>Quality</h3>
 					<div class="tsd-signature tsd-kind-icon">Network<wbr>Quality<span class="tsd-signature-symbol">:</span> <a href="../globals.html#networkqualitywithuidcallback" class="tsd-signature-type">NetworkQualityWithUidCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L396">src/RtcEvents.ts:396</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L475">src/src/RtcEvents.ts:475</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the last mile network quality of each user in the channel once every two seconds.
-							Last mile refers to the connection between the local device and Agora&#39;s edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.</p>
+							<p>Reports the last mile network quality of each user in the channel once every two seconds.</p>
 						</div>
+						<p>Last mile refers to the connection between the local device and Agora&#39;s edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="networktypechanged" class="tsd-anchor"></a>
 					<h3>Network<wbr>Type<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Network<wbr>Type<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#networktypecallback" class="tsd-signature-type">NetworkTypeCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L209">src/RtcEvents.ts:209</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L247">src/src/RtcEvents.ts:247</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the network type changes.
-							The SDK returns the current network type in this callback. When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.</p>
+							<p>Occurs when the network type changes.</p>
 						</div>
+						<p>The SDK returns the current network type in this callback. When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="rejoinchannelsuccess" class="tsd-anchor"></a>
 					<h3>Rejoin<wbr>Channel<wbr>Success</h3>
 					<div class="tsd-signature tsd-kind-icon">Rejoin<wbr>Channel<wbr>Success<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithelapsedandchannelcallback" class="tsd-signature-type">UidWithElapsedAndChannelCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L140">src/RtcEvents.ts:140</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L159">src/src/RtcEvents.ts:159</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when a user rejoins the channel after being disconnected due to network problems.
-							When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.</p>
+							<p>Occurs when a user rejoins the channel after being disconnected due to network problems.</p>
 						</div>
+						<p>When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="remoteaudiostatechanged" class="tsd-anchor"></a>
 					<h3>Remote<wbr>Audio<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Remote<wbr>Audio<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#remoteaudiostatecallback" class="tsd-signature-type">RemoteAudioStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L316">src/RtcEvents.ts:316</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L375">src/src/RtcEvents.ts:375</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the remote audio state changes.
-							This callback indicates the state change of the remote audio stream.</p>
+							<p>Occurs when the remote audio state changes.</p>
 						</div>
+						<p>This callback indicates the state change of the remote audio stream.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="remoteaudiostats" class="tsd-anchor"></a>
 					<h3>Remote<wbr>Audio<wbr>Stats</h3>
 					<div class="tsd-signature tsd-kind-icon">Remote<wbr>Audio<wbr>Stats<span class="tsd-signature-symbol">:</span> <a href="../globals.html#remoteaudiostatscallback" class="tsd-signature-type">RemoteAudioStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L426">src/RtcEvents.ts:426</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L518">src/src/RtcEvents.ts:518</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the statistics of the audio stream from each remote user/host.
-								The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
-							Schemes such as FEC (Forward Error Correction) or retransmission counter the frame loss rate. Hence, users may find the overall audio quality acceptable even when the packet loss rate is high.</p>
+							<p>Reports the statistics of the audio stream from each remote user/host.</p>
 						</div>
+						<p>The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.</p>
+						<p>Schemes such as FEC (Forward Error Correction) or retransmission counter the frame loss rate. Hence, users may find the overall audio quality acceptable even when the packet loss rate is high.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="remoteaudiotransportstats" class="tsd-anchor"></a>
 					<h3>Remote<wbr>Audio<wbr>Transport<wbr>Stats</h3>
 					<div class="tsd-signature tsd-kind-icon">Remote<wbr>Audio<wbr>Transport<wbr>Stats<span class="tsd-signature-symbol">:</span> <a href="../globals.html#transportstatscallback" class="tsd-signature-type">TransportStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L594">src/RtcEvents.ts:594</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L716">src/src/RtcEvents.ts:716</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1259,46 +1016,35 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated. Use onRemoteAudioStats instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteAudioStats
-								This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user.</p>
+							<dd><p>This callback is deprecated. Use <a href="rtcengineevents.html#remoteaudiostats">RemoteAudioStats</a> instead.</p>
+								<p>This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="remotesubscribefallbacktoaudioonly" class="tsd-anchor"></a>
 					<h3>Remote<wbr>Subscribe<wbr>Fallback<wbr>ToAudio<wbr>Only</h3>
 					<div class="tsd-signature tsd-kind-icon">Remote<wbr>Subscribe<wbr>Fallback<wbr>ToAudio<wbr>Only<span class="tsd-signature-symbol">:</span> <a href="../globals.html#fallbackwithuidcallback" class="tsd-signature-type">FallbackWithUidCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L342">src/RtcEvents.ts:342</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L405">src/src/RtcEvents.ts:405</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
-							If you call setRemoteSubscribeFallbackOption and set option as AudioOnly(2), this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.</p>
+							<p>Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.setRemoteSubscribeFallbackOption</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>StreamFallbackOptions.AudioOnly</p>
-							</dd>
-						</dl>
+						<p>If you call <a href="../classes/rtcengine.html#setremotesubscribefallbackoption">RtcEngine.setRemoteSubscribeFallbackOption</a> and set option as <a href="../enums/streamfallbackoptions.html#audioonly">StreamFallbackOptions.AudioOnly</a>, this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="remotevideostatechanged" class="tsd-anchor"></a>
 					<h3>Remote<wbr>Video<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Remote<wbr>Video<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#remotevideostatecallback" class="tsd-signature-type">RemoteVideoStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L298">src/RtcEvents.ts:298</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L354">src/src/RtcEvents.ts:354</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1307,13 +1053,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="remotevideostats" class="tsd-anchor"></a>
 					<h3>Remote<wbr>Video<wbr>Stats</h3>
 					<div class="tsd-signature tsd-kind-icon">Remote<wbr>Video<wbr>Stats<span class="tsd-signature-symbol">:</span> <a href="../globals.html#remotevideostatscallback" class="tsd-signature-type">RemoteVideoStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L419">src/RtcEvents.ts:419</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L507">src/src/RtcEvents.ts:507</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1322,13 +1068,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="remotevideotransportstats" class="tsd-anchor"></a>
 					<h3>Remote<wbr>Video<wbr>Transport<wbr>Stats</h3>
 					<div class="tsd-signature tsd-kind-icon">Remote<wbr>Video<wbr>Transport<wbr>Stats<span class="tsd-signature-symbol">:</span> <a href="../globals.html#transportstatscallback" class="tsd-signature-type">TransportStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L602">src/RtcEvents.ts:602</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L727">src/src/RtcEvents.ts:727</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1337,91 +1083,67 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated. Use onRemoteVideoStats instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteVideoStats
-								This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user.</p>
+							<dd><p>This callback is deprecated. Use <a href="rtcengineevents.html#remotevideostats">RemoteVideoStats</a> instead.</p>
+								<p>This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="requesttoken" class="tsd-anchor"></a>
 					<h3>Request<wbr>Token</h3>
 					<div class="tsd-signature tsd-kind-icon">Request<wbr>Token<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L231">src/RtcEvents.ts:231</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L276">src/src/RtcEvents.ts:276</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the token has expired.
-							After a token is specified when joining the channel, the token expires after a certain period of time, and a new token is required to reconnect to the server. This callback notifies the app to generate a new token and call joinChannel to rejoin the channel with the new token.</p>
+							<p>Occurs when the token has expired.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.joinChannel</p>
-							</dd>
-						</dl>
+						<p>After a token is specified when joining the channel, the token expires after a certain period of time, and a new token is required to reconnect to the server. This callback notifies the app to generate a new token and call <a href="../classes/rtcengine.html#joinchannel">RtcEngine.joinChannel</a> to rejoin the channel with the new token.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="rtcstats" class="tsd-anchor"></a>
 					<h3>Rtc<wbr>Stats</h3>
 					<div class="tsd-signature tsd-kind-icon">Rtc<wbr>Stats<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rtcstatscallback" class="tsd-signature-type">RtcStatsCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L384">src/RtcEvents.ts:384</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L459">src/src/RtcEvents.ts:459</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the statistics of the RtcEngine once every two seconds.</p>
+							<p>Reports the statistics of the <a href="../classes/rtcengine.html">RtcEngine</a> once every two seconds.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine</p>
-							</dd>
-						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="rtmpstreamingstatechanged" class="tsd-anchor"></a>
 					<h3>Rtmp<wbr>Streaming<wbr>State<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Rtmp<wbr>Streaming<wbr>State<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#rtmpstreamingstatecallback" class="tsd-signature-type">RtmpStreamingStateCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L467">src/RtcEvents.ts:467</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L563">src/src/RtcEvents.ts:563</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the state of the RTMP streaming changes.
-							The SDK triggers this callback to report the result of the local user calling the addPublishStreamUrl or removePublishStreamUrl method. This callback returns the URL and its current streaming state. When the streaming state is Failure(4), see the errCode parameter for details.</p>
+							<p>Occurs when the state of the RTMP streaming changes.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.addPublishStreamUrl</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.removePublishStreamUrl</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtmpStreamingState.Failure
-								This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback to report the result of the local user calling the <a href="../classes/rtcengine.html#addpublishstreamurl">RtcEngine.addPublishStreamUrl</a> or <a href="../classes/rtcengine.html#removepublishstreamurl">RtcEngine.removePublishStreamUrl</a> method. This callback returns the URL and its current streaming state. When the streaming state is <a href="../enums/rtmpstreamingstate.html#failure">RtmpStreamingState.Failure</a>, see the errCode parameter for details.</p>
+						<p>This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="streaminjectedstatus" class="tsd-anchor"></a>
 					<h3>Stream<wbr>Injected<wbr>Status</h3>
 					<div class="tsd-signature tsd-kind-icon">Stream<wbr>Injected<wbr>Status<span class="tsd-signature-symbol">:</span> <a href="../globals.html#streaminjectedstatuscallback" class="tsd-signature-type">StreamInjectedStatusCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L481">src/RtcEvents.ts:481</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L582">src/src/RtcEvents.ts:582</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1430,155 +1152,123 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="streammessage" class="tsd-anchor"></a>
 					<h3>Stream<wbr>Message</h3>
 					<div class="tsd-signature tsd-kind-icon">Stream<wbr>Message<span class="tsd-signature-symbol">:</span> <a href="../globals.html#streammessagecallback" class="tsd-signature-type">StreamMessageCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L488">src/RtcEvents.ts:488</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L591">src/src/RtcEvents.ts:591</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the local user receives a remote data stream.
-							The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the sendStreamMessage method.</p>
+							<p>Occurs when the local user receives a remote data stream.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.sendStreamMessage</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the <a href="../classes/rtcengine.html#sendstreammessage">RtcEngine.sendStreamMessage</a> method.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="streammessageerror" class="tsd-anchor"></a>
 					<h3>Stream<wbr>Message<wbr>Error</h3>
 					<div class="tsd-signature tsd-kind-icon">Stream<wbr>Message<wbr>Error<span class="tsd-signature-symbol">:</span> <a href="../globals.html#streammessageerrorcallback" class="tsd-signature-type">StreamMessageErrorCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L495">src/RtcEvents.ts:495</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L600">src/src/RtcEvents.ts:600</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the local user fails to receive a remote data stream.
-							The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the sendStreamMessage method.</p>
+							<p>Occurs when the local user fails to receive a remote data stream.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.sendStreamMessage</p>
-							</dd>
-						</dl>
+						<p>The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the <a href="../classes/rtcengine.html#sendstreammessage">RtcEngine.sendStreamMessage</a> method.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="streampublished" class="tsd-anchor"></a>
 					<h3>Stream<wbr>Published</h3>
 					<div class="tsd-signature tsd-kind-icon">Stream<wbr>Published<span class="tsd-signature-symbol">:</span> <a href="../globals.html#urlwitherrorcallback" class="tsd-signature-type">UrlWithErrorCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L577">src/RtcEvents.ts:577</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L694">src/src/RtcEvents.ts:694</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the result of calling the addPublishStreamUrl method.</p>
+							<p>Reports the result of calling the <a href="../classes/rtcengine.html#addpublishstreamurl">RtcEngine.addPublishStreamUrl</a> method.</p>
 						</div>
 						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.addPublishStreamUrl</p>
-							</dd>
 							<dt>deprecated</dt>
-							<dd><p>Use onRtmpStreamingStateChanged instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtmpStreamingStateChanged
-								This callback indicates whether you have successfully added an RTMP stream to the CDN.</p>
+							<dd><p>Use <a href="rtcengineevents.html#rtmpstreamingstatechanged">RtmpStreamingStateChanged</a> instead.</p>
+								<p>This callback indicates whether you have successfully added an RTMP stream to the CDN.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="streamunpublished" class="tsd-anchor"></a>
 					<h3>Stream<wbr>Unpublished</h3>
 					<div class="tsd-signature tsd-kind-icon">Stream<wbr>Unpublished<span class="tsd-signature-symbol">:</span> <a href="../globals.html#urlcallback" class="tsd-signature-type">UrlCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L586">src/RtcEvents.ts:586</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L705">src/src/RtcEvents.ts:705</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports the result of calling the removePublishStreamUrl method.</p>
+							<p>Reports the result of calling the <a href="../classes/rtcengine.html#removepublishstreamurl">RtcEngine.removePublishStreamUrl</a> method.</p>
 						</div>
 						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.removePublishStreamUrl</p>
-							</dd>
 							<dt>deprecated</dt>
-							<dd><p>Use onRtmpStreamingStateChanged instead.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtmpStreamingStateChanged
-								This callback indicates whether you have successfully removed an RTMP stream from the CDN.</p>
+							<dd><p>Use <a href="rtcengineevents.html#rtmpstreamingstatechanged">RtmpStreamingStateChanged</a> instead.</p>
+								<p>This callback indicates whether you have successfully removed an RTMP stream from the CDN.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="tokenprivilegewillexpire" class="tsd-anchor"></a>
 					<h3>Token<wbr>Privilege<wbr>Will<wbr>Expire</h3>
 					<div class="tsd-signature tsd-kind-icon">Token<wbr>Privilege<wbr>Will<wbr>Expire<span class="tsd-signature-symbol">:</span> <a href="../globals.html#tokencallback" class="tsd-signature-type">TokenCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L224">src/RtcEvents.ts:224</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L267">src/src/RtcEvents.ts:267</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the token expires in 30 seconds.
-							The user becomes offline if the token used when joining the channel expires. This callback is triggered 30 seconds before the token expires to remind the app to get a new token. Upon receiving this callback, you need to generate a new token on the server and call renewToken to pass the new token to the SDK.</p>
+							<p>Occurs when the token expires in 30 seconds.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.renewToken</p>
-							</dd>
-						</dl>
+						<p>The user becomes offline if the token used when joining the channel expires. This callback is triggered 30 seconds before the token expires to remind the app to get a new token. Upon receiving this callback, you need to generate a new token on the server and call <a href="../classes/rtcengine.html#renewtoken">RtcEngine.renewToken</a> to pass the new token to the SDK.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="transcodingupdated" class="tsd-anchor"></a>
 					<h3>Transcoding<wbr>Updated</h3>
 					<div class="tsd-signature tsd-kind-icon">Transcoding<wbr>Updated<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L476">src/RtcEvents.ts:476</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L575">src/src/RtcEvents.ts:575</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the publisher&#39;s transcoding settings are updated.
-							When the LiveTranscoding class in the setLiveTranscoding method updates, the SDK triggers this callback to report the update information.</p>
+							<p>Occurs when the publisher&#39;s transcoding settings are updated.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.setLiveTranscoding
-								Note</p>
-								<ul>
-									<li>If you call the setLiveTranscoding method to set the LiveTranscoding class for the first time, the SDK does not trigger this callback.</li>
-								</ul>
-							</dd>
-						</dl>
+						<p>When the LiveTranscoding class in the <a href="../classes/rtcengine.html#setlivetranscoding">RtcEngine.setLiveTranscoding</a> method updates, the SDK triggers this callback to report the update information.</p>
+						<p><strong>Note</strong></p>
+						<ul>
+							<li>If you call the setLiveTranscoding method to set the LiveTranscoding class for the first time, the SDK does not trigger this callback.</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="userenablelocalvideo" class="tsd-anchor"></a>
 					<h3>User<wbr>Enable<wbr>Local<wbr>Video</h3>
 					<div class="tsd-signature tsd-kind-icon">User<wbr>Enable<wbr>Local<wbr>Video<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithenabledcallback" class="tsd-signature-type">UidWithEnabledCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L637">src/RtcEvents.ts:637</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L760">src/src/RtcEvents.ts:760</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1587,44 +1277,24 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated and replaced by the onRemoteVideoStateChanged callback with the following parameters:</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteVideoStateChanged</p>
+							<dd><p>This callback is deprecated and replaced by the <a href="rtcengineevents.html#remotevideostatechanged">RemoteVideoStateChanged</a> callback with the following parameters:</p>
 								<ul>
-									<li>Stopped(0) and RemoteMuted(5).</li>
+									<li><a href="../enums/videoremotestate.html#stopped">VideoRemoteState.Stopped</a> and <a href="../enums/videoremotestatereason.html#remotemuted">VideoRemoteStateReason.RemoteMuted</a>.</li>
+									<li><a href="../enums/videoremotestate.html#decoding">VideoRemoteState.Decoding</a> and <a href="../enums/videoremotestatereason.html#remoteunmuted">VideoRemoteStateReason.RemoteUnmuted</a>.</li>
 								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Stopped</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteMuted</p>
-								<ul>
-									<li>Decoding(2) and RemoteUnmuted(6).</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Decoding</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteUnmuted
-								The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the enableLocalVideo method.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableLocalVideo
-								This callback is only applicable to the scenario when the remote user only wants to watch the remote video without sending any video stream to the other user.</p>
+								<p>The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the <a href="../classes/rtcengine.html#enablelocalvideo">RtcEngine.enableLocalVideo</a> method.</p>
+								<p>This callback is only applicable to the scenario when the remote user only wants to watch the remote video without sending any video stream to the other user.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="userenablevideo" class="tsd-anchor"></a>
 					<h3>User<wbr>Enable<wbr>Video</h3>
 					<div class="tsd-signature tsd-kind-icon">User<wbr>Enable<wbr>Video<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithenabledcallback" class="tsd-signature-type">UidWithEnabledCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L621">src/RtcEvents.ts:621</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L745">src/src/RtcEvents.ts:745</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1633,37 +1303,14 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated and replaced by the onRemoteVideoStateChanged callback with the following parameters:</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteVideoStateChanged</p>
+							<dd><p>This callback is deprecated and replaced by the <a href="rtcengineevents.html#remotevideostatechanged">RemoteVideoStateChanged</a> callback with the following parameters:</p>
 								<ul>
-									<li>Stopped(0) and RemoteMuted(5).</li>
+									<li><a href="../enums/videoremotestate.html#stopped">VideoRemoteState.Stopped</a> and <a href="../enums/videoremotestatereason.html#remotemuted">VideoRemoteStateReason.RemoteMuted</a>.</li>
+									<li><a href="../enums/videoremotestate.html#decoding">VideoRemoteState.Decoding</a> and <a href="../enums/videoremotestatereason.html#remoteunmuted">VideoRemoteStateReason.RemoteUnmuted</a>.</li>
 								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Stopped</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteMuted</p>
-								<ul>
-									<li>Decoding(2) and RemoteUnmuted(6).</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Decoding</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteUnmuted
-									Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.
-								The SDK triggers this callback when the remote user enables or disables the video module by calling the enableVideo or disableVideo method.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.enableVideo</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.disableVideo
-								Note</p>
+								<p>Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.</p>
+								<p>The SDK triggers this callback when the remote user enables or disables the video module by calling the <a href="../classes/rtcengine.html#enablevideo">RtcEngine.enableVideo</a> or <a href="../classes/rtcengine.html#disablevideo">RtcEngine.disableVideo</a> method.</p>
+								<p><strong>Note</strong></p>
 								<ul>
 									<li>This callback is invalid when the number of users or broadcasters in the channel exceeds 20.</li>
 								</ul>
@@ -1671,34 +1318,29 @@
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="userinfoupdated" class="tsd-anchor"></a>
 					<h3>User<wbr>Info<wbr>Updated</h3>
 					<div class="tsd-signature tsd-kind-icon">User<wbr>Info<wbr>Updated<span class="tsd-signature-symbol">:</span> <a href="../globals.html#userinfocallback" class="tsd-signature-type">UserInfoCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L162">src/RtcEvents.ts:162</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L188">src/src/RtcEvents.ts:188</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when the SDK gets the user ID and user account of the remote user.
-							After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object (UserInfo), and triggers this callback on the local client.</p>
+							<p>Occurs when the SDK gets the user ID and user account of the remote user.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>UserInfo</p>
-							</dd>
-						</dl>
+						<p>After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object (<a href="userinfo.html">UserInfo</a>), and triggers this callback on the local client.</p>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="userjoined" class="tsd-anchor"></a>
 					<h3>User<wbr>Joined</h3>
 					<div class="tsd-signature tsd-kind-icon">User<wbr>Joined<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithelapsedcallback" class="tsd-signature-type">UidWithElapsedCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L189">src/RtcEvents.ts:189</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L218">src/src/RtcEvents.ts:218</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1706,54 +1348,34 @@
 							<p>Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.</p>
 							<ul>
 								<li>Communication profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.</li>
-								<li>Live Broadcast profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel
-								The SDK triggers this callback under one of the following circumstances:</li>
-								<li>A remote user/host joins the channel by calling the joinChannel method.</li>
+								<li>Live Broadcast profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel</li>
 							</ul>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>RtcEngine.joinChannel</p>
-								<ul>
-									<li>A remote user switches the user role to the host by calling the setClientRole method after joining the channel.</li>
+						<p>The SDK triggers this callback under one of the following circumstances:</p>
+						<ul>
+							<li>A remote user/host joins the channel by calling the <a href="../classes/rtcengine.html#joinchannel">RtcEngine.joinChannel</a> method.</li>
+							<li>A remote user switches the user role to the host by calling the <a href="../classes/rtcengine.html#setclientrole">RtcEngine.setClientRole</a> method after joining the channel.</li>
+							<li>A remote user/host rejoins the channel after a network interruption.</li>
+							<li>The host injects an online media stream into the channel by calling the <a href="../classes/rtcengine.html#addinjectstreamurl">RtcEngine.addInjectStreamUrl</a> method.</li>
+						</ul>
+						<p><strong>Note</strong></p>
+						<ul>
+							<li>In the Live Broadcast profile:<ul>
+									<li>The host receives the onUserJoined callback when another host joins the channel.</li>
+									<li>The audience in the channel receives the onUserJoined callback when a new host joins the channel.</li>
+									<li>When a web application joins the channel, the onUserJoined callback is triggered as long as the web application publishes streams.</li>
 								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.setClientRole</p>
-								<ul>
-									<li>A remote user/host rejoins the channel after a network interruption.</li>
-									<li>The host injects an online media stream into the channel by calling the addInjectStreamUrl method.</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.addInjectStreamUrl
-								Note</p>
-								<ul>
-									<li>In the Live Broadcast profile:</li>
-									<li><ul>
-											<li>The host receives the onUserJoined callback when another host joins the channel.</li>
-										</ul>
-									</li>
-									<li><ul>
-											<li>The audience in the channel receives the onUserJoined callback when a new host joins the channel.</li>
-										</ul>
-									</li>
-									<li><ul>
-											<li>When a web application joins the channel, the onUserJoined callback is triggered as long as the web application publishes streams.</li>
-										</ul>
-									</li>
-								</ul>
-							</dd>
-						</dl>
+							</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="usermuteaudio" class="tsd-anchor"></a>
 					<h3>User<wbr>Mute<wbr>Audio</h3>
 					<div class="tsd-signature tsd-kind-icon">User<wbr>Mute<wbr>Audio<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithmutedcallback" class="tsd-signature-type">UidWithMutedCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L568">src/RtcEvents.ts:568</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L683">src/src/RtcEvents.ts:683</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1762,33 +1384,13 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use the onRemoteAudioStateChanged callback with the following parameters instead:</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteAudioStateChanged</p>
+							<dd><p>Use the <a href="rtcengineevents.html#remoteaudiostatechanged">RemoteAudioStateChanged</a> callback with the following parameters instead:</p>
 								<ul>
-									<li>Stopped(0) and RemoteMuted(5).</li>
+									<li><a href="../enums/videoremotestate.html#stopped">VideoRemoteState.Stopped</a> and <a href="../enums/videoremotestatereason.html#remotemuted">VideoRemoteStateReason.RemoteMuted</a>.</li>
+									<li><a href="../enums/videoremotestate.html#decoding">VideoRemoteState.Decoding</a> and <a href="../enums/videoremotestatereason.html#remoteunmuted">VideoRemoteStateReason.RemoteUnmuted</a>.</li>
 								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Stopped</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteMuted</p>
-								<ul>
-									<li>Decoding(2) and RemoteUnmuted(6).</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Decoding</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteUnmuted
-								The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the muteLocalAudioStream method.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.muteLocalAudioStream
-								Note</p>
+								<p>The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the <a href="../classes/rtcengine.html#mutelocalaudiostream">RtcEngine.muteLocalAudioStream</a> method.</p>
+								<p><strong>Note</strong></p>
 								<ul>
 									<li>This callback is invalid when the number of users or broadcasters in the channel exceeds 20.</li>
 								</ul>
@@ -1796,13 +1398,13 @@
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="usermutevideo" class="tsd-anchor"></a>
 					<h3>User<wbr>Mute<wbr>Video</h3>
 					<div class="tsd-signature tsd-kind-icon">User<wbr>Mute<wbr>Video<span class="tsd-signature-symbol">:</span> <a href="../globals.html#uidwithmutedcallback" class="tsd-signature-type">UidWithMutedCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L288">src/RtcEvents.ts:288</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L340">src/src/RtcEvents.ts:340</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1811,33 +1413,13 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>This callback is deprecated. Use the onRemoteVideoStateChanged callback with the following parameters for the same function:</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RemoteVideoStateChanged</p>
+							<dd><p>This callback is deprecated. Use the <a href="rtcengineevents.html#remotevideostatechanged">RemoteVideoStateChanged</a> callback with the following parameters for the same function:</p>
 								<ul>
-									<li>Stopped(0) and RemoteMuted(5).</li>
+									<li><a href="../enums/videoremotestate.html#stopped">VideoRemoteState.Stopped</a> and <a href="../enums/videoremotestatereason.html#remotemuted">VideoRemoteStateReason.RemoteMuted</a>.</li>
+									<li><a href="../enums/videoremotestate.html#decoding">VideoRemoteState.Decoding</a> and <a href="../enums/videoremotestatereason.html#remoteunmuted">VideoRemoteStateReason.RemoteUnmuted</a>.</li>
 								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Stopped</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteMuted</p>
-								<ul>
-									<li>Decoding(2) and RemoteUnmuted(6).</li>
-								</ul>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteState.Decoding</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>VideoRemoteStateReason.RemoteUnmuted
-								The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the muteLocalVideoStream method.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>RtcEngine.muteLocalVideoStream
-								Note</p>
+								<p>The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the <a href="../classes/rtcengine.html#mutelocalvideostream">RtcEngine.muteLocalVideoStream</a> method.</p>
+								<p><strong>Note</strong></p>
 								<ul>
 									<li>This callback is invalid when the number of users or broadcasters in the channel exceeds 20.</li>
 								</ul>
@@ -1845,33 +1427,33 @@
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="useroffline" class="tsd-anchor"></a>
 					<h3>User<wbr>Offline</h3>
 					<div class="tsd-signature tsd-kind-icon">User<wbr>Offline<span class="tsd-signature-symbol">:</span> <a href="../globals.html#userofflinecallback" class="tsd-signature-type">UserOfflineCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L197">src/RtcEvents.ts:197</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L229">src/src/RtcEvents.ts:229</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
-							There are two reasons for users to become offline:</p>
-							<ul>
-								<li>Leave the channel: When the user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.</li>
-								<li>Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the communication profile, and more for the live broadcast profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.</li>
-							</ul>
+							<p>Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.</p>
 						</div>
+						<p>There are two reasons for users to become offline:</p>
+						<ul>
+							<li>Leave the channel: When the user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.</li>
+							<li>Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the communication profile, and more for the live broadcast profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.</li>
+						</ul>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="videosizechanged" class="tsd-anchor"></a>
 					<h3>Video<wbr>Size<wbr>Changed</h3>
 					<div class="tsd-signature tsd-kind-icon">Video<wbr>Size<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="../globals.html#videosizecallback" class="tsd-signature-type">VideoSizeCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L293">src/RtcEvents.ts:293</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L347">src/src/RtcEvents.ts:347</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1880,13 +1462,13 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="videostopped" class="tsd-anchor"></a>
 					<h3>Video<wbr>Stopped</h3>
 					<div class="tsd-signature tsd-kind-icon">Video<wbr>Stopped<span class="tsd-signature-symbol">:</span> <a href="../globals.html#emptycallback" class="tsd-signature-type">EmptyCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L712">src/RtcEvents.ts:712</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L841">src/src/RtcEvents.ts:841</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1895,40 +1477,26 @@
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
-							<dd><p>Use Stopped(0) in the onLocalVideoStateChanged callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>LocalVideoStreamState.Stopped</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>LocalVideoStateChanged</p>
+							<dd><p>Use <a href="../enums/localvideostreamstate.html#stopped">LocalVideoStreamState.Stopped</a> in the <a href="rtcengineevents.html#localvideostatechanged">LocalVideoStateChanged</a> callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-event tsd-parent-kind-interface">
 					<a name="warning" class="tsd-anchor"></a>
 					<h3>Warning</h3>
 					<div class="tsd-signature tsd-kind-icon">Warning<span class="tsd-signature-symbol">:</span> <a href="../globals.html#warningcallback" class="tsd-signature-type">WarningCallback</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/6174f88/src/RtcEvents.ts#L111">src/RtcEvents.ts:111</a></li>
+							<li>Defined in <a href="https://github.com/syanbo/react-native-agora/blob/e22238c/src/src/RtcEvents.ts#L121">src/src/RtcEvents.ts:121</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Reports a warning during SDK runtime.
-								In most cases, the app can ignore the warning reported by the SDK because the SDK can usually fix the issue and resume running.
-							For instance, the SDK may report a LookupChannelTimeout warning upon disconnection with the server and tries to reconnect. For detailed warning codes, see Warning Codes.</p>
+							<p>Reports a warning during SDK runtime.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p>WarningCode.LookupChannelTimeout</p>
-							</dd>
-							<dt>see</dt>
-							<dd><p>WarningCode</p>
-							</dd>
-						</dl>
+						<p>In most cases, the app can ignore the warning reported by the SDK because the SDK can usually fix the issue and resume running.</p>
+						<p>For instance, the SDK may report a <a href="../enums/warningcode.html#lookupchanneltimeout">WarningCode.LookupChannelTimeout</a> warning upon disconnection with the server and tries to reconnect. For detailed warning codes, see <a href="../enums/warningcode.html">WarningCode</a>.</p>
 					</div>
 				</section>
 			</section>
@@ -1948,214 +1516,214 @@
 					<li class="current tsd-kind-interface">
 						<a href="rtcengineevents.html" class="tsd-kind-icon">Rtc<wbr>Engine<wbr>Events</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#activespeaker" class="tsd-kind-icon">Active<wbr>Speaker</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#apicallexecuted" class="tsd-kind-icon">Api<wbr>Call<wbr>Executed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#audioeffectfinished" class="tsd-kind-icon">Audio<wbr>Effect<wbr>Finished</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#audiomixingfinished" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>Finished</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#audiomixingstatechanged" class="tsd-kind-icon">Audio<wbr>Mixing<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#audioquality" class="tsd-kind-icon">Audio<wbr>Quality</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#audioroutechanged" class="tsd-kind-icon">Audio<wbr>Route<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#audiovolumeindication" class="tsd-kind-icon">Audio<wbr>Volume<wbr>Indication</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#cameraexposureareachanged" class="tsd-kind-icon">Camera<wbr>Exposure<wbr>Area<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#camerafocusareachanged" class="tsd-kind-icon">Camera<wbr>Focus<wbr>Area<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#cameraready" class="tsd-kind-icon">Camera<wbr>Ready</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#channelmediarelayevent" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>Event</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#channelmediarelaystatechanged" class="tsd-kind-icon">Channel<wbr>Media<wbr>Relay<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#clientrolechanged" class="tsd-kind-icon">Client<wbr>Role<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#connectionbanned" class="tsd-kind-icon">Connection<wbr>Banned</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#connectioninterrupted" class="tsd-kind-icon">Connection<wbr>Interrupted</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#connectionlost" class="tsd-kind-icon">Connection<wbr>Lost</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#connectionstatechanged" class="tsd-kind-icon">Connection<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#error" class="tsd-kind-icon">Error</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#facepositionchanged" class="tsd-kind-icon">Face<wbr>Position<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#firstlocalaudioframe" class="tsd-kind-icon">First<wbr>Local<wbr>Audio<wbr>Frame</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#firstlocalvideoframe" class="tsd-kind-icon">First<wbr>Local<wbr>Video<wbr>Frame</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#firstremoteaudiodecoded" class="tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Decoded</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#firstremoteaudioframe" class="tsd-kind-icon">First<wbr>Remote<wbr>Audio<wbr>Frame</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#firstremotevideodecoded" class="tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Decoded</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#firstremotevideoframe" class="tsd-kind-icon">First<wbr>Remote<wbr>Video<wbr>Frame</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#joinchannelsuccess" class="tsd-kind-icon">Join<wbr>Channel<wbr>Success</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#lastmileproberesult" class="tsd-kind-icon">Lastmile<wbr>Probe<wbr>Result</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#lastmilequality" class="tsd-kind-icon">Lastmile<wbr>Quality</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#leavechannel" class="tsd-kind-icon">Leave<wbr>Channel</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#localaudiostatechanged" class="tsd-kind-icon">Local<wbr>Audio<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#localaudiostats" class="tsd-kind-icon">Local<wbr>Audio<wbr>Stats</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#localpublishfallbacktoaudioonly" class="tsd-kind-icon">Local<wbr>Publish<wbr>Fallback<wbr>ToAudio<wbr>Only</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#localuserregistered" class="tsd-kind-icon">Local<wbr>User<wbr>Registered</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#localvideostatechanged" class="tsd-kind-icon">Local<wbr>Video<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#localvideostats" class="tsd-kind-icon">Local<wbr>Video<wbr>Stats</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#mediaengineloadsuccess" class="tsd-kind-icon">Media<wbr>Engine<wbr>Load<wbr>Success</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#mediaenginestartcallsuccess" class="tsd-kind-icon">Media<wbr>Engine<wbr>Start<wbr>Call<wbr>Success</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#metadatareceived" class="tsd-kind-icon">Metadata<wbr>Received</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#microphoneenabled" class="tsd-kind-icon">Microphone<wbr>Enabled</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#networkquality" class="tsd-kind-icon">Network<wbr>Quality</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#networktypechanged" class="tsd-kind-icon">Network<wbr>Type<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#rejoinchannelsuccess" class="tsd-kind-icon">Rejoin<wbr>Channel<wbr>Success</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#remoteaudiostatechanged" class="tsd-kind-icon">Remote<wbr>Audio<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#remoteaudiostats" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Stats</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#remoteaudiotransportstats" class="tsd-kind-icon">Remote<wbr>Audio<wbr>Transport<wbr>Stats</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#remotesubscribefallbacktoaudioonly" class="tsd-kind-icon">Remote<wbr>Subscribe<wbr>Fallback<wbr>ToAudio<wbr>Only</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#remotevideostatechanged" class="tsd-kind-icon">Remote<wbr>Video<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#remotevideostats" class="tsd-kind-icon">Remote<wbr>Video<wbr>Stats</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#remotevideotransportstats" class="tsd-kind-icon">Remote<wbr>Video<wbr>Transport<wbr>Stats</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#requesttoken" class="tsd-kind-icon">Request<wbr>Token</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#rtcstats" class="tsd-kind-icon">Rtc<wbr>Stats</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#rtmpstreamingstatechanged" class="tsd-kind-icon">Rtmp<wbr>Streaming<wbr>State<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#streaminjectedstatus" class="tsd-kind-icon">Stream<wbr>Injected<wbr>Status</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#streammessage" class="tsd-kind-icon">Stream<wbr>Message</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#streammessageerror" class="tsd-kind-icon">Stream<wbr>Message<wbr>Error</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#streampublished" class="tsd-kind-icon">Stream<wbr>Published</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#streamunpublished" class="tsd-kind-icon">Stream<wbr>Unpublished</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#tokenprivilegewillexpire" class="tsd-kind-icon">Token<wbr>Privilege<wbr>Will<wbr>Expire</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#transcodingupdated" class="tsd-kind-icon">Transcoding<wbr>Updated</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#userenablelocalvideo" class="tsd-kind-icon">User<wbr>Enable<wbr>Local<wbr>Video</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#userenablevideo" class="tsd-kind-icon">User<wbr>Enable<wbr>Video</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#userinfoupdated" class="tsd-kind-icon">User<wbr>Info<wbr>Updated</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#userjoined" class="tsd-kind-icon">User<wbr>Joined</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#usermuteaudio" class="tsd-kind-icon">User<wbr>Mute<wbr>Audio</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#usermutevideo" class="tsd-kind-icon">User<wbr>Mute<wbr>Video</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#useroffline" class="tsd-kind-icon">User<wbr>Offline</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#videosizechanged" class="tsd-kind-icon">Video<wbr>Size<wbr>Changed</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#videostopped" class="tsd-kind-icon">Video<wbr>Stopped</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-event tsd-parent-kind-interface">
 								<a href="rtcengineevents.html#warning" class="tsd-kind-icon">Warning</a>
 							</li>
 						</ul>
@@ -2186,9 +1754,6 @@
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
@@ -2199,6 +1764,5 @@
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

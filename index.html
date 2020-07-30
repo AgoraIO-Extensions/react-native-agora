@@ -70,10 +70,17 @@
 				<p><a href="https://www.npmjs.com/package/react-native-agora"><img src="https://img.shields.io/npm/v/react-native-agora.svg" alt="npm"></a>
 					<a href="https://www.npmjs.com/package/react-native-agora"><img src="https://img.shields.io/npm/dm/react-native-agora.svg" alt="npm"></a>
 					<a href="https://www.npmjs.com/package/react-native-agora"><img src="https://img.shields.io/npm/dt/react-native-agora.svg" alt="npm"></a>
-					<a href="https://github.com/syanbo/react-native-agora/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/react-native-agora.svg" alt="npm"></a>
-				<a href="https://gitter.im/react-native-agora/community"><img src="https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg" alt="join chat"></a></p>
-				<p>The <em>react-native-agora</em> is an open-source wrapper for React Native developers. </p>
+				<a href="LICENSE"><img src="https://img.shields.io/npm/l/react-native-agora.svg" alt="npm"></a></p>
+				<p><a href="README.zh.md">中文</a></p>
 				<p>This SDK takes advantage of React Native and Agora RTC Video SDK on Android &amp;&amp; iOS.</p>
+				<a href="#community-contributor" id="community-contributor" style="color: inherit; text-decoration: none;">
+					<h2>Community Contributor</h2>
+				</a>
+				<p>The community developer <a href="https://github.com/syanbo">Syanbo</a> developed 1.0 version React Native SDK based on the Agora Native SDK from 2016 to 2017. As the community&#39;s demand for React Native SDK keeps growing, Agora has achieved official cooperation with Syanbo, this project now is officially maintained by Agora. Thanks to Syanbo for his long-term contributions to React Native SDK.</p>
+				<a href="#release-note" id="release-note" style="color: inherit; text-decoration: none;">
+					<h2>Release Note</h2>
+				</a>
+				<p><a href="CHANGELOG.md">Changelog</a></p>
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h2>Installation</h2>
 				</a>
@@ -84,11 +91,11 @@
 				<pre><code class="language-shell">yarn add react-native-agora</code></pre>
 				<p>or</p>
 				<pre><code class="language-shell">npm i --save react-native-agora</code></pre>
-				<p>Go to your ios folder and run:</p>
-				<pre><code class="language-shell">cd ios
-pod install</code></pre>
+				<p>Go to your <strong>ios</strong> folder and run:</p>
+				<pre><code class="language-shell">pod install</code></pre>
 				<p><strong>_ IMPORTANT _</strong></p>
 				<p><a href="https://github.com/react-native-community/cli/blob/master/docs/autolinking.md">Native Modules are now Autolinked.</a></p>
+				<p><a href="https://github.com/AgoraIO-Community/react-native-agora/blob/master/docs/v3/installation.ios.md#step-1-migrating-to-swift">Migrating to Swift.</a></p>
 				<a href="#installing-react-native--059x" id="installing-react-native--059x" style="color: inherit; text-decoration: none;">
 					<h3>Installing (React Native == 0.59.x)</h3>
 				</a>
@@ -109,11 +116,11 @@ pod install</code></pre>
 				<a href="#general-usage" id="general-usage" style="color: inherit; text-decoration: none;">
 					<h2>General Usage</h2>
 				</a>
-				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> RtcEngine <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native-agora'</span>;
-RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> RtcEngine <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-native-agora&#x27;</span>;
+RtcEngine.create(<span class="hljs-string">&#x27;YOUR APP ID&#x27;</span>);</code></pre>
 				<p>or</p>
-				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> RtcEngine = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-native-agora'</span>);
-RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> RtcEngine = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;react-native-agora&#x27;</span>);
+RtcEngine.create(<span class="hljs-string">&#x27;YOUR APP ID&#x27;</span>);</code></pre>
 				<a href="#using-typescript" id="using-typescript" style="color: inherit; text-decoration: none;">
 					<h2>Using TypeScript</h2>
 				</a>
@@ -129,7 +136,7 @@ RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
 					<h3>Pod install failed (React Native &gt;= 0.62.0)</h3>
 				</a>
 				<p>The error log:</p>
-				<pre><code>[!] The <span class="hljs-string">'xxx'</span> target <span class="hljs-keyword">has</span> libraries <span class="hljs-keyword">with</span> conflicting names: libcrypto.a.</code></pre><p>You should disable Flipper, you can found it in the Podfile, and comment the code about Flipper in AppDelegate</p>
+				<pre><code>[!] The <span class="hljs-string">&#x27;xxx&#x27;</span> target <span class="hljs-keyword">has</span> libraries <span class="hljs-keyword">with</span> conflicting names: libcrypto.a.</code></pre><p>You should disable Flipper, you can found it in the Podfile, and comment the code about Flipper in AppDelegate.</p>
 				<pre><code>  # Enables Flipper.
   #
   #<span class="hljs-built_in"> Note </span>that <span class="hljs-keyword">if</span> you have use_frameworks! enabled, Flipper will <span class="hljs-keyword">not</span> work <span class="hljs-keyword">and</span>
@@ -148,7 +155,7 @@ RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
 					<h3>XCode 11 Beta App Launch Crash</h3>
 				</a>
 				<p>The error log:</p>
-				<pre><code>Exception <span class="hljs-string">'*** -[__NSArrayM objectAtIndexedSubscript:]: index 1 beyond bounds [0 .. 0]'</span> was thrown <span class="hljs-keyword">while</span> invoking getCurrentAppState <span class="hljs-keyword">on</span> target AppState <span class="hljs-keyword">with</span> <span class="hljs-keyword">params</span> (
+				<pre><code>Exception <span class="hljs-string">&#x27;*** -[__NSArrayM objectAtIndexedSubscript:]: index 1 beyond bounds [0 .. 0]&#x27;</span> was thrown <span class="hljs-keyword">while</span> invoking getCurrentAppState <span class="hljs-keyword">on</span> target AppState <span class="hljs-keyword">with</span> <span class="hljs-keyword">params</span> (
 <span class="hljs-number">2</span>,
 <span class="hljs-number">3</span>
 )</code></pre><p>Fixed in React Native 0.59.9.</p>
@@ -157,7 +164,7 @@ RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
 					<h2>API</h2>
 				</a>
 				<ul>
-					<li><a href="https://syanbo.github.io/react-native-agora/globals.html">React Native API</a></li>
+					<li><a href="https://agoraio-community.github.io/react-native-agora/globals.html">React Native API</a></li>
 					<li><a href="https://docs.agora.io/en/Video/API%20Reference/java/index.html">Android API</a></li>
 					<li><a href="https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html">iOS API</a></li>
 				</ul>
@@ -166,7 +173,7 @@ RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
 				</a>
 				<ul>
 					<li>Complete <a href="https://docs.agora.io/en/">API Doc</a> at the Developer Center</li>
-					<li><a href="https://github.com/syanbo/react-native-agora/issues">File bugs about this sample</a></li>
+					<li><a href="https://github.com/AgoraIO-Community/react-native-agora/issues">File bugs about this sample</a></li>
 					<li><a href="https://facebook.github.io/react-native/docs/getting-started.html">React Native Getting Started</a></li>
 				</ul>
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
@@ -175,7 +182,7 @@ RtcEngine.create(<span class="hljs-string">'YOUR APP ID'</span>);</code></pre>
 				<pre><code>Copyright (c) 2020 syanbo luxuhui
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
+of this software and associated documentation files (the &quot;Software&quot;), to deal
 in the Software without restriction, including without limitation the rights
 to <span class="hljs-keyword">use</span>, copy, <span class="hljs-keyword">modify</span>, <span class="hljs-keyword">merge</span>, publish, <span class="hljs-keyword">distribute</span>, sublicense, <span class="hljs-keyword">and</span>/<span class="hljs-keyword">or</span> sell
 copies <span class="hljs-keyword">of</span> the Software, <span class="hljs-keyword">and</span> <span class="hljs-keyword">to</span> permit persons <span class="hljs-keyword">to</span> whom the Software <span class="hljs-keyword">is</span>
@@ -184,7 +191,7 @@ furnished <span class="hljs-keyword">to</span> <span class="hljs-keyword">do</sp
 The above copyright <span class="hljs-keyword">notice</span> <span class="hljs-keyword">and</span> this permission <span class="hljs-keyword">notice</span> shall be included <span class="hljs-keyword">in</span> <span class="hljs-keyword">all</span>
 copies <span class="hljs-keyword">or</span> substantial portions <span class="hljs-keyword">of</span> the Software.
 
-THE SOFTWARE <span class="hljs-keyword">IS</span> PROVIDED <span class="hljs-string">"AS IS"</span>, <span class="hljs-keyword">WITHOUT</span> WARRANTY <span class="hljs-keyword">OF</span> <span class="hljs-keyword">ANY</span> KIND, EXPRESS <span class="hljs-keyword">OR</span>
+THE SOFTWARE <span class="hljs-keyword">IS</span> PROVIDED <span class="hljs-string">&quot;AS IS&quot;</span>, <span class="hljs-keyword">WITHOUT</span> WARRANTY <span class="hljs-keyword">OF</span> <span class="hljs-keyword">ANY</span> KIND, EXPRESS <span class="hljs-keyword">OR</span>
 IMPLIED, <span class="hljs-keyword">INCLUDING</span> BUT <span class="hljs-keyword">NOT</span> LIMITED <span class="hljs-keyword">TO</span> THE WARRANTIES <span class="hljs-keyword">OF</span> MERCHANTABILITY,
 FITNESS <span class="hljs-keyword">FOR</span> A PARTICULAR PURPOSE <span class="hljs-keyword">AND</span> NONINFRINGEMENT. <span class="hljs-keyword">IN</span> <span class="hljs-keyword">NO</span> <span class="hljs-keyword">EVENT</span> SHALL THE
 <span class="hljs-keyword">AUTHORS</span> <span class="hljs-keyword">OR</span> COPYRIGHT HOLDERS BE LIABLE <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">ANY</span> CLAIM, DAMAGES <span class="hljs-keyword">OR</span> OTHER
@@ -198,12 +205,6 @@ SOFTWARE.</code></pre>
 				<ul>
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/rtclocalview.html">Rtc<wbr>Local<wbr>View</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="modules/rtcremoteview.html">Rtc<wbr>Remote<wbr>View</a>
 					</li>
 				</ul>
 			</nav>
@@ -447,10 +448,10 @@ SOFTWARE.</code></pre>
 						<a href="classes/rtcengine.html" class="tsd-kind-icon">Rtc<wbr>Engine</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/rtcsurfaceview.html" class="tsd-kind-icon">Rtc<wbr>Surface<wbr>View</a>
+						<a href="classes/surfaceview.html" class="tsd-kind-icon">Surface<wbr>View</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/rtctextureview.html" class="tsd-kind-icon">Rtc<wbr>Texture<wbr>View</a>
+						<a href="classes/textureview.html" class="tsd-kind-icon">Texture<wbr>View</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/transcodinguser.html" class="tsd-kind-icon">Transcoding<wbr>User</a>
@@ -492,85 +493,22 @@ SOFTWARE.</code></pre>
 						<a href="interfaces/remotevideostats.html" class="tsd-kind-icon">Remote<wbr>Video<wbr>Stats</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcaudioeffectinterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Effect<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcaudiointerface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcaudiomixinginterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Mixing<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcaudiorecorderinterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Recorder<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcaudiorouteinterface.html" class="tsd-kind-icon">Rtc<wbr>Audio<wbr>Route<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtccamerainterface.html" class="tsd-kind-icon">Rtc<wbr>Camera<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
 						<a href="interfaces/rtcchannelevents.html" class="tsd-kind-icon">Rtc<wbr>Channel<wbr>Events</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcdualstreaminterface.html" class="tsd-kind-icon">Rtc<wbr>Dual<wbr>Stream<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcearmonitoringinterface.html" class="tsd-kind-icon">Rtc<wbr>Ear<wbr>Monitoring<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcencryptioninterface.html" class="tsd-kind-icon">Rtc<wbr>Encryption<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/rtcengineevents.html" class="tsd-kind-icon">Rtc<wbr>Engine<wbr>Events</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcfallbackinterface.html" class="tsd-kind-icon">Rtc<wbr>Fallback<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcinjectstreaminterface.html" class="tsd-kind-icon">Rtc<wbr>Inject<wbr>Stream<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcmediametadatainterface.html" class="tsd-kind-icon">Rtc<wbr>Media<wbr>Metadata<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcmediarelayinterface.html" class="tsd-kind-icon">Rtc<wbr>Media<wbr>Relay<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcpublishstreaminterface.html" class="tsd-kind-icon">Rtc<wbr>Publish<wbr>Stream<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
 						<a href="interfaces/rtcstats.html" class="tsd-kind-icon">Rtc<wbr>Stats</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcstreammessageinterface.html" class="tsd-kind-icon">Rtc<wbr>Stream<wbr>Message<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
 						<a href="interfaces/rtcsurfaceviewprops.html" class="tsd-kind-icon">Rtc<wbr>Surface<wbr>View<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtctestinterface.html" class="tsd-kind-icon">Rtc<wbr>Test<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/rtctextureviewprops.html" class="tsd-kind-icon">Rtc<wbr>Texture<wbr>View<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/rtcuidprops.html" class="tsd-kind-icon">Rtc<wbr>Uid<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcuserinfointerface.html" class="tsd-kind-icon">Rtc<wbr>User<wbr>Info<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcvideointerface.html" class="tsd-kind-icon">Rtc<wbr>Video<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcvoicechangerinterface.html" class="tsd-kind-icon">Rtc<wbr>Voice<wbr>Changer<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcvoicepositioninterface.html" class="tsd-kind-icon">Rtc<wbr>Voice<wbr>Position<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/rtcwatermarkinterface.html" class="tsd-kind-icon">Rtc<wbr>Watermark<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/subscription.html" class="tsd-kind-icon">Subscription</a>
@@ -657,9 +595,6 @@ SOFTWARE.</code></pre>
 						<a href="globals.html#networktypecallback" class="tsd-kind-icon">Network<wbr>Type<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#rate" class="tsd-kind-icon">Rate</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#rectcallback" class="tsd-kind-icon">Rect<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
@@ -691,9 +626,6 @@ SOFTWARE.</code></pre>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#streammessageerrorcallback" class="tsd-kind-icon">Stream<wbr>Message<wbr>Error<wbr>Callback</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#string" class="tsd-kind-icon">String</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#tokencallback" class="tsd-kind-icon">Token<wbr>Callback</a>
@@ -743,33 +675,6 @@ SOFTWARE.</code></pre>
 					<li class=" tsd-kind-type-alias">
 						<a href="globals.html#warningcallback" class="tsd-kind-icon">Warning<wbr>Callback</a>
 					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#agorartcchannelmodule" class="tsd-kind-icon">Agora<wbr>Rtc<wbr>Channel<wbr>Module</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#agorartcenginemodule" class="tsd-kind-icon">Agora<wbr>Rtc<wbr>Engine<wbr>Module</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#prefix" class="tsd-kind-icon">Prefix</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#rctrtcsurfaceview" class="tsd-kind-icon">RCTRtc<wbr>Surface<wbr>View</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#rctrtctextureview" class="tsd-kind-icon">RCTRtc<wbr>Texture<wbr>View</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#rtcchannelevent" class="tsd-kind-icon">Rtc<wbr>Channel<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#rtcengineevent" class="tsd-kind-icon">Rtc<wbr>Engine<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#channels" class="tsd-kind-icon">channels</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#engine" class="tsd-kind-icon">engine</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -794,9 +699,6 @@ SOFTWARE.</code></pre>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
@@ -807,6 +709,5 @@ SOFTWARE.</code></pre>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
