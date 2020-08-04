@@ -1,5 +1,9 @@
 ## THE CHANGELOG
 
+#### 3.0.1-rc.4
+  - fix crash when rendering view without `channelId` property
+  - fix `RtcLocalView` freezes after rendering remote view
+
 #### 3.0.1-rc.3
   - fix multiple channel render bug
   - remove `Types` from export, you can import enum or class by `import {} from 'react-native-agora'`

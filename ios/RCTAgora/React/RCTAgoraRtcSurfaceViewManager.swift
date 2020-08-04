@@ -40,6 +40,12 @@ class RtcView: RtcSurfaceView {
     private var getEngine: (() -> AgoraRtcEngineKit?)?
     private var getChannel: ((_ channelId: String) -> AgoraRtcChannel?)?
 
+    deinit {
+        // if let engine = getEngine?() {
+            // resetVideoCanvas(engine)
+        // }
+    }
+
     func setEngine(_ getEngine: @escaping () -> AgoraRtcEngineKit?) {
         self.getEngine = getEngine
     }
