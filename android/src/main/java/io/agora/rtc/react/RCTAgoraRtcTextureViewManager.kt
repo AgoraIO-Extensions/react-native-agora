@@ -20,6 +20,11 @@ class RCTAgoraRtcTextureViewManager : SimpleViewManager<RtcTextureView>() {
         return RtcTextureView(reactContext)
     }
 
+    override fun onDropViewInstance(view: RtcTextureView) {
+        // getEngine()?.let { view.resetVideoRender(it) }
+        super.onDropViewInstance(view)
+    }
+
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -27,9 +32,7 @@ class RCTAgoraRtcTextureViewManager : SimpleViewManager<RtcTextureView>() {
     @ReactProp(name = "data")
     fun setData(view: RtcTextureView, data: ReadableMap) {
         val channel = data.getString("channelId")?.let { getChannel(it) }
-        getEngine()?.let {
-            view.setData(it, channel, data.getInt("uid"))
-        }
+        getEngine()?.let { view.setData(it, channel, data.getInt("uid")) }
     }
 
     @ReactProp(name = "mirror")

@@ -20,6 +20,11 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
         return RtcSurfaceView(reactContext)
     }
 
+    override fun onDropViewInstance(view: RtcSurfaceView) {
+        // getEngine()?.let { view.resetVideoCanvas(it) }
+        super.onDropViewInstance(view)
+    }
+
     override fun getName(): String {
         return REACT_CLASS
     }
