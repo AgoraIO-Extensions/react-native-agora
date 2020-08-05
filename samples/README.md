@@ -2,4 +2,4 @@
 
 | name | description |
 | :-------------: | :-------------: |
-| [agora-rn-quickstart](https://github.com/agoraio-community/agora-rn-quickstart) | react-native-agora demo for beginner |
+| [agora-rn-quickstart](https://github.com/AgoraIO-Community/Agora-RN-Quickstart/tree/legacy) | react-native-agora demo for beginner |
