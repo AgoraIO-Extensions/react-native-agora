@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.0.1-rc.5
+  - fix `Xcode10` `Swift4` compile error
+
 #### 3.0.1-rc.4
   - fix crash when rendering view without `channelId` property
   - fix `RtcLocalView` freezes after rendering remote view

@@ -22,17 +22,24 @@ Use `react-native link` to add the library to your project:
 
 ```shell script
 react-native link react-native-agora
+```
+
+#### Download native SDK
+
+We provide a shell script to help you download the correct version of SDK.
+
+```shell script
 cd node_modules/react-native-agora
 sh ./install.sh
 ```
 
-Embedding the frameworks because they are dynamic libraries. The framework's path at:
+Then frameworks will be saved to this path:
 
 ```shell script
 node_modules/react-native-agora/ios/RCTAgora/Libs/*.framework
 ```
 
-[Apple Official Doc](https://developer.apple.com/library/archive/technotes/tn2435/_index.html#//apple_ref/doc/uid/DTS40017543-CH1-EMBED_IN_APP_SECTION)
+You should **copy frameworks to your root project** and [embedding](https://developer.apple.com/library/archive/technotes/tn2435/_index.html#//apple_ref/doc/uid/DTS40017543-CH1-EMBED_IN_APP_SECTION) these because they are dynamic libraries.
 
 ### Using with CocoaPods. (**recommended**)
 
