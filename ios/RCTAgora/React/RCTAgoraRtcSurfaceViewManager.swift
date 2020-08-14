@@ -19,19 +19,19 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
     }
 
     override class func requiresMainQueueSetup() -> Bool {
-        true
+        return true
     }
 
     override var methodQueue: DispatchQueue! {
-        DispatchQueue.main
+        return DispatchQueue.main
     }
 
     private func engine() -> AgoraRtcEngineKit? {
-        (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
+        return (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
 
     private func channel(_ channelId: String) -> AgoraRtcChannel? {
-        (bridge.module(for: RCTAgoraRtcChannelModule.classForCoder()) as? RCTAgoraRtcChannelModule)?.channel(channelId)
+        return (bridge.module(for: RCTAgoraRtcChannelModule.classForCoder()) as? RCTAgoraRtcChannelModule)?.channel(channelId)
     }
 }
 
