@@ -19,15 +19,15 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     private var hasListeners = false
 
     private lazy var manager: RtcChannelManager = {
-        RtcChannelManager()
+        return RtcChannelManager()
     }()
 
     override class func moduleName() -> String! {
-        RCTAgoraRtcChannelModule.REACT_CLASS
+        return RCTAgoraRtcChannelModule.REACT_CLASS
     }
 
     override func constantsToExport() -> [AnyHashable: Any]! {
-        ["prefix": RtcChannelEventHandler.PREFIX]
+        return ["prefix": RtcChannelEventHandler.PREFIX]
     }
 
     deinit {
@@ -35,11 +35,11 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     override class func requiresMainQueueSetup() -> Bool {
-        true
+        return true
     }
 
     override var methodQueue: DispatchQueue! {
-        DispatchQueue.main
+        return DispatchQueue.main
     }
 
     override func supportedEvents() -> [String]! {
@@ -65,11 +65,11 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter, RtcChannelInterface {
     }
 
     private func engine() -> AgoraRtcEngineKit? {
-        (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
+        return (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
 
     func channel(_ channelId: String) -> AgoraRtcChannel? {
-        manager[channelId]
+        return manager[channelId]
     }
 
     func create(_ channelId: String, _ callback: PromiseCallback?) {
