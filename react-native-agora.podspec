@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
     s.authors        = package["authors"]
     s.platform       = :ios, "9.0"
     s.static_framework = true
-    s.swift_version = "5.0"
+    s.swift_version = "4.0"
 
     s.source         = { :git => package["repository"]["url"] }
     s.source_files   = 'ios/RCTAgora/**/*.{h,m,swift}'

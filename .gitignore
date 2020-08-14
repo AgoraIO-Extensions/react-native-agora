@@ -1,5 +1,7 @@
 .tmp/
 build/
+gitpull.sh
+gitpush.sh
 
 # Xcode
 project.xcworkspace/
