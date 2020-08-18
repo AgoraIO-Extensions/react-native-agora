@@ -19,15 +19,15 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     private var hasListeners = false
 
     private lazy var manager: RtcEngineManager = {
-        RtcEngineManager()
+        return RtcEngineManager()
     }()
 
     override class func moduleName() -> String! {
-        RCTAgoraRtcEngineModule.REACT_CLASS
+        return RCTAgoraRtcEngineModule.REACT_CLASS
     }
 
     override func constantsToExport() -> [AnyHashable: Any]! {
-        ["prefix": RtcEngineEventHandler.PREFIX]
+        return ["prefix": RtcEngineEventHandler.PREFIX]
     }
 
     deinit {
@@ -35,11 +35,11 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter, RtcEngineInterface {
     }
 
     override class func requiresMainQueueSetup() -> Bool {
-        true
+        return true
     }
 
     override var methodQueue: DispatchQueue! {
-        DispatchQueue.main
+        return DispatchQueue.main
     }
 
     override func supportedEvents() -> [String]! {

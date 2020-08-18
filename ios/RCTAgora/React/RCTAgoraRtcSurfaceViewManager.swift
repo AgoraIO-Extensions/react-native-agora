@@ -19,19 +19,19 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
     }
 
     override class func requiresMainQueueSetup() -> Bool {
-        true
+        return true
     }
 
     override var methodQueue: DispatchQueue! {
-        DispatchQueue.main
+        return DispatchQueue.main
     }
 
     private func engine() -> AgoraRtcEngineKit? {
-        (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
+        return (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
 
     private func channel(_ channelId: String) -> AgoraRtcChannel? {
-        (bridge.module(for: RCTAgoraRtcChannelModule.classForCoder()) as? RCTAgoraRtcChannelModule)?.channel(channelId)
+        return (bridge.module(for: RCTAgoraRtcChannelModule.classForCoder()) as? RCTAgoraRtcChannelModule)?.channel(channelId)
     }
 }
 
@@ -39,6 +39,12 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
 class RtcView: RtcSurfaceView {
     private var getEngine: (() -> AgoraRtcEngineKit?)?
     private var getChannel: ((_ channelId: String) -> AgoraRtcChannel?)?
+
+    deinit {
+        // if let engine = getEngine?() {
+            // resetVideoCanvas(engine)
+        // }
+    }
 
     func setEngine(_ getEngine: @escaping () -> AgoraRtcEngineKit?) {
         self.getEngine = getEngine
@@ -54,21 +60,19 @@ class RtcView: RtcSurfaceView {
         }
     }
 
-    @objc func setChannelId(_ channelId: String) {
-        if let engine = getEngine?(), let channel = getChannel?(channelId) {
-            setChannel(engine, channel)
+    @objc func setData(_ data: NSDictionary) {
+        var channel: AgoraRtcChannel? = nil
+        if let channelId = data["channelId"] as? String {
+            channel = getChannel?(channelId)
+        }
+        if let engine = getEngine?() {
+            setData(engine, channel, data["uid"] as! Int)
         }
     }
 
     @objc func setMirrorMode(_ mirrorMode: Int) {
         if let engine = getEngine?() {
             setMirrorMode(engine, mirrorMode)
-        }
-    }
-
-    @objc func setUid(_ uid: Int) {
-        if let engine = getEngine?() {
-            setUid(engine, uid)
         }
     }
 }

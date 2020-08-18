@@ -69,8 +69,12 @@ const RCTRtcSurfaceView = requireNativeComponent('RCTAgoraRtcSurfaceView');
  */
 export class RtcSurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
     render() {
+        const {channelId = null, uid, ...others} = this.props
         return (
-            <RCTRtcSurfaceView {...this.props}/>
+            <RCTRtcSurfaceView
+                key={`surface-${channelId}-${uid}`}
+                data={{channelId, uid}}
+                {...others}/>
         )
     }
 }
@@ -85,8 +89,12 @@ const RCTRtcTextureView = requireNativeComponent('RCTAgoraRtcTextureView');
  */
 export class RtcTextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
     render() {
+        const {channelId = null, uid, ...others} = this.props
         return (
-            <RCTRtcTextureView {...this.props}/>
+            <RCTRtcTextureView
+                key={`texture-${channelId}-${uid}`}
+                data={{channelId, uid}}
+                {...others}/>
         )
     }
 }
