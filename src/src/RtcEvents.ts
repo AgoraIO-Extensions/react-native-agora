@@ -1207,8 +1207,8 @@ export interface RtcEngineEvents {
      * - `enabled`: *boolean*
      *
      *  Whether the specific remote user enables/disables the video module:
-     *  - true: Enable. The remote user can enter a video session.
-     *  - false: Disable. The remote user can only enter a voice session, and cannot send or receive any video stream.
+     *  - true: Enabled. The remote user can enter a video session.
+     *  - false: Disabled. The remote user can only enter a voice session, and cannot send or receive any video stream.
      * @event UserEnableVideo
      */
     UserEnableVideo: UidWithEnabledCallback
