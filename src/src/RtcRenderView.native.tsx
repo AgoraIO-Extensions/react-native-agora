@@ -31,7 +31,7 @@ export interface RtcUidProps {
  * @property mirrorMode: number | The video mirror mode.
  * @see VideoMirrorMode
  */
-export interface RtcSurfaceViewProps extends ViewProps {
+export interface RtcSurfaceViewProps {
     zOrderMediaOverlay?: boolean;
     zOrderOnTop?: boolean;
     renderMode?: VideoRenderMode;
@@ -54,7 +54,7 @@ export interface RtcSurfaceViewProps extends ViewProps {
  * @see RtcChannel.joinChannel
  * @property mirror: boolean | The video mirror.
  */
-export interface RtcTextureViewProps extends ViewProps {
+export interface RtcTextureViewProps {
     channelId?: string;
     mirror?: boolean;
 }
@@ -67,7 +67,7 @@ const RCTRtcSurfaceView = requireNativeComponent('RCTAgoraRtcSurfaceView');
 /**
  * @ignore
  */
-export class RtcSurfaceView extends Component<RtcSurfaceViewProps & RtcUidProps, {}> {
+export class RtcSurfaceView extends Component<ViewProps & RtcSurfaceViewProps & RtcUidProps, {}> {
     render() {
         const {channelId = null, uid, ...others} = this.props
         return (
@@ -87,7 +87,7 @@ const RCTRtcTextureView = requireNativeComponent('RCTAgoraRtcTextureView');
 /**
  * @ignore
  */
-export class RtcTextureView extends Component<RtcTextureViewProps & RtcUidProps, {}> {
+export class RtcTextureView extends Component<ViewProps & RtcTextureViewProps & RtcUidProps, {}> {
     render() {
         const {channelId = null, uid, ...others} = this.props
         return (
