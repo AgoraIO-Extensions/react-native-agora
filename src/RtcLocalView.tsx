@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Platform} from "react-native";
+import {Platform, ViewProps} from "react-native";
 
 import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps} from "./src/RtcRenderView.native";
 
@@ -7,7 +7,7 @@ import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps
  * Use SurfaceView in Android.
  * Use UIView in iOS.
  */
-class SurfaceView extends Component<RtcSurfaceViewProps, {}> {
+class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
     render() {
         return (
             <RtcSurfaceView
@@ -21,7 +21,7 @@ class SurfaceView extends Component<RtcSurfaceViewProps, {}> {
  * Use TextureView in Android.
  * Not support for iOS.
  */
-class TextureView extends Component<RtcTextureViewProps, {}> {
+class TextureView extends Component<ViewProps & RtcTextureViewProps, {}> {
     render() {
         if (Platform.OS === 'ios')
             throw new Error('TextureView not support for iOS')
