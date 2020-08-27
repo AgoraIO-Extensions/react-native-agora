@@ -270,8 +270,8 @@ export class LiveTranscoding {
     videoFramerate?: VideoFrameRate
     /**
      * **Deprecated**
-     * - true: Low latency with unassured quality.
-     * - false: (Default) High latency with assured quality.
+     * - `true`: Low latency with unassured quality.
+     * - `false`: (Default) High latency with assured quality.
      */
     lowLatency?: boolean
     /**
@@ -448,8 +448,8 @@ export class Rectangle {
 export class WatermarkOptions {
     /**
      * Sets whether or not the watermark image is visible in the local video preview:
-     * - true: (Default) The watermark image is visible in preview.
-     * - false: The watermark image is not visible in preview.
+     * - `true`: (Default) The watermark image is visible in preview.
+     * - `false`: The watermark image is not visible in preview.
      */
     visibleInPreview?: boolean
     /**
@@ -556,7 +556,7 @@ export class ChannelMediaOptions {
 }
 
 /**
- * Statistics of RTCEngine.
+ * Statistics of the call.
  *
  */
 export interface RtcStats {
@@ -678,24 +678,24 @@ export interface AudioVolumeInfo {
 }
 
 /**
- * Rect.
+ * The rectangular area.
  *
  */
 export interface Rect {
     /**
-     * Left.
+     * The x coordinate of the left side of the rectangular area.
      */
     left: number
     /**
-     * Top.
+     * The y coordinate of the upper side of the rectangular area.
      */
     top: number
     /**
-     * Right.
+     * The x coordinate of the right side of the rectangular area.
      */
     right: number
     /**
-     * Bottom.
+     * The y coordinate of the bottom side of the rectangular area.
      */
     bottom: number
 }
@@ -875,11 +875,13 @@ export interface RemoteVideoStats {
 
     /**
      * User ID of the user sending the video streams.
-     */uid: number
+     */
+    uid: number
     /**
      * **Deprecated**
-     * Time delay (ms). In scenarios where audio and video is synchronized, you can use the value of networkTransportDelay and jitterBufferDelay
-     * in RemoteAudioStats to know the delay statistics of the remote video.
+     * Time delay (ms). In scenarios where audio and video is synchronized, you can use the value
+     * of `networkTransportDelay` and `jitterBufferDelay`
+     * in [`RemoteAudioStats`]{@link RemoteAudioStats} to know the delay statistics of the remote video.
      */
     delay: number
     /**
