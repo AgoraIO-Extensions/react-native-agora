@@ -437,9 +437,11 @@ export enum AudioReverbPreset {
      */
     FX_PHONOGRAPH = 0x00100008,
     /**
-     * The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect. To achieve better virtual stereo reverberation, Agora recommends setting the profile parameter in setAudioProfile as MusicHighQualityStereo(5).
-     * @see RtcEngine#setAudioProfile
-     * @see AudioProfile.MusicHighQualityStereo
+     * The reverberation of the virtual stereo. The virtual stereo is an effect that renders
+     * the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect.
+     * To achieve better virtual stereo reverberation, Agora recommends setting the profile
+     * parameter in [`RtcEngine#setAudioProfile`]{@link RtcEngine#setAudioProfile} as [`MusicHighQualityStereo(5)`]{@link AudioProfile.MusicHighQualityStereo}.
+     *
      */
     VIRTUAL_STEREO = 0x00200001,
 }
@@ -738,7 +740,7 @@ export enum ChannelMediaRelayEvent {
      */
     Disconnect = 0,
     /**
-     * 1: The network reconnects.
+     * 1: The network reconnects.//TODO 为什么是 reconnects?
      */
     Connected = 1,
     /**
@@ -784,7 +786,7 @@ export enum ChannelMediaRelayEvent {
 }
 
 /**
- * The state code in AgoraChannelMediaRelayState.
+ * The state code in [`ChannelMediaRelayState`]{@link ChannelMediaRelayState}.
  * @enum {number}
  */
 export enum ChannelMediaRelayState {
@@ -952,11 +954,10 @@ export enum ConnectionStateType {
     Reconnecting = 4,
     /**
      * 5: The SDK fails to connect to Agora's edge server or join the channel.
-     * You must call leaveChannel to leave this state, and call joinChannel again to rejoin the channel.
-     * @see RtcEngine.leaveChannel
-     * @see RtcEngine.joinChannel
-     * If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the onConnectionStateChanged callbacks.
-     * @see RtcEngineEvents.onConnectionStateChanged
+     * You must call [`leaveChannel`]{@link RtcEngine.leaveChannel} to leave this state, and call [`joinChannel`]{@link RtcEngine.joinChannel} again to rejoin the channel.
+     *
+     * If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callbacks.
+     *
      */
     Failed = 5,
 }
@@ -1108,7 +1109,7 @@ export enum ErrorCode {
     InvalidChannelId = 102,
     /**
      * 109: The token expired.
-     * **DEPRECATED** as of v2.4.1. Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * **DEPRECATED** Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
      *
      * Possible reasons are:
      * - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the token to access the Agora service within five minutes after the token is generated. If the user does not access the Agora service after five minutes, this token is no longer valid.
@@ -1118,7 +1119,7 @@ export enum ErrorCode {
     TokenExpired = 109,
     /**
      * 110: The token is invalid.
-     * **DEPRECATED** as of v2.4.1. Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * **DEPRECATED**  Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
      *
      * Possible reasons are:
      * - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
@@ -1139,8 +1140,8 @@ export enum ErrorCode {
      */
     NotInChannel = 113,
     /**
-     * 114: The size of the sent data is over 1024 bytes when the user calls the sendStreamMessage method.
-     * @see [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage}
+     * 114: The size of the sent data is over 1024 bytes when the user calls the [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} method.
+     *
      */
     SizeTooLarge = 114,
     /**
@@ -1226,7 +1227,7 @@ export enum ErrorCode {
     /**
      * 1003: Fails to start the camera.
      *
-     * **DEPRECATED** as of v2.4.1. Use [`CaptureFailure`]{@link LocalVideoStreamError.CaptureFailure} in the error parameter of [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged}.
+     * **DEPRECATED** Use [`CaptureFailure`]{@link LocalVideoStreamError.CaptureFailure} in the error parameter of [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged}.
      *
      */
     StartCamera = 1003,
@@ -1299,7 +1300,7 @@ export enum ErrorCode {
      */
     AdmStartLoopback = 1023,
     /**
-     * 1027: Audio Device Module: An error occurs in no recording Permission.
+     * 1027: Audio Device Module: No recording permission.
      */
     AdmNoPermission = 1027,
     /**
@@ -1365,7 +1366,7 @@ export enum InjectStreamStatus {
      */
     StartFailed = 4,
     /**
-     * 5: The external video stream imports successfully.
+     * 5: The external video stream stops importing successfully.
      */
     StopSuccess = 5,
     /**
@@ -1373,19 +1374,19 @@ export enum InjectStreamStatus {
      */
     StopNotFound = 6,
     /**
-     * 7: The external video stream is stopped from being unauthorized.
+     * 7: The external video stream to be stopped importing is unauthorized.
      */
     StopUnauthorized = 7,
     /**
-     * 8: Importing the external video stream timeout.
+     * 8: Stopping importing the external video stream timed out.
      */
     StopTimedout = 8,
     /**
-     * 9: Importing the external video stream failed.
+     * 9: Stopping Importing the external video stream failed.
      */
     StopFailed = 9,
     /**
-     * 10: The external video stream import is interrupted.
+     * 10: The external video stream import is corrupted.
      */
     Broken = 10,
 }
@@ -1404,7 +1405,7 @@ export enum LastmileProbeResultState {
      */
     IncompleteNoBwe = 2,
     /**
-     * 3: the last-mile network probe test is not carried out, probably due to poor network conditions.
+     * 3: The last-mile network probe test is not carried out, probably due to poor network conditions.
      */
     Unavailable = 3,
 }
@@ -1572,11 +1573,11 @@ export enum MediaType {
  */
 export enum MetadataType {
     /**
-     * -1: the metadata type is unknown.
+     * -1: The metadata type is unknown.
      */
     Unknown = -1,
     /**
-     * 0: the metadata type is video.
+     * 0: The metadata type is video.
      */
     Video = 0,
 }
@@ -1846,7 +1847,6 @@ export enum UserPriority {
  * Video buffer type
  * @enum {number}
  * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
- * //TODO ?
  */
 export enum VideoBufferType {
     /**
@@ -1882,7 +1882,7 @@ export enum VideoCodecProfileType {
  * The content hint for screen sharing.
  * @enum {number}
  * TODO MacOS setScreenCaptureContentHint
- * //TODO ?
+ *
  */
 export enum VideoContentHint {
     /**
@@ -1904,9 +1904,12 @@ export enum VideoContentHint {
  * @enum {number}
  */
 export enum VideoFrameRate {
+    /**
+     * -1: The minimum frame rate of the video.
+     */
     Min = -1,
     /**
-     * -1: 1 fps.
+     * 1: 1 fps.
      */
     Fps1 = 1,
     /**
@@ -1936,7 +1939,172 @@ export enum VideoFrameRate {
 }
 
 /**
- * Sets the video bitrate (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range. You can also choose from the following options:
+ * Bitrate of the video (Kbps). Refer to the table below and set your bitrate.
+ * If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
+ *
+ * **Video Bitrate Table**
+ * <table>
+ *     <tr>
+ *         <th>Resolution</th>
+ *         <th>Frame rate<p>(fps)</th>
+ *         <th>Base Bitrate<p>(Kbps, for Communication)</th>
+ *         <th>Live Bitrate<p>(Kbps, for Live Broadcasting)</th>
+ *     </tr>
+ *     <tr>
+ *         <td>160*120</td>
+ *         <td>15</td>
+ *         <td>65</td>
+ *         <td>130</td>
+ *     </tr>
+ *     <tr>
+ *         <td>120*120</td>
+ *         <td>15</td>
+ *         <td>50</td>
+ *         <td>100</td>
+ *     </tr>
+ *     <tr>
+ *         <td>320*180</td>
+ *         <td>15</td>
+ *         <td>140</td>
+ *         <td>280</td>
+ *     </tr>
+ *     <tr>
+ *         <td>180*180</td>
+ *         <td>15</td>
+ *         <td>100</td>
+ *         <td>200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>240*180</td>
+ *         <td>15</td>
+ *         <td>120</td>
+ *         <td>240</td>
+ *     </tr>
+ *     <tr>
+ *         <td>320*240</td>
+ *         <td>15</td>
+ *         <td>200</td>
+ *         <td>400</td>
+ *     </tr>
+ *     <tr>
+ *         <td>240*240</td>
+ *         <td>15</td>
+ *         <td>140</td>
+ *         <td>280</td>
+ *     </tr>
+ *     <tr>
+ *         <td>424*240</td>
+ *         <td>15</td>
+ *         <td>220</td>
+ *         <td>440</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*360</td>
+ *         <td>15</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>360*360</td>
+ *         <td>15</td>
+ *         <td>260</td>
+ *         <td>520</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*360</td>
+ *         <td>30</td>
+ *         <td>600</td>
+ *         <td>1200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>360*360</td>
+ *         <td>30</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*360</td>
+ *         <td>15</td>
+ *         <td>320</td>
+ *         <td>640</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*360</td>
+ *         <td>30</td>
+ *         <td>490</td>
+ *         <td>980</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>15</td>
+ *         <td>500</td>
+ *         <td>1000</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*480</td>
+ *         <td>15</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>30</td>
+ *         <td>750</td>
+ *         <td>1500</td>
+ *     </tr>
+ *     <tr>
+ *         <td>480*480</td>
+ *         <td>30</td>
+ *         <td>600</td>
+ *         <td>1200</td>
+ *     </tr>
+ *     <tr>
+ *         <td>848*480</td>
+ *         <td>15</td>
+ *         <td>610</td>
+ *         <td>1220</td>
+ *     </tr>
+ *     <tr>
+ *         <td>848*480</td>
+ *         <td>30</td>
+ *         <td>930</td>
+ *         <td>1860</td>
+ *     </tr>
+ *     <tr>
+ *         <td>640*480</td>
+ *         <td>10</td>
+ *         <td>400</td>
+ *         <td>800</td>
+ *     </tr>
+ *     <tr>
+ *         <td>1280*720</td>
+ *         <td>15</td>
+ *         <td>1130</td>
+ *         <td>2260</td>
+ *     </tr>
+ *     <tr>
+ *         <td>1280*720</td>
+ *         <td>30</td>
+ *         <td>1710</td>
+ *         <td>3420</td>
+ *     </tr>
+ *     <tr>
+ *         <td>960*720</td>
+ *         <td>15</td>
+ *         <td>910</td>
+ *         <td>1820</td>
+ *     </tr>
+ *     <tr>
+ *         <td>960*720</td>
+ *         <td>30</td>
+ *         <td>1380</td>
+ *         <td>2760</td>
+ *     </tr>
+ * </table>
+ *
+ * Agora uses different video codecs for different profiles to optimize the user experience. For example,
+ * the Communication profile prioritizes the smoothness while the LIVE_BROADCASTING profile prioritizes the
+ * video quality (a higher bitrate). Therefore, We recommend setting this parameter as STANDARD_BITRATE = 0.
  * @enum {number}
  */
 export enum BitRate {
@@ -1947,7 +2115,8 @@ export enum BitRate {
      */
     Standard = 0,
     /**
-     * -1: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. In the Live-broadcast profile, if you choose this mode, the video frame rate may be lower than the set value.
+     * -1: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. In the Live-broadcast profile,
+     * if you choose this mode, the video frame rate may be lower than the set value.
      */
     Compatible = -1,
 }
@@ -2002,7 +2171,7 @@ export enum VideoOutputOrientationMode {
  * Video pixel format.
  * @enum {number}
  * TODO iOS AgoraVideoSinkProtocol
- * //TODO ?
+ *
  */
 export enum VideoPixelFormat {
     /**
@@ -2096,7 +2265,7 @@ export enum VideoRemoteStateReason {
      */
     LocalMuted = 3,
     /**
-     * 4: The local user stops receiving the remote video stream or disables the video module.
+     * 4: The local user resumes receiving the remote video stream or disables the video module.
      */
     LocalUnmuted = 4,
     /**
@@ -2215,13 +2384,14 @@ export enum WarningCode {
     /**
      * 105: The server rejects the request to look up the channel.
      * The server cannot process this request or the request is illegal.
-     * **DEPRECATED** as of v2.4.1. Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
+     * **DEPRECATED** Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
      * of [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}.
      *
      */
     LookupChannelRejected = 105,
     /**
-     * 106: The server rejects the request to look up the channel. The server cannot process this request or the request is illegal.
+     * 106: The server rejects the request to look up the channel. The server cannot process this request
+     * or the request is illegal.
      */
     OpenChannelTimeout = 106,
     /**

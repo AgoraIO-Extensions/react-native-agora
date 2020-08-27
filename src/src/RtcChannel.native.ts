@@ -34,7 +34,7 @@ const RtcChannelEvent = new NativeEventEmitter(AgoraRtcChannelModule);
 const channels = new Map<string, RtcChannel>();
 
 /**
- * The RtcChannel class.
+ * The {@link RtcChannel} class.
  */
 export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
     RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface, RtcFallbackInterface,
@@ -312,8 +312,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * @param uid ID of the remote user whose audio stream you want to mute.
      * @param muted Determines whether to receive/stop receiving the audio stream of the specified user:
-     * - true: Stop receiving the audio stream of the user.
-     * - false: (Default) Receive the audio stream of the user.
+     * - `true`: Stop receiving the audio stream of the user.
+     * - `false`: (Default) Receive the audio stream of the user.
      */
     muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteRemoteAudioStream(this._channelId, uid, muted)
@@ -323,8 +323,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * Stops/Resumes receiving all remote audio streams.
      *
      * @param muted Determines whether to receive/stop receiving all remote audio streams:
-     * - true: Stop receiving all remote audio streams.
-     * - false: (Default) Receive all remote audio streams.
+     * - `true`: Stop receiving all remote audio streams.
+     * - `false`: (Default) Receive all remote audio streams.
      */
     muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteAllRemoteAudioStreams(this._channelId, muted)
@@ -334,8 +334,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * Sets whether to receive all remote audio streams by default.
      *
      * @param muted Determines whether to receive/stop receiving all remote audio streams by default:
-     * - true: Stop receiving all remote audio streams by default.
-     * - false: (Default) Receive all remote audio streams by default.
+     * - `true`: Stop receiving all remote audio streams by default.
+     * - `false`: (Default) Receive all remote audio streams by default.
      */
     setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.setDefaultMuteAllRemoteAudioStreams(this._channelId, muted)
@@ -345,8 +345,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * Stops/Resumes receiving all remote video streams.
      *
      * @param muted Determines whether to receive/stop receiving all remote video streams:
-     * - true: Stop receiving all remote video streams.
-     * - false: (Default) Receive all remote video streams.
+     * - `true`: Stop receiving all remote video streams.
+     * - `false`: (Default) Receive all remote video streams.
      */
     muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteAllRemoteVideoStreams(this._channelId, muted)
@@ -357,8 +357,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * @param uid ID of the remote user whose video stream you want to mute.
      * @param muted Determines whether to receive/stop receiving the video stream of the specified user:
-     * - true: Stop receiving the video stream of the user.
-     * - false: (Default) Receive the video stream of the user.
+     * - `true`: Stop receiving the video stream of the user.
+     * - `false`: (Default) Receive the video stream of the user.
      */
     muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.muteRemoteVideoStream(this._channelId, uid, muted)
@@ -368,8 +368,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * Sets whether to receive all remote video streams by default.
      *
      * @param muted Determines whether to receive/stop receiving all remote video streams by default:
-     * - true: Stop receiving all remote video streams by default.
-     * - false: (Default) Receive all remote video streams by default.
+     * - `true`: Stop receiving all remote video streams by default.
+     * - `false`: (Default) Receive all remote video streams by default.
      */
     setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
         return AgoraRtcChannelModule.setDefaultMuteAllRemoteVideoStreams(this._channelId, muted)
@@ -410,8 +410,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
      * @param transcodingEnabled Sets whether transcoding is enabled/disabled. If you set this parameter as true,
      * ensure that you call the [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} method before this method.
-     * - true: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
-     * - false: Disable transcoding.
+     * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
+     * - `false`: Disable transcoding.
      */
     addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
         return AgoraRtcChannelModule.addPublishStreamUrl(this._channelId, url, transcodingEnabled);
@@ -690,12 +690,12 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * and the other as false.
      * @param reliable Sets whether the recipients are guaranteed to receive the data stream from the
      * sender within five seconds.
-     * - true: The recipients receive the data from the sender within five seconds. If the recipient does
+     * - `true`: The recipients receive the data from the sender within five seconds. If the recipient does
      * not receive the data within five seconds, the SDK triggers the [`StreamMessageError`]{@link RtcChannelEvents.StreamMessageError} callback and returns an error code.
-     * - false: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
+     * - `false`: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
      * @param ordered Determines whether the recipients receive the data stream in the sent order.
-     * - true: The recipients receive the data in the sent order.
-     * - false: The recipients do not receive the data in the sent order.
+     * - `true`: The recipients receive the data in the sent order.
+     * - `false`: The recipients do not receive the data in the sent order.
      */
     createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
         return AgoraRtcChannelModule.createDataStream(this._channelId, reliable, ordered);
