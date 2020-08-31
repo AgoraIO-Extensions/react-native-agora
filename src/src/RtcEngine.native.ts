@@ -89,7 +89,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param appId The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
      * Only users in apps with the same App ID can join the same channel and communicate with each other.
      * Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance. To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance, and after [`destroy`]{@link destroy} returns `0`,
-     * call [`create`]{@link create} to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
+     * call `create` to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      */
     static async create(appId: string): Promise<RtcEngine> {
         return RtcEngine.createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL)
@@ -104,12 +104,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
      * - You can create an [`RtcEngine`]{@link RtcEngine} instance either by calling this method or by calling [`create`]{@link create}. The difference between [`create`]{@link create} and this method is that this method enables you to specify the connection area.
-     * - The Agora React Native SDK supports creating only one {@link RtcEngine} instance for an app.
+     * - The Agora React Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app.
      * @param appId The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
      * Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance.
      * To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance and after [`destroy`]{@link destroy} returns `0`, call [`create`]{@link create} to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      * @param areaCode The area of connection. This advanced feature applies to scenarios that have regional restrictions.
      * You can use the bitwise OR operator (|) to specify multiple areas. For details, see {@link IPAreaCode}.
+     *
      * After specifying the region, the app that integrates the Agora SDK connects to the Agora servers within that region.
      */
     static async createWithAreaCode(appId: string, areaCode: IPAreaCode): Promise<RtcEngine> {
@@ -201,10 +202,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * Sets the channel profile of the Agora {@link RtcEngine}.
+     * Sets the channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
      *
      * The Agora [`RtcEngine`]{@link RtcEngine} differentiates channel profiles and applies different optimization algorithms accordingly.
-     * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
+     * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for live interactive video streaming.
      * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
      *
      */
@@ -217,7 +218,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * This method sets the role of a user, such as a host or an audience (default), before joining a channel.
      *
-     * This method can be used to switch the user role after a user joins a channel. In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful [`setClientRole`]{@link setClientRole }method call triggers the following callbacks:
+     * This method can be used to switch the user role after a user joins a channel. In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful call of this method triggers the following callbacks:
      * - The local client: [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged}.
      * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}).
      *
@@ -248,9 +249,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * A channel does not accept duplicate uids, such as two users with the same `uid`. If you set `uid` as `0`, the system automatically assigns a uid.
      *
-     * **Warning:**
+     * **Warning**
      *
-     * Ensure that the App ID used for creating the token is the same App ID used in the [`create`]{@link create} method for creating an {@link RtcEngine} object. Otherwise, CDN live streaming may fail.
+     * Ensure that the App ID used for creating the token is the same App ID used in the `create` method for creating an [`RtcEngine`]{@link RtcEngine} object. Otherwise, CDN live streaming may fail.
      *
      * @param token The token for authentication:
      * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
@@ -405,7 +406,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * Ensure that you call this method immediately after calling the [`create`]{@link create} method, otherwise the output log may not be complete.
+     * Ensure that you call this method immediately after calling the `create` method, otherwise the output log may not be complete.
      *
      * @param filePath File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log`.
      */
@@ -667,7 +668,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * This method does not affect receiving or playing the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios
      * where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
      *
-     * The SDK triggers the [`MicrophoneEnabled`]{@link RtcEngineEvents.MicrophoneEnabled} callback once the local audio function is disabled or re-enabled.
+    * Once the local audio function is disabled or re-enabled, the SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback, which reports [`Stopped`]{@link AudioLocalState.Stopped} or [`Recording`]{@link AudioLocalState.Recording}.
+     * The SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback once the local audio function is disabled or re-enabled.
      *
      * **Note**
      *
@@ -740,7 +742,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - You must call this method before calling [`joinChannel`]{@link joinChannel}.
      * - In the [Communication]{@link ChannelProfile.Communication} and [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
-     * - In scenarios requiring high-quality audio, we recommend setting profile as [`ShowRoom(4)`]{@link AudioScenario.ShowRoom} and scenario as [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}.
+     * - In scenarios requiring high-quality audio, we recommend setting profile as [`MusicHighQuality(4)`]{@link AudioProfile.MusicHighQuality} and scenario as [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}.
      * For example, for music education scenarios.
      *
      * @param profile Sets the sample rate, bitrate, encoding mode, and the number of channels.
@@ -841,7 +843,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * - This method affects the internal engine and can be called after calling the {@link leaveChannel} method. You can call this method either before or after joining a channel.
+     * - This method affects the internal engine and can be called after calling the [`leaveChannel`]{@link leaveChannel} method. You can call this method either before or after joining a channel.
      *
      * - This method resets the internal engine and takes some time to take effect.
      * We recommend using the following API methods to control the video engine modules separately:
@@ -1117,10 +1119,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * You can choose whether the other user can hear the local audio playback and specify the number of playback loops.
      * When the audio mixing file playback finishes after calling this method, the SDK triggers the [`AudioMixingFinished`]{@link RtcEngineEvents.AudioMixingFinished} callback.
      *
-     * A successful call of this method triggers the [`AudioMixingStateChanged(Playing)`]{@link RtcEngineEvents.AudioMixingStateChanged} callback on the local client.
+     * A successful call of this method triggers the [`AudioMixingStateChanged`]{@link RtcEngineEvents.AudioMixingStateChanged} callback and reports [`Playing`]{@link AudioMixingStateCode.Playing} on the local client.
      *
      *
-     * When the audio mixing file playback finishes, the SDK triggers the [`AudioMixingStateChanged(Stopped)`]{@link RtcEngineEvents.AudioMixingStateChanged} callback on the local client.
+     * When the audio mixing file playback finishes, the SDK triggers the [`AudioMixingStateChanged`]{@link RtcEngineEvents.AudioMixingStateChanged} callback and reports [`Stopped`]{@link AudioMixingStateCode.Stopped} on the local client.
      *
      *
      * **Note**
@@ -1435,7 +1437,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Removes an RTMP stream from the CDN.
      *
-     * This method removes the RTMP URL address (added by {@link addPublishStreamUrl}) from a CDN live stream.
+     * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
      * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback.
      *
      * **Note**
@@ -1508,7 +1510,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * If the method call fails, the SDK triggers the [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} callback with the [`ServerNoResponse(2)`]{@link ChannelMediaRelayError.ServerNoResponse}
-     * or [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerNoResponse} state code.
+     * or [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerConnectionLost} state code.
      * You can leave the channel by calling [`leaveChannel`]{@link leaveChannel}, and the media stream relay automatically stops.
      *
      */
@@ -1943,7 +1945,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Ensure that the directory to save the recording file exists and is writable.
      * - This method is usually called after calling [`joinChannel`]{@link joinChannel}. The recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
-     * - For better recording effects, set quality as [`AUDIO_RECORDING_QUALITY_MEDIUM`]{@link AudioRecordingQuality.Medium} or [`AUDIO_RECORDING_QUALITY_HIGH`]{@link AudioRecordingQuality.High} when sampleRate is 44.1 kHz or 48 kHz.
+     * - For better recording effects, set quality as [`Medium`]{@link AudioRecordingQuality.Medium} or [`High`]{@link AudioRecordingQuality.High} when sampleRate is 44.1 kHz or 48 kHz.
      *
      * @param filePath Absolute file path (including the suffixes of the filename) of the recording file. The string of the file name is in UTF-8. For example, `/sdcard/emulated/0/audio/aac`.
      * @param sampleRate Sample rate (Hz) of the recording file.

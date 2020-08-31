@@ -70,8 +70,181 @@ export class VideoEncoderConfiguration {
      */
     minFrameRate?: VideoFrameRate
     /**
-     * Bitrate of the video (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range,
-     * the SDK automatically adjusts it to a value within the range.
+     * Bitrate of the video (Kbps). Refer to the table below and set your bitrate. If you set a bitrate beyond the proper range, the SDK automatically adjusts it to a value within the range.
+     * You can also choose from the following options:
+     *  - [`Standard`]{@link BitRate.Standard}: (Recommended) The standard bitrate mode. In this mode, the bitrates differ between the `LiveBroadcasting` and `Communication` profiles:
+     *      - In the `Communication` profile, the video bitrate is the same as the base bitrate.
+     *      - In the `LiveBroadcasting` profile, the video bitrate is twice the base bitrate.
+     *  - [`Compatible`]{@link BitRate.Compatible}: The compatible bitrate mode. In this mode, the bitrate stays the same regardless of the profile. If you choose this mode for the `LiveBroadcasting` profile, the video frame rate may be lower than the set value.
+     *
+     * Agora uses different video codecs for different profiles to optimize the user experience. For example, the Communication profile prioritizes the smoothness while the `LiveBroadcasting` profile prioritizes the video quality (a higher bitrate). Therefore, We recommend setting this parameter as [`Standard`]{@link BitRate.Standard}.
+     *
+     * **Video Bitrate Table**
+     * <table>
+     *     <tr>
+     *         <th>Resolution</th>
+     *         <th>Frame rate<p>(fps)</th>
+     *         <th>Base Bitrate<p>(Kbps, for Communication)</th>
+     *         <th>Live Bitrate<p>(Kbps, for Live Broadcasting)</th>
+     *     </tr>
+     *     <tr>
+     *         <td>160*120</td>
+     *         <td>15</td>
+     *         <td>65</td>
+     *         <td>130</td>
+     *     </tr>
+     *     <tr>
+     *         <td>120*120</td>
+     *         <td>15</td>
+     *         <td>50</td>
+     *         <td>100</td>
+     *     </tr>
+     *     <tr>
+     *         <td>320*180</td>
+     *         <td>15</td>
+     *         <td>140</td>
+     *         <td>280</td>
+     *     </tr>
+     *     <tr>
+     *         <td>180*180</td>
+     *         <td>15</td>
+     *         <td>100</td>
+     *         <td>200</td>
+     *     </tr>
+     *     <tr>
+     *         <td>240*180</td>
+     *         <td>15</td>
+     *         <td>120</td>
+     *         <td>240</td>
+     *     </tr>
+     *     <tr>
+     *         <td>320*240</td>
+     *         <td>15</td>
+     *         <td>200</td>
+     *         <td>400</td>
+     *     </tr>
+     *     <tr>
+     *         <td>240*240</td>
+     *         <td>15</td>
+     *         <td>140</td>
+     *         <td>280</td>
+     *     </tr>
+     *     <tr>
+     *         <td>424*240</td>
+     *         <td>15</td>
+     *         <td>220</td>
+     *         <td>440</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*360</td>
+     *         <td>15</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>360*360</td>
+     *         <td>15</td>
+     *         <td>260</td>
+     *         <td>520</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*360</td>
+     *         <td>30</td>
+     *         <td>600</td>
+     *         <td>1200</td>
+     *     </tr>
+     *     <tr>
+     *         <td>360*360</td>
+     *         <td>30</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*360</td>
+     *         <td>15</td>
+     *         <td>320</td>
+     *         <td>640</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*360</td>
+     *         <td>30</td>
+     *         <td>490</td>
+     *         <td>980</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*480</td>
+     *         <td>15</td>
+     *         <td>500</td>
+     *         <td>1000</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*480</td>
+     *         <td>15</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*480</td>
+     *         <td>30</td>
+     *         <td>750</td>
+     *         <td>1500</td>
+     *     </tr>
+     *     <tr>
+     *         <td>480*480</td>
+     *         <td>30</td>
+     *         <td>600</td>
+     *         <td>1200</td>
+     *     </tr>
+     *     <tr>
+     *         <td>848*480</td>
+     *         <td>15</td>
+     *         <td>610</td>
+     *         <td>1220</td>
+     *     </tr>
+     *     <tr>
+     *         <td>848*480</td>
+     *         <td>30</td>
+     *         <td>930</td>
+     *         <td>1860</td>
+     *     </tr>
+     *     <tr>
+     *         <td>640*480</td>
+     *         <td>10</td>
+     *         <td>400</td>
+     *         <td>800</td>
+     *     </tr>
+     *     <tr>
+     *         <td>1280*720</td>
+     *         <td>15</td>
+     *         <td>1130</td>
+     *         <td>2260</td>
+     *     </tr>
+     *     <tr>
+     *         <td>1280*720</td>
+     *         <td>30</td>
+     *         <td>1710</td>
+     *         <td>3420</td>
+     *     </tr>
+     *     <tr>
+     *         <td>960*720</td>
+     *         <td>15</td>
+     *         <td>910</td>
+     *         <td>1820</td>
+     *     </tr>
+     *     <tr>
+     *         <td>960*720</td>
+     *         <td>30</td>
+     *         <td>1380</td>
+     *         <td>2760</td>
+     *     </tr>
+     * </table>
+     *
+     * **Note**
+     *
+     * The base bitrate in this table applies to the Communication profile.
+     * The `LiveBroadcasting` profile generally requires a higher bitrate for better video quality.
+     * We recommend setting the bitrate mode as [`Standard`]{@link BitRate.Standard}. You can also set the bitrate as the base bitrate value &times; 2.
+     *
      */
     bitrate?: number
     /**
@@ -683,19 +856,19 @@ export interface AudioVolumeInfo {
  */
 export interface Rect {
     /**
-     * The x coordinate of the left side of the rectangular area.
+     * The horizontal coordinate of the left side of the rectangular area.
      */
     left: number
     /**
-     * The y coordinate of the upper side of the rectangular area.
+     * The vertical coordinate of the upper side of the rectangular area.
      */
     top: number
     /**
-     * The x coordinate of the right side of the rectangular area.
+     * The horizontal coordinate of the right side of the rectangular area.
      */
     right: number
     /**
-     * The y coordinate of the bottom side of the rectangular area.
+     * The vertical coordinate of the bottom side of the rectangular area.
      */
     bottom: number
 }
