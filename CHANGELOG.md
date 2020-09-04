@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.0.1
+  - release version
+
 #### 3.0.1-rc.5
   - fix `Xcode10` `Swift4` compile error
 
