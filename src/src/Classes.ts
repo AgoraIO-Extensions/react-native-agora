@@ -78,7 +78,7 @@ export class VideoEncoderConfiguration {
      *         <li>1280x720</li>
      * </ul>
      *
-     * @note
+     * **Note**
      * <ul>
      *     <li>The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [`VideoOutputOrientationMode`]{@link VideoOutputOrientationMode}.</li>
      *     <li>Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
@@ -265,7 +265,7 @@ export class VideoEncoderConfiguration {
      *     </tr>
      * </table>
      *
-     * @note
+     * **Note**
      *
      * The base bitrate in this table applies to the Communication profile.
      * The `LiveBroadcasting` profile generally requires a higher bitrate for better video quality.
@@ -410,7 +410,7 @@ export class TranscodingUser {
      * - 4: The audio stream of the broadcaster uses the BL audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
      * - 5: The audio stream of the broadcaster uses the BR audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
      *
-     * @note
+     * **Note**
      *
      * Special players are needed if `audioChannel` is not set as 0.
      *

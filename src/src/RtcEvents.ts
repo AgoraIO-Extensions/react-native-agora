@@ -538,7 +538,7 @@ export interface RtcEngineEvents {
      * - A remote user/host rejoins the channel after a network interruption.
      * - The host injects an online media stream into the channel by calling [`addInjectStreamUrl`]{@link RtcEngine.addInjectStreamUrl}.
      *
-     * @note
+     * **Note**
      * In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile:
      *  - The host receives the [`UserJoined`]{@link UserJoined} callback when another host joins the channel.
      *  - The audience in the channel receives the [`UserJoined`]{@link UserJoined} callback when a new host joins the channel.
@@ -617,7 +617,7 @@ export interface RtcEngineEvents {
      *
      * The SDK triggers two independent `AudioVolumeIndication` callbacks at one time, which separately report the volume information of the local user and all the remote speakers. For more information, see the detailed parameter descriptions.
      *
-     * @note
+     * **Note**
      * - To enable the voice activity detection of the local user, ensure that you set `report_vad(true)` in the [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication} method.
      * - Calling [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} affects the SDK's behavior.
      *  - If the local user calls [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream}, the SDK stops triggering the local user's callback.
@@ -633,7 +633,7 @@ export interface RtcEngineEvents {
      * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by
      * calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
      *
-     * @note
+     * **Note**
      * - To receive this callback, you need to call [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}.
      * - This callback returns the user ID of the user with the highest voice volume during a period of time, instead of at the moment.
      *
@@ -668,7 +668,7 @@ export interface RtcEngineEvents {
      *
      * The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream} method.
      *
-     * @note
+     * **Note**
      *
      * This callback is invalid when the number of users or hosts in the channel exceeds 17.
      *
@@ -707,7 +707,7 @@ export interface RtcEngineEvents {
      *
      * This callback indicates the state change of the remote audio stream.
      *
-     * @note
+     * **Note**
      *
      * This callback does not work properly when the number of users (in the [`Communication`] profile) or hosts (in the [`LiveBroadcasting`] profile) in the channel exceeds 17.
      *
@@ -720,7 +720,7 @@ export interface RtcEngineEvents {
      *
      * This callback indicates the state change of the local audio stream, including the state of the audio recording and encoding, and allows you to troubleshoot issues when exceptions occur.
      *
-     * @note
+     * **Note**
      *
      * When the state is [`Failed`]{@link AudioLocalState.Failed}, see the error parameter for details.
      *
@@ -792,7 +792,7 @@ export interface RtcEngineEvents {
      * - The position of the human face in the local video.
      * - The distance between the human face and the device screen. This value is based on the fitting calculation of the local video size and the position of the human face.
      *
-     * @note
+     * **Note**
      * - If the SDK does not detect a face, it reduces the frequency of this callback to reduce power consumption on the local device.
      * - The SDK stops triggering this callback when a human face is in close proximity to the screen.
      * - On Android, the distance value reported in this callback may be slightly different from the actual distance. Therefore, Agora does not recommend using it for accurate calculation.
@@ -926,7 +926,7 @@ export interface RtcEngineEvents {
      *
      * When the `LiveTranscoding` class in the [`setLiveTranscoding`]{@link RtcEngine.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
      *
-     * @note
+     * **Note**
      * - If you call [`setLiveTranscoding`]{@link RtcEngine.setLiveTranscoding} to set the `LiveTranscoding` class for the first time, the SDK does not trigger this callback.
      *
      * @event TranscodingUpdated
@@ -1043,7 +1043,7 @@ export interface RtcEngineEvents {
      *
      * The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} method.
      *
-     * @note
+     * **Note**
      *
      * This callback is invalid when the number of users or hosts in the channel exceeds 17.
      *
@@ -1117,7 +1117,7 @@ export interface RtcEngineEvents {
      *
      * The SDK triggers this callback when the remote user enables or disables the video module by calling the [`enableVideo`]{@link RtcEngine.enableVideo} or [`disableVideo`]{@link RtcEngine.disableVideo} method.
      *
-     * @note
+     * **Note**
      *
      * This callback is invalid when the number of users or hosts in the channel exceeds 17.
      *
@@ -1325,7 +1325,7 @@ export interface RtcChannelEvents {
      * - A remote user/host rejoins the channel after a network interruption.
      * - The host injects an online media stream into the channel by calling [`addInjectStreamUrl`]{@link RtcChannel.addInjectStreamUrl}.
      *
-     * @note
+     * **Note**
      * - In the `LiveBroadcasting` profile:
      *  - The host receives this callback when another host joins the channel.
      *  - The audience in the channel receives this callback when a new host joins the channel.
@@ -1394,7 +1394,7 @@ export interface RtcChannelEvents {
      *
      * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
      *
-     * @note
+     * **Note**
      * - To receive this callback, you need to call [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}.
      * - This callback reports the ID of the user with the highest voice volume during a period of time, instead of at the moment.
      *
@@ -1440,7 +1440,7 @@ export interface RtcChannelEvents {
      *
      * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
      *
-     * @note
+     * **Note**
      *
      * Once the remote media stream is switched to the low stream due to poor network conditions,
      * you can monitor the stream switch between a high and low stream in the [`RemoteVideoStats`]{@link RemoteVideoStats} callback.
@@ -1500,7 +1500,7 @@ export interface RtcChannelEvents {
      *
      * When the `LiveTranscoding` class in the [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
      *
-     * @note
+     * **Note**
      *
      * If you call [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} to set the `LiveTranscoding` class for the first time, the SDK does not trigger this callback.
      *
