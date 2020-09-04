@@ -775,7 +775,7 @@ export enum ChannelMediaRelayEvent {
      */
     UpdateDestinationChannelNotChange = 9,
     /**
-     * 10: The destination channel name is NULL.
+     * 10: The destination channel name is null.
      */
     UpdateDestinationChannelIsNil = 10,
     /**

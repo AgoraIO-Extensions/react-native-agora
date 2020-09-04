@@ -43,7 +43,9 @@ export class VideoDimensions {
      * The video resolution on the vertical axis.
      */
     height: number
-
+    /**
+     * @ignore
+     */
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
@@ -58,6 +60,32 @@ export class VideoEncoderConfiguration {
     /**
      * The video frame dimensions (px), which is used to specify the video quality and measured by the total number of pixels along a
      * frame's width and height. The default value is 640 × 360.
+     * You can customize the dimension, or select from the following list:
+     * <ul>
+     *         <li>120x120</li>
+     *         <li>160x120</li>
+     *         <li>180x180</li>
+     *         <li>240x180</li>
+     *         <li>320x180</li>
+     *         <li>240x240</li>
+     *         <li>320x240</li>
+     *         <li>424x240</li>
+     *         <li>360x360</li>
+     *         <li>480x360</li>
+     *         <li>640x360</li>
+     *         <li>480x480</li>
+     *         <li>640x480</li>
+     *         <li>840x480</li>
+     *         <li>960x720</li>
+     *         <li>1280x720</li>
+     * </ul>
+     *
+     * **Note**
+     * <ul>
+     *     <li>The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [`VideoOutputOrientationMode`]{@link VideoOutputOrientationMode}.</li>
+     *     <li>Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
+     * </ul>
+     *
      */
     dimensions?: VideoDimensions
     /**
@@ -264,7 +292,9 @@ export class VideoEncoderConfiguration {
      * Sets the mirror mode of the published local video stream.
      */
     mirrorMode?: VideoMirrorMode
-
+    /**
+     * @ignore
+     */
     constructor({dimensions, frameRate, minFrameRate, bitrate, minBitrate, orientationMode, degradationPrefer, mirrorMode}: { dimensions?: VideoDimensions, frameRate?: VideoFrameRate, minFrameRate?: VideoFrameRate, bitrate?: number, minBitrate?: number, orientationMode?: VideoOutputOrientationMode, degradationPrefer?: DegradationPreference, mirrorMode?: VideoMirrorMode }) {
         this.dimensions = dimensions;
         this.frameRate = frameRate;
@@ -299,7 +329,9 @@ export class BeautyOptions {
      * The default value is 0.1. This parameter adjusts the red saturation level.
      */
     rednessLevel?: number
-
+    /**
+     * @ignore
+     */
     constructor({lighteningContrastLevel, lighteningLevel, smoothnessLevel, rednessLevel}: { lighteningContrastLevel?: LighteningContrastLevel, lighteningLevel?: number, smoothnessLevel?: number, rednessLevel?: number }) {
         this.lighteningContrastLevel = lighteningContrastLevel;
         this.lighteningLevel = lighteningLevel;
@@ -332,7 +364,9 @@ export class AgoraImage {
      * Height of the image on the broadcasting video.
      */
     height: number
-
+    /**
+     * @ignore
+     */
     constructor(url: string, x: number, y: number, width: number, height: number) {
         this.url = url;
         this.x = x;
@@ -371,14 +405,28 @@ export class TranscodingUser {
      */
     zOrder?: number
     /**
-     * The transparency of the video frame of the user in the CDN live stream that ranges between 0.0 and 1.0. 0.0 means that the video frame is completely transparent and 1.0 means opaque. The default value is 1.0.
+     * The transparency of the video frame of the user in the CDN live streaming that ranges between 0.0 and 1.0. 0.0 means that the video frame is completely transparent and 1.0 means opaque. The default value is 1.0.
      */
     alpha?: number
     /**
      * The audio channel ranging between 0 and 5. The default value is 0.
+     *
+     * - 0: (default) Supports dual channels. Depends on the upstream of the broadcaster.
+     * - 1: The audio stream of the broadcaster uses the FL audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
+     * - 2: The audio stream of the broadcaster uses the FC audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
+     * - 3: The audio stream of the broadcaster uses the FR audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
+     * - 4: The audio stream of the broadcaster uses the BL audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
+     * - 5: The audio stream of the broadcaster uses the BR audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
+     *
+     * **Note**
+     *
+     * Special players are needed if `audioChannel` is not set as 0.
+     *
      */
     audioChannel?: AudioChannel
-
+    /**
+     * @ignore
+     */
     constructor(uid: number, x: number, y: number, {width, height, zOrder, alpha, audioChannel}: { width?: number, height?: number, zOrder?: number, alpha?: number, audioChannel?: AudioChannel }) {
         this.uid = uid;
         this.x = x;
@@ -408,7 +456,9 @@ export class Color {
      * Blue.
      */
     blue: number
-
+    /**
+     * @ignore
+     */
     constructor(red: number, green: number, blue: number) {
         this.red = red;
         this.green = green;
@@ -470,7 +520,14 @@ export class LiveTranscoding {
      */
     audioBitrate?: number
     /**
-     * Agora self-defined audio channel type. We recommend choosing `1` or `2`. Special players are required if you choose `3`, `4` or `5`.
+     * The number of audio channels for the CDN live stream.
+     *
+     * Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
+     * - 1: (Default) Mono
+     * - 2: Stereo
+     * - 3: Three audio channels
+     * - 4: Four audio channels
+     * - 5: Five audio channels
      */
     audioChannels?: AudioChannel
     /**
@@ -493,7 +550,9 @@ export class LiveTranscoding {
      * An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
      */
     transcodingUsers: TranscodingUser[]
-
+    /**
+     * @ignore
+     */
     constructor(transcodingUsers: TranscodingUser[], {width, height, videoBitrate, videoFramerate, lowLatency, videoGop, watermark, backgroundImage, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, videoCodecProfile, backgroundColor, userConfigExtraInfo}: { width?: number, height?: number, videoBitrate?: number, videoFramerate?: VideoFrameRate, lowLatency?: boolean, videoGop?: number, watermark?: AgoraImage, backgroundImage?: AgoraImage, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel, audioCodecProfile?: AudioCodecProfileType, videoCodecProfile?: VideoCodecProfileType, backgroundColor?: Color, userConfigExtraInfo?: string, }) {
         this.width = width;
         this.height = height;
@@ -530,7 +589,9 @@ export class ChannelMediaInfo {
      * The user ID.
      */
     uid: number
-
+    /**
+     * @ignore
+     */
     constructor(uid: number, {channelName, token}: { channelName?: string, token?: string }) {
         this.channelName = channelName;
         this.token = token;
@@ -543,14 +604,26 @@ export class ChannelMediaInfo {
  */
 export class ChannelMediaRelayConfiguration {
     /**
-     * Sets the information of the source channel.
+     * The information of the source channel: [`ChannelMediaInfo`]{@link ChannelMediaInfo}. It contains the following members:
+     * - `channelName`: The name of the source channel. The default value is null, which means the SDK applies the name of the current channel.
+     * - `uid`: ID of the host whose media stream you want to relay. The default value is 0, which means the SDK generates a random UID. You must set it as 0.
+     * - `token`: The token for joining the source channel. It is generated with the `channelName` and `uid` you set in `srcInfo`.
+     *  - If you have not enabled the App Certificate, set this parameter as the default value null, which means the SDK applies the App ID.
+     *  - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`, and the `uid` must be set as 0.
      */
     srcInfo: ChannelMediaInfo
     /**
-     * Sets the information of the destination channel.
+     * The information of the destination channel: [`ChannelMediaInfo`]{@link ChannelMediaInfo}. It contains the following members:
+     * - `channelName`: The name of the destination channel.
+     * - `uid`: ID of the host in the destination channel. The value ranges from 0 to (232-1). To avoid UID conflicts, this uid must be different from any other UIDs in the destination channel. The default value is 0, which means the SDK generates a random UID.
+     * - `token`: The token for joining the source channel. It is generated with the `channelName` and `uid` you set in `destInfo`.
+     *  - If you have not enabled the App Certificate, set this parameter as the default value null, which means the SDK applies the App ID.
+     *  - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`, and the `uid` must be set as 0.
      */
     destInfos: ChannelMediaInfo[]
-
+    /**
+     * @ignore
+     */
     constructor(srcInfo: ChannelMediaInfo, destInfos: ChannelMediaInfo[]) {
         this.srcInfo = srcInfo;
         this.destInfos = destInfos;
@@ -577,7 +650,9 @@ export class LastmileProbeConfig {
      * The expected maximum receive bitrate in bps in range of [100000,5000000].
      */
     expectedDownlinkBitrate: number
-
+    /**
+     * @ignore
+     */
     constructor(probeUplink: boolean, probeDownlink: boolean, expectedUplinkBitrate: number, expectedDownlinkBitrate: number) {
         this.probeUplink = probeUplink;
         this.probeDownlink = probeDownlink;
@@ -606,7 +681,9 @@ export class Rectangle {
      * The height (pixels) of the watermark image.
      */
     height: number
-
+    /**
+     * @ignore
+     */
     constructor(x: number, y: number, width: number, height: number) {
         this.x = x;
         this.y = y;
@@ -633,7 +710,9 @@ export class WatermarkOptions {
      * The watermark position in the portrait mode.
      */
     positionInPortraitMode: Rectangle
-
+    /**
+     * @ignore
+     */
     constructor(positionInLandscapeMode: Rectangle, positionInPortraitMode: Rectangle, visibleInPreview?: boolean) {
         this.visibleInPreview = visibleInPreview;
         this.positionInLandscapeMode = positionInLandscapeMode;
@@ -642,15 +721,15 @@ export class WatermarkOptions {
 }
 
 /**
- * Configuration of the imported live broadcast voice or video stream.
+ * Configuration of the imported live interactive voice or video stream.
  */
 export class LiveInjectStreamConfig {
     /**
-     * Width of the added stream to the live interactive streaming. The default value is 0, which is the same width as the original stream.
+     * Width (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same width as the original stream.
      */
     width?: number
     /**
-     * Height of the added stream to the live interactive streaming. The default value is 0, which is the same height as the original stream.
+     * Height (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same height as the original stream.
      */
     height?: number
     /**
@@ -666,18 +745,27 @@ export class LiveInjectStreamConfig {
      */
     videoBitrate?: number
     /**
-     * Audio sample rate of the added stream to the live interactive streaming: AudioSampleRateType. The default value is 44100 Hz.
+     * Audio sample rate of the added stream to the live interactive streaming. The default value is 44100 Hz.
      */
     audioSampleRate?: AudioSampleRateType
     /**
-     * Audio bitrate of the added stream to the live interactive streaming. The default value is 48.
+     * Audio bitrate of the added stream to the live interactive streaming. The default value is 48 Kbps.
      */
     audioBitrate?: number
     /**
-     * Audio channels to add into the live interactive streaming. The value ranges between `1` and `2`. The default value is `1`.
+     * Audio channels to be added to the live interactive streaming.
+     *
+     * Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
+     * - 1: (Default) Mono
+     * - 2: Stereo
+     * - 3: Three audio channels
+     * - 4: Four audio channels
+     * - 5: Five audio channels
      */
     audioChannels?: AudioChannel
-
+    /**
+     * @ignore
+     */
     constructor({width, height, videoGop, videoFramerate, videoBitrate, audioSampleRate, audioBitrate, audioChannels}: { width?: number, height?: number, videoGop?: number, videoFramerate?: VideoFrameRate, videoBitrate?: number, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel }) {
         this.width = width;
         this.height = height;
@@ -702,7 +790,9 @@ export class CameraCapturerConfiguration {
      * The camera direction.
      */
     cameraDirection: CameraDirection
-
+    /**
+     * @ignore
+     */
     constructor(preference: CameraCaptureOutputPreference, cameraDirection: CameraDirection) {
         this.preference = preference;
         this.cameraDirection = cameraDirection;
@@ -715,13 +805,19 @@ export class CameraCapturerConfiguration {
 export class ChannelMediaOptions {
     /**
      * Determines whether to subscribe to audio streams when the user joins the channel.
+     * - `true`: (Default) Subscribe.
+     * - `false`: Do not subscribe.
      */
     autoSubscribeAudio: boolean
     /**
      * Determines whether to subscribe to video streams when the user joins the channel.
+     * - `true`: (Default) Subscribe.
+     * - `false`: Do not subscribe.
      */
     autoSubscribeVideo: boolean
-
+    /**
+     * @ignore
+     */
     constructor(autoSubscribeAudio: boolean, autoSubscribeVideo: boolean) {
         this.autoSubscribeAudio = autoSubscribeAudio;
         this.autoSubscribeVideo = autoSubscribeVideo;

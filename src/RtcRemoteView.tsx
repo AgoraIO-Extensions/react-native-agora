@@ -9,10 +9,7 @@ import {
     RtcUidProps
 } from "./src/RtcRenderView.native";
 
-/**
- * Use SurfaceView in Android.
- * Use UIView in iOS.
- */
+
 class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps & RtcUidProps, {}> {
     render() {
         return (
@@ -21,10 +18,7 @@ class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps & RtcUidProp
     }
 }
 
-/**
- * Use TextureView in Android.
- * Not support for iOS.
- */
+
 class TextureView extends Component<ViewProps & RtcTextureViewProps & RtcUidProps, {}> {
     render() {
         if (Platform.OS === 'ios')
