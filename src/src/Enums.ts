@@ -981,8 +981,8 @@ export enum DegradationPreference {
 }
 
 /**
- * Encryption mode
- * @enum {string}
+ * Encryption mode.
+ *
  */
 export enum EncryptionMode {
     /**
