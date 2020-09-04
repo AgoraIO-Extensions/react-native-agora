@@ -10,8 +10,13 @@ import {
 } from "./src/RtcRenderView.native";
 
 /**
- * Use SurfaceView in Android.
- * Use UIView in iOS.
+ * The SurfaceView class.
+ *
+ * **Note**
+ *
+ * SurfaceView is supported on Android only. Use UIView on iOS.
+ *
+ * @noInheritDoc
  */
 class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps & RtcUidProps, {}> {
     render() {
@@ -22,8 +27,12 @@ class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps & RtcUidProp
 }
 
 /**
- * Use TextureView in Android.
- * Not support for iOS.
+ * The TextureView class.
+ *
+ * **Note**
+ *
+ * TextureView is supported on Android only. iOS does not support TextureView.
+ * @noInheritDoc
  */
 class TextureView extends Component<ViewProps & RtcTextureViewProps & RtcUidProps, {}> {
     render() {
@@ -36,7 +45,7 @@ class TextureView extends Component<ViewProps & RtcTextureViewProps & RtcUidProp
 }
 
 /**
- * View for render remote video.
+ * View for rendering remote video.
  */
 export default {
     SurfaceView,

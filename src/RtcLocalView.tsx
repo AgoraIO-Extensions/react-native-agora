@@ -4,8 +4,13 @@ import {Platform, ViewProps} from "react-native";
 import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps} from "./src/RtcRenderView.native";
 
 /**
- * Use SurfaceView in Android.
- * Use UIView in iOS.
+ * The SurfaceView class.
+ *
+ * **Note**
+ *
+ * SurfaceView is supported on Android only. Use UIView on iOS.
+ *
+ * @noInheritDoc
  */
 class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
     render() {
@@ -18,8 +23,12 @@ class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
 }
 
 /**
- * Use TextureView in Android.
- * Not support for iOS.
+ * The TextureView class.
+ *
+ * **Note**
+ *
+ * TextureView is supported on Android only. iOS does not support TextureView.
+ * @noInheritDoc
  */
 class TextureView extends Component<ViewProps & RtcTextureViewProps, {}> {
     render() {
@@ -34,7 +43,7 @@ class TextureView extends Component<ViewProps & RtcTextureViewProps, {}> {
 }
 
 /**
- * View for preview local video.
+ * View for previewing local video.
  */
 export default {
     SurfaceView,
