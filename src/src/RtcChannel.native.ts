@@ -71,7 +71,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * - The space character.
      * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
      *
-     * @note
+     * **Note**
      * - This parameter does not have a default value. You must set it.
      * - Do not set it as the empty string "". Otherwise, the SDK returns [`Refused(-5)`]{@link ErrorCode.Refused}.
      *
@@ -186,7 +186,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     /**
      * Joins the channel with a user ID.
      *
-     * @note
+     * **Note**
      * - If you are already in a channel, you cannot rejoin it with the same UID.
      * - We recommend using different UIDs for different channels.
      * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
@@ -207,7 +207,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     /**
      * Joins a channel with the user account.
      *
-     * @note
+     * **Note**
      * - If you are already in a channel, you cannot rejoin it with the same user account.
      * - We recommend using different user accounts for different channels.
      * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
@@ -302,7 +302,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * You can call this method as many times as necessary to adjust the playback volume of different remote
      * users, or to repeatedly adjust the playback volume of the same remote user.
      *
-     * @note
+     * **Note**
      * - Call this method after joining a channel.
      * - The playback volume here refers to the mixed volume of a specified remote user.
      * - This method can only adjust the playback volume of one specified remote user at a time.
@@ -390,7 +390,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
      *
-     * @note
+     * **Note**
      * - For this method to work, enable stereo panning for remote users by calling the [`enableSoundPositionIndication`]{@link RtcEngine.enableSoundPositionIndication} method before joining a channel.
      * - This method requires hardware support. For the best sound positioning, we recommend using a stereo headset.
      *
@@ -411,7 +411,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged}
      * callback on the local client to report the state of adding a local stream to the CDN.
      *
-     * @note
+     * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - Ensure that the user joins a channel before calling this method.
      * - This method can only be called by a host in a `LiveBroadcasting` channel.
@@ -433,7 +433,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
      * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback.
      *
-     * @note
+     * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - This method can only be called by a host in a `LiveBroadcasting` channel.
      * - This method removes only one stream HTTP/HTTPS URL address each time it is called.
@@ -452,7 +452,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * call this method to update the [`LiveTranscoding`]{@link LiveTranscoding} class. If you call this method to set the [`LiveTranscoding`]{@link LiveTranscoding}
      * class for the first time, the SDK does not trigger the [`TranscodingUpdated`]{@link RtcChannelEvents.TranscodingUpdated} callback.
      *
-     * @note
+     * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - Ensure that the user joins a channel before calling this method.
      * - This method can only be called by a host in a `LiveBroadcasting` channel.
@@ -477,7 +477,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * - If the [`ChannelMediaRelayStateChanged`]{@link RtcChannelEvents.ChannelMediaRelayStateChanged} callback returns [`Failure(3)`]{@link ChannelMediaRelayState.Failure}, an exception occurs during the media stream relay.
      *
-     * @note
+     * **Note**
      * - Contact support@agora.io before implementing this function.
      * - We do not support string user accounts in this API.
      * - Call this method after joining the channel.
@@ -498,7 +498,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * After a successful method call, the SDK triggers the [`ChannelMediaRelayStateChanged`]{@link RtcChannelEvents.ChannelMediaRelayStateChanged} callback. If the callback reports [`Idle(0)`]{@link ChannelMediaRelayState.Idle} and
      * [`None(0)`]{@link ChannelMediaRelayError.None}, the host successfully stops the relay.
      *
-     * @note
+     * **Note**
      * - If the method call fails, the SDK triggers the [`ChannelMediaRelayStateChanged`]{@link RtcChannelEvents.ChannelMediaRelayStateChanged} callback with
      * the [`ServerNoResponse(2)`]{@link ChannelMediaRelayError.ServerNoResponse} or [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerConnectionLost} state code.
      * You can leave the channel using [`leaveChannel`]{@link RtcChannel.leaveChannel}, and the media stream relay automatically stops.
@@ -515,7 +515,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * After a successful method call, the SDK triggers the [`ChannelMediaRelayEvent`]{@link RtcChannelEvents.ChannelMediaRelayEvent} callback with
      * the [`UpdateDestinationChannel(7)`]{@link ChannelMediaRelayEvent.UpdateDestinationChannel} state code.
      *
-     * @note
+     * **Note**
      * - Call this method after the [`startChannelMediaRelay`]{@link RtcChannel.startChannelMediaRelay} method to update the destination channel.
      * - This method supports adding at most four destination channels in the relay.
      *
@@ -560,7 +560,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * Use this method with the [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} method.
      * If a remote video stream experiences the fallback, the SDK ensures the high-priority user gets the best possible stream quality.
      *
-     * @note
+     * **Note**
      * The Agora SDK supports setting userPriority as high for one user only.
      *
      * @param uid The ID of the remote user.
@@ -579,7 +579,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * This method enables you to add synchronized metadata in the video stream for more diversified live streaming interactions,
      * such as sending shopping links, digital coupons, and online quizzes.
      *
-     * @note
+     * **Note**
      * - Call this method before the [`joinChannel`]{@link RtcChannel.joinChannel} method.
      * - This method applies to the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile only.
      *
@@ -621,7 +621,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * All users in the same channel must use the same encryption mode and password.
      * Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
      *
-     * @note
+     * **Note**
      * - Do not use this method for CDN streaming.
      * - Before calling this method, ensure that you have called [`setEncryptionSecret`]{@link RtcChannel.setEncryptionSecret} to enable encryption.
      *
@@ -639,7 +639,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * The encryption password is automatically cleared once a user leaves the channel.
      * If the encryption password is not specified or set to empty, the encryption functionality is disabled.
      *
-     * @note
+     * **Note**
      * - For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
      * - Do not use this method for CDN live streaming.
      *
@@ -663,7 +663,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *  - [`UserJoined`]{@link RtcChannelEvents.UserJoined}(uid: 666), if the method call succeeds and the online
      * media stream is injected into the channel.
      *
-     * @note
+     * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - This method can only be called by a host in a `LiveBroadcasting` channel.
      *
@@ -696,7 +696,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * Each user can create up to five data streams during the life cycle of the [`RtcChannel`]{@link RtcChannel} instance.
      *
-     * @note
+     * **Note**
      *
      * Set both the `reliable` and `ordered` parameters to `true` or `false`. Do not set one as `true`
      * and the other as `false`.

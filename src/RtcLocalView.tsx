@@ -6,7 +6,7 @@ import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps
 /**
  * The SurfaceView class.
  *
- * @note
+ * **Note**
  *
  * SurfaceView is supported on Android only. Use UIView on iOS.
  *
@@ -25,7 +25,7 @@ class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
 /**
  * The TextureView class.
  *
- * @note
+ * **Note**
  *
  * TextureView is supported on Android only. iOS does not support TextureView.
  * @noInheritDoc

@@ -71,7 +71,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Gets a created [`RtcEngine`]{@link RtcEngine} instance.
      *
-     * @note
+     * **Note**
      *
      * Ensure that you have created an `RtcEngine`. Otherwise, the method call fails and the SDK returns an error message.
      * @returns
@@ -92,7 +92,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
      *
-     * @note
+     * **Note**
      * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
      * - You can create an [`RtcEngine`]{@link RtcEngine} instance either by calling this method or by calling [`createWithAreaCode`]{@link createWithAreaCode}. The difference between [`createWithAreaCode`]{@link createWithAreaCode} and this method is that [`createWithAreaCode`]{@link createWithAreaCode} enables you to specify the connection area.
      * - The Agora React Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app.
@@ -113,7 +113,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
      *
-     * @note
+     * **Note**
      *
      * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
      * - You can create an [`RtcEngine`]{@link RtcEngine} instance either by calling this method or by calling [`create`]{@link create}. The difference between [`create`]{@link create} and this method is that this method enables you to specify the connection area.
@@ -144,7 +144,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Once you call this method to destroy the created [`RtcEngine`]{@link RtcEngine} instance, you cannot use any method or callback in the SDK any more.
      * If you want to use the real-time communication functions again, you must call `create` to create a new [`RtcEngine`]{@link RtcEngine} instance.
      *
-     * @note
+     * **Note**
      *
      * - Because [`destroy`]{@link destroy} is a synchronous method and the app cannot move on to another task until the execution completes,
      * Agora suggests calling this method in a sub-thread to avoid congestion in the main thread.
@@ -262,7 +262,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * When the connection between the client and Agora server is interrupted due to poor network conditions,
      * the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [`RejoinChannelSuccess`]{@link RtcEngineEvents.RejoinChannelSuccess} callback on the local client.
      *
-     * @note
+     * **Note**
      *
      * A channel does not accept duplicate uids, such as two users with the same `uid`. If you set `uid` as `0`, the system automatically assigns a uid.
      *
@@ -299,7 +299,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * After the user successfully switches to another channel, the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} and [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} callbacks are triggered to
      * indicate that the user has left the original channel and joined a new one.
      *
-     * @note
+     * **Note**
      *
      * This method applies to the [`Audience`]{@link ClientRole.Audience} role in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel only.
      *
@@ -331,7 +331,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - The remote client: [`UserOffline`]{@link RtcEngineEvents.UserOffline}, if the user leaving the channel is in the [`Communication`]{@link ChannelProfile.Communication} channel, or is a [`Broadcaster`]{@link ClientRole.Broadcaster}
      * in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
-     * @note
+     * **Note**
      * - If you call [`destroy`]{@link destroy} immediately after calling [`leaveChannel`]{@link leaveChannel}, the [`leaveChannel`]{@link leaveChannel} process interrupts, and the SDK does not trigger the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} callback.
      *
      * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removeInjectStreamUrl`]{@link removeInjectStreamUrl} method.
@@ -422,7 +422,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
      *
-     * @note
+     * **Note**
      *
      * Ensure that you call this method immediately after calling the `create` method, otherwise the output log may not be complete.
      *
@@ -500,7 +500,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
-     * @note
+     * **Note**
      *
      * To ensure smooth communication, use the same parameter type to identify the user.
      * For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account.
@@ -539,7 +539,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * The difference between the two is that for the former, the time elapsed between calling the [`joinChannelWithUserAccount`]{@link joinChannelWithUserAccount} method and joining the channel is shorter than the latter.
      *
-     * @note
+     * **Note**
      *
      * - Ensure that you set the `userAccount` parameter. Otherwise, this method does not take effect.
      * - Ensure that the value of the `userAccount` parameter is unique in the channel.
@@ -562,7 +562,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Adjusts the playback volume of all remote users.
      *
-     * @note
+     * **Note**
      *
      * - This method adjusts the playback volume which is mixed volume of all remote users.
      * - To mute the local audio playback, call both this method and [`adjustAudioMixingVolume`]{@link adjustAudioMixingVolume}, and set `volume` as `0`.
@@ -595,7 +595,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
      *
-     * @note
+     * **Note**
      * - Call this method after joining a channel.
      * - The playback volume here refers to the mixed volume of a specified remote user.
      * - This method can only adjust the playback volume of one specified remote user at a time. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.
@@ -611,7 +611,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Disables the audio module.
      *
-     * @note
+     * **Note**
      *
      * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
      * You can call this method either before or after joining a channel.
@@ -637,7 +637,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * The audio module is enabled by default.
      *
-     * @note
+     * **Note**
      *
      * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
      * You can call this method either before or after joining a channel.
@@ -690,7 +690,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     * Once the local audio function is disabled or re-enabled, the SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback, which reports [`Stopped`]{@link AudioLocalState.Stopped} or [`Recording`]{@link AudioLocalState.Recording}.
      * The SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback once the local audio function is disabled or re-enabled.
      *
-     * @note
+     * **Note**
      *
      * - This method is different from the [`muteLocalAudioStream`]{@link muteLocalAudioStream} method:
      *
@@ -722,7 +722,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Stops/Resumes sending the local audio stream.
      * A successful [`muteLocalAudioStream`]{@link muteLocalAudioStream} method call triggers the [`UserMuteAudio`]{@link RtcEngineEvents.UserMuteAudio} callback on the remote client.
      *
-     * @note
+     * **Note**
      *
      * - When `muted` is set as ``true``, this method does not disable the microphone and thus does not affect any ongoing recording.
      * - If you call [`setChannelProfile`]{@link setChannelProfile} after this method, the SDK resets whether to mute the local audio according to the channel profile and user role.
@@ -739,7 +739,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Stops/Resumes receiving a specified audio stream.
      *
-     * @note
+     * **Note**
      *
      * - If you called [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams} and set `muted` as `true` to stop receiving all remote video streams,
      * ensure that the [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams} method is called and set `muted` as `false` before calling this method.
@@ -757,7 +757,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Sets the audio parameters and application scenarios.
      *
-     * @note
+     * **Note**
      *
      * - You must call this method before calling [`joinChannel`]{@link joinChannel}.
      * - In the [`Communication`]{@link ChannelProfile.Communication} and [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
@@ -777,7 +777,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * You can call this method either before or after joining a channel.
      * If you call `setDefaultMuteAllRemoteAudioStreams(true)` after joining a channel, you will not receive the audio streams of any subsequent user.
      *
-     * @note
+     * **Note**
      *
      * If you want to resume receiving audio streams, call [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream}, and specify the ID of the remote user that you want to subscribe to.
      * To resume audio streams of multiple users, call [`muteRemoteAudioStream`]{@link muteRemoteAudioStream} as many times.
@@ -803,7 +803,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * To enable the video mode, call  [`enableVideo`]{@link enableVideo}.
      *
-     * @note
+     * **Note**
      *
      * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
      * You can call this method either before or after joining a channel.
@@ -835,7 +835,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * After the local video capturer is successfully disabled or re-enabled, the SDK triggers the [`UserEnableLocalVideo`]{@link RtcEngineEvents.UserEnableLocalVideo} callback on the remote client.
      *
-     * @note
+     * **Note**
      *
      * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
      * @param enabled Sets whether to disable/re-enable the local video, including the capturer, renderer, and sender:
@@ -860,7 +860,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * To disable the video, call the [`disableVideo`]{@link disableVideo} method.
      *
-     * @note
+     * **Note**
      *
      * - This method affects the internal engine and can be called after calling the [`leaveChannel`]{@link leaveChannel} method. You can call this method either before or after joining a channel.
      *
@@ -896,7 +896,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * A successful [`muteLocalVideoStream`]{@link muteLocalVideoStream} method call triggers the [`UserMuteVideo`]{@link RtcEngineEvents.UserMuteVideo} callback on the remote client.
      *
-     * @note
+     * **Note**
      *
      * - When you set `muted` as `true`, this method does not disable the camera and thus does not affect the retrieval of the local video streams.
      * This method responds faster than calling [`enableLocalVideo`]{@link enableLocalVideo} and set `muted` as `false`, which controls sending the local video stream.
@@ -915,7 +915,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Stops/Resumes receiving a specified remote user's video stream.
      *
-     * @note
+     * **Note**
      *
      * If you call [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams} and set `muted` as `true` to stop receiving all remote video streams,
      * ensure that the [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams} method is called and set `muted` as `false` before calling this method. The [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams} method sets all remote streams, while this method sets a specified remote user's stream.
@@ -932,7 +932,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Enables/Disables image enhancement and sets the options.
      *
-     * @note
+     * **Note**
      *
      * - Call this method after calling [`enableVideo`]{@link enableVideo}.
      * - On Android，this method applies to Android 4.4 or later.
@@ -953,7 +953,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * You can call this method either before or after joining a channel.
      * If you call `setDefaultMuteAllRemoteVideoStreams(true)` after joining a channel, you will not receive the video stream of any subsequent user.
      *
-     * @note
+     * **Note**
      *
      * If you want to resume receiving video streams, call [`muteRemoteVideoStream(false)`]{@link muteRemoteVideoStream}, and specify the ID of the remote user that you want to subscribe to.
      * To resume receiving video streams of multiple users, call [`muteRemoteVideoStream`]{@link muteRemoteVideoStream} as many times. Calling `setDefaultMuteAllRemoteVideoStreams(false)` resumes receiving video streams of the subsequent users only.
@@ -986,7 +986,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Before calling this method, you must call the [`enableVideo`]{@link enableVideo} method to enable the video.
      *
-     * @note
+     * **Note**
      *
      * - By default, the local preview enables the mirror mode.
      * - Once you call this method to start the local video preview, if you leave the channel by calling [`leaveChannel`]{@link leaveChannel},
@@ -1007,7 +1007,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Adjusts the volume of audio mixing for local playback.
      *
-     * @note
+     * **Note**
      *
      * Call this method when you are in a channel.
      *
@@ -1020,7 +1020,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Adjusts the volume of audio mixing for publishing (sending to other users).
      *
-     * @note
+     * **Note**
      *
      * Call this method when you are in a channel.
      *
@@ -1033,7 +1033,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Adjusts the volume of audio mixing.
      *
-     * @note
+     * **Note**
      *
      * - Call this method when you are in a channel.
      *
@@ -1048,7 +1048,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Gets the playback position (ms) of the music file.
      *
-     * @note
+     * **Note**
      *
      * Call this method when you are in a channel.
      *
@@ -1063,7 +1063,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Gets the duration (ms) of the music file.
      *
-     * @note
+     * **Note**
      *
      * Call this method when you are in a channel.
      *
@@ -1125,7 +1125,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * When a local music file is mixed with a local human voice, call this method to
      * set the pitch of the local music file only.
      *
-     * @note
+     * **Note**
      *
      * Call this method after calling [`startAudioMixing`]{@link startAudioMixing}.
      *
@@ -1160,7 +1160,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * When the audio mixing file playback finishes, the SDK triggers the [`AudioMixingStateChanged`]{@link RtcEngineEvents.AudioMixingStateChanged} callback and reports [`Stopped`]{@link AudioMixingStateCode.Stopped} on the local client.
      *
      *
-     * @note
+     * **Note**
      *
      * - To use this method on Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
      *
@@ -1269,7 +1269,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Supported audio formats: mp3, aac, m4a, 3gp, wav.
      *
-     * @note
+     * **Note**
      * - This method does not support online audio effect files.
      *
      * - To ensure smooth communication, limit the size of the audio effect file.
@@ -1324,7 +1324,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Stops playing a specified audio effect.
      *
-     * @note
+     * **Note**
      *
      * If you preloaded the audio effect into the memory through the [`preloadEffect`]{@link preloadEffect} method,
      * ensure that the `soundID` value is set to the same value as in the [`preloadEffect`]{@link preloadEffect} method.
@@ -1346,7 +1346,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Sets the local voice changer option.
      *
-     * @note
+     * **Note**
      *
      * Do not use this method together with [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset}, or the method called earlier does not take effect.
      *
@@ -1380,7 +1380,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Sets the local voice reverberation.
      *
-     * @note
+     * **Note**
      *
      * Adds the [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset} method, a more user-friendly method for setting the
      * local voice reverberation. You can use this method to set the local reverberation effect,
@@ -1397,7 +1397,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Sets the preset local voice reverberation effect.
      *
-     * @note
+     * **Note**
      *
      * - Do not use this method together with [`setLocalVoiceReverb`]{@link setLocalVoiceReverb}.
      *
@@ -1432,7 +1432,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * position of the remote user, creating a real sense of space.
      * This method applies to massively multiplayer online games, such as Battle Royale games.
      *
-     * @note
+     * **Note**
      *
      * - For this method to work, enable stereo panning for remote users by calling the [`enableSoundPositionIndication`]{@link enableSoundPositionIndication} method before joining a channel.
      *
@@ -1456,7 +1456,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback on the local client to report the state of adding a local stream to the CDN.
      *
-     * @note
+     * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - Ensure that the user joins a channel before calling this method.
@@ -1479,7 +1479,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
      * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback.
      *
-     * @note
+     * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - Ensure that the user joins a channel before calling this method.
      * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
@@ -1498,7 +1498,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * If you call this method to set the [`LiveTranscoding`]{@link LiveTranscoding} class for the first time,
      * the SDK does not trigger the [`TranscodingUpdated`]{@link RtcEngineEvents.TranscodingUpdated} callback.
      *
-     * @note
+     * **Note**
      *
      * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in Push Streams to CDN.
@@ -1523,7 +1523,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * If the [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} callback returns [`Failure(3)`]{@link ChannelMediaRelayState.Failure}, an exception occurs during the media stream relay.
      *
-     * @note
+     * **Note**
      *
      * - Contact sales-us@agora.io before implementing this function.
      * - We do not support string user accounts in this API.
@@ -1546,7 +1546,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * After a successful method call, the SDK triggers the [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} callback.
      * If the callback returns [`Idle(0)`]{@link ChannelMediaRelayState.Idle} and [`None(0)`]{@link ChannelMediaRelayError.None}, the host successfully stops the relay.
      *
-     * @note
+     * **Note**
      *
      * If the method call fails, the SDK triggers the [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} callback with the [`ServerNoResponse(2)`]{@link ChannelMediaRelayError.ServerNoResponse}
      * or [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerConnectionLost} state code.
@@ -1565,7 +1565,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * After a successful method call, the SDK triggers the [`ChannelMediaRelayEvent`]{@link RtcEngineEvents.ChannelMediaRelayEvent} callback with the [`UpdateDestinationChannel(7)`]{@link ChannelMediaRelayEvent.UpdateDestinationChannel} state code.
      *
-     * @note
+     * **Note**
      *
      * - Call this method after the [`startChannelMediaRelay`]{@link startChannelMediaRelay} method to update the destination channel.
      *
@@ -1605,7 +1605,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
      *
-     * @note
+     * **Note**
      *
      * - This method applies to the [`Communication`]{@link ChannelProfile.Communication} profile only.
      * - Call this method before the user joins a channel.
@@ -1623,7 +1623,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * This method sets whether the audio is routed to the speakerphone or earpiece.
      * After calling this method, the SDK returns the [`AudioRouteChanged`]{@link RtcEngineEvents.AudioRouteChanged} callback to indicate the changes.
      *
-     * @note
+     * **Note**
      *
      * - Ensure that you have successfully called [`joinChannel`]{@link joinChannel} before calling this method.
      *
@@ -1715,7 +1715,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * When the locally published video stream falls back to audio only or when the audio-only stream
      * switches back to the video, the SDK triggers the [`LocalPublishFallbackToAudioOnly`]{@link RtcEngineEvents.LocalPublishFallbackToAudioOnly}.
      *
-     * @note
+     * **Note**
      *
      * Agora does not recommend using this method for CDN live streaming, because the remote CDN live user will have a noticeable lag when the locally published video stream falls back to audio only.
      * @param option Sets the fallback option for the locally published video stream.
@@ -1748,7 +1748,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Use this method with the [`setRemoteSubscribeFallbackOption`]{@link setRemoteSubscribeFallbackOption} method.
      * If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
      *
-     * @note
+     * **Note**
      *
      * The Agora SDK supports setting `userPriority` as high for one user only.
      *
@@ -1777,7 +1777,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Call [`disableLastmileTest`]{@link disableLastmileTest} to disable this test after receiving the [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} callback,
      * and before the user joins a channel or switches the user role.
      *
-     * @note
+     * **Note**
      *
      * - Do not use this method with the [`startLastmileProbeTest`]{@link startLastmileProbeTest} method.
      *
@@ -1797,7 +1797,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * In the audio call test, you record your voice. If the recording plays back within the set time interval, the audio devices and the network connection are working properly.
      *
-     * @note
+     * **Note**
      *
      * - Call this method before joining a channel.
      *
@@ -1824,7 +1824,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Call this method to check the uplink network quality before users join a channel or before an audience switches to a host.
      *
-     * @note
+     * **Note**
      *
      * - This method consumes extra network traffic and may affect communication quality. We do not recommend calling this method together with [`enableLastmileTest`]{@link enableLastmileTest}.
      * - Do not call other methods before receiving the [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} and [`LastmileProbeResult`]{@link RtcEngineEvents.LastmileProbeResult} callbacks. Otherwise, the callbacks may be interrupted by other methods.
@@ -1857,7 +1857,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * This method enables you to add synchronized metadata in the video stream for more diversified live streaming interactions,
      * such as sending shopping links, digital coupons, and online quizzes.
      *
-     * @note
+     * **Note**
      *
      * Call this method before the [`joinChannel`]{@link joinChannel} method.
      *
@@ -1907,7 +1907,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - When setting the watermark position, the region must be less than the dimensions set in the [`setVideoEncoderConfiguration`]{@link setVideoEncoderConfiguration} method.
      * Otherwise, the watermark image will be cropped.
      *
-     * @note
+     * **Note**
      *
      * - Ensure that you have called [`enableVideo`]{@link enableVideo} to enable the video module before calling this method.
      *
@@ -1946,7 +1946,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
      *
-     * @note
+     * **Note**
      *
      * Call [`setEncryptionSecret`]{@link setEncryptionSecret} before calling this method.
      *
@@ -1964,7 +1964,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * The encryption password is automatically cleared once a user leaves the channel.
      * If the encryption password is not specified or set to empty, the encryption functionality is disabled.
      *
-     * @note
+     * **Note**
      *
      * - For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
      * - Do not use this method for CDN live streaming.
@@ -1984,7 +1984,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - .wav: Large file size with high fidelity.
      * - .aac: Small file size with low fidelity.
      *
-     * @note
+     * **Note**
      *
      * - Ensure that the directory to save the recording file exists and is writable.
      * - This method is usually called after calling [`joinChannel`]{@link joinChannel}. The recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
@@ -2002,7 +2002,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Stops the audio recording on the client.
      *
-     * @note
+     * **Note**
      *
      * You can call this method before calling [`leaveChannel`]{@link leaveChannel};
      * else, the recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
@@ -2027,7 +2027,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - The remote client:
      *  - [`UserJoined`]{@link RtcEngineEvents.UserJoined}(uid: 666), if the method call is successful and the online media stream is injected into the channel.
      *
-     * @note
+     * **Note**
      *
      * - This method applies to the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile only.
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
@@ -2172,7 +2172,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - If you want better quality for the local video preview, we recommend setting `config` as [`Preview(2)`]{@link CameraCaptureOutputPreference.Preview}.
      *
-     * @note
+     * **Note**
      *
      * Call this method before enabling the local camera. That said, you can call this method before calling [`joinChannel`]{@link joinChannel}, [`enableVideo`]{@link enableVideo}, or [`enableLocalVideo`]{@link enableLocalVideo}, depending on which method you use to turn on your local camera.
      *
@@ -2237,7 +2237,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Each user can create up to five data streams during the lifecycle of the [`RtcEngine`]{@link RtcEngine}.
      *
-     * @note
+     * **Note**
      *
      * Set both the `reliable` and `ordered` parameters to `true` or `false`. Do not set one as `true` and the other as `false`.
      * @param reliable Sets whether the recipients are guaranteed to receive the data stream from the sender within five seconds:
@@ -2270,7 +2270,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * A failed [`sendStreamMessage`]{@link sendStreamMessage} method call triggers the [`StreamMessageError`]{@link RtcEngineEvents.StreamMessageError} callback on the remote client.
      *
-     * @note
+     * **Note**
      *
      * - Ensure that you have created the data stream using [`createDataStream`]{@link createDataStream} before calling this method.
      *
