@@ -62,7 +62,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * and call the [`joinChannel`]{@link RtcChannel.joinChannel} method of each created `RtcChannel` object.
      *
      * After joining multiple channels, you can simultaneously subscribe to streams of all the channels, but publish a stream in only one channel at one time.
-     * @param channelId The unique channel name for the AgoraRTC session in the string format.
+     * @param channelId The unique channel name for the Agora RTC session in the string format.
      * The string length must be less than 64 bytes.
      * Supported character scopes are:
      * - All lowercase English letters: a to z.
@@ -74,6 +74,11 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * **Note**
      * - This parameter does not have a default value. You must set it.
      * - Do not set it as the empty string "". Otherwise, the SDK returns [`Refused(-5)`]{@link ErrorCode.Refused}.
+     *
+     * @returns
+     * - An `RtcChannel` instance, if the method call succeeds.
+     * - Null, if the method call fails.
+     * - [`Refused(-5)`]{@link ErrorCode.Refused}, if you set channelId as the empty string "".
      */
     static async create(channelId: string): Promise<RtcChannel> {
         if (channels.get(channelId)) return channels.get(channelId) as RtcChannel;
@@ -164,13 +169,13 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     /**
      * Sets the role of a user.
      *
-     * This method sets the role of a user, such as a host or an audience. In a Live-Broadcast channel,
+     * This method sets the role of a user, such as a host or an audience member. In a `LiveBroadcasting` channel,
      * only a host can call the [`publish`]{@link publish} method in the [`RtcChannel`]{@link RtcChannel} class.
      *
      * A successful call of this method triggers the following callbacks:
      * - The local client: [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged}.
      * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined}
-     * or [`UserOffline(BecomeAudience)`]{@link RtcChannelEvents.UserOffline}.
+     * or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
      * @param role The role of the user.
      *
      */
@@ -182,13 +187,13 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * Joins the channel with a user ID.
      *
      * **Note**
-     * - If you are already in a channel, you cannot rejoin it with the same uid.
+     * - If you are already in a channel, you cannot rejoin it with the same UID.
      * - We recommend using different UIDs for different channels.
      * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
      * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
      *
      * @param token The token generated at your server.
-     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
      * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
      * @param optionalInfo Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
      * @param optionalUid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess} callback. The app must maintain this user ID.
@@ -203,14 +208,14 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * Joins a channel with the user account.
      *
      * **Note**
-     * - If you are already in a channel, you cannot rejoin it with the same uid.
+     * - If you are already in a channel, you cannot rejoin it with the same user account.
      * - We recommend using different user accounts for different channels.
      * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
      * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
      *
      * @param token The token generated at your server.
-     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see Get a temporary token.
-     * - In situations requiring high security: Set it as the token generated at your server. For details, see Generate a token.
+     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
+     * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
      * @param userAccount The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
      * - All lowercase English letters: a to z.
      * - All uppercase English letters: A to Z.
@@ -229,7 +234,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * A successful call of this method triggers the following callbacks:
      * - The local client: [`LeaveChannel`]{@link RtcChannelEvents.LeaveChannel}.
-     * - The remote client: [`UserOffline`]{@link RtcChannelEvents.UserOffline}, if the user leaving the channel is in a Communication channel, or is a host in a Live-Broadcast channel.
+     * - The remote client: [`UserOffline`]{@link RtcChannelEvents.UserOffline}, if the user leaving the channel is in a `Communication` channel, or is a host in a `LiveBroadcasting` channel.
      *
      */
     leaveChannel(): Promise<void> {
@@ -251,7 +256,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
-     * Gets the connection state of the SDK.
+     * Gets the network connection state of the SDK.
      */
     getConnectionState(): Promise<ConnectionStateType> {
         return AgoraRtcChannelModule.getConnectionState(this._channelId)
@@ -262,8 +267,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * You must keep the following restrictions in mind when calling this method.
      * Otherwise, the SDK returns the [`Refused(-5)`]{@link ErrorCode.Refused}:
      * - This method publishes one stream only to the channel corresponding to the current [`RtcChannel`]{@link RtcChannel} instance.
-     * - In a Live-Broadcast channel, only a host can call this method. To switch the client role, call [`setClientRole`]{@link RtcChannel.setClientRole} of the current [`RtcChannel`]{@link RtcChannel} instance.
-     * - You can publish a stream to only one channel at a time. For details, see the advanced guide Join Multiple Channels.
+     * - In a `LiveBroadcasting` channel, only a host can call this method. To switch the client role, call [`setClientRole`]{@link RtcChannel.setClientRole} of the current [`RtcChannel`]{@link RtcChannel} instance.
+     * - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
      */
     publish(): Promise<void> {
         return AgoraRtcChannelModule.publish(this._channelId)
@@ -281,6 +286,11 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
 
     /**
      * Gets the current call ID.
+     *
+     * @returns
+     * - The current call ID, if the method call succeeds.
+     * - The empty string "", if the method call fails.
+     *
      */
     getCallId(): Promise<string> {
         return AgoraRtcChannelModule.getCallId(this._channelId)
@@ -386,7 +396,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * @param uid The ID of the remote user.
      * @param pan The sound position of the remote user. The value ranges from -1.0 to 1.0:
-     * - 0.0: The remote sound comes from the front.
+     * - 0.0: (default) The remote sound comes from the front.
      * - -1.0: The remote sound comes from the left.
      * - 1.0: The remote sound comes from the right.
      * @param gain Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
@@ -404,7 +414,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - Ensure that the user joins a channel before calling this method.
-     * - This method can only be called by a host in a Live-Broadcast channel.
+     * - This method can only be called by a host in a `LiveBroadcasting` channel.
      * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
      *
      * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
@@ -425,7 +435,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
-     * - This method can only be called by a broadcaster in a Live-Broadcast channel.
+     * - This method can only be called by a host in a `LiveBroadcasting` channel.
      * - This method removes only one stream HTTP/HTTPS URL address each time it is called.
      *
      * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters,
@@ -445,7 +455,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - Ensure that the user joins a channel before calling this method.
-     * - This method can only be called by a host in a Live-Broadcast channel.
+     * - This method can only be called by a host in a `LiveBroadcasting` channel.
      * - Ensure that you call this method before calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} method.
      *
      * @param transcoding Sets the CDN live audio/video transcoding settings.
@@ -468,8 +478,10 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * - If the [`ChannelMediaRelayStateChanged`]{@link RtcChannelEvents.ChannelMediaRelayStateChanged} callback returns [`Failure(3)`]{@link ChannelMediaRelayState.Failure}, an exception occurs during the media stream relay.
      *
      * **Note**
+     * - Contact support@agora.io before implementing this function.
+     * - We do not support string user accounts in this API.
      * - Call this method after joining the channel.
-     * - This method can only be called by a host in a Live-Broadcast channel.
+     * - This method can only be called by a host in a `LiveBroadcasting` channel.
      * - After a successful method call, if you want to call this method again, ensure that you call the [`stopChannelMediaRelay`]{@link RtcChannel.stopChannelMediaRelay} method to quit the current relay.
      *
      * @param channelMediaRelayConfiguration The configuration of the media stream relay.
@@ -569,7 +581,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * **Note**
      * - Call this method before the [`joinChannel`]{@link RtcChannel.joinChannel} method.
-     * - This method applies to the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile only.
+     * - This method applies to the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile only.
      *
      */
     registerMediaMetadataObserver(): Promise<void> {
@@ -638,13 +650,9 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
-     * Injects an online media stream to a Live-Broadcast channel.
+     * Injects an online media stream to live interactive streaming.
      *
-     * If this method call succeeds, the servers pulls the voice or video stream and injects it into a live channel. This applies to scenarios where all audience members in the channel can watch a live show and interact with each other.
-     *
-     * **Note**
-     * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
-     * - This method can only be called by a host in a Live-Broadcast channel.
+     * If this method call succeeds, the server pulls the voice or video stream and injects it into a live channel. This applies to scenarios where all audience members in the channel can watch a live show and interact with each other.
      *
      * Calling this method triggers the following callbacks:
      * - The local client:
@@ -655,9 +663,13 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *  - [`UserJoined`]{@link RtcChannelEvents.UserJoined}(uid: 666), if the method call succeeds and the online
      * media stream is injected into the channel.
      *
-     * @param url The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and FLV.
+     * **Note**
+     * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
+     * - This method can only be called by a host in a `LiveBroadcasting` channel.
+     *
+     * @param url The URL address to be added to the ongoing live interactive streaming. Valid protocols are RTMP, HLS, and FLV.
      * - Supported FLV audio codec type: AAC.
-     * - Supported FLV video codec type: H264(AVC).
+     * - Supported FLV video codec type: H264 (AVC).
      * @param config The [`LiveInjectStreamConfig`]{@link LiveInjectStreamConfig} object, which contains the configuration information for the added voice or video stream.
      *
      */
@@ -666,11 +678,11 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
-     * Removes the injected online media stream from a Live-Broadcast channel.
+     * Removes the injected online media stream from a `LiveBroadcasting` channel.
      *
      * This method removes the URL address added by [`addInjectStreamUrl`]{@link RtcChannel.addInjectStreamUrl}.
      *
-     * If you successfully remove the URL address from the Live-Broadcast, the SDK triggers the
+     * If you successfully remove the URL address from the live interactive streaming, the SDK triggers the
      * [`UserJoined`]{@link RtcChannelEvents.UserJoined} callback, with the stream uid of 666.
      *
      * @param url The URL address to be removed.
@@ -686,8 +698,8 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      *
      * **Note**
      *
-     * Set both the reliable and ordered parameters to true or false. Do not set one as true
-     * and the other as false.
+     * Set both the `reliable` and `ordered` parameters to `true` or `false`. Do not set one as `true`
+     * and the other as `false`.
      * @param reliable Sets whether the recipients are guaranteed to receive the data stream from the
      * sender within five seconds.
      * - `true`: The recipients receive the data from the sender within five seconds. If the recipient does
@@ -696,6 +708,9 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
      * @param ordered Determines whether the recipients receive the data stream in the sent order.
      * - `true`: The recipients receive the data in the sent order.
      * - `false`: The recipients do not receive the data in the sent order.
+     * @returns
+     * - Returns the stream ID, if the method call is successful.
+     * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
      */
     createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
         return AgoraRtcChannelModule.createDataStream(this._channelId, reliable, ordered);

@@ -707,6 +707,10 @@ export interface RtcEngineEvents {
      *
      * This callback indicates the state change of the remote audio stream.
      *
+     * **Note**
+     *
+     * This callback does not work properly when the number of users (in the [`Communication`] profile) or hosts (in the [`LiveBroadcasting`] profile) in the channel exceeds 17.
+     *
      * @event RemoteAudioStateChanged
      */
     RemoteAudioStateChanged: RemoteAudioStateCallback
@@ -911,7 +915,7 @@ export interface RtcEngineEvents {
      * The SDK triggers this callback to report the result of the local user calling [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
      * This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
      *
-     * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
+     * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
      *
      * @event RtmpStreamingStateChanged
      */
@@ -1311,12 +1315,18 @@ export interface RtcChannelEvents {
     ClientRoleChanged: ClientRoleCallback
 
     /**
-     * Occurs when a remote user (Communication) or a broadcaster (Live-Broadcast) joins the channel.
-     * - Communication profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
-     * - Live-Broadcast profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
+     * Occurs when a remote user (`Communication`) or a host (`LiveBroadcasting`) joins the channel.
+     * - `Communication` profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
+     * - `LiveBroadcasting` profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
+     *
+     * The SDK triggers this callback under one of the following circumstances:
+     * - A remote user/host joins the channel by calling [`joinChannel`]{@link RtcChannel.joinChannel}.
+     * - A remote user switches the user role to the host by calling [`setClientRole`]{@link RtcChannel.setClientRole} after joining the channel.
+     * - A remote user/host rejoins the channel after a network interruption.
+     * - The host injects an online media stream into the channel by calling [`addInjectStreamUrl`]{@link RtcChannel.addInjectStreamUrl}.
      *
      * **Note**
-     * - In the Live-Broadcast profile:
+     * - In the `LiveBroadcasting` profile:
      *  - The host receives this callback when another host joins the channel.
      *  - The audience in the channel receives this callback when a new host joins the channel.
      *  - When a web app joins the channel, this callback is triggered as long as the web app publishes streams.
@@ -1326,11 +1336,11 @@ export interface RtcChannelEvents {
     UserJoined: UidWithElapsedCallback
 
     /**
-     * Occurs when a remote user (Communication) or a broadcaster (Live Broadcast) leaves the channel.
+     * Occurs when a remote user (`Communication`) or a host (`LiveBroadcasting`) leaves the channel.
      *
      * There are two reasons for users to become offline:
-     * - Leave the channel: When the user/broadcaster leaves the channel, the user/broadcaster sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
-     * - Go offline: When no data packet of the user or broadcaster is received for a certain period of time (around 20 seconds), the SDK assumes that the user/broadcaster drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
+     * - Leave the channel: When the user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
+     * - Go offline: When no data packet of the user or host is received for a certain period of time (around 20 seconds), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
      *
      * @event UserOffline
      */
@@ -1419,7 +1429,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
      *
-     * If you call {@link RtcEngine.setLocalPublishFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+     * If you call [`setLocalPublishFallbackOption`]{@link RtcEngine.setLocalPublishFallbackOption} and set `option` as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
      *
      * @event LocalPublishFallbackToAudioOnly
      */
@@ -1457,16 +1467,16 @@ export interface RtcChannelEvents {
     NetworkQuality: NetworkQualityWithUidCallback
 
     /**
-     * Reports the statistics of the video stream from each remote user/broadcaster. The SDK triggers this callback once every two seconds for each remote user/broadcaster. If a channel includes multiple remote users, the SDK triggers this callback as many times.
+     * Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/broadcaster. If a channel includes multiple remote users, the SDK triggers this callback as many times.
      *
      * @event RemoteVideoStats
      */
     RemoteVideoStats: RemoteVideoStatsCallback
 
     /**
-     * Reports the statistics of the audio stream from each remote user/broadcaster.
+     * Reports the statistics of the audio stream from each remote user/host.
      *
-     * The SDK triggers this callback once every two seconds for each remote user/broadcaster. If a channel includes multiple remote users, the SDK triggers this callback as many times.
+     * The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
      *
      * Schemes such as FEC (Forward Error Correction) or retransmission counter the frame loss rate. Hence, users may find the overall audio quality acceptable even when the packet loss rate is high.
      *
@@ -1508,7 +1518,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the local user receives a remote data stream.
      *
-     * The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the {@link RtcChannel.sendStreamMessage} method.
+     * The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the [`sendStreamMessage`]{@link RtcChannel.sendStreamMessage} method.
      *
      * @event StreamMessage
      */

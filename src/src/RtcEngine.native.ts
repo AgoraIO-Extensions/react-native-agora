@@ -57,7 +57,7 @@ const RtcEngineEvent = new NativeEventEmitter(AgoraRtcEngineModule);
 let engine: RtcEngine | undefined;
 
 /**
- * [`RtcEngine`]{@link RtcEngine} is the main interface class of the Agora SDK.
+ * [`RtcEngine`]{@link RtcEngine} is the main class of the Agora SDK.
  */
 export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
     RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
@@ -68,7 +68,17 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @ignore
      */
     private _listeners = new Map<string, Map<Listener, Listener>>();
-
+    /**
+     * Gets a created [`RtcEngine`]{@link RtcEngine} instance.
+     *
+     * **Note**
+     *
+     * Ensure that you have created an `RtcEngine`. Otherwise, the method call fails and the SDK returns an error message.
+     * @returns
+     * - The `RtcEngine` instance, if the method call succeeds.
+     * - Returns an error when it fails to get an `RtcEngine`.
+     *
+     */
     static instance(): RtcEngine {
         if (engine) {
             return engine as RtcEngine;
@@ -90,6 +100,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Only users in apps with the same App ID can join the same channel and communicate with each other.
      * Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance. To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance, and after [`destroy`]{@link destroy} returns `0`,
      * call `create` to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
+     * @returns
+     * - The `RtcEngine` instance, if the method call succeeds.
+     * - < 0, if the method call fails.
      */
     static async create(appId: string): Promise<RtcEngine> {
         return RtcEngine.createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL)
@@ -112,6 +125,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * You can use the bitwise OR operator (|) to specify multiple areas. For details, see {@link IPAreaCode}.
      *
      * After specifying the region, the app that integrates the Agora SDK connects to the Agora servers within that region.
+     *
+     * @returns
+     * - The `RtcEngine` instance, if the method call succeeds.
+     * - < 0, if the method call fails.
      */
     static async createWithAreaCode(appId: string, areaCode: IPAreaCode): Promise<RtcEngine> {
         if (engine) return engine;
@@ -214,11 +231,11 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * Sets the role of a user ([Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} only).
+     * Sets the role of a user ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only).
      *
      * This method sets the role of a user, such as a host or an audience (default), before joining a channel.
      *
-     * This method can be used to switch the user role after a user joins a channel. In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful call of this method triggers the following callbacks:
+     * This method can be used to switch the user role after a user joins a channel. In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful call of this method triggers the following callbacks:
      * - The local client: [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged}.
      * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}).
      *
@@ -239,8 +256,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - The local client: [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess}.
      *
-     * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined}, if the user joining the channel is in the [Communication]{@link ChannelProfile.Communication} profile,
-     * or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile,
+     * or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
      * When the connection between the client and Agora server is interrupted due to poor network conditions,
      * the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [`RejoinChannelSuccess`]{@link RtcEngineEvents.RejoinChannelSuccess} callback on the local client.
@@ -254,7 +271,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Ensure that the App ID used for creating the token is the same App ID used in the `create` method for creating an [`RtcEngine`]{@link RtcEngine} object. Otherwise, CDN live streaming may fail.
      *
      * @param token The token for authentication:
-     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
      * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
      * @param channelName The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
      * - All lowercase English letters: a to z.
@@ -277,17 +294,17 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     /**
      * Switches to a different channel.
      *
-     * This method allows the audience of a [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} channel to switch to a different channel.
+     * This method allows the audience of a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel to switch to a different channel.
      *
      * After the user successfully switches to another channel, the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} and [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} callbacks are triggered to
      * indicate that the user has left the original channel and joined a new one.
      *
      * **Note**
      *
-     * This method applies to the [`Audience`]{@link ClientRole.Audience} role in a [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} channel only.
+     * This method applies to the [`Audience`]{@link ClientRole.Audience} role in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel only.
      *
      * @param token The token for authentication:
-     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
      * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
      * @param channelName Unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
      * - All lowercase English letters: a to z.
@@ -311,8 +328,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * A successful [`leaveChannel`]{@link leaveChannel} method call triggers the following callbacks:
      * - The local client: [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel}.
      *
-     * - The remote client: [`UserOffline`]{@link RtcEngineEvents.UserOffline}, if the user leaving the channel is in the [Communication]{@link ChannelProfile.Communication} channel, or is a [`Broadcaster`]{@link ClientRole.Broadcaster}
-     * in the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - The remote client: [`UserOffline`]{@link RtcEngineEvents.UserOffline}, if the user leaving the channel is in the [`Communication`]{@link ChannelProfile.Communication} channel, or is a [`Broadcaster`]{@link ClientRole.Broadcaster}
+     * in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
      * **Note**
      * - If you call [`destroy`]{@link destroy} immediately after calling [`leaveChannel`]{@link leaveChannel}, the [`leaveChannel`]{@link leaveChannel} process interrupts, and the SDK does not trigger the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} callback.
@@ -340,7 +357,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * Enables interoperability with the Agora Web SDK ([Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} only).
+     * Enables interoperability with the Agora Web SDK ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only).
      *
      * **Deprecated**
      *
@@ -348,7 +365,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      *
      * If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.
-     * Use this method when the channel profile is [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting}. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [Communication]{@link ChannelProfile.Communication}.
+     * Use this method when the channel profile is [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [`Communication`]{@link ChannelProfile.Communication}.
      * @param enabled Sets whether to enable/disable interoperability with the Agora Web SDK:
      * - `true`: Enable.
      * - `false`: (Default) Disable.
@@ -372,6 +389,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * The [`rate`]{@link rate} and [`complain`]{@link complain} methods require the `callId` parameter retrieved from the [`getCallId`]{@link getCallId} method during a call.
      * `callId` is passed as an argument into the [`rate`]{@link rate} and [`complain`]{@link complain} methods after the call ends.
+     *
+     * @returns
+     * Current call ID.
      */
     getCallId(): Promise<string> {
         return AgoraRtcEngineModule.getCallId()
@@ -440,6 +460,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
+     * @ignore
      * Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
      *
      * The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
@@ -479,7 +500,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * After the user successfully joins the channel, the SDK triggers the following callbacks:
      * - The local client: [`LocalUserRegistered`]{@link RtcEngineEvents.LocalUserRegistered} and [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess}.
      *
-     * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [Communication]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
      * **Note**
      *
@@ -487,7 +508,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account.
      * If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
      * @param token The token generated at your server:
-     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#temptoken).
+     * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
      * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
      * @param channelName The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
      * - All lowercase English letters: a to z.
@@ -741,7 +762,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * - You must call this method before calling [`joinChannel`]{@link joinChannel}.
-     * - In the [Communication]{@link ChannelProfile.Communication} and [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
+     * - In the [`Communication`]{@link ChannelProfile.Communication} and [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
      * - In scenarios requiring high-quality audio, we recommend setting profile as [`MusicHighQuality(4)`]{@link AudioProfile.MusicHighQuality} and scenario as [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}.
      * For example, for music education scenarios.
      *
@@ -916,7 +937,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * - Call this method after calling [`enableVideo`]{@link enableVideo}.
-     * - This method applies to Android 4.4 or later.
+     * - On Android，this method applies to Android 4.4 or later.
      *
      * @param enabled Sets whether to enable image enhancement:
      * - `true`: Enable image enhancement.
@@ -1032,6 +1053,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * Call this method when you are in a channel.
+     *
+     * @returns
+     * - Returns the current playback position of the audio mixing, if the method call is successful.
+     * - < 0: Failure.
      */
     getAudioMixingCurrentPosition(): Promise<number> {
         return AgoraRtcEngineModule.getAudioMixingCurrentPosition();
@@ -1043,6 +1068,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * Call this method when you are in a channel.
+     *
+     *  @returns
+     * - Returns the audio mixing duration, if the method call is successful.
+     * - < 0: Failure.
      */
     getAudioMixingDuration(): Promise<number> {
         return AgoraRtcEngineModule.getAudioMixingDuration();
@@ -1052,6 +1081,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Gets the audio mixing volume for local playback.
      *
      * This method helps troubleshoot audio volume related issues.
+     *
+     * @returns
+     * - Returns the audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
+     * - < 0: Failure.
      */
     getAudioMixingPlayoutVolume(): Promise<number> {
         return AgoraRtcEngineModule.getAudioMixingPlayoutVolume();
@@ -1061,6 +1094,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Gets the audio mixing volume for publishing.
      *
      * This method helps troubleshoot audio volume related issues.
+     *
+     * @returns
+     * - Returns the audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
+     * - < 0: Failure.
      */
     getAudioMixingPublishVolume(): Promise<number> {
         return AgoraRtcEngineModule.getAudioMixingPublishVolume();
@@ -1127,15 +1164,15 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * - To use this method, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
+     * - To use this method on Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
      *
      * - Call this method when you are in the channel, otherwise it may cause issues.
      *
-     * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [`TooFrequentCall = 702`]{@link AudioMixingErrorCode.TooFrequentCall} error occurs.
+     * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [`TooFrequentCall(702)`]{@link AudioMixingErrorCode.TooFrequentCall} error occurs.
      *
      * - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
      *
-     * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`CanNotOpen = 701`]{@link AudioMixingErrorCode.CanNotOpen}.
+     * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`CanNotOpen(701)`]{@link AudioMixingErrorCode.CanNotOpen}.
      *
      * - If you call this method on an emulator, only the MP3 file format is supported.
      *
@@ -1170,6 +1207,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Gets the volume of the audio effects.
      *
      * The value ranges between 0.0 and 100.0.
+     *
+     * @returns
+     * - Returns the volume, if the method call is successful.
+     * - < 0: Failure.
      */
     getEffectsVolume(): Promise<number> {
         return AgoraRtcEngineModule.getEffectsVolume();
@@ -1419,7 +1460,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
-     * - This method applies to [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} only.
+     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - Ensure that the user joins a channel before calling this method.
      * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
      * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes.
@@ -1441,9 +1482,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback.
      *
      * **Note**
-     * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in Push Streams to CDN.
+     * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - Ensure that the user joins a channel before calling this method.
-     * - This method applies to [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} only.
+     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - This method removes only one stream RTMP URL address each time it is called.
      * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes.
      * The URL address must not contain special characters, such as Chinese language characters.
@@ -1461,7 +1502,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * - This method applies to [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} only.
+     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in Push Streams to CDN.
      * - Ensure that you call [`setClientRole`]{@link setClientRole} and set the user role as the host.
      * - Ensure that you call [`setLiveTranscoding`]{@link setLiveTranscoding} before calling  [`addPublishStreamUrl`]{@link addPublishStreamUrl}.
@@ -1490,7 +1531,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - We do not support string user accounts in this API.
      * - Call this method after the [`joinChannel`]{@link joinChannel} method.
      * - This method takes effect only when you are a [`Broadcaster`]{@link ClientRole.Broadcaster}
-     *  in a [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} channel.
+     *  in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel.
      * - After a successful method call, if you want to call this method again, ensure that you call [`stopChannelMediaRelay`]{@link stopChannelMediaRelay} to quit the current relay.
      *
      * @param channelMediaRelayConfiguration The configuration of the media stream relay.
@@ -1540,6 +1581,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Checks whether the speakerphone is enabled.
+     *
+     * @returns
+     * - `true`: The speakerphone is enabled, and the audio plays from the speakerphone.
+     * - `false`: The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
      */
     isSpeakerphoneEnabled(): Promise<boolean> {
         return AgoraRtcEngineModule.isSpeakerphoneEnabled();
@@ -1554,17 +1599,17 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * joining a channel, call [`setEnableSpeakerphone`]{@link setEnableSpeakerphone}.
      *
      * The default audio route for each scenario:
-     * - In the [Communication]{@link ChannelProfile.Communication} profile:
+     * - In the [`Communication`]{@link ChannelProfile.Communication} profile:
      *
      *  - For a voice call, the default audio route is the earpiece.
      *  - For a video call, the default audio route is the speaker. If the user disables the video
      * using [`disableVideo`]{@link disableVideo}, or [`muteLocalVideoStream`]{@link muteLocalVideoStream} and [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}, the default audio route automatically switches back to the earpiece.
      *
-     * - In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
+     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
      *
      * **Note**
      *
-     * - This method applies to the [Communication]{@link ChannelProfile.Communication} profile only.
+     * - This method applies to the [`Communication`]{@link ChannelProfile.Communication} profile only.
      * - Call this method before the user joins a channel.
      * @param defaultToSpeaker Sets the default audio route:
      * - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
@@ -1584,7 +1629,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Ensure that you have successfully called [`joinChannel`]{@link joinChannel} before calling this method.
      *
-     * - This method is invalid for audience users in the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - This method is invalid for audience users in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
      * @param enabled Sets whether to route the audio to the speakerphone or earpiece:
      * - `true`: Route the audio to the speakerphone.
@@ -1740,7 +1785,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Do not call any other methods before receiving the [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} callback. Otherwise, the callback may be interrupted by other methods and may not execute.
      *
-     * - In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, a host should not call this method after joining a channel.
+     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, a host should not call this method after joining a channel.
      * - If you call this method to test the last-mile quality, the SDK consumes the bandwidth of a video stream, whose bitrate corresponds to the bitrate you set in the [`setVideoEncoderConfiguration`]{@link setVideoEncoderConfiguration} method.
      * After you join the channel, whether you have called [`disableLastmileTest`]{@link disableLastmileTest} or not, the SDK automatically stops consuming the bandwidth.
      *
@@ -1761,7 +1806,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - After calling this method, call [`stopEchoTest`]{@link stopEchoTest} to end the test.
      * Otherwise, the app cannot run the next echo test, or call [`joinChannel`]{@link joinChannel}.
      *
-     * - In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, only a host can call this method.
+     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, only a host can call this method.
      * @param intervalInSeconds The time interval (s) between when you speak and when the recording plays back.
      */
     startEchoTest(intervalInSeconds: number): Promise<void> {
@@ -1785,7 +1830,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - This method consumes extra network traffic and may affect communication quality. We do not recommend calling this method together with [`enableLastmileTest`]{@link enableLastmileTest}.
      * - Do not call other methods before receiving the [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} and [`LastmileProbeResult`]{@link RtcEngineEvents.LastmileProbeResult} callbacks. Otherwise, the callbacks may be interrupted by other methods.
-     * - In the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile, a host should not call this method after joining a channel.
+     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, a host should not call this method after joining a channel.
      *
      * @param config The configurations of the last-mile network probe test.
      *
@@ -1970,7 +2015,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * Injects an online media stream to a live interactive streaming channel.
+     * Injects an online media stream to live interactive streaming.
      *
      * If this method call is successful, the server pulls the voice or video stream and injects it into
      * a live channel. This is applicable to scenarios where all audience members in the channel can watch a live show and interact with each other.
@@ -1986,7 +2031,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * - This method applies to the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile only.
+     * - This method applies to the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile only.
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - You can inject only one media stream into the channel at the same time.
      *
@@ -2032,6 +2077,8 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Gets the maximum zoom ratio supported by the camera.
+     *
+     * @returns The maximum camera zoom factor.
      */
     getCameraMaxZoomFactor(): Promise<number> {
         return AgoraRtcEngineModule.getCameraMaxZoomFactor();
@@ -2039,6 +2086,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Checks whether the camera auto-face focus function is supported.
+     *
+     * @returns
+     *
+     * - `true`: The device supports the camera auto-face focus function.
+     * - `false`: The device does not support the camera auto-face focus function.
+     *
      */
     isCameraAutoFocusFaceModeSupported(): Promise<boolean> {
         return AgoraRtcEngineModule.isCameraAutoFocusFaceModeSupported();
@@ -2046,6 +2099,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Checks whether the camera exposure function is supported.
+     *
+     * @returns
+     *
+     * - `true`: The device supports the camera exposure function.
+     * - `false`: The device does not support the camera exposure function.
+     *
      */
     isCameraExposurePositionSupported(): Promise<boolean> {
         return AgoraRtcEngineModule.isCameraExposurePositionSupported();
@@ -2053,6 +2112,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Checks whether the camera manual focus function is supported.
+     *
+     * @returns
+     *
+     * - `true`: The device supports the camera manual focus function.
+     * - `false`: The device does not support the camera manual focus function.
+     *
      */
     isCameraFocusSupported(): Promise<boolean> {
         return AgoraRtcEngineModule.isCameraFocusSupported();
@@ -2060,6 +2125,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Checks whether the camera flash function is supported.
+     *
+     * @returns
+     *
+     * - `true`: The device supports the camera flash function.
+     * - `false`: The device does not the support camera flash function.
+     *
      */
     isCameraTorchSupported(): Promise<boolean> {
         return AgoraRtcEngineModule.isCameraTorchSupported();
@@ -2067,6 +2138,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Checks whether the camera zoom function is supported.
+     *
+     * @returns
+     *
+     * - `true`: The device supports the camera zoom function.
+     * - `false`: The device does not support the camera zoom function.
+     *
      */
     isCameraZoomSupported(): Promise<boolean> {
         return AgoraRtcEngineModule.isCameraZoomSupported();
@@ -2173,6 +2250,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param ordered Sets whether the recipients receive the data stream in the sent order:
      * - `true`: The recipients receive the data in the sent order.
      * - `false`: The recipients do not receive the data in the sent order.
+     *
+     * @return
+     * - Returns the stream ID, if the method call is successful.
+     * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
      */
     createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
         return AgoraRtcEngineModule.createDataStream(reliable, ordered);
@@ -2195,7 +2276,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Ensure that you have created the data stream using [`createDataStream`]{@link createDataStream} before calling this method.
      *
-     * - This method applies only to the [Communication]{@link ChannelProfile.Communication} profile or to hosts in the [Live-Broadcast]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - This method applies only to the [`Communication`]{@link ChannelProfile.Communication} profile or to hosts in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      * @param streamId ID of the sent data stream returned by the [`createDataStream`]{@link createDataStream} method.
      * @param message Sent data.
      */
