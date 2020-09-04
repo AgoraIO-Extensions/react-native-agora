@@ -43,9 +43,7 @@ export class VideoDimensions {
      * The video resolution on the vertical axis.
      */
     height: number
-    /**
-     * @ignore
-     */
+
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
@@ -80,7 +78,7 @@ export class VideoEncoderConfiguration {
      *         <li>1280x720</li>
      * </ul>
      *
-     * **Note**
+     * @note
      * <ul>
      *     <li>The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [`VideoOutputOrientationMode`]{@link VideoOutputOrientationMode}.</li>
      *     <li>Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
@@ -267,7 +265,7 @@ export class VideoEncoderConfiguration {
      *     </tr>
      * </table>
      *
-     * **Note**
+     * @note
      *
      * The base bitrate in this table applies to the Communication profile.
      * The `LiveBroadcasting` profile generally requires a higher bitrate for better video quality.
@@ -292,9 +290,7 @@ export class VideoEncoderConfiguration {
      * Sets the mirror mode of the published local video stream.
      */
     mirrorMode?: VideoMirrorMode
-    /**
-     * @ignore
-     */
+
     constructor({dimensions, frameRate, minFrameRate, bitrate, minBitrate, orientationMode, degradationPrefer, mirrorMode}: { dimensions?: VideoDimensions, frameRate?: VideoFrameRate, minFrameRate?: VideoFrameRate, bitrate?: number, minBitrate?: number, orientationMode?: VideoOutputOrientationMode, degradationPrefer?: DegradationPreference, mirrorMode?: VideoMirrorMode }) {
         this.dimensions = dimensions;
         this.frameRate = frameRate;
@@ -329,9 +325,7 @@ export class BeautyOptions {
      * The default value is 0.1. This parameter adjusts the red saturation level.
      */
     rednessLevel?: number
-    /**
-     * @ignore
-     */
+
     constructor({lighteningContrastLevel, lighteningLevel, smoothnessLevel, rednessLevel}: { lighteningContrastLevel?: LighteningContrastLevel, lighteningLevel?: number, smoothnessLevel?: number, rednessLevel?: number }) {
         this.lighteningContrastLevel = lighteningContrastLevel;
         this.lighteningLevel = lighteningLevel;
@@ -364,9 +358,7 @@ export class AgoraImage {
      * Height of the image on the broadcasting video.
      */
     height: number
-    /**
-     * @ignore
-     */
+
     constructor(url: string, x: number, y: number, width: number, height: number) {
         this.url = url;
         this.x = x;
@@ -418,15 +410,13 @@ export class TranscodingUser {
      * - 4: The audio stream of the broadcaster uses the BL audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
      * - 5: The audio stream of the broadcaster uses the BR audio channel. If the broadcaster’s upstream uses multiple audio channels, these channels are mixed into mono first.
      *
-     * **Note**
+     * @note
      *
      * Special players are needed if `audioChannel` is not set as 0.
      *
      */
     audioChannel?: AudioChannel
-    /**
-     * @ignore
-     */
+
     constructor(uid: number, x: number, y: number, {width, height, zOrder, alpha, audioChannel}: { width?: number, height?: number, zOrder?: number, alpha?: number, audioChannel?: AudioChannel }) {
         this.uid = uid;
         this.x = x;
@@ -456,9 +446,7 @@ export class Color {
      * Blue.
      */
     blue: number
-    /**
-     * @ignore
-     */
+
     constructor(red: number, green: number, blue: number) {
         this.red = red;
         this.green = green;
@@ -492,7 +480,7 @@ export class LiveTranscoding {
      */
     videoFramerate?: VideoFrameRate
     /**
-     * **Deprecated**
+     * @deprecated
      * - `true`: Low latency with unassured quality.
      * - `false`: (Default) High latency with assured quality.
      */
@@ -550,9 +538,7 @@ export class LiveTranscoding {
      * An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
      */
     transcodingUsers: TranscodingUser[]
-    /**
-     * @ignore
-     */
+
     constructor(transcodingUsers: TranscodingUser[], {width, height, videoBitrate, videoFramerate, lowLatency, videoGop, watermark, backgroundImage, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, videoCodecProfile, backgroundColor, userConfigExtraInfo}: { width?: number, height?: number, videoBitrate?: number, videoFramerate?: VideoFrameRate, lowLatency?: boolean, videoGop?: number, watermark?: AgoraImage, backgroundImage?: AgoraImage, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel, audioCodecProfile?: AudioCodecProfileType, videoCodecProfile?: VideoCodecProfileType, backgroundColor?: Color, userConfigExtraInfo?: string, }) {
         this.width = width;
         this.height = height;
@@ -589,9 +575,7 @@ export class ChannelMediaInfo {
      * The user ID.
      */
     uid: number
-    /**
-     * @ignore
-     */
+
     constructor(uid: number, {channelName, token}: { channelName?: string, token?: string }) {
         this.channelName = channelName;
         this.token = token;
@@ -621,9 +605,7 @@ export class ChannelMediaRelayConfiguration {
      *  - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`, and the `uid` must be set as 0.
      */
     destInfos: ChannelMediaInfo[]
-    /**
-     * @ignore
-     */
+
     constructor(srcInfo: ChannelMediaInfo, destInfos: ChannelMediaInfo[]) {
         this.srcInfo = srcInfo;
         this.destInfos = destInfos;
@@ -650,9 +632,7 @@ export class LastmileProbeConfig {
      * The expected maximum receive bitrate in bps in range of [100000,5000000].
      */
     expectedDownlinkBitrate: number
-    /**
-     * @ignore
-     */
+
     constructor(probeUplink: boolean, probeDownlink: boolean, expectedUplinkBitrate: number, expectedDownlinkBitrate: number) {
         this.probeUplink = probeUplink;
         this.probeDownlink = probeDownlink;
@@ -681,9 +661,7 @@ export class Rectangle {
      * The height (pixels) of the watermark image.
      */
     height: number
-    /**
-     * @ignore
-     */
+
     constructor(x: number, y: number, width: number, height: number) {
         this.x = x;
         this.y = y;
@@ -710,9 +688,7 @@ export class WatermarkOptions {
      * The watermark position in the portrait mode.
      */
     positionInPortraitMode: Rectangle
-    /**
-     * @ignore
-     */
+
     constructor(positionInLandscapeMode: Rectangle, positionInPortraitMode: Rectangle, visibleInPreview?: boolean) {
         this.visibleInPreview = visibleInPreview;
         this.positionInLandscapeMode = positionInLandscapeMode;
@@ -763,9 +739,7 @@ export class LiveInjectStreamConfig {
      * - 5: Five audio channels
      */
     audioChannels?: AudioChannel
-    /**
-     * @ignore
-     */
+
     constructor({width, height, videoGop, videoFramerate, videoBitrate, audioSampleRate, audioBitrate, audioChannels}: { width?: number, height?: number, videoGop?: number, videoFramerate?: VideoFrameRate, videoBitrate?: number, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel }) {
         this.width = width;
         this.height = height;
@@ -790,9 +764,7 @@ export class CameraCapturerConfiguration {
      * The camera direction.
      */
     cameraDirection: CameraDirection
-    /**
-     * @ignore
-     */
+
     constructor(preference: CameraCaptureOutputPreference, cameraDirection: CameraDirection) {
         this.preference = preference;
         this.cameraDirection = cameraDirection;
@@ -815,9 +787,7 @@ export class ChannelMediaOptions {
      * - `false`: Do not subscribe.
      */
     autoSubscribeVideo: boolean
-    /**
-     * @ignore
-     */
+
     constructor(autoSubscribeAudio: boolean, autoSubscribeVideo: boolean) {
         this.autoSubscribeAudio = autoSubscribeAudio;
         this.autoSubscribeVideo = autoSubscribeVideo;
@@ -1147,7 +1117,8 @@ export interface RemoteVideoStats {
      */
     uid: number
     /**
-     * **Deprecated**
+     * @deprecated
+     *
      * Time delay (ms). In scenarios where audio and video is synchronized, you can use the value
      * of `networkTransportDelay` and `jitterBufferDelay`
      * in [`RemoteAudioStats`]{@link RemoteAudioStats} to know the delay statistics of the remote video.

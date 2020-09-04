@@ -37,7 +37,7 @@ export interface RtcSurfaceViewProps {
      * - The space character.
      * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
      *
-     * **Note**
+     * @note
      * - The default value is the empty string "". Use the default value if the user joins the channel using the [`joinChannel`]{@link RtcEngine.joinChannel} method in the `RtcEngine` class.
      * - If the user joins the channel using the [`joinChannel`]{@link RtcChannel.joinChannel} method in the `RtcChannel` class, set this parameter as the `channelId` of the `RtcChannel` object.
      */
@@ -59,7 +59,7 @@ export interface RtcTextureViewProps {
      * - The space character.
      * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
      *
-     * **Note**
+     * @note
      * - The default value is the empty string "". Use the default value if the user joins the channel using the [`joinChannel`]{@link RtcEngine.joinChannel} method in the `RtcEngine` class.
      * - If the user joins the channel using the [`joinChannel`]{@link RtcChannel.joinChannel} method in the `RtcChannel` class, set this parameter as the `channelId` of the `RtcChannel` object.
      */

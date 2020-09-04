@@ -1,6 +1,6 @@
 /**
  * IP areas
- * @enum {number}
+ *
  */
 export enum IPAreaCode {
     /**
@@ -27,7 +27,7 @@ export enum IPAreaCode {
 
 /**
  * Audio codec profile.
- * @enum {number}
+ *
  */
 export enum AudioCodecProfileType {
     /**
@@ -42,7 +42,7 @@ export enum AudioCodecProfileType {
 
 /**
  * Audio equalization band frequency.
- * @enum {number}
+ *
  */
 export enum AudioEqualizationBandFrequency {
     /**
@@ -89,7 +89,7 @@ export enum AudioEqualizationBandFrequency {
 
 /**
  * The error information of the local audio.
- * @enum {number}
+ *
  */
 export enum AudioLocalError {
     /**
@@ -120,7 +120,7 @@ export enum AudioLocalError {
 
 /**
  * The state of the local audio.
- * @enum {number}
+ *
  */
 export enum AudioLocalState {
     /**
@@ -143,7 +143,7 @@ export enum AudioLocalState {
 
 /**
  * The error code of the audio mixing file.
- * @enum {number}
+ *
  */
 export enum AudioMixingErrorCode {
     /**
@@ -166,7 +166,7 @@ export enum AudioMixingErrorCode {
 
 /**
  * The state of the audio mixing file.
- * @enum {number}
+ *
  */
 export enum AudioMixingStateCode {
     /**
@@ -189,7 +189,7 @@ export enum AudioMixingStateCode {
 
 /**
  * Audio output routing.
- * @enum {number}
+ *
  */
 export enum AudioOutputRouting {
     /**
@@ -224,7 +224,7 @@ export enum AudioOutputRouting {
 
 /**
  * Audio profile.
- * @enum {number}
+ *
  */
 export enum AudioProfile {
     /**
@@ -257,7 +257,7 @@ export enum AudioProfile {
 
 /**
  * Use mode of the onRecordAudioFrame callback.
- * @enum {number}
+ *
  * TODO setPlaybackAudioFrameParameters
  */
 export enum AudioRawFrameOperationMode {
@@ -295,7 +295,7 @@ export enum AudioRecordingQuality {
 
 /**
  * The state of the remote audio.
- * @enum {number}
+ *
  */
 export enum AudioRemoteState {
     /**
@@ -330,7 +330,7 @@ export enum AudioRemoteState {
 
 /**
  * The reason of the remote audio state change.
- * @enum {number}
+ *
  */
 export enum AudioRemoteStateReason {
     /**
@@ -369,7 +369,7 @@ export enum AudioRemoteStateReason {
 
 /**
  * The preset local voice reverberation option.
- * @enum {number}
+ *
  */
 export enum AudioReverbPreset {
     /**
@@ -448,7 +448,7 @@ export enum AudioReverbPreset {
 
 /**
  * Audio reverberation type.
- * @enum {number}
+ *
  */
 export enum AudioReverbType {
     /**
@@ -475,7 +475,7 @@ export enum AudioReverbType {
 
 /**
  * Audio sample rate.
- * @enum {number}
+ *
  */
 export enum AudioSampleRateType {
     /**
@@ -494,7 +494,7 @@ export enum AudioSampleRateType {
 
 /**
  * Audio scenario.
- * @enum {number}
+ *
  */
 export enum AudioScenario {
     /**
@@ -525,7 +525,7 @@ export enum AudioScenario {
 
 /**
  * Audio session restriction.
- * @enum {number}
+ *
  * TODO iOS setAudioSessionOperationRestriction
  */
 export enum AudioSessionOperationRestriction {
@@ -553,7 +553,7 @@ export enum AudioSessionOperationRestriction {
 
 /**
  * The preset audio voice configuration used to change the voice effect.
- * @enum {number}
+ *
  */
 export enum AudioVoiceChanger {
     /**
@@ -636,7 +636,7 @@ export enum AudioVoiceChanger {
 
 /**
  * The camera capturer configuration.
- * @enum {number}
+ *
  */
 export enum CameraCaptureOutputPreference {
     /**
@@ -659,7 +659,7 @@ export enum CameraCaptureOutputPreference {
 
 /**
  * The camera direction.
- * @enum {number}
+ *
  */
 export enum CameraDirection {
     /**
@@ -674,7 +674,7 @@ export enum CameraDirection {
 
 /**
  * The error code in AgoraChannelMediaRelayError.
- * @enum {number}
+ *
  */
 export enum ChannelMediaRelayError {
     /**
@@ -731,7 +731,7 @@ export enum ChannelMediaRelayError {
 
 /**
  * The event code in `ChannelMediaRelayEvent`.
- * @enum {number}
+ *
  */
 export enum ChannelMediaRelayEvent {
     /**
@@ -786,7 +786,7 @@ export enum ChannelMediaRelayEvent {
 
 /**
  * The state code in [`ChannelMediaRelayState`]{@link ChannelMediaRelayState}.
- * @enum {number}
+ *
  */
 export enum ChannelMediaRelayState {
     /**
@@ -809,7 +809,7 @@ export enum ChannelMediaRelayState {
 
 /**
  * Channel profile.
- * @enum {number}
+ *
  */
 export enum ChannelProfile {
     /**
@@ -831,7 +831,7 @@ export enum ChannelProfile {
 
 /**
  * Client role in the `LiveBroadcasting` profile.
- * @enum {number}
+ *
  */
 export enum ClientRole {
     /**
@@ -846,7 +846,7 @@ export enum ClientRole {
 
 /**
  * Reasons for the connection state change.
- * @enum {number}
+ *
  */
 export enum ConnectionChangedReason {
     /**
@@ -917,7 +917,7 @@ export enum ConnectionChangedReason {
 
 /**
  * Connection states.
- * @enum {number}
+ *
  */
 export enum ConnectionStateType {
     /**
@@ -963,7 +963,7 @@ export enum ConnectionStateType {
 
 /**
  * The video encoding degradation preference under limited bandwidth.
- * @enum {number}
+ *
  */
 export enum DegradationPreference {
     /**
@@ -1001,7 +1001,7 @@ export enum EncryptionMode {
 
 /**
  * Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
- * @enum {number}
+ *
  */
 export enum ErrorCode {
     /**
@@ -1108,7 +1108,7 @@ export enum ErrorCode {
     InvalidChannelId = 102,
     /**
      * 109: The token expired.
-     * **DEPRECATED** Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * @deprecated Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
      *
      * Possible reasons are:
      * - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the token to access the Agora service within five minutes after the token is generated. If the user does not access the Agora service after five minutes, this token is no longer valid.
@@ -1118,7 +1118,7 @@ export enum ErrorCode {
     TokenExpired = 109,
     /**
      * 110: The token is invalid.
-     * **DEPRECATED**  Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * @deprecated Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
      *
      * Possible reasons are:
      * - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
@@ -1226,7 +1226,7 @@ export enum ErrorCode {
     /**
      * 1003: Fails to start the camera.
      *
-     * **DEPRECATED** Use [`CaptureFailure`]{@link LocalVideoStreamError.CaptureFailure} in the error parameter of [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged}.
+     * @deprecated Use [`CaptureFailure`]{@link LocalVideoStreamError.CaptureFailure} in the error parameter of [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged}.
      *
      */
     StartCamera = 1003,
@@ -1333,7 +1333,7 @@ export enum ErrorCode {
     /**
      * 1603: Video Device Module: An error occurs in setting the video encoder.
      *
-     * **DEPRECATED**
+     * @deprecated
      * This error code is deprecated.
      */
     VcmEncoderSetError = 1603,
@@ -1341,7 +1341,7 @@ export enum ErrorCode {
 
 /**
  * State of importing an external video stream in a live broadcast.
- * @enum {number}
+ *
  */
 export enum InjectStreamStatus {
     /**
@@ -1392,7 +1392,7 @@ export enum InjectStreamStatus {
 
 /**
  * The state of the probe test result.
- * @enum {number}
+ *
  */
 export enum LastmileProbeResultState {
     /**
@@ -1411,7 +1411,7 @@ export enum LastmileProbeResultState {
 
 /**
  * The lightening contrast level.
- * @enum {number}
+ *
  */
 export enum LighteningContrastLevel {
     /**
@@ -1430,7 +1430,7 @@ export enum LighteningContrastLevel {
 
 /**
  * The detailed error information of the local video.
- * @enum {number}
+ *
  */
 export enum LocalVideoStreamError {
     /**
@@ -1461,7 +1461,7 @@ export enum LocalVideoStreamError {
 
 /**
  * The state of the local video stream.
- * @enum {number}
+ *
  */
 export enum LocalVideoStreamState {
     /**
@@ -1484,7 +1484,7 @@ export enum LocalVideoStreamState {
 
 /**
  * Output log filter level.
- * @enum {number}
+ *
  */
 export enum LogFilter {
     /**
@@ -1515,7 +1515,7 @@ export enum LogFilter {
 
 /**
  * Media device type.
- * @enum {number}
+ *
  * TODO MacOS AgoraMediaDeviceType
  */
 export enum MediaDeviceType {
@@ -1543,7 +1543,7 @@ export enum MediaDeviceType {
 
 /**
  * Media type.
- * @enum {number}
+ *
  * TODO LiveEngine
  */
 export enum MediaType {
@@ -1567,7 +1567,7 @@ export enum MediaType {
 
 /**
  * The metadata type.
- * @enum {number}
+ *
  * TODO registerMediaMetadataObserver
  */
 export enum MetadataType {
@@ -1583,7 +1583,7 @@ export enum MetadataType {
 
 /**
  * Network quality.
- * @enum {number}
+ *
  */
 export enum NetworkQuality {
     /**
@@ -1626,7 +1626,7 @@ export enum NetworkQuality {
 
 /**
  * Network type.
- * @enum {number}
+ *
  */
 export enum NetworkType {
     /**
@@ -1661,7 +1661,7 @@ export enum NetworkType {
 
 /**
  * Default camera position
- * @enum {number}
+ *
  * TODO AgoraRtcDefaultCamera
  */
 export enum RtcDefaultCameraPosition {
@@ -1677,7 +1677,7 @@ export enum RtcDefaultCameraPosition {
 
 /**
  * Lifecycle of the CDN live video stream.
- * @enum {number}
+ *
  * TODO AgoraPublisherConfiguration
  */
 export enum RtmpStreamLifeCycle {
@@ -1693,7 +1693,7 @@ export enum RtmpStreamLifeCycle {
 
 /**
  * The detailed error information for streaming.
- * @enum {number}
+ *
  */
 export enum RtmpStreamingErrorCode {
     /**
@@ -1746,7 +1746,7 @@ export enum RtmpStreamingErrorCode {
 
 /**
  * The RTMP streaming state.
- * @enum {number}
+ *
  */
 export enum RtmpStreamingState {
     /**
@@ -1787,7 +1787,7 @@ export enum RtmpStreamingState {
 
 /**
  * Stream fallback option.
- * @enum {number}
+ *
  */
 export enum StreamFallbackOptions {
     /**
@@ -1810,7 +1810,7 @@ export enum StreamFallbackOptions {
 
 /**
  * Reason for the user being offline.
- * @enum {number}
+ *
  */
 export enum UserOfflineReason {
     /**
@@ -1829,7 +1829,7 @@ export enum UserOfflineReason {
 
 /**
  * The priority of the remote user.
- * @enum {number}
+ *
  */
 export enum UserPriority {
     /**
@@ -1844,7 +1844,7 @@ export enum UserPriority {
 
 /**
  * Video buffer type
- * @enum {number}
+ *
  * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
  */
 export enum VideoBufferType {
@@ -1860,7 +1860,7 @@ export enum VideoBufferType {
 
 /**
  * Self-defined video codec profile.
- * @enum {number}
+ *
  */
 export enum VideoCodecProfileType {
     /**
@@ -1879,7 +1879,7 @@ export enum VideoCodecProfileType {
 
 /**
  * The content hint for screen sharing.
- * @enum {number}
+ *
  * TODO MacOS setScreenCaptureContentHint
  *
  */
@@ -1900,7 +1900,7 @@ export enum VideoContentHint {
 
 /**
  * Video frame rate
- * @enum {number}
+ *
  */
 export enum VideoFrameRate {
     /**
@@ -2104,7 +2104,7 @@ export enum VideoFrameRate {
  * Agora uses different video codecs for different profiles to optimize the user experience. For example,
  * the Communication profile prioritizes the smoothness while the LIVE_BROADCASTING profile prioritizes the
  * video quality (a higher bitrate). Therefore, We recommend setting this parameter as STANDARD_BITRATE = 0.
- * @enum {number}
+ *
  */
 export enum BitRate {
     /**
@@ -2122,7 +2122,7 @@ export enum BitRate {
 
 /**
  * Video mirror mode.
- * @enum {number}
+ *
  */
 export enum VideoMirrorMode {
     /**
@@ -2141,7 +2141,7 @@ export enum VideoMirrorMode {
 
 /**
  * Video output orientation mode.
- * @enum {number}
+ *
  */
 export enum VideoOutputOrientationMode {
     /**
@@ -2168,7 +2168,7 @@ export enum VideoOutputOrientationMode {
 
 /**
  * Video pixel format.
- * @enum {number}
+ *
  * TODO iOS AgoraVideoSinkProtocol
  *
  */
@@ -2189,7 +2189,7 @@ export enum VideoPixelFormat {
 
 /**
  * Quality change of the local video in terms of target frame rate and target bit rate since last count.
- * @enum {number}
+ *
  */
 export enum VideoQualityAdaptIndication {
     /**
@@ -2208,7 +2208,7 @@ export enum VideoQualityAdaptIndication {
 
 /**
  * The state of the remote video.
- * @enum {number}
+ *
  */
 export enum VideoRemoteState {
     /**
@@ -2244,7 +2244,7 @@ export enum VideoRemoteState {
 
 /**
  * The reason of the remote video state change.
- * @enum {number}
+ *
  */
 export enum VideoRemoteStateReason {
     /**
@@ -2291,7 +2291,7 @@ export enum VideoRemoteStateReason {
 
 /**
  * Video display mode.
- * @enum {number}
+ *
  */
 export enum VideoRenderMode {
     /**
@@ -2303,7 +2303,7 @@ export enum VideoRenderMode {
      */
     Fit = 2,
     /**
-     * **DEPRECATED**
+     * @deprecated
      * 3: This mode is deprecated.
      *
      */
@@ -2316,7 +2316,7 @@ export enum VideoRenderMode {
 
 /**
  * Video rotation.
- * @enum {number}
+ *
  * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
  */
 export enum VideoRotation {
@@ -2340,7 +2340,7 @@ export enum VideoRotation {
 
 /**
  * Video stream type.
- * @enum {number}
+ *
  */
 export enum VideoStreamType {
     /**
@@ -2357,7 +2357,7 @@ export enum VideoStreamType {
  * Warning codes occur when the SDK encounters an error that may be recovered automatically.
  * These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server,
  * the SDK reports the [`OpenChannelTimeout(106)`]{@link WarningCode.OpenChannelTimeout} warning and tries to reconnect automatically.
- * @enum {number}
+ *
  */
 export enum WarningCode {
     /**
@@ -2383,7 +2383,7 @@ export enum WarningCode {
     /**
      * 105: The server rejects the request to look up the channel.
      * The server cannot process this request or the request is illegal.
-     * **Deprecated**
+     * @deprecated
      *
      * Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
      * of [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}.
@@ -2475,7 +2475,7 @@ export enum WarningCode {
 
 /**
  * The audio channel of the sound.
- * @enum {number}
+ *
  */
 export enum AudioChannel {
     /**
@@ -2506,7 +2506,7 @@ export enum AudioChannel {
 
 /**
  * Video codec types.
- * @enum {number}
+ *
  */
 export enum VideoCodecType {
     /**
