@@ -36,73 +36,403 @@ import {
     WarningCode
 } from "../Types"
 
+
 /**
  * @internal
+ * @ignore
  */
+
 export type Listener = (...args: any[]) => any
 
 /**
  * @internal
+ * @ignore
  */
 export interface Subscription {
     remove(): void
 }
 
+
 export type EmptyCallback = () => void
-export type WarningCallback = (warn: WarningCode) => void
-export type ErrorCallback = (err: ErrorCode) => void
-export type ApiCallCallback = (error: ErrorCode, api: string, result: string) => void
-export type UidWithElapsedAndChannelCallback = (channel: string, uid: number, elapsed: number) => void
-export type RtcStatsCallback = (stats: RtcStats) => void
-export type UserAccountCallback = (uid: number, userAccount: string) => void
-export type UserInfoCallback = (uid: number, userInfo: UserInfo) => void
-export type ClientRoleCallback = (oldRole: ClientRole, newRole: ClientRole) => void
-export type UidWithElapsedCallback = (uid: number, elapsed: number) => void
-export type UserOfflineCallback = (uid: number, reason: UserOfflineReason) => void
-export type ConnectionStateCallback = (state: ConnectionStateType, reason: ConnectionChangedReason) => void
-export type NetworkTypeCallback = (type: NetworkType) => void
-export type TokenCallback = (token: string) => void
-export type AudioVolumeCallback = (speakers: AudioVolumeInfo[], totalVolume: number) => void
-export type UidCallback = (uid: number) => void
-export type ElapsedCallback = (elapsed: number) => void
-export type VideoFrameCallback = (width: number, height: number, elapsed: number) => void
-export type UidWithMutedCallback = (uid: number, muted: boolean) => void
-export type VideoSizeCallback = (uid: number, width: number, height: number, rotation: number) => void
-export type RemoteVideoStateCallback = (uid: number, state: VideoRemoteState, reason: VideoRemoteStateReason, elapsed: number) => void
-export type LocalVideoStateCallback = (localVideoState: LocalVideoStreamState, error: LocalVideoStreamError) => void
-export type RemoteAudioStateCallback = (uid: number, state: AudioRemoteState, reason: AudioRemoteStateReason, elapsed: number) => void
-export type LocalAudioStateCallback = (state: AudioLocalState, error: AudioLocalError) => void
-export type FallbackCallback = (isFallbackOrRecover: boolean) => void
-export type FallbackWithUidCallback = (uid: number, isFallbackOrRecover: boolean) => void
-export type AudioRouteCallback = (routing: AudioOutputRouting) => void
-export type RectCallback = (rect: Rect) => void
-export type NetworkQualityCallback = (quality: NetworkQuality) => void
-export type NetworkQualityWithUidCallback = (uid: number, txQuality: NetworkQuality, rxQuality: NetworkQuality) => void
-export type LastmileProbeCallback = (result: LastmileProbeResult) => void
-export type LocalVideoStatsCallback = (stats: LocalVideoStats) => void
-export type LocalAudioStatsCallback = (stats: LocalAudioStats) => void
-export type RemoteVideoStatsCallback = (stats: RemoteVideoStats) => void
-export type RemoteAudioStatsCallback = (stats: RemoteAudioStats) => void
-export type AudioMixingStateCallback = (state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void
-export type SoundIdCallback = (soundId: number) => void
-export type RtmpStreamingStateCallback = (url: string, state: RtmpStreamingState, errCode: RtmpStreamingErrorCode) => void
-export type StreamInjectedStatusCallback = (url: string, uid: number, status: InjectStreamStatus) => void
-export type StreamMessageCallback = (uid: number, streamId: number, data: string) => void
-export type StreamMessageErrorCallback = (uid: number, streamId: number, error: ErrorCode, missed: number, cached: number) => void
-export type MediaRelayStateCallback = (state: ChannelMediaRelayState, code: ChannelMediaRelayError) => void
-export type MediaRelayEventCallback = (code: ChannelMediaRelayEvent) => void
-export type VideoFrameWithUidCallback = (uid: number, width: number, height: number, elapsed: number) => void
-export type UrlWithErrorCallback = (url: string, error: ErrorCode) => void
-export type UrlCallback = (url: string) => void
-export type TransportStatsCallback = (uid: number, delay: number, lost: number, rxKBitRate: number) => void
-export type UidWithEnabledCallback = (uid: number, enabled: boolean) => void
-export type EnabledCallback = (enabled: boolean) => void
-export type AudioQualityCallback = (uid: number, quality: number, delay: number, lost: number) => void
-export type MetadataCallback = (buffer: string, uid: number, timeStampMs: number) => void
-export type FacePositionCallback = (imageWidth: number, imageHeight: number, faces: FacePositionInfo[]) => void
+export type WarningCallback =
+/**
+ * @param warn Warning code.
+ *
+ */
+(warn: WarningCode) => void
+export type ErrorCallback =
+/**
+ * @param err Error code.
+ */
+(err: ErrorCode) => void
+export type ApiCallCallback =
+/**
+ * @param error [Error Code]{@link ErrorCode} that the SDK returns when the method call fails.
+ * @param api The method executed by the SDK.
+ * @param result The result of the method call.
+ *
+ */
+(error: ErrorCode, api: string, result: string) => void
+export type UidWithElapsedAndChannelCallback =
+/**
+ * @param channel Channel name.
+ * @param uid User ID.
+ * @param elapsed Time elapsed (ms) from the user calling [`joinChannel`]{@link RtcEngine.joinChannel} until
+ * this callback is triggered.
+ */
+(channel: string, uid: number, elapsed: number) => void
+export type RtcStatsCallback =
+/**
+ * @param stats Statistics of the call.
+ */
+(stats: RtcStats) => void
+export type UserAccountCallback =
+/**
+ * @param uid The ID of the local user.
+ * @param userAccount The user account of the local user.
+ *
+ */
+(uid: number, userAccount: string) => void
+export type UserInfoCallback =
+/**
+ * @param uid The ID of the remote user.
+ * @param userInfo The `UserInfo` object that contains the user ID and user account of the remote user.
+ */
+(uid: number, userInfo: UserInfo) => void
+export type ClientRoleCallback =
+/**
+ * @param oldRole Role that the user switches from.
+ * @param newRole Role that the user switches to.
+ */
+(oldRole: ClientRole, newRole: ClientRole) => void
+export type UidWithElapsedCallback =
+/**
+ * @param uid ID of the user or host who joins the channel.
+ * @param elapsed Time delay (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} or [`setClientRole`]{@link RtcEngine.setClientRole}
+ * until this callback is triggered.
+ */
+(uid: number, elapsed: number) => void
+export type UserOfflineCallback =
+/**
+ * @param uid ID of the user or host who leaves the channel or goes offline.
+ * @param reason Reason why the user goes offline.
+ */
+(uid: number, reason: UserOfflineReason) => void
+export type ConnectionStateCallback =
+/**
+ * @param state The current network connection state.
+ * @param reason The reason causing the change of the connection state.
+ */
+(state: ConnectionStateType, reason: ConnectionChangedReason) => void
+export type NetworkTypeCallback =
+/**
+ * @param type The network type.
+ */
+(type: NetworkType) => void
+export type TokenCallback =
+/**
+ * @param token The token that will expire in 30 seconds.
+ */
+(token: string) => void
+export type AudioVolumeCallback =
+/**
+ * @param speakers An array containing the user ID and volume information for each speaker.
+ *
+ * In the local user’s callback, this array contains the following members:
+ *  - `uid` = 0,
+ *  - `volume` = `totalVolume`, which reports the sum of the voice volume and audio-mixing volume of the local user, and
+ *  - `vad`, which reports the voice activity status of the local user.
+ *
+ * In the remote speakers' callback, this array contains the following members:
+ *  - `uid` of each remote speaker,
+ *  - `volume`, which reports the sum of the voice volume and audio-mixing volume of each remote speaker, and
+ *  - `vad` = 0.
+ *
+ * An empty `speakers` array in the callback indicates that no remote user is speaking at the moment.
+ *
+ * @param totalVolume Total volume after audio mixing. The value ranges between 0 (lowest volume) and 255 (highest volume).
+ *  - In the local user’s callback, `totalVolume` is the sum of the voice volume and audio-mixing volume of the local user.
+ *  - In the remote speakers' callback, `totalVolume` is the sum of the voice volume and audio-mixing
+ * volume of all remote speakers.
+ */
+(speakers: AudioVolumeInfo[], totalVolume: number) => void
+export type UidCallback =
+/**
+ * @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
+ */
+( uid: number) => void
+export type ElapsedCallback =
+/**
+ * @param elapsed Time elapsed (ms) from the local user calling the [`joinChannel`]{@link RtcEngine.joinChannel} until
+ * this callback is triggered.
+ */
+(elapsed: number) => void
+export type VideoFrameCallback =
+/**
+ * @param width Width (pixels) of the first local video frame.
+ * @param height Height (pixels) of the first local video frame.
+ * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until this
+ * callback is triggered.
+ * If [`startPreview`]{@link RtcEngine.startPreview} is called before [`joinChannel`]{@link RtcEngine.joinChannel}, elapsed is the
+ * time elapsed (ms) from the local user calling [`startPreview`]{@link RtcEngine.startPreview} until this callback is triggered.
+ */
+(width: number, height: number, elapsed: number) => void
+export type UidWithMutedCallback =
+/**
+ * @param uid ID of the remote user.
+ * @param muted Whether the remote user's video stream playback pauses/resumes:
+ *
+ *  - `true`: Pause.
+ *  - `false`: Resume.
+ */
+(uid: number, muted: boolean) => void
+export type VideoSizeCallback =
+/**
+ * @param uid User ID of the remote user or local user (0) whose video size or rotation changes.
+ * @param width New width (pixels) of the video.
+ * @param height New height (pixels) of the video.
+ * @param rotation New rotation of the video [0 to 360).
+ */
+(uid: number, width: number, height: number, rotation: number) => void
+export type RemoteVideoStateCallback =
+/**
+ * @param uid ID of the remote user whose video state changes.
+ * @param state State of the remote video.
+ * @param reason The reason of the remote video state change.
+ * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until the SDK
+ * triggers this callback.
+ *
+ */
+(uid: number, state: VideoRemoteState, reason: VideoRemoteStateReason, elapsed: number) => void
+export type LocalVideoStateCallback =
+/**
+ * @param localVideoState The local video state.
+ * @param error The detailed error information of the local video.
+ */
+(localVideoState: LocalVideoStreamState, error: LocalVideoStreamError) => void
+export type RemoteAudioStateCallback =
+/**
+ * @param uid ID of the user whose audio state changes.
+ * @param state State of the remote audio.
+ * @param reason The reason of the remote audio state change.
+ * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until the
+ * SDK triggers this callback.
+ *
+ */
+(uid: number, state: AudioRemoteState, reason: AudioRemoteStateReason, elapsed: number) => void
+export type LocalAudioStateCallback =
+/**
+ * @param state State of the local audio.
+ * @param error The error information of the local audio.
+ */
+(state: AudioLocalState, error: AudioLocalError) => void
+export type FallbackCallback =
+/**
+ * @param isFallbackOrRecover Whether the published stream fell back to audio-only or switched back to the video:
+ *
+ *  - `true`: The published stream fell back to audio-only due to poor network conditions.
+ *  - `false`: The published stream switched back to the video after the network conditions improved.
+ */
+(isFallbackOrRecover: boolean) => void
+export type FallbackWithUidCallback =
+/**
+ * @param uid ID of the remote user sending the stream.
+ * @param isFallbackOrRecover Whether the remote media stream fell back to audio-only or
+ * switched back to the video:
+ *
+ *  - `true`: The remote media stream fell back to audio-only due to poor network conditions.
+ *  - `false`: The remote media stream switched back to the video stream after the network conditions improved.
+ */
+(uid: number, isFallbackOrRecover: boolean) => void
+export type AudioRouteCallback =
+/**
+ * @param routing Audio output routing.
+ */
+(routing: AudioOutputRouting) => void
+export type RectCallback =
+/**
+ * @param rect Rectangular area in the camera zoom specifying the focus area.
+ */
+
+(rect: Rect) => void
+export type NetworkQualityCallback =
+/**
+ * @param quality The last mile network quality based on the uplink and downlink packet loss rate and jitter.
+ */
+(quality: NetworkQuality) => void
+export type NetworkQualityWithUidCallback =
+/**
+ * @param uid User ID. The network quality of the user with this uid is reported.
+ * @param txQuality Uplink transmission quality of the user in terms of the transmission bitrate, packet loss rate, average RTT (Round-Trip Time)
+ * and jitter of the uplink network. `txQuality` is a quality rating helping you understand how well the current uplink
+ * network conditions can support the selected VideoEncoderConfiguration.
+ * For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution
+ * of 680 × 480 and a frame rate of 30 fps, but may be inadequate for resolutions higher than 1280 × 720.
+ * @param rxQuality Downlink network quality rating of the user in terms of packet loss rate, average RTT, and
+ * jitter of the downlink network.
+ *
+ */
+(uid: number, txQuality: NetworkQuality, rxQuality: NetworkQuality) => void
+export type LastmileProbeCallback =
+/**
+ * @param result The uplink and downlink last-mile network probe test result.
+ */
+(result: LastmileProbeResult) => void
+export type LocalVideoStatsCallback =
+/**
+ * @param stats The statistics of the local video stream.
+ */
+(stats: LocalVideoStats) => void
+export type LocalAudioStatsCallback =
+/**
+ * @param stats The statistics of the local audio stream.
+ */
+(stats: LocalAudioStats) => void
+export type RemoteVideoStatsCallback =
+/**
+ * @param stats Statistics of the received remote video streams.
+ */
+(stats: RemoteVideoStats) => void
+export type RemoteAudioStatsCallback =
+/**
+ * @param stats Statistics of the received remote audio streams.
+ */
+(stats: RemoteAudioStats) => void
+export type AudioMixingStateCallback =
+/**
+ * @param state The state code.
+ * @param errorCode The error code.
+ */
+(state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void
+export type SoundIdCallback =
+/**
+ * @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
+ */
+(soundId: number) => void
+export type RtmpStreamingStateCallback =
+/**
+ * @param url The RTMP URL address.
+ * @param state The RTMP streaming state.
+ * @param errCode The detailed error information for streaming.
+ *
+ */
+(url: string, state: RtmpStreamingState, errCode: RtmpStreamingErrorCode) => void
+export type StreamInjectedStatusCallback =
+/**
+ * @param url The URL address of the externally injected stream.
+ * @param uid User ID.
+ * @param status State of the externally injected stream.
+ *
+ */
+(url: string, uid: number, status: InjectStreamStatus) => void
+export type StreamMessageCallback =
+/**
+ * @param uid User ID of the remote user sending the data stream.
+ * @param streamId Stream ID.
+ * @param data Data received by the local user.
+ *
+ */
+(uid: number, streamId: number, data: string) => void
+export type StreamMessageErrorCallback =
+/**
+ * @param uid User ID of the remote user sending the data stream.
+ * @param streamId Stream ID.
+ * @param error Error code.
+ * @param missed The number of lost messages.
+ * @param cached The number of incoming cached messages when the data stream is interrupted.
+ */
+(uid: number, streamId: number, error: ErrorCode, missed: number, cached: number) => void
+export type MediaRelayStateCallback =
+/**
+ * @param state The state code.
+ * @param code The error code.
+ */
+(state: ChannelMediaRelayState, code: ChannelMediaRelayError) => void
+export type MediaRelayEventCallback =
+/**
+ * @param code The event code for media stream relay.
+ *
+ */
+(code: ChannelMediaRelayEvent) => void
+export type VideoFrameWithUidCallback =
+/**
+ * @param uid User ID of the remote user sending the video streams.
+ * @param width Width (pixels) of the video stream.
+ * @param height Height (pixels) of the video stream.
+ * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until this
+ * callback is triggered.
+ *
+ */
+(uid: number, width: number, height: number, elapsed: number) => void
+export type UrlWithErrorCallback =
+/**
+ * @param url The RTMP URL address.
+ * @param error The detailed error information.
+ *
+ */
+(url: string, error: ErrorCode) => void
+export type UrlCallback =
+/**
+ * @param url The RTMP URL address.
+ */
+(url: string) => void
+export type TransportStatsCallback =
+/**
+ * @param uid User ID of the remote user sending the audio packet.
+ * @param delay Network time delay (ms) from the remote user sending the audio packet to the local user.
+ * @param lost Packet loss rate (%) of the audio packet sent from the remote user.
+ * @param rxKBitRate Received bitrate (Kbps) of the audio packet sent from the remote user.
+ *
+ */
+(uid: number, delay: number, lost: number, rxKBitRate: number) => void
+export type UidWithEnabledCallback =
+/**
+ * @param uid User ID of the remote user.
+ * @param enabled Whether the specific remote user enables/disables the video module:
+ *
+ *  - `true`: Enabled. The remote user can enter a video session.
+ *  - `false`: Disabled. The remote user can only enter a voice session, and cannot send or receive
+ * any video stream.
+ */
+(uid: number, enabled: boolean) => void
+export type EnabledCallback =
+/**
+ * @param enabled Whether the microphone is enabled/disabled:
+ *  - `true`：Enabled.
+ *  - `false`：Disabled.
+ *
+ */
+(enabled: boolean) => void
+export type AudioQualityCallback =
+/**
+ * @param uid User ID of the speaker.
+ * @param quality Audio quality of the user.
+ * @param delay Time delay (ms) of the audio packet from the sender to the receiver, including the time delay
+ * from audio sampling pre-processing, transmission, and the jitter buffer.
+ * @param lost Packet loss rate (%) of the audio packet sent from the sender to the receiver.
+ *
+ */
+(uid: number, quality: number, delay: number, lost: number) => void
+export type MetadataCallback =
+/**
+ * @param buffer The received metadata.
+ * @param uid The ID of the user who sent the metadata.
+ * @param timeStampMs The timestamp (ms) of the received metadata.
+ *
+ */
+(buffer: string, uid: number, timeStampMs: number) => void
+export type FacePositionCallback =
+/**
+ * @param imageWidth The width (px) of the local video.
+ * @param imageHeight The height (px) of the local video.
+ * @param faces The information of the detected human face. For details, see [`FacePositionInfo`]{@link FacePositionInfo}.
+ * The number of the `FacePositionInfo` array depends on the number of human faces detected.
+ * If the array length is 0, it means that no human face is detected.
+ */
+(imageWidth: number, imageHeight: number, faces: FacePositionInfo[]) => void
 
 /**
- * The SDK uses the RtcEngineEvents interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
+ * The SDK uses the [`RtcEngineEvents`]{@link RtcEngineEvents} interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
  *
  * All methods in this interface class have their (empty) default implementations, and the application can inherit only some of the required events instead of all of them.
  *
@@ -114,7 +444,7 @@ export interface RtcEngineEvents {
      *
      * In most cases, the app can ignore the warning reported by the SDK because the SDK can usually fix the issue and resume running.
      *
-     * For instance, the SDK may report a {@link WarningCode.LookupChannelTimeout} warning upon disconnection with the server and tries to reconnect. For detailed warning codes, see {@link WarningCode}.
+     * For instance, the SDK may report a [`LookupChannelTimeout`]{@link WarningCode.LookupChannelTimeout} warning upon disconnection with the server and tries to reconnect. For detailed warning codes, see [`WarningCode`]{@link WarningCode}.
      *
      * @event Warning
      */
@@ -125,7 +455,7 @@ export interface RtcEngineEvents {
      *
      * In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.
      *
-     * For example, the SDK reports an {@link ErrorCode.StartCall} error when failing to initialize a call. The app informs the user that the call initialization failed and invokes the {@link RtcEngine.leaveChannel} method to leave the channel. For detailed error codes, see {@link ErrorCode}.
+     * For example, the SDK reports a [`StartCall`]{@link ErrorCode.StartCall} error when failing to initialize a call. The app informs the user that the call initialization failed and invokes the [`leaveChannel`]{@link RtcEngine.leaveChannel} method to leave the channel. For detailed error codes, see {@link ErrorCode}.
      *
      * @event Error
      */
@@ -143,7 +473,7 @@ export interface RtcEngineEvents {
      *
      * The channel name assignment is based on channelName specified in the joinChannel method.
      *
-     * If the uid is not specified when {@link RtcEngine.joinChannel} is called, the server automatically assigns a uid.
+     * If the uid is not specified when [`joinChannel`]{@link RtcEngine.joinChannel} is called, the server automatically assigns a uid.
      *
      * @event JoinChannelSuccess
      */
@@ -161,7 +491,7 @@ export interface RtcEngineEvents {
     /**
      * Occurs when a user leaves the channel.
      *
-     * When the app calls the {@link RtcEngine.leaveChannel} method, the SDK uses this callback to notify the app when the user leaves the channel.
+     * When the app calls the [`leaveChannel`]{@link RtcEngine.leaveChannel} method, the SDK uses this callback to notify the app when the user leaves the channel.
      *
      * With this callback, the application retrieves the channel information, such as the call duration and statistics.
      *
@@ -172,7 +502,8 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the local user registers a user account.
      *
-     * This callback is triggered when the local user successfully registers a user account by calling the {@link RtcEngine.registerLocalUserAccount} method, or joins a channel by calling the {@link RtcEngine.joinChannelWithUserAccount} method. This callback reports the user ID and user account of the local user.
+     * This callback is triggered when the local user successfully registers a user account by calling [`registerLocalUserAccount`]{@link RtcEngine.registerLocalUserAccount}, or joins a channel by calling [`joinChannelWithUserAccount`]{@link RtcEngine.joinChannelWithUserAccount}.
+     * This callback reports the user ID and user account of the local user.
      *
      * @event LocalUserRegistered
      */
@@ -181,48 +512,48 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the SDK gets the user ID and user account of the remote user.
      *
-     * After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object ({@link UserInfo}), and triggers this callback on the local client.
+     * After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object ([`UserInfo`]{@link UserInfo}), and triggers this callback on the local client.
      *
      * @event UserInfoUpdated
      */
     UserInfoUpdated: UserInfoCallback
 
     /**
-     * Occurs when the user role switches in a live broadcast. For example, from a host to an audience or vice versa.
+     * Occurs when the user role switches in live interactive streaming. For example, from a host to an audience or vice versa.
      *
-     * The SDK triggers this callback when the local user switches the user role by calling the {@link RtcEngine.setClientRole} method after joining the channel.
+     * The SDK triggers this callback when the local user switches the user role by calling [`setClientRole`]{@link RtcEngine.setClientRole} after joining the channel.
      *
      * @event ClientRoleChanged
      */
     ClientRoleChanged: ClientRoleCallback
 
     /**
-     * Occurs when a remote user (Communication)/host (Live Broadcast) joins the channel.
-     * - Communication profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
-     * - Live Broadcast profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel
+     * Occurs when a remote user ([`Communication`]{@link ChannelProfile.Communication})/host ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}) joins the channel.
+     * - [`Communication`]{@link ChannelProfile.Communication} profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
+     * - [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
      *
      * The SDK triggers this callback under one of the following circumstances:
-     * - A remote user/host joins the channel by calling the {@link RtcEngine.joinChannel} method.
-     * - A remote user switches the user role to the host by calling the {@link RtcEngine.setClientRole} method after joining the channel.
+     * - A remote user/host joins the channel by calling [`joinChannel`]{@link RtcEngine.joinChannel}.
+     * - A remote user switches the user role to the host by calling [`setClientRole`]{@link RtcEngine.setClientRole} after joining the channel.
      * - A remote user/host rejoins the channel after a network interruption.
-     * - The host injects an online media stream into the channel by calling the {@link RtcEngine.addInjectStreamUrl} method.
+     * - The host injects an online media stream into the channel by calling [`addInjectStreamUrl`]{@link RtcEngine.addInjectStreamUrl}.
      *
      * **Note**
-     * - In the Live Broadcast profile:
-     *  - The host receives the onUserJoined callback when another host joins the channel.
-     *  - The audience in the channel receives the onUserJoined callback when a new host joins the channel.
-     *  - When a web application joins the channel, the onUserJoined callback is triggered as long as the web application publishes streams.
+     * In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile:
+     *  - The host receives the [`UserJoined`]{@link UserJoined} callback when another host joins the channel.
+     *  - The audience in the channel receives the [`UserJoined`]{@link UserJoined} callback when a new host joins the channel.
+     *  - When a web application joins the channel, the [`UserJoined`]{@link UserJoined} callback is triggered as long as the web application publishes streams.
      *
      * @event UserJoined
      */
     UserJoined: UidWithElapsedCallback
 
     /**
-     * Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
+     * Occurs when a remote user ([`Communication`]{@link ChannelProfile.Communication})/host ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}) leaves the channel.
      *
      * There are two reasons for users to become offline:
      * - Leave the channel: When the user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
-     * - Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the communication profile, and more for the live broadcast profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
+     * - Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the [`Communication`]{@link ChannelProfile.Communication} profile, and more for the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
      *
      * @event UserOffline
      */
@@ -249,7 +580,7 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
      *
-     * The SDK triggers this callback when it cannot connect to the server 10 seconds after calling {@link RtcEngine.joinChannel}, regardless of whether it is in the channel or not.
+     * The SDK triggers this callback when it cannot connect to the server 10 seconds after calling [`joinChannel`]{@link RtcEngine.joinChannel}, regardless of whether it is in the channel or not.
      *
      * If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
      *
@@ -260,7 +591,7 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the token expires in 30 seconds.
      *
-     * The user becomes offline if the token used when joining the channel expires. This callback is triggered 30 seconds before the token expires to remind the app to get a new token. Upon receiving this callback, you need to generate a new token on the server and call {@link RtcEngine.renewToken} to pass the new token to the SDK.
+     * The user becomes offline if the token used when joining the channel expires. This callback is triggered 30 seconds before the token expires to remind the app to get a new token. Upon receiving this callback, you need to generate a new token on the server and call [`renewToken`]{@link RtcEngine.renewToken} to pass the new token to the SDK.
      *
      * @event TokenPrivilegeWillExpire
      */
@@ -269,7 +600,9 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the token has expired.
      *
-     * After a token is specified when joining the channel, the token expires after a certain period of time, and a new token is required to reconnect to the server. This callback notifies the app to generate a new token and call {@link RtcEngine.joinChannel} to rejoin the channel with the new token.
+     * After a token is specified when joining the channel, the token expires after a certain period of time,
+     * and a new token is required to reconnect to the server. This callback notifies the app to generate a
+     * new token and call [`joinChannel`]{@link RtcEngine.joinChannel} to rejoin the channel with the new token.
      *
      * @event RequestToken
      */
@@ -280,15 +613,15 @@ export interface RtcEngineEvents {
      *
      * This callback reports the IDs and volumes of the loudest speakers (at most 3) at the moment in the channel, and whether the local user is speaking.
      *
-     * By default, this callback is disabled. You can enable it by calling the {@link RtcEngine.enableAudioVolumeIndication} method. Once enabled, this callback is triggered at the set interval, regardless of whether a user speaks or not.
+     * By default, this callback is disabled. You can enable it by calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}. Once enabled, this callback is triggered at the set interval, regardless of whether a user speaks or not.
      *
-     * The SDK triggers two independent onAudioVolumeIndication callbacks at one time, which separately report the volume information of the local user and all the remote speakers. For more information, see the detailed parameter descriptions.
+     * The SDK triggers two independent `AudioVolumeIndication` callbacks at one time, which separately report the volume information of the local user and all the remote speakers. For more information, see the detailed parameter descriptions.
      *
      * **Note**
-     * - To enable the voice activity detection of the local user, ensure that you set report_vad(true) in the {@link RtcEngine.enableAudioVolumeIndication} method.
-     * - Calling the {@link RtcEngine.muteLocalAudioStream} method affects the SDK's behavior.
-     *  - If the local user calls the {@link RtcEngine.muteLocalAudioStream} method, the SDK stops triggering the local user's callback.
-     *  - 20 seconds after a remote speaker calls the {@link RtcEngine.muteLocalAudioStream} method, the remote speakers' callback does not include information of this remote user; 20 seconds after all remote users call the the muteLocalAudioStream method, the SDK stops triggering the remote speakers' callback.
+     * - To enable the voice activity detection of the local user, ensure that you set `report_vad(true)` in the [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication} method.
+     * - Calling [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} affects the SDK's behavior.
+     *  - If the local user calls [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream}, the SDK stops triggering the local user's callback.
+     *  - 20 seconds after a remote speaker calls [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream}, the remote speakers' callback does not include information of this remote user; 20 seconds after all remote users call the the [`muteLocalAudioStream`]{@link muteLocalAudioStream} method, the SDK stops triggering the remote speakers' callback.
      *
      * @event AudioVolumeIndication
      */
@@ -297,10 +630,11 @@ export interface RtcEngineEvents {
     /**
      * Reports which user is the loudest speaker.
      *
-     * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling {@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
+     * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by
+     * calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
      *
      * **Note**
-     * - To receive this callback, you need to call {@link RtcEngine.enableAudioVolumeIndication}.
+     * - To receive this callback, you need to call [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}.
      * - This callback returns the user ID of the user with the highest voice volume during a period of time, instead of at the moment.
      *
      * @event ActiveSpeaker
@@ -326,14 +660,17 @@ export interface RtcEngineEvents {
     /**
      * Occurs when a remote user stops/resumes sending the video stream.
      *
-     * @deprecated This callback is deprecated. Use the {@link RemoteVideoStateChanged} callback with the following parameters for the same function:
-     * - {@link VideoRemoteState.Stopped} and {@link VideoRemoteStateReason.RemoteMuted}.
-     * - {@link VideoRemoteState.Decoding} and {@link VideoRemoteStateReason.RemoteUnmuted}.
+     * @deprecated
      *
-     * The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the {@link RtcEngine.muteLocalVideoStream} method.
+     * This callback is deprecated. Use the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters for the same function:
+     * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
+     * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
+     *
+     * The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream} method.
      *
      * **Note**
-     * - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
+     *
+     * This callback is invalid when the number of users or hosts in the channel exceeds 17.
      *
      * @event UserMuteVideo
      */
@@ -356,10 +693,10 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the local video state changes.
      *
-     * The SDK returns the current video state in this callback. When the state is {@link LocalVideoStreamState.Failed}, see the error parameter for details.
+     * The SDK returns the current video state in this callback.
+     * This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
+     * When the state is [`Failed`]{@link LocalVideoStreamState.Failed}, see the error parameter for details.
      *
-     * **Note**
-     * - This callback reports the current state of the local video, which keeps changing throughout the RtcEngine life cycle. We recommend maintaining the states reported in this callback, and check the local video state before starting the local camera. If the SDK reports {@link LocalVideoStreamError.CaptureFailure}, the local camera is occupied by either the system or a third-party app. To access the camera, call {@link RtcEngine.enableLocalVideo} (false) first, and then {@link RtcEngine.enableLocalVideo} (video).
      *
      * @event LocalVideoStateChanged
      */
@@ -369,6 +706,10 @@ export interface RtcEngineEvents {
      * Occurs when the remote audio state changes.
      *
      * This callback indicates the state change of the remote audio stream.
+     *
+     * **Note**
+     *
+     * This callback does not work properly when the number of users (in the [`Communication`] profile) or hosts (in the [`LiveBroadcasting`] profile) in the channel exceeds 17.
      *
      * @event RemoteAudioStateChanged
      */
@@ -380,16 +721,21 @@ export interface RtcEngineEvents {
      * This callback indicates the state change of the local audio stream, including the state of the audio recording and encoding, and allows you to troubleshoot issues when exceptions occur.
      *
      * **Note**
-     * - When the state is {@link AudioLocalState.Failed}, see the error parameter for details.
+     *
+     * When the state is [`Failed`]{@link AudioLocalState.Failed}, see the error parameter for details.
      *
      * @event LocalAudioStateChanged
      */
     LocalAudioStateChanged: LocalAudioStateCallback
 
     /**
-     * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
+     * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions
+     * or switches back to video stream after the network conditions improve.
      *
-     * If you call {@link RtcEngine.setLocalPublishFallbackOption} and set option as {@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+     * If you call [`setLocalPublishFallbackOption`]{@link RtcEngine.setLocalPublishFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly},
+     * this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions,
+     * or when the audio stream switches back to the video after the uplink network condition improves. Once the published stream falls back to audio only,
+     * the remote app receives the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback.
      *
      * @event LocalPublishFallbackToAudioOnly
      */
@@ -398,7 +744,11 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
      *
-     * If you call {@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as {@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after the uplink network condition improves.
+     * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set
+     * option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly},
+     * this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due
+     * to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after
+     * the uplink network condition improves.
      *
      * @event RemoteSubscribeFallbackToAudioOnly
      */
@@ -409,8 +759,7 @@ export interface RtcEngineEvents {
      *
      * This callback returns that the audio route switched to an earpiece, speakerphone, headset, or Bluetooth device.
      *
-     * The definition of the routing is listed as follows:
-     * - {@link AudioOutputRouting}
+     * The definition of the routing is listed in [`AudioOutputRouting`]{@link AudioOutputRouting}.
      *
      * @event AudioRouteChanged
      */
@@ -419,7 +768,8 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the camera focus area is changed.
      *
-     * The SDK triggers this callback when the local user changes the camera focus position by calling the {@link RtcEngine.setCameraFocusPositionInPreview} method.
+     * The SDK triggers this callback when the local user changes the camera focus position by
+     * calling [`setCameraFocusPositionInPreview`]{@link RtcEngine.setCameraFocusPositionInPreview}.
      *
      * @event CameraFocusAreaChanged
      */
@@ -428,7 +778,7 @@ export interface RtcEngineEvents {
     /**
      * The camera exposure area has changed.
      *
-     * The SDK triggers this callback when the local user changes the camera exposure position by calling the {@link RtcEngine.setCameraExposurePosition} method.
+     * The SDK triggers this callback when the local user changes the camera exposure position by calling [`setCameraExposurePosition`]{@link RtcEngine.setCameraExposurePosition}.
      *
      * @event CameraExposureAreaChanged
      */
@@ -437,7 +787,7 @@ export interface RtcEngineEvents {
     /**
      * Reports the face detection result of the local user.
      *
-     * Once you enable face detection by calling {@link RtcEngine.enableFaceDetection}, you can get the following information on the local user in real-time:
+     * Once you enable face detection by calling [`enableFaceDetection`]{@link RtcEngine.enableFaceDetection}, you can get the following information on the local user in real-time:
      * - The width and height of the local video.
      * - The position of the human face in the local video.
      * - The distance between the human face and the device screen. This value is based on the fitting calculation of the local video size and the position of the human face.
@@ -452,14 +802,18 @@ export interface RtcEngineEvents {
     FacePositionChanged: FacePositionCallback
 
     /**
-     * Reports the statistics of the {@link RtcEngine} once every two seconds.
+     * Reports the statistics of the [`RtcEngine`]{@link RtcEngine} once every two seconds.
+     *
      *
      * @event RtcStats
      */
     RtcStats: RtcStatsCallback
 
     /**
-     * Reports the last mile network quality of the local user once every two seconds before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. After the application calls the {@link RtcEngine.enableLastmileTest} method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.
+     * Reports the last mile network quality of the local user once every two seconds before the user joins the channel.
+     * Last mile refers to the connection between the local device and Agora's edge server. After the application calls the [`enableLastmileTest`]{@link RtcEngine.enableLastmileTest} method,
+     * this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.
+     *
      *
      * @event LastmileQuality
      */
@@ -477,7 +831,7 @@ export interface RtcEngineEvents {
     /**
      * Reports the last-mile network probe result.
      *
-     * The SDK triggers this callback within 30 seconds after the app calls the {@link RtcEngine.startLastmileProbeTest} method.
+     * The SDK triggers this callback within 30 seconds after the app calls [`startLastmileProbeTest`]{@link RtcEngine.startLastmileProbeTest}.
      *
      * @event LastmileProbeResult
      */
@@ -520,11 +874,14 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the audio mixing file playback finishes.
      *
-     * @deprecated This callback is deprecated. Use {@link AudioMixingStateChanged} instead.
+     * @deprecated
      *
-     * You can start an audio mixing file playback by calling the {@link RtcEngine.startAudioMixing} method. This callback is triggered when the audio mixing file playback finishes.
+     * This callback is deprecated.
+     * Use [`AudioMixingStateChanged`]{@link AudioMixingStateChanged} instead.
      *
-     * If the {@link RtcEngine.startAudioMixing} method call fails, an {@link WarningCode.AudioMixingOpenError} warning returns in the {@link Warning} callback.
+     * You can start an audio mixing file playback by calling [`startAudioMixing`]{@link RtcEngine.startAudioMixing}. This callback is triggered when the audio mixing file playback finishes.
+     *
+     * If the [`startAudioMixing`]{@link RtcEngine.startAudioMixing} method call fails, an [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError} warning returns in the [`Warning`]{@link Warning} callback.
      *
      * @event AudioMixingFinished
      */
@@ -533,10 +890,10 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the state of the local user's audio mixing file changes.
      *
-     * When you call the {@link RtcEngine.startAudioMixing} method and the state of audio mixing file changes, the Agora SDK triggers this callback.
-     * - When the audio mixing file plays, pauses playing, or stops playing, this callback returns 710, 711, or 713 in state, and 0 in errorCode.
-     * - When exceptions occur during playback, this callback returns 714 in state and an error in errorCode.
-     * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns {@link WarningCode.AudioMixingOpenError}.
+     * When you call [`startAudioMixing`]{@link RtcEngine.startAudioMixing} and the state of audio mixing file changes, the Agora SDK triggers this callback.
+     * - When the audio mixing file plays, pauses playing, or stops playing, this callback returns `710`, `711`, or `713` in state, and `0` in errorCode.
+     * - When exceptions occur during playback, this callback returns `714` in state and an error in errorCode.
+     * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}.
      *
      * @event AudioMixingStateChanged
      */
@@ -545,7 +902,8 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the audio effect file playback finishes.
      *
-     * You can start a local audio effect playback by calling the {@link RtcEngine.playEffect} method. This callback is triggered when the local audio effect file playback finishes.
+     * You can start a local audio effect playback by calling [`playEffect`]{@link RtcEngine.playEffect}. This callback is triggered when the local audio effect file playback finishes.
+     *
      *
      * @event AudioEffectFinished
      */
@@ -554,9 +912,10 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the state of the RTMP streaming changes.
      *
-     * The SDK triggers this callback to report the result of the local user calling the {@link RtcEngine.addPublishStreamUrl} or {@link RtcEngine.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is {@link RtmpStreamingState.Failure}, see the errCode parameter for details.
+     * The SDK triggers this callback to report the result of the local user calling [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
+     * This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
      *
-     * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
+     * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
      *
      * @event RtmpStreamingStateChanged
      */
@@ -565,10 +924,10 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the publisher's transcoding settings are updated.
      *
-     * When the LiveTranscoding class in the {@link RtcEngine.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
+     * When the `LiveTranscoding` class in the [`setLiveTranscoding`]{@link RtcEngine.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
      *
      * **Note**
-     * - If you call the setLiveTranscoding method to set the LiveTranscoding class for the first time, the SDK does not trigger this callback.
+     * - If you call [`setLiveTranscoding`]{@link RtcEngine.setLiveTranscoding} to set the `LiveTranscoding` class for the first time, the SDK does not trigger this callback.
      *
      * @event TranscodingUpdated
      */
@@ -584,7 +943,8 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the local user receives a remote data stream.
      *
-     * The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the {@link RtcEngine.sendStreamMessage} method.
+     * The SDK triggers this callback when the local user receives the stream message that the remote user sends
+     * by calling the [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} method.
      *
      * @event StreamMessage
      */
@@ -593,7 +953,8 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the local user fails to receive a remote data stream.
      *
-     * The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the {@link RtcEngine.sendStreamMessage} method.
+     * The SDK triggers this callback when the local user fails to receive the stream message that the remote
+     * user sends by calling the [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} method.
      *
      * @event StreamMessageError
      */
@@ -632,7 +993,9 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the first remote video frame is rendered.
      *
-     * @deprecated Use {@link VideoRemoteState.Starting} or {@link VideoRemoteState.Decoding} in the {@link RemoteVideoStateChanged} callback instead.
+     * @deprecated
+     *
+     * Use [`Starting`]{@link VideoRemoteState.Starting} or [`Decoding`]{@link VideoRemoteState.Decoding} in the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback instead.
      *
      * This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
      *
@@ -643,7 +1006,9 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the first remote audio frame is received.
      *
-     * @deprecated Use {@link AudioRemoteState.Starting} in {@link RemoteAudioStateChanged} instead.
+     * @deprecated
+     *
+     * Use [`Starting`]{@link AudioRemoteState.Starting} in [`RemoteAudioStateChanged`]{@link RemoteAudioStateChanged} instead.
      *
      * @event FirstRemoteAudioFrame
      */
@@ -652,15 +1017,17 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the engine receives the first audio frame from a specified remote user.
      *
-     * @deprecated Use {@link VideoRemoteState.Decoding} in {@link RemoteAudioStateChanged} instead.
+     * @deprecated
+     *
+     * Use [`Decoding`]{@link VideoRemoteState.Decoding} in [`RemoteAudioStateChanged`]{@link RemoteAudioStateChanged} instead.
      *
      * This callback is triggered in either of the following scenarios：
      * - The remote user joins the channel and sends the audio stream.
      * - The remote user stops sending the audio stream and re-sends it after 15 seconds. Possible reasons include:
      *  - The remote user leaves channel.
      *  - The remote user drops offline.
-     *  - The remote user calls the {@link RtcEngine.muteLocalAudioStream} method.
-     *  - The remote user calls the {@link RtcEngine.disableAudio} method.
+     *  - The remote user calls [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream}.
+     *  - The remote user calls [`disableAudio`]{@link RtcEngine.disableAudio}.
      *
      * @event FirstRemoteAudioDecoded
      */
@@ -669,23 +1036,27 @@ export interface RtcEngineEvents {
     /**
      * Occurs when a remote user stops/resumes sending the audio stream.
      *
-     * @deprecated Use the {@link RemoteAudioStateChanged} callback with the following parameters instead:
-     * - {@link VideoRemoteState.Stopped} and {@link VideoRemoteStateReason.RemoteMuted}.
-     * - {@link VideoRemoteState.Decoding} and {@link VideoRemoteStateReason.RemoteUnmuted}.
+     * @deprecated
+     * Use the [`RemoteAudioStateChanged`]{@link RemoteAudioStateChanged} callback with the following parameters instead:
+     * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
+     * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
      *
-     * The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the {@link RtcEngine.muteLocalAudioStream} method.
+     * The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} method.
      *
      * **Note**
-     * - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
+     *
+     * This callback is invalid when the number of users or hosts in the channel exceeds 17.
      *
      * @event UserMuteAudio
      */
     UserMuteAudio: UidWithMutedCallback
 
     /**
-     * Reports the result of calling the {@link RtcEngine.addPublishStreamUrl} method.
+     * Reports the result of calling [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl}.
      *
-     * @deprecated Use {@link RtmpStreamingStateChanged} instead.
+     * @deprecated
+     *
+     * Use [`RtmpStreamingStateChanged`]{@link RtmpStreamingStateChanged} instead.
      *
      * This callback indicates whether you have successfully added an RTMP stream to the CDN.
      *
@@ -694,9 +1065,11 @@ export interface RtcEngineEvents {
     StreamPublished: UrlWithErrorCallback
 
     /**
-     * Reports the result of calling the {@link RtcEngine.removePublishStreamUrl} method.
+     * Reports the result of calling [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
      *
-     * @deprecated Use {@link RtmpStreamingStateChanged} instead.
+     * @deprecated
+     *
+     * Use [`RtmpStreamingStateChanged`]{@link RtmpStreamingStateChanged} instead.
      *
      * This callback indicates whether you have successfully removed an RTMP stream from the CDN.
      *
@@ -707,9 +1080,12 @@ export interface RtcEngineEvents {
     /**
      * Reports the transport-layer statistics of each remote audio stream.
      *
-     * @deprecated This callback is deprecated. Use {@link RemoteAudioStats} instead.
+     * @deprecated
      *
-     * This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives an audio packet from a remote user.
+     * This callback is deprecated. Use [`RemoteAudioStats`]{@link RemoteAudioStats} instead.
+     *
+     * This callback reports the transport-layer statistics, such as the packet loss rate and time delay,
+     * once every two seconds after the local user receives an audio packet from a remote user.
      *
      * @event RemoteAudioTransportStats
      */
@@ -718,9 +1094,12 @@ export interface RtcEngineEvents {
     /**
      * Reports the transport-layer statistics of each remote video stream.
      *
-     * @deprecated This callback is deprecated. Use {@link RemoteVideoStats} instead.
+     * @deprecated
      *
-     * This callback reports the transport-layer statistics, such as the packet loss rate and time delay, once every two seconds after the local user receives the video packet from a remote user.
+     * This callback is deprecated. Use [`RemoteVideoStats`]{@link RemoteVideoStats} instead.
+     *
+     * This callback reports the transport-layer statistics, such as the packet loss rate and time delay,
+     * once every two seconds after the local user receives the video packet from a remote user.
      *
      * @event RemoteVideoTransportStats
      */
@@ -729,16 +1108,18 @@ export interface RtcEngineEvents {
     /**
      * Occurs when a remote user enables/disables the video module.
      *
-     * @deprecated This callback is deprecated and replaced by the {@link RemoteVideoStateChanged} callback with the following parameters:
-     * - {@link VideoRemoteState.Stopped} and {@link VideoRemoteStateReason.RemoteMuted}.
-     * - {@link VideoRemoteState.Decoding} and {@link VideoRemoteStateReason.RemoteUnmuted}.
+     * @deprecated
+     * This callback is deprecated and replaced by the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters:
+     * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
+     * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
      *
      * Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.
      *
-     * The SDK triggers this callback when the remote user enables or disables the video module by calling the {@link RtcEngine.enableVideo} or {@link RtcEngine.disableVideo} method.
+     * The SDK triggers this callback when the remote user enables or disables the video module by calling the [`enableVideo`]{@link RtcEngine.enableVideo} or [`disableVideo`]{@link RtcEngine.disableVideo} method.
      *
      * **Note**
-     * - This callback is invalid when the number of users or broadcasters in the channel exceeds 20.
+     *
+     * This callback is invalid when the number of users or hosts in the channel exceeds 17.
      *
      * @event UserEnableVideo
      */
@@ -747,11 +1128,14 @@ export interface RtcEngineEvents {
     /**
      * Occurs when a remote user enables/disables the local video capture function.
      *
-     * @deprecated This callback is deprecated and replaced by the {@link RemoteVideoStateChanged} callback with the following parameters:
-     * - {@link VideoRemoteState.Stopped} and {@link VideoRemoteStateReason.RemoteMuted}.
-     * - {@link VideoRemoteState.Decoding} and {@link VideoRemoteStateReason.RemoteUnmuted}.
+     * @deprecated
      *
-     * The SDK triggers this callback when the remote user resumes or stops capturing the video stream by calling the {@link RtcEngine.enableLocalVideo} method.
+     * This callback is deprecated and replaced by the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters:
+     * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
+     * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
+     *
+     * The SDK triggers this callback when the remote user resumes or stops capturing the video stream by
+     * calling [`enableLocalVideo`]{@link RtcEngine.enableLocalVideo}.
      *
      * This callback is only applicable to the scenario when the remote user only wants to watch the remote video without sending any video stream to the other user.
      *
@@ -762,15 +1146,17 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the first remote video frame is received and decoded.
      *
-     * @deprecated This callback is deprecated. Use {@link VideoRemoteState.Starting} or {@link VideoRemoteState.Decoding} in the {@link RemoteVideoStateChanged} callback instead.
+     * @deprecated
+     *
+     * This callback is deprecated. Use [`Starting`]{@link VideoRemoteState.Starting} or [`Decoding`]{@link VideoRemoteState.Decoding} in the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback instead.
      *
      * This callback is triggered in either of the following scenarios:
      * - The remote user joins the channel and sends the video stream.
      * - The remote user stops sending the video stream and re-sends it after 15 seconds. Possible reasons include:
      *  - The remote user leaves channel.
      *  - The remote user drops offline.
-     *  - The remote user calls the {@link RtcEngine.muteLocalVideoStream} method.
-     *  - The remote user calls the {@link RtcEngine.disableVideo} method.
+     *  - The remote user calls [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream}.
+     *  - The remote user calls [`disableVideo`]{@link RtcEngine.disableVideo}.
      *
      * @event FirstRemoteVideoDecoded
      */
@@ -779,9 +1165,12 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the microphone is enabled/disabled.
      *
-     * @deprecated This callback is deprecated. Use {@link AudioLocalState.Stopped} or {@link AudioLocalState.Recording} in the {@link LocalAudioStateChanged} callback instead.
+     * @deprecated
      *
-     * The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling the {@link RtcEngine.enableLocalAudio} method.
+     * This callback is deprecated. Use [`Stopped`]{@link AudioLocalState.Stopped} or [`Recording`]{@link AudioLocalState.Recording} in the [`LocalAudioStateChanged`]{@link LocalAudioStateChanged} callback instead.
+     *
+     * The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling [`enableLocalAudio`]{@link RtcEngine.enableLocalAudio}.
+     *
      *
      * @event MicrophoneEnabled
      */
@@ -790,11 +1179,17 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the connection between the SDK and the server is interrupted.
      *
-     * @deprecated Use {@link ConnectionStateChanged} instead.
+     * @deprecated
      *
-     * The SDK triggers this callback when it loses connection to the server for more than four seconds after the connection is established. After triggering this callback, the SDK tries to reconnect to the server. You can use this callback to implement pop-up reminders. This callback is different from {@link ConnectionLost}:
-     * - The SDK triggers the {@link ConnectionInterrupted} callback when the SDK loses connection with the server for more than four seconds after it joins the channel.
-     * - The SDK triggers the {@link ConnectionLost} callback when it loses connection with the server for more than 10 seconds, regardless of whether it joins the channel or not.
+     * Use {@link ConnectionStateChanged} instead.
+     *
+     * The SDK triggers this callback when it loses connection to the server for more than four seconds after
+     * the connection is established. After triggering this callback, the SDK tries to reconnect to the server.
+     * You can use this callback to implement pop-up reminders. This callback is different from [`ConnectionLost`]{@link ConnectionLost}:
+     * - The SDK triggers the [`ConnectionInterrupted`]{@link ConnectionInterrupted} callback when the SDK loses
+     * connection with the server for more than four seconds after it joins the channel.
+     * - The SDK triggers the [`ConnectionLost`]{@link ConnectionLost} callback when it loses connection with
+     * the server for more than 10 seconds, regardless of whether it joins the channel or not.
      *
      * If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
      *
@@ -805,7 +1200,9 @@ export interface RtcEngineEvents {
     /**
      * Occurs when your connection is banned by the Agora Server.
      *
-     * @deprecated Use {@link ConnectionStateChanged} instead.
+     * @deprecated
+     *
+     * Use [`ConnectionStateChanged`]{@link ConnectionStateChanged} instead.
      *
      * @event ConnectionBanned
      */
@@ -814,9 +1211,12 @@ export interface RtcEngineEvents {
     /**
      * Reports the statistics of the audio stream from each remote user/host.
      *
-     * @deprecated Use {@link RemoteAudioStats} instead.
+     * @deprecated
+     *
+     * Use [`RemoteAudioStats`]{@link RemoteAudioStats} instead.
      *
      * The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple remote users/hosts sending audio streams, the SDK trggers this callback as many times.
+     *
      *
      * @event AudioQuality
      */
@@ -825,7 +1225,10 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the camera is turned on and ready to capture video.
      *
-     * @deprecated Use {@link LocalVideoStreamState.Capturing} in the {@link LocalVideoStateChanged} callback instead. If the camera fails to turn on, fix the error reported in the {@link Error} callback.
+     * @deprecated
+     *
+     * Use [`Capturing`]{@link LocalVideoStreamState.Capturing} in the [`LocalVideoStateChanged`]{@link LocalVideoStateChanged} callback instead.
+     * If the camera fails to turn on, fix the error reported in the [`Error`]{@link Error} callback.
      *
      * @event CameraReady
      */
@@ -834,7 +1237,11 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the video stops playing.
      *
-     * @deprecated Use {@link LocalVideoStreamState.Stopped} in the {@link LocalVideoStateChanged} callback instead. The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
+     * @deprecated
+     *
+     * Use [`Stopped`]{@link LocalVideoStreamState.Stopped} in the [`LocalVideoStateChanged`]{@link LocalVideoStateChanged} callback instead.
+     * The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view)
+     * after the video stops playing.
      *
      * @event VideoStopped
      */
@@ -849,18 +1256,18 @@ export interface RtcEngineEvents {
 }
 
 /**
- * The RtcChannelEvents interface.
+ * The [`RtcChannelEvents`]{@link RtcChannelEvents} interface.
  */
 export interface RtcChannelEvents {
     /**
-     * Reports the warning code of the {@link RtcChannel} instance.
+     * Reports the warning code of the [`RtcChannel`]{@link RtcChannel} instance.
      *
      * @event Warning
      */
     Warning: WarningCallback
 
     /**
-     * Reports the error code of the {@link RtcChannel} instance.
+     * Reports the error code of the [`RtcChannel`]{@link RtcChannel} instance.
      *
      * @event Error
      */
@@ -869,7 +1276,8 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the local user joins a specified channel.
      *
-     * If the uid is not specified when calling {@link RtcChannel.joinChannel}, the server automatically assigns a uid.
+     * If the uid is not specified when calling [`joinChannel`]{@link RtcChannel.joinChannel}, the
+     * server automatically assigns a uid.
      *
      * @event JoinChannelSuccess
      */
@@ -878,7 +1286,9 @@ export interface RtcChannelEvents {
     /**
      * Occurs when a user rejoins the channel after being disconnected due to network problems.
      *
-     * When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.
+     * When a user loses connection with the server because of network problems, the SDK automatically tries
+     * to reconnect and triggers this callback upon reconnection.
+     *
      *
      * @event RejoinChannelSuccess
      */
@@ -887,7 +1297,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when a user leaves the channel.
      *
-     * When a user leaves the channel by using the {@link RtcChannel.leaveChannel} method, the SDK uses this callback to notify the app when the user leaves the channel.
+     * When a user leaves the channel by using the [`leaveChannel`]{@link RtcChannel.leaveChannel} method, the SDK uses this callback to notify the app when the user leaves the channel.
      *
      * With this callback, the app retrieves the channel information, such as the call duration and statistics.
      *
@@ -896,21 +1306,27 @@ export interface RtcChannelEvents {
     LeaveChannel: RtcStatsCallback
 
     /**
-     * Occurs when the user role switches in a Live-Broadcast channel. For example, from broadcaster to audience or vice versa.
+     * Occurs when the user role switches in a live interactive streaming channel. For example, from a host to an audience member or vice versa.
      *
-     * The SDK triggers this callback when the local user switches the user role by calling the {@link RtcChannel.setClientRole} method after joining the channel.
+     * The SDK triggers this callback when the local user switches the user role by calling the [`setClientRole`]{@link RtcChannel.setClientRole} method after joining the channel.
      *
      * @event ClientRoleChanged
      */
     ClientRoleChanged: ClientRoleCallback
 
     /**
-     * Occurs when a remote user (Communication) or a broadcaster (Live-Broadcast) joins the channel.
-     * - Communication profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
-     * - Live-Broadcast profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
+     * Occurs when a remote user (`Communication`) or a host (`LiveBroadcasting`) joins the channel.
+     * - `Communication` profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
+     * - `LiveBroadcasting` profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
+     *
+     * The SDK triggers this callback under one of the following circumstances:
+     * - A remote user/host joins the channel by calling [`joinChannel`]{@link RtcChannel.joinChannel}.
+     * - A remote user switches the user role to the host by calling [`setClientRole`]{@link RtcChannel.setClientRole} after joining the channel.
+     * - A remote user/host rejoins the channel after a network interruption.
+     * - The host injects an online media stream into the channel by calling [`addInjectStreamUrl`]{@link RtcChannel.addInjectStreamUrl}.
      *
      * **Note**
-     * - In the Live-Broadcast profile:
+     * - In the `LiveBroadcasting` profile:
      *  - The host receives this callback when another host joins the channel.
      *  - The audience in the channel receives this callback when a new host joins the channel.
      *  - When a web app joins the channel, this callback is triggered as long as the web app publishes streams.
@@ -920,11 +1336,11 @@ export interface RtcChannelEvents {
     UserJoined: UidWithElapsedCallback
 
     /**
-     * Occurs when a remote user (Communication) or a broadcaster (Live Broadcast) leaves the channel.
+     * Occurs when a remote user (`Communication`) or a host (`LiveBroadcasting`) leaves the channel.
      *
      * There are two reasons for users to become offline:
-     * - Leave the channel: When the user/broadcaster leaves the channel, the user/broadcaster sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
-     * - Go offline: When no data packet of the user or broadcaster is received for a certain period of time (around 20 seconds), the SDK assumes that the user/broadcaster drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
+     * - Leave the channel: When the user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
+     * - Go offline: When no data packet of the user or host is received for a certain period of time (around 20 seconds), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
      *
      * @event UserOffline
      */
@@ -933,7 +1349,8 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the network connection state changes.
      *
-     * The Agora SDK triggers this callback to report on the current network connection state when it changes, and the reason to such change.
+     * The Agora SDK triggers this callback to report on the current network connection state when it changes,
+     * and the reason to such change.
      *
      * @event ConnectionStateChanged
      */
@@ -942,7 +1359,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
      *
-     * The SDK also triggers this callback when it cannot connect to the server 10 seconds after calling {@link RtcChannel.joinChannel}, regardless of whether it is in the channel or not.
+     * The SDK also triggers this callback when it cannot connect to the server 10 seconds after calling [`joinChannel`]{@link RtcChannel.joinChannel}, regardless of whether it is in the channel or not.
      *
      * If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
      *
@@ -953,7 +1370,9 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the token expires in 30 seconds.
      *
-     * The user becomes offline if the token used when joining the channel expires. This callback is triggered 30 seconds before the token expires, to remind the app to get a new token. Upon receiving this callback, you need to generate a new token on the server and call {@link RtcChannel.renewToken} to pass the new token to the SDK.
+     * The user becomes offline if the token used when joining the channel expires. This callback is
+     * triggered 30 seconds before the token expires, to remind the app to get a new token. Upon receiving this callback,
+     * you need to generate a new token on the server and call [`renewToken`]{@link RtcChannel.renewToken} to pass the new token to the SDK.
      *
      * @event TokenPrivilegeWillExpire
      */
@@ -962,7 +1381,9 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the token has expired.
      *
-     * After a token is specified when joining the channel, the token expires after a certain period of time, and a new token is required to reconnect to the server. This callback notifies the app to generate a new token and call {@link RtcChannel.renewToken} to renew the token.
+     * After a token is specified when joining the channel, the token expires after a certain period of time,
+     * and a new token is required to reconnect to the server.
+     * This callback notifies the app to generate a new token and call [`renewToken`]{@link RtcChannel.renewToken} to renew the token.
      *
      * @event RequestToken
      */
@@ -971,10 +1392,10 @@ export interface RtcChannelEvents {
     /**
      * Reports which user is the loudest speaker.
      *
-     * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling {@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
+     * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
      *
      * **Note**
-     * - To receive this callback, you need to call {@link RtcEngine.enableAudioVolumeIndication}.
+     * - To receive this callback, you need to call [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}.
      * - This callback reports the ID of the user with the highest voice volume during a period of time, instead of at the moment.
      *
      * @event ActiveSpeaker
@@ -990,6 +1411,7 @@ export interface RtcChannelEvents {
 
     /**
      * Occurs when the remote video state changes.
+     *
      *
      * @event RemoteVideoStateChanged
      */
@@ -1007,7 +1429,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
      *
-     * If you call {@link RtcEngine.setLocalPublishFallbackOption} and set option as {@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
+     * If you call [`setLocalPublishFallbackOption`]{@link RtcEngine.setLocalPublishFallbackOption} and set `option` as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the locally published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
      *
      * @event LocalPublishFallbackToAudioOnly
      */
@@ -1016,17 +1438,20 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
      *
-     * If you call {@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as {@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
+     * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
      *
      * **Note**
-     * - Once the remote media stream is switched to the low stream due to poor network conditions, you can monitor the stream switch between a high and low stream in the {@link RemoteVideoStats} callback.
+     *
+     * Once the remote media stream is switched to the low stream due to poor network conditions,
+     * you can monitor the stream switch between a high and low stream in the [`RemoteVideoStats`]{@link RemoteVideoStats} callback.
+     *
      *
      * @event RemoteSubscribeFallbackToAudioOnly
      */
     RemoteSubscribeFallbackToAudioOnly: FallbackWithUidCallback
 
     /**
-     * Reports the statistics of the {@link RtcEngine} once every two seconds.
+     * Reports the statistics of the [`RtcEngine`]{@link RtcEngine} once every two seconds.
      *
      * @event RtcStats
      */
@@ -1042,16 +1467,16 @@ export interface RtcChannelEvents {
     NetworkQuality: NetworkQualityWithUidCallback
 
     /**
-     * Reports the statistics of the video stream from each remote user/broadcaster. The SDK triggers this callback once every two seconds for each remote user/broadcaster. If a channel includes multiple remote users, the SDK triggers this callback as many times.
+     * Reports the statistics of the video stream from each remote user/host. The SDK triggers this callback once every two seconds for each remote user/broadcaster. If a channel includes multiple remote users, the SDK triggers this callback as many times.
      *
      * @event RemoteVideoStats
      */
     RemoteVideoStats: RemoteVideoStatsCallback
 
     /**
-     * Reports the statistics of the audio stream from each remote user/broadcaster.
+     * Reports the statistics of the audio stream from each remote user/host.
      *
-     * The SDK triggers this callback once every two seconds for each remote user/broadcaster. If a channel includes multiple remote users, the SDK triggers this callback as many times.
+     * The SDK triggers this callback once every two seconds for each remote user/host. If a channel includes multiple remote users, the SDK triggers this callback as many times.
      *
      * Schemes such as FEC (Forward Error Correction) or retransmission counter the frame loss rate. Hence, users may find the overall audio quality acceptable even when the packet loss rate is high.
      *
@@ -1062,7 +1487,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the state of the RTMP streaming changes.
      *
-     * The SDK triggers this callback to report the result of the local user calling the {@link RtcChannel.addPublishStreamUrl} or {@link RtcChannel.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is {@link RtmpStreamingState.Failure}, see the errCode parameter for details.
+     * The SDK triggers this callback to report the result of the local user calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcChannel.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
      *
      * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
      *
@@ -1073,10 +1498,11 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the publisher's transcoding settings are updated.
      *
-     * When the LiveTranscoding class in the {@link RtcChannel.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
+     * When the `LiveTranscoding` class in the [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} method updates, the SDK triggers this callback to report the update information.
      *
      * **Note**
-     * - If you call the setLiveTranscoding method to set the LiveTranscoding class for the first time, the SDK does not trigger this callback.
+     *
+     * If you call [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} to set the `LiveTranscoding` class for the first time, the SDK does not trigger this callback.
      *
      * @event TranscodingUpdated
      */
@@ -1092,7 +1518,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the local user receives a remote data stream.
      *
-     * The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the {@link RtcChannel.sendStreamMessage} method.
+     * The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the [`sendStreamMessage`]{@link RtcChannel.sendStreamMessage} method.
      *
      * @event StreamMessage
      */
@@ -1101,7 +1527,7 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the local user fails to receive a remote data stream.
      *
-     * The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the {@link RtcChannel.sendStreamMessage} method.
+     * The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the [`sendStreamMessage`]{@link RtcChannel.sendStreamMessage} method.
      *
      * @event StreamMessageError
      */
