@@ -52,8 +52,6 @@ Either way, then link with:
   [中文](https://docs.agora.io/cn/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
   [English](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 
-## [API DOCS](https://syanbo.github.io/react-native-agora/globals.html)
-
 ## Resources
 * Complete [API documentation](https://docs.agora.io/en/) at the Developer Center
 * [File bugs about this sample](https://github.com/syanbo/react-native-agora/issues)
