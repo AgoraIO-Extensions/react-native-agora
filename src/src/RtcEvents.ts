@@ -29,6 +29,8 @@ import {
     RtcStats,
     RtmpStreamingErrorCode,
     RtmpStreamingState,
+    StreamPublishState,
+    StreamSubscribeState,
     UserInfo,
     UserOfflineReason,
     VideoRemoteState,
@@ -57,22 +59,20 @@ export type EmptyCallback = () => void
 export type WarningCallback =
 /**
  * @param warn Warning code.
- *
  */
-(warn: WarningCode) => void
+    (warn: WarningCode) => void
 export type ErrorCallback =
 /**
  * @param err Error code.
  */
-(err: ErrorCode) => void
+    (err: ErrorCode) => void
 export type ApiCallCallback =
 /**
  * @param error [Error Code]{@link ErrorCode} that the SDK returns when the method call fails.
  * @param api The method executed by the SDK.
  * @param result The result of the method call.
- *
  */
-(error: ErrorCode, api: string, result: string) => void
+    (error: ErrorCode, api: string, result: string) => void
 export type UidWithElapsedAndChannelCallback =
 /**
  * @param channel Channel name.
@@ -80,60 +80,59 @@ export type UidWithElapsedAndChannelCallback =
  * @param elapsed Time elapsed (ms) from the user calling [`joinChannel`]{@link RtcEngine.joinChannel} until
  * this callback is triggered.
  */
-(channel: string, uid: number, elapsed: number) => void
+    (channel: string, uid: number, elapsed: number) => void
 export type RtcStatsCallback =
 /**
  * @param stats Statistics of the call.
  */
-(stats: RtcStats) => void
+    (stats: RtcStats) => void
 export type UserAccountCallback =
 /**
  * @param uid The ID of the local user.
  * @param userAccount The user account of the local user.
- *
  */
-(uid: number, userAccount: string) => void
+    (uid: number, userAccount: string) => void
 export type UserInfoCallback =
 /**
  * @param uid The ID of the remote user.
  * @param userInfo The `UserInfo` object that contains the user ID and user account of the remote user.
  */
-(uid: number, userInfo: UserInfo) => void
+    (uid: number, userInfo: UserInfo) => void
 export type ClientRoleCallback =
 /**
  * @param oldRole Role that the user switches from.
  * @param newRole Role that the user switches to.
  */
-(oldRole: ClientRole, newRole: ClientRole) => void
+    (oldRole: ClientRole, newRole: ClientRole) => void
 export type UidWithElapsedCallback =
 /**
  * @param uid ID of the user or host who joins the channel.
  * @param elapsed Time delay (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} or [`setClientRole`]{@link RtcEngine.setClientRole}
  * until this callback is triggered.
  */
-(uid: number, elapsed: number) => void
+    (uid: number, elapsed: number) => void
 export type UserOfflineCallback =
 /**
  * @param uid ID of the user or host who leaves the channel or goes offline.
  * @param reason Reason why the user goes offline.
  */
-(uid: number, reason: UserOfflineReason) => void
+    (uid: number, reason: UserOfflineReason) => void
 export type ConnectionStateCallback =
 /**
  * @param state The current network connection state.
  * @param reason The reason causing the change of the connection state.
  */
-(state: ConnectionStateType, reason: ConnectionChangedReason) => void
+    (state: ConnectionStateType, reason: ConnectionChangedReason) => void
 export type NetworkTypeCallback =
 /**
  * @param type The network type.
  */
-(type: NetworkType) => void
+    (type: NetworkType) => void
 export type TokenCallback =
 /**
  * @param token The token that will expire in 30 seconds.
  */
-(token: string) => void
+    (token: string) => void
 export type AudioVolumeCallback =
 /**
  * @param speakers An array containing the user ID and volume information for each speaker.
@@ -155,18 +154,18 @@ export type AudioVolumeCallback =
  *  - In the remote speakers' callback, `totalVolume` is the sum of the voice volume and audio-mixing
  * volume of all remote speakers.
  */
-(speakers: AudioVolumeInfo[], totalVolume: number) => void
+    (speakers: AudioVolumeInfo[], totalVolume: number) => void
 export type UidCallback =
 /**
  * @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
  */
-( uid: number) => void
+    (uid: number) => void
 export type ElapsedCallback =
 /**
  * @param elapsed Time elapsed (ms) from the local user calling the [`joinChannel`]{@link RtcEngine.joinChannel} until
  * this callback is triggered.
  */
-(elapsed: number) => void
+    (elapsed: number) => void
 export type VideoFrameCallback =
 /**
  * @param width Width (pixels) of the first local video frame.
@@ -176,7 +175,7 @@ export type VideoFrameCallback =
  * If [`startPreview`]{@link RtcEngine.startPreview} is called before [`joinChannel`]{@link RtcEngine.joinChannel}, elapsed is the
  * time elapsed (ms) from the local user calling [`startPreview`]{@link RtcEngine.startPreview} until this callback is triggered.
  */
-(width: number, height: number, elapsed: number) => void
+    (width: number, height: number, elapsed: number) => void
 export type UidWithMutedCallback =
 /**
  * @param uid ID of the remote user.
@@ -185,7 +184,7 @@ export type UidWithMutedCallback =
  *  - `true`: Pause.
  *  - `false`: Resume.
  */
-(uid: number, muted: boolean) => void
+    (uid: number, muted: boolean) => void
 export type VideoSizeCallback =
 /**
  * @param uid User ID of the remote user or local user (0) whose video size or rotation changes.
@@ -193,7 +192,7 @@ export type VideoSizeCallback =
  * @param height New height (pixels) of the video.
  * @param rotation New rotation of the video [0 to 360).
  */
-(uid: number, width: number, height: number, rotation: number) => void
+    (uid: number, width: number, height: number, rotation: number) => void
 export type RemoteVideoStateCallback =
 /**
  * @param uid ID of the remote user whose video state changes.
@@ -201,15 +200,14 @@ export type RemoteVideoStateCallback =
  * @param reason The reason of the remote video state change.
  * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until the SDK
  * triggers this callback.
- *
  */
-(uid: number, state: VideoRemoteState, reason: VideoRemoteStateReason, elapsed: number) => void
+    (uid: number, state: VideoRemoteState, reason: VideoRemoteStateReason, elapsed: number) => void
 export type LocalVideoStateCallback =
 /**
  * @param localVideoState The local video state.
  * @param error The detailed error information of the local video.
  */
-(localVideoState: LocalVideoStreamState, error: LocalVideoStreamError) => void
+    (localVideoState: LocalVideoStreamState, error: LocalVideoStreamError) => void
 export type RemoteAudioStateCallback =
 /**
  * @param uid ID of the user whose audio state changes.
@@ -217,15 +215,14 @@ export type RemoteAudioStateCallback =
  * @param reason The reason of the remote audio state change.
  * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until the
  * SDK triggers this callback.
- *
  */
-(uid: number, state: AudioRemoteState, reason: AudioRemoteStateReason, elapsed: number) => void
+    (uid: number, state: AudioRemoteState, reason: AudioRemoteStateReason, elapsed: number) => void
 export type LocalAudioStateCallback =
 /**
  * @param state State of the local audio.
  * @param error The error information of the local audio.
  */
-(state: AudioLocalState, error: AudioLocalError) => void
+    (state: AudioLocalState, error: AudioLocalError) => void
 export type FallbackCallback =
 /**
  * @param isFallbackOrRecover Whether the published stream fell back to audio-only or switched back to the video:
@@ -233,7 +230,7 @@ export type FallbackCallback =
  *  - `true`: The published stream fell back to audio-only due to poor network conditions.
  *  - `false`: The published stream switched back to the video after the network conditions improved.
  */
-(isFallbackOrRecover: boolean) => void
+    (isFallbackOrRecover: boolean) => void
 export type FallbackWithUidCallback =
 /**
  * @param uid ID of the remote user sending the stream.
@@ -243,23 +240,23 @@ export type FallbackWithUidCallback =
  *  - `true`: The remote media stream fell back to audio-only due to poor network conditions.
  *  - `false`: The remote media stream switched back to the video stream after the network conditions improved.
  */
-(uid: number, isFallbackOrRecover: boolean) => void
+    (uid: number, isFallbackOrRecover: boolean) => void
 export type AudioRouteCallback =
 /**
  * @param routing Audio output routing.
  */
-(routing: AudioOutputRouting) => void
+    (routing: AudioOutputRouting) => void
 export type RectCallback =
 /**
  * @param rect Rectangular area in the camera zoom specifying the focus area.
  */
 
-(rect: Rect) => void
+    (rect: Rect) => void
 export type NetworkQualityCallback =
 /**
  * @param quality The last mile network quality based on the uplink and downlink packet loss rate and jitter.
  */
-(quality: NetworkQuality) => void
+    (quality: NetworkQuality) => void
 export type NetworkQualityWithUidCallback =
 /**
  * @param uid User ID. The network quality of the user with this uid is reported.
@@ -270,69 +267,65 @@ export type NetworkQualityWithUidCallback =
  * of 680 × 480 and a frame rate of 30 fps, but may be inadequate for resolutions higher than 1280 × 720.
  * @param rxQuality Downlink network quality rating of the user in terms of packet loss rate, average RTT, and
  * jitter of the downlink network.
- *
  */
-(uid: number, txQuality: NetworkQuality, rxQuality: NetworkQuality) => void
+    (uid: number, txQuality: NetworkQuality, rxQuality: NetworkQuality) => void
 export type LastmileProbeCallback =
 /**
  * @param result The uplink and downlink last-mile network probe test result.
  */
-(result: LastmileProbeResult) => void
+    (result: LastmileProbeResult) => void
 export type LocalVideoStatsCallback =
 /**
  * @param stats The statistics of the local video stream.
  */
-(stats: LocalVideoStats) => void
+    (stats: LocalVideoStats) => void
 export type LocalAudioStatsCallback =
 /**
  * @param stats The statistics of the local audio stream.
  */
-(stats: LocalAudioStats) => void
+    (stats: LocalAudioStats) => void
 export type RemoteVideoStatsCallback =
 /**
  * @param stats Statistics of the received remote video streams.
  */
-(stats: RemoteVideoStats) => void
+    (stats: RemoteVideoStats) => void
 export type RemoteAudioStatsCallback =
 /**
  * @param stats Statistics of the received remote audio streams.
  */
-(stats: RemoteAudioStats) => void
+    (stats: RemoteAudioStats) => void
 export type AudioMixingStateCallback =
 /**
  * @param state The state code.
  * @param errorCode The error code.
  */
-(state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void
+    (state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void
 export type SoundIdCallback =
 /**
  * @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
  */
-(soundId: number) => void
+    (soundId: number) => void
 export type RtmpStreamingStateCallback =
 /**
  * @param url The RTMP URL address.
  * @param state The RTMP streaming state.
  * @param errCode The detailed error information for streaming.
- *
  */
-(url: string, state: RtmpStreamingState, errCode: RtmpStreamingErrorCode) => void
+    (url: string, state: RtmpStreamingState, errCode: RtmpStreamingErrorCode) => void
 export type StreamInjectedStatusCallback =
 /**
  * @param url The URL address of the externally injected stream.
  * @param uid User ID.
  * @param status State of the externally injected stream.
- *
  */
-(url: string, uid: number, status: InjectStreamStatus) => void
+    (url: string, uid: number, status: InjectStreamStatus) => void
 export type StreamMessageCallback =
 /**
  * @param uid User ID of the remote user sending the data stream.
  * @param streamId Stream ID.
  * @param data Data received by the local user.
- *
  */
-(uid: number, streamId: number, data: string) => void
+    (uid: number, streamId: number, data: string) => void
 export type StreamMessageErrorCallback =
 /**
  * @param uid User ID of the remote user sending the data stream.
@@ -341,19 +334,18 @@ export type StreamMessageErrorCallback =
  * @param missed The number of lost messages.
  * @param cached The number of incoming cached messages when the data stream is interrupted.
  */
-(uid: number, streamId: number, error: ErrorCode, missed: number, cached: number) => void
+    (uid: number, streamId: number, error: ErrorCode, missed: number, cached: number) => void
 export type MediaRelayStateCallback =
 /**
  * @param state The state code.
  * @param code The error code.
  */
-(state: ChannelMediaRelayState, code: ChannelMediaRelayError) => void
+    (state: ChannelMediaRelayState, code: ChannelMediaRelayError) => void
 export type MediaRelayEventCallback =
 /**
  * @param code The event code for media stream relay.
- *
  */
-(code: ChannelMediaRelayEvent) => void
+    (code: ChannelMediaRelayEvent) => void
 export type VideoFrameWithUidCallback =
 /**
  * @param uid User ID of the remote user sending the video streams.
@@ -361,30 +353,27 @@ export type VideoFrameWithUidCallback =
  * @param height Height (pixels) of the video stream.
  * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until this
  * callback is triggered.
- *
  */
-(uid: number, width: number, height: number, elapsed: number) => void
+    (uid: number, width: number, height: number, elapsed: number) => void
 export type UrlWithErrorCallback =
 /**
  * @param url The RTMP URL address.
  * @param error The detailed error information.
- *
  */
-(url: string, error: ErrorCode) => void
+    (url: string, error: ErrorCode) => void
 export type UrlCallback =
 /**
  * @param url The RTMP URL address.
  */
-(url: string) => void
+    (url: string) => void
 export type TransportStatsCallback =
 /**
  * @param uid User ID of the remote user sending the audio packet.
  * @param delay Network time delay (ms) from the remote user sending the audio packet to the local user.
  * @param lost Packet loss rate (%) of the audio packet sent from the remote user.
  * @param rxKBitRate Received bitrate (Kbps) of the audio packet sent from the remote user.
- *
  */
-(uid: number, delay: number, lost: number, rxKBitRate: number) => void
+    (uid: number, delay: number, lost: number, rxKBitRate: number) => void
 export type UidWithEnabledCallback =
 /**
  * @param uid User ID of the remote user.
@@ -394,15 +383,14 @@ export type UidWithEnabledCallback =
  *  - `false`: Disabled. The remote user can only enter a voice session, and cannot send or receive
  * any video stream.
  */
-(uid: number, enabled: boolean) => void
+    (uid: number, enabled: boolean) => void
 export type EnabledCallback =
 /**
  * @param enabled Whether the microphone is enabled/disabled:
  *  - `true`：Enabled.
  *  - `false`：Disabled.
- *
  */
-(enabled: boolean) => void
+    (enabled: boolean) => void
 export type AudioQualityCallback =
 /**
  * @param uid User ID of the speaker.
@@ -410,17 +398,15 @@ export type AudioQualityCallback =
  * @param delay Time delay (ms) of the audio packet from the sender to the receiver, including the time delay
  * from audio sampling pre-processing, transmission, and the jitter buffer.
  * @param lost Packet loss rate (%) of the audio packet sent from the sender to the receiver.
- *
  */
-(uid: number, quality: number, delay: number, lost: number) => void
+    (uid: number, quality: number, delay: number, lost: number) => void
 export type MetadataCallback =
 /**
  * @param buffer The received metadata.
  * @param uid The ID of the user who sent the metadata.
  * @param timeStampMs The timestamp (ms) of the received metadata.
- *
  */
-(buffer: string, uid: number, timeStampMs: number) => void
+    (buffer: string, uid: number, timeStampMs: number) => void
 export type FacePositionCallback =
 /**
  * @param imageWidth The width (px) of the local video.
@@ -429,7 +415,17 @@ export type FacePositionCallback =
  * The number of the `FacePositionInfo` array depends on the number of human faces detected.
  * If the array length is 0, it means that no human face is detected.
  */
-(imageWidth: number, imageHeight: number, faces: FacePositionInfo[]) => void
+    (imageWidth: number, imageHeight: number, faces: FacePositionInfo[]) => void
+export type StreamPublishStateCallback =
+/**
+ * TODO(doc)
+ */
+    (channel: string, oldState: StreamPublishState, newState: StreamPublishState, elapseSinceLastState: number) => void
+export type StreamSubscribeStateCallback =
+/**
+ * TODO(doc)
+ */
+    (channel: string, oldState: StreamSubscribeState, newState: StreamSubscribeState, elapseSinceLastState: number) => void
 
 /**
  * The SDK uses the [`RtcEngineEvents`]{@link RtcEngineEvents} interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
@@ -528,9 +524,9 @@ export interface RtcEngineEvents {
     ClientRoleChanged: ClientRoleCallback
 
     /**
-     * Occurs when a remote user ([`Communication`]{@link ChannelProfile.Communication})/host ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}) joins the channel.
-     * - [`Communication`]{@link ChannelProfile.Communication} profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
-     * - [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
+     * Occurs when a remote user ([`Communication`]{@link ChannelProfile.Communication})/host ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}) joins the channel.
+     * - [`Communication`]{@link ChannelProfile.Communication} profile: This callback notifies the app when another user joins the channel. If other users are already in the channel, the SDK also reports to the app on the existing users.
+     * - [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: This callback notifies the app when the host joins the channel. If other hosts are already in the channel, the SDK also reports to the app on the existing hosts. We recommend having at most 17 hosts in a channel.
      *
      * The SDK triggers this callback under one of the following circumstances:
      * - A remote user/host joins the channel by calling [`joinChannel`]{@link RtcEngine.joinChannel}.
@@ -539,7 +535,7 @@ export interface RtcEngineEvents {
      * - The host injects an online media stream into the channel by calling [`addInjectStreamUrl`]{@link RtcEngine.addInjectStreamUrl}.
      *
      * **Note**
-     * In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile:
+     * In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile:
      *  - The host receives the [`UserJoined`]{@link UserJoined} callback when another host joins the channel.
      *  - The audience in the channel receives the [`UserJoined`]{@link UserJoined} callback when a new host joins the channel.
      *  - When a web application joins the channel, the [`UserJoined`]{@link UserJoined} callback is triggered as long as the web application publishes streams.
@@ -549,11 +545,11 @@ export interface RtcEngineEvents {
     UserJoined: UidWithElapsedCallback
 
     /**
-     * Occurs when a remote user ([`Communication`]{@link ChannelProfile.Communication})/host ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}) leaves the channel.
+     * Occurs when a remote user ([`Communication`]{@link ChannelProfile.Communication})/host ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}) leaves the channel.
      *
      * There are two reasons for users to become offline:
      * - Leave the channel: When the user/host leaves the channel, the user/host sends a goodbye message. When this message is received, the SDK determines that the user/host leaves the channel.
-     * - Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the [`Communication`]{@link ChannelProfile.Communication} profile, and more for the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
+     * - Drop offline: When no data packet of the user or host is received for a certain period of time (20 seconds for the [`Communication`]{@link ChannelProfile.Communication} profile, and more for the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile), the SDK assumes that the user/host drops offline. A poor network connection may lead to false detections, so we recommend using the Agora RTM SDK for reliable offline detection.
      *
      * @event UserOffline
      */
@@ -644,6 +640,8 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the first local audio frame is sent.
      *
+     * @deprecated TODO(doc)
+     *
      * @event FirstLocalAudioFrame
      */
     FirstLocalAudioFrame: ElapsedCallback
@@ -696,7 +694,6 @@ export interface RtcEngineEvents {
      * The SDK returns the current video state in this callback.
      * This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
      * When the state is [`Failed`]{@link LocalVideoStreamState.Failed}, see the error parameter for details.
-     *
      *
      * @event LocalVideoStateChanged
      */
@@ -804,7 +801,6 @@ export interface RtcEngineEvents {
     /**
      * Reports the statistics of the [`RtcEngine`]{@link RtcEngine} once every two seconds.
      *
-     *
      * @event RtcStats
      */
     RtcStats: RtcStatsCallback
@@ -813,7 +809,6 @@ export interface RtcEngineEvents {
      * Reports the last mile network quality of the local user once every two seconds before the user joins the channel.
      * Last mile refers to the connection between the local device and Agora's edge server. After the application calls the [`enableLastmileTest`]{@link RtcEngine.enableLastmileTest} method,
      * this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.
-     *
      *
      * @event LastmileQuality
      */
@@ -903,7 +898,6 @@ export interface RtcEngineEvents {
      * Occurs when the audio effect file playback finishes.
      *
      * You can start a local audio effect playback by calling [`playEffect`]{@link RtcEngine.playEffect}. This callback is triggered when the local audio effect file playback finishes.
-     *
      *
      * @event AudioEffectFinished
      */
@@ -1171,7 +1165,6 @@ export interface RtcEngineEvents {
      *
      * The SDK triggers this callback when the local user resumes or stops capturing the local audio stream by calling [`enableLocalAudio`]{@link RtcEngine.enableLocalAudio}.
      *
-     *
      * @event MicrophoneEnabled
      */
     MicrophoneEnabled: EnabledCallback
@@ -1217,7 +1210,6 @@ export interface RtcEngineEvents {
      *
      * The SDK triggers this callback once every two seconds to report the audio quality of each remote user/host sending an audio stream. If a channel has multiple remote users/hosts sending audio streams, the SDK trggers this callback as many times.
      *
-     *
      * @event AudioQuality
      */
     AudioQuality: AudioQualityCallback
@@ -1253,6 +1245,41 @@ export interface RtcEngineEvents {
      * @event MetadataReceived
      */
     MetadataReceived: MetadataCallback
+
+    /**
+     * TODO(doc)
+     */
+    FirstLocalAudioFramePublished: ElapsedCallback
+
+    /**
+     * TODO(doc)
+     */
+    FirstLocalVideoFramePublished: ElapsedCallback
+
+    /**
+     * TODO(doc)
+     */
+    AudioPublishStateChanged: StreamPublishStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    VideoPublishStateChanged: StreamPublishStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    AudioSubscribeStateChanged: StreamSubscribeStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    VideoSubscribeStateChanged: StreamSubscribeStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    RtmpStreamingEvent: UrlWithErrorCallback
 }
 
 /**
@@ -1288,7 +1315,6 @@ export interface RtcChannelEvents {
      *
      * When a user loses connection with the server because of network problems, the SDK automatically tries
      * to reconnect and triggers this callback upon reconnection.
-     *
      *
      * @event RejoinChannelSuccess
      */
@@ -1412,7 +1438,6 @@ export interface RtcChannelEvents {
     /**
      * Occurs when the remote video state changes.
      *
-     *
      * @event RemoteVideoStateChanged
      */
     RemoteVideoStateChanged: RemoteVideoStateCallback
@@ -1444,7 +1469,6 @@ export interface RtcChannelEvents {
      *
      * Once the remote media stream is switched to the low stream due to poor network conditions,
      * you can monitor the stream switch between a high and low stream in the [`RemoteVideoStats`]{@link RemoteVideoStats} callback.
-     *
      *
      * @event RemoteSubscribeFallbackToAudioOnly
      */
@@ -1555,4 +1579,29 @@ export interface RtcChannelEvents {
      * @event MetadataReceived
      */
     MetadataReceived: MetadataCallback
+
+    /**
+     * TODO(doc)
+     */
+    AudioPublishStateChanged: StreamPublishStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    VideoPublishStateChanged: StreamPublishStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    AudioSubscribeStateChanged: StreamSubscribeStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    VideoSubscribeStateChanged: StreamSubscribeStateCallback
+
+    /**
+     * TODO(doc)
+     */
+    RtmpStreamingEvent: UrlWithErrorCallback
 }
