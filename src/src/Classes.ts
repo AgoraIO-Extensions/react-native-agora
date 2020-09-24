@@ -913,6 +913,9 @@ export interface RtcStats {
     cpuAppUsage: number
     /**
      * The round-trip time delay from the client to the local router.
+     *
+     * **Note**
+     * (iOS only) Since v3.1.2, this parameter is disabled by default. See [FAQ](https://docs.agora.io/en/faq/local_network_privacy) for details. If you need to enable this parameter, contact support@agora.io.
      */
     gatewayRtt: number
     /**
