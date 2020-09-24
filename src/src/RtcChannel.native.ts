@@ -560,7 +560,7 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     /**
      * Registers the metadata observer.
      *
-     * A successful call of this method triggers the [`setMaxMetadataSize`]{@link RtcChannel.setMaxMetadataSize} callback.
+     * A successful call of this method triggers the [`setMaxMetadataSize`]{@link RtcChannel.setMaxMetadataSize} method.
      *
      * This method enables you to add synchronized metadata in the video stream for more diversified live streaming interactions,
      * such as sending shopping links, digital coupons, and online quizzes.
