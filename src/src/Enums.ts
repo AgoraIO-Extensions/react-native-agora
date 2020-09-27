@@ -255,26 +255,6 @@ export enum AudioProfile {
 }
 
 /**
- * Use mode of the `RecordAudioFrame` callback.
- *
- * //TODO setPlaybackAudioFrameParameters
- */
-export enum AudioRawFrameOperationMode {
-    /**
-     * 0: Users only read the AudioFrame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
-     */
-    ReadOnly = 0,
-    /**
-     * 1: Users replace the AudioFrame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
-     */
-    WriteOnly = 1,
-    /**
-     * 2: Users read the data from AudioFrame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
-     */
-    ReadWrite = 2,
-}
-
-/**
  * Audio recording quality.
  */
 export enum AudioRecordingQuality {
@@ -513,33 +493,6 @@ export enum AudioScenario {
      * 5: Gaming scenario.
      */
     ChatRoomGaming = 5,
-}
-
-/**
- * Audio session restriction.
- */
-//TODO iOS setAudioSessionOperationRestriction
-export enum AudioSessionOperationRestriction {
-    /**
-     * 0: No restriction, the SDK has full control of the audio session operations.
-     */
-    None = 0,
-    /**
-     * 1: The SDK does not change the audio session category.
-     */
-    SetCategory = 1,
-    /**
-     * 1 << 1: The SDK does not change any setting of the audio session (category, mode, categoryOptions).
-     */
-    ConfigureSession = 1 << 1,
-    /**
-     * 1 << 2: The SDK keeps the audio session active when leaving a channel.
-     */
-    DeactivateSession = 1 << 2,
-    /**
-     * 1 << 7: The SDK does not configure the audio session anymore.
-     */
-    All = 1 << 7,
 }
 
 /**
@@ -1492,73 +1445,6 @@ export enum LogFilter {
 }
 
 /**
- * Media device type.
- *
- */
-//TODO MacOS AgoraMediaDeviceType
-export enum MediaDeviceType {
-    /**
-     * -1: Unknown device.
-     */
-    AudioUnknown = -1,
-    /**
-     * 0: Audio playback device.
-     */
-    AudioPlayout = 0,
-    /**
-     * 1: Audio recording device.
-     */
-    AudioRecording = 1,
-    /**
-     * 2: Video render device.
-     */
-    VideoRender = 2,
-    /**
-     * 3: Video capture device.
-     */
-    VideoCapture = 3,
-}
-
-/**
- * Media type.
- *
- */
-//TODO LiveEngine
-export enum MediaType {
-    /**
-     * 0: No audio and video.
-     */
-    None = 0,
-    /**
-     * 1: Audio only.
-     */
-    AudioOnly = 1,
-    /**
-     * 2: Video only.
-     */
-    VideoOnly = 2,
-    /**
-     * 3: Audio and video.
-     */
-    AudioAndVideo = 3,
-}
-
-/**
- * The metadata type.
- */
-//TODO registerMediaMetadataObserver
-export enum MetadataType {
-    /**
-     * -1: The metadata type is unknown.
-     */
-    Unknown = -1,
-    /**
-     * 0: The metadata type is video.
-     */
-    Video = 0,
-}
-
-/**
  * Network quality.
  */
 export enum NetworkQuality {
@@ -1632,38 +1518,6 @@ export enum NetworkType {
      * 5: The network type is mobile 4G.
      */
     Mobile4G = 5,
-}
-
-/**
- * Default camera position.
- *
- */
-//TODO AgoraRtcDefaultCamera
-export enum RtcDefaultCameraPosition {
-    /**
-     * 0: Front camera
-     */
-    Front = 0,
-    /**
-     * 1: Rear camera
-     */
-    Back = 1,
-}
-
-/**
- * Lifecycle of the CDN live video stream.
- *
- */
-//TODO AgoraPublisherConfiguration
-export enum RtmpStreamLifeCycle {
-    /**
-     * 1: Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
-     */
-    BindToChannel = 1,
-    /**
-     * 2: Bound to the owner of the RTMP stream. If the owner leaves the channel, the CDN live streaming stops immediately.
-     */
-    BindToOwnner = 2,
 }
 
 /**
@@ -1808,22 +1662,6 @@ export enum UserPriority {
 }
 
 /**
- * Video buffer type.
- *
- */
-//TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
-export enum VideoBufferType {
-    /**
-     * 1: Use a pixel buffer to transmit the video data.
-     */
-    PixelBuffer = 1,
-    /**
-     * 2: Use raw data to transmit the video data.
-     */
-    RawData = 2,
-}
-
-/**
  * Self-defined video codec profile.
  */
 export enum VideoCodecProfileType {
@@ -1839,26 +1677,6 @@ export enum VideoCodecProfileType {
      * 100: (Default) High video codec profile. Generally used in high-resolution broadcasts or television.
      */
     High = 100,
-}
-
-/**
- * The content hint for screen sharing.
- *
- */
-//TODO MacOS setScreenCaptureContentHint
-export enum VideoContentHint {
-    /**
-     * 0: (Default) No content hint.
-     */
-    None = 0,
-    /**
-     * 1: Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
-     */
-    Motion = 1,
-    /**
-     * 2: Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slide, or text.
-     */
-    Details = 2,
 }
 
 /**
@@ -2126,26 +1944,6 @@ export enum VideoOutputOrientationMode {
 }
 
 /**
- * Video pixel format.
- *
- */
-//TODO iOS AgoraVideoSinkProtocol
-export enum VideoPixelFormat {
-    /**
-     * 1: I420
-     */
-    I420 = 1,
-    /**
-     * 2: BGRA
-     */
-    BGRA = 2,
-    /**
-     * 8: NV12
-     */
-    NV12 = 8,
-}
-
-/**
  * Quality change of the local video in terms of target frame rate and target bit rate since last count.
  */
 export enum VideoQualityAdaptIndication {
@@ -2265,30 +2063,6 @@ export enum VideoRenderMode {
      * 4: The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
      */
     FILL = 4,
-}
-
-/**
- * Video rotation.
- *
- */
-//TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
-export enum VideoRotation {
-    /**
-     * 0: No rotation
-     */
-    RotationNone = 0,
-    /**
-     * 1: 90 degrees
-     */
-    Rotation90 = 1,
-    /**
-     * 2: 180 degrees
-     */
-    Rotation180 = 2,
-    /**
-     * 3: 270 degrees
-     */
-    Rotation270 = 3,
 }
 
 /**

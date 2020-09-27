@@ -1861,7 +1861,6 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Unregisters the metadata observer.
-     *
      */
     unregisterMediaMetadataObserver(): Promise<void> {
         return AgoraRtcEngineModule.unregisterMediaMetadataObserver()
@@ -1906,7 +1905,6 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
 
     /**
      * Removes the watermark image from the video stream added by [`addVideoWatermark`]{@link addVideoWatermark}.
-     *
      */
     clearVideoWatermarks(): Promise<void> {
         return AgoraRtcEngineModule.clearVideoWatermarks()
@@ -1954,19 +1952,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param encryptionMode Sets the encryption mode.
      */
     setEncryptionMode(encryptionMode: EncryptionMode): Promise<void> {
-        let mode = ''
-        switch (encryptionMode) {
-            case EncryptionMode.AES128XTS:
-                mode = 'aes-128-xts'
-                break
-            case EncryptionMode.AES128ECB:
-                mode = 'aes-128-ecb'
-                break
-            case EncryptionMode.AES256XTS:
-                mode = 'aes-256-xts'
-                break
-        }
-        return AgoraRtcEngineModule.setEncryptionMode(mode)
+        return AgoraRtcEngineModule.setEncryptionMode(encryptionMode)
     }
 
     /**
