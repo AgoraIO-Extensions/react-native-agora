@@ -1,5 +1,5 @@
 /**
- * IP areas
+ * Regions for connection.
  */
 export enum AreaCode {
     /**
@@ -228,8 +228,8 @@ export enum AudioOutputRouting {
 export enum AudioProfile {
     /**
      * 0: Default audio profile.
-     * - In the Communication profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-     * - In the Live-broadcast profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
+     * - In the `Communication` profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+     * - In the `LiveBroadcasting` profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 64 Kbps.
      */
     Default = 0,
     /**
@@ -237,27 +237,27 @@ export enum AudioProfile {
      */
     SpeechStandard = 1,
     /**
-     * 2: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 48 Kbps.
+     * 2: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 64 Kbps.
      */
     MusicStandard = 2,
     /**
-     * 3: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 56 Kbps.
+     * 3: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 80 Kbps.
      */
     MusicStandardStereo = 3,
     /**
-     * 4: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 128 Kbps.
+     * 4: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 96 Kbps.
      */
     MusicHighQuality = 4,
     /**
-     * 5: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
+     * 5: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 128 Kbps.
      */
     MusicHighQualityStereo = 5,
 }
 
 /**
- * Use mode of the onRecordAudioFrame callback.
+ * Use mode of the `RecordAudioFrame` callback.
  *
- * TODO setPlaybackAudioFrameParameters
+ * //TODO setPlaybackAudioFrameParameters
  */
 export enum AudioRawFrameOperationMode {
     /**
@@ -517,9 +517,8 @@ export enum AudioScenario {
 
 /**
  * Audio session restriction.
- *
- * TODO iOS setAudioSessionOperationRestriction
  */
+//TODO iOS setAudioSessionOperationRestriction
 export enum AudioSessionOperationRestriction {
     /**
      * 0: No restriction, the SDK has full control of the audio session operations.
@@ -959,23 +958,26 @@ export enum DegradationPreference {
  */
 export enum EncryptionMode {
     /**
-     * TODO(doc)
+     * @deprecated
+     * 0: This mode is deprecated.
      */
     None = 0,
     /**
-     * (Default) 128-bit AES encryption, XTS mode.
+     * 1: (Default) 128-bit AES encryption, XTS mode.
      */
     AES128XTS = 1,
     /**
-     * 128-bit AES encryption, ECB mode.
+     * 2: 128-bit AES encryption, ECB mode.
      */
     AES128ECB = 2,
     /**
-     * 256-bit AES encryption, XTS mode.
+     * 3: 256-bit AES encryption, XTS mode.
      */
     AES256XTS = 3,
     /**
-     * TODO(doc)
+     * 4: 128-bit SM4 encryption, ECB mode.
+     *
+     * @since v3.1.2.
      */
     SM4128ECB = 4,
 }
@@ -1087,7 +1089,9 @@ export enum ErrorCode {
      */
     InvalidChannelId = 102,
     /**
-     * TODO(doc)
+     * 103: Fails to get server resources in the specified region. Please try to specify another region.
+     *
+     * @since v3.1.2.
      */
     NoServerResources = 103,
     /**
@@ -1263,11 +1267,11 @@ export enum ErrorCode {
      */
     AdmRecordAudioFailed = 1018,
     /**
-     * 1020: Audio Device Module: Abnormal audio playback frequency.
+     * 1020: Audio device module: The audio playback frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
      */
     AdmPlayAbnormalFrequency = 1020,
     /**
-     * 1021: Audio Device Module: Abnormal audio recording frequency.
+     * 1021: Audio device module: The audio recording frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
      */
     AdmRecordAbnormalFrequency = 1021,
     /**
@@ -1490,8 +1494,8 @@ export enum LogFilter {
 /**
  * Media device type.
  *
- * TODO MacOS AgoraMediaDeviceType
  */
+//TODO MacOS AgoraMediaDeviceType
 export enum MediaDeviceType {
     /**
      * -1: Unknown device.
@@ -1518,8 +1522,8 @@ export enum MediaDeviceType {
 /**
  * Media type.
  *
- * TODO LiveEngine
  */
+//TODO LiveEngine
 export enum MediaType {
     /**
      * 0: No audio and video.
@@ -1541,9 +1545,8 @@ export enum MediaType {
 
 /**
  * The metadata type.
- *
- * TODO registerMediaMetadataObserver
  */
+//TODO registerMediaMetadataObserver
 export enum MetadataType {
     /**
      * -1: The metadata type is unknown.
@@ -1632,10 +1635,10 @@ export enum NetworkType {
 }
 
 /**
- * Default camera position
+ * Default camera position.
  *
- * TODO AgoraRtcDefaultCamera
  */
+//TODO AgoraRtcDefaultCamera
 export enum RtcDefaultCameraPosition {
     /**
      * 0: Front camera
@@ -1650,8 +1653,8 @@ export enum RtcDefaultCameraPosition {
 /**
  * Lifecycle of the CDN live video stream.
  *
- * TODO AgoraPublisherConfiguration
  */
+//TODO AgoraPublisherConfiguration
 export enum RtmpStreamLifeCycle {
     /**
      * 1: Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
@@ -1805,10 +1808,10 @@ export enum UserPriority {
 }
 
 /**
- * Video buffer type
+ * Video buffer type.
  *
- * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
  */
+//TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 export enum VideoBufferType {
     /**
      * 1: Use a pixel buffer to transmit the video data.
@@ -1841,8 +1844,8 @@ export enum VideoCodecProfileType {
 /**
  * The content hint for screen sharing.
  *
- * TODO MacOS setScreenCaptureContentHint
  */
+//TODO MacOS setScreenCaptureContentHint
 export enum VideoContentHint {
     /**
      * 0: (Default) No content hint.
@@ -1859,7 +1862,7 @@ export enum VideoContentHint {
 }
 
 /**
- * Video frame rate
+ * Video frame rate.
  */
 export enum VideoFrameRate {
     /**
@@ -2125,8 +2128,8 @@ export enum VideoOutputOrientationMode {
 /**
  * Video pixel format.
  *
- * TODO iOS AgoraVideoSinkProtocol
  */
+//TODO iOS AgoraVideoSinkProtocol
 export enum VideoPixelFormat {
     /**
      * 1: I420
@@ -2267,8 +2270,8 @@ export enum VideoRenderMode {
 /**
  * Video rotation.
  *
- * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
  */
+//TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
 export enum VideoRotation {
     /**
      * 0: No rotation
@@ -2395,7 +2398,9 @@ export enum WarningCode {
      */
     AdmInterruption = 1025,
     /**
-     * TODO(doc)
+     * 1029: During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
+     *
+     * @since v3.1.2.
      */
     AdmCategoryNotPlayAndRecord = 1029,
     /**
@@ -2411,11 +2416,18 @@ export enum WarningCode {
      */
     AdmRecordIsOccupied = 1033,
     /**
-     * TODO(doc)
+     * 1040: Audio device module: An error occurs in the audio driver. Solutions:
+     * - Restart your audio device.
+     * - Restart your device where the app runs.
+     * - Upgrade the sound card drive.
+     *
+     * @since v3.1.2.
      */
     AdmNoDataReadyCallback = 1040,
     /**
-     * TODO(doc)
+     * 1042: Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
+     *
+     * @since v3.1.2.
      */
     AdmInconsistentDevices = 1042,
     /**
@@ -2427,7 +2439,7 @@ export enum WarningCode {
      */
     AdmGlitchState = 1052,
     /**
-     * 1053: Audio Device Module: the underlying audio settings have changed.
+     * 1053: Audio processing module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
      */
     ApmResidualEcho = 1053,
 }
@@ -2485,27 +2497,61 @@ export enum VideoCodecType {
 }
 
 /**
- * TODO(doc)
+ * The publishing state.
+ *
+ * @since v3.1.2.
  */
 export enum StreamPublishState {
+    /**
+     * 0: The initial publishing state after joining the channel.
+     */
     Idle = 0,
-
+    /**
+     * 1: Fails to publish the local stream. Possible reasons:
+     * - The local user calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} to stop sending local streams.
+     * - The local user calls [`disableAudio`]{@link RtcEngine.disableAudio} or [`disableVideo`]{@link RtcEngine.disableVideo} to disable the entire audio or video module.
+     * - The local user calls [`enableLocalAudio(false)`]{@link RtcEngine.enableLocalAudio} or [`enableLocalVideo(false)`]{@link enableLocalVideo} to disable the local audio sampling or video capturing.
+     * - The role of the local user is `Audience`.
+     */
     NoPublished = 1,
-
+    /**
+     * 2: Publishing.
+     */
     Publishing = 2,
-
+    /**
+     * 3: Publishes successfully.
+     */
     Published = 3,
 }
 
 /**
- * TODO(doc)
+ * The subscribing state.
+ *
+ * @since v3.1.2.
  */
 export enum StreamSubscribeState {
+    /**
+     * 0: The initial subscribing state after joining the channel.
+     */
     Idle = 0,
-
+    /**
+     * 1: Fails to subscribe to the remote stream. Possible reasons:
+     * - The remote user:
+     *   - Calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} to stop sending local streams.
+     *   - The local user calls [`disableAudio`]{@link RtcEngine.disableAudio} or [`disableVideo`]{@link RtcEngine.disableVideo} to disable the entire audio or video module.
+     *   - The local user calls [`enableLocalAudio(false)`]{@link RtcEngine.enableLocalAudio} or [`enableLocalVideo(false)`]{@link enableLocalVideo} to disable the local audio sampling or video capturing.
+     *   - The role of the local user is `Audience`.
+     * - The local user calls the following methods to stop receiving remote streams:
+     *   - Calls [`muteRemoteAudioStream(true)`]{@link RtcEngine.muteRemoteAudioStream}, [`muteAllRemoteAudioStreams(true)`]{@link RtcEngine.muteAllRemoteAudioStreams}, or [`setDefaultMuteAllRemoteAudioStreams(true)`]{@link RtcEngine.setDefaultMuteAllRemoteAudioStreams} to stop receiving remote audio streams.
+     *   - Calls [`muteRemoteVideoStream(true)`]{@link RtcEngine.muteRemoteVideoStream}, [`muteAllRemoteVideoStreams(true)`]{@link RtcEngine.muteAllRemoteVideoStreams}, or [`setDefaultMuteAllRemoteVideoStreams(true)`]{@link RtcEngine.setDefaultMuteAllRemoteVideoStreams} to stop receiving remote video streams.
+     */
     NoSubscribed = 1,
-
+    /**
+     * 2: Subscribing.
+     */
     Subscribing = 2,
-
+    /**
+     * 3: Subscribes to and receives the remote stream successfully.
+     */
     Subscribed = 3,
 }
