@@ -357,7 +357,7 @@ export type VideoFrameWithUidCallback =
     (uid: number, width: number, height: number, elapsed: number) => void
 export type UrlWithErrorCallback =
 /**
- * @param url The RTMP URL address.
+ * @param url The RTMP streaming URL.
  * @param error The detailed error information.
  */
     (url: string, error: ErrorCode) => void
@@ -418,20 +418,26 @@ export type FacePositionCallback =
     (imageWidth: number, imageHeight: number, faces: FacePositionInfo[]) => void
 export type StreamPublishStateCallback =
 /**
- * TODO(doc)
+ * @param channel The channel name.
+ * @param oldState The previous publishing state. See [`StreamPublishState`]{@link StreamPublishState}.
+ * @param newState The current publishing state. See [`StreamPublishState`]{@link StreamPublishState}.
+ * @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
  */
     (channel: string, oldState: StreamPublishState, newState: StreamPublishState, elapseSinceLastState: number) => void
 export type StreamSubscribeStateCallback =
 /**
- * TODO(doc)
+ * @param channel The channel name.
+ * @param oldState The previous publishing state. See [`StreamPublishState`]{@link StreamPublishState}.
+ * @param newState The current publishing state. See [`StreamPublishState`]{@link StreamPublishState}.
+ * @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
  */
     (channel: string, oldState: StreamSubscribeState, newState: StreamSubscribeState, elapseSinceLastState: number) => void
 
 /**
+ * Callbacks.
+ *
  * The SDK uses the [`RtcEngineEvents`]{@link RtcEngineEvents} interface class to send callbacks to the application, and the application inherits the methods of this interface class to retrieve these callbacks.
- *
  * All methods in this interface class have their (empty) default implementations, and the application can inherit only some of the required events instead of all of them.
- *
  * In the callbacks, the application should avoid time-consuming tasks or call blocking APIs (such as SendMessage), otherwise, the SDK may not work properly.
  */
 export interface RtcEngineEvents {
@@ -640,7 +646,7 @@ export interface RtcEngineEvents {
     /**
      * Occurs when the first local audio frame is sent.
      *
-     * @deprecated TODO(doc)
+     * @deprecated Deprecated as of v3.1.2. Use [`FirstLocalAudioFramePublished`]{@link RtcEngineEvents.FirstLocalAudioFramePublished} instead.
      *
      * @event FirstLocalAudioFrame
      */
@@ -1247,37 +1253,69 @@ export interface RtcEngineEvents {
     MetadataReceived: MetadataCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the first audio frame is published.
+     *
+     * @since v3.1.2.
+     *
+     * The SDK triggers this callback under one of the following circumstances:
+     * - The local client enables the audio module and calls [`joinChannel`]{@link joinChannel} successfully.
+     * - The local client calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} and [`muteLocalAudioStream(false)`]{@link RtcEngine.muteLocalAudioStream} in sequence.
+     * - The local client calls [`disableAudio`]{@link RtcEngine.disableAudio} and [`enableAudio`]{@link RtcEngine.enableAudio} in sequence.
      */
     FirstLocalAudioFramePublished: ElapsedCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the first video frame is published.
+     *
+     * @since v3.1.2.
+     *
+     * The SDK triggers this callback under one of the following circumstances:
+     * - The local client enables the video module and calls [`joinChannel`]{@link joinChannel} successfully.
+     * - The local client calls [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} and [`muteLocalVideoStream(false)`]{@link RtcEngine.muteLocalVideoStream} in sequence.
+     * - The local client calls [`disableVideo`]{@link RtcEngine.disableVideo} and [`enableVideo`]{@link RtcEngine.enableVideo} in sequence.
      */
     FirstLocalVideoFramePublished: ElapsedCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the audio publishing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the publishing state change of the local audio stream.
      */
     AudioPublishStateChanged: StreamPublishStateCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the video publishing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the publishing state change of the local video stream.
      */
     VideoPublishStateChanged: StreamPublishStateCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the audio subscribing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the subscribing state change of a remote audio stream.
      */
     AudioSubscribeStateChanged: StreamSubscribeStateCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the video subscribing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the subscribing state change of a remote video stream.
      */
     VideoSubscribeStateChanged: StreamSubscribeStateCallback
 
     /**
-     * TODO(doc)
+     * Reports events during the RTMP streaming.
+     *
+     * @since v3.1.2.
      */
     RtmpStreamingEvent: UrlWithErrorCallback
 }
@@ -1581,27 +1619,45 @@ export interface RtcChannelEvents {
     MetadataReceived: MetadataCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the audio publishing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the publishing state change of the local audio stream.
      */
     AudioPublishStateChanged: StreamPublishStateCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the video publishing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the publishing state change of the local video stream.
      */
     VideoPublishStateChanged: StreamPublishStateCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the audio subscribing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the subscribing state change of a remote audio stream.
      */
     AudioSubscribeStateChanged: StreamSubscribeStateCallback
 
     /**
-     * TODO(doc)
+     * Occurs when the video subscribing state changes.
+     *
+     * @since v3.1.2.
+     *
+     * This callback indicates the subscribing state change of a remote video stream.
      */
     VideoSubscribeStateChanged: StreamSubscribeStateCallback
 
     /**
-     * TODO(doc)
+     * Reports events during the RTMP streaming.
+     *
+     * @since v3.1.2.
      */
     RtmpStreamingEvent: UrlWithErrorCallback
 }

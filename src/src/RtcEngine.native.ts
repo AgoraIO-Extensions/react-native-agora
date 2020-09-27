@@ -414,8 +414,11 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * Specifies an SDK output log file.
+     * Sets the log files that the SDK outputs.
      *
+     * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB.
+     * These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the
+     * earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
      * The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
      *
      * **Note**
@@ -441,12 +444,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * Sets the log file size (KB).
+     * Sets the size (KB) of a log file that the SDK outputs.
      *
-     * The Agora SDK has two log files, each with a default size of 512 KB.
-     * If you set `fileSizeInKBytes` as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB.
-     * If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
-     * @param fileSizeInKBytes The SDK log file size (KB).
+     * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB. These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`.
+     * When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and create a new `agorasdk.log` to record latest logs.
+     * @param fileSizeInKBytes The size (KB) of a log file. The default value is 1024 KB. If you set `fileSizeInKByte` to 1024 KB, the SDK outputs
+     * at most 5 MB log files; if you set it to less than 1024 KB, the maximum size of a log file is still 1024 KB.
      */
     setLogFileSize(fileSizeInKBytes: number): Promise<void> {
         return AgoraRtcEngineModule.setLogFileSize(fileSizeInKBytes)
@@ -1910,21 +1913,35 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * TODO(doc)
+     * Enables/Disables the built-in encryption.
      *
-     * @param enabled
-     * @param config
+     * @since v3.1.2.
+     *
+     * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
+     *
+     * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+     *
+     * **Note**
+     * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+     * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
+     *
+     *
+     * @param enabled Whether to enable the built-in encryption.
+     * - `true`: Enable the built-in encryption.
+     * - `false`: Disable the built-in encryption.
+     * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
      */
     enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
         return AgoraRtcEngineModule.enableEncryption(enabled, config);
     }
 
     /**
-     * @deprecated TODO(doc)
-     *
      * Sets the built-in encryption mode.
      *
-     * The Agora SDK supports built-in encryption, which is set to `aes-128-xts` mode by default.
+     * @deprecated
+     * Deprecated as of v3.1.2. Use [`enableEncryption`]{@link enableEncryption} instead.
+     *
+     * The Agora SDK supports built-in encryption, which is set to `AES128XTS` mode by default.
      * Call this method to set the encryption mode to use other encryption modes.
      * All users in the same channel must use the same encryption mode and password.
      *
@@ -1953,9 +1970,10 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     }
 
     /**
-     * @deprecated TODO(doc)
-     *
      * Enables built-in encryption with an encryption password before joining a channel.
+     *
+     * @deprecated
+     * Deprecated as of v3.1.2. Use [`enableEncryption`]{@link enableEncryption} instead.
      *
      * All users in a channel must set the same encryption password.
      * The encryption password is automatically cleared once a user leaves the channel.
