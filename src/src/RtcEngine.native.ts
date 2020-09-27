@@ -60,11 +60,7 @@ let engine: RtcEngine | undefined
 /**
  * [`RtcEngine`]{@link RtcEngine} is the main class of the Agora SDK.
  */
-export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
-    RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
-    RtcMediaRelayInterface, RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface,
-    RtcFallbackInterface, RtcTestInterface, RtcMediaMetadataInterface, RtcWatermarkInterface, RtcEncryptionInterface,
-    RtcAudioRecorderInterface, RtcInjectStreamInterface, RtcCameraInterface, RtcStreamMessageInterface {
+export default class RtcEngine implements RtcEngineInterface {
     /**
      * @ignore
      */
@@ -2273,6 +2269,47 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     sendStreamMessage(streamId: number, message: string): Promise<void> {
         return AgoraRtcEngineModule.sendStreamMessage(streamId, message)
     }
+}
+
+/**
+ * @ignore
+ */
+interface RtcEngineInterface extends RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
+    RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
+    RtcMediaRelayInterface, RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface,
+    RtcFallbackInterface, RtcTestInterface, RtcMediaMetadataInterface, RtcWatermarkInterface, RtcEncryptionInterface,
+    RtcAudioRecorderInterface, RtcInjectStreamInterface, RtcCameraInterface, RtcStreamMessageInterface {
+    destroy(): Promise<void>
+
+    setChannelProfile(profile: ChannelProfile): Promise<void>
+
+    setClientRole(role: ClientRole): Promise<void>
+
+    joinChannel(token: string | null, channelName: string, optionalInfo: string | null, optionalUid: number): Promise<void>
+
+    switchChannel(token: string | null, channelName: string): Promise<void>
+
+    leaveChannel(): Promise<void>
+
+    renewToken(token: string): Promise<void>
+
+    enableWebSdkInteroperability(enabled: boolean): Promise<void>
+
+    getConnectionState(): Promise<ConnectionStateType>
+
+    getCallId(): Promise<string>
+
+    rate(callId: string, rating: Rate, description?: string): Promise<void>
+
+    complain(callId: string, description: string): Promise<void>
+
+    setLogFile(filePath: string): Promise<void>
+
+    setLogFilter(filter: LogFilter): Promise<void>
+
+    setLogFileSize(fileSizeInKBytes: number): Promise<void>
+
+    setParameters(parameters: string): Promise<void>
 }
 
 /**

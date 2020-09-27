@@ -37,9 +37,7 @@ const channels = new Map<string, RtcChannel>()
 /**
  * The {@link RtcChannel} class.
  */
-export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
-    RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface, RtcFallbackInterface,
-    RtcMediaMetadataInterface, RtcEncryptionInterface, RtcInjectStreamInterface, RtcStreamMessageInterface {
+export default class RtcChannel implements RtcChannelInterface {
     /**
      * @ignore
      */
@@ -748,6 +746,33 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     sendStreamMessage(streamId: number, message: string): Promise<void> {
         return AgoraRtcChannelModule.sendStreamMessage(this._channelId, streamId, message)
     }
+}
+
+/**
+ * @ignore
+ */
+interface RtcChannelInterface extends RtcAudioInterface, RtcVideoInterface, RtcVoicePositionInterface,
+    RtcPublishStreamInterface, RtcMediaRelayInterface, RtcDualStreamInterface, RtcFallbackInterface,
+    RtcMediaMetadataInterface, RtcEncryptionInterface, RtcInjectStreamInterface, RtcStreamMessageInterface {
+    destroy(): Promise<void>
+
+    setClientRole(role: ClientRole): Promise<void>
+
+    joinChannel(token: string | null, optionalInfo: string | null, optionalUid: number, options: ChannelMediaOptions): Promise<void>
+
+    joinChannelWithUserAccount(token: string | null, userAccount: string, options: ChannelMediaOptions): Promise<void>
+
+    leaveChannel(): Promise<void>
+
+    renewToken(token: string): Promise<void>
+
+    getConnectionState(): Promise<ConnectionStateType>
+
+    publish(): Promise<void>
+
+    unpublish(): Promise<void>
+
+    getCallId(): Promise<string>
 }
 
 /**
