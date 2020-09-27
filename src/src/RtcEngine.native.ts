@@ -153,7 +153,7 @@ export default class RtcEngine implements RtcEngineInterface {
         RtcChannel.destroyAll()
         this.removeAllListeners()
         engine = undefined
-        return AgoraRtcEngineModule.callMethod('destroy')
+        return AgoraRtcEngineModule.callMethod('destroy', null)
     }
 
     /**
@@ -331,7 +331,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removeInjectStreamUrl`]{@link removeInjectStreamUrl} method.
      */
     leaveChannel(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('leaveChannel')
+        return AgoraRtcEngineModule.callMethod('leaveChannel', null)
     }
 
     /**
@@ -368,7 +368,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Gets the connection state of the SDK.
      */
     getConnectionState(): Promise<ConnectionStateType> {
-        return AgoraRtcEngineModule.callMethod('getConnectionState')
+        return AgoraRtcEngineModule.callMethod('getConnectionState', null)
     }
 
     /**
@@ -384,7 +384,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Current call ID.
      */
     getCallId(): Promise<string> {
-        return AgoraRtcEngineModule.callMethod('getCallId')
+        return AgoraRtcEngineModule.callMethod('getCallId', null)
     }
 
     /**
@@ -622,7 +622,7 @@ export default class RtcEngine implements RtcEngineInterface {
      *  - [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams}: Whether to subscribe to and play all remote audio streams.
      */
     disableAudio(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('disableAudio')
+        return AgoraRtcEngineModule.callMethod('disableAudio', null)
     }
 
     /**
@@ -647,7 +647,7 @@ export default class RtcEngine implements RtcEngineInterface {
      *  - [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams}: Whether to subscribe to and play all remote audio streams.
      */
     enableAudio(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('enableAudio')
+        return AgoraRtcEngineModule.callMethod('enableAudio', null)
     }
 
     /**
@@ -812,7 +812,7 @@ export default class RtcEngine implements RtcEngineInterface {
      *  - [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}: Whether to subscribe to and play all remote video streams.
      */
     disableVideo(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('disableVideo')
+        return AgoraRtcEngineModule.callMethod('disableVideo', null)
     }
 
     /**
@@ -867,7 +867,7 @@ export default class RtcEngine implements RtcEngineInterface {
      *  - [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}: Whether to subscribe to and play all remote video streams.
      */
     enableVideo(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('enableVideo')
+        return AgoraRtcEngineModule.callMethod('enableVideo', null)
     }
 
     /**
@@ -981,14 +981,14 @@ export default class RtcEngine implements RtcEngineInterface {
      * the local video preview remains until you call [`stopPreview`]{@link stopPreview} to disable it.
      */
     startPreview(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('startPreview')
+        return AgoraRtcEngineModule.callMethod('startPreview', null)
     }
 
     /**
      * Stops the local video preview and the video.
      */
     stopPreview(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('stopPreview')
+        return AgoraRtcEngineModule.callMethod('stopPreview', null)
     }
 
     /**
@@ -1044,7 +1044,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - < 0: Failure.
      */
     getAudioMixingCurrentPosition(): Promise<number> {
-        return AgoraRtcEngineModule.callMethod('getAudioMixingCurrentPosition')
+        return AgoraRtcEngineModule.callMethod('getAudioMixingCurrentPosition', null)
     }
 
     /**
@@ -1059,7 +1059,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - < 0: Failure.
      */
     getAudioMixingDuration(): Promise<number> {
-        return AgoraRtcEngineModule.callMethod('getAudioMixingDuration')
+        return AgoraRtcEngineModule.callMethod('getAudioMixingDuration', null)
     }
 
     /**
@@ -1072,7 +1072,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - < 0: Failure.
      */
     getAudioMixingPlayoutVolume(): Promise<number> {
-        return AgoraRtcEngineModule.callMethod('getAudioMixingPlayoutVolume')
+        return AgoraRtcEngineModule.callMethod('getAudioMixingPlayoutVolume', null)
     }
 
     /**
@@ -1085,7 +1085,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - < 0: Failure.
      */
     getAudioMixingPublishVolume(): Promise<number> {
-        return AgoraRtcEngineModule.callMethod('getAudioMixingPublishVolume')
+        return AgoraRtcEngineModule.callMethod('getAudioMixingPublishVolume', null)
     }
 
     /**
@@ -1094,7 +1094,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Call this method when you are in a channel.
      */
     pauseAudioMixing(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('pauseAudioMixing')
+        return AgoraRtcEngineModule.callMethod('pauseAudioMixing', null)
     }
 
     /**
@@ -1103,7 +1103,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Call this method when you are in a channel.
      */
     resumeAudioMixing(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('resumeAudioMixing')
+        return AgoraRtcEngineModule.callMethod('resumeAudioMixing', null)
     }
 
     /**
@@ -1183,7 +1183,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Call this method when you are in a channel.
      */
     stopAudioMixing(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('stopAudioMixing')
+        return AgoraRtcEngineModule.callMethod('stopAudioMixing', null)
     }
 
     /**
@@ -1196,14 +1196,14 @@ export default class RtcEngine implements RtcEngineInterface {
      * - < 0: Failure.
      */
     getEffectsVolume(): Promise<number> {
-        return AgoraRtcEngineModule.callMethod('getEffectsVolume')
+        return AgoraRtcEngineModule.callMethod('getEffectsVolume', null)
     }
 
     /**
      * Pauses all audio effects.
      */
     pauseAllEffects(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('pauseAllEffects')
+        return AgoraRtcEngineModule.callMethod('pauseAllEffects', null)
     }
 
     /**
@@ -1271,7 +1271,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Resumes playing all audio effects.
      */
     resumeAllEffects(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('resumeAllEffects')
+        return AgoraRtcEngineModule.callMethod('resumeAllEffects', null)
     }
 
     /**
@@ -1303,7 +1303,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Stops playing all audio effects.
      */
     stopAllEffects(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('stopAllEffects')
+        return AgoraRtcEngineModule.callMethod('stopAllEffects', null)
     }
 
     /**
@@ -1534,7 +1534,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * You can leave the channel by calling [`leaveChannel`]{@link leaveChannel}, and the media stream relay automatically stops.
      */
     stopChannelMediaRelay(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('stopChannelMediaRelay')
+        return AgoraRtcEngineModule.callMethod('stopChannelMediaRelay', null)
     }
 
     /**
@@ -1564,7 +1564,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - `false`: The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
      */
     isSpeakerphoneEnabled(): Promise<boolean> {
-        return AgoraRtcEngineModule.callMethod('isSpeakerphoneEnabled')
+        return AgoraRtcEngineModule.callMethod('isSpeakerphoneEnabled', null)
     }
 
     /**
@@ -1738,7 +1738,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Disables the network connection quality test.
      */
     disableLastmileTest(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('disableLastmileTest')
+        return AgoraRtcEngineModule.callMethod('disableLastmileTest', null)
     }
 
     /**
@@ -1762,7 +1762,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * After you join the channel, whether you have called [`disableLastmileTest`]{@link disableLastmileTest} or not, the SDK automatically stops consuming the bandwidth.
      */
     enableLastmileTest(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('enableLastmileTest')
+        return AgoraRtcEngineModule.callMethod('enableLastmileTest', null)
     }
 
     /**
@@ -1813,14 +1813,14 @@ export default class RtcEngine implements RtcEngineInterface {
      * Stops the audio call test.
      */
     stopEchoTest(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('stopEchoTest')
+        return AgoraRtcEngineModule.callMethod('stopEchoTest', null)
     }
 
     /**
      * Stops the last-mile network probe test.
      */
     stopLastmileProbeTest(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('stopLastmileProbeTest')
+        return AgoraRtcEngineModule.callMethod('stopLastmileProbeTest', null)
     }
 
     /**
@@ -1834,7 +1834,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Call this method before the [`joinChannel`]{@link joinChannel} method.
      */
     registerMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('registerMediaMetadataObserver')
+        return AgoraRtcEngineModule.callMethod('registerMediaMetadataObserver', null)
     }
 
     /**
@@ -1859,7 +1859,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Unregisters the metadata observer.
      */
     unregisterMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('unregisterMediaMetadataObserver')
+        return AgoraRtcEngineModule.callMethod('unregisterMediaMetadataObserver', null)
     }
 
     /**
@@ -1903,7 +1903,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Removes the watermark image from the video stream added by [`addVideoWatermark`]{@link addVideoWatermark}.
      */
     clearVideoWatermarks(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('clearVideoWatermarks')
+        return AgoraRtcEngineModule.callMethod('clearVideoWatermarks', null)
     }
 
     /**
@@ -2004,7 +2004,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * else, the recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
      */
     stopAudioRecording(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('stopAudioRecording')
+        return AgoraRtcEngineModule.callMethod('stopAudioRecording', null)
     }
 
     /**
@@ -2073,7 +2073,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * @returns The maximum camera zoom factor.
      */
     getCameraMaxZoomFactor(): Promise<number> {
-        return AgoraRtcEngineModule.callMethod('getCameraMaxZoomFactor')
+        return AgoraRtcEngineModule.callMethod('getCameraMaxZoomFactor', null)
     }
 
     /**
@@ -2085,7 +2085,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - `false`: The device does not support the camera auto-face focus function.
      */
     isCameraAutoFocusFaceModeSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.callMethod('isCameraAutoFocusFaceModeSupported')
+        return AgoraRtcEngineModule.callMethod('isCameraAutoFocusFaceModeSupported', null)
     }
 
     /**
@@ -2097,7 +2097,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - `false`: The device does not support the camera exposure function.
      */
     isCameraExposurePositionSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.callMethod('isCameraExposurePositionSupported')
+        return AgoraRtcEngineModule.callMethod('isCameraExposurePositionSupported', null)
     }
 
     /**
@@ -2109,7 +2109,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - `false`: The device does not support the camera manual focus function.
      */
     isCameraFocusSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.callMethod('isCameraFocusSupported')
+        return AgoraRtcEngineModule.callMethod('isCameraFocusSupported', null)
     }
 
     /**
@@ -2121,7 +2121,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - `false`: The device does not the support camera flash function.
      */
     isCameraTorchSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.callMethod('isCameraTorchSupported')
+        return AgoraRtcEngineModule.callMethod('isCameraTorchSupported', null)
     }
 
     /**
@@ -2133,7 +2133,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * - `false`: The device does not support the camera zoom function.
      */
     isCameraZoomSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.callMethod('isCameraZoomSupported')
+        return AgoraRtcEngineModule.callMethod('isCameraZoomSupported', null)
     }
 
     /**
@@ -2217,7 +2217,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * Switches between front and rear cameras.
      */
     switchCamera(): Promise<void> {
-        return AgoraRtcEngineModule.callMethod('switchCamera')
+        return AgoraRtcEngineModule.callMethod('switchCamera', null)
     }
 
     /**
