@@ -446,7 +446,8 @@ export type StreamSubscribeStateCallback =
     (channel: string, oldState: StreamSubscribeState, newState: StreamSubscribeState, elapseSinceLastState: number) => void
 export type RtmpStreamingEventCallback =
 /**
- * TODO(doc)
+ * @param url The RTMP streaming URL.
+ * @param eventCode The event code. See [`RtmpStreamingEvent`]{@link RtmpStreamingEvent}.
  */
     (url: string, eventCode: RtmpStreamingEvent) => void
 
