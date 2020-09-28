@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {Platform, ViewProps} from "react-native";
+import React, {Component} from "react"
+import {Platform, ViewProps} from "react-native"
 
 import {
     RtcSurfaceView,
@@ -7,7 +7,7 @@ import {
     RtcTextureView,
     RtcTextureViewProps,
     RtcUidProps
-} from "./src/RtcRenderView.native";
+} from "./src/RtcRenderView.native"
 
 /**
  * The SurfaceView class.
@@ -22,7 +22,7 @@ class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps & RtcUidProp
     render() {
         return (
             <RtcSurfaceView {...this.props}/>
-        );
+        )
     }
 }
 
@@ -40,7 +40,7 @@ class TextureView extends Component<ViewProps & RtcTextureViewProps & RtcUidProp
             throw new Error('TextureView not support for iOS')
         return (
             <RtcTextureView {...this.props}/>
-        );
+        )
     }
 }
 

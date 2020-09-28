@@ -5,6 +5,7 @@ import {
     CameraCaptureOutputPreference,
     CameraDirection,
     DegradationPreference,
+    EncryptionMode,
     LastmileProbeResultState,
     LighteningContrastLevel,
     NetworkQuality,
@@ -15,7 +16,7 @@ import {
     VideoOutputOrientationMode,
     VideoQualityAdaptIndication,
     VideoStreamType
-} from "./Enums";
+} from "./Enums"
 
 /**
  * The user information, including the user ID and user account.
@@ -45,14 +46,13 @@ export class VideoDimensions {
     height: number
 
     constructor(width: number, height: number) {
-        this.width = width;
-        this.height = height;
+        this.width = width
+        this.height = height
     }
 }
 
 /**
  * Definition of VideoEncoderConfiguration.
- *
  */
 export class VideoEncoderConfiguration {
     /**
@@ -80,8 +80,8 @@ export class VideoEncoderConfiguration {
      *
      * **Note**
      * <ul>
-     *     <li>The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [`VideoOutputOrientationMode`]{@link VideoOutputOrientationMode}.</li>
-     *     <li>Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
+     *    <li> The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [<code>VideoOutputOrientationMode</code>]{@link VideoOutputOrientationMode}.</li>
+     *    <li> Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
      * </ul>
      *
      */
@@ -270,7 +270,6 @@ export class VideoEncoderConfiguration {
      * The base bitrate in this table applies to the Communication profile.
      * The `LiveBroadcasting` profile generally requires a higher bitrate for better video quality.
      * We recommend setting the bitrate mode as [`Standard`]{@link BitRate.Standard}. You can also set the bitrate as the base bitrate value &times; 2.
-     *
      */
     bitrate?: number
     /**
@@ -292,14 +291,14 @@ export class VideoEncoderConfiguration {
     mirrorMode?: VideoMirrorMode
 
     constructor({dimensions, frameRate, minFrameRate, bitrate, minBitrate, orientationMode, degradationPrefer, mirrorMode}: { dimensions?: VideoDimensions, frameRate?: VideoFrameRate, minFrameRate?: VideoFrameRate, bitrate?: number, minBitrate?: number, orientationMode?: VideoOutputOrientationMode, degradationPrefer?: DegradationPreference, mirrorMode?: VideoMirrorMode }) {
-        this.dimensions = dimensions;
-        this.frameRate = frameRate;
-        this.minFrameRate = minFrameRate;
-        this.bitrate = bitrate;
-        this.minBitrate = minBitrate;
-        this.orientationMode = orientationMode;
-        this.degradationPrefer = degradationPrefer;
-        this.mirrorMode = mirrorMode;
+        this.dimensions = dimensions
+        this.frameRate = frameRate
+        this.minFrameRate = minFrameRate
+        this.bitrate = bitrate
+        this.minBitrate = minBitrate
+        this.orientationMode = orientationMode
+        this.degradationPrefer = degradationPrefer
+        this.mirrorMode = mirrorMode
     }
 }
 
@@ -327,10 +326,10 @@ export class BeautyOptions {
     rednessLevel?: number
 
     constructor({lighteningContrastLevel, lighteningLevel, smoothnessLevel, rednessLevel}: { lighteningContrastLevel?: LighteningContrastLevel, lighteningLevel?: number, smoothnessLevel?: number, rednessLevel?: number }) {
-        this.lighteningContrastLevel = lighteningContrastLevel;
-        this.lighteningLevel = lighteningLevel;
-        this.smoothnessLevel = smoothnessLevel;
-        this.rednessLevel = rednessLevel;
+        this.lighteningContrastLevel = lighteningContrastLevel
+        this.lighteningLevel = lighteningLevel
+        this.smoothnessLevel = smoothnessLevel
+        this.rednessLevel = rednessLevel
     }
 }
 
@@ -360,11 +359,11 @@ export class AgoraImage {
     height: number
 
     constructor(url: string, x: number, y: number, width: number, height: number) {
-        this.url = url;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.url = url
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
     }
 }
 
@@ -413,25 +412,23 @@ export class TranscodingUser {
      * **Note**
      *
      * Special players are needed if `audioChannel` is not set as 0.
-     *
      */
     audioChannel?: AudioChannel
 
     constructor(uid: number, x: number, y: number, {width, height, zOrder, alpha, audioChannel}: { width?: number, height?: number, zOrder?: number, alpha?: number, audioChannel?: AudioChannel }) {
-        this.uid = uid;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.zOrder = zOrder;
-        this.alpha = alpha;
-        this.audioChannel = audioChannel;
+        this.uid = uid
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
+        this.zOrder = zOrder
+        this.alpha = alpha
+        this.audioChannel = audioChannel
     }
 }
 
 /**
  * Color.
- *
  */
 export class Color {
     /**
@@ -448,15 +445,14 @@ export class Color {
     blue: number
 
     constructor(red: number, green: number, blue: number) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
+        this.red = red
+        this.green = green
+        this.blue = blue
     }
 }
 
 /**
  * A class for managing user-specific CDN live audio/video transcoding settings.
- *
  */
 export class LiveTranscoding {
     /**
@@ -540,22 +536,22 @@ export class LiveTranscoding {
     transcodingUsers: TranscodingUser[]
 
     constructor(transcodingUsers: TranscodingUser[], {width, height, videoBitrate, videoFramerate, lowLatency, videoGop, watermark, backgroundImage, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, videoCodecProfile, backgroundColor, userConfigExtraInfo}: { width?: number, height?: number, videoBitrate?: number, videoFramerate?: VideoFrameRate, lowLatency?: boolean, videoGop?: number, watermark?: AgoraImage, backgroundImage?: AgoraImage, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel, audioCodecProfile?: AudioCodecProfileType, videoCodecProfile?: VideoCodecProfileType, backgroundColor?: Color, userConfigExtraInfo?: string, }) {
-        this.width = width;
-        this.height = height;
-        this.videoBitrate = videoBitrate;
-        this.videoFramerate = videoFramerate;
-        this.lowLatency = lowLatency;
-        this.videoGop = videoGop;
-        this.watermark = watermark;
-        this.backgroundImage = backgroundImage;
-        this.audioSampleRate = audioSampleRate;
-        this.audioBitrate = audioBitrate;
-        this.audioChannels = audioChannels;
-        this.audioCodecProfile = audioCodecProfile;
-        this.videoCodecProfile = videoCodecProfile;
-        this.backgroundColor = backgroundColor;
-        this.userConfigExtraInfo = userConfigExtraInfo;
-        this.transcodingUsers = transcodingUsers;
+        this.width = width
+        this.height = height
+        this.videoBitrate = videoBitrate
+        this.videoFramerate = videoFramerate
+        this.lowLatency = lowLatency
+        this.videoGop = videoGop
+        this.watermark = watermark
+        this.backgroundImage = backgroundImage
+        this.audioSampleRate = audioSampleRate
+        this.audioBitrate = audioBitrate
+        this.audioChannels = audioChannels
+        this.audioCodecProfile = audioCodecProfile
+        this.videoCodecProfile = videoCodecProfile
+        this.backgroundColor = backgroundColor
+        this.userConfigExtraInfo = userConfigExtraInfo
+        this.transcodingUsers = transcodingUsers
     }
 }
 
@@ -577,9 +573,9 @@ export class ChannelMediaInfo {
     uid: number
 
     constructor(uid: number, {channelName, token}: { channelName?: string, token?: string }) {
-        this.channelName = channelName;
-        this.token = token;
-        this.uid = uid;
+        this.channelName = channelName
+        this.token = token
+        this.uid = uid
     }
 }
 
@@ -599,7 +595,7 @@ export class ChannelMediaRelayConfiguration {
     /**
      * The information of the destination channel: [`ChannelMediaInfo`]{@link ChannelMediaInfo}. It contains the following members:
      * - `channelName`: The name of the destination channel.
-     * - `uid`: ID of the host in the destination channel. The value ranges from 0 to (232-1). To avoid UID conflicts, this uid must be different from any other UIDs in the destination channel. The default value is 0, which means the SDK generates a random UID.
+     * - `uid`: ID of the host in the destination channel. The value ranges from 0 to (2<sup>32</sup>-1). To avoid UID conflicts, this uid must be different from any other UIDs in the destination channel. The default value is 0, which means the SDK generates a random UID.
      * - `token`: The token for joining the source channel. It is generated with the `channelName` and `uid` you set in `destInfo`.
      *  - If you have not enabled the App Certificate, set this parameter as the default value null, which means the SDK applies the App ID.
      *  - If you have enabled the App Certificate, you must use the token generated with the `channelName` and `uid`, and the `uid` must be set as 0.
@@ -607,8 +603,8 @@ export class ChannelMediaRelayConfiguration {
     destInfos: ChannelMediaInfo[]
 
     constructor(srcInfo: ChannelMediaInfo, destInfos: ChannelMediaInfo[]) {
-        this.srcInfo = srcInfo;
-        this.destInfos = destInfos;
+        this.srcInfo = srcInfo
+        this.destInfos = destInfos
     }
 }
 
@@ -634,10 +630,10 @@ export class LastmileProbeConfig {
     expectedDownlinkBitrate: number
 
     constructor(probeUplink: boolean, probeDownlink: boolean, expectedUplinkBitrate: number, expectedDownlinkBitrate: number) {
-        this.probeUplink = probeUplink;
-        this.probeDownlink = probeDownlink;
-        this.expectedUplinkBitrate = expectedUplinkBitrate;
-        this.expectedDownlinkBitrate = expectedDownlinkBitrate;
+        this.probeUplink = probeUplink
+        this.probeDownlink = probeDownlink
+        this.expectedUplinkBitrate = expectedUplinkBitrate
+        this.expectedDownlinkBitrate = expectedDownlinkBitrate
     }
 }
 
@@ -663,10 +659,10 @@ export class Rectangle {
     height: number
 
     constructor(x: number, y: number, width: number, height: number) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
     }
 }
 
@@ -690,9 +686,9 @@ export class WatermarkOptions {
     positionInPortraitMode: Rectangle
 
     constructor(positionInLandscapeMode: Rectangle, positionInPortraitMode: Rectangle, visibleInPreview?: boolean) {
-        this.visibleInPreview = visibleInPreview;
-        this.positionInLandscapeMode = positionInLandscapeMode;
-        this.positionInPortraitMode = positionInPortraitMode;
+        this.visibleInPreview = visibleInPreview
+        this.positionInLandscapeMode = positionInLandscapeMode
+        this.positionInPortraitMode = positionInPortraitMode
     }
 }
 
@@ -718,37 +714,46 @@ export class LiveInjectStreamConfig {
     videoFramerate?: VideoFrameRate
     /**
      * Video bitrate of the added stream to the live interactive streaming. The default value is 400 Kbps.
+     *
+     * **Note**
+     *
+     * The setting of the video bitrate is closely linked to the resolution. If you set the video bitrate beyond a reasonable range, the SDK sets it within a reasonable range instead.
      */
     videoBitrate?: number
     /**
      * Audio sample rate of the added stream to the live interactive streaming. The default value is 44100 Hz.
+     *
+     * **Note**
+     *
+     * We recommend you use the default value and not reset it.
      */
     audioSampleRate?: AudioSampleRateType
     /**
      * Audio bitrate of the added stream to the live interactive streaming. The default value is 48 Kbps.
+     *
+     * **Note**
+     *
+     * We recommend you use the default value and not reset it.
      */
     audioBitrate?: number
     /**
-     * Audio channels to be added to the live interactive streaming.
+     * Audio channels to add into the live streaming. The value ranges between 1 and 2. The default value is 1.
      *
-     * Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
-     * - 1: (Default) Mono
-     * - 2: Stereo
-     * - 3: Three audio channels
-     * - 4: Four audio channels
-     * - 5: Five audio channels
+     * **Note**
+     *
+     * We recommend you use the default value and not reset it.
      */
     audioChannels?: AudioChannel
 
     constructor({width, height, videoGop, videoFramerate, videoBitrate, audioSampleRate, audioBitrate, audioChannels}: { width?: number, height?: number, videoGop?: number, videoFramerate?: VideoFrameRate, videoBitrate?: number, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel }) {
-        this.width = width;
-        this.height = height;
-        this.videoGop = videoGop;
-        this.videoFramerate = videoFramerate;
-        this.videoBitrate = videoBitrate;
-        this.audioSampleRate = audioSampleRate;
-        this.audioBitrate = audioBitrate;
-        this.audioChannels = audioChannels;
+        this.width = width
+        this.height = height
+        this.videoGop = videoGop
+        this.videoFramerate = videoFramerate
+        this.videoBitrate = videoBitrate
+        this.audioSampleRate = audioSampleRate
+        this.audioBitrate = audioBitrate
+        this.audioChannels = audioChannels
     }
 }
 
@@ -766,8 +771,8 @@ export class CameraCapturerConfiguration {
     cameraDirection: CameraDirection
 
     constructor(preference: CameraCaptureOutputPreference, cameraDirection: CameraDirection) {
-        this.preference = preference;
-        this.cameraDirection = cameraDirection;
+        this.preference = preference
+        this.cameraDirection = cameraDirection
     }
 }
 
@@ -779,24 +784,52 @@ export class ChannelMediaOptions {
      * Determines whether to subscribe to audio streams when the user joins the channel.
      * - `true`: (Default) Subscribe.
      * - `false`: Do not subscribe.
+     *
+     * This member serves a similar function to the [`muteAllRemoteAudioStreams`]{@link RtcEngine.muteAllRemoteAudioStreams} method. After joining the channel, you can call the `muteAllRemoteAudioStreams` method to set whether to subscribe to audio streams in the channel.
      */
     autoSubscribeAudio: boolean
     /**
      * Determines whether to subscribe to video streams when the user joins the channel.
      * - `true`: (Default) Subscribe.
      * - `false`: Do not subscribe.
+     *
+     * This member serves a similar function to the [`muteAllRemoteVideoStreams`]{@link RtcEngine.muteAllRemoteVideoStreams} method. After joining the channel, you can call the `muteAllRemoteVideoStreams` method to set whether to subscribe to audio streams in the channel.
      */
     autoSubscribeVideo: boolean
 
     constructor(autoSubscribeAudio: boolean, autoSubscribeVideo: boolean) {
-        this.autoSubscribeAudio = autoSubscribeAudio;
-        this.autoSubscribeVideo = autoSubscribeVideo;
+        this.autoSubscribeAudio = autoSubscribeAudio
+        this.autoSubscribeVideo = autoSubscribeVideo
+    }
+}
+
+/**
+ * Definition of `EncryptionConfig`.
+ *
+ * @since v3.1.2.
+ */
+export class EncryptionConfig {
+    /**
+     * Encryption mode. The default encryption mode is `AES128XTS`. See [`EncryptionMode`]{@link EncryptionMode}.
+     */
+    encryptionMode: EncryptionMode
+    /**
+     * Encryption key in string type.
+     *
+     * **Note**
+     *
+     * If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [`InvalidArgument(2)`]{@link ErrorCode.InvalidArgument}.
+     */
+    encryptionKey: string
+
+    constructor(encryptionMode: EncryptionMode, encryptionKey: string) {
+        this.encryptionMode = encryptionMode
+        this.encryptionKey = encryptionKey
     }
 }
 
 /**
  * Statistics of the call.
- *
  */
 export interface RtcStats {
     /**
@@ -853,6 +886,10 @@ export interface RtcStats {
     rxVideoKBitRate: number
     /**
      * The number of users in the channel.
+     * - `COMMUNICATION` profile: The number of users in the channel.
+     * - `LiveBroadcasting` profile:
+     *  - If the local user is an audience member: The number of users in the channel = The number of hosts in the channel + 1.
+     *  - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
      */
     users: number
     /**
@@ -877,25 +914,39 @@ export interface RtcStats {
     cpuAppUsage: number
     /**
      * The round-trip time delay from the client to the local router.
+     *
+     * **Note**
+     * (iOS only) Since v3.1.2, this parameter is disabled by default. See [FAQ](https://docs.agora.io/en/faq/local_network_privacy) for details. If you need to enable this parameter, contact support@agora.io.
      */
     gatewayRtt: number
     /**
      * The memory usage ratio of the app (%).
+     *
+     * **Note**
+     *
+     * This value is for reference only. Due to system limitations, you may not get the value of this member.
      */
     memoryAppUsageRatio: number
     /**
      * The memory usage ratio of the system (%).
+     *
+     * **Note**
+     *
+     * This value is for reference only. Due to system limitations, you may not get the value of this member.
      */
     memoryTotalUsageRatio: number
     /**
      * The memory usage of the app (KB).
+     *
+     * **Note**
+     *
+     * This value is for reference only. Due to system limitations, you may not get the value of this member.
      */
     memoryAppUsageInKbytes: number
 }
 
 /**
  * Properties of the audio volume information. An array containing the user ID and volume information for each speaker.
- *
  */
 export interface AudioVolumeInfo {
     /**
@@ -908,6 +959,12 @@ export interface AudioVolumeInfo {
     volume: number
     /**
      * Voice activity status of the local user.
+     * - 0: The local user is not speaking.
+     * - 1: The local user is speaking.
+     *
+     * **Note**
+     * - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
+     * - Ensure that you set `report_vad(true)` in the [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication} method to enable the voice activity detection of the local user.
      */
     vad: number
     /**
@@ -918,7 +975,6 @@ export interface AudioVolumeInfo {
 
 /**
  * The rectangular area.
- *
  */
 export interface Rect {
     /**
@@ -941,7 +997,6 @@ export interface Rect {
 
 /**
  * The one-way last-mile probe result.
- *
  */
 export interface LastmileProbeOneWayResult {
     /**
@@ -960,7 +1015,6 @@ export interface LastmileProbeOneWayResult {
 
 /**
  * Statistics of the lastmile probe.
- *
  */
 export interface LastmileProbeResult {
     /**
@@ -983,7 +1037,6 @@ export interface LastmileProbeResult {
 
 /**
  * Statistics of the local audio stream.
- *
  */
 export interface LocalAudioStats {
     /**
@@ -998,11 +1051,16 @@ export interface LocalAudioStats {
      * The average sending bitrate (Kbps).
      */
     sentBitrate: number
+    /**
+     * The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
+     *
+     * @since v3.1.2.
+     */
+    txPacketLossRate: number
 }
 
 /**
  * Statistics of the local video.
- *
  */
 export interface LocalVideoStats {
     /**
@@ -1053,11 +1111,22 @@ export interface LocalVideoStats {
      * The codec type of the local video.
      */
     codecType: VideoCodecType
+    /**
+     * The video packet loss rate (%) from the local client to the Agora edge server before applying the anti-packet loss strategies.
+     *
+     * @since v3.1.2.
+     */
+    txPacketLossRate: number,
+    /**
+     * The capture frame rate (fps) of the local video.
+     *
+     * @since v3.1.2.
+     */
+    captureFrameRate: number,
 }
 
 /**
  * Statistics of the remote audio.
- *
  */
 export interface RemoteAudioStats {
     /**
@@ -1104,11 +1173,17 @@ export interface RemoteAudioStats {
      * The total time (ms) when the remote user in the `Communication` profile or the remote broadcaster in the `LiveBroadcasting` profile neither stops sending the audio stream nor disables the audio module after joining the channel.
      */
     totalActiveTime: number
+    /**
+     * The total active time (ms) of the remote audio stream after the remote user publish the audio stream.
+     *
+     * @since v3.1.2.
+     *
+     */
+    publishDuration: number
 }
 
 /**
  * Statistics of the remote video.
- *
  */
 export interface RemoteVideoStats {
 
@@ -1154,21 +1229,30 @@ export interface RemoteVideoStats {
     rxStreamType: VideoStreamType
     /**
      * The total freeze time (ms) of the remote video stream after the remote user joins the channel.
+     *
+     * In a video session where the frame rate is set to no less than 5 fps, video freeze occurs when the time interval between two adjacent
+     * renderable video frames is more than 500 ms.
      */
     totalFrozenTime: number
     /**
-     * The total video freeze time as a percentage (%) of the total time when the video is available.
+     * The total video freeze time (`totalFrozenTime`) as a percentage (%) of the total active time of the remote video stream (`totalActiveTime`).
      */
     frozenRate: number
     /**
      * The total time (ms) when the remote user in the Communication profile or the remote broadcaster in the Live-broadcast profile neither stops sending the video stream nor disables the video module after joining the channel.
      */
     totalActiveTime: number
+    /**
+     * The total publish duration (ms) of the remote video stream.
+     *
+     * @since v3.1.2.
+     *
+     */
+    publishDuration: number
 }
 
 /**
  * The information of the detected human face.
- *
  */
 export interface FacePositionInfo {
     /**

@@ -1,33 +1,39 @@
 /**
- * IP areas
- *
+ * Regions for connection.
  */
-export enum IPAreaCode {
+export enum AreaCode {
     /**
      * Mainland China
      */
-    AREA_CN = 1 << 0,
+    CN = 0x00000001,
     /**
      * North America
      */
-    AREA_NA = 1 << 1,
+    NA = 0x00000002,
     /**
      * Europe
      */
-    AREA_EUR = 1 << 2,
+    EU = 0x00000004,
     /**
      * Asia, excluding Mainland China
      */
-    AREA_AS = 1 << 3,
+    AS = 0x00000008,
+    /**
+     * Japan
+     */
+    JP = 0x00000010,
+    /**
+     * India
+     */
+    IN = 0x00000020,
     /**
      * (Default) Global
      */
-    AREA_GLOBAL = -1,
+    GLOB = -1,
 }
 
 /**
  * Audio codec profile.
- *
  */
 export enum AudioCodecProfileType {
     /**
@@ -42,7 +48,6 @@ export enum AudioCodecProfileType {
 
 /**
  * Audio equalization band frequency.
- *
  */
 export enum AudioEqualizationBandFrequency {
     /**
@@ -89,7 +94,6 @@ export enum AudioEqualizationBandFrequency {
 
 /**
  * The error information of the local audio.
- *
  */
 export enum AudioLocalError {
     /**
@@ -120,7 +124,6 @@ export enum AudioLocalError {
 
 /**
  * The state of the local audio.
- *
  */
 export enum AudioLocalState {
     /**
@@ -143,7 +146,6 @@ export enum AudioLocalState {
 
 /**
  * The error code of the audio mixing file.
- *
  */
 export enum AudioMixingErrorCode {
     /**
@@ -166,7 +168,6 @@ export enum AudioMixingErrorCode {
 
 /**
  * The state of the audio mixing file.
- *
  */
 export enum AudioMixingStateCode {
     /**
@@ -189,7 +190,6 @@ export enum AudioMixingStateCode {
 
 /**
  * Audio output routing.
- *
  */
 export enum AudioOutputRouting {
     /**
@@ -224,13 +224,12 @@ export enum AudioOutputRouting {
 
 /**
  * Audio profile.
- *
  */
 export enum AudioProfile {
     /**
      * 0: Default audio profile.
-     * - In the Communication profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-     * - In the Live-broadcast profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
+     * - In the `Communication` profile: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
+     * - In the `LiveBroadcasting` profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 64 Kbps.
      */
     Default = 0,
     /**
@@ -238,41 +237,21 @@ export enum AudioProfile {
      */
     SpeechStandard = 1,
     /**
-     * 2: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 48 Kbps.
+     * 2: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 64 Kbps.
      */
     MusicStandard = 2,
     /**
-     * 3: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 56 Kbps.
+     * 3: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 80 Kbps.
      */
     MusicStandardStereo = 3,
     /**
-     * 4: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 128 Kbps.
+     * 4: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 96 Kbps.
      */
     MusicHighQuality = 4,
     /**
-     * 5: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
+     * 5: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 128 Kbps.
      */
     MusicHighQualityStereo = 5,
-}
-
-/**
- * Use mode of the onRecordAudioFrame callback.
- *
- * TODO setPlaybackAudioFrameParameters
- */
-export enum AudioRawFrameOperationMode {
-    /**
-     * 0: Users only read the AudioFrame data without modifying anything. For example, when users acquire data with the Agora SDK then push the RTMP streams.
-     */
-    ReadOnly = 0,
-    /**
-     * 1: Users replace the AudioFrame data with their own data and pass them to the SDK for encoding. For example, when users acquire data.
-     */
-    WriteOnly = 1,
-    /**
-     * 2: Users read the data from AudioFrame, modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing such as a voice change.
-     */
-    ReadWrite = 2,
 }
 
 /**
@@ -295,7 +274,6 @@ export enum AudioRecordingQuality {
 
 /**
  * The state of the remote audio.
- *
  */
 export enum AudioRemoteState {
     /**
@@ -330,7 +308,6 @@ export enum AudioRemoteState {
 
 /**
  * The reason of the remote audio state change.
- *
  */
 export enum AudioRemoteStateReason {
     /**
@@ -369,7 +346,6 @@ export enum AudioRemoteStateReason {
 
 /**
  * The preset local voice reverberation option.
- *
  */
 export enum AudioReverbPreset {
     /**
@@ -441,14 +417,12 @@ export enum AudioReverbPreset {
      * the monophonic audio as the stereo audio, so that all users in the channel can hear the stereo voice effect.
      * To achieve better virtual stereo reverberation, Agora recommends setting the profile
      * parameter in [`RtcEngine#setAudioProfile`]{@link RtcEngine#setAudioProfile} as [`MusicHighQualityStereo(5)`]{@link AudioProfile.MusicHighQualityStereo}.
-     *
      */
     VIRTUAL_STEREO = 0x00200001,
 }
 
 /**
  * Audio reverberation type.
- *
  */
 export enum AudioReverbType {
     /**
@@ -475,7 +449,6 @@ export enum AudioReverbType {
 
 /**
  * Audio sample rate.
- *
  */
 export enum AudioSampleRateType {
     /**
@@ -494,7 +467,6 @@ export enum AudioSampleRateType {
 
 /**
  * Audio scenario.
- *
  */
 export enum AudioScenario {
     /**
@@ -524,36 +496,7 @@ export enum AudioScenario {
 }
 
 /**
- * Audio session restriction.
- *
- * TODO iOS setAudioSessionOperationRestriction
- */
-export enum AudioSessionOperationRestriction {
-    /**
-     * 0: No restriction, the SDK has full control of the audio session operations.
-     */
-    None = 0,
-    /**
-     * 1: The SDK does not change the audio session category.
-     */
-    SetCategory = 1,
-    /**
-     * 1 << 1: The SDK does not change any setting of the audio session (category, mode, categoryOptions).
-     */
-    ConfigureSession = 1 << 1,
-    /**
-     * 1 << 2: The SDK keeps the audio session active when leaving a channel.
-     */
-    DeactivateSession = 1 << 2,
-    /**
-     * 1 << 7: The SDK does not configure the audio session anymore.
-     */
-    All = 1 << 7,
-}
-
-/**
  * The preset audio voice configuration used to change the voice effect.
- *
  */
 export enum AudioVoiceChanger {
     /**
@@ -636,7 +579,6 @@ export enum AudioVoiceChanger {
 
 /**
  * The camera capturer configuration.
- *
  */
 export enum CameraCaptureOutputPreference {
     /**
@@ -659,7 +601,6 @@ export enum CameraCaptureOutputPreference {
 
 /**
  * The camera direction.
- *
  */
 export enum CameraDirection {
     /**
@@ -674,7 +615,6 @@ export enum CameraDirection {
 
 /**
  * The error code in AgoraChannelMediaRelayError.
- *
  */
 export enum ChannelMediaRelayError {
     /**
@@ -712,7 +652,6 @@ export enum ChannelMediaRelayError {
     FailedPacketSentToDestination = 7,
     /**
      * 8: The SDK disconnects from the server due to poor network connections. You can call [`leaveChannel`]{@link RtcEngine.leaveChannel} to leave the channel.
-     *
      */
     ServerConnectionLost = 8,
     /**
@@ -731,7 +670,6 @@ export enum ChannelMediaRelayError {
 
 /**
  * The event code in `ChannelMediaRelayEvent`.
- *
  */
 export enum ChannelMediaRelayEvent {
     /**
@@ -786,7 +724,6 @@ export enum ChannelMediaRelayEvent {
 
 /**
  * The state code in [`ChannelMediaRelayState`]{@link ChannelMediaRelayState}.
- *
  */
 export enum ChannelMediaRelayState {
     /**
@@ -809,7 +746,6 @@ export enum ChannelMediaRelayState {
 
 /**
  * Channel profile.
- *
  */
 export enum ChannelProfile {
     /**
@@ -831,7 +767,6 @@ export enum ChannelProfile {
 
 /**
  * Client role in the `LiveBroadcasting` profile.
- *
  */
 export enum ClientRole {
     /**
@@ -846,7 +781,6 @@ export enum ClientRole {
 
 /**
  * Reasons for the connection state change.
- *
  */
 export enum ConnectionChangedReason {
     /**
@@ -885,7 +819,6 @@ export enum ConnectionChangedReason {
      * 8: The generated token is invalid probably due to the following reasons:
      * - The App Certificate for the project is enabled in Console, but you do not use Token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
      * - The uid that you specify in the [`joinChannel`]{@link RtcEngine.joinChannel} method is different from the uid that you pass for generating the token.
-     *
      */
     InvalidToken = 8,
     /**
@@ -917,14 +850,12 @@ export enum ConnectionChangedReason {
 
 /**
  * Connection states.
- *
  */
 export enum ConnectionStateType {
     /**
      * 1: The SDK is disconnected from Agora's edge server.
      * - This is the initial state before [`joinChannel`]{@link RtcEngine.joinChannel}.
      * - The SDK also enters this state when the app calls [`leaveChannel`]{@link RtcEngine.leaveChannel}.
-     *
      */
     Disconnected = 1,
     /**
@@ -932,14 +863,12 @@ export enum ConnectionStateType {
      * - When the app calls [`joinChannel`]{@link RtcEngine.joinChannel}, the SDK starts to establish a connection to the specified channel, triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback, and switches to the [`Connecting`]{@link ConnectionStateType.Connecting} state.
      * - When the SDK successfully joins the channel, the SDK triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback and switches to the [`Connected`]{@link ConnectionStateType.Connected} state.
      * - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} callback.
-     *
      */
     Connecting = 2,
     /**
      * 3: The SDK is connected to Agora's edge server and joins a channel. You can now publish or subscribe to a media stream in the channel.
      * If the connection to the channel is lost because, for example, the network is down or switched, the SDK automatically tries to reconnect and triggers:
      * - The [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback, and switches to the [`Reconnecting`]{@link ConnectionStateType.Reconnecting} state.
-     *
      */
     Connected = 3,
     /**
@@ -948,7 +877,6 @@ export enum ConnectionStateType {
      *
      * - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora’s edge server, the SDK triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback, switches to the [`Failed`]{@link ConnectionStateType.Failed} state, and stops rejoining the channel.
      * [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}
-     *
      */
     Reconnecting = 4,
     /**
@@ -956,14 +884,12 @@ export enum ConnectionStateType {
      * You must call [`leaveChannel`]{@link RtcEngine.leaveChannel} to leave this state, and call [`joinChannel`]{@link RtcEngine.joinChannel} again to rejoin the channel.
      *
      * If the SDK is banned from joining the channel by Agora’s edge server (through the RESTful API), the SDK triggers the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callbacks.
-     *
      */
     Failed = 5,
 }
 
 /**
  * The video encoding degradation preference under limited bandwidth.
- *
  */
 export enum DegradationPreference {
     /**
@@ -982,26 +908,35 @@ export enum DegradationPreference {
 
 /**
  * Encryption mode.
- *
  */
 export enum EncryptionMode {
     /**
-     * (Default) 128-bit AES encryption, XTS mode.
+     * @deprecated
+     * 0: This mode is deprecated.
      */
-    AES128XTS = 'aes-128-xts',
+    None = 0,
     /**
-     * 256-bit AES encryption, XTS mode.
+     * 1: (Default) 128-bit AES encryption, XTS mode.
      */
-    AES256XTS = 'aes-256-xts',
+    AES128XTS = 1,
     /**
-     * 128-bit AES encryption, ECB mode.
+     * 2: 128-bit AES encryption, ECB mode.
      */
-    AES128ECB = 'aes-128-ecb',
+    AES128ECB = 2,
+    /**
+     * 3: 256-bit AES encryption, XTS mode.
+     */
+    AES256XTS = 3,
+    /**
+     * 4: 128-bit SM4 encryption, ECB mode.
+     *
+     * @since v3.1.2.
+     */
+    SM4128ECB = 4,
 }
 
 /**
  * Error codes occur when the SDK encounters an error that cannot be recovered automatically without any app intervention.
- *
  */
 export enum ErrorCode {
     /**
@@ -1107,23 +1042,27 @@ export enum ErrorCode {
      */
     InvalidChannelId = 102,
     /**
+     * 103: Fails to get server resources in the specified region. Please try to specify another region.
+     *
+     * @since v3.1.2.
+     */
+    NoServerResources = 103,
+    /**
      * 109: The token expired.
-     * @deprecated Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * @deprecated Use [`TokenExpired`]{@link ConnectionChangedReason.TokenExpired} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}.
      *
      * Possible reasons are:
      * - Authorized Timestamp expired: The timestamp is represented by the number of seconds elapsed since 1/1/1970. The user can use the token to access the Agora service within five minutes after the token is generated. If the user does not access the Agora service after five minutes, this token is no longer valid.
      * - Call Expiration Timestamp expired: The timestamp is the exact time when a user can no longer use the Agora service (for example, when a user is forced to leave an ongoing call). When a value is set for the Call Expiration Timestamp, it does not mean that the token will expire, but that the user will be banned from the channel.
-     *
      */
     TokenExpired = 109,
     /**
      * 110: The token is invalid.
-     * @deprecated Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.onConnectionStateChanged}.
+     * @deprecated Use [`InvalidToken`]{@link ConnectionChangedReason.InvalidToken} in the reason parameter of [`onConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}.
      *
      * Possible reasons are:
      * - The App Certificate for the project is enabled in Console, but the user is using the App ID. Once the App Certificate is enabled, the user must use a token.
      * - The uid is mandatory, and users must set the same uid as the one set in the [`joinChannel`]{@link RtcEngine.joinChannel} method.
-     *
      */
     InvalidToken = 110,
     /**
@@ -1140,7 +1079,6 @@ export enum ErrorCode {
     NotInChannel = 113,
     /**
      * 114: The size of the sent data is over 1024 bytes when the user calls the [`sendStreamMessage`]{@link RtcEngine.sendStreamMessage} method.
-     *
      */
     SizeTooLarge = 114,
     /**
@@ -1227,7 +1165,6 @@ export enum ErrorCode {
      * 1003: Fails to start the camera.
      *
      * @deprecated Use [`CaptureFailure`]{@link LocalVideoStreamError.CaptureFailure} in the error parameter of [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged}.
-     *
      */
     StartCamera = 1003,
     /**
@@ -1283,11 +1220,11 @@ export enum ErrorCode {
      */
     AdmRecordAudioFailed = 1018,
     /**
-     * 1020: Audio Device Module: Abnormal audio playback frequency.
+     * 1020: Audio device module: The audio playback frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
      */
     AdmPlayAbnormalFrequency = 1020,
     /**
-     * 1021: Audio Device Module: Abnormal audio recording frequency.
+     * 1021: Audio device module: The audio recording frequency is abnormal, which may cause audio freezes. This abnormality is caused by high CPU usage. Agora recommends stopping other apps.
      */
     AdmRecordAbnormalFrequency = 1021,
     /**
@@ -1341,7 +1278,6 @@ export enum ErrorCode {
 
 /**
  * State of importing an external video stream in a live broadcast.
- *
  */
 export enum InjectStreamStatus {
     /**
@@ -1392,7 +1328,6 @@ export enum InjectStreamStatus {
 
 /**
  * The state of the probe test result.
- *
  */
 export enum LastmileProbeResultState {
     /**
@@ -1411,7 +1346,6 @@ export enum LastmileProbeResultState {
 
 /**
  * The lightening contrast level.
- *
  */
 export enum LighteningContrastLevel {
     /**
@@ -1430,7 +1364,6 @@ export enum LighteningContrastLevel {
 
 /**
  * The detailed error information of the local video.
- *
  */
 export enum LocalVideoStreamError {
     /**
@@ -1461,7 +1394,6 @@ export enum LocalVideoStreamError {
 
 /**
  * The state of the local video stream.
- *
  */
 export enum LocalVideoStreamState {
     /**
@@ -1484,7 +1416,6 @@ export enum LocalVideoStreamState {
 
 /**
  * Output log filter level.
- *
  */
 export enum LogFilter {
     /**
@@ -1514,76 +1445,7 @@ export enum LogFilter {
 }
 
 /**
- * Media device type.
- *
- * TODO MacOS AgoraMediaDeviceType
- */
-export enum MediaDeviceType {
-    /**
-     * -1: Unknown device.
-     */
-    AudioUnknown = -1,
-    /**
-     * 0: Audio playback device.
-     */
-    AudioPlayout = 0,
-    /**
-     * 1: Audio recording device.
-     */
-    AudioRecording = 1,
-    /**
-     * 2: Video render device.
-     */
-    VideoRender = 2,
-    /**
-     * 3: Video capture device.
-     */
-    VideoCapture = 3,
-}
-
-/**
- * Media type.
- *
- * TODO LiveEngine
- */
-export enum MediaType {
-    /**
-     * 0: No audio and video.
-     */
-    None = 0,
-    /**
-     * 1: Audio only.
-     */
-    AudioOnly = 1,
-    /**
-     * 2: Video only.
-     */
-    VideoOnly = 2,
-    /**
-     * 3: Audio and video.
-     */
-    AudioAndVideo = 3,
-}
-
-/**
- * The metadata type.
- *
- * TODO registerMediaMetadataObserver
- */
-export enum MetadataType {
-    /**
-     * -1: The metadata type is unknown.
-     */
-    Unknown = -1,
-    /**
-     * 0: The metadata type is video.
-     */
-    Video = 0,
-}
-
-/**
  * Network quality.
- *
  */
 export enum NetworkQuality {
     /**
@@ -1626,7 +1488,6 @@ export enum NetworkQuality {
 
 /**
  * Network type.
- *
  */
 export enum NetworkType {
     /**
@@ -1660,40 +1521,7 @@ export enum NetworkType {
 }
 
 /**
- * Default camera position
- *
- * TODO AgoraRtcDefaultCamera
- */
-export enum RtcDefaultCameraPosition {
-    /**
-     * 0: Front camera
-     */
-    Front = 0,
-    /**
-     * 1: Rear camera
-     */
-    Back = 1,
-}
-
-/**
- * Lifecycle of the CDN live video stream.
- *
- * TODO AgoraPublisherConfiguration
- */
-export enum RtmpStreamLifeCycle {
-    /**
-     * 1: Bound to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
-     */
-    BindToChannel = 1,
-    /**
-     * 2: Bound to the owner of the RTMP stream. If the owner leaves the channel, the CDN live streaming stops immediately.
-     */
-    BindToOwnner = 2,
-}
-
-/**
  * The detailed error information for streaming.
- *
  */
 export enum RtmpStreamingErrorCode {
     /**
@@ -1746,19 +1574,16 @@ export enum RtmpStreamingErrorCode {
 
 /**
  * The RTMP streaming state.
- *
  */
 export enum RtmpStreamingState {
     /**
      * 0: The RTMP streaming has not started or has ended. This state is also triggered after you
      * remove an RTMP address from the CDN by calling [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
-     *
      */
     Idle = 0,
     /**
      * 1: The SDK is connecting to Agora’s streaming server and the RTMP server.
      * This state is triggered after you call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method.
-     *
      */
     Connecting = 1,
     /**
@@ -1774,20 +1599,17 @@ export enum RtmpStreamingState {
      * [`Failure`]{@link RtmpStreamingState.Failure} returns.
      *
      * You can also reconnect to the server by calling the [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl} and [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} methods.
-     *
      */
     Recovering = 3,
     /**
      * 4: The RTMP streaming fails. See the errorCode parameter for the detailed error information.
      * You can also call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the RTMP streaming again.
-     *
      */
     Failure = 4,
 }
 
 /**
  * Stream fallback option.
- *
  */
 export enum StreamFallbackOptions {
     /**
@@ -1799,7 +1621,6 @@ export enum StreamFallbackOptions {
      * low-stream (low resolution and low bitrate) video. You can only set this option
      * in the [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} method.
      * Nothing happens when you set this in the [`setLocalPublishFallbackOption`]{@link RtcEngine.setLocalPublishFallbackOption} method.
-     *
      */
     VideoStreamLow = 1,
     /**
@@ -1810,7 +1631,6 @@ export enum StreamFallbackOptions {
 
 /**
  * Reason for the user being offline.
- *
  */
 export enum UserOfflineReason {
     /**
@@ -1829,7 +1649,6 @@ export enum UserOfflineReason {
 
 /**
  * The priority of the remote user.
- *
  */
 export enum UserPriority {
     /**
@@ -1843,24 +1662,7 @@ export enum UserPriority {
 }
 
 /**
- * Video buffer type
- *
- * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
- */
-export enum VideoBufferType {
-    /**
-     * 1: Use a pixel buffer to transmit the video data.
-     */
-    PixelBuffer = 1,
-    /**
-     * 2: Use raw data to transmit the video data.
-     */
-    RawData = 2,
-}
-
-/**
  * Self-defined video codec profile.
- *
  */
 export enum VideoCodecProfileType {
     /**
@@ -1878,29 +1680,7 @@ export enum VideoCodecProfileType {
 }
 
 /**
- * The content hint for screen sharing.
- *
- * TODO MacOS setScreenCaptureContentHint
- *
- */
-export enum VideoContentHint {
-    /**
-     * 0: (Default) No content hint.
-     */
-    None = 0,
-    /**
-     * 1: Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
-     */
-    Motion = 1,
-    /**
-     * 2: Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slide, or text.
-     */
-    Details = 2,
-}
-
-/**
- * Video frame rate
- *
+ * Video frame rate.
  */
 export enum VideoFrameRate {
     /**
@@ -2104,7 +1884,6 @@ export enum VideoFrameRate {
  * Agora uses different video codecs for different profiles to optimize the user experience. For example,
  * the Communication profile prioritizes the smoothness while the LIVE_BROADCASTING profile prioritizes the
  * video quality (a higher bitrate). Therefore, We recommend setting this parameter as STANDARD_BITRATE = 0.
- *
  */
 export enum BitRate {
     /**
@@ -2122,7 +1901,6 @@ export enum BitRate {
 
 /**
  * Video mirror mode.
- *
  */
 export enum VideoMirrorMode {
     /**
@@ -2141,7 +1919,6 @@ export enum VideoMirrorMode {
 
 /**
  * Video output orientation mode.
- *
  */
 export enum VideoOutputOrientationMode {
     /**
@@ -2167,29 +1944,7 @@ export enum VideoOutputOrientationMode {
 }
 
 /**
- * Video pixel format.
- *
- * TODO iOS AgoraVideoSinkProtocol
- *
- */
-export enum VideoPixelFormat {
-    /**
-     * 1: I420
-     */
-    I420 = 1,
-    /**
-     * 2: BGRA
-     */
-    BGRA = 2,
-    /**
-     * 8: NV12
-     */
-    NV12 = 8,
-}
-
-/**
  * Quality change of the local video in terms of target frame rate and target bit rate since last count.
- *
  */
 export enum VideoQualityAdaptIndication {
     /**
@@ -2208,7 +1963,6 @@ export enum VideoQualityAdaptIndication {
 
 /**
  * The state of the remote video.
- *
  */
 export enum VideoRemoteState {
     /**
@@ -2244,7 +1998,6 @@ export enum VideoRemoteState {
 
 /**
  * The reason of the remote video state change.
- *
  */
 export enum VideoRemoteStateReason {
     /**
@@ -2291,7 +2044,6 @@ export enum VideoRemoteStateReason {
 
 /**
  * Video display mode.
- *
  */
 export enum VideoRenderMode {
     /**
@@ -2305,7 +2057,6 @@ export enum VideoRenderMode {
     /**
      * @deprecated
      * 3: This mode is deprecated.
-     *
      */
     Adaptive = 3,
     /**
@@ -2315,32 +2066,7 @@ export enum VideoRenderMode {
 }
 
 /**
- * Video rotation.
- *
- * TODO iOS AgoraVideoSourceProtocol AgoraVideoSinkProtocol
- */
-export enum VideoRotation {
-    /**
-     * 0: No rotation
-     */
-    RotationNone = 0,
-    /**
-     * 1: 90 degrees
-     */
-    Rotation90 = 1,
-    /**
-     * 2: 180 degrees
-     */
-    Rotation180 = 2,
-    /**
-     * 3: 270 degrees
-     */
-    Rotation270 = 3,
-}
-
-/**
  * Video stream type.
- *
  */
 export enum VideoStreamType {
     /**
@@ -2357,7 +2083,6 @@ export enum VideoStreamType {
  * Warning codes occur when the SDK encounters an error that may be recovered automatically.
  * These are only notifications, and can generally be ignored. For example, when the SDK loses connection to the server,
  * the SDK reports the [`OpenChannelTimeout(106)`]{@link WarningCode.OpenChannelTimeout} warning and tries to reconnect automatically.
- *
  */
 export enum WarningCode {
     /**
@@ -2387,7 +2112,6 @@ export enum WarningCode {
      *
      * Use [`RejectedByServer(10)`]{@link ConnectionChangedReason.RejectedByServer} in the reason parameter
      * of [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged}.
-     *
      */
     LookupChannelRejected = 105,
     /**
@@ -2448,6 +2172,12 @@ export enum WarningCode {
      */
     AdmInterruption = 1025,
     /**
+     * 1029: During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
+     *
+     * @since v3.1.2.
+     */
+    AdmCategoryNotPlayAndRecord = 1029,
+    /**
      * 1031: Audio Device Module: the recorded audio is too low.
      */
     AdmRecordAudioLowlevel = 1031,
@@ -2460,6 +2190,21 @@ export enum WarningCode {
      */
     AdmRecordIsOccupied = 1033,
     /**
+     * 1040: Audio device module: An error occurs in the audio driver. Solutions:
+     * - Restart your audio device.
+     * - Restart your device where the app runs.
+     * - Upgrade the sound card drive.
+     *
+     * @since v3.1.2.
+     */
+    AdmNoDataReadyCallback = 1040,
+    /**
+     * 1042: Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
+     *
+     * @since v3.1.2.
+     */
+    AdmInconsistentDevices = 1042,
+    /**
      * 1051: Audio Device Module: howling is detected.
      */
     ApmHowling = 1051,
@@ -2468,14 +2213,13 @@ export enum WarningCode {
      */
     AdmGlitchState = 1052,
     /**
-     * 1053: Audio Device Module: the underlying audio settings have changed.
+     * 1053: Audio processing module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
      */
-    AdmImproperSettings = 1053,
+    ApmResidualEcho = 1053,
 }
 
 /**
  * The audio channel of the sound.
- *
  */
 export enum AudioChannel {
     /**
@@ -2506,7 +2250,6 @@ export enum AudioChannel {
 
 /**
  * Video codec types.
- *
  */
 export enum VideoCodecType {
     /**
@@ -2525,4 +2268,74 @@ export enum VideoCodecType {
      * 4: Enhanced H264.
      */
     E264 = 4,
+}
+
+/**
+ * The publishing state.
+ *
+ * @since v3.1.2.
+ */
+export enum StreamPublishState {
+    /**
+     * 0: The initial publishing state after joining the channel.
+     */
+    Idle = 0,
+    /**
+     * 1: Fails to publish the local stream. Possible reasons:
+     * - The local user calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} to stop sending local streams.
+     * - The local user calls [`disableAudio`]{@link RtcEngine.disableAudio} or [`disableVideo`]{@link RtcEngine.disableVideo} to disable the entire audio or video module.
+     * - The local user calls [`enableLocalAudio(false)`]{@link RtcEngine.enableLocalAudio} or [`enableLocalVideo(false)`]{@link enableLocalVideo} to disable the local audio sampling or video capturing.
+     * - The role of the local user is `Audience`.
+     */
+    NoPublished = 1,
+    /**
+     * 2: Publishing.
+     */
+    Publishing = 2,
+    /**
+     * 3: Publishes successfully.
+     */
+    Published = 3,
+}
+
+/**
+ * The subscribing state.
+ *
+ * @since v3.1.2.
+ */
+export enum StreamSubscribeState {
+    /**
+     * 0: The initial subscribing state after joining the channel.
+     */
+    Idle = 0,
+    /**
+     * 1: Fails to subscribe to the remote stream. Possible reasons:
+     * - The remote user:
+     *   - Calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} to stop sending local streams.
+     *   - The local user calls [`disableAudio`]{@link RtcEngine.disableAudio} or [`disableVideo`]{@link RtcEngine.disableVideo} to disable the entire audio or video module.
+     *   - The local user calls [`enableLocalAudio(false)`]{@link RtcEngine.enableLocalAudio} or [`enableLocalVideo(false)`]{@link enableLocalVideo} to disable the local audio sampling or video capturing.
+     *   - The role of the local user is `Audience`.
+     * - The local user calls the following methods to stop receiving remote streams:
+     *   - Calls [`muteRemoteAudioStream(true)`]{@link RtcEngine.muteRemoteAudioStream}, [`muteAllRemoteAudioStreams(true)`]{@link RtcEngine.muteAllRemoteAudioStreams}, or [`setDefaultMuteAllRemoteAudioStreams(true)`]{@link RtcEngine.setDefaultMuteAllRemoteAudioStreams} to stop receiving remote audio streams.
+     *   - Calls [`muteRemoteVideoStream(true)`]{@link RtcEngine.muteRemoteVideoStream}, [`muteAllRemoteVideoStreams(true)`]{@link RtcEngine.muteAllRemoteVideoStreams}, or [`setDefaultMuteAllRemoteVideoStreams(true)`]{@link RtcEngine.setDefaultMuteAllRemoteVideoStreams} to stop receiving remote video streams.
+     */
+    NoSubscribed = 1,
+    /**
+     * 2: Subscribing.
+     */
+    Subscribing = 2,
+    /**
+     * 3: Subscribes to and receives the remote stream successfully.
+     */
+    Subscribed = 3,
+}
+
+/**
+ * Events during the RTMP streaming.
+ */
+export enum RtmpStreamingEvent {
+    /**
+     * 1: An error occurs when you add a background image or a watermark image to the RTMP stream.
+     */
+    FailedLoadImage = 1,
 }
