@@ -2331,11 +2331,11 @@ export enum StreamSubscribeState {
 }
 
 /**
- * TODO(doc)
+ * Events during the RTMP streaming.
  */
 export enum RtmpStreamingEvent {
     /**
-     * TODO(doc)
+     * 1: An error occurs when you add a background image or a watermark image to the RTMP stream.
      */
     FailedLoadImage = 1,
 }
