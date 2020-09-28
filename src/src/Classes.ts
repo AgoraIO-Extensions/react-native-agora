@@ -80,9 +80,10 @@ export class VideoEncoderConfiguration {
      *
      * **Note**
      * <ul>
-     *     <li>The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [`VideoOutputOrientationMode`]{@link VideoOutputOrientationMode}.</li>
-     *     <li>Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
+     *    <li> The value of the dimension does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [<code>VideoOutputOrientationMode</code>]{@link VideoOutputOrientationMode}.</li>
+     *    <li> Whether 720p+ can be supported depends on the device. If the device cannot support 720p, the frame rate will be lower than the one listed in the table.</li>
      * </ul>
+     *
      */
     dimensions?: VideoDimensions
     /**
