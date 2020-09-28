@@ -99,7 +99,7 @@ export default class RtcEngine implements RtcEngineInterface {
      * call `create` to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      * @returns
      * - The `RtcEngine` instance, if the method call succeeds.
-     * - < 0, if the method call fails.
+     * - The error code, if the method call fails.
      */
     static async create(appId: string): Promise<RtcEngine> {
         return RtcEngine.createWithAreaCode(appId, AreaCode.GLOB)
@@ -125,7 +125,7 @@ export default class RtcEngine implements RtcEngineInterface {
      *
      * @returns
      * - The `RtcEngine` instance, if the method call succeeds.
-     * - < 0, if the method call fails.
+     * - The error code, if the method call fails.
      */
     static async createWithAreaCode(appId: string, areaCode: AreaCode): Promise<RtcEngine> {
         if (engine) return engine
