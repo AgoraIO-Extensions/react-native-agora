@@ -35,9 +35,14 @@ class RCTAgoraRtcTextureViewManager : SimpleViewManager<RtcTextureView>() {
         getEngine()?.let { view.setData(it, channel, data.getInt("uid")) }
     }
 
-    @ReactProp(name = "mirror")
-    fun setMirror(view: RtcTextureView, mirror: Boolean) {
-        getEngine()?.let { view.setMirror(it, mirror) }
+    @ReactProp(name = "renderMode")
+    fun setRenderMode(view: RtcTextureView, renderMode: Int) {
+        getEngine()?.let { view.setRenderMode(it, renderMode) }
+    }
+
+    @ReactProp(name = "mirrorMode")
+    fun setMirrorMode(view: RtcTextureView, mirrorMode: Int) {
+        getEngine()?.let { view.setMirrorMode(it, mirrorMode) }
     }
 
     private fun getEngine(): RtcEngine? {
