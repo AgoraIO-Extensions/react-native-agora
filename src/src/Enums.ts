@@ -2329,3 +2329,13 @@ export enum StreamSubscribeState {
      */
     Subscribed = 3,
 }
+
+/**
+ * TODO(doc)
+ */
+export enum RtmpStreamingEvent {
+    /**
+     * TODO(doc)
+     */
+    FailedLoadImage = 1,
+}
