@@ -1,6 +1,7 @@
-import {NativeEventEmitter, NativeModules} from "react-native";
+import {NativeEventEmitter, NativeModules} from "react-native"
 
 import {
+    AreaCode,
     AudioEqualizationBandFrequency,
     AudioProfile,
     AudioRecordingQuality,
@@ -15,8 +16,8 @@ import {
     ChannelProfile,
     ClientRole,
     ConnectionStateType,
+    EncryptionConfig,
     EncryptionMode,
-    IPAreaCode,
     LastmileProbeConfig,
     LiveInjectStreamConfig,
     LiveTranscoding,
@@ -27,9 +28,9 @@ import {
     VideoEncoderConfiguration,
     VideoStreamType,
     WatermarkOptions
-} from "../Types";
-import {Listener, RtcEngineEvents, Subscription} from "./RtcEvents";
-import RtcChannel from "./RtcChannel.native";
+} from "../Types"
+import {Listener, RtcEngineEvents, Subscription} from "./RtcEvents"
+import RtcChannel from "./RtcChannel.native"
 
 /**
  * @ignore
@@ -41,35 +42,32 @@ const {
      * @ignore
      */
     AgoraRtcEngineModule
-} = NativeModules;
+} = NativeModules
 /**
  * @ignore
  */
-const Prefix = AgoraRtcEngineModule.prefix;
+const Prefix = AgoraRtcEngineModule.prefix
 /**
  * @ignore
  */
-const RtcEngineEvent = new NativeEventEmitter(AgoraRtcEngineModule);
+const RtcEngineEvent = new NativeEventEmitter(AgoraRtcEngineModule)
 
 /**
  * @ignore
  */
-let engine: RtcEngine | undefined;
+let engine: RtcEngine | undefined
 
 /**
- * [`RtcEngine`]{@link RtcEngine} is the main class of the Agora SDK.
+ * [`RtcEngine`]{@link RtcEngine} is the main class of the Agora SDK.
  */
-export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
-    RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
-    RtcMediaRelayInterface, RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface,
-    RtcFallbackInterface, RtcTestInterface, RtcMediaMetadataInterface, RtcWatermarkInterface, RtcEncryptionInterface,
-    RtcAudioRecorderInterface, RtcInjectStreamInterface, RtcCameraInterface, RtcStreamMessageInterface {
+export default class RtcEngine implements RtcEngineInterface {
     /**
      * @ignore
      */
-    private _listeners = new Map<string, Map<Listener, Listener>>();
+    private _listeners = new Map<string, Map<Listener, Listener>>()
+
     /**
-     * Gets a created [`RtcEngine`]{@link RtcEngine} instance.
+     * Gets a created [`RtcEngine`]{@link RtcEngine} instance.
      *
      * **Note**
      *
@@ -77,86 +75,85 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @returns
      * - The `RtcEngine` instance, if the method call succeeds.
      * - Returns an error when it fails to get an `RtcEngine`.
-     *
      */
     static instance(): RtcEngine {
         if (engine) {
-            return engine as RtcEngine;
+            return engine as RtcEngine
         } else {
             throw new Error('please create RtcEngine first')
         }
     }
 
     /**
-     * Creates an [`RtcEngine`]{@link RtcEngine} instance.
+     * Creates an [`RtcEngine`]{@link RtcEngine} instance.
      *
-     * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
+     * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
      *
      * **Note**
-     * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
-     * - You can create an [`RtcEngine`]{@link RtcEngine} instance either by calling this method or by calling [`createWithAreaCode`]{@link createWithAreaCode}. The difference between [`createWithAreaCode`]{@link createWithAreaCode} and this method is that [`createWithAreaCode`]{@link createWithAreaCode} enables you to specify the connection area.
-     * - The Agora React Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app.
+     * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
+     * - You can create an [`RtcEngine`]{@link RtcEngine} instance either by calling this method or by calling [`createWithAreaCode`]{@link createWithAreaCode}. The difference between [`createWithAreaCode`]{@link createWithAreaCode} and this method is that [`createWithAreaCode`]{@link createWithAreaCode} enables you to specify the connection area.
+     * - The Agora React Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app.
      * @param appId The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
      * Only users in apps with the same App ID can join the same channel and communicate with each other.
-     * Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance. To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance, and after [`destroy`]{@link destroy} returns `0`,
-     * call `create` to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
+     * Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance. To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance, and after [`destroy`]{@link destroy} returns `0`,
+     * call `create` to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      * @returns
      * - The `RtcEngine` instance, if the method call succeeds.
-     * - < 0, if the method call fails.
+     * - The error code, if the method call fails.
      */
     static async create(appId: string): Promise<RtcEngine> {
-        return RtcEngine.createWithAreaCode(appId, IPAreaCode.AREA_GLOBAL)
+        return RtcEngine.createWithAreaCode(appId, AreaCode.GLOB)
     }
 
     /**
-     * Creates an [`RtcEngine`]{@link RtcEngine} instance.
+     * Creates an [`RtcEngine`]{@link RtcEngine} instance.
      *
-     * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
+     * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
      *
      * **Note**
      *
-     * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
-     * - You can create an [`RtcEngine`]{@link RtcEngine} instance either by calling this method or by calling [`create`]{@link create}. The difference between [`create`]{@link create} and this method is that this method enables you to specify the connection area.
-     * - The Agora React Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app.
+     * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
+     * - You can create an [`RtcEngine`]{@link RtcEngine} instance either by calling this method or by calling [`create`]{@link create}. The difference between [`create`]{@link create} and this method is that this method enables you to specify the connection area.
+     * - The Agora React Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app.
      * @param appId The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
-     * Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance.
-     * To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance and after [`destroy`]{@link destroy} returns `0`, call [`create`]{@link create} to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
+     * Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [`RtcEngine`]{@link RtcEngine} instance.
+     * To change your App ID, call [`destroy`]{@link destroy} to destroy the current [`RtcEngine`]{@link RtcEngine} instance and after [`destroy`]{@link destroy} returns `0`, call [`create`]{@link create} to create an [`RtcEngine`]{@link RtcEngine} instance with the new App ID.
      * @param areaCode The area of connection. This advanced feature applies to scenarios that have regional restrictions.
-     * You can use the bitwise OR operator (|) to specify multiple areas. For details, see {@link IPAreaCode}.
+     * For details, see {@link AreaCode}.
      *
      * After specifying the region, the app that integrates the Agora SDK connects to the Agora servers within that region.
      *
      * @returns
      * - The `RtcEngine` instance, if the method call succeeds.
-     * - < 0, if the method call fails.
+     * - The error code, if the method call fails.
      */
-    static async createWithAreaCode(appId: string, areaCode: IPAreaCode): Promise<RtcEngine> {
-        if (engine) return engine;
-        await AgoraRtcEngineModule.create(appId, areaCode);
-        engine = new RtcEngine();
+    static async createWithAreaCode(appId: string, areaCode: AreaCode): Promise<RtcEngine> {
+        if (engine) return engine
+        await AgoraRtcEngineModule.callMethod('create', {appId, areaCode, appType: 8})
+        engine = new RtcEngine()
         return engine
     }
 
     /**
-     * Destroys the [`RtcEngine`]{@link RtcEngine} instance and releases all resources used by the Agora SDK.
+     * Destroys the [`RtcEngine`]{@link RtcEngine} instance and releases all resources used by the Agora SDK.
      *
      * Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations.
-     * Once you call this method to destroy the created [`RtcEngine`]{@link RtcEngine} instance, you cannot use any method or callback in the SDK any more.
-     * If you want to use the real-time communication functions again, you must call `create` to create a new [`RtcEngine`]{@link RtcEngine} instance.
+     * Once you call this method to destroy the created [`RtcEngine`]{@link RtcEngine} instance, you cannot use any method or callback in the SDK any more.
+     * If you want to use the real-time communication functions again, you must call `create` to create a new [`RtcEngine`]{@link RtcEngine} instance.
      *
      * **Note**
      *
      * - Because [`destroy`]{@link destroy} is a synchronous method and the app cannot move on to another task until the execution completes,
      * Agora suggests calling this method in a sub-thread to avoid congestion in the main thread.
      * Besides, you cannot call [`destroy`]{@link destroy} in any method or callback of the SDK.
-     * Otherwise, the SDK cannot release the resources occupied by the [`RtcEngine`]{@link RtcEngine} instance until the callbacks return results, which may result in a deadlock.
-     * - If you want to create a new [`RtcEngine`]{@link RtcEngine} instance after destroying the current one, ensure that you wait till the [`destroy`]{@link destroy} method completes executing.
+     * Otherwise, the SDK cannot release the resources occupied by the [`RtcEngine`]{@link RtcEngine} instance until the callbacks return results, which may result in a deadlock.
+     * - If you want to create a new [`RtcEngine`]{@link RtcEngine} instance after destroying the current one, ensure that you wait till the [`destroy`]{@link destroy} method completes executing.
      */
     destroy(): Promise<void> {
-        RtcChannel.destroyAll();
-        this.removeAllListeners();
-        engine = undefined;
-        return AgoraRtcEngineModule.destroy()
+        RtcChannel.destroyAll()
+        this.removeAllListeners()
+        engine = undefined
+        return AgoraRtcEngineModule.callMethod('destroy', null)
     }
 
     /**
@@ -168,19 +165,19 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      */
     addListener<EventType extends keyof RtcEngineEvents>(event: EventType, listener: RtcEngineEvents[EventType]): Subscription {
         const callback = (res: any) => {
-            const {channelId, data} = res;
+            const {channelId, data} = res
             if (channelId === undefined) {
                 // @ts-ignore
                 listener(...data)
             }
-        };
-        let map = this._listeners.get(event);
+        }
+        let map = this._listeners.get(event)
         if (map === undefined) {
-            map = new Map<Listener, Listener>();
+            map = new Map<Listener, Listener>()
             this._listeners.set(event, map)
         }
-        RtcEngineEvent.addListener(Prefix + event, callback);
-        map.set(listener, callback);
+        RtcEngineEvent.addListener(Prefix + event, callback)
+        map.set(listener, callback)
         return {
             remove: () => {
                 this.removeListener(event, listener)
@@ -196,9 +193,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param listener The [`RtcEngineEvents`]{@link RtcEngineEvents} handler.
      */
     removeListener<EventType extends keyof RtcEngineEvents>(event: EventType, listener: RtcEngineEvents[EventType]) {
-        const map = this._listeners.get(event);
-        if (map === undefined) return;
-        RtcEngineEvent.removeListener(Prefix + event, map.get(listener) as Listener);
+        const map = this._listeners.get(event)
+        if (map === undefined) return
+        RtcEngineEvent.removeListener(Prefix + event, map.get(listener) as Listener)
         map.delete(listener)
     }
 
@@ -209,41 +206,39 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
     removeAllListeners<EventType extends keyof RtcEngineEvents>(event?: EventType) {
         if (event === undefined) {
             this._listeners.forEach((value, key) => {
-                RtcEngineEvent.removeAllListeners(Prefix + key);
-            });
-            this._listeners.clear();
+                RtcEngineEvent.removeAllListeners(Prefix + key)
+            })
+            this._listeners.clear()
             return
         }
-        RtcEngineEvent.removeAllListeners(Prefix + event);
+        RtcEngineEvent.removeAllListeners(Prefix + event)
         this._listeners.delete(event as string)
     }
 
     /**
-     * Sets the channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
+     * Sets the channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
      *
-     * The Agora [`RtcEngine`]{@link RtcEngine} differentiates channel profiles and applies different optimization algorithms accordingly.
+     * The Agora [`RtcEngine`]{@link RtcEngine} differentiates channel profiles and applies different optimization algorithms accordingly.
      * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for live interactive video streaming.
-     * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
-     *
+     * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
      */
     setChannelProfile(profile: ChannelProfile): Promise<void> {
-        return AgoraRtcEngineModule.setChannelProfile(profile)
+        return AgoraRtcEngineModule.callMethod('setChannelProfile', {profile})
     }
 
     /**
-     * Sets the role of a user ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only).
+     * Sets the role of a user ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only).
      *
      * This method sets the role of a user, such as a host or an audience (default), before joining a channel.
      *
-     * This method can be used to switch the user role after a user joins a channel. In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful call of this method triggers the following callbacks:
+     * This method can be used to switch the user role after a user joins a channel. In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful call of this method triggers the following callbacks:
      * - The local client: [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged}.
      * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}).
      *
      * @param role Sets the role of a user.
-     *
      */
     setClientRole(role: ClientRole): Promise<void> {
-        return AgoraRtcEngineModule.setClientRole(role)
+        return AgoraRtcEngineModule.callMethod('setClientRole', {role})
     }
 
     /**
@@ -285,10 +280,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * The uid is represented as a 32-bit unsigned integer in the SDK. Since unsigned integers are not supported by Java, the uid is handled as a 32-bit signed integer and larger numbers are interpreted as negative numbers in Java.
      * If necessary, the uid can be converted to a 64-bit integer through “uid&0xffffffffL”.
-     *
      */
     joinChannel(token: string | null, channelName: string, optionalInfo: string | null, optionalUid: number): Promise<void> {
-        return AgoraRtcEngineModule.joinChannel(token, channelName, optionalInfo, optionalUid)
+        return AgoraRtcEngineModule.callMethod('joinChannel', {token, channelName, optionalInfo, optionalUid})
     }
 
     /**
@@ -314,7 +308,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
      */
     switchChannel(token: string | null, channelName: string): Promise<void> {
-        return AgoraRtcEngineModule.switchChannel(token, channelName)
+        return AgoraRtcEngineModule.callMethod('switchChannel', {token, channelName})
     }
 
     /**
@@ -335,10 +329,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - If you call [`destroy`]{@link destroy} immediately after calling [`leaveChannel`]{@link leaveChannel}, the [`leaveChannel`]{@link leaveChannel} process interrupts, and the SDK does not trigger the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} callback.
      *
      * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removeInjectStreamUrl`]{@link removeInjectStreamUrl} method.
-     *
      */
     leaveChannel(): Promise<void> {
-        return AgoraRtcEngineModule.leaveChannel()
+        return AgoraRtcEngineModule.callMethod('leaveChannel', null)
     }
 
     /**
@@ -353,7 +346,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param token The new token.
      */
     renewToken(token: string): Promise<void> {
-        return AgoraRtcEngineModule.renewToken(token)
+        return AgoraRtcEngineModule.callMethod('renewToken', {token})
     }
 
     /**
@@ -361,22 +354,21 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * @deprecated This method is deprecated. The Agora Native SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.
      *
-     *
      * If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.
-     * Use this method when the channel profile is [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [`Communication`]{@link ChannelProfile.Communication}.
+     * Use this method when the channel profile is [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting}. Interoperability with the Agora Web SDK is enabled by default when the channel profile is [`Communication`]{@link ChannelProfile.Communication}.
      * @param enabled Sets whether to enable/disable interoperability with the Agora Web SDK:
      * - `true`: Enable.
      * - `false`: (Default) Disable.
      */
     enableWebSdkInteroperability(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableWebSdkInteroperability(enabled)
+        return AgoraRtcEngineModule.callMethod('enableWebSdkInteroperability', {enabled})
     }
 
     /**
      * Gets the connection state of the SDK.
      */
     getConnectionState(): Promise<ConnectionStateType> {
-        return AgoraRtcEngineModule.getConnectionState()
+        return AgoraRtcEngineModule.callMethod('getConnectionState', null)
     }
 
     /**
@@ -392,7 +384,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Current call ID.
      */
     getCallId(): Promise<string> {
-        return AgoraRtcEngineModule.getCallId()
+        return AgoraRtcEngineModule.callMethod('getCallId', null)
     }
 
     /**
@@ -404,7 +396,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param description (Optional) The description of the rating. The string length must be less than 800 bytes.
      */
     rate(callId: string, rating: Rate, description?: string): Promise<void> {
-        return AgoraRtcEngineModule.rate(callId, rating, description)
+        return AgoraRtcEngineModule.callMethod('rate', {callId, rating, description})
     }
 
     /**
@@ -414,12 +406,15 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param description (Optional) The description of the complaint. The string length must be less than 800 bytes.
      */
     complain(callId: string, description: string): Promise<void> {
-        return AgoraRtcEngineModule.complain(callId, description)
+        return AgoraRtcEngineModule.callMethod('complain', {callId, description})
     }
 
     /**
-     * Specifies an SDK output log file.
+     * Sets the log files that the SDK outputs.
      *
+     * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB.
+     * These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the
+     * earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
      * The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
      *
      * **Note**
@@ -429,7 +424,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param filePath File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log`.
      */
     setLogFile(filePath: string): Promise<void> {
-        return AgoraRtcEngineModule.setLogFile(filePath)
+        return AgoraRtcEngineModule.callMethod('setLogFile', {filePath})
     }
 
     /**
@@ -439,22 +434,21 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Choose a level to see the logs preceding that level. For example, if you set the log level to `Warning`, you see the logs within levels `Critical`, `Error`, and `Warning`.
      *
      * @param filter Sets the log filter level.
-     *
      */
     setLogFilter(filter: LogFilter): Promise<void> {
-        return AgoraRtcEngineModule.setLogFilter(filter)
+        return AgoraRtcEngineModule.callMethod('setLogFilter', {filter})
     }
 
     /**
-     * Sets the log file size (KB).
+     * Sets the size (KB) of a log file that the SDK outputs.
      *
-     * The Agora SDK has two log files, each with a default size of 512 KB.
-     * If you set `fileSizeInKBytes` as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB.
-     * If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
-     * @param fileSizeInKBytes The SDK log file size (KB).
+     * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB. These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`.
+     * When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and create a new `agorasdk.log` to record latest logs.
+     * @param fileSizeInKBytes The size (KB) of a log file. The default value is 1024 KB. If you set `fileSizeInKByte` to 1024 KB, the SDK outputs
+     * at most 5 MB log files; if you set it to less than 1024 KB, the maximum size of a log file is still 1024 KB.
      */
     setLogFileSize(fileSizeInKBytes: number): Promise<void> {
-        return AgoraRtcEngineModule.setLogFileSize(fileSizeInKBytes)
+        return AgoraRtcEngineModule.callMethod('setLogFileSize', {fileSizeInKBytes})
     }
 
     /**
@@ -465,7 +459,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param parameters Sets the parameter as a JSON string in the specified format.
      */
     setParameters(parameters: string): Promise<void> {
-        return AgoraRtcEngineModule.setParameters(parameters)
+        return AgoraRtcEngineModule.callMethod('setParameters', {parameters})
     }
 
     /**
@@ -477,7 +471,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param uid The user ID of the user. Ensure that you set this parameter.
      */
     getUserInfoByUid(uid: number): Promise<UserInfo> {
-        return AgoraRtcEngineModule.getUserInfoByUid(uid)
+        return AgoraRtcEngineModule.callMethod('getUserInfoByUid', {uid})
     }
 
     /**
@@ -489,7 +483,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param userAccount The user account of the user. Ensure that you set this parameter.
      */
     getUserInfoByUserAccount(userAccount: string): Promise<UserInfo> {
-        return AgoraRtcEngineModule.getUserInfoByUserAccount(userAccount)
+        return AgoraRtcEngineModule.callMethod('getUserInfoByUserAccount', {userAccount})
     }
 
     /**
@@ -498,7 +492,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * After the user successfully joins the channel, the SDK triggers the following callbacks:
      * - The local client: [`LocalUserRegistered`]{@link RtcEngineEvents.LocalUserRegistered} and [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess}.
      *
-     * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
      * **Note**
      *
@@ -523,7 +517,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
      */
     joinChannelWithUserAccount(token: string | null, channelName: string, userAccount: string): Promise<void> {
-        return AgoraRtcEngineModule.joinChannelWithUserAccount(token, channelName, userAccount);
+        return AgoraRtcEngineModule.callMethod('joinChannelWithUserAccount', {token, channelName, userAccount})
     }
 
     /**
@@ -556,7 +550,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
      */
     registerLocalUserAccount(appId: string, userAccount: string): Promise<void> {
-        return AgoraRtcEngineModule.registerLocalUserAccount(appId, userAccount);
+        return AgoraRtcEngineModule.callMethod('registerLocalUserAccount', {appId, userAccount})
     }
 
     /**
@@ -574,7 +568,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Agora recommends setting the value of volume between 0 and 100. If you need to set the value higher than 100, contact support@agora.io first.
      */
     adjustPlaybackSignalVolume(volume: number): Promise<void> {
-        return AgoraRtcEngineModule.adjustPlaybackSignalVolume(volume);
+        return AgoraRtcEngineModule.callMethod('adjustPlaybackSignalVolume', {volume})
     }
 
     /**
@@ -587,7 +581,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * If you need to set the value higher than 100, contact support@agora.io first.
      */
     adjustRecordingSignalVolume(volume: number): Promise<void> {
-        return AgoraRtcEngineModule.adjustRecordingSignalVolume(volume);
+        return AgoraRtcEngineModule.callMethod('adjustRecordingSignalVolume', {volume})
     }
 
     /**
@@ -605,7 +599,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - 100: The original volume.
      */
     adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void> {
-        return AgoraRtcEngineModule.adjustUserPlaybackSignalVolume(uid, volume);
+        return AgoraRtcEngineModule.callMethod('adjustUserPlaybackSignalVolume', {uid, volume})
     }
 
     /**
@@ -626,10 +620,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *  - [`muteRemoteAudioStream`]{@link muteRemoteAudioStream}: Whether to subscribe to and play the remote audio stream.
      *
      *  - [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams}: Whether to subscribe to and play all remote audio streams.
-     *
      */
     disableAudio(): Promise<void> {
-        return AgoraRtcEngineModule.disableAudio();
+        return AgoraRtcEngineModule.callMethod('disableAudio', null)
     }
 
     /**
@@ -652,10 +645,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *  - [`muteRemoteAudioStream`]{@link muteRemoteAudioStream}: Whether to subscribe to and play the remote audio stream.
      *
      *  - [`muteAllRemoteAudioStreams`]{@link muteAllRemoteAudioStreams}: Whether to subscribe to and play all remote audio streams.
-     *
      */
     enableAudio(): Promise<void> {
-        return AgoraRtcEngineModule.enableAudio();
+        return AgoraRtcEngineModule.callMethod('enableAudio', null)
     }
 
     /**
@@ -675,7 +667,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * except for scenarios where the engine automatically detects the voice activity of the local user.
      */
     enableAudioVolumeIndication(interval: number, smooth: number, report_vad: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableAudioVolumeIndication(interval, smooth, report_vad);
+        return AgoraRtcEngineModule.callMethod('enableAudioVolumeIndication', {interval, smooth, report_vad})
     }
 
     /**
@@ -687,7 +679,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * This method does not affect receiving or playing the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios
      * where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
      *
-    * Once the local audio function is disabled or re-enabled, the SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback, which reports [`Stopped`]{@link AudioLocalState.Stopped} or [`Recording`]{@link AudioLocalState.Recording}.
+     * Once the local audio function is disabled or re-enabled, the SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback, which reports [`Stopped`]{@link AudioLocalState.Stopped} or [`Recording`]{@link AudioLocalState.Recording}.
      * The SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback once the local audio function is disabled or re-enabled.
      *
      * **Note**
@@ -704,7 +696,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: Disable the local audio function, that is, to stop local audio capture and processing.
      */
     enableLocalAudio(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableLocalAudio(enabled);
+        return AgoraRtcEngineModule.callMethod('enableLocalAudio', {enabled})
     }
 
     /**
@@ -715,7 +707,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Receive all remote audio streams.
      */
     muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.muteAllRemoteAudioStreams(muted);
+        return AgoraRtcEngineModule.callMethod('muteAllRemoteAudioStreams', {muted})
     }
 
     /**
@@ -733,7 +725,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Send the local audio stream.
      */
     muteLocalAudioStream(muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.muteLocalAudioStream(muted);
+        return AgoraRtcEngineModule.callMethod('muteLocalAudioStream', {muted})
     }
 
     /**
@@ -751,7 +743,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Receive the specified remote user’s audio stream.
      */
     muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.muteRemoteAudioStream(uid, muted);
+        return AgoraRtcEngineModule.callMethod('muteRemoteAudioStream', {uid, muted})
     }
 
     /**
@@ -760,7 +752,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * - You must call this method before calling [`joinChannel`]{@link joinChannel}.
-     * - In the [`Communication`]{@link ChannelProfile.Communication} and [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
+     * - In the [`Communication`]{@link ChannelProfile.Communication} and [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
      * - In scenarios requiring high-quality audio, we recommend setting profile as [`MusicHighQuality(4)`]{@link AudioProfile.MusicHighQuality} and scenario as [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}.
      * For example, for music education scenarios.
      *
@@ -768,7 +760,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param scenario Sets the audio application scenarios. Under different audio scenarios, the device uses different volume tracks, i.e. either the in-call volume or the media volume.
      */
     setAudioProfile(profile: AudioProfile, scenario: AudioScenario): Promise<void> {
-        return AgoraRtcEngineModule.setAudioProfile(profile, scenario);
+        return AgoraRtcEngineModule.callMethod('setAudioProfile', {profile, scenario})
     }
 
     /**
@@ -788,7 +780,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Receive all remote audio streams by default.
      */
     setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.setDefaultMuteAllRemoteAudioStreams(muted);
+        return AgoraRtcEngineModule.callMethod('setDefaultMuteAllRemoteAudioStreams', {muted})
     }
 
     /**
@@ -818,10 +810,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *  - [`muteRemoteVideoStream`]{@link muteRemoteVideoStream}: Whether to subscribe to and play the remote video stream.
      *
      *  - [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}: Whether to subscribe to and play all remote video streams.
-     *
      */
     disableVideo(): Promise<void> {
-        return AgoraRtcEngineModule.disableVideo();
+        return AgoraRtcEngineModule.callMethod('disableVideo', null)
     }
 
     /**
@@ -844,7 +835,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * When you set `enabled` as `false`, this method does not require a local camera.
      */
     enableLocalVideo(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableLocalVideo(enabled);
+        return AgoraRtcEngineModule.callMethod('enableLocalVideo', {enabled})
     }
 
     /**
@@ -874,10 +865,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *  - [`muteRemoteVideoStream`]{@link muteRemoteVideoStream}: Whether to subscribe to and play the remote video stream.
      *
      *  - [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}: Whether to subscribe to and play all remote video streams.
-     *
      */
     enableVideo(): Promise<void> {
-        return AgoraRtcEngineModule.enableVideo();
+        return AgoraRtcEngineModule.callMethod('enableVideo', null)
     }
 
     /**
@@ -888,7 +878,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Receive all remote video streams.
      */
     muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.muteAllRemoteVideoStreams(muted);
+        return AgoraRtcEngineModule.callMethod('muteAllRemoteVideoStreams', {muted})
     }
 
     /**
@@ -909,7 +899,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Send the local video stream.
      */
     muteLocalVideoStream(muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.muteLocalVideoStream(muted);
+        return AgoraRtcEngineModule.callMethod('muteLocalVideoStream', {muted})
     }
 
     /**
@@ -926,7 +916,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Receive a specified remote user’s video stream.
      */
     muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.muteRemoteVideoStream(uid, muted);
+        return AgoraRtcEngineModule.callMethod('muteRemoteVideoStream', {uid, muted})
     }
 
     /**
@@ -941,10 +931,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `true`: Enable image enhancement.
      * - `false`: Disable image enhancement.
      * @param options The image enhancement options.
-     *
      */
     setBeautyEffectOptions(enabled: boolean, options: BeautyOptions): Promise<void> {
-        return AgoraRtcEngineModule.setBeautyEffectOptions(enabled, options);
+        return AgoraRtcEngineModule.callMethod('setBeautyEffectOptions', {enabled, options})
     }
 
     /**
@@ -963,7 +952,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Receive all remote video streams by default.
      */
     setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return AgoraRtcEngineModule.setDefaultMuteAllRemoteVideoStreams(muted);
+        return AgoraRtcEngineModule.callMethod('setDefaultMuteAllRemoteVideoStreams', {muted})
     }
 
     /**
@@ -975,10 +964,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * If you do not set the video encoder configuration after joining the channel, you can call this method before calling [`enableVideo`]{@link enableVideo} to reduce the render time of the first video frame.
      *
      * @param config The local video encoder configuration.
-     *
      */
     setVideoEncoderConfiguration(config: VideoEncoderConfiguration): Promise<void> {
-        return AgoraRtcEngineModule.setVideoEncoderConfiguration(config);
+        return AgoraRtcEngineModule.callMethod('setVideoEncoderConfiguration', {config})
     }
 
     /**
@@ -991,17 +979,16 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - By default, the local preview enables the mirror mode.
      * - Once you call this method to start the local video preview, if you leave the channel by calling [`leaveChannel`]{@link leaveChannel},
      * the local video preview remains until you call [`stopPreview`]{@link stopPreview} to disable it.
-     *
      */
     startPreview(): Promise<void> {
-        return AgoraRtcEngineModule.startPreview();
+        return AgoraRtcEngineModule.callMethod('startPreview', null)
     }
 
     /**
      * Stops the local video preview and the video.
      */
     stopPreview(): Promise<void> {
-        return AgoraRtcEngineModule.stopPreview();
+        return AgoraRtcEngineModule.callMethod('stopPreview', null)
     }
 
     /**
@@ -1014,7 +1001,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param volume Audio mixing volume for local playback. The value ranges between 0 and 100 (default).
      */
     adjustAudioMixingPlayoutVolume(volume: number): Promise<void> {
-        return AgoraRtcEngineModule.adjustAudioMixingPlayoutVolume(volume);
+        return AgoraRtcEngineModule.callMethod('adjustAudioMixingPlayoutVolume', {volume})
     }
 
     /**
@@ -1027,7 +1014,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param volume Audio mixing volume for publishing. The value ranges between 0 and 100 (default).
      */
     adjustAudioMixingPublishVolume(volume: number): Promise<void> {
-        return AgoraRtcEngineModule.adjustAudioMixingPublishVolume(volume);
+        return AgoraRtcEngineModule.callMethod('adjustAudioMixingPublishVolume', {volume})
     }
 
     /**
@@ -1042,7 +1029,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param volume Audio mixing volume. The value ranges between 0 and 100 (default).
      */
     adjustAudioMixingVolume(volume: number): Promise<void> {
-        return AgoraRtcEngineModule.adjustAudioMixingVolume(volume);
+        return AgoraRtcEngineModule.callMethod('adjustAudioMixingVolume', {volume})
     }
 
     /**
@@ -1057,7 +1044,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - < 0: Failure.
      */
     getAudioMixingCurrentPosition(): Promise<number> {
-        return AgoraRtcEngineModule.getAudioMixingCurrentPosition();
+        return AgoraRtcEngineModule.callMethod('getAudioMixingCurrentPosition', null)
     }
 
     /**
@@ -1072,7 +1059,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - < 0: Failure.
      */
     getAudioMixingDuration(): Promise<number> {
-        return AgoraRtcEngineModule.getAudioMixingDuration();
+        return AgoraRtcEngineModule.callMethod('getAudioMixingDuration', null)
     }
 
     /**
@@ -1085,7 +1072,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - < 0: Failure.
      */
     getAudioMixingPlayoutVolume(): Promise<number> {
-        return AgoraRtcEngineModule.getAudioMixingPlayoutVolume();
+        return AgoraRtcEngineModule.callMethod('getAudioMixingPlayoutVolume', null)
     }
 
     /**
@@ -1098,7 +1085,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - < 0: Failure.
      */
     getAudioMixingPublishVolume(): Promise<number> {
-        return AgoraRtcEngineModule.getAudioMixingPublishVolume();
+        return AgoraRtcEngineModule.callMethod('getAudioMixingPublishVolume', null)
     }
 
     /**
@@ -1107,7 +1094,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Call this method when you are in a channel.
      */
     pauseAudioMixing(): Promise<void> {
-        return AgoraRtcEngineModule.pauseAudioMixing();
+        return AgoraRtcEngineModule.callMethod('pauseAudioMixing', null)
     }
 
     /**
@@ -1116,7 +1103,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Call this method when you are in a channel.
      */
     resumeAudioMixing(): Promise<void> {
-        return AgoraRtcEngineModule.resumeAudioMixing();
+        return AgoraRtcEngineModule.callMethod('resumeAudioMixing', null)
     }
 
     /**
@@ -1135,7 +1122,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
      */
     setAudioMixingPitch(pitch: number): Promise<void> {
-        return AgoraRtcEngineModule.setAudioMixingPitch(pitch);
+        return AgoraRtcEngineModule.callMethod('setAudioMixingPitch', {pitch})
     }
 
     /**
@@ -1143,7 +1130,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param pos The playback starting position (ms) of the audio mixing file.
      */
     setAudioMixingPosition(pos: number): Promise<void> {
-        return AgoraRtcEngineModule.setAudioMixingPosition(pos);
+        return AgoraRtcEngineModule.callMethod('setAudioMixingPosition', {pos})
     }
 
     /**
@@ -1156,9 +1143,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * A successful call of this method triggers the [`AudioMixingStateChanged`]{@link RtcEngineEvents.AudioMixingStateChanged} callback and reports [`Playing`]{@link AudioMixingStateCode.Playing} on the local client.
      *
-     *
      * When the audio mixing file playback finishes, the SDK triggers the [`AudioMixingStateChanged`]{@link RtcEngineEvents.AudioMixingStateChanged} callback and reports [`Stopped`]{@link AudioMixingStateCode.Stopped} on the local client.
-     *
      *
      * **Note**
      *
@@ -1189,7 +1174,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - -1: Infinite playback loops.
      */
     startAudioMixing(filePath: string, loopback: boolean, replace: boolean, cycle: number): Promise<void> {
-        return AgoraRtcEngineModule.startAudioMixing(filePath, loopback, replace, cycle);
+        return AgoraRtcEngineModule.callMethod('startAudioMixing', {filePath, loopback, replace, cycle})
     }
 
     /**
@@ -1198,7 +1183,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Call this method when you are in a channel.
      */
     stopAudioMixing(): Promise<void> {
-        return AgoraRtcEngineModule.stopAudioMixing();
+        return AgoraRtcEngineModule.callMethod('stopAudioMixing', null)
     }
 
     /**
@@ -1211,14 +1196,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - < 0: Failure.
      */
     getEffectsVolume(): Promise<number> {
-        return AgoraRtcEngineModule.getEffectsVolume();
+        return AgoraRtcEngineModule.callMethod('getEffectsVolume', null)
     }
 
     /**
      * Pauses all audio effects.
      */
     pauseAllEffects(): Promise<void> {
-        return AgoraRtcEngineModule.pauseAllEffects();
+        return AgoraRtcEngineModule.callMethod('pauseAllEffects', null)
     }
 
     /**
@@ -1226,7 +1211,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param soundId ID of the audio effect. Each audio effect has a unique ID.
      */
     pauseEffect(soundId: number): Promise<void> {
-        return AgoraRtcEngineModule.pauseEffect(soundId);
+        return AgoraRtcEngineModule.callMethod('pauseEffect', {soundId})
     }
 
     /**
@@ -1261,7 +1246,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
      */
     playEffect(soundId: number, filePath: string, loopCount: number, pitch: number, pan: number, gain: number, publish: Boolean): Promise<void> {
-        return AgoraRtcEngineModule.playEffect(soundId, filePath, loopCount, pitch, pan, gain, publish);
+        return AgoraRtcEngineModule.callMethod('playEffect', {soundId, filePath, loopCount, pitch, pan, gain, publish})
     }
 
     /**
@@ -1279,14 +1264,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param filePath Absolute path of the audio effect file.
      */
     preloadEffect(soundId: number, filePath: string): Promise<void> {
-        return AgoraRtcEngineModule.preloadEffect(soundId, filePath);
+        return AgoraRtcEngineModule.callMethod('preloadEffect', {soundId, filePath})
     }
 
     /**
      * Resumes playing all audio effects.
      */
     resumeAllEffects(): Promise<void> {
-        return AgoraRtcEngineModule.resumeAllEffects();
+        return AgoraRtcEngineModule.callMethod('resumeAllEffects', null)
     }
 
     /**
@@ -1294,7 +1279,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param soundId ID of the audio effect. Each audio effect has a unique ID.
      */
     resumeEffect(soundId: number): Promise<void> {
-        return AgoraRtcEngineModule.resumeEffect(soundId);
+        return AgoraRtcEngineModule.callMethod('resumeEffect', {soundId})
     }
 
     /**
@@ -1302,7 +1287,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param volume Volume of the audio effects. The value ranges between 0.0 and 100.0 (default).
      */
     setEffectsVolume(volume: number): Promise<void> {
-        return AgoraRtcEngineModule.setEffectsVolume(volume);
+        return AgoraRtcEngineModule.callMethod('setEffectsVolume', {volume})
     }
 
     /**
@@ -1311,14 +1296,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param volume Volume of the audio effect. The value ranges between 0.0 and 100.0 (default).
      */
     setVolumeOfEffect(soundId: number, volume: number): Promise<void> {
-        return AgoraRtcEngineModule.setVolumeOfEffect(soundId, volume);
+        return AgoraRtcEngineModule.callMethod('setVolumeOfEffect', {soundId, volume})
     }
 
     /**
      * Stops playing all audio effects.
      */
     stopAllEffects(): Promise<void> {
-        return AgoraRtcEngineModule.stopAllEffects();
+        return AgoraRtcEngineModule.callMethod('stopAllEffects', null)
     }
 
     /**
@@ -1332,7 +1317,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param soundId ID of the specified audio effect. Each audio effect has a unique ID.
      */
     stopEffect(soundId: number): Promise<void> {
-        return AgoraRtcEngineModule.stopEffect(soundId);
+        return AgoraRtcEngineModule.callMethod('stopEffect', {soundId})
     }
 
     /**
@@ -1340,7 +1325,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param soundId ID of the audio effect. Each audio effect has a unique ID.
      */
     unloadEffect(soundId: number): Promise<void> {
-        return AgoraRtcEngineModule.unloadEffect(soundId);
+        return AgoraRtcEngineModule.callMethod('unloadEffect', {soundId})
     }
 
     /**
@@ -1351,10 +1336,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Do not use this method together with [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset}, or the method called earlier does not take effect.
      *
      * @param voiceChanger The local voice changer option.
-     *
      */
     setLocalVoiceChanger(voiceChanger: AudioVoiceChanger): Promise<void> {
-        return AgoraRtcEngineModule.setLocalVoiceChanger(voiceChanger);
+        return AgoraRtcEngineModule.callMethod('setLocalVoiceChanger', {voiceChanger})
     }
 
     /**
@@ -1365,7 +1349,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param bandGain Sets the gain of each band (dB). The value ranges between -15 and 15. The default value is 0.
      */
     setLocalVoiceEqualization(bandFrequency: AudioEqualizationBandFrequency, bandGain: number): Promise<void> {
-        return AgoraRtcEngineModule.setLocalVoiceEqualization(bandFrequency, bandGain);
+        return AgoraRtcEngineModule.callMethod('setLocalVoiceEqualization', {bandFrequency, bandGain})
     }
 
     /**
@@ -1374,7 +1358,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * The lower the value, the lower the voice pitch. The default value is 1.0 (no change to the local voice pitch).
      */
     setLocalVoicePitch(pitch: number): Promise<void> {
-        return AgoraRtcEngineModule.setLocalVoicePitch(pitch);
+        return AgoraRtcEngineModule.callMethod('setLocalVoicePitch', {pitch})
     }
 
     /**
@@ -1391,7 +1375,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param value The local voice reverberation value.
      */
     setLocalVoiceReverb(reverbKey: AudioReverbType, value: number): Promise<void> {
-        return AgoraRtcEngineModule.setLocalVoiceReverb(reverbKey, value);
+        return AgoraRtcEngineModule.callMethod('setLocalVoiceReverb', {reverbKey, value})
     }
 
     /**
@@ -1404,10 +1388,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - Do not use this method together with [`setLocalVoiceChanger`]{@link setLocalVoiceChanger}, or the method called earlier does not take effect.
      *
      * @param preset The local voice reverberation preset.
-     *
      */
     setLocalVoiceReverbPreset(preset: AudioReverbPreset): Promise<void> {
-        return AgoraRtcEngineModule.setLocalVoiceReverbPreset(preset);
+        return AgoraRtcEngineModule.callMethod('setLocalVoiceReverbPreset', {preset})
     }
 
     /**
@@ -1421,7 +1404,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: Disable stereo panning.
      */
     enableSoundPositionIndication(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableSoundPositionIndication(enabled);
+        return AgoraRtcEngineModule.callMethod('enableSoundPositionIndication', {enabled})
     }
 
     /**
@@ -1448,7 +1431,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
      */
     setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void> {
-        return AgoraRtcEngineModule.setRemoteVoicePosition(uid, pan, gain);
+        return AgoraRtcEngineModule.callMethod('setRemoteVoicePosition', {uid, pan, gain})
     }
 
     /**
@@ -1458,7 +1441,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
-     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
+     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - Ensure that the user joins a channel before calling this method.
      * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
      * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes.
@@ -1470,7 +1453,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: Disable transcoding.
      */
     addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.addPublishStreamUrl(url, transcodingEnabled);
+        return AgoraRtcEngineModule.callMethod('addPublishStreamUrl', {url, transcodingEnabled})
     }
 
     /**
@@ -1482,13 +1465,13 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - Ensure that the user joins a channel before calling this method.
-     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
+     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - This method removes only one stream RTMP URL address each time it is called.
      * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes.
      * The URL address must not contain special characters, such as Chinese language characters.
      */
     removePublishStreamUrl(url: string): Promise<void> {
-        return AgoraRtcEngineModule.removePublishStreamUrl(url);
+        return AgoraRtcEngineModule.callMethod('removePublishStreamUrl', {url})
     }
 
     /**
@@ -1500,16 +1483,15 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
+     * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in Push Streams to CDN.
      * - Ensure that you call [`setClientRole`]{@link setClientRole} and set the user role as the host.
      * - Ensure that you call [`setLiveTranscoding`]{@link setLiveTranscoding} before calling  [`addPublishStreamUrl`]{@link addPublishStreamUrl}.
      *
      * @param transcoding Sets the CDN live audio/video transcoding settings.
-     *
      */
     setLiveTranscoding(transcoding: LiveTranscoding): Promise<void> {
-        return AgoraRtcEngineModule.setLiveTranscoding(transcoding);
+        return AgoraRtcEngineModule.callMethod('setLiveTranscoding', {transcoding})
     }
 
     /**
@@ -1528,15 +1510,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - Contact sales-us@agora.io before implementing this function.
      * - We do not support string user accounts in this API.
      * - Call this method after the [`joinChannel`]{@link joinChannel} method.
-     * - This method takes effect only when you are a [`Broadcaster`]{@link ClientRole.Broadcaster}
-     *  in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel.
+     * - This method takes effect only when you are a [`Broadcaster`]{@link ClientRole.Broadcaster}
+     *  in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel.
      * - After a successful method call, if you want to call this method again, ensure that you call [`stopChannelMediaRelay`]{@link stopChannelMediaRelay} to quit the current relay.
      *
      * @param channelMediaRelayConfiguration The configuration of the media stream relay.
-     *
      */
     startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return AgoraRtcEngineModule.startChannelMediaRelay(channelMediaRelayConfiguration);
+        return AgoraRtcEngineModule.callMethod('startChannelMediaRelay', {channelMediaRelayConfiguration})
     }
 
     /**
@@ -1551,10 +1532,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * If the method call fails, the SDK triggers the [`ChannelMediaRelayStateChanged`]{@link RtcEngineEvents.ChannelMediaRelayStateChanged} callback with the [`ServerNoResponse(2)`]{@link ChannelMediaRelayError.ServerNoResponse}
      * or [`ServerConnectionLost(8)`]{@link ChannelMediaRelayError.ServerConnectionLost} state code.
      * You can leave the channel by calling [`leaveChannel`]{@link leaveChannel}, and the media stream relay automatically stops.
-     *
      */
     stopChannelMediaRelay(): Promise<void> {
-        return AgoraRtcEngineModule.stopChannelMediaRelay();
+        return AgoraRtcEngineModule.callMethod('stopChannelMediaRelay', null)
     }
 
     /**
@@ -1571,10 +1551,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - This method supports adding at most four destination channels in the relay. If there are already four destination channels in the relay.
      * @param channelMediaRelayConfiguration The media stream relay configuration
-     *
      */
     updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return AgoraRtcEngineModule.updateChannelMediaRelay(channelMediaRelayConfiguration);
+        return AgoraRtcEngineModule.callMethod('updateChannelMediaRelay', {channelMediaRelayConfiguration})
     }
 
     /**
@@ -1585,7 +1564,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
      */
     isSpeakerphoneEnabled(): Promise<boolean> {
-        return AgoraRtcEngineModule.isSpeakerphoneEnabled();
+        return AgoraRtcEngineModule.callMethod('isSpeakerphoneEnabled', null)
     }
 
     /**
@@ -1603,7 +1582,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *  - For a video call, the default audio route is the speaker. If the user disables the video
      * using [`disableVideo`]{@link disableVideo}, or [`muteLocalVideoStream`]{@link muteLocalVideoStream} and [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}, the default audio route automatically switches back to the earpiece.
      *
-     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
+     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
      *
      * **Note**
      *
@@ -1614,7 +1593,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
      */
     setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker: boolean): Promise<void> {
-        return AgoraRtcEngineModule.setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker);
+        return AgoraRtcEngineModule.callMethod('setDefaultAudioRoutetoSpeakerphone', {defaultToSpeaker})
     }
 
     /**
@@ -1627,14 +1606,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Ensure that you have successfully called [`joinChannel`]{@link joinChannel} before calling this method.
      *
-     * - This method is invalid for audience users in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - This method is invalid for audience users in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      *
      * @param enabled Sets whether to route the audio to the speakerphone or earpiece:
      * - `true`: Route the audio to the speakerphone.
      * - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
      */
     setEnableSpeakerphone(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.setEnableSpeakerphone(enabled);
+        return AgoraRtcEngineModule.callMethod('setEnableSpeakerphone', {enabled})
     }
 
     /**
@@ -1644,7 +1623,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Disable.
      */
     enableInEarMonitoring(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableInEarMonitoring(enabled);
+        return AgoraRtcEngineModule.callMethod('enableInEarMonitoring', {enabled})
     }
 
     /**
@@ -1652,7 +1631,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param volume Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
      */
     setInEarMonitoringVolume(volume: number): Promise<void> {
-        return AgoraRtcEngineModule.setInEarMonitoringVolume(volume);
+        return AgoraRtcEngineModule.callMethod('setInEarMonitoringVolume', {volume})
     }
 
     /**
@@ -1666,7 +1645,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Single-stream mode.
      */
     enableDualStreamMode(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableDualStreamMode(enabled);
+        return AgoraRtcEngineModule.callMethod('enableDualStreamMode', {enabled})
     }
 
     /**
@@ -1674,10 +1653,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * when the remote user sends dual streams.
      *
      * @param streamType Sets the default video-stream type.
-     *
      */
     setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void> {
-        return AgoraRtcEngineModule.setRemoteDefaultVideoStreamType(streamType);
+        return AgoraRtcEngineModule.callMethod('setRemoteDefaultVideoStreamType', {streamType})
     }
 
     /**
@@ -1697,10 +1675,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * @param uid ID of the remote user sending the video stream.
      * @param streamType Sets the video-stream type.
-     *
      */
     setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void> {
-        return AgoraRtcEngineModule.setRemoteVideoStreamType(uid, streamType);
+        return AgoraRtcEngineModule.callMethod('setRemoteVideoStreamType', {uid, streamType})
     }
 
     /**
@@ -1719,10 +1696,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * Agora does not recommend using this method for CDN live streaming, because the remote CDN live user will have a noticeable lag when the locally published video stream falls back to audio only.
      * @param option Sets the fallback option for the locally published video stream.
-     *
      */
     setLocalPublishFallbackOption(option: StreamFallbackOptions): Promise<void> {
-        return AgoraRtcEngineModule.setLocalPublishFallbackOption(option);
+        return AgoraRtcEngineModule.callMethod('setLocalPublishFallbackOption', {option})
     }
 
     /**
@@ -1736,10 +1712,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * the SDK triggers the [`RemoteSubscribeFallbackToAudioOnly`]{@link RtcEngineEvents.RemoteSubscribeFallbackToAudioOnly} callback.
      *
      * @param option Sets the fallback option for the remotely subscribed video stream.
-     *
      */
     setRemoteSubscribeFallbackOption(option: StreamFallbackOptions): Promise<void> {
-        return AgoraRtcEngineModule.setRemoteSubscribeFallbackOption(option);
+        return AgoraRtcEngineModule.callMethod('setRemoteSubscribeFallbackOption', {option})
     }
 
     /**
@@ -1754,17 +1729,16 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * @param uid The ID of the remote user.
      * @param userPriority The priority of the remote user.
-     *
      */
     setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void> {
-        return AgoraRtcEngineModule.setRemoteUserPriority(uid, userPriority);
+        return AgoraRtcEngineModule.callMethod('setRemoteUserPriority', {uid, userPriority})
     }
 
     /**
      * Disables the network connection quality test.
      */
     disableLastmileTest(): Promise<void> {
-        return AgoraRtcEngineModule.disableLastmileTest();
+        return AgoraRtcEngineModule.callMethod('disableLastmileTest', null)
     }
 
     /**
@@ -1783,13 +1757,12 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Do not call any other methods before receiving the [`LastmileQuality`]{@link RtcEngineEvents.LastmileQuality} callback. Otherwise, the callback may be interrupted by other methods and may not execute.
      *
-     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, a host should not call this method after joining a channel.
+     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, a host should not call this method after joining a channel.
      * - If you call this method to test the last-mile quality, the SDK consumes the bandwidth of a video stream, whose bitrate corresponds to the bitrate you set in the [`setVideoEncoderConfiguration`]{@link setVideoEncoderConfiguration} method.
      * After you join the channel, whether you have called [`disableLastmileTest`]{@link disableLastmileTest} or not, the SDK automatically stops consuming the bandwidth.
-     *
      */
     enableLastmileTest(): Promise<void> {
-        return AgoraRtcEngineModule.enableLastmileTest();
+        return AgoraRtcEngineModule.callMethod('enableLastmileTest', null)
     }
 
     /**
@@ -1804,11 +1777,11 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - After calling this method, call [`stopEchoTest`]{@link stopEchoTest} to end the test.
      * Otherwise, the app cannot run the next echo test, or call [`joinChannel`]{@link joinChannel}.
      *
-     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, only a host can call this method.
+     * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, only a host can call this method.
      * @param intervalInSeconds The time interval (s) between when you speak and when the recording plays back.
      */
     startEchoTest(intervalInSeconds: number): Promise<void> {
-        return AgoraRtcEngineModule.startEchoTest(intervalInSeconds);
+        return AgoraRtcEngineModule.callMethod('startEchoTest', {intervalInSeconds})
     }
 
     /**
@@ -1831,24 +1804,23 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, a host should not call this method after joining a channel.
      *
      * @param config The configurations of the last-mile network probe test.
-     *
      */
     startLastmileProbeTest(config: LastmileProbeConfig): Promise<void> {
-        return AgoraRtcEngineModule.startLastmileProbeTest(config);
+        return AgoraRtcEngineModule.callMethod('startLastmileProbeTest', {config})
     }
 
     /**
      * Stops the audio call test.
      */
     stopEchoTest(): Promise<void> {
-        return AgoraRtcEngineModule.stopEchoTest();
+        return AgoraRtcEngineModule.callMethod('stopEchoTest', null)
     }
 
     /**
      * Stops the last-mile network probe test.
      */
     stopLastmileProbeTest(): Promise<void> {
-        return AgoraRtcEngineModule.stopLastmileProbeTest();
+        return AgoraRtcEngineModule.callMethod('stopLastmileProbeTest', null)
     }
 
     /**
@@ -1860,35 +1832,34 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * **Note**
      *
      * Call this method before the [`joinChannel`]{@link joinChannel} method.
-     *
      */
     registerMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcEngineModule.registerMediaMetadataObserver();
+        return AgoraRtcEngineModule.callMethod('registerMediaMetadataObserver', null)
     }
+
     /**
      * Sends the metadata.
      *
      * @param metadata The metadata to be sent.
-     *
      */
     sendMetadata(metadata: string): Promise<void> {
-        return AgoraRtcEngineModule.sendMetadata(metadata);
+        return AgoraRtcEngineModule.callMethod('sendMetadata', {metadata})
     }
+
     /**
      * Sets the maximum size of the metadata.
      *
      * @param size Buffer size of the sent or received metadata.
-     *
      */
     setMaxMetadataSize(size: number): Promise<void> {
-        return AgoraRtcEngineModule.setMaxMetadataSize(size);
+        return AgoraRtcEngineModule.callMethod('setMaxMetadataSize', {size})
     }
+
     /**
      * Unregisters the metadata observer.
-     *
      */
     unregisterMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcEngineModule.unregisterMediaMetadataObserver();
+        return AgoraRtcEngineModule.callMethod('unregisterMediaMetadataObserver', null)
     }
 
     /**
@@ -1923,24 +1894,48 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * You can implement the watermark function in your application layer.
      * @param watermarkUrl The local file path of the watermark image to be added. This method supports adding a watermark image from either the local file path or the assets file path. If you use the assets file path, you need to start with `/assets/` when filling in this parameter.
      * @param options The options of the watermark image to be added.
-     *
      */
     addVideoWatermark(watermarkUrl: string, options: WatermarkOptions): Promise<void> {
-        return AgoraRtcEngineModule.addVideoWatermark(watermarkUrl, options);
+        return AgoraRtcEngineModule.callMethod('addVideoWatermark', {watermarkUrl, options})
     }
 
     /**
      * Removes the watermark image from the video stream added by [`addVideoWatermark`]{@link addVideoWatermark}.
-     *
      */
     clearVideoWatermarks(): Promise<void> {
-        return AgoraRtcEngineModule.clearVideoWatermarks();
+        return AgoraRtcEngineModule.callMethod('clearVideoWatermarks', null)
+    }
+
+    /**
+     * Enables/Disables the built-in encryption.
+     *
+     * @since v3.1.2.
+     *
+     * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
+     *
+     * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+     *
+     * **Note**
+     * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+     * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
+     *
+     *
+     * @param enabled Whether to enable the built-in encryption.
+     * - `true`: Enable the built-in encryption.
+     * - `false`: Disable the built-in encryption.
+     * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+     */
+    enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
+        return AgoraRtcEngineModule.callMethod('enableEncryption', {enabled, config});
     }
 
     /**
      * Sets the built-in encryption mode.
      *
-     * The Agora SDK supports built-in encryption, which is set to `aes-128-xts` mode by default.
+     * @deprecated
+     * Deprecated as of v3.1.2. Use [`enableEncryption`]{@link enableEncryption} instead.
+     *
+     * The Agora SDK supports built-in encryption, which is set to `AES128XTS` mode by default.
      * Call this method to set the encryption mode to use other encryption modes.
      * All users in the same channel must use the same encryption mode and password.
      *
@@ -1951,14 +1946,16 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Call [`setEncryptionSecret`]{@link setEncryptionSecret} before calling this method.
      *
      * @param encryptionMode Sets the encryption mode.
-     *
      */
     setEncryptionMode(encryptionMode: EncryptionMode): Promise<void> {
-        return AgoraRtcEngineModule.setEncryptionMode(encryptionMode);
+        return AgoraRtcEngineModule.callMethod('setEncryptionMode', {encryptionMode})
     }
 
     /**
      * Enables built-in encryption with an encryption password before joining a channel.
+     *
+     * @deprecated
+     * Deprecated as of v3.1.2. Use [`enableEncryption`]{@link enableEncryption} instead.
      *
      * All users in a channel must set the same encryption password.
      * The encryption password is automatically cleared once a user leaves the channel.
@@ -1971,7 +1968,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param secret The encryption password.
      */
     setEncryptionSecret(secret: string): Promise<void> {
-        return AgoraRtcEngineModule.setEncryptionSecret(secret);
+        return AgoraRtcEngineModule.callMethod('setEncryptionSecret', {secret})
     }
 
     /**
@@ -1993,10 +1990,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param filePath Absolute file path (including the suffixes of the filename) of the recording file. The string of the file name is in UTF-8. For example, `/sdcard/emulated/0/audio/aac`.
      * @param sampleRate Sample rate (Hz) of the recording file.
      * @param quality The audio recording quality.
-     *
      */
     startAudioRecording(filePath: string, sampleRate: AudioSampleRateType, quality: AudioRecordingQuality): Promise<void> {
-        return AgoraRtcEngineModule.startAudioRecording(filePath, sampleRate, quality);
+        return AgoraRtcEngineModule.callMethod('startAudioRecording', {filePath, sampleRate, quality})
     }
 
     /**
@@ -2006,10 +2002,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * You can call this method before calling [`leaveChannel`]{@link leaveChannel};
      * else, the recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
-     *
      */
     stopAudioRecording(): Promise<void> {
-        return AgoraRtcEngineModule.stopAudioRecording();
+        return AgoraRtcEngineModule.callMethod('stopAudioRecording', null)
     }
 
     /**
@@ -2029,7 +2024,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * **Note**
      *
-     * - This method applies to the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile only.
+     * - This method applies to the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile only.
      * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
      * - You can inject only one media stream into the channel at the same time.
      *
@@ -2037,10 +2032,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - Supported audio codec type: AAC.
      * - Supported video codec type: H264(AVC).
      * @param config The `LiveInjectStreamConfig` object which contains the configuration information for the added voice or video stream.
-     *
      */
     addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void> {
-        return AgoraRtcEngineModule.addInjectStreamUrl(url, config);
+        return AgoraRtcEngineModule.callMethod('addInjectStreamUrl', {url, config})
     }
 
     /**
@@ -2053,7 +2047,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param url HTTP/HTTPS URL address of the added stream to be removed.
      */
     removeInjectStreamUrl(url: string): Promise<void> {
-        return AgoraRtcEngineModule.removeInjectStreamUrl(url);
+        return AgoraRtcEngineModule.callMethod('removeInjectStreamUrl', {url})
     }
 
     /**
@@ -2070,7 +2064,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Disable face detection.
      */
     enableFaceDetection(enable: boolean): Promise<void> {
-        return AgoraRtcEngineModule.enableFaceDetection(enable)
+        return AgoraRtcEngineModule.callMethod('enableFaceDetection', {enable})
     }
 
     /**
@@ -2079,7 +2073,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @returns The maximum camera zoom factor.
      */
     getCameraMaxZoomFactor(): Promise<number> {
-        return AgoraRtcEngineModule.getCameraMaxZoomFactor();
+        return AgoraRtcEngineModule.callMethod('getCameraMaxZoomFactor', null)
     }
 
     /**
@@ -2089,10 +2083,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - `true`: The device supports the camera auto-face focus function.
      * - `false`: The device does not support the camera auto-face focus function.
-     *
      */
     isCameraAutoFocusFaceModeSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.isCameraAutoFocusFaceModeSupported();
+        return AgoraRtcEngineModule.callMethod('isCameraAutoFocusFaceModeSupported', null)
     }
 
     /**
@@ -2102,10 +2095,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - `true`: The device supports the camera exposure function.
      * - `false`: The device does not support the camera exposure function.
-     *
      */
     isCameraExposurePositionSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.isCameraExposurePositionSupported();
+        return AgoraRtcEngineModule.callMethod('isCameraExposurePositionSupported', null)
     }
 
     /**
@@ -2115,10 +2107,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - `true`: The device supports the camera manual focus function.
      * - `false`: The device does not support the camera manual focus function.
-     *
      */
     isCameraFocusSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.isCameraFocusSupported();
+        return AgoraRtcEngineModule.callMethod('isCameraFocusSupported', null)
     }
 
     /**
@@ -2128,10 +2119,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - `true`: The device supports the camera flash function.
      * - `false`: The device does not the support camera flash function.
-     *
      */
     isCameraTorchSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.isCameraTorchSupported();
+        return AgoraRtcEngineModule.callMethod('isCameraTorchSupported', null)
     }
 
     /**
@@ -2141,10 +2131,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - `true`: The device supports the camera zoom function.
      * - `false`: The device does not support the camera zoom function.
-     *
      */
     isCameraZoomSupported(): Promise<boolean> {
-        return AgoraRtcEngineModule.isCameraZoomSupported();
+        return AgoraRtcEngineModule.callMethod('isCameraZoomSupported', null)
     }
 
     /**
@@ -2155,7 +2144,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: (Default) Disable the camera auto-face focus function.
      */
     setCameraAutoFocusFaceModeEnabled(enabled: boolean): Promise<void> {
-        return AgoraRtcEngineModule.setCameraAutoFocusFaceModeEnabled(enabled);
+        return AgoraRtcEngineModule.callMethod('setCameraAutoFocusFaceModeEnabled', {enabled})
     }
 
     /**
@@ -2177,10 +2166,9 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * Call this method before enabling the local camera. That said, you can call this method before calling [`joinChannel`]{@link joinChannel}, [`enableVideo`]{@link enableVideo}, or [`enableLocalVideo`]{@link enableLocalVideo}, depending on which method you use to turn on your local camera.
      *
      * @param config The camera capturer configuration.
-     *
      */
     setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<void> {
-        return AgoraRtcEngineModule.setCameraCapturerConfiguration(config);
+        return AgoraRtcEngineModule.callMethod('setCameraCapturerConfiguration', {config})
     }
 
     /**
@@ -2192,7 +2180,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param positionYinView The vertical coordinate of the touch point in the view.
      */
     setCameraExposurePosition(positionXinView: number, positionYinView: number): Promise<void> {
-        return AgoraRtcEngineModule.setCameraExposurePosition(positionXinView, positionYinView);
+        return AgoraRtcEngineModule.callMethod('setCameraExposurePosition', {positionXinView, positionYinView})
     }
 
     /**
@@ -2204,7 +2192,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param positionY The vertical coordinate of the touch point in the view.
      */
     setCameraFocusPositionInPreview(positionX: number, positionY: number): Promise<void> {
-        return AgoraRtcEngineModule.setCameraFocusPositionInPreview(positionX, positionY);
+        return AgoraRtcEngineModule.callMethod('setCameraFocusPositionInPreview', {positionX, positionY})
     }
 
     /**
@@ -2214,7 +2202,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - `false`: Disable the camera flash function.
      */
     setCameraTorchOn(isOn: boolean): Promise<void> {
-        return AgoraRtcEngineModule.setCameraTorchOn(isOn);
+        return AgoraRtcEngineModule.callMethod('setCameraTorchOn', {isOn})
     }
 
     /**
@@ -2222,14 +2210,14 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * @param factor Sets the camera zoom factor. The value ranges between 1.0 and the maximum zoom supported by the device.
      */
     setCameraZoomFactor(factor: number): Promise<void> {
-        return AgoraRtcEngineModule.setCameraZoomFactor(factor);
+        return AgoraRtcEngineModule.callMethod('setCameraZoomFactor', {factor})
     }
 
     /**
      * Switches between front and rear cameras.
      */
     switchCamera(): Promise<void> {
-        return AgoraRtcEngineModule.switchCamera();
+        return AgoraRtcEngineModule.callMethod('switchCamera', null)
     }
 
     /**
@@ -2254,7 +2242,7 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
      */
     createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
-        return AgoraRtcEngineModule.createDataStream(reliable, ordered);
+        return AgoraRtcEngineModule.callMethod('createDataStream', {reliable, ordered})
     }
 
     /**
@@ -2274,336 +2262,379 @@ export default class RtcEngine implements RtcUserInfoInterface, RtcAudioInterfac
      *
      * - Ensure that you have created the data stream using [`createDataStream`]{@link createDataStream} before calling this method.
      *
-     * - This method applies only to the [`Communication`]{@link ChannelProfile.Communication} profile or to hosts in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
+     * - This method applies only to the [`Communication`]{@link ChannelProfile.Communication} profile or to hosts in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
      * @param streamId ID of the sent data stream returned by the [`createDataStream`]{@link createDataStream} method.
      * @param message Sent data.
      */
     sendStreamMessage(streamId: number, message: string): Promise<void> {
-        return AgoraRtcEngineModule.sendStreamMessage(streamId, message);
+        return AgoraRtcEngineModule.callMethod('sendStreamMessage', {streamId, message})
     }
 }
 
 /**
  * @ignore
  */
+interface RtcEngineInterface extends RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface, RtcAudioMixingInterface,
+    RtcAudioEffectInterface, RtcVoiceChangerInterface, RtcVoicePositionInterface, RtcPublishStreamInterface,
+    RtcMediaRelayInterface, RtcAudioRouteInterface, RtcEarMonitoringInterface, RtcDualStreamInterface,
+    RtcFallbackInterface, RtcTestInterface, RtcMediaMetadataInterface, RtcWatermarkInterface, RtcEncryptionInterface,
+    RtcAudioRecorderInterface, RtcInjectStreamInterface, RtcCameraInterface, RtcStreamMessageInterface {
+    destroy(): Promise<void>
+
+    setChannelProfile(profile: ChannelProfile): Promise<void>
+
+    setClientRole(role: ClientRole): Promise<void>
+
+    joinChannel(token: string | null, channelName: string, optionalInfo: string | null, optionalUid: number): Promise<void>
+
+    switchChannel(token: string | null, channelName: string): Promise<void>
+
+    leaveChannel(): Promise<void>
+
+    renewToken(token: string): Promise<void>
+
+    enableWebSdkInteroperability(enabled: boolean): Promise<void>
+
+    getConnectionState(): Promise<ConnectionStateType>
+
+    getCallId(): Promise<string>
+
+    rate(callId: string, rating: Rate, description?: string): Promise<void>
+
+    complain(callId: string, description: string): Promise<void>
+
+    setLogFile(filePath: string): Promise<void>
+
+    setLogFilter(filter: LogFilter): Promise<void>
+
+    setLogFileSize(fileSizeInKBytes: number): Promise<void>
+
+    setParameters(parameters: string): Promise<void>
+}
+
+/**
+ * @ignore
+ */
 interface RtcUserInfoInterface {
-    registerLocalUserAccount(appId: string, userAccount: string): Promise<void>;
+    registerLocalUserAccount(appId: string, userAccount: string): Promise<void>
 
-    joinChannelWithUserAccount(token: string, channelName: string, userAccount: string): Promise<void>;
+    joinChannelWithUserAccount(token: string, channelName: string, userAccount: string): Promise<void>
 
-    getUserInfoByUserAccount(userAccount: string): Promise<UserInfo>;
+    getUserInfoByUserAccount(userAccount: string): Promise<UserInfo>
 
-    getUserInfoByUid(uid: number): Promise<UserInfo>;
+    getUserInfoByUid(uid: number): Promise<UserInfo>
 }
 
 /**
  * @ignore
  */
 interface RtcAudioInterface {
-    enableAudio(): Promise<void>;
+    enableAudio(): Promise<void>
 
-    disableAudio(): Promise<void>;
+    disableAudio(): Promise<void>
 
-    setAudioProfile(profile: AudioProfile, scenario: AudioScenario): Promise<void>;
+    setAudioProfile(profile: AudioProfile, scenario: AudioScenario): Promise<void>
 
-    adjustRecordingSignalVolume(volume: number): Promise<void>;
+    adjustRecordingSignalVolume(volume: number): Promise<void>
 
-    adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void>;
+    adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void>
 
-    adjustPlaybackSignalVolume(volume: number): Promise<void>;
+    adjustPlaybackSignalVolume(volume: number): Promise<void>
 
-    enableLocalAudio(enabled: boolean): Promise<void>;
+    enableLocalAudio(enabled: boolean): Promise<void>
 
-    muteLocalAudioStream(muted: boolean): Promise<void>;
+    muteLocalAudioStream(muted: boolean): Promise<void>
 
-    muteRemoteAudioStream(uid: number, muted: boolean): Promise<void>;
+    muteRemoteAudioStream(uid: number, muted: boolean): Promise<void>
 
-    muteAllRemoteAudioStreams(muted: boolean): Promise<void>;
+    muteAllRemoteAudioStreams(muted: boolean): Promise<void>
 
-    setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void>;
+    setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void>
 
-    enableAudioVolumeIndication(interval: number, smooth: number, report_vad: boolean): Promise<void>;
+    enableAudioVolumeIndication(interval: number, smooth: number, report_vad: boolean): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcVideoInterface {
-    enableVideo(): Promise<void>;
+    enableVideo(): Promise<void>
 
-    disableVideo(): Promise<void>;
+    disableVideo(): Promise<void>
 
-    setVideoEncoderConfiguration(config: VideoEncoderConfiguration): Promise<void>;
+    setVideoEncoderConfiguration(config: VideoEncoderConfiguration): Promise<void>
 
-    startPreview(): Promise<void>;
+    startPreview(): Promise<void>
 
-    stopPreview(): Promise<void>;
+    stopPreview(): Promise<void>
 
-    enableLocalVideo(enabled: boolean): Promise<void>;
+    enableLocalVideo(enabled: boolean): Promise<void>
 
-    muteLocalVideoStream(muted: boolean): Promise<void>;
+    muteLocalVideoStream(muted: boolean): Promise<void>
 
-    muteRemoteVideoStream(uid: number, muted: boolean): Promise<void>;
+    muteRemoteVideoStream(uid: number, muted: boolean): Promise<void>
 
-    muteAllRemoteVideoStreams(muted: boolean): Promise<void>;
+    muteAllRemoteVideoStreams(muted: boolean): Promise<void>
 
-    setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void>;
+    setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void>
 
-    setBeautyEffectOptions(enabled: boolean, options: BeautyOptions): Promise<void>;
+    setBeautyEffectOptions(enabled: boolean, options: BeautyOptions): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcAudioMixingInterface {
-    startAudioMixing(filePath: string, loopback: boolean, replace: boolean, cycle: number): Promise<void>;
+    startAudioMixing(filePath: string, loopback: boolean, replace: boolean, cycle: number): Promise<void>
 
-    stopAudioMixing(): Promise<void>;
+    stopAudioMixing(): Promise<void>
 
-    pauseAudioMixing(): Promise<void>;
+    pauseAudioMixing(): Promise<void>
 
-    resumeAudioMixing(): Promise<void>;
+    resumeAudioMixing(): Promise<void>
 
-    adjustAudioMixingVolume(volume: number): Promise<void>;
+    adjustAudioMixingVolume(volume: number): Promise<void>
 
-    adjustAudioMixingPlayoutVolume(volume: number): Promise<void>;
+    adjustAudioMixingPlayoutVolume(volume: number): Promise<void>
 
-    adjustAudioMixingPublishVolume(volume: number): Promise<void>;
+    adjustAudioMixingPublishVolume(volume: number): Promise<void>
 
-    getAudioMixingPlayoutVolume(): Promise<number>;
+    getAudioMixingPlayoutVolume(): Promise<number>
 
-    getAudioMixingPublishVolume(): Promise<number>;
+    getAudioMixingPublishVolume(): Promise<number>
 
-    getAudioMixingDuration(): Promise<number>;
+    getAudioMixingDuration(): Promise<number>
 
-    getAudioMixingCurrentPosition(): Promise<number>;
+    getAudioMixingCurrentPosition(): Promise<number>
 
-    setAudioMixingPosition(pos: number): Promise<void>;
+    setAudioMixingPosition(pos: number): Promise<void>
 
-    setAudioMixingPitch(pitch: number): Promise<void>;
+    setAudioMixingPitch(pitch: number): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcAudioEffectInterface {
-    getEffectsVolume(): Promise<number>;
+    getEffectsVolume(): Promise<number>
 
-    setEffectsVolume(volume: number): Promise<void>;
+    setEffectsVolume(volume: number): Promise<void>
 
-    setVolumeOfEffect(soundId: number, volume: number): Promise<void>;
+    setVolumeOfEffect(soundId: number, volume: number): Promise<void>
 
-    playEffect(soundId: number, filePath: string, loopCount: number, pitch: number, pan: number, gain: number, publish: Boolean): Promise<void>;
+    playEffect(soundId: number, filePath: string, loopCount: number, pitch: number, pan: number, gain: number, publish: Boolean): Promise<void>
 
-    stopEffect(soundId: number): Promise<void>;
+    stopEffect(soundId: number): Promise<void>
 
-    stopAllEffects(): Promise<void>;
+    stopAllEffects(): Promise<void>
 
-    preloadEffect(soundId: number, filePath: string): Promise<void>;
+    preloadEffect(soundId: number, filePath: string): Promise<void>
 
-    unloadEffect(soundId: number): Promise<void>;
+    unloadEffect(soundId: number): Promise<void>
 
-    pauseEffect(soundId: number): Promise<void>;
+    pauseEffect(soundId: number): Promise<void>
 
-    pauseAllEffects(): Promise<void>;
+    pauseAllEffects(): Promise<void>
 
-    resumeEffect(soundId: number): Promise<void>;
+    resumeEffect(soundId: number): Promise<void>
 
-    resumeAllEffects(): Promise<void>;
+    resumeAllEffects(): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcVoiceChangerInterface {
-    setLocalVoiceChanger(voiceChanger: AudioVoiceChanger): Promise<void>;
+    setLocalVoiceChanger(voiceChanger: AudioVoiceChanger): Promise<void>
 
-    setLocalVoiceReverbPreset(preset: AudioReverbPreset): Promise<void>;
+    setLocalVoiceReverbPreset(preset: AudioReverbPreset): Promise<void>
 
-    setLocalVoicePitch(pitch: number): Promise<void>;
+    setLocalVoicePitch(pitch: number): Promise<void>
 
-    setLocalVoiceEqualization(bandFrequency: AudioEqualizationBandFrequency, bandGain: number): Promise<void>;
+    setLocalVoiceEqualization(bandFrequency: AudioEqualizationBandFrequency, bandGain: number): Promise<void>
 
-    setLocalVoiceReverb(reverbKey: AudioReverbType, value: number): Promise<void>;
+    setLocalVoiceReverb(reverbKey: AudioReverbType, value: number): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcVoicePositionInterface {
-    enableSoundPositionIndication(enabled: boolean): Promise<void>;
+    enableSoundPositionIndication(enabled: boolean): Promise<void>
 
-    setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void>;
+    setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcPublishStreamInterface {
-    setLiveTranscoding(transcoding: LiveTranscoding): Promise<void>;
+    setLiveTranscoding(transcoding: LiveTranscoding): Promise<void>
 
-    addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void>;
+    addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void>
 
-    removePublishStreamUrl(url: string): Promise<void>;
+    removePublishStreamUrl(url: string): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcMediaRelayInterface {
-    startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>;
+    startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>
 
-    updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>;
+    updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void>
 
-    stopChannelMediaRelay(): Promise<void>;
+    stopChannelMediaRelay(): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcAudioRouteInterface {
-    setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker: boolean): Promise<void>;
+    setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker: boolean): Promise<void>
 
-    setEnableSpeakerphone(enabled: boolean): Promise<void>;
+    setEnableSpeakerphone(enabled: boolean): Promise<void>
 
-    isSpeakerphoneEnabled(): Promise<boolean>;
+    isSpeakerphoneEnabled(): Promise<boolean>
 }
 
 /**
  * @ignore
  */
 interface RtcEarMonitoringInterface {
-    enableInEarMonitoring(enabled: boolean): Promise<void>;
+    enableInEarMonitoring(enabled: boolean): Promise<void>
 
-    setInEarMonitoringVolume(volume: number): Promise<void>;
+    setInEarMonitoringVolume(volume: number): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcDualStreamInterface {
-    enableDualStreamMode(enabled: boolean): Promise<void>;
+    enableDualStreamMode(enabled: boolean): Promise<void>
 
-    setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void>;
+    setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void>
 
-    setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void>;
+    setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcFallbackInterface {
-    setLocalPublishFallbackOption(option: StreamFallbackOptions): Promise<void>;
+    setLocalPublishFallbackOption(option: StreamFallbackOptions): Promise<void>
 
-    setRemoteSubscribeFallbackOption(option: StreamFallbackOptions): Promise<void>;
+    setRemoteSubscribeFallbackOption(option: StreamFallbackOptions): Promise<void>
 
-    setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void>;
+    setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcTestInterface {
-    startEchoTest(intervalInSeconds: number): Promise<void>;
+    startEchoTest(intervalInSeconds: number): Promise<void>
 
-    stopEchoTest(): Promise<void>;
+    stopEchoTest(): Promise<void>
 
-    enableLastmileTest(): Promise<void>;
+    enableLastmileTest(): Promise<void>
 
-    disableLastmileTest(): Promise<void>;
+    disableLastmileTest(): Promise<void>
 
-    startLastmileProbeTest(config: LastmileProbeConfig): Promise<void>;
+    startLastmileProbeTest(config: LastmileProbeConfig): Promise<void>
 
-    stopLastmileProbeTest(): Promise<void>;
+    stopLastmileProbeTest(): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcMediaMetadataInterface {
-    registerMediaMetadataObserver(): Promise<void>;
+    registerMediaMetadataObserver(): Promise<void>
 
-    unregisterMediaMetadataObserver(): Promise<void>;
+    unregisterMediaMetadataObserver(): Promise<void>
 
-    setMaxMetadataSize(size: number): Promise<void>;
+    setMaxMetadataSize(size: number): Promise<void>
 
-    sendMetadata(metadata: string): Promise<void>;
+    sendMetadata(metadata: string): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcWatermarkInterface {
-    addVideoWatermark(watermarkUrl: string, options: WatermarkOptions): Promise<void>;
+    addVideoWatermark(watermarkUrl: string, options: WatermarkOptions): Promise<void>
 
-    clearVideoWatermarks(): Promise<void>;
+    clearVideoWatermarks(): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcEncryptionInterface {
-    setEncryptionSecret(secret: string): Promise<void>;
+    setEncryptionSecret(secret: string): Promise<void>
 
-    setEncryptionMode(encryptionMode: EncryptionMode): Promise<void>;
+    setEncryptionMode(encryptionMode: EncryptionMode): Promise<void>
+
+    enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcAudioRecorderInterface {
-    startAudioRecording(filePath: string, sampleRate: AudioSampleRateType, quality: AudioRecordingQuality): Promise<void>;
+    startAudioRecording(filePath: string, sampleRate: AudioSampleRateType, quality: AudioRecordingQuality): Promise<void>
 
-    stopAudioRecording(): Promise<void>;
+    stopAudioRecording(): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcInjectStreamInterface {
-    addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void>;
+    addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void>
 
-    removeInjectStreamUrl(url: string): Promise<void>;
+    removeInjectStreamUrl(url: string): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcCameraInterface {
-    switchCamera(): Promise<void>;
+    switchCamera(): Promise<void>
 
-    isCameraZoomSupported(): Promise<boolean>;
+    isCameraZoomSupported(): Promise<boolean>
 
-    isCameraTorchSupported(): Promise<boolean>;
+    isCameraTorchSupported(): Promise<boolean>
 
-    isCameraFocusSupported(): Promise<boolean>;
+    isCameraFocusSupported(): Promise<boolean>
 
-    isCameraExposurePositionSupported(): Promise<boolean>;
+    isCameraExposurePositionSupported(): Promise<boolean>
 
-    isCameraAutoFocusFaceModeSupported(): Promise<boolean>;
+    isCameraAutoFocusFaceModeSupported(): Promise<boolean>
 
-    setCameraZoomFactor(factor: number): Promise<void>;
+    setCameraZoomFactor(factor: number): Promise<void>
 
-    getCameraMaxZoomFactor(): Promise<number>;
+    getCameraMaxZoomFactor(): Promise<number>
 
-    setCameraFocusPositionInPreview(positionX: number, positionY: number): Promise<void>;
+    setCameraFocusPositionInPreview(positionX: number, positionY: number): Promise<void>
 
-    setCameraExposurePosition(positionXinView: number, positionYinView: number): Promise<void>;
+    setCameraExposurePosition(positionXinView: number, positionYinView: number): Promise<void>
 
-    enableFaceDetection(enable: boolean): Promise<void>;
+    enableFaceDetection(enable: boolean): Promise<void>
 
-    setCameraTorchOn(isOn: boolean): Promise<void>;
+    setCameraTorchOn(isOn: boolean): Promise<void>
 
-    setCameraAutoFocusFaceModeEnabled(enabled: boolean): Promise<void>;
+    setCameraAutoFocusFaceModeEnabled(enabled: boolean): Promise<void>
 
-    setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<void>;
+    setCameraCapturerConfiguration(config: CameraCapturerConfiguration): Promise<void>
 }
 
 /**
  * @ignore
  */
 interface RtcStreamMessageInterface {
-    createDataStream(reliable: boolean, ordered: boolean): Promise<number>;
+    createDataStream(reliable: boolean, ordered: boolean): Promise<number>
 
-    sendStreamMessage(streamId: number, message: string): Promise<void>;
+    sendStreamMessage(streamId: number, message: string): Promise<void>
 }

@@ -80,6 +80,13 @@ class RtcEngineEvents {
     static let CameraReady = "CameraReady"
     static let VideoStopped = "VideoStopped"
     static let MetadataReceived = "MetadataReceived"
+    static let FirstLocalAudioFramePublished = "FirstLocalAudioFramePublished"
+    static let FirstLocalVideoFramePublished = "FirstLocalVideoFramePublished"
+    static let AudioPublishStateChanged = "AudioPublishStateChanged"
+    static let VideoPublishStateChanged = "VideoPublishStateChanged"
+    static let AudioSubscribeStateChanged = "AudioSubscribeStateChanged"
+    static let VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
+    static let RtmpStreamingEvent = "RtmpStreamingEvent"
 
     static func toMap() -> Dictionary<String, String> {
         return [
@@ -153,6 +160,13 @@ class RtcEngineEvents {
             "CameraReady": CameraReady,
             "VideoStopped": VideoStopped,
             "MetadataReceived": MetadataReceived,
+            "FirstLocalAudioFramePublished": FirstLocalAudioFramePublished,
+            "FirstLocalVideoFramePublished": FirstLocalVideoFramePublished,
+            "AudioPublishStateChanged": AudioPublishStateChanged,
+            "VideoPublishStateChanged": VideoPublishStateChanged,
+            "AudioSubscribeStateChanged": AudioSubscribeStateChanged,
+            "VideoSubscribeStateChanged": VideoSubscribeStateChanged,
+            "RtmpStreamingEvent": RtmpStreamingEvent,
         ]
     }
 }
@@ -189,7 +203,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, didRejoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
-        callback(RtcEngineEvents.RejoinChannelSuccess, uid, elapsed)
+        callback(RtcEngineEvents.RejoinChannelSuccess, channel, uid, elapsed)
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, didLeaveChannelWith stats: AgoraChannelStats) {
@@ -249,7 +263,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, firstLocalVideoFrameWith size: CGSize, elapsed: Int) {
-        callback(RtcEngineEvents.FirstLocalVideoFrame, size.width, size.height, elapsed)
+        callback(RtcEngineEvents.FirstLocalVideoFrame, Int(size.width), Int(size.height), elapsed)
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoMuted muted: Bool, byUid uid: UInt) {
@@ -257,7 +271,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, videoSizeChangedOfUid uid: UInt, size: CGSize, rotation: Int) {
-        callback(RtcEngineEvents.VideoSizeChanged, uid, size.width, size.height, rotation)
+        callback(RtcEngineEvents.VideoSizeChanged, uid, Int(size.width), Int(size.height), rotation)
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteStateReason, elapsed: Int) {
@@ -389,7 +403,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteVideoFrameOfUid uid: UInt, size: CGSize, elapsed: Int) {
-        callback(RtcEngineEvents.FirstRemoteVideoFrame, uid, size.width, size.height, elapsed)
+        callback(RtcEngineEvents.FirstRemoteVideoFrame, uid, Int(size.width), Int(size.height), elapsed)
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteAudioFrameOfUid uid: UInt, elapsed: Int) {
@@ -429,7 +443,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, firstRemoteVideoDecodedOfUid uid: UInt, size: CGSize, elapsed: Int) {
-        callback(RtcEngineEvents.FirstRemoteVideoDecoded, uid, size.width, size.height, elapsed)
+        callback(RtcEngineEvents.FirstRemoteVideoDecoded, uid, Int(size.width), Int(size.height), elapsed)
     }
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, didMicrophoneEnabled enabled: Bool) {
@@ -454,5 +468,33 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
 
     public func rtcEngineVideoDidStop(_ engine: AgoraRtcEngineKit) {
         callback(RtcEngineEvents.VideoStopped)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, firstLocalAudioFramePublished elapsed: Int) {
+        callback(RtcEngineEvents.FirstLocalAudioFramePublished, elapsed)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, firstLocalVideoFramePublished elapsed: Int) {
+        callback(RtcEngineEvents.FirstLocalVideoFramePublished, elapsed)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didAudioPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.AudioPublishStateChanged, channel, oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoPublishStateChange channel: String, oldState: AgoraStreamPublishState, newState: AgoraStreamPublishState, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.VideoPublishStateChanged, channel, oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didAudioSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.AudioSubscribeStateChanged, channel, uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didVideoSubscribeStateChange channel: String, withUid uid: UInt, oldState: AgoraStreamSubscribeState, newState: AgoraStreamSubscribeState, elapseSinceLastState: Int) {
+        callback(RtcEngineEvents.VideoSubscribeStateChanged, channel, uid, oldState.rawValue, newState.rawValue, elapseSinceLastState)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, rtmpStreamingEventWithUrl url: String, eventCode: AgoraRtmpStreamingEvent) {
+        callback(RtcEngineEvents.RtmpStreamingEvent, url, eventCode.rawValue)
     }
 }

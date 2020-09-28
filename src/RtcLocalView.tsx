@@ -1,14 +1,14 @@
-import React, {Component} from "react";
-import {Platform, ViewProps} from "react-native";
+import React, {Component} from "react"
+import {Platform, ViewProps} from "react-native"
 
-import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps} from "./src/RtcRenderView.native";
+import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps} from "./src/RtcRenderView.native"
 
 /**
  * The SurfaceView class.
  *
  * **Note**
  *
- * SurfaceView is supported on Android only. Use UIView on iOS.
+ * SurfaceView is supported on Android only. Use [UIView](https://developer.apple.com/documentation/uikit/uiview) on iOS.
  *
  * @noInheritDoc
  */
@@ -18,7 +18,7 @@ class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
             <RtcSurfaceView
                 {...this.props}
                 uid={0}/>
-        );
+        )
     }
 }
 
@@ -38,7 +38,7 @@ class TextureView extends Component<ViewProps & RtcTextureViewProps, {}> {
             <RtcTextureView
                 {...this.props}
                 uid={0}/>
-        );
+        )
     }
 }
 
