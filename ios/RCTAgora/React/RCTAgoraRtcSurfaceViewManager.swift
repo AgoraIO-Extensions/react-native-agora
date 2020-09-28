@@ -42,7 +42,7 @@ class RtcView: RtcSurfaceView {
 
     deinit {
         // if let engine = getEngine?() {
-            // resetVideoCanvas(engine)
+        // resetVideoCanvas(engine)
         // }
     }
 
