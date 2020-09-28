@@ -28,6 +28,7 @@ import {
     RemoteVideoStats,
     RtcStats,
     RtmpStreamingErrorCode,
+    RtmpStreamingEvent,
     RtmpStreamingState,
     StreamPublishState,
     StreamSubscribeState,
@@ -432,6 +433,11 @@ export type StreamSubscribeStateCallback =
  * @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
  */
     (channel: string, oldState: StreamSubscribeState, newState: StreamSubscribeState, elapseSinceLastState: number) => void
+export type RtmpStreamingEventCallback =
+/**
+ * TODO(doc)
+ */
+    (url: string, eventCode: RtmpStreamingEvent) => void
 
 /**
  * Callbacks.
@@ -1659,5 +1665,5 @@ export interface RtcChannelEvents {
      *
      * @since v3.1.2.
      */
-    RtmpStreamingEvent: UrlWithErrorCallback
+    RtmpStreamingEvent: RtmpStreamingEventCallback
 }
