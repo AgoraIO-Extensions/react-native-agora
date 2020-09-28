@@ -8,7 +8,7 @@ import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps
  *
  * **Note**
  *
- * SurfaceView is supported on Android only. Use UIView on iOS.
+ * SurfaceView is supported on Android only. Use [UIView](https://developer.apple.com/documentation/uikit/uiview) on iOS.
  *
  * @noInheritDoc
  */
