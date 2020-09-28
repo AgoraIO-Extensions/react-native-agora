@@ -5,6 +5,7 @@ import {
     ChannelMediaRelayConfiguration,
     ClientRole,
     ConnectionStateType,
+    EncryptionConfig,
     EncryptionMode,
     LiveInjectStreamConfig,
     LiveTranscoding,
@@ -599,7 +600,33 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
     }
 
     /**
+     * Enables/Disables the built-in encryption.
+     *
+     * @since v3.1.2.
+     *
+     * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
+     *
+     * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+     *
+     * **Note**
+     * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+     * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
+     *
+     *
+     * @param enabled Whether to enable the built-in encryption.
+     * - `true`: Enable the built-in encryption.
+     * - `false`: Disable the built-in encryption.
+     * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+     */
+    enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
+        return AgoraRtcChannelModule.enableEncryption(enabled, config);
+    }
+
+    /**
      * Sets the built-in encryption mode.
+     *
+     * @deprecated
+     * Deprecated as of v3.1.2. Use [`enableEncryption`]{@link enableEncryption} instead.
      *
      * The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default.
      * Call this method to set the encryption mode to use other encryption modes.
@@ -618,6 +645,9 @@ export default class RtcChannel implements RtcAudioInterface, RtcVideoInterface,
 
     /**
      * Enables built-in encryption with an encryption password before joining a channel.
+     *
+     * @deprecated
+     * Deprecated as of v3.1.2. Use [`enableEncryption`]{@link enableEncryption} instead.
      *
      * All users in a channel must set the same encryption password.
      * The encryption password is automatically cleared once a user leaves the channel.
@@ -809,6 +839,8 @@ interface RtcEncryptionInterface {
     setEncryptionSecret(secret: string): Promise<void>
 
     setEncryptionMode(encryptionMode: EncryptionMode): Promise<void>
+
+    enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void>
 }
 
 /**
