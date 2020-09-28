@@ -11,6 +11,7 @@
 
 @interface RCT_EXTERN_MODULE(RCTAgoraRtcEngineModule, NSObject)
 
-RCT_EXTERN_METHOD(callMethod:(NSString *) methodName :(NSDictionary *) params :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
+RCT_EXTERN_METHOD(callMethod:
+    (NSString *) methodName :(NSDictionary *) params :(RCTPromiseResolveBlock) resolve :(RCTPromiseRejectBlock) reject)
 
 @end

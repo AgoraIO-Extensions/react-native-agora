@@ -1,5 +1,9 @@
 ## THE CHANGELOG
 
+#### 3.1.2
+  - support 3.1.2 native sdk
+  - fix `RejoinChannelSuccess` bug
+
 #### 3.0.1
   - release version
 

@@ -5,8 +5,11 @@ import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
-import io.agora.rtc.base.*
+import io.agora.rtc.base.RtcChannelEventHandler
+import io.agora.rtc.base.RtcChannelManager
 import io.agora.rtc.react.RCTAgoraRtcChannelModule.Companion.REACT_CLASS
+import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.jvm.javaMethod
 
 @ReactModule(name = REACT_CLASS)
 class RCTAgoraRtcChannelModule(
@@ -16,7 +19,7 @@ class RCTAgoraRtcChannelModule(
         const val REACT_CLASS = "RCTAgoraRtcChannelModule"
     }
 
-    private val manager = RtcChannelManager()
+    private val manager = RtcChannelManager { methodName, data -> emit(methodName, data) }
 
     override fun getName(): String {
         return REACT_CLASS
@@ -46,5 +49,23 @@ class RCTAgoraRtcChannelModule(
         return manager[channelId]
     }
 
-
+    @ReactMethod
+    fun callMethod(methodName: String, params: ReadableMap?, callback: Promise?) {
+        manager::class.declaredMemberFunctions.find { it.name == methodName }?.let { function ->
+            function.javaMethod?.let { method ->
+                try {
+                    val parameters = mutableListOf<Any?>()
+                    params?.toHashMap()?.toMutableMap()?.let {
+                        if (methodName == "create") {
+                            it["engine"] = engine()
+                        }
+                        parameters.add(it)
+                    }
+                    method.invoke(manager, *parameters.toTypedArray(), PromiseCallback(callback))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
 }
