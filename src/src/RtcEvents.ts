@@ -1323,7 +1323,7 @@ export interface RtcEngineEvents {
      *
      * @since v3.1.2.
      */
-    RtmpStreamingEvent: UrlWithErrorCallback
+    RtmpStreamingEvent: RtmpStreamingEventCallback
 }
 
 /**
