@@ -73,6 +73,9 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter {
 
     @objc func callMethod(_ methodName: String, _ params: NSDictionary?, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         if let `params` = params {
+            if methodName == "create" {
+                params.setValue(engine(), forKey: "engine")
+            }
             manager.perform(NSSelectorFromString(methodName + "::"), with: params, with: PromiseCallback(resolve, reject))
         } else {
             manager.perform(NSSelectorFromString(methodName + ":"), with: PromiseCallback(resolve, reject))
