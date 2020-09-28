@@ -113,11 +113,11 @@ export type UidWithElapsedCallback =
  * - [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess}: User ID.
  * - [`RejoinChannelSuccess`]{@link RtcChannelEvents.RejoinChannelSuccess}: User ID.
  * @param elapsed This parameter has the following definitions in different events:
- * - [`UserJoined`]{@link RtcEngineEvents.UserJoined}：Time delay (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} or [`setClientRole`]{@link RtcEngine.setClientRole}
+ * - [`UserJoined`]{@link RtcEngineEvents.UserJoined}: Time delay (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} or [`setClientRole`]{@link RtcEngine.setClientRole}
  * until this callback is triggered.
  * - [`FirstRemoteAudioFrame`]{@link RtcEngineEvents.FirstRemoteAudioFrame}: Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until this callback is triggered.
  * - [`FirstRemoteAudioDecoded`]{@link RtcEngineEvents.FirstRemoteAudioDecoded}: Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until the SDK triggers this callback.
- * - [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess}：Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcChannel.joinChannel} until this callback is triggered.
+ * - [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess}: Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcChannel.joinChannel} until this callback is triggered.
  * - [`RejoinChannelSuccess`]{@link RtcChannelEvents.RejoinChannelSuccess}: Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
  *
  */
@@ -398,8 +398,8 @@ export type UidWithEnabledCallback =
 export type EnabledCallback =
 /**
  * @param enabled Whether the microphone is enabled/disabled:
- *  - `true`：Enabled.
- *  - `false`：Disabled.
+ *  - `true`: Enabled.
+ *  - `false`: Disabled.
  */
     (enabled: boolean) => void
 export type AudioQualityCallback =
@@ -1032,7 +1032,7 @@ export interface RtcEngineEvents {
      *
      * Use [`Decoding`]{@link VideoRemoteState.Decoding} in [`RemoteAudioStateChanged`]{@link RemoteAudioStateChanged} instead.
      *
-     * This callback is triggered in either of the following scenarios：
+     * This callback is triggered in either of the following scenarios:
      * - The remote user joins the channel and sends the audio stream.
      * - The remote user stops sending the audio stream and re-sends it after 15 seconds. Possible reasons include:
      *  - The remote user leaves channel.
