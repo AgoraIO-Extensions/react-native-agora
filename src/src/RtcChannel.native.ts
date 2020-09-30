@@ -54,6 +54,9 @@ export default class RtcChannel implements RtcChannelInterface {
         this.channelId = channelId
     }
 
+    /**
+     * @ignore
+     */
     private _callMethod<T>(method: string, args?: {}): Promise<T> {
         return AgoraRtcChannelModule.callMethod(method, args === undefined ? {channelId: this.channelId} : {channelId: this.channelId, ...args});
     }
