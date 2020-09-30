@@ -66,6 +66,9 @@ export default class RtcEngine implements RtcEngineInterface {
      */
     private _listeners = new Map<string, Map<Listener, Listener>>()
 
+    /**
+     * @ignore
+     */
     private static _callMethod<T>(method: string, args?: {}): Promise<T> {
         return AgoraRtcEngineModule.callMethod(method, args);
     }
