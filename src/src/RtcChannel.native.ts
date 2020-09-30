@@ -54,6 +54,10 @@ export default class RtcChannel implements RtcChannelInterface {
         this.channelId = channelId
     }
 
+    private _callMethod<T>(method: string, args?: {}): Promise<T> {
+        return AgoraRtcChannelModule.callMethod(method, args === undefined ? {channelId: this.channelId} : {channelId: this.channelId, ...args});
+    }
+
     /**
      * Creates and gets an [`RtcChannel`]{@link RtcChannel} instance.
      *
@@ -102,7 +106,7 @@ export default class RtcChannel implements RtcChannelInterface {
     destroy(): Promise<void> {
         this.removeAllListeners()
         channels.delete(this.channelId)
-        return AgoraRtcChannelModule.callMethod('destroy', {channelId: this.channelId})
+        return this._callMethod('destroy')
     }
 
     /**
@@ -177,7 +181,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param role The role of the user.
      */
     setClientRole(role: ClientRole): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setClientRole', {channelId: this.channelId, role})
+        return this._callMethod('setClientRole', {role})
     }
 
     /**
@@ -197,13 +201,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param options The channel media options.
      */
     joinChannel(token: string | null, optionalInfo: string | null, optionalUid: number, options: ChannelMediaOptions): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('joinChannel', {
-            channelId: this.channelId,
-            token,
-            optionalInfo,
-            optionalUid,
-            options
-        })
+        return this._callMethod('joinChannel', {token, optionalInfo, optionalUid, options})
     }
 
     /**
@@ -227,12 +225,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param options The channel media options.
      */
     joinChannelWithUserAccount(token: string | null, userAccount: string, options: ChannelMediaOptions): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('joinChannelWithUserAccount', {
-            channelId: this.channelId,
-            token,
-            userAccount,
-            options
-        })
+        return this._callMethod('joinChannelWithUserAccount', {token, userAccount, options})
     }
 
     /**
@@ -243,7 +236,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - The remote client: [`UserOffline`]{@link RtcChannelEvents.UserOffline}, if the user leaving the channel is in a `Communication` channel, or is a host in a `LiveBroadcasting` channel.
      */
     leaveChannel(): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('leaveChannel', {channelId: this.channelId})
+        return this._callMethod('leaveChannel')
     }
 
     /**
@@ -257,14 +250,14 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param token The new token.
      */
     renewToken(token: string): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('renewToken', {channelId: this.channelId, token})
+        return this._callMethod('renewToken', {token})
     }
 
     /**
      * Gets the network connection state of the SDK.
      */
     getConnectionState(): Promise<ConnectionStateType> {
-        return AgoraRtcChannelModule.callMethod('getConnectionState', {channelId: this.channelId})
+        return this._callMethod('getConnectionState')
     }
 
     /**
@@ -276,7 +269,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
      */
     publish(): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('publish', {channelId: this.channelId})
+        return this._callMethod('publish')
     }
 
     /**
@@ -285,7 +278,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * If you call this method in a channel where you are not publishing streams, the SDK returns [`Refused(-5)`]{@link ErrorCode.Refused}.
      */
     unpublish(): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('unpublish', {channelId: this.channelId})
+        return this._callMethod('unpublish')
     }
 
     /**
@@ -296,7 +289,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - The empty string "", if the method call fails.
      */
     getCallId(): Promise<string> {
-        return AgoraRtcChannelModule.callMethod('getCallId', {channelId: this.channelId})
+        return this._callMethod('getCallId')
     }
 
     /**
@@ -317,11 +310,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - 100: The original volume.
      */
     adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('adjustUserPlaybackSignalVolume', {
-            channelId: this.channelId,
-            uid,
-            volume
-        })
+        return this._callMethod('adjustUserPlaybackSignalVolume', {uid, volume})
     }
 
     /**
@@ -333,7 +322,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - `false`: (Default) Receive the audio stream of the user.
      */
     muteRemoteAudioStream(uid: number, muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('muteRemoteAudioStream', {channelId: this.channelId, uid, muted})
+        return this._callMethod('muteRemoteAudioStream', {uid, muted})
     }
 
     /**
@@ -344,7 +333,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - `false`: (Default) Receive all remote audio streams.
      */
     muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('muteAllRemoteAudioStreams', {channelId: this.channelId, muted})
+        return this._callMethod('muteAllRemoteAudioStreams', {muted})
     }
 
     /**
@@ -355,10 +344,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - `false`: (Default) Receive all remote audio streams by default.
      */
     setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setDefaultMuteAllRemoteAudioStreams', {
-            channelId: this.channelId,
-            muted
-        })
+        return this._callMethod('setDefaultMuteAllRemoteAudioStreams', {muted})
     }
 
     /**
@@ -369,7 +355,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - `false`: (Default) Receive all remote video streams.
      */
     muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('muteAllRemoteVideoStreams', {channelId: this.channelId, muted})
+        return this._callMethod('muteAllRemoteVideoStreams', {muted})
     }
 
     /**
@@ -381,7 +367,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - `false`: (Default) Receive the video stream of the user.
      */
     muteRemoteVideoStream(uid: number, muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('muteRemoteVideoStream', {channelId: this.channelId, uid, muted})
+        return this._callMethod('muteRemoteVideoStream', {uid, muted})
     }
 
     /**
@@ -392,10 +378,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - `false`: (Default) Receive all remote video streams by default.
      */
     setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setDefaultMuteAllRemoteVideoStreams', {
-            channelId: this.channelId,
-            muted
-        })
+        return this._callMethod('setDefaultMuteAllRemoteVideoStreams', {muted})
     }
 
     /**
@@ -415,7 +398,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param gain Gain of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original gain of the remote user). The smaller the value, the less the gain.
      */
     setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setRemoteVoicePosition', {channelId: this.channelId, uid, pan, gain})
+        return this._callMethod('setRemoteVoicePosition', {uid, pan, gain})
     }
 
     /**
@@ -437,11 +420,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - `false`: Disable transcoding.
      */
     addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('addPublishStreamUrl', {
-            channelId: this.channelId,
-            url,
-            transcodingEnabled
-        })
+        return this._callMethod('addPublishStreamUrl', {url, transcodingEnabled})
     }
 
     /**
@@ -459,7 +438,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * such as Chinese language characters.
      */
     removePublishStreamUrl(url: string): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('removePublishStreamUrl', {channelId: this.channelId, url})
+        return this._callMethod('removePublishStreamUrl', {url})
     }
 
     /**
@@ -478,7 +457,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param transcoding Sets the CDN live audio/video transcoding settings.
      */
     setLiveTranscoding(transcoding: LiveTranscoding): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setLiveTranscoding', {channelId: this.channelId, transcoding})
+        return this._callMethod('setLiveTranscoding', {transcoding})
     }
 
     /**
@@ -503,10 +482,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param channelMediaRelayConfiguration The configuration of the media stream relay.
      */
     startChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('startChannelMediaRelay', {
-            channelId: this.channelId,
-            channelMediaRelayConfiguration
-        })
+        return this._callMethod('startChannelMediaRelay', {channelMediaRelayConfiguration})
     }
 
     /**
@@ -522,7 +498,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * You can leave the channel using [`leaveChannel`]{@link RtcChannel.leaveChannel}, and the media stream relay automatically stops.
      */
     stopChannelMediaRelay(): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('stopChannelMediaRelay', {channelId: this.channelId})
+        return this._callMethod('stopChannelMediaRelay')
     }
 
     /**
@@ -539,10 +515,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param channelMediaRelayConfiguration The media stream relay configuration.
      */
     updateChannelMediaRelay(channelMediaRelayConfiguration: ChannelMediaRelayConfiguration): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('updateChannelMediaRelay', {
-            channelId: this.channelId,
-            channelMediaRelayConfiguration
-        })
+        return this._callMethod('updateChannelMediaRelay', {channelMediaRelayConfiguration})
     }
 
     /**
@@ -551,10 +524,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param streamType Sets the default video-stream type.
      */
     setRemoteDefaultVideoStreamType(streamType: VideoStreamType): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setRemoteDefaultVideoStreamType', {
-            channelId: this.channelId,
-            streamType
-        })
+        return this._callMethod('setRemoteDefaultVideoStreamType', {streamType})
     }
 
     /**
@@ -571,11 +541,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param streamType Sets the video-stream type.
      */
     setRemoteVideoStreamType(uid: number, streamType: VideoStreamType): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setRemoteVideoStreamType', {
-            channelId: this.channelId,
-            uid,
-            streamType
-        })
+        return this._callMethod('setRemoteVideoStreamType', {uid, streamType})
     }
 
     /**
@@ -591,11 +557,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param userPriority The priority of the remote user.
      */
     setRemoteUserPriority(uid: number, userPriority: UserPriority): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setRemoteUserPriority', {
-            channelId: this.channelId,
-            uid,
-            userPriority
-        })
+        return this._callMethod('setRemoteUserPriority', {uid, userPriority})
     }
 
     /**
@@ -611,7 +573,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - This method applies to the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile only.
      */
     registerMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('registerMediaMetadataObserver', {channelId: this.channelId})
+        return this._callMethod('registerMediaMetadataObserver')
     }
 
     /**
@@ -620,7 +582,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param metadata The metadata to be sent.
      */
     sendMetadata(metadata: string): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('sendMetadata', {channelId: this.channelId, metadata})
+        return this._callMethod('sendMetadata', {metadata})
     }
 
     /**
@@ -629,14 +591,14 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param size Buffer size of the sent or received metadata.
      */
     setMaxMetadataSize(size: number): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setMaxMetadataSize', {channelId: this.channelId, size})
+        return this._callMethod('setMaxMetadataSize', {size})
     }
 
     /**
      * Unregisters the metadata observer.
      */
     unregisterMediaMetadataObserver(): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('unregisterMediaMetadataObserver', {channelId: this.channelId})
+        return this._callMethod('unregisterMediaMetadataObserver')
     }
 
     /**
@@ -659,7 +621,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
      */
     enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('enableEncryption', {channelId: this.channelId, enabled, config});
+        return this._callMethod('enableEncryption', {enabled, config});
     }
 
     /**
@@ -680,7 +642,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param encryptionMode Sets the encryption mode.
      */
     setEncryptionMode(encryptionMode: EncryptionMode): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setEncryptionMode', {channelId: this.channelId, encryptionMode})
+        return this._callMethod('setEncryptionMode', {encryptionMode})
     }
 
     /**
@@ -700,7 +662,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param secret The encryption password.
      */
     setEncryptionSecret(secret: string): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('setEncryptionSecret', {channelId: this.channelId, secret})
+        return this._callMethod('setEncryptionSecret', {secret})
     }
 
     /**
@@ -727,7 +689,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param config The [`LiveInjectStreamConfig`]{@link LiveInjectStreamConfig} object, which contains the configuration information for the added voice or video stream.
      */
     addInjectStreamUrl(url: string, config: LiveInjectStreamConfig): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('addInjectStreamUrl', {channelId: this.channelId, url, config})
+        return this._callMethod('addInjectStreamUrl', {url, config})
     }
 
     /**
@@ -741,7 +703,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param url The URL address to be removed.
      */
     removeInjectStreamUrl(url: string): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('removeInjectStreamUrl', {channelId: this.channelId, url})
+        return this._callMethod('removeInjectStreamUrl', {url})
     }
 
     /**
@@ -766,7 +728,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
      */
     createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
-        return AgoraRtcChannelModule.callMethod('createDataStream', {channelId: this.channelId, reliable, ordered})
+        return this._callMethod('createDataStream', {reliable, ordered})
     }
 
     /**
@@ -786,7 +748,7 @@ export default class RtcChannel implements RtcChannelInterface {
      * @param message The message data.
      */
     sendStreamMessage(streamId: number, message: string): Promise<void> {
-        return AgoraRtcChannelModule.callMethod('sendStreamMessage', {channelId: this.channelId, streamId, message})
+        return this._callMethod('sendStreamMessage', {streamId, message})
     }
 }
 
