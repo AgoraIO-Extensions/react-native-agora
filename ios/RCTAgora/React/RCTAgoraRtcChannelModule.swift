@@ -14,9 +14,8 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter {
     static let REACT_CLASS = "RCTAgoraRtcChannelModule"
 
     private var hasListeners = false
-
     private lazy var manager: RtcChannelManager = {
-        return RtcChannelManager { [weak self] methodName, data in
+        return RtcChannelManager() { [weak self] methodName, data in
             self?.emit(methodName, data)
         }
     }()
@@ -63,11 +62,11 @@ class RCTAgoraRtcChannelModule: RCTEventEmitter {
         }
     }
 
-    private func engine() -> AgoraRtcEngineKit? {
+    private weak var engine: AgoraRtcEngineKit? {
         return (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
 
-    func channel(_ channelId: String) -> AgoraRtcChannel? {
+    public func channel(_ channelId: String) -> AgoraRtcChannel? {
         return manager[channelId]
     }
 

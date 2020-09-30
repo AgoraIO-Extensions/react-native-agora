@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.1.2-rc.1
+  - make `RtcChannel.channelId` public
+
 #### 3.1.2
   - support 3.1.2 native sdk
   - fix `RejoinChannelSuccess` bug
