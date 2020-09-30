@@ -14,7 +14,6 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter {
     static let REACT_CLASS = "RCTAgoraRtcEngineModule"
 
     private var hasListeners = false
-
     private lazy var manager: RtcEngineManager = {
         return RtcEngineManager() { [weak self] methodName, data in
             self?.emit(methodName, data)
@@ -63,7 +62,7 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter {
         }
     }
 
-    var engine: AgoraRtcEngineKit? {
+    weak var engine: AgoraRtcEngineKit? {
         return manager.engine
     }
 
