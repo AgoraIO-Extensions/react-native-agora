@@ -1,5 +1,9 @@
 ## THE CHANGELOG
 
+#### 3.1.2-rc.2
+  - fix iOS `deinit` `[weak self]` crash
+  - fix `engine()` build error
+
 #### 3.1.2-rc.1
   - make `RtcChannel.channelId` public
 
