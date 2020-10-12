@@ -1,5 +1,17 @@
 ## THE CHANGELOG
 
+#### 3.1.3
+  - fix iOS `deinit` `[weak self]` crash
+  - make `RtcChannel.channelId` public
+  - add `setAudioSessionOperationRestriction` and `sendCustomReportMessage` method
+
+#### 3.1.2-rc.2
+  - fix iOS `deinit` `[weak self]` crash
+  - fix `engine()` build error
+
+#### 3.1.2-rc.1
+  - make `RtcChannel.channelId` public
+
 #### 3.1.2
   - support 3.1.2 native sdk
   - fix `RejoinChannelSuccess` bug

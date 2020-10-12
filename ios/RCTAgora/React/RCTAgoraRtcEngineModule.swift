@@ -14,12 +14,18 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter {
     static let REACT_CLASS = "RCTAgoraRtcEngineModule"
 
     private var hasListeners = false
+    private var manager: RtcEngineManager?
 
-    private lazy var manager: RtcEngineManager = {
-        return RtcEngineManager() { [weak self] methodName, data in
+    override init() {
+        super.init()
+        manager = RtcEngineManager() { [weak self] methodName, data in
             self?.emit(methodName, data)
         }
-    }()
+    }
+
+    deinit {
+        manager?.Release()
+    }
 
     override class func moduleName() -> String! {
         return RCTAgoraRtcEngineModule.REACT_CLASS
@@ -27,10 +33,6 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter {
 
     override func constantsToExport() -> [AnyHashable: Any]! {
         return ["prefix": RtcEngineEventHandler.PREFIX]
-    }
-
-    deinit {
-        manager.Release()
     }
 
     override class func requiresMainQueueSetup() -> Bool {
@@ -63,15 +65,15 @@ class RCTAgoraRtcEngineModule: RCTEventEmitter {
         }
     }
 
-    var engine: AgoraRtcEngineKit? {
-        return manager.engine
+    weak var engine: AgoraRtcEngineKit? {
+        return manager?.engine
     }
 
     @objc func callMethod(_ methodName: String, _ params: NSDictionary?, _ resolve: RCTPromiseResolveBlock?, _ reject: RCTPromiseRejectBlock?) {
         if let `params` = params {
-            manager.perform(NSSelectorFromString(methodName + "::"), with: params, with: PromiseCallback(resolve, reject))
+            manager?.perform(NSSelectorFromString(methodName + "::"), with: params, with: PromiseCallback(resolve, reject))
         } else {
-            manager.perform(NSSelectorFromString(methodName + ":"), with: PromiseCallback(resolve, reject))
+            manager?.perform(NSSelectorFromString(methodName + ":"), with: PromiseCallback(resolve, reject))
         }
     }
 }

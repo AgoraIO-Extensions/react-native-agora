@@ -2339,3 +2339,29 @@ export enum RtmpStreamingEvent {
      */
     FailedLoadImage = 1,
 }
+
+/**
+ * Audio session restriction.
+ */
+export enum AudioSessionOperationRestriction {
+    /**
+     * No restriction, the SDK has full control of the audio session operations.
+     */
+    None = 0,
+    /**
+     * The SDK does not change the audio session category.
+     */
+    SetCategory = 1,
+    /**
+     * The SDK does not change any setting of the audio session (category, mode, categoryOptions).
+     */
+    ConfigureSession = 1 << 1,
+    /**
+     * The SDK keeps the audio session active when leaving a channel.
+     */
+    DeactivateSession = 1 << 2,
+    /**
+     * The SDK does not configure the audio session anymore.
+     */
+    All = 1 << 7,
+}
