@@ -9,6 +9,7 @@ import {
     AudioReverbType,
     AudioSampleRateType,
     AudioScenario,
+    AudioSessionOperationRestriction,
     AudioVoiceChanger,
     BeautyOptions,
     CameraCapturerConfiguration,
@@ -2276,6 +2277,32 @@ export default class RtcEngine implements RtcEngineInterface {
     sendStreamMessage(streamId: number, message: string): Promise<void> {
         return RtcEngine._callMethod('sendStreamMessage', {streamId, message})
     }
+
+    /**
+     * This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
+     * @param id
+     * @param category
+     * @param event
+     * @param label
+     * @param value
+     */
+    sendCustomReportMessage(id: string, category: string, event: string, label: string, value: number): Promise<void> {
+        return RtcEngine._callMethod('sendCustomReportMessage', {id, category, event, label, value})
+    }
+
+    /**
+     * The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
+     *
+     * You can call this method at any time to return the control of the audio sessions to the SDK.
+     *
+     * **Note**
+     * - This method restricts the SDK’s manipulation of the audio session. Any operation to the audio session relies solely on the app, other apps, or third-party components.
+     *
+     * @param restriction The operational restriction (bit mask) of the SDK on the audio session. See [`AudioSessionOperationRestriction`]{@link AudioSessionOperationRestriction}.
+     */
+    setAudioSessionOperationRestriction(restriction: AudioSessionOperationRestriction): Promise<void> {
+        return RtcEngine._callMethod('setAudioSessionOperationRestriction', {restriction})
+    }
 }
 
 /**
@@ -2303,6 +2330,8 @@ interface RtcEngineInterface extends RtcUserInfoInterface, RtcAudioInterface, Rt
     enableWebSdkInteroperability(enabled: boolean): Promise<void>
 
     getConnectionState(): Promise<ConnectionStateType>
+
+    sendCustomReportMessage(id: string, category: string, event: string, label: string, value: number): Promise<void>
 
     getCallId(): Promise<string>
 
@@ -2446,6 +2475,8 @@ interface RtcAudioEffectInterface {
     resumeEffect(soundId: number): Promise<void>
 
     resumeAllEffects(): Promise<void>
+
+    setAudioSessionOperationRestriction(restriction: AudioSessionOperationRestriction): Promise<void>
 }
 
 /**
