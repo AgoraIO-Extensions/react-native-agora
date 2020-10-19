@@ -290,15 +290,15 @@ export class VideoEncoderConfiguration {
      */
     mirrorMode?: VideoMirrorMode
 
-    constructor({dimensions, frameRate, minFrameRate, bitrate, minBitrate, orientationMode, degradationPrefer, mirrorMode}: { dimensions?: VideoDimensions, frameRate?: VideoFrameRate, minFrameRate?: VideoFrameRate, bitrate?: number, minBitrate?: number, orientationMode?: VideoOutputOrientationMode, degradationPrefer?: DegradationPreference, mirrorMode?: VideoMirrorMode }) {
-        this.dimensions = dimensions
-        this.frameRate = frameRate
-        this.minFrameRate = minFrameRate
-        this.bitrate = bitrate
-        this.minBitrate = minBitrate
-        this.orientationMode = orientationMode
-        this.degradationPrefer = degradationPrefer
-        this.mirrorMode = mirrorMode
+    constructor(params?: { dimensions?: VideoDimensions, frameRate?: VideoFrameRate, minFrameRate?: VideoFrameRate, bitrate?: number, minBitrate?: number, orientationMode?: VideoOutputOrientationMode, degradationPrefer?: DegradationPreference, mirrorMode?: VideoMirrorMode }) {
+        this.dimensions = params?.dimensions
+        this.frameRate = params?.frameRate
+        this.minFrameRate = params?.minFrameRate
+        this.bitrate = params?.bitrate
+        this.minBitrate = params?.minBitrate
+        this.orientationMode = params?.orientationMode
+        this.degradationPrefer = params?.degradationPrefer
+        this.mirrorMode = params?.mirrorMode
     }
 }
 
@@ -325,11 +325,11 @@ export class BeautyOptions {
      */
     rednessLevel?: number
 
-    constructor({lighteningContrastLevel, lighteningLevel, smoothnessLevel, rednessLevel}: { lighteningContrastLevel?: LighteningContrastLevel, lighteningLevel?: number, smoothnessLevel?: number, rednessLevel?: number }) {
-        this.lighteningContrastLevel = lighteningContrastLevel
-        this.lighteningLevel = lighteningLevel
-        this.smoothnessLevel = smoothnessLevel
-        this.rednessLevel = rednessLevel
+    constructor(params?: { lighteningContrastLevel?: LighteningContrastLevel, lighteningLevel?: number, smoothnessLevel?: number, rednessLevel?: number }) {
+        this.lighteningContrastLevel = params?.lighteningContrastLevel
+        this.lighteningLevel = params?.lighteningLevel
+        this.smoothnessLevel = params?.smoothnessLevel
+        this.rednessLevel = params?.rednessLevel
     }
 }
 
@@ -415,15 +415,15 @@ export class TranscodingUser {
      */
     audioChannel?: AudioChannel
 
-    constructor(uid: number, x: number, y: number, {width, height, zOrder, alpha, audioChannel}: { width?: number, height?: number, zOrder?: number, alpha?: number, audioChannel?: AudioChannel }) {
+    constructor(uid: number, x: number, y: number, params?: { width?: number, height?: number, zOrder?: number, alpha?: number, audioChannel?: AudioChannel }) {
         this.uid = uid
         this.x = x
         this.y = y
-        this.width = width
-        this.height = height
-        this.zOrder = zOrder
-        this.alpha = alpha
-        this.audioChannel = audioChannel
+        this.width = params?.width
+        this.height = params?.height
+        this.zOrder = params?.zOrder
+        this.alpha = params?.alpha
+        this.audioChannel = params?.audioChannel
     }
 }
 
@@ -535,22 +535,22 @@ export class LiveTranscoding {
      */
     transcodingUsers: TranscodingUser[]
 
-    constructor(transcodingUsers: TranscodingUser[], {width, height, videoBitrate, videoFramerate, lowLatency, videoGop, watermark, backgroundImage, audioSampleRate, audioBitrate, audioChannels, audioCodecProfile, videoCodecProfile, backgroundColor, userConfigExtraInfo}: { width?: number, height?: number, videoBitrate?: number, videoFramerate?: VideoFrameRate, lowLatency?: boolean, videoGop?: number, watermark?: AgoraImage, backgroundImage?: AgoraImage, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel, audioCodecProfile?: AudioCodecProfileType, videoCodecProfile?: VideoCodecProfileType, backgroundColor?: Color, userConfigExtraInfo?: string, }) {
-        this.width = width
-        this.height = height
-        this.videoBitrate = videoBitrate
-        this.videoFramerate = videoFramerate
-        this.lowLatency = lowLatency
-        this.videoGop = videoGop
-        this.watermark = watermark
-        this.backgroundImage = backgroundImage
-        this.audioSampleRate = audioSampleRate
-        this.audioBitrate = audioBitrate
-        this.audioChannels = audioChannels
-        this.audioCodecProfile = audioCodecProfile
-        this.videoCodecProfile = videoCodecProfile
-        this.backgroundColor = backgroundColor
-        this.userConfigExtraInfo = userConfigExtraInfo
+    constructor(transcodingUsers: TranscodingUser[], params?: { width?: number, height?: number, videoBitrate?: number, videoFramerate?: VideoFrameRate, lowLatency?: boolean, videoGop?: number, watermark?: AgoraImage, backgroundImage?: AgoraImage, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel, audioCodecProfile?: AudioCodecProfileType, videoCodecProfile?: VideoCodecProfileType, backgroundColor?: Color, userConfigExtraInfo?: string, }) {
+        this.width = params?.width
+        this.height = params?.height
+        this.videoBitrate = params?.videoBitrate
+        this.videoFramerate = params?.videoFramerate
+        this.lowLatency = params?.lowLatency
+        this.videoGop = params?.videoGop
+        this.watermark = params?.watermark
+        this.backgroundImage = params?.backgroundImage
+        this.audioSampleRate = params?.audioSampleRate
+        this.audioBitrate = params?.audioBitrate
+        this.audioChannels = params?.audioChannels
+        this.audioCodecProfile = params?.audioCodecProfile
+        this.videoCodecProfile = params?.videoCodecProfile
+        this.backgroundColor = params?.backgroundColor
+        this.userConfigExtraInfo = params?.userConfigExtraInfo
         this.transcodingUsers = transcodingUsers
     }
 }
@@ -572,9 +572,9 @@ export class ChannelMediaInfo {
      */
     uid: number
 
-    constructor(uid: number, {channelName, token}: { channelName?: string, token?: string }) {
-        this.channelName = channelName
-        this.token = token
+    constructor(uid: number, params?: { channelName?: string, token?: string }) {
+        this.channelName = params?.channelName
+        this.token = params?.token
         this.uid = uid
     }
 }
@@ -745,15 +745,15 @@ export class LiveInjectStreamConfig {
      */
     audioChannels?: AudioChannel
 
-    constructor({width, height, videoGop, videoFramerate, videoBitrate, audioSampleRate, audioBitrate, audioChannels}: { width?: number, height?: number, videoGop?: number, videoFramerate?: VideoFrameRate, videoBitrate?: number, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel }) {
-        this.width = width
-        this.height = height
-        this.videoGop = videoGop
-        this.videoFramerate = videoFramerate
-        this.videoBitrate = videoBitrate
-        this.audioSampleRate = audioSampleRate
-        this.audioBitrate = audioBitrate
-        this.audioChannels = audioChannels
+    constructor(params?: { width?: number, height?: number, videoGop?: number, videoFramerate?: VideoFrameRate, videoBitrate?: number, audioSampleRate?: AudioSampleRateType, audioBitrate?: number, audioChannels?: AudioChannel }) {
+        this.width = params?.width
+        this.height = params?.height
+        this.videoGop = params?.videoGop
+        this.videoFramerate = params?.videoFramerate
+        this.videoBitrate = params?.videoBitrate
+        this.audioSampleRate = params?.audioSampleRate
+        this.audioBitrate = params?.audioBitrate
+        this.audioChannels = params?.audioChannels
     }
 }
 
