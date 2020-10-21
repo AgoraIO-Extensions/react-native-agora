@@ -1,5 +1,8 @@
 ## THE CHANGELOG
 
+#### 3.1.4.rc-1
+  - migrating to @react-native-community/bob
+
 #### 3.1.3
   - fix iOS `deinit` `[weak self]` crash
   - make `RtcChannel.channelId` public
