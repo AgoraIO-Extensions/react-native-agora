@@ -1,3 +1,10 @@
+## [3.1.4-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/3.1.2-rc.2...v3.1.4-rc.0) (2020-10-21)
+
+
+### Features
+
+* migrating to @react-native-community/bob ([c72a527](https://github.com/AgoraIO-Community/react-native-agora/commit/c72a5278b2e990081d34e2e765e2e6a26ba792bb))
+
 ## 3.1.3
   - fix iOS `deinit` `[weak self]` crash
   - make `RtcChannel.channelId` public
