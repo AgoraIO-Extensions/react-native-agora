@@ -1,4 +1,7 @@
 {
-    "mode": "file",
-    "out": "docs/api"
+  "inputFiles": ["./lib/typescript/src"],
+  "mode": "file",
+  "out": "docs/api",
+  "includeDeclarations": true,
+  "excludeExternals": true
 }
