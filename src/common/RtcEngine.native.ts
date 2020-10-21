@@ -304,9 +304,9 @@ export default class RtcEngine implements RtcEngineInterface {
    * If necessary, the uid can be converted to a 64-bit integer through “uid&0xffffffffL”.
    */
   joinChannel(
-    token: string | null,
+    token: string | undefined | null,
     channelName: string,
-    optionalInfo: string | null,
+    optionalInfo: string | undefined | null,
     optionalUid: number
   ): Promise<void> {
     return RtcEngine._callMethod('joinChannel', {
@@ -339,7 +339,10 @@ export default class RtcEngine implements RtcEngineInterface {
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
    */
-  switchChannel(token: string | null, channelName: string): Promise<void> {
+  switchChannel(
+    token: string | undefined | null,
+    channelName: string
+  ): Promise<void> {
     return RtcEngine._callMethod('switchChannel', { token, channelName });
   }
 
@@ -549,7 +552,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
    */
   joinChannelWithUserAccount(
-    token: string | null,
+    token: string | undefined | null,
     channelName: string,
     userAccount: string
   ): Promise<void> {
@@ -2517,13 +2520,16 @@ interface RtcEngineInterface
   setClientRole(role: ClientRole): Promise<void>;
 
   joinChannel(
-    token: string | null,
+    token: string | undefined | null,
     channelName: string,
-    optionalInfo: string | null,
+    optionalInfo: string | undefined | null,
     optionalUid: number
   ): Promise<void>;
 
-  switchChannel(token: string | null, channelName: string): Promise<void>;
+  switchChannel(
+    token: string | undefined | null,
+    channelName: string
+  ): Promise<void>;
 
   leaveChannel(): Promise<void>;
 

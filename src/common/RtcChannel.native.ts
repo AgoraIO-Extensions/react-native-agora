@@ -220,8 +220,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param options The channel media options.
    */
   joinChannel(
-    token: string | null,
-    optionalInfo: string | null,
+    token: string | undefined | null,
+    optionalInfo: string | undefined | null,
     optionalUid: number,
     options: ChannelMediaOptions
   ): Promise<void> {
@@ -254,7 +254,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param options The channel media options.
    */
   joinChannelWithUserAccount(
-    token: string | null,
+    token: string | undefined | null,
     userAccount: string,
     options: ChannelMediaOptions
   ): Promise<void> {
@@ -830,14 +830,14 @@ interface RtcChannelInterface
   setClientRole(role: ClientRole): Promise<void>;
 
   joinChannel(
-    token: string | null,
-    optionalInfo: string | null,
+    token: string | undefined | null,
+    optionalInfo: string | undefined | null,
     optionalUid: number,
     options: ChannelMediaOptions
   ): Promise<void>;
 
   joinChannelWithUserAccount(
-    token: string | null,
+    token: string | undefined | null,
     userAccount: string,
     options: ChannelMediaOptions
   ): Promise<void>;

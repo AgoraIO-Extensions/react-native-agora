@@ -1310,6 +1310,8 @@ export interface RtcEngineEvents {
    * - The local client enables the audio module and calls [`joinChannel`]{@link joinChannel} successfully.
    * - The local client calls [`muteLocalAudioStream(true)`]{@link RtcEngine.muteLocalAudioStream} and [`muteLocalAudioStream(false)`]{@link RtcEngine.muteLocalAudioStream} in sequence.
    * - The local client calls [`disableAudio`]{@link RtcEngine.disableAudio} and [`enableAudio`]{@link RtcEngine.enableAudio} in sequence.
+   *
+   * @event FirstLocalAudioFramePublished
    */
   FirstLocalAudioFramePublished: ElapsedCallback;
 
@@ -1322,6 +1324,8 @@ export interface RtcEngineEvents {
    * - The local client enables the video module and calls [`joinChannel`]{@link joinChannel} successfully.
    * - The local client calls [`muteLocalVideoStream(true)`]{@link RtcEngine.muteLocalVideoStream} and [`muteLocalVideoStream(false)`]{@link RtcEngine.muteLocalVideoStream} in sequence.
    * - The local client calls [`disableVideo`]{@link RtcEngine.disableVideo} and [`enableVideo`]{@link RtcEngine.enableVideo} in sequence.
+   *
+   * @event FirstLocalVideoFramePublished
    */
   FirstLocalVideoFramePublished: ElapsedCallback;
 
@@ -1331,6 +1335,8 @@ export interface RtcEngineEvents {
    * @since v3.1.2.
    *
    * This callback indicates the publishing state change of the local audio stream.
+   *
+   * @event AudioPublishStateChanged
    */
   AudioPublishStateChanged: StreamPublishStateCallback;
 
@@ -1340,6 +1346,8 @@ export interface RtcEngineEvents {
    * @since v3.1.2.
    *
    * This callback indicates the publishing state change of the local video stream.
+   *
+   * @event VideoPublishStateChanged
    */
   VideoPublishStateChanged: StreamPublishStateCallback;
 
@@ -1349,6 +1357,8 @@ export interface RtcEngineEvents {
    * @since v3.1.2.
    *
    * This callback indicates the subscribing state change of a remote audio stream.
+   *
+   * @event AudioSubscribeStateChanged
    */
   AudioSubscribeStateChanged: StreamSubscribeStateCallback;
 
@@ -1358,6 +1368,8 @@ export interface RtcEngineEvents {
    * @since v3.1.2.
    *
    * This callback indicates the subscribing state change of a remote video stream.
+   *
+   * @event VideoSubscribeStateChanged
    */
   VideoSubscribeStateChanged: StreamSubscribeStateCallback;
 
@@ -1365,6 +1377,8 @@ export interface RtcEngineEvents {
    * Reports events during the RTMP streaming.
    *
    * @since v3.1.2.
+   *
+   * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
 }
@@ -1673,6 +1687,8 @@ export interface RtcChannelEvents {
    * @since v3.1.2.
    *
    * This callback indicates the publishing state change of the local audio stream.
+   *
+   * @event AudioPublishStateChanged
    */
   AudioPublishStateChanged: StreamPublishStateCallback;
 
@@ -1682,6 +1698,8 @@ export interface RtcChannelEvents {
    * @since v3.1.2.
    *
    * This callback indicates the publishing state change of the local video stream.
+   *
+   * @event VideoPublishStateChanged
    */
   VideoPublishStateChanged: StreamPublishStateCallback;
 
@@ -1691,6 +1709,8 @@ export interface RtcChannelEvents {
    * @since v3.1.2.
    *
    * This callback indicates the subscribing state change of a remote audio stream.
+   *
+   * @event AudioSubscribeStateChanged
    */
   AudioSubscribeStateChanged: StreamSubscribeStateCallback;
 
@@ -1700,6 +1720,8 @@ export interface RtcChannelEvents {
    * @since v3.1.2.
    *
    * This callback indicates the subscribing state change of a remote video stream.
+   *
+   * @event VideoSubscribeStateChanged
    */
   VideoSubscribeStateChanged: StreamSubscribeStateCallback;
 
@@ -1707,6 +1729,8 @@ export interface RtcChannelEvents {
    * Reports events during the RTMP streaming.
    *
    * @since v3.1.2.
+   *
+   * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
 }

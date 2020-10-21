@@ -1,6 +1,3 @@
-.idea/
 docs/
-lib/**/*.map
-lib/**/*.tsbuildinfo
-samples/
+example/
 src/
