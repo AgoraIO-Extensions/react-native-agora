@@ -1,4 +1,18 @@
-## [3.1.4-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/3.1.2-rc.2...v3.1.4-rc.0) (2020-10-21)
+## [3.1.4-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.4-rc.0...v3.1.4-rc.1) (2020-10-22)
+
+
+### Bug Fixes
+
+* Android setData error ([69a7a96](https://github.com/AgoraIO-Community/react-native-agora/commit/69a7a96ec35037f5dbcc5a0e67285eb1d4c59c08))
+
+
+### Features
+
+* add API example ([652c346](https://github.com/AgoraIO-Community/react-native-agora/commit/652c346821f63546aaaa1cf7b677781b87dd87b2))
+* Android add getNativeHandle ([0eab471](https://github.com/AgoraIO-Community/react-native-agora/commit/0eab47114cde933482f90879e177fd019430cafd))
+* js add getNativeHandle ([201c82a](https://github.com/AgoraIO-Community/react-native-agora/commit/201c82a66fe86eee86d24b2188b9bfd5ecaca04f))
+
+## [3.1.4-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/3.1.3...v3.1.4-rc.0) (2020-10-21)
 
 
 ### Features
