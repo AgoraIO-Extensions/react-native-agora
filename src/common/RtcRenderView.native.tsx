@@ -91,7 +91,7 @@ export class RtcSurfaceView extends Component<
   {}
 > {
   render() {
-    const { channelId = undefined, uid, ...others } = this.props;
+    const { channelId, uid, ...others } = this.props;
     return (
       <RCTRtcSurfaceView
         key={`surface-${channelId}-${uid}`}
@@ -117,7 +117,7 @@ export class RtcTextureView extends Component<
   {}
 > {
   render() {
-    const { channelId = undefined, uid, ...others } = this.props;
+    const { channelId, uid, ...others } = this.props;
     return (
       <RCTRtcTextureView
         key={`texture-${channelId}-${uid}`}
