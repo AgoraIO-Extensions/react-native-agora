@@ -2486,6 +2486,15 @@ export default class RtcEngine implements RtcEngineInterface {
       restriction,
     });
   }
+
+  /**
+   * Gets the native handle of the SDK engine.
+   *
+   * This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
+   */
+  getNativeHandle(): Promise<number> {
+    return RtcEngine._callMethod('getNativeHandle');
+  }
 }
 
 /**
@@ -2560,6 +2569,8 @@ interface RtcEngineInterface
   setLogFileSize(fileSizeInKBytes: number): Promise<void>;
 
   setParameters(parameters: string): Promise<void>;
+
+  getNativeHandle(): Promise<number>;
 }
 
 /**
