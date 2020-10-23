@@ -81,7 +81,7 @@ export default class StringUid extends Component<{}, State, any> {
     const { channelId, stringUid, isJoined } = this.state;
     return (
       <View style={styles.container}>
-        <View style={styles.bottom}>
+        <View style={styles.top}>
           <TextInput
             style={styles.input}
             onChangeText={(text) => this.setState({ channelId: text })}
@@ -112,26 +112,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   float: {
-    width: '30%',
     position: 'absolute',
     right: 0,
     bottom: 0,
   },
-  bottom: {
+  top: {
     width: '100%',
   },
   input: {
     borderColor: 'gray',
     borderWidth: 1,
-  },
-  local: {
-    flex: 1,
-  },
-  remote: {
-    width: 200,
-    height: 200,
-    position: 'absolute',
-    left: 0,
-    top: 0,
   },
 });
