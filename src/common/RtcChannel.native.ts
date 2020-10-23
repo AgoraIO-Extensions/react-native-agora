@@ -103,7 +103,8 @@ export default class RtcChannel implements RtcChannelInterface {
    */
   static destroyAll() {
     channels.forEach(async (value) => {
-      await value.destroy();
+      value.removeAllListeners();
+      await value._callMethod('destroy');
     });
     channels.clear();
   }

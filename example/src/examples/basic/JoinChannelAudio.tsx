@@ -90,9 +90,9 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       });
   };
 
-  _switchSpeakerphone = async () => {
+  _switchSpeakerphone = () => {
     const { enableSpeakerphone } = this.state;
-    await this._engine
+    this._engine
       ?.setEnableSpeakerphone(!enableSpeakerphone)
       .then(() => {
         this.setState({ enableSpeakerphone: !enableSpeakerphone });
@@ -111,7 +111,7 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
     } = this.state;
     return (
       <View style={styles.container}>
-        <View style={styles.bottom}>
+        <View style={styles.top}>
           <TextInput
             style={styles.input}
             onChangeText={(text) => this.setState({ channelId: text })}
@@ -143,12 +143,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   float: {
-    width: '30%',
     position: 'absolute',
     right: 0,
     bottom: 0,
   },
-  bottom: {
+  top: {
     width: '100%',
   },
   input: {

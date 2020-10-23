@@ -163,7 +163,7 @@ export default class MultiChannel extends Component<{}, State, any> {
     const { isJoined0, isJoined1 } = this.state;
     return (
       <View style={styles.container}>
-        <View style={styles.bottom}>
+        <View style={styles.top}>
           <Button
             onPress={isJoined0 ? this._leaveChannel0 : this._joinChannel0}
             title={`${isJoined0 ? 'Leave' : 'Join'} ${channelId0}`}
@@ -177,7 +177,7 @@ export default class MultiChannel extends Component<{}, State, any> {
         <View style={styles.float}>
           <Button
             onPress={this._publishChannel0}
-            title={`Pulish ${channelId0}`}
+            title={`Publish ${channelId0}`}
           />
           <Button
             onPress={() => {
@@ -187,7 +187,7 @@ export default class MultiChannel extends Component<{}, State, any> {
           />
           <Button
             onPress={this._publishChannel1}
-            title={`Pulish ${channelId1}`}
+            title={`Publish ${channelId1}`}
           />
           <Button
             onPress={() => {
@@ -231,17 +231,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   float: {
-    width: '30%',
     position: 'absolute',
     right: 0,
     bottom: 0,
   },
-  bottom: {
+  top: {
     width: '100%',
-  },
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
   },
   local: {
     flex: 1,
