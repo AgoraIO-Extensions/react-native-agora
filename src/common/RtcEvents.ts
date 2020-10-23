@@ -1409,7 +1409,7 @@ export interface RtcChannelEvents {
    *
    * @event JoinChannelSuccess
    */
-  JoinChannelSuccess: UidWithElapsedCallback;
+  JoinChannelSuccess: UidWithElapsedAndChannelCallback;
 
   /**
    * Occurs when a user rejoins the channel after being disconnected due to network problems.
@@ -1419,7 +1419,7 @@ export interface RtcChannelEvents {
    *
    * @event RejoinChannelSuccess
    */
-  RejoinChannelSuccess: UidWithElapsedCallback;
+  RejoinChannelSuccess: UidWithElapsedAndChannelCallback;
 
   /**
    * Occurs when a user leaves the channel.

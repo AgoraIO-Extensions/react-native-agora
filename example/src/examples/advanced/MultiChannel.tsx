@@ -70,7 +70,7 @@ export default class MultiChannel extends Component<{}, State, any> {
     }
 
     this._channel0 = await RtcChannel.create(channelId0);
-    this._addListener(this._channel0, channelId0);
+    this._addListener(this._channel0);
 
     await this._channel0.setClientRole(ClientRole.Broadcaster);
     await this._channel0.joinChannel(
@@ -90,7 +90,7 @@ export default class MultiChannel extends Component<{}, State, any> {
     }
 
     this._channel1 = await RtcChannel.create(channelId1);
-    this._addListener(this._channel1, channelId1);
+    this._addListener(this._channel1);
 
     await this._channel1.setClientRole(ClientRole.Broadcaster);
     await this._channel1.joinChannel(
@@ -101,16 +101,17 @@ export default class MultiChannel extends Component<{}, State, any> {
     );
   };
 
-  _addListener = (channel: RtcChannel, channelId: string) => {
-    channel.addListener('JoinChannelSuccess', (uid, elapsed) => {
-      console.info('JoinChannelSuccess', channelId, uid, elapsed);
+  _addListener = (rtcChannel: RtcChannel) => {
+    const { channelId } = rtcChannel;
+    rtcChannel.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
+      console.info('JoinChannelSuccess', channel, uid, elapsed);
       if (channelId === channelId0) {
         this.setState({ isJoined0: true });
       } else if (channelId === channelId1) {
         this.setState({ isJoined1: true });
       }
     });
-    channel.addListener('UserJoined', (uid, elapsed) => {
+    rtcChannel.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', channelId, uid, elapsed);
       if (channelId === channelId0) {
         this.setState({ remoteUid0: uid });
@@ -118,7 +119,7 @@ export default class MultiChannel extends Component<{}, State, any> {
         this.setState({ remoteUid1: uid });
       }
     });
-    channel.addListener('UserOffline', (uid, reason) => {
+    rtcChannel.addListener('UserOffline', (uid, reason) => {
       console.info('UserOffline', channelId, uid, reason);
       if (channelId === channelId0) {
         if (uid === this.state.remoteUid0) {
@@ -130,7 +131,7 @@ export default class MultiChannel extends Component<{}, State, any> {
         }
       }
     });
-    channel.addListener('LeaveChannel', (stats) => {
+    rtcChannel.addListener('LeaveChannel', (stats) => {
       console.info('LeaveChannel', channelId, stats);
       if (channelId === channelId0) {
         this.setState({ isJoined0: false, remoteUid0: undefined });
