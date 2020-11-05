@@ -465,12 +465,14 @@ export type StreamPublishStateCallback =
 export type StreamSubscribeStateCallback =
   /**
    * @param channel The channel name.
+   * @param uid The ID of the remote user whose subscribe state changes.
    * @param oldState The previous publishing state. See [`StreamPublishState`]{@link StreamPublishState}.
    * @param newState The current publishing state. See [`StreamPublishState`]{@link StreamPublishState}.
    * @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
    */
   (
     channel: string,
+    uid: number,
     oldState: StreamSubscribeState,
     newState: StreamSubscribeState,
     elapseSinceLastState: number
