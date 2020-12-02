@@ -1,3 +1,12 @@
+## [3.1.4](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.4-rc.1...v3.1.4) (2020-12-02)
+
+
+### Bug Fixes
+
+* `JoinChannelSuccess` `RejoinChannelSuccess` type in `RtcChannelEvents` ([25cf253](https://github.com/AgoraIO-Community/react-native-agora/commit/25cf2536df117bdd0b3fcb4d4e91f099f9649487))
+* miss `uid` in `StreamSubscribeStateCallback` ([9bc680f](https://github.com/AgoraIO-Community/react-native-agora/commit/9bc680f1ee7a6b7e3926a7e29847013950841d84))
+* RtcChannel `destroyAll` ([d647049](https://github.com/AgoraIO-Community/react-native-agora/commit/d6470492b25116054fd7969ad8d408ce34fce6c2))
+
 ## [3.1.4-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.4-rc.0...v3.1.4-rc.1) (2020-10-22)
 
 
