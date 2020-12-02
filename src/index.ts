@@ -1,13 +1,9 @@
-import RtcEngine from './src/RtcEngine.native'
-import RtcChannel from './src/RtcChannel.native'
-import RtcLocalView from './RtcLocalView'
-import RtcRemoteView from './RtcRemoteView'
+import RtcEngine from './common/RtcEngine.native';
+import RtcChannel from './common/RtcChannel.native';
+import RtcLocalView from './RtcLocalView';
+import RtcRemoteView from './RtcRemoteView';
 
-export * from './Types'
+export * from './Types';
 
-export default RtcEngine
-export {
-    RtcChannel,
-    RtcLocalView,
-    RtcRemoteView
-}
+export default RtcEngine;
+export { RtcChannel, RtcLocalView, RtcRemoteView };
