@@ -18,7 +18,7 @@ export default class StringUid extends Component<{}, State, any> {
     super(props);
     this.state = {
       channelId: config.channelId,
-      stringUid: '',
+      stringUid: config.stringUid,
       isJoined: false,
     };
   }
