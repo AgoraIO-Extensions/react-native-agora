@@ -1,7 +1,12 @@
-import React, {Component} from "react"
-import {Platform, ViewProps} from "react-native"
+import React, { Component } from 'react';
+import { Platform, ViewProps } from 'react-native';
 
-import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps} from "./src/RtcRenderView.native"
+import {
+  RtcSurfaceView,
+  RtcSurfaceViewProps,
+  RtcTextureView,
+  RtcTextureViewProps,
+} from './common/RtcRenderView.native';
 
 /**
  * The SurfaceView class.
@@ -13,13 +18,9 @@ import {RtcSurfaceView, RtcSurfaceViewProps, RtcTextureView, RtcTextureViewProps
  * @noInheritDoc
  */
 class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
-    render() {
-        return (
-            <RtcSurfaceView
-                {...this.props}
-                uid={0}/>
-        )
-    }
+  render() {
+    return <RtcSurfaceView {...this.props} uid={0} />;
+  }
 }
 
 /**
@@ -31,21 +32,17 @@ class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
  * @noInheritDoc
  */
 class TextureView extends Component<ViewProps & RtcTextureViewProps, {}> {
-    render() {
-        if (Platform.OS === 'ios')
-            throw new Error('TextureView not support for iOS')
-        return (
-            <RtcTextureView
-                {...this.props}
-                uid={0}/>
-        )
-    }
+  render() {
+    if (Platform.OS === 'ios')
+      throw new Error('TextureView not support for iOS');
+    return <RtcTextureView {...this.props} uid={0} />;
+  }
 }
 
 /**
  * View for previewing local video.
  */
 export default {
-    SurfaceView,
-    TextureView
-}
+  SurfaceView,
+  TextureView,
+};
