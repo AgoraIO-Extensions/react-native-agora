@@ -1,2 +1,2 @@
-export * from './src/Classes'
-export * from './src/Enums'
+export * from './common/Classes';
+export * from './common/Enums';

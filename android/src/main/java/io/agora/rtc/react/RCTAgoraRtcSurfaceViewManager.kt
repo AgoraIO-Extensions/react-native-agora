@@ -41,8 +41,10 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
 
     @ReactProp(name = "data")
     fun setData(view: RtcSurfaceView, data: ReadableMap) {
-        val channel = data.getString("channelId")?.let { getChannel(it) }
-        getEngine()?.let { view.setData(it, channel, data.getInt("uid")) }
+        data.toHashMap().let { map ->
+            val channel = (map["channelId"] as? String)?.let { getChannel(it) }
+            getEngine()?.let { view.setData(it, channel, (map["uid"] as Number).toInt()) }
+        }
     }
 
     @ReactProp(name = "renderMode")
