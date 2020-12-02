@@ -493,6 +493,14 @@ export enum AudioScenario {
    * 5: Gaming scenario.
    */
   ChatRoomGaming = 5,
+  /**
+   * TODO
+   */
+  IOT = 6,
+  /**
+   * TODO
+   */
+  MEETING = 8,
 }
 
 /**
@@ -2216,6 +2224,18 @@ export enum WarningCode {
    * 1053: Audio processing module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
    */
   ApmResidualEcho = 1053,
+  /**
+   * 1610: Super-resolution warning: the original video dimensions of the remote user exceed 640*480.
+   */
+  SuperResolutionStreamOverLimitation = 1610,
+  /**
+   * 1611: Super-resolution warning: another user is using super resolution.
+   */
+  SuperResolutionUserCountOverLimitation = 1611,
+  /**
+   * 1612: Super-resolution warning: The device is not supported.
+   */
+  SuperResolutionDeviceNotSupported = 1612,
 }
 
 /**
@@ -2364,4 +2384,76 @@ export enum AudioSessionOperationRestriction {
    * The SDK does not configure the audio session anymore.
    */
   All = 1 << 7,
+}
+
+/**
+ * TODO
+ */
+export enum AudioEffectPreset {
+  AudioEffectOff = 0x00000000,
+
+  RoomAcousticsKTV = 0x02010100,
+
+  RoomAcousticsVocalConcert = 0x02010200,
+
+  RoomAcousticsStudio = 0x02010300,
+
+  RoomAcousticsPhonograph = 0x02010400,
+
+  RoomAcousticsVirtualStereo = 0x02010500,
+
+  RoomAcousticsSpacial = 0x02010600,
+
+  RoomAcousticsEthereal = 0x02010700,
+
+  RoomAcoustics3DVoice = 0x02010800,
+
+  VoiceChangerEffectUncle = 0x02020100,
+
+  VoiceChangerEffectOldMan = 0x02020200,
+
+  VoiceChangerEffectBoy = 0x02020300,
+
+  VoiceChangerEffectSister = 0x02020400,
+
+  VoiceChangerEffectGirl = 0x02020500,
+
+  VoiceChangerEffectPigKing = 0x02020600,
+
+  VoiceChangerEffectHulk = 0x02020700,
+
+  StyleTransformationRnB = 0x02030100,
+
+  StyleTransformationPopular = 0x02030200,
+
+  PitchCorrection = 0x02040100,
+}
+
+/**
+ * TODO
+ */
+export enum VoiceBeautifierPreset {
+  VoiceBeautifierOff = 0x00000000,
+
+  ChatBeautifierMagnetic = 0x01010100,
+
+  ChatBeautifierFresh = 0x01010200,
+
+  ChatBeautifierVitality = 0x01010300,
+
+  TimbreTransformationVigorous = 0x01030100,
+
+  TimbreTransformationDeep = 0x01030200,
+
+  TimbreTransformationMellow = 0x01030300,
+
+  TimbreTransformationFalsetto = 0x01030400,
+
+  TimbreTransformationFull = 0x01030500,
+
+  TimbreTransformationClear = 0x01030600,
+
+  TimbreTransformationResounding = 0x01030700,
+
+  TimbreTransformationRinging = 0x01030800,
 }

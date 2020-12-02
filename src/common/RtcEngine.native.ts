@@ -2,6 +2,7 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 
 import {
   AreaCode,
+  AudioEffectPreset,
   AudioEqualizationBandFrequency,
   AudioProfile,
   AudioRecordingQuality,
@@ -28,6 +29,7 @@ import {
   UserPriority,
   VideoEncoderConfiguration,
   VideoStreamType,
+  VoiceBeautifierPreset,
   WatermarkOptions,
 } from '../Types';
 import type { Listener, RtcEngineEvents, Subscription } from './RtcEvents';
@@ -1429,6 +1431,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Sets the local voice changer option.
    *
+   * @deprecated
+   *
    * **Note**
    *
    * Do not use this method together with [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset}, or the method called earlier does not take effect.
@@ -1487,6 +1491,8 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * Sets the preset local voice reverberation effect.
+   *
+   * @deprecated
    *
    * **Note**
    *
@@ -2495,6 +2501,43 @@ export default class RtcEngine implements RtcEngineInterface {
   getNativeHandle(): Promise<number> {
     return RtcEngine._callMethod('getNativeHandle');
   }
+
+  /**
+   * TODO
+   *
+   * @param preset
+   * @param param1
+   * @param param2
+   */
+  setAudioEffectParameters(
+    preset: AudioEffectPreset,
+    param1: number,
+    param2: number
+  ): Promise<void> {
+    return RtcEngine._callMethod('setAudioEffectParameters', {
+      preset,
+      param1,
+      param2,
+    });
+  }
+
+  /**
+   * TODO
+   *
+   * @param preset
+   */
+  setAudioEffectPreset(preset: AudioEffectPreset): Promise<void> {
+    return RtcEngine._callMethod('setAudioEffectPreset', { preset });
+  }
+
+  /**
+   * TODO
+   *
+   * @param preset
+   */
+  setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void> {
+    return RtcEngine._callMethod('setVoiceBeautifierPreset', { preset });
+  }
 }
 
 /**
@@ -2751,6 +2794,16 @@ interface RtcVoiceChangerInterface {
   ): Promise<void>;
 
   setLocalVoiceReverb(reverbKey: AudioReverbType, value: number): Promise<void>;
+
+  setAudioEffectPreset(preset: AudioEffectPreset): Promise<void>;
+
+  setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void>;
+
+  setAudioEffectParameters(
+    preset: AudioEffectPreset,
+    param1: number,
+    param2: number
+  ): Promise<void>;
 }
 
 /**
