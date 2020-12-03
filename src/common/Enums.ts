@@ -470,35 +470,39 @@ export enum AudioSampleRateType {
  */
 export enum AudioScenario {
   /**
-   * 0: Default.
+   * 0: Default audio scenario.
    */
   Default = 0,
   /**
-   * 1: Entertainment scenario, supporting voice during gameplay.
+   * 1: Entertainment scenario where users need to frequently switch the user role.
    */
   ChatRoomEntertainment = 1,
   /**
-   * 2: Education scenario, prioritizing fluency and stability.
+   * 2: Education scenario where users want smoothness and stability.
    */
   Education = 2,
   /**
-   * 3: Live gaming scenario, enabling the gaming audio effects in the speaker mode in a live broadcast scenario. Choose this scenario for high-fidelity music playback.
+   * 3: High-quality audio chatroom scenario where hosts mainly play music.
    */
   GameStreaming = 3,
   /**
-   * 4: Showroom scenario, optimizing the audio quality with external professional equipment.
+   * 4: Showroom scenario where a single host wants high-quality audio.
    */
   ShowRoom = 4,
   /**
-   * 5: Gaming scenario.
+   * 5: Gaming scenario for group chat that only contains the human voice.
    */
   ChatRoomGaming = 5,
   /**
-   * TODO
+   * IoT (Internet of Things) scenario where users use IoT devices with low power consumption.
+   *
+   * @since v3.2.0.
    */
   IOT = 6,
   /**
-   * TODO
+   * Meeting scenario that mainly contains the human voice.
+   *
+   * @since v3.2.0.
    */
   MEETING = 8,
 }
@@ -2387,73 +2391,277 @@ export enum AudioSessionOperationRestriction {
 }
 
 /**
- * TODO
+ * The options for SDK preset audio effects.
  */
 export enum AudioEffectPreset {
+  /**
+   * Turn off audio effects and use the original voice.
+   */
   AudioEffectOff = 0x00000000,
 
+  /**
+   * An audio effect typical of a KTV venue.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling setAudioProfile and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   RoomAcousticsKTV = 0x02010100,
-
+  /**
+   * An audio effect typical of a concert hall.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   RoomAcousticsVocalConcert = 0x02010200,
 
+  /**
+   * An audio effect typical of a recording studio.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   RoomAcousticsStudio = 0x02010300,
 
+  /**
+   * An audio effect typical of a vintage phonograph.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   RoomAcousticsPhonograph = 0x02010400,
 
+  /**
+   * A virtual stereo effect that renders monophonic audio as stereo audio.
+   *
+   * **Note**
+   *
+   * Call `setAudioProfile` and set the profile parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)`
+   * before setting this enumerator; otherwise, the enumerator setting does not take effect.
+   */
   RoomAcousticsVirtualStereo = 0x02010500,
 
+  /**
+   * A more spatial audio effect.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   RoomAcousticsSpacial = 0x02010600,
 
+  /**
+   * A more ethereal audio effect.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   RoomAcousticsEthereal = 0x02010700,
 
+  /**
+   * A 3D voice effect that makes the voice appear to be moving around the user.
+   * The default cycle period of the 3D voice effect is 10 seconds. To change the cycle period, call `setAudioEffectParameters` after this method.
+   *
+   * **Note**
+   *
+   * - Call `setAudioProfile` and set the profile parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)` before setting this enumerator;
+   * otherwise, the enumerator setting does not take effect.
+   * - If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
+   */
   RoomAcoustics3DVoice = 0x02010800,
 
+  /**
+   * The voice of an uncle.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   VoiceChangerEffectUncle = 0x02020100,
 
+  /**
+   * The voice of an uncle.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   VoiceChangerEffectOldMan = 0x02020200,
 
+  /**
+   * The voice of a boy.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   VoiceChangerEffectBoy = 0x02020300,
 
+  /**
+   * The voice of a young woman.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   VoiceChangerEffectSister = 0x02020400,
 
+  /**
+   * The voice of a girl.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   VoiceChangerEffectGirl = 0x02020500,
 
+  /**
+   * The voice of Pig King, a character in Journey to the West who has a voice like a growling bear.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   VoiceChangerEffectPigKing = 0x02020600,
 
+  /**
+   * The voice of Hulk.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   VoiceChangerEffectHulk = 0x02020700,
 
+  /**
+   * An audio effect typical of R&B music.
+   *
+   * **Note**
+   *
+   * Call `setAudioProfile` and set the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator;
+   * otherwise, the enumerator setting does not take effect.
+   */
   StyleTransformationRnB = 0x02030100,
 
+  /**
+   * An audio effect typical of popular music.
+   *
+   * **Note**
+   *
+   * Call `setAudioProfile` and set the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator;
+   * otherwise, the enumerator setting does not take effect.
+   */
   StyleTransformationPopular = 0x02030200,
 
+  /**
+   * A pitch correction effect that corrects the user's pitch based on the pitch of the natural C major scale.
+   * To change the basic mode and tonic pitch, call `setAudioEffectParameters` after this method.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
   PitchCorrection = 0x02040100,
 }
 
 /**
- * TODO
+ * The options for SDK preset voice beautifier effects.
  */
 export enum VoiceBeautifierPreset {
+  /**
+   * Turn off voice beautifier effects and use the original voice.
+   */
   VoiceBeautifierOff = 0x00000000,
 
+  /**
+   * A more magnetic voice.
+   *
+   * **Note**
+   *
+   * Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may experience vocal distortion.
+   */
   ChatBeautifierMagnetic = 0x01010100,
 
+  /**
+   * A fresher voice.
+   *
+   * **Note**
+   *
+   * Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+   */
   ChatBeautifierFresh = 0x01010200,
 
+  /**
+   * A more vital voice.
+   *
+   * **Note**
+   *
+   * Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+   */
   ChatBeautifierVitality = 0x01010300,
 
+  /**
+   * A more vigorous voice.
+   */
   TimbreTransformationVigorous = 0x01030100,
 
+  /**
+   * A deeper voice.
+   */
   TimbreTransformationDeep = 0x01030200,
 
+  /**
+   * A mellower voice.
+   */
   TimbreTransformationMellow = 0x01030300,
 
+  /**
+   * A falsetto voice.
+   */
   TimbreTransformationFalsetto = 0x01030400,
 
+  /**
+   * A fuller voice.
+   */
   TimbreTransformationFull = 0x01030500,
 
+  /**
+   * A clearer voice.
+   */
   TimbreTransformationClear = 0x01030600,
 
+  /**
+   * A more resounding voice.
+   */
   TimbreTransformationResounding = 0x01030700,
 
+  /**
+   * A more ringing voice.
+   */
   TimbreTransformationRinging = 0x01030800,
 }
