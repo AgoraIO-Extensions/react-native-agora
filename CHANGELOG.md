@@ -1,3 +1,15 @@
+## [3.1.5](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.4...v3.1.5) (2020-12-15)
+
+
+### Bug Fixes
+
+* `RtcSurfaceView` memory leak ([c8845fe](https://github.com/AgoraIO-Community/react-native-agora/commit/c8845fe04c1596fe2e7242302bf160bc671910cb))
+
+
+### Features
+
+* example support `switchRender` ([a6a509e](https://github.com/AgoraIO-Community/react-native-agora/commit/a6a509e273f64c67dce67fc61a9451d5b0ffeb70)), closes [#309](https://github.com/AgoraIO-Community/react-native-agora/issues/309)
+
 ## [3.1.4](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.4-rc.1...v3.1.4) (2020-12-02)
 
 
