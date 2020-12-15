@@ -110,6 +110,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @returns
    * - The `RtcEngine` instance, if the method call succeeds.
    * - The error code, if the method call fails.
+   *    - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
   static async create(appId: string): Promise<RtcEngine> {
     return RtcEngine.createWithAreaCode(appId, AreaCode.GLOB);
@@ -136,6 +137,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @returns
    * - The `RtcEngine` instance, if the method call succeeds.
    * - The error code, if the method call fails.
+   *   - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
   static async createWithAreaCode(
     appId: string,
@@ -245,6 +247,12 @@ export default class RtcEngine implements RtcEngineInterface {
    * The Agora [`RtcEngine`]{@link RtcEngine} differentiates channel profiles and applies different optimization algorithms accordingly.
    * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for live interactive video streaming.
    * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
+   *
+   * @returns
+     * - 0(NoError): Success.
+     * - Error codes: Failure.
+     *    - 2(InvalidArgument): The parameter is invalid.
+     *    - 7(NotInitialized): The SDK is not initialized.
    */
   setChannelProfile(profile: ChannelProfile): Promise<void> {
     return RtcEngine._callMethod('setChannelProfile', { profile });
@@ -260,6 +268,13 @@ export default class RtcEngine implements RtcEngineInterface {
    * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}).
    *
    * @param role Sets the role of a user.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   setClientRole(role: ClientRole): Promise<void> {
     return RtcEngine._callMethod('setClientRole', { role });
@@ -304,6 +319,16 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * The uid is represented as a 32-bit unsigned integer in the SDK. Since unsigned integers are not supported by Java, the uid is handled as a 32-bit signed integer and larger numbers are interpreted as negative numbers in Java.
    * If necessary, the uid can be converted to a 64-bit integer through “uid&0xffffffffL”.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected. Possible reasons:
+   *        - You have created an `RtcChannel` object with the same channel name.
+   *        - You have joined and published a stream in a channel created by the `RtcChannel` object.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   joinChannel(
     token: string | undefined | null,
@@ -340,6 +365,16 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 5(Refused): The request is rejected, probably because the user is not an audience.
+   *    - 7(NotInitialized): The SDK is not initialized.
+   *    - 102(InvalidChannelId): The channel name is invalid.
+   *    - 113(NotInChannel): The user is not in the channel.
    */
   switchChannel(
     token: string | undefined | null,
@@ -366,6 +401,13 @@ export default class RtcEngine implements RtcEngineInterface {
    * - If you call [`destroy`]{@link destroy} immediately after calling [`leaveChannel`]{@link leaveChannel}, the [`leaveChannel`]{@link leaveChannel} process interrupts, and the SDK does not trigger the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} callback.
    *
    * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removeInjectStreamUrl`]{@link removeInjectStreamUrl} method.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   leaveChannel(): Promise<void> {
     return RtcEngine._callMethod('leaveChannel');
@@ -381,6 +423,13 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
    * @param token The new token.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   renewToken(token: string): Promise<void> {
     return RtcEngine._callMethod('renewToken', { token });
@@ -431,6 +480,12 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param rating Rating of the call. The value is between 1 (lowest score) and 5 (highest score).
    * If you set a value out of this range, the [`InvalidArgument(-2)`]{@link ErrorCode.InvalidArgument} error occurs.
    * @param description (Optional) The description of the rating. The string length must be less than 800 bytes.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    */
   rate(callId: string, rating: Rate, description?: string): Promise<void> {
     return RtcEngine._callMethod('rate', { callId, rating, description });
@@ -441,6 +496,12 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param callId ID of the call retrieved from the [`getCallId`]{@link getCallId} method.
    * @param description (Optional) The description of the complaint. The string length must be less than 800 bytes.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    */
   complain(callId: string, description: string): Promise<void> {
     return RtcEngine._callMethod('complain', { callId, description });
@@ -552,6 +613,14 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected.
+   *
    */
   joinChannelWithUserAccount(
     token: string | undefined | null,
@@ -995,6 +1064,12 @@ export default class RtcEngine implements RtcEngineInterface {
    * - `true`: Enable image enhancement.
    * - `false`: Disable image enhancement.
    * @param options The image enhancement options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 4(NotSupported): The system version is earlier than Android 4.4, which does not support this function.
+   *
    */
   setBeautyEffectOptions(
     enabled: boolean,
@@ -1115,7 +1190,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the current playback position of the audio mixing, if the method call is successful.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingCurrentPosition(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingCurrentPosition');
@@ -1130,7 +1205,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    *  @returns
    * - Returns the audio mixing duration, if the method call is successful.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingDuration(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingDuration');
@@ -1143,7 +1218,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingPlayoutVolume(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingPlayoutVolume');
@@ -1156,7 +1231,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingPublishVolume(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingPublishVolume');
@@ -1246,6 +1321,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param cycle Sets the number of playback loops:
    * - Positive integer: Number of playback loops.
    * - -1: Infinite playback loops.
+   *
    */
   startAudioMixing(
     filePath: string,
@@ -1277,7 +1353,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the volume, if the method call is successful.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getEffectsVolume(): Promise<number> {
     return RtcEngine._callMethod('getEffectsVolume');
@@ -1568,6 +1644,12 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
    * - `false`: Disable transcoding.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): Invalid parameter, usually because the URL address is null or the string length is 0.
+   *    - 7(NotInitialized): You have not initialized `RtcEngine` when publishing the stream.
    */
   addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
     return RtcEngine._callMethod('addPublishStreamUrl', {
@@ -2078,6 +2160,13 @@ export default class RtcEngine implements RtcEngineInterface {
    * - `true`: Enable the built-in encryption.
    * - `false`: Disable the built-in encryption.
    * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): An invalid parameter is used. Set the parameter with a valid value.
+   *    - 4(NotSupported):  The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
     return RtcEngine._callMethod('enableEncryption', { enabled, config });
@@ -2194,6 +2283,14 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Supported audio codec type: AAC.
    * - Supported video codec type: H264(AVC).
    * @param config The `LiveInjectStreamConfig` object which contains the configuration information for the added voice or video stream.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
+   *    - 3(NotReady): The user is not in the channel.
+   *    - 4(NotSupported): The channel profile is not `LiveBroadcasting`. Call the `setChannelProfile` method and set the channel profile to `LiveBroadcasting` before calling this method.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   addInjectStreamUrl(
     url: string,
@@ -2420,7 +2517,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @return
    * - Returns the stream ID, if the method call is successful.
-   * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
+   * - Error codes: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return RtcEngine._callMethod('createDataStream', { reliable, ordered });
@@ -2476,6 +2573,8 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
+   * The method applies to the iOS platform only. You can call this method either before or after joining a channel.
+   *
    * The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
    *
    * You can call this method at any time to return the control of the audio sessions to the SDK.
@@ -2564,7 +2663,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - 0: Success.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   setAudioEffectParameters(
     preset: AudioEffectPreset,
@@ -2607,7 +2706,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - 0: Success.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   setAudioEffectPreset(preset: AudioEffectPreset): Promise<void> {
     return RtcEngine._callMethod('setAudioEffectPreset', { preset });
@@ -2641,7 +2740,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - 0: Success.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void> {
     return RtcEngine._callMethod('setVoiceBeautifierPreset', { preset });

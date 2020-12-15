@@ -111,6 +111,11 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Destroys the [`RtcChannel`]{@link RtcChannel} instance.
+   *
+   *  @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 7(NotInitialized): The `RtcChannel` instance is not initialized before calling this method.
    */
   destroy(): Promise<void> {
     this.removeAllListeners();
@@ -199,6 +204,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined}
    * or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
    * @param role The role of the user.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   setClientRole(role: ClientRole): Promise<void> {
     return this._callMethod('setClientRole', { role });
@@ -219,6 +231,16 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param optionalInfo Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
    * @param optionalUid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess} callback. The app must maintain this user ID.
    * @param options The channel media options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected. Possible reasons:
+   *        - You have created an `RtcChannel` object with the same channel name.
+   *        - You have joined and published a stream in a channel created by the `RtcChannel` object.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   joinChannel(
     token: string | undefined | null,
@@ -253,6 +275,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
    * @param options The channel media options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected.
    */
   joinChannelWithUserAccount(
     token: string | undefined | null,
@@ -272,6 +301,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * A successful call of this method triggers the following callbacks:
    * - The local client: [`LeaveChannel`]{@link RtcChannelEvents.LeaveChannel}.
    * - The remote client: [`UserOffline`]{@link RtcChannelEvents.UserOffline}, if the user leaving the channel is in a `Communication` channel, or is a host in a `LiveBroadcasting` channel.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   leaveChannel(): Promise<void> {
     return this._callMethod('leaveChannel');
@@ -286,6 +322,13 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * You should get a new token from your server and call this method to renew it. Failure to do so results in the SDK disconnecting from the Agora server.
    * @param token The new token.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   renewToken(token: string): Promise<void> {
     return this._callMethod('renewToken', { token });
@@ -460,6 +503,12 @@ export default class RtcChannel implements RtcChannelInterface {
    * ensure that you call the [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} method before this method.
    * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
    * - `false`: Disable transcoding.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): Invalid parameter, usually because the URL address is null or the string length is 0.
+   *    - 7(NotInitialized): You have not initialized `RtcEngine` when publishing the stream.
    */
   addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
     return this._callMethod('addPublishStreamUrl', { url, transcodingEnabled });
@@ -675,6 +724,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * - `true`: Enable the built-in encryption.
    * - `false`: Disable the built-in encryption.
    * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): An invalid parameter is used. Set the parameter with a valid value.
+   *    - 4(NotSupported):  The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
     return this._callMethod('enableEncryption', { enabled, config });
@@ -743,6 +799,14 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Supported FLV audio codec type: AAC.
    * - Supported FLV video codec type: H264 (AVC).
    * @param config The [`LiveInjectStreamConfig`]{@link LiveInjectStreamConfig} object, which contains the configuration information for the added voice or video stream.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
+   *    - 3(NotReady): The user is not in the channel.
+   *    - 4(NotSupported): The channel profile is not `LiveBroadcasting`. Call the `setChannelProfile` method and set the channel profile to `LiveBroadcasting` before calling this method.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   addInjectStreamUrl(
     url: string,
@@ -784,7 +848,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * - `false`: The recipients do not receive the data in the sent order.
    * @returns
    * - Returns the stream ID, if the method call is successful.
-   * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
+   * - Error codes: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return this._callMethod('createDataStream', { reliable, ordered });
