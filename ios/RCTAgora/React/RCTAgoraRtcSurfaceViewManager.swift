@@ -9,6 +9,22 @@
 import Foundation
 import AgoraRtcKit
 
+fileprivate struct AssociatedKeys {
+    static var view: UInt8 = 0
+}
+
+@objc(AgoraRtcVideoCanvas)
+public extension AgoraRtcVideoCanvas {
+    @objc weak var view: UIView? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.view) as? UIView
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.view, newValue, .OBJC_ASSOCIATION_ASSIGN)
+        }
+    }
+}
+
 @objc(RCTAgoraRtcSurfaceViewManager)
 class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
     override func view() -> UIView! {
@@ -39,8 +55,9 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
 class RtcView: RtcSurfaceView {
     private var getEngine: (() -> AgoraRtcEngineKit?)?
     private var getChannel: ((_ channelId: String) -> AgoraRtcChannel?)?
-
+    
     deinit {
+        destroy()
         // if let engine = getEngine?() {
             // resetVideoCanvas(engine)
         // }
