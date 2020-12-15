@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import {
-  View,
-  TextInput,
-  PermissionsAndroid,
-  StyleSheet,
   Button,
+  PermissionsAndroid,
   Platform,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
-  RtcLocalView,
-  RtcRemoteView,
   ChannelProfile,
   ClientRole,
+  RtcLocalView,
+  RtcRemoteView,
 } from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
@@ -22,6 +23,7 @@ interface State {
   isJoined: boolean;
   remoteUid: number | undefined;
   switchCamera: boolean;
+  switchRender: boolean;
 }
 
 export default class JoinChannelAudio extends Component<{}, State, any> {
@@ -33,7 +35,8 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       channelId: config.channelId,
       isJoined: false,
       remoteUid: undefined,
-      switchCamera: false,
+      switchCamera: true,
+      switchRender: true,
     };
   }
 
@@ -107,6 +110,11 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       });
   };
 
+  _switchRender = () => {
+    const { switchRender } = this.state;
+    this.setState({ switchRender: !switchRender });
+  };
+
   render() {
     const { channelId, isJoined, switchCamera } = this.state;
     return (
@@ -135,16 +143,30 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
   }
 
   _renderVideo = () => {
-    const { remoteUid } = this.state;
+    const { remoteUid, switchRender } = this.state;
     return (
       <View style={styles.container}>
-        <RtcLocalView.SurfaceView style={styles.local} />
-        {remoteUid !== undefined && (
+        {switchRender ? (
+          <RtcLocalView.SurfaceView style={styles.local} />
+        ) : (
           <RtcRemoteView.SurfaceView
-            style={styles.remote}
-            uid={remoteUid}
+            style={styles.local}
+            uid={remoteUid!}
             zOrderMediaOverlay={true}
           />
+        )}
+        {remoteUid !== undefined && (
+          <TouchableOpacity style={styles.remote} onPress={this._switchRender}>
+            {switchRender ? (
+              <RtcRemoteView.SurfaceView
+                style={styles.container}
+                uid={remoteUid}
+                zOrderMediaOverlay={true}
+              />
+            ) : (
+              <RtcLocalView.SurfaceView style={styles.container} />
+            )}
+          </TouchableOpacity>
         )}
       </View>
     );
