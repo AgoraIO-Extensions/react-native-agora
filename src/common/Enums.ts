@@ -2663,3 +2663,22 @@ export enum VoiceBeautifierPreset {
    */
   TimbreTransformationRinging = 0x01030800,
 }
+
+/**
+ * The latency level of an audience member in a interactive live streaming.
+ *
+ * **Note**
+ *
+ * Takes effect only when the user role is AgoraClientRoleBroadcaster.
+ */
+export enum AudienceLatencyLevelType {
+  /**
+   * 1: Low latency.
+   */
+  LowLatency = 1,
+
+  /**
+   * 2: (Default) Ultra low latency.
+   */
+  UltraLowLatency = 2,
+}
