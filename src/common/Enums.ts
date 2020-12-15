@@ -2217,11 +2217,11 @@ export enum WarningCode {
    */
   AdmInconsistentDevices = 1042,
   /**
-   * 1051: Audio Device Module: howling is detected.
+   * 1051: Audio Device Module: Howling is detected.
    */
   ApmHowling = 1051,
   /**
-   * 1052: Audio Device Module: the device is in the glitch state.
+   * 1052: Audio Device Module: The device is in the glitch state.
    */
   AdmGlitchState = 1052,
   /**
@@ -2229,15 +2229,15 @@ export enum WarningCode {
    */
   ApmResidualEcho = 1053,
   /**
-   * 1610: Super-resolution warning: the original video dimensions of the remote user exceed 640*480.
+   * 1610: Super-resolution warning: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
    */
   SuperResolutionStreamOverLimitation = 1610,
   /**
-   * 1611: Super-resolution warning: another user is using super resolution.
+   * 1611: Super-resolution warning: Another user is already using the super-resolution algorithm.
    */
   SuperResolutionUserCountOverLimitation = 1611,
   /**
-   * 1612: Super-resolution warning: The device is not supported.
+   * 1612: Super-resolution warning: The device does not support the super-resolution algorithm.
    */
   SuperResolutionDeviceNotSupported = 1612,
 }
@@ -2540,8 +2540,7 @@ export enum AudioEffectPreset {
    *
    * **Note**
    *
-   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
    * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
    */
   VoiceChangerEffectPigKing = 0x02020600,
@@ -2551,8 +2550,7 @@ export enum AudioEffectPreset {
    *
    * **Note**
    *
-   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
    * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
    */
   VoiceChangerEffectHulk = 0x02020700,
