@@ -1,5 +1,18 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
+import type {
+  BeautyOptions,
+  CameraCapturerConfiguration,
+  ChannelMediaRelayConfiguration,
+  ClientRoleOptions,
+  EncryptionConfig,
+  LastmileProbeConfig,
+  LiveInjectStreamConfig,
+  LiveTranscoding,
+  UserInfo,
+  VideoEncoderConfiguration,
+  WatermarkOptions,
+} from './Classes';
 import {
   AreaCode,
   AudioEffectPreset,
@@ -12,26 +25,16 @@ import {
   AudioScenario,
   AudioSessionOperationRestriction,
   AudioVoiceChanger,
-  BeautyOptions,
-  CameraCapturerConfiguration,
-  ChannelMediaRelayConfiguration,
   ChannelProfile,
   ClientRole,
   ConnectionStateType,
-  EncryptionConfig,
   EncryptionMode,
-  LastmileProbeConfig,
-  LiveInjectStreamConfig,
-  LiveTranscoding,
   LogFilter,
   StreamFallbackOptions,
-  UserInfo,
   UserPriority,
-  VideoEncoderConfiguration,
   VideoStreamType,
   VoiceBeautifierPreset,
-  WatermarkOptions,
-} from '../Types';
+} from './Enums';
 import type { Listener, RtcEngineEvents, Subscription } from './RtcEvents';
 import RtcChannel from './RtcChannel.native';
 
@@ -249,10 +252,10 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
    *
    * @returns
-     * - 0(NoError): Success.
-     * - Error codes: Failure.
-     *    - 2(InvalidArgument): The parameter is invalid.
-     *    - 7(NotInitialized): The SDK is not initialized.
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   setChannelProfile(profile: ChannelProfile): Promise<void> {
     return RtcEngine._callMethod('setChannelProfile', { profile });
@@ -276,8 +279,8 @@ export default class RtcEngine implements RtcEngineInterface {
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 7(NotInitialized): The SDK is not initialized.
    */
-  setClientRole(role: ClientRole): Promise<void> {
-    return RtcEngine._callMethod('setClientRole', { role });
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void> {
+    return RtcEngine._callMethod('setClientRole', { role, options });
   }
 
   /**
@@ -2776,7 +2779,7 @@ interface RtcEngineInterface
 
   setChannelProfile(profile: ChannelProfile): Promise<void>;
 
-  setClientRole(role: ClientRole): Promise<void>;
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>;
 
   joinChannel(
     token: string | undefined | null,

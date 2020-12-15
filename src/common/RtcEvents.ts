@@ -1,4 +1,16 @@
 import type {
+  AudioVolumeInfo,
+  FacePositionInfo,
+  LastmileProbeResult,
+  LocalAudioStats,
+  LocalVideoStats,
+  Rect,
+  RemoteAudioStats,
+  RemoteVideoStats,
+  RtcStats,
+  UserInfo,
+} from './Classes';
+import type {
   AudioLocalError,
   AudioLocalState,
   AudioMixingErrorCode,
@@ -6,7 +18,6 @@ import type {
   AudioOutputRouting,
   AudioRemoteState,
   AudioRemoteStateReason,
-  AudioVolumeInfo,
   ChannelMediaRelayError,
   ChannelMediaRelayEvent,
   ChannelMediaRelayState,
@@ -14,30 +25,21 @@ import type {
   ConnectionChangedReason,
   ConnectionStateType,
   ErrorCode,
-  FacePositionInfo,
   InjectStreamStatus,
-  LastmileProbeResult,
-  LocalAudioStats,
-  LocalVideoStats,
   LocalVideoStreamError,
   LocalVideoStreamState,
   NetworkQuality,
   NetworkType,
-  Rect,
-  RemoteAudioStats,
-  RemoteVideoStats,
-  RtcStats,
   RtmpStreamingErrorCode,
   RtmpStreamingEvent,
   RtmpStreamingState,
   StreamPublishState,
   StreamSubscribeState,
-  UserInfo,
   UserOfflineReason,
   VideoRemoteState,
   VideoRemoteStateReason,
   WarningCode,
-} from '../Types';
+} from './Enums';
 
 /**
  * @internal

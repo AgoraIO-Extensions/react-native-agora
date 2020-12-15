@@ -3,15 +3,18 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 import type {
   ChannelMediaOptions,
   ChannelMediaRelayConfiguration,
-  ClientRole,
-  ConnectionStateType,
+  ClientRoleOptions,
   EncryptionConfig,
-  EncryptionMode,
   LiveInjectStreamConfig,
   LiveTranscoding,
+} from './Classes';
+import type {
+  ClientRole,
+  ConnectionStateType,
+  EncryptionMode,
   UserPriority,
   VideoStreamType,
-} from '../Types';
+} from './Enums';
 import type { Listener, RtcChannelEvents, Subscription } from './RtcEvents';
 
 const {
@@ -212,8 +215,8 @@ export default class RtcChannel implements RtcChannelInterface {
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 7(NotInitialized): The SDK is not initialized.
    */
-  setClientRole(role: ClientRole): Promise<void> {
-    return this._callMethod('setClientRole', { role });
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void> {
+    return this._callMethod('setClientRole', { role, options });
   }
 
   /**
@@ -892,7 +895,7 @@ interface RtcChannelInterface
     RtcStreamMessageInterface {
   destroy(): Promise<void>;
 
-  setClientRole(role: ClientRole): Promise<void>;
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>;
 
   joinChannel(
     token: string | undefined | null,

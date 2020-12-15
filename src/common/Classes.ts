@@ -1,4 +1,5 @@
 import type {
+  AudienceLatencyLevelType,
   AudioChannel,
   AudioCodecProfileType,
   AudioSampleRateType,
@@ -300,14 +301,16 @@ export class VideoEncoderConfiguration {
     degradationPrefer?: DegradationPreference;
     mirrorMode?: VideoMirrorMode;
   }) {
-    this.dimensions = params?.dimensions;
-    this.frameRate = params?.frameRate;
-    this.minFrameRate = params?.minFrameRate;
-    this.bitrate = params?.bitrate;
-    this.minBitrate = params?.minBitrate;
-    this.orientationMode = params?.orientationMode;
-    this.degradationPrefer = params?.degradationPrefer;
-    this.mirrorMode = params?.mirrorMode;
+    if (params) {
+      this.dimensions = params.dimensions;
+      this.frameRate = params.frameRate;
+      this.minFrameRate = params.minFrameRate;
+      this.bitrate = params.bitrate;
+      this.minBitrate = params.minBitrate;
+      this.orientationMode = params.orientationMode;
+      this.degradationPrefer = params.degradationPrefer;
+      this.mirrorMode = params.mirrorMode;
+    }
   }
 }
 
@@ -340,10 +343,12 @@ export class BeautyOptions {
     smoothnessLevel?: number;
     rednessLevel?: number;
   }) {
-    this.lighteningContrastLevel = params?.lighteningContrastLevel;
-    this.lighteningLevel = params?.lighteningLevel;
-    this.smoothnessLevel = params?.smoothnessLevel;
-    this.rednessLevel = params?.rednessLevel;
+    if (params) {
+      this.lighteningContrastLevel = params.lighteningContrastLevel;
+      this.lighteningLevel = params.lighteningLevel;
+      this.smoothnessLevel = params.smoothnessLevel;
+      this.rednessLevel = params.rednessLevel;
+    }
   }
 }
 
@@ -450,11 +455,13 @@ export class TranscodingUser {
     this.uid = uid;
     this.x = x;
     this.y = y;
-    this.width = params?.width;
-    this.height = params?.height;
-    this.zOrder = params?.zOrder;
-    this.alpha = params?.alpha;
-    this.audioChannel = params?.audioChannel;
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+      this.zOrder = params.zOrder;
+      this.alpha = params.alpha;
+      this.audioChannel = params.audioChannel;
+    }
   }
 }
 
@@ -586,21 +593,23 @@ export class LiveTranscoding {
       userConfigExtraInfo?: string;
     }
   ) {
-    this.width = params?.width;
-    this.height = params?.height;
-    this.videoBitrate = params?.videoBitrate;
-    this.videoFramerate = params?.videoFramerate;
-    this.lowLatency = params?.lowLatency;
-    this.videoGop = params?.videoGop;
-    this.watermark = params?.watermark;
-    this.backgroundImage = params?.backgroundImage;
-    this.audioSampleRate = params?.audioSampleRate;
-    this.audioBitrate = params?.audioBitrate;
-    this.audioChannels = params?.audioChannels;
-    this.audioCodecProfile = params?.audioCodecProfile;
-    this.videoCodecProfile = params?.videoCodecProfile;
-    this.backgroundColor = params?.backgroundColor;
-    this.userConfigExtraInfo = params?.userConfigExtraInfo;
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+      this.videoBitrate = params.videoBitrate;
+      this.videoFramerate = params.videoFramerate;
+      this.lowLatency = params.lowLatency;
+      this.videoGop = params.videoGop;
+      this.watermark = params.watermark;
+      this.backgroundImage = params.backgroundImage;
+      this.audioSampleRate = params.audioSampleRate;
+      this.audioBitrate = params.audioBitrate;
+      this.audioChannels = params.audioChannels;
+      this.audioCodecProfile = params.audioCodecProfile;
+      this.videoCodecProfile = params.videoCodecProfile;
+      this.backgroundColor = params.backgroundColor;
+      this.userConfigExtraInfo = params.userConfigExtraInfo;
+    }
     this.transcodingUsers = transcodingUsers;
   }
 }
@@ -623,8 +632,10 @@ export class ChannelMediaInfo {
   uid: number;
 
   constructor(uid: number, params?: { channelName?: string; token?: string }) {
-    this.channelName = params?.channelName;
-    this.token = params?.token;
+    if (params) {
+      this.channelName = params.channelName;
+      this.token = params.token;
+    }
     this.uid = uid;
   }
 }
@@ -814,14 +825,16 @@ export class LiveInjectStreamConfig {
     audioBitrate?: number;
     audioChannels?: AudioChannel;
   }) {
-    this.width = params?.width;
-    this.height = params?.height;
-    this.videoGop = params?.videoGop;
-    this.videoFramerate = params?.videoFramerate;
-    this.videoBitrate = params?.videoBitrate;
-    this.audioSampleRate = params?.audioSampleRate;
-    this.audioBitrate = params?.audioBitrate;
-    this.audioChannels = params?.audioChannels;
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+      this.videoGop = params.videoGop;
+      this.videoFramerate = params.videoFramerate;
+      this.videoBitrate = params.videoBitrate;
+      this.audioSampleRate = params.audioSampleRate;
+      this.audioBitrate = params.audioBitrate;
+      this.audioChannels = params.audioChannels;
+    }
   }
 }
 
@@ -1347,4 +1360,18 @@ export interface FacePositionInfo {
    * The distance (cm) between the human face and the screen.
    */
   distance: number;
+}
+
+/**
+ * The detailed options of a user.
+ */
+export class ClientRoleOptions {
+  /**
+   * The latency level of an audience member in a interactive live streaming. See AgoraAudienceLatencyLevelType.
+   */
+  audienceLatencyLevel: AudienceLatencyLevelType;
+
+  constructor(audienceLatencyLevel: AudienceLatencyLevelType) {
+    this.audienceLatencyLevel = audienceLatencyLevel;
+  }
 }
