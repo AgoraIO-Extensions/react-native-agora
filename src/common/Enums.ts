@@ -2665,11 +2665,11 @@ export enum VoiceBeautifierPreset {
 }
 
 /**
- * The latency level of an audience member in a interactive live streaming.
+ * The latency level of an audience member in interactive live streaming.
  *
  * **Note**
  *
- * Takes effect only when the user role is AgoraClientRoleBroadcaster.
+ * Takes effect only when the user role is `Broadcaster`.
  */
 export enum AudienceLatencyLevelType {
   /**
