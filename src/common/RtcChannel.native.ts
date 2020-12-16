@@ -197,16 +197,20 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Sets the role of a user.
+   * Sets the role of a user in live interactive streaming.
    *
-   * This method sets the role of a user, such as a host or an audience member. In a `LiveBroadcasting` channel,
-   * only a host can call the [`publish`]{@link publish} method in the [`RtcChannel`]{@link RtcChannel} class.
-   *
-   * A successful call of this method triggers the following callbacks:
+   * You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
    * - The local client: [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged}.
-   * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined}
-   * or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
-   * @param role The role of the user.
+   * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined} or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
+   *
+   * **Note**
+   * - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
+   * - As of v3.2.0, this method can set the user level in addition to the user role.
+   *    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
+   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
+   *
+   * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
+   * @param options? The detailed options of a user, including user level. See {@link ClientRoleOptions}.
    *
    * @returns
    * - 0(NoError): Success.
@@ -227,6 +231,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * - We recommend using different UIDs for different channels.
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
+   *
+   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
    *
    * @param token The token generated at your server.
    * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
@@ -267,6 +273,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * - We recommend using different user accounts for different channels.
    * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
+   *
+   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
    *
    * @param token The token generated at your server.
    * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
