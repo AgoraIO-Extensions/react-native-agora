@@ -389,7 +389,7 @@ export enum AudioReverbPreset {
    */
   FX_VOCAL_CONCERT = 0x00100002,
   /**
-   * The reverberation style typical of an uncle’s voice.
+   * The reverberation style typical of a middle-aged man’s voice.
    */
   FX_UNCLE = 0x00100003,
   /**
@@ -2481,7 +2481,7 @@ export enum AudioEffectPreset {
   RoomAcoustics3DVoice = 0x02010800,
 
   /**
-   * The voice of an uncle.
+   * The voice of a middle-aged man.
    *
    * **Note**
    *
@@ -2492,7 +2492,7 @@ export enum AudioEffectPreset {
   VoiceChangerEffectUncle = 0x02020100,
 
   /**
-   * The voice of an uncle.
+   * The voice of an old man.
    *
    * **Note**
    *
