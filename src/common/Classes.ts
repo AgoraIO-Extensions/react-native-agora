@@ -1364,10 +1364,12 @@ export interface FacePositionInfo {
 
 /**
  * The detailed options of a user.
+ *
+ * @since v3.2.0.
  */
 export class ClientRoleOptions {
   /**
-   * The latency level of an audience member in a interactive live streaming. See AgoraAudienceLatencyLevelType.
+   * The latency level of an audience member in a live interactive streaming. See {@link AudienceLatencyLevelType}.
    */
   audienceLatencyLevel: AudienceLatencyLevelType;
 
