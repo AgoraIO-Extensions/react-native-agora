@@ -2660,7 +2660,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *   - 3: Japanese pentatonic scale.
    *
    * @param param2
-   * - You need to set `param2` to 0.
+   * - If you set `preset` to `RoomAcoustics3DVoice`, you need to set `param2` to `0`.
    * - If you set `preset` to `PitchCorrection`, `param2` sets the tonic pitch of the pitch correction effect:
    *   - 1: A
    *   - 2: A#
