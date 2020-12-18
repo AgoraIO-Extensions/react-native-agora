@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import {
-  View,
-  PermissionsAndroid,
-  StyleSheet,
   Button,
+  PermissionsAndroid,
   Platform,
+  ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
+  ChannelMediaOptions,
+  ChannelProfile,
+  ClientRole,
   RtcChannel,
   RtcLocalView,
   RtcRemoteView,
-  ChannelProfile,
-  ClientRole,
-  ChannelMediaOptions,
+  VideoRemoteState,
 } from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
@@ -22,8 +24,8 @@ interface State {
   renderChannelId: string;
   isJoined0: boolean;
   isJoined1: boolean;
-  remoteUid0: number | undefined;
-  remoteUid1: number | undefined;
+  remoteUid0: number[];
+  remoteUid1: number[];
 }
 
 const channelId0 = 'channel0';
@@ -40,8 +42,8 @@ export default class MultiChannel extends Component<{}, State, any> {
       renderChannelId: channelId0,
       isJoined0: false,
       isJoined1: false,
-      remoteUid0: undefined,
-      remoteUid1: undefined,
+      remoteUid0: [],
+      remoteUid1: [],
     };
   }
 
@@ -59,6 +61,7 @@ export default class MultiChannel extends Component<{}, State, any> {
     await this._engine.enableVideo();
     await this._engine.startPreview();
     await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await this._engine.setClientRole(ClientRole.Broadcaster);
   };
 
   _joinChannel0 = async () => {
@@ -113,32 +116,45 @@ export default class MultiChannel extends Component<{}, State, any> {
     });
     rtcChannel.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', channelId, uid, elapsed);
-      if (channelId === channelId0) {
-        this.setState({ remoteUid0: uid });
-      } else if (channelId === channelId1) {
-        this.setState({ remoteUid1: uid });
-      }
     });
     rtcChannel.addListener('UserOffline', (uid, reason) => {
       console.info('UserOffline', channelId, uid, reason);
-      if (channelId === channelId0) {
-        if (uid === this.state.remoteUid0) {
-          this.setState({ remoteUid0: undefined });
-        }
-      } else if (channelId === channelId1) {
-        if (uid === this.state.remoteUid1) {
-          this.setState({ remoteUid1: undefined });
-        }
-      }
     });
     rtcChannel.addListener('LeaveChannel', (stats) => {
       console.info('LeaveChannel', channelId, stats);
       if (channelId === channelId0) {
-        this.setState({ isJoined0: false, remoteUid0: undefined });
+        this.setState({ isJoined0: false, remoteUid0: [] });
       } else if (channelId === channelId1) {
-        this.setState({ isJoined1: false, remoteUid1: undefined });
+        this.setState({ isJoined1: false, remoteUid1: [] });
       }
     });
+    rtcChannel.addListener(
+      'RemoteVideoStateChanged',
+      (uid, state, reason, elapsed) => {
+        console.info('RemoteVideoStateChanged', uid, state, reason, elapsed);
+        if (state === VideoRemoteState.Starting) {
+          if (channelId === channelId0) {
+            this.setState({ remoteUid0: [...this.state.remoteUid0, uid] });
+          } else if (channelId === channelId1) {
+            this.setState({ remoteUid1: [...this.state.remoteUid1, uid] });
+          }
+        } else if (state === VideoRemoteState.Stopped) {
+          if (channelId === channelId0) {
+            this.setState({
+              remoteUid0: this.state.remoteUid0.filter(
+                (value) => value !== uid
+              ),
+            });
+          } else if (channelId === channelId1) {
+            this.setState({
+              remoteUid1: this.state.remoteUid1.filter(
+                (value) => value !== uid
+              ),
+            });
+          }
+        }
+      }
+    );
   };
 
   _publishChannel0 = async () => {
@@ -202,7 +218,7 @@ export default class MultiChannel extends Component<{}, State, any> {
 
   _renderVideo = () => {
     const { renderChannelId, remoteUid0, remoteUid1 } = this.state;
-    let remoteUid: number | undefined;
+    let remoteUid: number[] | undefined;
     if (renderChannelId === channelId0) {
       remoteUid = remoteUid0;
     } else if (renderChannelId === channelId1) {
@@ -215,11 +231,15 @@ export default class MultiChannel extends Component<{}, State, any> {
           channelId={renderChannelId}
         />
         {remoteUid !== undefined && (
-          <RtcRemoteView.SurfaceView
-            style={styles.remote}
-            channelId={renderChannelId}
-            uid={remoteUid}
-          />
+          <ScrollView horizontal={true} style={styles.remoteContainer}>
+            {remoteUid.map((value) => (
+              <RtcRemoteView.SurfaceView
+                style={styles.remote}
+                channelId={renderChannelId}
+                uid={value}
+              />
+            ))}
+          </ScrollView>
         )}
       </View>
     );
@@ -241,11 +261,13 @@ const styles = StyleSheet.create({
   local: {
     flex: 1,
   },
-  remote: {
-    width: 200,
-    height: 200,
+  remoteContainer: {
     position: 'absolute',
     left: 0,
     top: 0,
+  },
+  remote: {
+    width: 120,
+    height: 120,
   },
 });
