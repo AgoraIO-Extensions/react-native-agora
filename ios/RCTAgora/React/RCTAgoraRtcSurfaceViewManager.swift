@@ -40,18 +40,16 @@ class RtcView: RtcSurfaceView {
     private var getEngine: (() -> AgoraRtcEngineKit?)?
     private var getChannel: ((_ channelId: String) -> AgoraRtcChannel?)?
 
-    deinit {
-        // if let engine = getEngine?() {
-            // resetVideoCanvas(engine)
-        // }
-    }
-
     func setEngine(_ getEngine: @escaping () -> AgoraRtcEngineKit?) {
         self.getEngine = getEngine
     }
 
     func setChannel(_ getChannel: @escaping (_ channelId: String) -> AgoraRtcChannel?) {
         self.getChannel = getChannel
+    }
+
+    override func observerForKeyPath() -> String {
+        return "bounds"
     }
 
     @objc func setRenderMode(_ renderMode: Int) {
