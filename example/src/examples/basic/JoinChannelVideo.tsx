@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import {
-  View,
-  TextInput,
-  PermissionsAndroid,
-  StyleSheet,
   Button,
+  PermissionsAndroid,
   Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
-  RtcLocalView,
-  RtcRemoteView,
   ChannelProfile,
   ClientRole,
+  RtcLocalView,
+  RtcRemoteView,
 } from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
@@ -20,8 +22,9 @@ const config = require('../../../agora.config.json');
 interface State {
   channelId: string;
   isJoined: boolean;
-  remoteUid: number | undefined;
+  remoteUid: number[];
   switchCamera: boolean;
+  switchRender: boolean;
 }
 
 export default class JoinChannelAudio extends Component<{}, State, any> {
@@ -32,8 +35,9 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
     this.state = {
       channelId: config.channelId,
       isJoined: false,
-      remoteUid: undefined,
-      switchCamera: false,
+      remoteUid: [],
+      switchCamera: true,
+      switchRender: true,
     };
   }
 
@@ -62,17 +66,17 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
     });
     this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
-      this.setState({ remoteUid: uid });
+      this.setState({ remoteUid: [...this.state.remoteUid, uid] });
     });
     this._engine?.addListener('UserOffline', (uid, reason) => {
       console.info('UserOffline', uid, reason);
-      if (uid === this.state.remoteUid) {
-        this.setState({ remoteUid: undefined });
-      }
+      this.setState({
+        remoteUid: this.state.remoteUid.filter((value) => value !== uid),
+      });
     });
     this._engine?.addListener('LeaveChannel', (stats) => {
       console.info('LeaveChannel', stats);
-      this.setState({ isJoined: false, remoteUid: undefined });
+      this.setState({ isJoined: false, remoteUid: [] });
     });
   };
 
@@ -105,6 +109,14 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       .catch((err) => {
         console.warn('switchCamera', err);
       });
+  };
+
+  _switchRender = () => {
+    const { switchRender, remoteUid } = this.state;
+    this.setState({
+      switchRender: !switchRender,
+      remoteUid: remoteUid.reverse(),
+    });
   };
 
   render() {
@@ -140,11 +152,21 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       <View style={styles.container}>
         <RtcLocalView.SurfaceView style={styles.local} />
         {remoteUid !== undefined && (
-          <RtcRemoteView.SurfaceView
-            style={styles.remote}
-            uid={remoteUid}
-            zOrderMediaOverlay={true}
-          />
+          <ScrollView horizontal={true} style={styles.remoteContainer}>
+            {remoteUid.map((value, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.remote}
+                onPress={this._switchRender}
+              >
+                <RtcRemoteView.SurfaceView
+                  style={styles.container}
+                  uid={value}
+                  zOrderMediaOverlay={true}
+                />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         )}
       </View>
     );
@@ -170,11 +192,13 @@ const styles = StyleSheet.create({
   local: {
     flex: 1,
   },
-  remote: {
-    width: 200,
-    height: 200,
+  remoteContainer: {
     position: 'absolute',
     left: 0,
     top: 0,
+  },
+  remote: {
+    width: 120,
+    height: 120,
   },
 });
