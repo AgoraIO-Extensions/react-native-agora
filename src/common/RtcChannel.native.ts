@@ -498,7 +498,9 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Publishes the local stream to the CDN.
+   * Publishes the local stream to a specified CDN streaming URL.
+   *
+   * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN.
    *
    * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged}
    * callback on the local client to report the state of adding a local stream to the CDN.
@@ -507,10 +509,11 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - Ensure that the user joins a channel before calling this method.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
-   * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
+   * - This method adds only one CDN streaming URL each time it is called.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
-   * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
-   * @param transcodingEnabled Sets whether transcoding is enabled/disabled. If you set this parameter as true,
+   * @param url The CDN streaming URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
+   * @param transcodingEnabled Whether to enable transcoding. If you set this parameter as true,
    * ensure that you call the [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} method before this method.
    * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
    * - `false`: Disable transcoding.
@@ -526,17 +529,17 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Removes an RTMP stream from the CDN.
+   * Removes an RTMP or RTMPS stream from the CDN.
    *
-   * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
+   * This method removes the CDN streaming URL (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
    * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback.
    *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
-   * - This method removes only one stream HTTP/HTTPS URL address each time it is called.
+   * - This method removes only one CDN streaming URL each time it is called.
    *
-   * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters,
+   * @param url The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters,
    * such as Chinese language characters.
    */
   removePublishStreamUrl(url: string): Promise<void> {
@@ -555,6 +558,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Ensure that the user joins a channel before calling this method.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
    * - Ensure that you call this method before calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} method.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
    * @param transcoding Sets the CDN live audio/video transcoding settings.
    */
@@ -727,7 +731,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
    *
    * **Note**
-   * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
    * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
    *
    *

@@ -1227,6 +1227,10 @@ export interface RemoteAudioStats {
   networkTransportDelay: number;
   /**
    * Network delay (ms) from the receiver to the jitter buffer.
+   *
+   * **Note**
+   *
+   * When the receiver is an audience member and `AudienceLatencyLevelType` is `1`, this parameter does not take effect.
    */
   jitterBufferDelay: number;
   /**
