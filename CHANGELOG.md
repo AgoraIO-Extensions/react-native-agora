@@ -1,3 +1,15 @@
+# [3.2.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.2.0-rc.0) (2020-12-21)
+
+
+### Features
+
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([721604e](https://github.com/AgoraIO-Community/react-native-agora/commit/721604ee94c3f7e3a0485b5b5db7fb5973e30665))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([2fef3ae](https://github.com/AgoraIO-Community/react-native-agora/commit/2fef3aee038b31808af53cee80a0fddc8d444fe8))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([3a55997](https://github.com/AgoraIO-Community/react-native-agora/commit/3a55997db81dcd16e68ee551d69b9079ff8052b0))
+* upgrade to 3.2.0 ([fcb57cc](https://github.com/AgoraIO-Community/react-native-agora/commit/fcb57cc3e2cbb3e16750e9ce8ddca069184ac1c0))
+* upgrade to 3.2.0 ([4ee51a9](https://github.com/AgoraIO-Community/react-native-agora/commit/4ee51a9b405deb17b467f5359f6717033c3961a2))
+* upgrade to 3.2.0 ([680048f](https://github.com/AgoraIO-Community/react-native-agora/commit/680048f7836940f586ce7228559ba2cde9e0de62))
+
 ## [3.1.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.5...v3.1.6) (2020-12-21)
 
 
