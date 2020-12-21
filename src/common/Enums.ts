@@ -1162,7 +1162,7 @@ export enum ErrorCode {
    */
   PublishStreamNotFound = 155,
   /**
-   * 156: The format of the RTMP stream URL is not supported. Check whether the URL format is correct.
+   * 156: The format of the RTMP or RTMPS stream URL is not supported. Check whether the URL format is correct.
    */
   PublishStreamFormatNotSuppported = 156,
   /**
@@ -1537,7 +1537,7 @@ export enum NetworkType {
  */
 export enum RtmpStreamingErrorCode {
   /**
-   * 0: The RTMP streaming publishes successfully.
+   * 0: The RTMP or RTMPS streaming publishes successfully.
    */
   OK = 0,
   /**
@@ -1547,11 +1547,11 @@ export enum RtmpStreamingErrorCode {
    */
   InvalidParameters = 1,
   /**
-   * 2: The RTMP streaming is encrypted and cannot be published.
+   * 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
    */
   EncryptedStreamNotAllowed = 2,
   /**
-   * 3: Timeout for the RTMP streaming. Call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the streaming again.
+   * 3: Timeout for the RTMP or RTMPS streaming. Call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the streaming again.
    */
   ConnectionTimeout = 3,
   /**
@@ -1559,11 +1559,11 @@ export enum RtmpStreamingErrorCode {
    */
   InternalServerError = 4,
   /**
-   * 5: An error occurs in the RTMP server.
+   * 5: An error occurs in the CDN server.
    */
   RtmpServerError = 5,
   /**
-   * 6: The RTMP streaming publishes too frequently.
+   * 6: The RTMP or RTMPS streaming publishes too frequently.
    */
   TooOften = 6,
   /**
@@ -1575,36 +1575,36 @@ export enum RtmpStreamingErrorCode {
    */
   NotAuthorized = 8,
   /**
-   * 9: Agora’s server fails to find the RTMP streaming.
+   * 9: Agora’s server fails to find the RTMP or RTMPS streaming.
    */
   StreamNotFound = 9,
   /**
-   * 10: The format of the RTMP streaming URL is not supported. Check whether the URL format is correct.
+   * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
    */
   FormatNotSupported = 10,
 }
 
 /**
- * The RTMP streaming state.
+ * The RTMP or RTMPS streaming state.
  */
 export enum RtmpStreamingState {
   /**
-   * 0: The RTMP streaming has not started or has ended. This state is also triggered after you
-   * remove an RTMP address from the CDN by calling [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
+   * 0: The RTMP or RTMPS streaming has not started or has ended. This state is also triggered after you
+   * remove an RTMP or RTMPS stream* from the CDN by calling [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
    */
   Idle = 0,
   /**
-   * 1: The SDK is connecting to Agora’s streaming server and the RTMP server.
+   * 1: The SDK is connecting to Agora’s streaming server and the CDN server.
    * This state is triggered after you call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method.
    */
   Connecting = 1,
   /**
-   * 2: The RTMP streaming is being published. The SDK successfully publishes the RTMP streaming and returns this state.
+   * 2: The RTMP or RTMPS streaming is being published. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
    */
   Running = 2,
   /**
-   * 3: The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted,
-   * the SDK attempts to resume RTMP streaming and returns this state.
+   * 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted,
+   * the SDK attempts to resume RTMP or RTMPS streaming and returns this state.
    *
    * - If the SDK successfully resumes the streaming, [`Running`]{@link RtmpStreamingState.Running} returns.
    * - If the streaming does not resume within 60 seconds or server errors occur,
@@ -1614,8 +1614,8 @@ export enum RtmpStreamingState {
    */
   Recovering = 3,
   /**
-   * 4: The RTMP streaming fails. See the errorCode parameter for the detailed error information.
-   * You can also call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the RTMP streaming again.
+   * 4: The RTMP or RTMPS streaming fails. See the errorCode parameter for the detailed error information.
+   * You can also call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the RTMP or RTMPS streaming again.
    */
   Failure = 4,
 }
@@ -2355,11 +2355,11 @@ export enum StreamSubscribeState {
 }
 
 /**
- * Events during the RTMP streaming.
+ * Events during the RTMP or RTMPS streaming.
  */
 export enum RtmpStreamingEvent {
   /**
-   * 1: An error occurs when you add a background image or a watermark image to the RTMP stream.
+   * 1: An error occurs when you add a background image or a watermark image to the RTMP or RTMPS stream.
    */
   FailedLoadImage = 1,
 }
