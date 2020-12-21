@@ -1,3 +1,18 @@
+## [3.1.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.5...v3.1.6) (2020-12-21)
+
+
+### Bug Fixes
+
+* `MetadataReceived` event parameters bug ([bda6ec0](https://github.com/AgoraIO-Community/react-native-agora/commit/bda6ec081ab95fd3295de89d4bdfe0bcb4b2a0a2))
+* some rendering problems when change render widget order ([12e2561](https://github.com/AgoraIO-Community/react-native-agora/commit/12e25618ce8fabd5bf9b34e418792450518e219e))
+* some rendering problems when change render widget order ([c737102](https://github.com/AgoraIO-Community/react-native-agora/commit/c737102ecc22e3cb563f9762a88d9b519fdc599f))
+* use the better way to fix rendering problems ([f0c044f](https://github.com/AgoraIO-Community/react-native-agora/commit/f0c044f7248f5c301c7dec087aa33a9941f10fca))
+
+
+### Features
+
+* example support render multi remote-videos ([af68969](https://github.com/AgoraIO-Community/react-native-agora/commit/af68969cf18b355cae22fe5999ae9b00c912c879))
+
 ## [3.1.5](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.4...v3.1.5) (2020-12-15)
 
 

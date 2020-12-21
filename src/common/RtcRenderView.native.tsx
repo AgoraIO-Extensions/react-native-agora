@@ -92,13 +92,7 @@ export class RtcSurfaceView extends Component<
 > {
   render() {
     const { channelId, uid, ...others } = this.props;
-    return (
-      <RCTRtcSurfaceView
-        key={`surface-${channelId}-${uid}`}
-        data={{ channelId, uid }}
-        {...others}
-      />
-    );
+    return <RCTRtcSurfaceView data={{ channelId, uid }} {...others} />;
   }
 }
 
@@ -118,12 +112,6 @@ export class RtcTextureView extends Component<
 > {
   render() {
     const { channelId, uid, ...others } = this.props;
-    return (
-      <RCTRtcTextureView
-        key={`texture-${channelId}-${uid}`}
-        data={{ channelId, uid }}
-        {...others}
-      />
-    );
+    return <RCTRtcTextureView data={{ channelId, uid }} {...others} />;
   }
 }
