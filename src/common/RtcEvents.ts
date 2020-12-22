@@ -332,8 +332,8 @@ export type SoundIdCallback =
   (soundId: number) => void;
 export type RtmpStreamingStateCallback =
   /**
-   * @param url The RTMP URL address.
-   * @param state The RTMP streaming state.
+   * @param url The CDN streaming URL.
+   * @param state The RTMP or RTMPS streaming state.
    * @param errCode The detailed error information for streaming.
    */
   (
@@ -392,13 +392,13 @@ export type VideoFrameWithUidCallback =
   (uid: number, width: number, height: number, elapsed: number) => void;
 export type UrlWithErrorCallback =
   /**
-   * @param url The RTMP streaming URL.
+   * @param url The RTMP or RTMPS streaming URL.
    * @param error The detailed error information.
    */
   (url: string, error: ErrorCode) => void;
 export type UrlCallback =
   /**
-   * @param url The RTMP URL address.
+   * @param url The CDN streaming URL.
    */
   (url: string) => void;
 export type TransportStatsCallback =
@@ -481,7 +481,7 @@ export type StreamSubscribeStateCallback =
   ) => void;
 export type RtmpStreamingEventCallback =
   /**
-   * @param url The RTMP streaming URL.
+   * @param url The RTMP or RTMPS streaming URL.
    * @param eventCode The event code. See [`RtmpStreamingEvent`]{@link RtmpStreamingEvent}.
    */
   (url: string, eventCode: RtmpStreamingEvent) => void;
@@ -963,12 +963,12 @@ export interface RtcEngineEvents {
   AudioEffectFinished: SoundIdCallback;
 
   /**
-   * Occurs when the state of the RTMP streaming changes.
+   * Occurs when the state of the RTMP or RTMPS streaming changes.
    *
    * The SDK triggers this callback to report the result of the local user calling [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
    * This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
    *
-   * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
+   * This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
    *
    * @event RtmpStreamingStateChanged
    */
@@ -1111,7 +1111,7 @@ export interface RtcEngineEvents {
    *
    * Use [`RtmpStreamingStateChanged`]{@link RtmpStreamingStateChanged} instead.
    *
-   * This callback indicates whether you have successfully added an RTMP stream to the CDN.
+   * This callback indicates whether you have successfully added an RTMP or RTMPS stream to the CDN.
    *
    * @event StreamPublished
    */
@@ -1124,7 +1124,7 @@ export interface RtcEngineEvents {
    *
    * Use [`RtmpStreamingStateChanged`]{@link RtmpStreamingStateChanged} instead.
    *
-   * This callback indicates whether you have successfully removed an RTMP stream from the CDN.
+   * This callback indicates whether you have successfully removed an RTMP or RTMPS stream from the CDN.
    *
    * @event StreamUnpublished
    */
@@ -1378,7 +1378,7 @@ export interface RtcEngineEvents {
   VideoSubscribeStateChanged: StreamSubscribeStateCallback;
 
   /**
-   * Reports events during the RTMP streaming.
+   * Reports events during the RTMP or RTMPS streaming.
    *
    * @since v3.1.2.
    *
@@ -1614,11 +1614,11 @@ export interface RtcChannelEvents {
   RemoteAudioStats: RemoteAudioStatsCallback;
 
   /**
-   * Occurs when the state of the RTMP streaming changes.
+   * Occurs when the state of the RTMP or RTMPS streaming changes.
    *
    * The SDK triggers this callback to report the result of the local user calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcChannel.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
    *
-   * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
+   * This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
    *
    * @event RtmpStreamingStateChanged
    */
@@ -1730,7 +1730,7 @@ export interface RtcChannelEvents {
   VideoSubscribeStateChanged: StreamSubscribeStateCallback;
 
   /**
-   * Reports events during the RTMP streaming.
+   * Reports events during the RTMP or RTMPS streaming.
    *
    * @since v3.1.2.
    *

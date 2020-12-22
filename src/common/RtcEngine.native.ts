@@ -412,7 +412,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * **Note**
    * - If you call [`destroy`]{@link destroy} immediately after calling [`leaveChannel`]{@link leaveChannel}, the [`leaveChannel`]{@link leaveChannel} process interrupts, and the SDK does not trigger the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} callback.
    *
-   * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removeInjectStreamUrl`]{@link removeInjectStreamUrl} method.
+   * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removePublishStreamUrl`]{@link removePublishStreamUrl} method.
    *
    * @returns
    * - 0(NoError): Success.
@@ -741,11 +741,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
+   * - This method affects the audio module and can be called after calling [`leaveChannel`]{@link leaveChannel}.
    * You can call this method either before or after joining a channel.
    *
-   * - This method resets the engine and takes some time to take effect.
-   * We recommend using the following API methods to control the audio engine modules separately:
+   * - This method enables/disables the audio module and takes some time to take effect.
+   * We recommend using the following API methods to control the audio module separately:
    *
    *  - [`enableLocalAudio`]{@link enableLocalAudio}: Whether to enable the microphone to create the local audio stream.
    *
@@ -766,11 +766,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
+   * - This method affects the audio module and can be called after calling [`leaveChannel`]{@link leaveChannel}.
    * You can call this method either before or after joining a channel.
    *
-   * - This method resets the internal engine and takes some time to take effect.
-   * We recommend using the following API methods to control the audio engine modules separately:
+   * - This method enables/disables the audio module and takes some time to take effect.
+   * We recommend using the following API methods to control the audio module separately:
    *
    *  - [`enableLocalAudio`]{@link enableLocalAudio}: Whether to enable the microphone to create the local audio stream.
    *
@@ -797,7 +797,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * The recommended value is 3.
    * @param report_vad
    * - `true`: Enable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} callback reports the voice activity status of the local user.
-   * - `false`: (Default) Disable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} callback does not report the voice activity status of the local user,
+   * - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the `vad` parameter of the [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} callback does not report the voice activity status of the local user,
    * except for scenarios where the engine automatically detects the voice activity of the local user.
    */
   enableAudioVolumeIndication(
@@ -826,7 +826,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * - This method is different from the [`muteLocalAudioStream`]{@link muteLocalAudioStream} method:
+   * This method is different from the [`muteLocalAudioStream`]{@link muteLocalAudioStream} method:
    *
    *  - [`enableLocalAudio`]{@link enableLocalAudio}: Disables/Re-enables the local audio capture and processing.
    * If you disable or re-enable local audio recording using [`enableLocalAudio`]{@link enableLocalAudio}, the local user may hear a pause in the remote audio playback.
@@ -1642,18 +1642,22 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Publishes the local stream to the CDN.
+   * Publishes the local stream to a specified CDN streaming URL.
    *
-   * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback on the local client to report the state of adding a local stream to the CDN.
+   * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN.
+   *
+   * This SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback on the local client to report the state of adding a local stream to the CDN.
    *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
    * - Ensure that the user joins a channel before calling this method.
-   * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
-   * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes.
+   * - This method adds only one CDN streaming URL each time it is called.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
+   *
+   * @param url The CDN streaming URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes.
    * The URL address must not contain special characters, such as Chinese language characters.
-   * @param transcodingEnabled Sets whether transcoding is enabled/disabled.
+   * @param transcodingEnabled Whether to enable transcoding.
    * If you set this parameter as `true`, ensure that you call [`setLiveTranscoding`]{@link setLiveTranscoding} before this method.
    *
    * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
@@ -1673,17 +1677,18 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Removes an RTMP stream from the CDN.
+   * Removes an RTMP or RTMPS stream from the CDN.
    *
-   * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
+   * This method removes the CDN streaming URL (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
    * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback.
    *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - Ensure that the user joins a channel before calling this method.
    * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
-   * - This method removes only one stream RTMP URL address each time it is called.
-   * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes.
+   * - This method removes only one CDN streaming URL each time it is called.
+   *
+   * @param url The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes.
    * The URL address must not contain special characters, such as Chinese language characters.
    */
   removePublishStreamUrl(url: string): Promise<void> {
@@ -1703,6 +1708,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in Push Streams to CDN.
    * - Ensure that you call [`setClientRole`]{@link setClientRole} and set the user role as the host.
    * - Ensure that you call [`setLiveTranscoding`]{@link setLiveTranscoding} before calling  [`addPublishStreamUrl`]{@link addPublishStreamUrl}.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
    * @param transcoding Sets the CDN live audio/video transcoding settings.
    */
@@ -1834,8 +1840,13 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - This method is invalid for audience users in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
    *
+   * - Settings of `setAudioProfile` and `setChannelProfile` affect the call result of `setEnableSpeakerphone`. The following are scenarios where `setEnableSpeakerphone` does not take effect:
+   *    - If you set `scenario` as `GameStreaming`, no user can change the audio playback route.
+   *    - If you set `scenario` as `Default` or `ShowRoom`, the audience cannot change the audio playback route. If there is only one host is in the channel, the host cannot change the audio playback route either.
+   *    - If you set `scenario` as `Education`, the audience cannot change the audio playback route.
+   *
    * @param enabled Sets whether to route the audio to the speakerphone or earpiece:
-   * - `true`: Route the audio to the speakerphone.
+   * - `true`: Route the audio to the speakerphone. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the speakerphone.
    * - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
    */
   setEnableSpeakerphone(enabled: boolean): Promise<void> {
@@ -2166,7 +2177,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
    *
    * **Note**
-   * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
    * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
    *
    *
