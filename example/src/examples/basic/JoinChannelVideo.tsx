@@ -91,7 +91,7 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       config.token,
       this.state.channelId,
       null,
-      0
+      config.uid
     );
   };
 
