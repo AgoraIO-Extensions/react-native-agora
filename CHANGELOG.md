@@ -1,13 +1,13 @@
 ## [3.2.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0...v3.2.1) (2020-12-24)
 
-# [3.2.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
+## [3.2.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
 
 
 ### Features
 
 * upgrade native SDK to 3.2.1 ([3dcc489](https://github.com/AgoraIO-Community/react-native-agora/commit/3dcc489bb52daaf8a794554f6048f343cbff5d8f))
 
-# [3.2.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.2.0-rc.0) (2020-12-21)
+## [3.2.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.2.0-rc.0) (2020-12-21)
 
 
 ### Features
