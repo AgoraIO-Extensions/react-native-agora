@@ -1,3 +1,10 @@
+## [3.1.7-appbuilder.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.1.7-appbuilder.0) (2020-12-24)
+
+
+### Features
+
+* build for app-builder ([db4b176](https://github.com/AgoraIO-Community/react-native-agora/commit/db4b1764bebef6e784625067a76840a11f0bdbfe))
+
 ## [3.1.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.5...v3.1.6) (2020-12-21)
 
 
