@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.1...v3.2.2) (2020-12-28)
+
+
+### Bug Fixes
+
+* process resolve value type ([d28c79d](https://github.com/AgoraIO-Community/react-native-agora/commit/d28c79d18338604cbc6e723baedd9618e8a11374))
+
 ## [3.2.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0...v3.2.1) (2020-12-24)
 
 ## [3.2.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
