@@ -8,16 +8,21 @@ class PromiseCallback(
   private val promise: Promise?
 ) : Callback() {
   override fun success(data: Any?) {
-    if (data is Map<*, *>) {
-      val map = mutableMapOf<String, Any?>()
-      data.forEach {
-        if (it.key is String) {
-          map[it.key as String] = it.value
+    when (data) {
+      null, is Boolean, is Int, is String -> promise?.resolve(data)
+      is Number -> promise?.resolve(data.toDouble())
+      is Array<*> -> promise?.resolve(Arguments.makeNativeArray<Any>(arrayOf(data)))
+      is List<*> -> promise?.resolve(Arguments.makeNativeArray(data))
+      is Map<*, *> -> {
+        val map = mutableMapOf<String, Any?>()
+        data.forEach {
+          if (it.key is String) {
+            map[it.key as String] = it.value
+          }
         }
+        promise?.resolve(Arguments.makeNativeMap(map))
       }
-      promise?.resolve(Arguments.makeNativeMap(map))
-    } else {
-      promise?.resolve(data)
+      else -> promise?.reject(IllegalArgumentException("Could not convert " + data.javaClass))
     }
   }
 

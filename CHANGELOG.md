@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.1...v3.2.2) (2020-12-28)
+
+
+### Bug Fixes
+
+* process resolve value type ([d28c79d](https://github.com/AgoraIO-Community/react-native-agora/commit/d28c79d18338604cbc6e723baedd9618e8a11374))
+
 ## [3.2.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0...v3.2.1) (2020-12-24)
 
 ## [3.2.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
@@ -18,6 +25,13 @@
 * upgrade to 3.2.0 ([fcb57cc](https://github.com/AgoraIO-Community/react-native-agora/commit/fcb57cc3e2cbb3e16750e9ce8ddca069184ac1c0))
 * upgrade to 3.2.0 ([4ee51a9](https://github.com/AgoraIO-Community/react-native-agora/commit/4ee51a9b405deb17b467f5359f6717033c3961a2))
 * upgrade to 3.2.0 ([680048f](https://github.com/AgoraIO-Community/react-native-agora/commit/680048f7836940f586ce7228559ba2cde9e0de62))
+
+## [3.1.7](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.1.7) (2020-12-28)
+
+
+### Bug Fixes
+
+* process resolve value type ([d28c79d](https://github.com/AgoraIO-Community/react-native-agora/commit/d28c79d18338604cbc6e723baedd9618e8a11374))
 
 ## [3.1.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.5...v3.1.6) (2020-12-21)
 
