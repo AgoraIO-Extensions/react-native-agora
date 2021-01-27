@@ -606,9 +606,9 @@ export enum CameraCaptureOutputPreference {
    */
   Preview = 2,
   /**
-   * 3: Internal use only
+   * 3: Capture Dimensions determined by user
    */
-  Unkown = 3,
+  Manual = 3,
 }
 
 /**
@@ -858,6 +858,10 @@ export enum ConnectionChangedReason {
    * [`Reconnecting`]{@link ConnectionStateType.Reconnecting}
    */
   KeepAliveTimeout = 14,
+  /**
+   * 15: In cloud proxy mode, the proxy server connection interrupted.
+   */
+  ProxyServerInterrupted = 15,
 }
 
 /**
@@ -1166,6 +1170,10 @@ export enum ErrorCode {
    */
   PublishStreamFormatNotSuppported = 156,
   /**
+   * 157: The App lack necessary library file. Check whether the dynamic library is loaded.
+   */
+  ModuleNotFound = 157,
+  /**
    * 1001: Fails to load the media engine.
    */
   LoadMediaEngine = 1001,
@@ -1402,6 +1410,14 @@ export enum LocalVideoStreamError {
    * 5: The local video encoding fails.
    */
   EncodeFailure = 5,
+  /**
+   * 6: Capture InBackground.
+   */
+  CaptureInBackground = 6,
+  /**
+   * 7: Capture MultipleForegroundApps.
+   */
+  CaptureMultipleForegroundApps = 7,
 }
 
 /**
@@ -2624,6 +2640,11 @@ export enum VoiceBeautifierPreset {
   ChatBeautifierVitality = 0x01010300,
 
   /**
+   * TODO(DOC)
+   */
+  SINGING_BEAUTIFIER = 0x01020100,
+
+  /**
    * A more vigorous voice.
    */
   TimbreTransformationVigorous = 0x01030100,
@@ -2681,4 +2702,118 @@ export enum AudienceLatencyLevelType {
    * 2: (Default) Ultra low latency.
    */
   UltraLowLatency = 2,
+}
+
+/**
+ * TODO(DOC)
+ */
+export enum LogLevel {
+  /**
+   * 0: Do not output any log information.
+   */
+  None = 0x0000,
+  /**
+   * 0x000f: Output CRITICAL, ERROR, WARNING, and INFO level log information.
+   * We recommend setting your log filter as this level.
+   */
+  Info = 0x0001,
+  /**
+   * 0x000e: Outputs CRITICAL, ERROR, and WARNING level log information.
+   */
+  Warn = 0x0002,
+  /**
+   * 0x000c: Outputs CRITICAL and ERROR level log information.
+   */
+  Error = 0x0004,
+  /**
+   * 0x0008: Outputs CRITICAL level log information.
+   */
+  Fatal = 0x0008,
+}
+
+/**
+ * TODO(DOC)
+ */
+export enum CaptureBrightnessLevelType {
+  Invalid = -1,
+  Normal = 0,
+  Bright = 1,
+  Dark = 2,
+}
+
+/**
+ * The reason why the super-resolution algorithm is not successfully enabled.
+ */
+export enum SuperResolutionStateReason {
+  /**
+   * 0: The super-resolution algorithm is successfully enabled.
+   */
+  Success = 0,
+  /**
+   * 1: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+   */
+  StreamOverLimitation = 1,
+  /**
+   * 2: Another user is already using the super-resolution algorithm.
+   */
+  UserCountOverLimitation = 2,
+  /**
+   * 3: The device does not support the super-resolution algorithm.
+   */
+  DeviceNotSupported = 3,
+}
+
+/**
+ * TODO(DOC)
+ */
+export enum UploadErrorReason {
+  Success = 0,
+  NetError = 1,
+  ServerError = 2,
+}
+
+/**
+ * TODO(DOC)
+ * Cloud proxy transport type
+ */
+export enum CloudProxyType {
+  /**
+   * no proxy
+   */
+  None = 0,
+  /**
+   * udp proxy
+   */
+  UDP = 1,
+  /**
+   * tcp proxy
+   */
+  TCP = 2,
+}
+
+/**
+ * TODO(DOC)
+ * Experience quality types.
+ */
+export enum ExperienceQualityType {
+  /**
+   * 0: Good experience quality.
+   */
+  Good = 0,
+  /**
+   * 1: Bad experience quality.
+   */
+  Bad = 1,
+}
+
+/**
+ * TODO(DOC)
+ * The reason for poor experience
+ */
+export enum ExperiencePoorReason {
+  None = 0,
+  RemoteNetworkQualityPoor = 1,
+  LocalNetworkQualityPoor = 2,
+  WirelessSignalPoor = 4,
+  WifiBluetoothCoexist = 8,
 }

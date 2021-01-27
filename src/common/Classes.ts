@@ -1,14 +1,17 @@
 import type {
+  AreaCode,
   AudienceLatencyLevelType,
   AudioChannel,
   AudioCodecProfileType,
   AudioSampleRateType,
   CameraCaptureOutputPreference,
   CameraDirection,
+  CaptureBrightnessLevelType,
   DegradationPreference,
   EncryptionMode,
   LastmileProbeResultState,
   LighteningContrastLevel,
+  LogLevel,
   NetworkQuality,
   VideoCodecProfileType,
   VideoCodecType,
@@ -847,16 +850,32 @@ export class CameraCapturerConfiguration {
    */
   preference: CameraCaptureOutputPreference;
   /**
+   * Camera Capture Width
+   */
+  captureWidth?: number;
+  /**
+   * Camera Capture Height
+   */
+  captureHeight?: number;
+  /**
    * The camera direction.
    */
   cameraDirection: CameraDirection;
 
   constructor(
     preference: CameraCaptureOutputPreference,
-    cameraDirection: CameraDirection
+    cameraDirection: CameraDirection,
+    params?: {
+      captureWidth?: number;
+      captureHeight?: number;
+    }
   ) {
     this.preference = preference;
     this.cameraDirection = cameraDirection;
+    if (params) {
+      this.captureWidth = params.captureWidth;
+      this.captureHeight = params.captureHeight;
+    }
   }
 }
 
@@ -1207,6 +1226,10 @@ export interface LocalVideoStats {
    * @since v3.1.2.
    */
   captureFrameRate: number;
+  /**
+   * The capture brightness level type.
+   */
+  captureBrightnessLevel: CaptureBrightnessLevelType;
 }
 
 /**
@@ -1268,6 +1291,14 @@ export interface RemoteAudioStats {
    *
    */
   publishDuration: number;
+  /**
+   * Experience quality: #EXPERIENCE_QUALITY_TYPE
+   */
+  qoeQuality: number;
+  /**
+   * The reason for poor experience quality: #EXPERIENCE_POOR_REASON
+   */
+  qualityChangedReason: number;
 }
 
 /**
@@ -1379,5 +1410,95 @@ export class ClientRoleOptions {
 
   constructor(audienceLatencyLevel: AudienceLatencyLevelType) {
     this.audienceLatencyLevel = audienceLatencyLevel;
+  }
+}
+
+/**
+ * TODO(DOC)
+ * Definition of LogConfiguration
+ */
+export class LogConfig {
+  /**
+   * The log file path, default is NULL for default log path
+   */
+  filePath?: string;
+  /**
+   * The log file size, KB , set -1 to use default log size
+   */
+  fileSize?: number;
+  /**
+   * The log level, set LOG_LEVEL_INFO to use default log level
+   */
+  level?: LogLevel;
+
+  constructor(params?: {
+    filePath?: string;
+    fileSize?: number;
+    level?: LogLevel;
+  }) {
+    if (params) {
+      this.filePath = params.filePath;
+      this.fileSize = params.fileSize;
+      this.level = params.level;
+    }
+  }
+}
+
+/**
+ * TODO(DOC)
+ * Data stream config
+ */
+export class DataStreamConfig {
+  /**
+   * syncWithAudio Sets whether or not the recipients receive the data stream sync with current audio stream.
+   */
+  syncWithAudio?: boolean;
+  /**
+   * ordered Sets whether or not the recipients receive the data stream in the sent order:
+   */
+  ordered?: boolean;
+
+  constructor(params?: { syncWithAudio?: boolean; ordered?: boolean }) {
+    if (params) {
+      this.syncWithAudio = params.syncWithAudio;
+      this.ordered = params.ordered;
+    }
+  }
+}
+
+/**
+ * TODO(DOC)
+ * Definition of RtcEngineConfig.
+ */
+export class RtcEngineConfig {
+  /**
+   * The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
+   * Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
+   * one `IRtcEngine` instance. To change your App ID, call `release` to destroy the current `IRtcEngine` instance and then call `createAgoraRtcEngine`
+   * and `initialize` to create an `IRtcEngine` instance with the new App ID.
+   */
+  appId: string;
+  /**
+   * The region for connection. This advanced feature applies to scenarios that have regional restrictions.
+   *
+   * For the regions that Agora supports, see #AREA_CODE. After specifying the region, the SDK connects to the Agora servers within that region.
+   *
+   * @note The SDK supports specify only one region.
+   */
+  areaCode?: AreaCode;
+  /**
+   * The config for custumer set log path, log size and log level
+   */
+  logConfig?: LogConfig;
+
+  constructor(
+    appId: string,
+    params?: { areaCode?: AreaCode; logConfig?: LogConfig }
+  ) {
+    this.appId = appId;
+    if (params) {
+      this.areaCode = params.areaCode;
+      this.logConfig = params.logConfig;
+    }
   }
 }

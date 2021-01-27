@@ -35,6 +35,8 @@ import type {
   RtmpStreamingState,
   StreamPublishState,
   StreamSubscribeState,
+  SuperResolutionStateReason,
+  UploadErrorReason,
   UserOfflineReason,
   VideoRemoteState,
   VideoRemoteStateReason,
@@ -485,6 +487,16 @@ export type RtmpStreamingEventCallback =
    * @param eventCode The event code. See [`RtmpStreamingEvent`]{@link RtmpStreamingEvent}.
    */
   (url: string, eventCode: RtmpStreamingEvent) => void;
+export type UserSuperResolutionEnabledCallback =
+  /**
+   * TODO(DOC)
+   */
+  (uid: number, enabled: boolean, reason: SuperResolutionStateReason) => void;
+export type UploadLogResultCallback =
+  /**
+   * TODO(DOC)
+   */
+  (requestId: string, success: boolean, reason: UploadErrorReason) => void;
 
 /**
  * Callbacks.
@@ -1385,6 +1397,16 @@ export interface RtcEngineEvents {
    * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
+
+  /**
+   * TODO(DOC)
+   */
+  UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
+
+  /**
+   * TODO(DOC)
+   */
+  UploadLogResult: UploadLogResultCallback;
 }
 
 /**
@@ -1737,4 +1759,9 @@ export interface RtcChannelEvents {
    * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
+
+  /**
+   * TODO(DOC)
+   */
+  UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 }
