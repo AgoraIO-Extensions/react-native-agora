@@ -4,6 +4,7 @@ import type {
   ChannelMediaOptions,
   ChannelMediaRelayConfiguration,
   ClientRoleOptions,
+  DataStreamConfig,
   EncryptionConfig,
   LiveInjectStreamConfig,
   LiveTranscoding,
@@ -431,6 +432,8 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Sets whether to receive all remote audio streams by default.
    *
+   * @deprecated TODO(DOC)
+   *
    * @param muted Determines whether to receive/stop receiving all remote audio streams by default:
    * - `true`: Stop receiving all remote audio streams by default.
    * - `false`: (Default) Receive all remote audio streams by default.
@@ -465,12 +468,23 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Sets whether to receive all remote video streams by default.
    *
+   * @deprecated TODO(DOC)
+   *
    * @param muted Determines whether to receive/stop receiving all remote video streams by default:
    * - `true`: Stop receiving all remote video streams by default.
    * - `false`: (Default) Receive all remote video streams by default.
    */
   setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
     return this._callMethod('setDefaultMuteAllRemoteVideoStreams', { muted });
+  }
+
+  /**
+   * TODO(DOC)
+   * @param uid
+   * @param enable
+   */
+  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
+    return this._callMethod('enableRemoteSuperResolution', { uid, enable });
   }
 
   /**
@@ -847,6 +861,8 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Creates a data stream.
    *
+   * @deprecated TODO(DOC)
+   *
    * Each user can create up to five data streams during the life cycle of the [`RtcChannel`]{@link RtcChannel} instance.
    *
    * **Note**
@@ -867,6 +883,14 @@ export default class RtcChannel implements RtcChannelInterface {
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return this._callMethod('createDataStream', { reliable, ordered });
+  }
+
+  /**
+   * TODO(DOC)
+   * @param config
+   */
+  createDataStreamWithConfig(config: DataStreamConfig): Promise<number> {
+    return this._callMethod('createDataStream', { config });
   }
 
   /**
@@ -957,6 +981,8 @@ interface RtcVideoInterface {
   muteAllRemoteVideoStreams(muted: boolean): Promise<void>;
 
   setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void>;
+
+  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void>;
 }
 
 /**
@@ -1052,6 +1078,8 @@ interface RtcInjectStreamInterface {
  */
 interface RtcStreamMessageInterface {
   createDataStream(reliable: boolean, ordered: boolean): Promise<number>;
+
+  createDataStreamWithConfig(config: DataStreamConfig): Promise<number>;
 
   sendStreamMessage(streamId: number, message: string): Promise<void>;
 }

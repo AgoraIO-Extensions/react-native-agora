@@ -1,19 +1,22 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
-import type {
+import {
   BeautyOptions,
   CameraCapturerConfiguration,
+  ChannelMediaOptions,
   ChannelMediaRelayConfiguration,
   ClientRoleOptions,
+  DataStreamConfig,
   EncryptionConfig,
   LastmileProbeConfig,
   LiveInjectStreamConfig,
   LiveTranscoding,
+  RtcEngineConfig,
   UserInfo,
   VideoEncoderConfiguration,
   WatermarkOptions,
 } from './Classes';
-import {
+import type {
   AreaCode,
   AudioEffectPreset,
   AudioEqualizationBandFrequency,
@@ -27,6 +30,7 @@ import {
   AudioVoiceChanger,
   ChannelProfile,
   ClientRole,
+  CloudProxyType,
   ConnectionStateType,
   EncryptionMode,
   LogFilter,
@@ -98,7 +102,23 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
+   * TODO(DOC)
+   */
+  static async getSdkVersion(): Promise<string> {
+    return RtcEngine._callMethod('getSdkVersion');
+  }
+
+  /**
+   * TODO(DOC)
+   */
+  static async getErrorDescription(error: number): Promise<string> {
+    return RtcEngine._callMethod('getErrorDescription', { error });
+  }
+
+  /**
    * Creates an [`RtcEngine`]{@link RtcEngine} instance.
+   *
+   * @deprecated
    *
    * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
    *
@@ -116,11 +136,13 @@ export default class RtcEngine implements RtcEngineInterface {
    *    - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
   static async create(appId: string): Promise<RtcEngine> {
-    return RtcEngine.createWithAreaCode(appId, AreaCode.GLOB);
+    return RtcEngine.createWithConfig(new RtcEngineConfig(appId));
   }
 
   /**
    * Creates an [`RtcEngine`]{@link RtcEngine} instance.
+   *
+   * @deprecated
    *
    * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
    *
@@ -146,8 +168,16 @@ export default class RtcEngine implements RtcEngineInterface {
     appId: string,
     areaCode: AreaCode
   ): Promise<RtcEngine> {
+    return RtcEngine.createWithConfig(new RtcEngineConfig(appId, { areaCode }));
+  }
+
+  /**
+   * TODO(DOC)
+   * @param config
+   */
+  static async createWithConfig(config: RtcEngineConfig) {
     if (engine) return engine;
-    await RtcEngine._callMethod('create', { appId, areaCode, appType: 8 });
+    await RtcEngine._callMethod('create', { config, appType: 8 });
     engine = new RtcEngine();
     return engine;
   }
@@ -325,6 +355,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
    * @param optionalInfo Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
    * @param optionalUid (Optional) User ID. A 32-bit unsigned integer with a value ranging from 1 to (2^32-1). `optionalUid` must be unique. If `optionalUid` is not assigned (or set to `0`), the SDK assigns and returns `uid` in the [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} callback.
+   * @param options TODO(DOC)
    * Your app must record and maintain the returned uid since the SDK does not do so.
    *
    * The uid is represented as a 32-bit unsigned integer in the SDK. Since unsigned integers are not supported by Java, the uid is handled as a 32-bit signed integer and larger numbers are interpreted as negative numbers in Java.
@@ -344,13 +375,15 @@ export default class RtcEngine implements RtcEngineInterface {
     token: string | undefined | null,
     channelName: string,
     optionalInfo: string | undefined | null,
-    optionalUid: number
+    optionalUid: number,
+    options?: ChannelMediaOptions
   ): Promise<void> {
     return RtcEngine._callMethod('joinChannel', {
       token,
       channelName,
       optionalInfo,
       optionalUid,
+      options,
     });
   }
 
@@ -377,6 +410,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+   * @param options TODO(DOC)
    *
    * @returns
    * - 0(NoError): Success.
@@ -390,9 +424,14 @@ export default class RtcEngine implements RtcEngineInterface {
    */
   switchChannel(
     token: string | undefined | null,
-    channelName: string
+    channelName: string,
+    options?: ChannelMediaOptions
   ): Promise<void> {
-    return RtcEngine._callMethod('switchChannel', { token, channelName });
+    return RtcEngine._callMethod('switchChannel', {
+      token,
+      channelName,
+      options,
+    });
   }
 
   /**
@@ -522,6 +561,9 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Sets the log files that the SDK outputs.
    *
+   * TODO(DOC)
+   * @deprecated
+   *
    * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB.
    * These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the
    * earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
@@ -540,6 +582,9 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Sets the output log level of the SDK.
    *
+   * TODO(DOC)
+   * @deprecated
+   *
    * You can use one or a combination of the filters. The log level follows the sequence of `Off`, `Critical`, `Error`, `Warning`, `Info`, and `Debug`.
    * Choose a level to see the logs preceding that level. For example, if you set the log level to `Warning`, you see the logs within levels `Critical`, `Error`, and `Warning`.
    *
@@ -551,6 +596,9 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * Sets the size (KB) of a log file that the SDK outputs.
+   *
+   * TODO(DOC)
+   * @deprecated
    *
    * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB. These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`.
    * When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and create a new `agorasdk.log` to record latest logs.
@@ -627,6 +675,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+   * @param options TODO(DOC)
    *
    * @returns
    * - 0(NoError): Success.
@@ -639,12 +688,14 @@ export default class RtcEngine implements RtcEngineInterface {
   joinChannelWithUserAccount(
     token: string | undefined | null,
     channelName: string,
-    userAccount: string
+    userAccount: string,
+    options?: ChannelMediaOptions
   ): Promise<void> {
     return RtcEngine._callMethod('joinChannelWithUserAccount', {
       token,
       channelName,
       userAccount,
+      options,
     });
   }
 
@@ -911,6 +962,9 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Sets whether to receive all remote audio streams by default.
    *
+   * TODO(DOC)
+   * @deprecated
+   *
    * You can call this method either before or after joining a channel.
    * If you call `setDefaultMuteAllRemoteAudioStreams(true)` after joining a channel, you will not receive the audio streams of any subsequent user.
    *
@@ -1096,7 +1150,22 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
+   * TODO(DOC)
+   * @param uid
+   * @param enable
+   */
+  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
+    return RtcEngine._callMethod('enableRemoteSuperResolution', {
+      uid,
+      enable,
+    });
+  }
+
+  /**
    * Sets whether to receive all remote video streams by default.
+   *
+   * TODO(DOC)
+   * @deprecated
    *
    * You can call this method either before or after joining a channel.
    * If you call `setDefaultMuteAllRemoteVideoStreams(true)` after joining a channel, you will not receive the video stream of any subsequent user.
@@ -2526,6 +2595,9 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Creates a data stream.
    *
+   * TODO(DOC)
+   * @deprecated
+   *
    * Each user can create up to five data streams during the lifecycle of the [`RtcEngine`]{@link RtcEngine}.
    *
    * **Note**
@@ -2546,6 +2618,14 @@ export default class RtcEngine implements RtcEngineInterface {
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return RtcEngine._callMethod('createDataStream', { reliable, ordered });
+  }
+
+  /**
+   * TODO(DOC)
+   * @param config
+   */
+  createDataStreamWithConfig(config: DataStreamConfig): Promise<number> {
+    return RtcEngine._callMethod('createDataStream', { config });
   }
 
   /**
@@ -2627,6 +2707,29 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
+   * TODO(DOC)
+   * @param enabled
+   */
+  enableDeepLearningDenoise(enabled: boolean): Promise<void> {
+    return RtcEngine._callMethod('enableDeepLearningDenoise', { enabled });
+  }
+
+  /**
+   * TODO(DOC)
+   * @param proxyType
+   */
+  setCloudProxy(proxyType: CloudProxyType): Promise<void> {
+    return RtcEngine._callMethod('setCloudProxy', { proxyType });
+  }
+
+  /**
+   * TODO(DOC)
+   */
+  uploadLogFile(): Promise<string> {
+    return RtcEngine._callMethod('uploadLogFile');
+  }
+
+  /**
    * Sets parameters for SDK preset audio effects.
    *
    * @since v3.2.0.
@@ -2696,6 +2799,24 @@ export default class RtcEngine implements RtcEngineInterface {
     param2: number
   ): Promise<void> {
     return RtcEngine._callMethod('setAudioEffectParameters', {
+      preset,
+      param1,
+      param2,
+    });
+  }
+
+  /**
+   * TODO(DOC)
+   * @param preset
+   * @param param1
+   * @param param2
+   */
+  setVoiceBeautifierParameters(
+    preset: VoiceBeautifierPreset,
+    param1: number,
+    param2: number
+  ): Promise<void> {
+    return RtcEngine._callMethod('setVoiceBeautifierParameters', {
       preset,
       param1,
       param2,
@@ -2807,12 +2928,14 @@ interface RtcEngineInterface
     token: string | undefined | null,
     channelName: string,
     optionalInfo: string | undefined | null,
-    optionalUid: number
+    optionalUid: number,
+    options?: ChannelMediaOptions
   ): Promise<void>;
 
   switchChannel(
     token: string | undefined | null,
-    channelName: string
+    channelName: string,
+    options?: ChannelMediaOptions
   ): Promise<void>;
 
   leaveChannel(): Promise<void>;
@@ -2846,6 +2969,12 @@ interface RtcEngineInterface
   setParameters(parameters: string): Promise<void>;
 
   getNativeHandle(): Promise<number>;
+
+  enableDeepLearningDenoise(enabled: boolean): Promise<void>;
+
+  setCloudProxy(proxyType: CloudProxyType): Promise<void>;
+
+  uploadLogFile(): Promise<string>;
 }
 
 /**
@@ -2857,7 +2986,8 @@ interface RtcUserInfoInterface {
   joinChannelWithUserAccount(
     token: string,
     channelName: string,
-    userAccount: string
+    userAccount: string,
+    options?: ChannelMediaOptions
   ): Promise<void>;
 
   getUserInfoByUserAccount(userAccount: string): Promise<UserInfo>;
@@ -2931,6 +3061,8 @@ interface RtcVideoInterface {
     enabled: boolean,
     options: BeautyOptions
   ): Promise<void>;
+
+  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void>;
 }
 
 /**
@@ -3033,6 +3165,12 @@ interface RtcVoiceChangerInterface {
 
   setAudioEffectParameters(
     preset: AudioEffectPreset,
+    param1: number,
+    param2: number
+  ): Promise<void>;
+
+  setVoiceBeautifierParameters(
+    preset: VoiceBeautifierPreset,
     param1: number,
     param2: number
   ): Promise<void>;
@@ -3244,6 +3382,8 @@ interface RtcCameraInterface {
  */
 interface RtcStreamMessageInterface {
   createDataStream(reliable: boolean, ordered: boolean): Promise<number>;
+
+  createDataStreamWithConfig(config: DataStreamConfig): Promise<number>;
 
   sendStreamMessage(streamId: number, message: string): Promise<void>;
 }
