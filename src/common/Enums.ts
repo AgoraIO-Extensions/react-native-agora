@@ -606,7 +606,7 @@ export enum CameraCaptureOutputPreference {
    */
   Preview = 2,
   /**
-   * 3: Capture Dimensions determined by user
+   * 3: Capture Dimensions determined by user.
    */
   Manual = 3,
 }
@@ -2642,7 +2642,7 @@ export enum VoiceBeautifierPreset {
   /**
    * TODO(DOC)
    */
-  SINGING_BEAUTIFIER = 0x01020100,
+  SingingBeautifier = 0x01020100,
 
   /**
    * A more vigorous voice.
