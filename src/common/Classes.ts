@@ -9,6 +9,8 @@ import type {
   CaptureBrightnessLevelType,
   DegradationPreference,
   EncryptionMode,
+  ExperiencePoorReason,
+  ExperienceQualityType,
   LastmileProbeResultState,
   LighteningContrastLevel,
   LogLevel,
@@ -1294,11 +1296,11 @@ export interface RemoteAudioStats {
   /**
    * Experience quality: #EXPERIENCE_QUALITY_TYPE
    */
-  qoeQuality: number;
+  qoeQuality: ExperienceQualityType;
   /**
    * The reason for poor experience quality: #EXPERIENCE_POOR_REASON
    */
-  qualityChangedReason: number;
+  qualityChangedReason: ExperiencePoorReason;
 }
 
 /**
