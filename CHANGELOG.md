@@ -1,3 +1,10 @@
+# [3.3.0-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.0-rc.0...v3.3.0-rc.1) (2021-01-28)
+
+
+### Bug Fixes
+
+* type error ([1ffd0f8](https://github.com/AgoraIO-Community/react-native-agora/commit/1ffd0f8923b2968d1d908d4c672ab8c40072635e))
+
 # [3.3.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.2...v3.3.0-rc.0) (2021-01-28)
 
 
