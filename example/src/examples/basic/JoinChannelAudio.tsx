@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {
-  View,
-  TextInput,
-  PermissionsAndroid,
-  StyleSheet,
   Button,
+  PermissionsAndroid,
   Platform,
+  StyleSheet,
+  TextInput,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
@@ -14,6 +14,8 @@ import RtcEngine, {
   RtcEngineConfig,
 } from 'react-native-agora';
 
+import RNFS from 'react-native-fs';
+
 const config = require('../../../agora.config.json');
 
 interface State {
@@ -21,6 +23,7 @@ interface State {
   isJoined: boolean;
   openMicrophone: boolean;
   enableSpeakerphone: boolean;
+  playEffect: boolean;
 }
 
 export default class JoinChannelAudio extends Component<{}, State, any> {
@@ -33,6 +36,7 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       isJoined: false,
       openMicrophone: true,
       enableSpeakerphone: true,
+      playEffect: false,
     };
   }
 
@@ -108,12 +112,46 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       });
   };
 
+  _switchEffect = () => {
+    const { playEffect } = this.state;
+    if (playEffect) {
+      this._engine
+        ?.stopEffect(1)
+        .then(() => {
+          this.setState({ playEffect: false });
+        })
+        .catch((err) => {
+          console.warn('stopEffect', err);
+        });
+    } else {
+      this._engine
+        ?.playEffect(
+          1,
+          Platform.OS === 'ios'
+            ? `${RNFS.MainBundlePath}/Sound_Horizon.mp3`
+            : '/assets/Sound_Horizon.mp3',
+          -1,
+          1,
+          1,
+          100,
+          true
+        )
+        .then(() => {
+          this.setState({ playEffect: true });
+        })
+        .catch((err) => {
+          console.warn('playEffect', err);
+        });
+    }
+  };
+
   render() {
     const {
       channelId,
       isJoined,
       openMicrophone,
       enableSpeakerphone,
+      playEffect,
     } = this.state;
     return (
       <View style={styles.container}>
@@ -137,6 +175,10 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
           <Button
             onPress={this._switchSpeakerphone}
             title={enableSpeakerphone ? 'Speakerphone' : 'Earpiece'}
+          />
+          <Button
+            onPress={this._switchEffect}
+            title={`${playEffect ? 'Stop' : 'Play'} effect`}
           />
         </View>
       </View>

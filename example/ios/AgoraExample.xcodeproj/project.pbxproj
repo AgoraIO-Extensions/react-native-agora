@@ -13,6 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		20F357B024636CDF00C146DC /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F357AF24636CDF00C146DC /* File.swift */; };
+		F5A97F0625D3B42C00263532 /* Sound_Horizon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5A97ED425D3ADDC00263532 /* Sound_Horizon.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		871719007ECC5EAD276C345C /* Pods-AgoraExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraExample.debug.xcconfig"; path = "Target Support Files/Pods-AgoraExample/Pods-AgoraExample.debug.xcconfig"; sourceTree = "<group>"; };
 		BCEA90A70F4BEAD7E9FA28B2 /* libPods-AgoraExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgoraExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F5A97ED425D3ADDC00263532 /* Sound_Horizon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sound_Horizon.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				F5A97ED525D3ADEF00263532 /* Resources */,
 				1CFFDEF7170271C97B8B7E5A /* Pods */,
 				20F357AD24636CDE00C146DC /* AgoraExample-Bridging-Header.h */,
 			);
@@ -107,6 +110,14 @@
 				13B07F961A680F5B00A75B9A /* AgoraExample.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F5A97ED525D3ADEF00263532 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F5A97ED425D3ADDC00263532 /* Sound_Horizon.mp3 */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,6 +184,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5A97F0625D3B42C00263532 /* Sound_Horizon.mp3 in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
