@@ -38,6 +38,7 @@ import type {
   UserPriority,
   VideoStreamType,
   VoiceBeautifierPreset,
+  VoiceConversionPreset,
 } from './Enums';
 import type { Listener, RtcEngineEvents, Subscription } from './RtcEvents';
 import RtcChannel from './RtcChannel.native';
@@ -2891,6 +2892,14 @@ export default class RtcEngine implements RtcEngineInterface {
   setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void> {
     return RtcEngine._callMethod('setVoiceBeautifierPreset', { preset });
   }
+
+  /**
+   * TODO(DOC)
+   * @param preset
+   */
+  setVoiceConversionPreset(preset: VoiceConversionPreset): Promise<void> {
+    return RtcEngine._callMethod('setVoiceConversionPreset', { preset });
+  }
 }
 
 /**
@@ -3162,6 +3171,8 @@ interface RtcVoiceChangerInterface {
   setAudioEffectPreset(preset: AudioEffectPreset): Promise<void>;
 
   setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void>;
+
+  setVoiceConversionPreset(preset: VoiceConversionPreset): Promise<void>;
 
   setAudioEffectParameters(
     preset: AudioEffectPreset,

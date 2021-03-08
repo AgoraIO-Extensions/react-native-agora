@@ -949,6 +949,14 @@ export enum EncryptionMode {
    * @since v3.1.2.
    */
   SM4128ECB = 4,
+  /**
+   * 5: 128-bit AES encryption, GCM mode.
+   */
+  AES128GCM = 5,
+  /**
+   * 6: 256-bit AES encryption, GCM mode.
+   */
+  AES256GCM = 6,
 }
 
 /**
@@ -2812,8 +2820,27 @@ export enum ExperienceQualityType {
  */
 export enum ExperiencePoorReason {
   None = 0,
+
   RemoteNetworkQualityPoor = 1,
+
   LocalNetworkQualityPoor = 2,
+
   WirelessSignalPoor = 4,
+
   WifiBluetoothCoexist = 8,
+}
+
+/**
+ * TODO(DOC)
+ */
+export enum VoiceConversionPreset {
+  Off = 0,
+
+  Neutral = 50397440,
+
+  Sweet = 50397696,
+
+  Solid = 50397952,
+
+  Bass = 50397952,
 }
