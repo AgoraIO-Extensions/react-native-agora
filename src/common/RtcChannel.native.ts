@@ -432,11 +432,21 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Sets whether to receive all remote audio streams by default.
    *
-   * @deprecated TODO(DOC)
+   * @deprecated This method is deprecated from v3.3.1.
    *
-   * @param muted Determines whether to receive/stop receiving all remote audio streams by default:
-   * - `true`: Stop receiving all remote audio streams by default.
-   * - `false`: (Default) Receive all remote audio streams by default.
+   * Stops or resumes subscribing to the audio streams of all remote users by default.
+   *
+   * Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.
+   *
+   * @note
+   * If you need to resume subscribing to the audio streams of remote users in the channel after calling `setDefaultMuteAllRemoteAudioStreams(true)`, do the following:
+   *   - If you need to resume subscribing to the audio stream of a specified user, call [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream}, and specify the user ID.
+   *   - If you need to resume subscribing to the audio streams of multiple remote users, call [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream} multiple times.
+   *
+   * @param muted Sets whether to stop subscribing to the audio streams of all remote users by default.
+   *              - `true`: Stop subscribing to the audio streams of all remote users by default.
+   *              - `false`: (Default) Resume subscribing to the audio streams of all remote users by default.
+   *
    */
   setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
     return this._callMethod('setDefaultMuteAllRemoteAudioStreams', { muted });
@@ -465,23 +475,79 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('muteRemoteVideoStream', { uid, muted });
   }
 
+
   /**
    * Sets whether to receive all remote video streams by default.
    *
-   * @deprecated TODO(DOC)
+   * @deprecated This method is deprecated from v3.3.1.
    *
-   * @param muted Determines whether to receive/stop receiving all remote video streams by default:
-   * - `true`: Stop receiving all remote video streams by default.
-   * - `false`: (Default) Receive all remote video streams by default.
+   * Stops or resumes subscribing to the video streams of all remote users by default.
+   *
+   * Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the video streams of all subsequent users.
+   *
+   * @note
+   * If you need to resume subscribing to the video streams of remote users in the channel after calling `setDefaultMuteAllRemoteVideoStreams(true)`, do the following:
+   *   - If you need to resume subscribing to the video stream of a specified user, call `muteRemoteVideoStream(false)`, and specify the user ID.
+   *   - If you need to resume subscribing to the video streams of multiple remote users, call `muteRemoteVideoStream(false)` multiple times.
+   *
+   * @param muted Sets whether to stop subscribing to the video streams of all remote users by default.
+   *              - `true`: Stop subscribing to the video streams of all remote users by default.
+   *              - `false`: (Default) Resume subscribing to the video streams of all remote users by default.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
    */
   setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
     return this._callMethod('setDefaultMuteAllRemoteVideoStreams', { muted });
   }
 
   /**
-   * TODO(DOC)
-   * @param uid
-   * @param enable
+   * @ignore
+   * Enables/Disables the super-resolution algorithm for a remote user's video stream.
+   *
+   * @since v3.3.1. (later)
+   *
+   * The algorithm effectively improves the resolution of the specified remote user's video stream. When the original resolution of the remote video stream is a × b pixels, you can receive and render the stream at a higher resolution (2a × 2b pixels) by enabling the algorithm.
+   *
+   * After calling this method, the SDK triggers the [`UserSuperResolutionEnabled`]{@link RtcChannelEvents.UserSuperResolutionEnabled} callback to report whether you have successfully enabled the super-resolution algorithm.
+   *
+   * @warning
+   * The super-resolution algorithm requires extra system resources. To balance the visual experience and system usage, the SDK poses the following restrictions:
+   * - The algorithm can only be used for a single user at a time.
+   * - On the Android platform, the original resolution of the remote video must not exceed 640 × 360 pixels.
+   * - On the iOS platform, the original resolution of the remote video must not exceed 640 × 480 pixels.
+   *
+   * If you exceed these limitations, the SDK triggers the `Warning` callback with the corresponding warning codes:
+   * - `SuperResolutionStreamOverLimitation(1610)`: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+   * - `SuperResolutionUserCountOverLimitation(1611)`: Another user is already using the super-resolution algorithm.
+   * - `SuperResolutionDeviceNotSupported(1612)`: The device does not support the super-resolution algorithm.
+   *
+   * @note
+   * Requirements for the user's device:
+   * - Android: The following devices are known to support the method:
+   *   - VIVO: V1821A, NEX S, 1914A, 1916A, and 1824BA
+   *   - OPPO: PCCM00
+   *   - OnePlus: A6000
+   *   - Xiaomi: Mi 8, Mi 9, MIX3, and Redmi K20 Pro
+   *   - SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, and SM-G9750
+   *   - HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, and EVR-AN00
+   * - iOS: This method is supported on devices running iOS 12.0 or later. The following device models are known to support the method:
+   *   - iPhone XR
+   *   - iPhone XS
+   *   - iPhone XS Max
+   *   - iPhone 11
+   *   - iPhone 11 Pro
+   *   - iPhone 11 Pro Max
+   *   - iPad Pro 11-inch (3rd Generation)
+   *   - iPad Pro 12.9-inch (3rd Generation)
+   *   - iPad Air 3 (3rd Generation)
+   * @param uid The ID of the remote user.
+   * @param enable Whether to enable the super-resolution algorithm:
+   *   - `true`: Enable the super-resolution algorithm.
+   *   - `false`: Disable the super-resolution algorithm.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
    */
   enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
     return this._callMethod('enableRemoteSuperResolution', { uid, enable });
@@ -742,12 +808,10 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
    *
-   * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+   * All users in the same channel must use the same encryption mode and encryption key. After a user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
    *
    * **Note**
-   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
-   * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
-   *
+   * If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
    *
    * @param enabled Whether to enable the built-in encryption.
    * - `true`: Enable the built-in encryption.
@@ -820,6 +884,10 @@ export default class RtcChannel implements RtcChannelInterface {
    *  - [`UserJoined`]{@link RtcChannelEvents.UserJoined}(uid: 666), if the method call succeeds and the online
    * media stream is injected into the channel.
    *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
@@ -852,6 +920,10 @@ export default class RtcChannel implements RtcChannelInterface {
    * If you successfully remove the URL address from the live interactive streaming, the SDK triggers the
    * [`UserJoined`]{@link RtcChannelEvents.UserJoined} callback, with the stream uid of 666.
    *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
    * @param url The URL address to be removed.
    */
   removeInjectStreamUrl(url: string): Promise<void> {
@@ -861,7 +933,9 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Creates a data stream.
    *
-   * @deprecated TODO(DOC)
+   * @deprecated
+   *
+   * This method is deprecated from v3.3.1. Use the [`createDataStreamWithConfig`]{@link createDataStreamWithConfig} method instead.
    *
    * Each user can create up to five data streams during the life cycle of the [`RtcChannel`]{@link RtcChannel} instance.
    *
@@ -885,9 +959,22 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('createDataStream', { reliable, ordered });
   }
 
+
   /**
-   * TODO(DOC)
-   * @param config
+   * Creates a data stream.
+   *
+   * @since v3.3.1.
+   *
+   * Each user can create up to five data streams in a single channel.
+   *
+   * This method does not support data reliability. If the receiver receives a data packet five seconds or more after it was sent, the SDK directly discards the data.
+   *
+   * @param config The configurations for the data stream.
+   *
+   *
+   * @return
+   * - Returns the stream ID if you successfully create the data stream.
+   * - < 0: Fails to create the data stream.
    */
   createDataStreamWithConfig(config: DataStreamConfig): Promise<number> {
     return this._callMethod('createDataStream', { config });
