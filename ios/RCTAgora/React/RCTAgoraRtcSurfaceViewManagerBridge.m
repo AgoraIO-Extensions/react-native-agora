@@ -12,8 +12,8 @@
 
 RCT_EXPORT_VIEW_PROPERTY(data, NSDictionary)
 
-RCT_EXPORT_VIEW_PROPERTY(renderMode, NSInteger)
+RCT_EXPORT_VIEW_PROPERTY(renderMode, NSNumber)
 
-RCT_EXPORT_VIEW_PROPERTY(mirrorMode, NSInteger)
+RCT_EXPORT_VIEW_PROPERTY(mirrorMode, NSNumber)
 
 @end

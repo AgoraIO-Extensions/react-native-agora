@@ -11,10 +11,6 @@ import {
 /**
  * The SurfaceView class.
  *
- * **Note**
- *
- * SurfaceView is supported on Android only. Use [UIView](https://developer.apple.com/documentation/uikit/uiview) on iOS.
- *
  * @noInheritDoc
  */
 class SurfaceView extends Component<ViewProps & RtcSurfaceViewProps, {}> {
