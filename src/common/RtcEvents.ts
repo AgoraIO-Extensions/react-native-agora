@@ -35,6 +35,8 @@ import type {
   RtmpStreamingState,
   StreamPublishState,
   StreamSubscribeState,
+  SuperResolutionStateReason,
+  UploadErrorReason,
   UserOfflineReason,
   VideoRemoteState,
   VideoRemoteStateReason,
@@ -485,6 +487,28 @@ export type RtmpStreamingEventCallback =
    * @param eventCode The event code. See [`RtmpStreamingEvent`]{@link RtmpStreamingEvent}.
    */
   (url: string, eventCode: RtmpStreamingEvent) => void;
+export type UserSuperResolutionEnabledCallback =
+  /**
+   * @ignore
+   *
+   * @param uid The ID of the remote user.
+   * @param enabled Whether the super-resolution algorithm is successfully enabled:
+   *   - `true`: The super-resolution algorithm is successfully enabled.
+   *   - `false`: The super-resolution algorithm is not successfully enabled.
+   * @param reason The reason why the super-resolution algorithm is not successfully enabled. See [`SuperResolutionStateReason`]{@link enum.SuperResolutionStateReason}.
+   */
+  (uid: number, enabled: boolean, reason: SuperResolutionStateReason) => void;
+export type UploadLogResultCallback =
+  /**
+   * @ignore
+   *
+   * @param requestId The request ID. This request ID is the same as requestId returned by `uploadLogFile`, and you can use `requestId` to match a specific upload with a callback.
+   * @param success Whether the log files are successfully uploaded:
+   *  - `true`: Successfully upload the log files.
+   *  - `false`: Fails to upload the log files. For details, see the reason parameter.
+   * @param reason The reason for the upload failure. See [`UploadErrorReason`]{@link enum.UploadErrorReason}.
+   */
+  (requestId: string, success: boolean, reason: UploadErrorReason) => void;
 
 /**
  * Callbacks.
@@ -751,8 +775,17 @@ export interface RtcEngineEvents {
    * Occurs when the local video state changes.
    *
    * The SDK returns the current video state in this callback.
-   * This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
-   * When the state is [`Failed`]{@link LocalVideoStreamState.Failed}, see the error parameter for details.
+   *
+   * The SDK triggers the `LocalVideoStateChanged(Failed, CaptureFailure)` callback in the following situations:
+   * - On Android:
+   *    - (Android 9 or later) The application exits to the background, and the system recycles the camera.
+   *    - (Android 6 or later) The camera is occupied by a third-party application. When the third-party application releases the camera, the SDK triggers the `LocalVideoStateChanged(Capturing, OK)` callback.
+   *    - The camera starts normally, but the captured video is not output for four seconds.
+   * - On iOS:
+   *    - The application exits to the background, and the system recycles the camera.
+   *    - The camera starts normally, but the captured video is not output for four seconds.
+   *
+   * When the camera outputs the captured video frames, if all the video frames are the same for 15 consecutive frames, the SDK triggers the `LocalVideoStateChanged(Capturing, CaptureFailure)` callback. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
    *
    * @event LocalVideoStateChanged
    */
@@ -778,7 +811,7 @@ export interface RtcEngineEvents {
    *
    * **Note**
    *
-   * When the state is [`Failed`]{@link AudioLocalState.Failed}, see the error parameter for details.
+   * When the state is [`Failed`]{@link AudioLocalState.Failed}, see the `error` parameter for details.
    *
    * @event LocalAudioStateChanged
    */
@@ -988,6 +1021,11 @@ export interface RtcEngineEvents {
 
   /**
    * Reports the status of injecting the online media stream.
+   *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
    *
    * @event StreamInjectedStatus
    */
@@ -1385,6 +1423,28 @@ export interface RtcEngineEvents {
    * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
+
+  /**
+   * @ignore
+   *
+   * Reports whether the super-resolution algorithm is enabled.
+   *
+   * @since v3.3.1 (later)
+   *
+   * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use reason for troubleshooting.
+   */
+  UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
+
+  /**
+   * @ignore
+   *
+   * Reports the result of uploading the SDK log files.
+   *
+   * @since v3.3.1 (later)
+   *
+   * After the method call of `uploadLogFile`, the SDK triggers this callback to report the result of uploading the log files. If the upload fails, refer to the `reason` parameter to troubleshoot.
+   */
+  UploadLogResult: UploadLogResultCallback;
 }
 
 /**
@@ -1640,6 +1700,11 @@ export interface RtcChannelEvents {
   /**
    * Reports the status of injecting the online media stream.
    *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
+   *
    * @event StreamInjectedStatus
    */
   StreamInjectedStatus: StreamInjectedStatusCallback;
@@ -1737,4 +1802,14 @@ export interface RtcChannelEvents {
    * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
+
+  /**
+   * @ignore
+   * Reports whether the super-resolution algorithm is enabled.
+   *
+   * @since v3.3.1 (later)
+   *
+   * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use `reason` for troubleshooting.
+   */
+  UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 }
