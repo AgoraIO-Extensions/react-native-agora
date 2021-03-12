@@ -848,15 +848,19 @@ export class LiveInjectStreamConfig {
  */
 export class CameraCapturerConfiguration {
   /**
-   * The camera capturer configuration.
+   * The camera capture preference.
    */
   preference: CameraCaptureOutputPreference;
   /**
-   * Camera Capture Width
+   * The width (px) of the video image captured by the local camera. To customize the width of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureWidth`.
+   *
+   * @since v3.3.1.
    */
   captureWidth?: number;
   /**
-   * Camera Capture Height
+   * The height (px) of the video image captured by the local camera. To customize the height of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureHeight`.
+   *
+   * @since v3.3.1.
    */
   captureHeight?: number;
   /**
@@ -1011,10 +1015,18 @@ export interface RtcStats {
   rxPacketLossRate: number;
   /**
    * System CPU usage (%).
+   *
+   * **Note**
+   *
+   * The `cpuTotalUsage` reported in the `LeaveChannel` callback is always 0.
    */
   cpuTotalUsage: number;
   /**
    * Application CPU usage (%).
+   *
+   * **Note**
+   *
+   * The `cpuAppUsage` reported in the `LeaveChannel` callback is always 0.
    */
   cpuAppUsage: number;
   /**
@@ -1229,7 +1241,9 @@ export interface LocalVideoStats {
    */
   captureFrameRate: number;
   /**
-   * The capture brightness level type.
+   * The brightness level of the video image captured by the local camera. See [`CaptureBrightnessLevelType`]{@link CaptureBrightnessLevelType}.
+   *
+   * @since v3.3.1.
    */
   captureBrightnessLevel: CaptureBrightnessLevelType;
 }
@@ -1294,15 +1308,34 @@ export interface RemoteAudioStats {
    */
   publishDuration: number;
   /**
-   * Experience quality: #EXPERIENCE_QUALITY_TYPE
+   * Quality of experience (QoE) of the local user when receiving a remote audio stream. See [`ExperienceQualityType`]{@link ExperienceQualityType}.
+   *
+   * @since 3.3.1.
    */
   qoeQuality: ExperienceQualityType;
   /**
-   * The reason for poor experience quality: #EXPERIENCE_POOR_REASON
+   * The reason for poor QoE of the local user when receiving a remote audio stream. See [`ExperiencePoorReason`]{@link ExperiencePoorReason}.
+   *
+   * @since 3.3.1.
    */
   qualityChangedReason: ExperiencePoorReason;
   /**
    * The quality of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval. The return value ranges from 0 to 500. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.
+   *
+   * @since v3.3.1.
+   *
+   * The subjective perception of audio quality corresponding to the Agora
+   * real-time audio MOS scores is as follows:
+   *
+   * | MOS score       | Perception of audio quality                                                                                                                                 |
+   * |-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+   * | Greater than 4  | Excellent. The audio sounds clear and smooth.                                                                                                               |
+   * | From 3.5 to 4   | Good. The audio has some perceptible impairment, but still sounds clear.                                                                                    |
+   * | From 3 to 3.5   | Fair. The audio freezes occasionally and requires attentive listening.                                                                                      |
+   * | From 2.5 to 3   | Poor. The audio sounds choppy and requires considerable effort to understand.                                                                               |
+   * | From 2 to 2.5   | Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.  |
+   * | Less than 2     | Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible. |
+   *
    */
   mosValue: number;
 }
@@ -1420,20 +1453,28 @@ export class ClientRoleOptions {
 }
 
 /**
- * TODO(DOC)
- * Definition of LogConfiguration
+ * Log file configurations.
+ *
+ * @since v3.3.1.
  */
 export class LogConfig {
   /**
-   * The log file path, default is NULL for default log path
+   * The absolute path of log files. The default file path is as follows:
+   *   - Android: `/storage/emulated/0/Android/data/<package_name>/files/agorasdk.log`
+   *   - iOS: `App Sandbox/Library/caches/agorasdk.log`
+   * Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
    */
   filePath?: string;
   /**
-   * The log file size, KB , set -1 to use default log size
+   * The size (KB) of a log file. The default value is 1024 KB. If you set `fileSize` to 1024 KB, the SDK outputs at most 5 MB log files; if you set it to less than 1024 KB, the setting is invalid, and the maximum size of a log file is still 1024 KB.
    */
   fileSize?: number;
   /**
-   * The log level, set LOG_LEVEL_INFO to use default log level
+   * The output log level of the SDK.
+   *
+   * For example, if you set the log level to `WARN`, the SDK outputs the logs within levels `FATAL`, `ERROR`, and `WARN`.
+   *
+   * See [`LogLevel`]{@link enum LogLevel}.
    */
   level?: LogLevel;
 
@@ -1451,16 +1492,32 @@ export class LogConfig {
 }
 
 /**
- * TODO(DOC)
- * Data stream config
+ * The configurations for the data stream.
+ *
+ * @since v3.3.1
+ *
+ * | `syncWithAudio` | `ordered` | SDK behaviors                                                |
+ * | :-------------- | :-------- | :----------------------------------------------------------- |
+ * | `false`         | `false`   | The SDK triggers the `onStreamMessage` callback immediately after the receiver receives a data packet. |
+ * | `true`          | `false`   | <ul><li>If the data packet delay is within the audio delay, the SDK triggers the <code>onStreamMessage</code> callback when the synchronized audio packet is played out</li><li>If the data packet delay exceeds the audio delay, the SDK triggers the <code>onStreamMessage</code> callback as soon as the data packet is received. In this case, the data packet is not synchronized with the audio packet.</li></ul>.  |
+ * | `false`         | `true`    | <ul><li>If the delay of a data packet is within five seconds, the SDK corrects the order of the data packet.</li><li>If the delay of a data packet exceeds five seconds, the SDK discards the data packet.</li></ul> |
+ * | `true`          | `true`    |    <ul><li>If the delay of a data packet is within the audio delay, the SDK corrects the order of the data packet.</li><li>If the delay of a data packet exceeds the audio delay, the SDK discards this data packet.</li></ul>                                                          |
  */
 export class DataStreamConfig {
   /**
-   * syncWithAudio Sets whether or not the recipients receive the data stream sync with current audio stream.
+   * Whether to synchronize the data packet with the published audio packet.
+   * - `true`: Synchronize the data packet with the audio packet.
+   * - `false`: Do not synchronize the data packet with the audio packet.
+   *
+   * When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the [`StreamMessage`]{@link RtcEngineEvents.StreamMessage} callback when the synchronized audio packet is played out. Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
    */
   syncWithAudio?: boolean;
   /**
-   * ordered Sets whether or not the recipients receive the data stream in the sent order:
+   * Whether the SDK guarantees that the receiver receives the data in the sent order.
+   * - `true`: Guarantee that the receiver receives the data in the sent order.
+   * - `false`: Do not guarantee that the receiver receives the data in the sent order.
+   *
+   * Do not set this parameter to `true` if you need the receiver to receive the data immediately.
    */
   ordered?: boolean;
 
@@ -1473,8 +1530,9 @@ export class DataStreamConfig {
 }
 
 /**
- * TODO(DOC)
- * Definition of RtcEngineConfig.
+ * Configurations for the [`RtcEngine`]{@link RtcEngine}.
+ *
+ * @since v3.3.1
  */
 export class RtcEngineConfig {
   /**
@@ -1487,13 +1545,18 @@ export class RtcEngineConfig {
   /**
    * The region for connection. This advanced feature applies to scenarios that have regional restrictions.
    *
-   * For the regions that Agora supports, see #AREA_CODE. After specifying the region, the SDK connects to the Agora servers within that region.
+   * For the regions that Agora supports, see [`AreaCode`]{@link enum.AreaCode}.
    *
-   * @note The SDK supports specify only one region.
+   * After specifying the region, the SDK connects to the Agora servers within that region.
+   *
    */
   areaCode?: AreaCode;
   /**
-   * The config for custumer set log path, log size and log level
+   * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link class.LogConfig}.
+   *
+   * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB. These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
+   *
+   * The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
    */
   logConfig?: LogConfig;
 
