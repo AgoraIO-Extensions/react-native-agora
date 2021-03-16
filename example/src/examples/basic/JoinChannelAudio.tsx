@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {
   Button,
   PermissionsAndroid,
@@ -6,8 +6,9 @@ import {
   StyleSheet,
   TextInput,
   View,
+  Switch,
 } from 'react-native';
-
+import Slider from '@react-native-community/slider';
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
@@ -25,7 +26,50 @@ interface State {
   enableSpeakerphone: boolean;
   playEffect: boolean;
 }
-
+interface ItemProps {
+  title: string;
+  btnOnPress?: any;
+  onSliderValueChange?: (value: number) => void;
+  onSwitchValueChange?: (value: boolean) => void;
+  isShowSlider?: boolean;
+  isShowSwitch?: boolean;
+}
+const Item = ({
+  title,
+  btnOnPress = () => {},
+  onSliderValueChange,
+  onSwitchValueChange,
+  isShowSlider = false,
+  isShowSwitch = false,
+}: ItemProps) => {
+  const [isEnabled, setIsEnabled] = useState(isShowSwitch || isShowSlider);
+  return (
+    <View style={styles.item}>
+      <View>
+        <Button onPress={btnOnPress} title={title} />
+        {isShowSwitch && (
+          <Switch
+            onValueChange={(value: boolean) => {
+              onSwitchValueChange && onSwitchValueChange(value);
+              setIsEnabled((previousState) => !previousState);
+            }}
+            value={isEnabled}
+          />
+        )}
+      </View>
+      {isEnabled && (
+        <Slider
+          style={{ width: '35%', height: 40 }}
+          minimumValue={0}
+          maximumValue={1}
+          minimumTrackTintColor="#FFFFFF"
+          maximumTrackTintColor="#000000"
+          onValueChange={onSliderValueChange}
+        />
+      )}
+    </View>
+  );
+};
 export default class JoinChannelAudio extends Component<{}, State, any> {
   _engine: RtcEngine | undefined;
 
@@ -82,6 +126,21 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       null,
       config.uid
     );
+  };
+  _onChangeRecordingVolume = (value: number) => {
+    this._engine?.adjustRecordingSignalVolume(value * 400);
+  };
+
+  _onChangePlaybackVolume = (value: number) => {
+    this._engine?.adjustPlaybackSignalVolume(value * 400);
+  };
+
+  _toggleInEarMonitoring = (isEnabled: boolean) => {
+    this._engine?.enableInEarMonitoring(isEnabled);
+  };
+
+  _onChangeInEarMonitoringVolume = (value: number) => {
+    this._engine?.setInEarMonitoringVolume(value * 400);
   };
 
   _leaveChannel = async () => {
@@ -167,20 +226,39 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
             title={`${isJoined ? 'Leave' : 'Join'} channel`}
           />
         </View>
-        <View style={styles.float}>
-          <Button
-            onPress={this._switchMicrophone}
-            title={`Microphone ${openMicrophone ? 'on' : 'off'}`}
-          />
-          <Button
-            onPress={this._switchSpeakerphone}
-            title={enableSpeakerphone ? 'Speakerphone' : 'Earpiece'}
-          />
-          <Button
-            onPress={this._switchEffect}
-            title={`${playEffect ? 'Stop' : 'Play'} effect`}
-          />
-        </View>
+        {isJoined && (
+          <View style={styles.float}>
+            <Item
+              title={`Microphone ${openMicrophone ? 'on' : 'off'}`}
+              btnOnPress={this._switchMicrophone}
+            />
+            <Item
+              title={enableSpeakerphone ? 'Speakerphone' : 'Earpiece'}
+              btnOnPress={this._switchSpeakerphone}
+            />
+            <Item
+              title={`${playEffect ? 'Stop' : 'Play'} effect`}
+              btnOnPress={this._switchEffect}
+            />
+            <Item
+              title={'RecordingVolume'}
+              isShowSlider
+              onSliderValueChange={this._onChangeRecordingVolume}
+            />
+            <Item
+              title={'PlaybackVolume'}
+              isShowSlider={true}
+              onSliderValueChange={this._onChangePlaybackVolume}
+            />
+            <Item
+              title={'InEar Monitoring Volume'}
+              isShowSlider
+              isShowSwitch
+              onSwitchValueChange={this._toggleInEarMonitoring}
+              onSliderValueChange={this._onChangeInEarMonitoringVolume}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -190,10 +268,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  item: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 10,
+    marginTop: 10,
+  },
   float: {
+    width: '100%',
     position: 'absolute',
-    right: 0,
-    bottom: 0,
+    alignItems: 'flex-start',
+    bottom: 20,
   },
   top: {
     width: '100%',
