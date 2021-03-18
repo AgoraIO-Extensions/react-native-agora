@@ -13,17 +13,7 @@ if [ ! -f $temp/$zipName"$version".zip ]; then
 fi
 
 echo "start unzip SDK..."
-unzip -o -q $temp/$zipName"$version".zip -d $temp/$zipName"$version"
-unzip -o -q "**/*_Dynamic.zip" -d $temp/$zipName"$version"
-if [ $? -ne 0 ]; then
-  echo "unzip SDK failed, retry..."
-  unzip -o -q $temp/$zipName"$version".zip "**/ALL_ARCHITECTURE/*" -d $temp/$zipName"$version"
-else
-  echo "unzip SDK success, start unzip dynamic framework..."
-  for zip in $(find $temp/$zipName"$version" -maxdepth 5 -iname '*_Dynamic.zip'); do
-    unzip -o -q "$zip" "**/ALL_ARCHITECTURE/*" -d $temp/$zipName"$version"
-  done
-fi
+unzip -o -q $temp/$zipName"$version".zip "**/libs/*" -d $temp/$zipName"$version"
 
 echo "start transfer dynamic framework to $libs..."
 rm -rf $libs
