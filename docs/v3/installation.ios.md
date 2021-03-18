@@ -36,7 +36,7 @@ sh ./install.sh
 Then frameworks will be saved to this path:
 
 ```shell script
-node_modules/react-native-agora/ios/RCTAgora/Libs/*.framework
+node_modules/react-native-agora/ios/RCTAgora/Libs/*.xcframework
 ```
 
 You should **copy frameworks to your root project** and [embedding](https://developer.apple.com/library/archive/technotes/tn2435/_index.html#//apple_ref/doc/uid/DTS40017543-CH1-EMBED_IN_APP_SECTION) these because they are dynamic libraries.
