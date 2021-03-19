@@ -42,7 +42,7 @@ class RCTAgoraRtcChannelModule(
   }
 
   private fun engine(): RtcEngine? {
-    return reactApplicationContext.getNativeModule(RCTAgoraRtcEngineModule::class.java).engine()
+    return reactApplicationContext.getNativeModule(RCTAgoraRtcEngineModule::class.java)?.engine()
   }
 
   fun channel(channelId: String): RtcChannel? {
