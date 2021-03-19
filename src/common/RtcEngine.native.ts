@@ -102,7 +102,6 @@ export default class RtcEngine implements RtcEngineInterface {
     }
   }
 
-
   /**
    * Gets the SDK version.
    *
@@ -114,7 +113,6 @@ export default class RtcEngine implements RtcEngineInterface {
   static async getSdkVersion(): Promise<string> {
     return RtcEngine._callMethod('getSdkVersion');
   }
-
 
   /**
    * Gets the warning or error description.
@@ -3116,7 +3114,6 @@ export default class RtcEngine implements RtcEngineInterface {
   setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void> {
     return RtcEngine._callMethod('setVoiceBeautifierPreset', { preset });
   }
-
 
   /**
    * Sets an SDK preset voice conversion effect.

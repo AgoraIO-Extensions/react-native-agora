@@ -2659,7 +2659,6 @@ export enum VoiceBeautifierPreset {
    */
   ChatBeautifierVitality = 0x01010300,
 
-
   /**
    * Singing beautifier effect.
    *
