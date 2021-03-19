@@ -475,7 +475,6 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('muteRemoteVideoStream', { uid, muted });
   }
 
-
   /**
    * Sets whether to receive all remote video streams by default.
    *
@@ -958,7 +957,6 @@ export default class RtcChannel implements RtcChannelInterface {
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return this._callMethod('createDataStream', { reliable, ordered });
   }
-
 
   /**
    * Creates a data stream.
