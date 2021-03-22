@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
   s.swift_version = "4.0"
 
   s.dependency "React"
-  s.dependency "AgoraRtcEngine_iOS", "3.2.1"
+  s.dependency "AgoraAudio_Special_iOS", "3.2.2.201"
 end

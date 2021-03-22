@@ -14,7 +14,7 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
     override func view() -> UIView! {
         let view = RtcView()
         view.setEngine(engine)
-        view.setChannel(channel(_:))
+//        view.setChannel(channel(_:))
         return view
     }
 
@@ -30,9 +30,9 @@ class RCTAgoraRtcSurfaceViewManager: RCTViewManager {
         return (bridge.module(for: RCTAgoraRtcEngineModule.classForCoder()) as? RCTAgoraRtcEngineModule)?.engine
     }
 
-    private func channel(_ channelId: String) -> AgoraRtcChannel? {
-        return (bridge.module(for: RCTAgoraRtcChannelModule.classForCoder()) as? RCTAgoraRtcChannelModule)?.channel(channelId)
-    }
+//    private func channel(_ channelId: String) -> AgoraRtcChannel? {
+//        return (bridge.module(for: RCTAgoraRtcChannelModule.classForCoder()) as? RCTAgoraRtcChannelModule)?.channel(channelId)
+//    }
 }
 
 @objc(RtcView)
