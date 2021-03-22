@@ -1,3 +1,10 @@
+## [3.3.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.2-rc.0...v3.3.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* iOS selector error ([2d1ac8f](https://github.com/AgoraIO-Community/react-native-agora/commit/2d1ac8f1b902f71c06b0b1729579adf396b58c9b))
+
 ## [3.3.2-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.1...v3.3.2-rc.0) (2021-03-19)
 
 

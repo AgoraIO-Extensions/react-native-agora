@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "3.3.2-rc.0",
+  "version": "3.3.2",
   "description": "Agora RTC SDK For React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
