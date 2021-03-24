@@ -86,7 +86,7 @@ target '_YOUR_PROJECT_TARGET_' do
     'RCTLinkingIOS',
   ], :modular_headers => true
   # Explicitly include Yoga if you are using RN >= 0.42.0
-  pod "yoga", :path => "../node_modules/react-native/ReactCommon/yoga", :modular_headers => true
+  pod 'Yoga', :path => "../node_modules/react-native/ReactCommon/yoga", :modular_headers => true
   
   # Third party deps podspec link
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec', :modular_headers => false
