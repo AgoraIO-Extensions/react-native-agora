@@ -1,9 +1,9 @@
 {
   "//appId": "Get your own App ID at https://dashboard.agora.io/",
-  "appId": YOUR_APP_ID,
+  "appId": "50cdc3aa2d744217bf60cbf4f2d972e0",
   "//token": "Please refer to https://docs.agora.io/en/Agora%20Platform/token",
-  "token": YOUR_TOEKN,
-  "channelId": YOUR_CHANNEL_ID,
-  "uid": YOUR_UID,
-  "stringUid": YOUR_STRING_UID
+  "token": "0061e198de31cb34e2b8142f317d29a6582IABS0jnxXHdRYRAFx4F3xak/SctLYt7Y/52fRj9qio4DOQx+f9gAAAAAEADYCUcoaLddYAEAAQBnt11g",
+  "channelId": "test",
+  "uid": 0,
+  "stringUid": "0"
 }
