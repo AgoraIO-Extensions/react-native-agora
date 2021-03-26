@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Button, View, Switch, StyleSheet } from 'react-native';
+import {
+  Button,
+  View,
+  Switch,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import Slider from '@react-native-community/slider';
 
 interface ItemProps {
@@ -26,6 +33,8 @@ const styles = StyleSheet.create({
   },
   top: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 const Item = ({
@@ -41,7 +50,9 @@ const Item = ({
   return (
     <View style={styles.item}>
       <View style={styles.top}>
-        <Button onPress={btnOnPress} title={title} color={titleColor} />
+        <TouchableOpacity onPress={btnOnPress}>
+          <Text style={titleColor ? { color: titleColor } : {}}>{title}</Text>
+        </TouchableOpacity>
         {isShowSwitch && (
           <Switch
             onValueChange={(value: boolean) => {
