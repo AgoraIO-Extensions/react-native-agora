@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  View,
-  Switch,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import { View, Switch, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 interface ItemProps {
