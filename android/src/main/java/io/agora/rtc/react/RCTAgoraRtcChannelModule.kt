@@ -8,8 +8,6 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcChannelEventHandler
 import io.agora.rtc.base.RtcChannelManager
 import io.agora.rtc.react.RCTAgoraRtcChannelModule.Companion.REACT_CLASS
-import kotlin.reflect.full.declaredMemberFunctions
-import kotlin.reflect.jvm.javaMethod
 
 @ReactModule(name = REACT_CLASS)
 class RCTAgoraRtcChannelModule(
@@ -51,8 +49,8 @@ class RCTAgoraRtcChannelModule(
 
   @ReactMethod
   fun callMethod(methodName: String, params: ReadableMap?, callback: Promise?) {
-    manager::class.declaredMemberFunctions.find { it.name == methodName }?.let { function ->
-      function.javaMethod?.let { method ->
+    manager.javaClass.declaredMethods.find { it.name == methodName }?.let { function ->
+      function.let { method ->
         try {
           val parameters = mutableListOf<Any?>()
           params?.toHashMap()?.toMutableMap()?.let {
