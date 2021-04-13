@@ -1,3 +1,12 @@
+## [3.3.3](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.2...v3.3.3) (2021-04-13)
+
+
+### Features
+
+* upgrade native SDK to 3.3.2 ([a54feda](https://github.com/AgoraIO-Community/react-native-agora/commit/a54fedab614a80f90450cc789352049f8f1d671f))
+* **add example:** channelAudio,liveStream,mediaChannelRelay,streamData ([e4d5ceb](https://github.com/AgoraIO-Community/react-native-agora/commit/e4d5ceb0f42e8ee1a987fc621459eb8b84d25b5c))
+* **add voicechange:** add VoiceChange ([c1722cc](https://github.com/AgoraIO-Community/react-native-agora/commit/c1722ccdf1fbfee4b5b6c84ae34e3990b60b18e6))
+
 ## [3.3.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.2-rc.0...v3.3.2) (2021-03-22)
 
 
