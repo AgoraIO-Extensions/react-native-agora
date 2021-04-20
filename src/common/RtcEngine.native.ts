@@ -15,6 +15,7 @@ import {
   UserInfo,
   VideoEncoderConfiguration,
   WatermarkOptions,
+  RhythmPlayerConfig,
 } from './Classes';
 import type {
   AreaCode,
@@ -39,6 +40,7 @@ import type {
   VideoStreamType,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
+  AudioRecordingPosition,
 } from './Enums';
 import type { Listener, RtcEngineEvents, Subscription } from './RtcEvents';
 import RtcChannel from './RtcChannel.native';
@@ -1376,8 +1378,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Returns the audio mixing duration, if the method call is successful.
    * - Error codes: Failure.
    */
-  getAudioMixingDuration(): Promise<number> {
-    return RtcEngine._callMethod('getAudioMixingDuration');
+  getAudioMixingDuration(filePath?: string): Promise<number> {
+    return RtcEngine._callMethod('getAudioMixingDuration', { filePath });
   }
 
   /**
@@ -1510,13 +1512,15 @@ export default class RtcEngine implements RtcEngineInterface {
     filePath: string,
     loopback: boolean,
     replace: boolean,
-    cycle: number
+    cycle: number,
+    startPos?: number
   ): Promise<void> {
     return RtcEngine._callMethod('startAudioMixing', {
       filePath,
       loopback,
       replace,
       cycle,
+      startPos,
     });
   }
 
@@ -1595,7 +1599,8 @@ export default class RtcEngine implements RtcEngineInterface {
     pitch: number,
     pan: number,
     gain: number,
-    publish: Boolean
+    publish: Boolean,
+    startPos?: number
   ): Promise<void> {
     return RtcEngine._callMethod('playEffect', {
       soundId,
@@ -1605,6 +1610,24 @@ export default class RtcEngine implements RtcEngineInterface {
       pan,
       gain,
       publish,
+      startPos,
+    });
+  }
+
+  setEffectPosition(soundId: number, pos: number): Promise<void> {
+    return RtcEngine._callMethod('setEffectPosition', {
+      soundId,
+      pos,
+    });
+  }
+
+  getEffectDuration(filePath: string): Promise<number> {
+    return RtcEngine._callMethod('getEffectDuration', { filePath });
+  }
+
+  getEffectCurrentPosition(soundId: number): Promise<number> {
+    return RtcEngine._callMethod('getEffectCurrentPosition', {
+      soundId,
     });
   }
 
@@ -2443,13 +2466,35 @@ export default class RtcEngine implements RtcEngineInterface {
   startAudioRecording(
     filePath: string,
     sampleRate: AudioSampleRateType,
-    quality: AudioRecordingQuality
+    quality: AudioRecordingQuality,
+    recordingPosition?: AudioRecordingPosition
   ): Promise<void> {
     return RtcEngine._callMethod('startAudioRecording', {
       filePath,
       sampleRate,
       quality,
+      recordingPosition,
     });
+  }
+
+  startRhythmPlayer(
+    sound1: string,
+    sound2: string,
+    config: RhythmPlayerConfig
+  ): Promise<void> {
+    return RtcEngine._callMethod('startRhythmPlayer', {
+      sound1,
+      sound2,
+      config,
+    });
+  }
+
+  stopRhythmPlayer(): Promise<void> {
+    return RtcEngine._callMethod('stopRhythmPlayer');
+  }
+
+  configRhythmPlayer(config: RhythmPlayerConfig): Promise<void> {
+    return RtcEngine._callMethod('configRhythmPlayer', config);
   }
 
   /**
@@ -3331,7 +3376,8 @@ interface RtcAudioMixingInterface {
     filePath: string,
     loopback: boolean,
     replace: boolean,
-    cycle: number
+    cycle: number,
+    startPos?: number
   ): Promise<void>;
 
   stopAudioMixing(): Promise<void>;
@@ -3350,7 +3396,7 @@ interface RtcAudioMixingInterface {
 
   getAudioMixingPublishVolume(): Promise<number>;
 
-  getAudioMixingDuration(): Promise<number>;
+  getAudioMixingDuration(filePath?: string): Promise<number>;
 
   getAudioMixingCurrentPosition(): Promise<number>;
 
@@ -3376,8 +3422,15 @@ interface RtcAudioEffectInterface {
     pitch: number,
     pan: number,
     gain: number,
-    publish: Boolean
+    publish: Boolean,
+    startPos?: number
   ): Promise<void>;
+
+  setEffectPosition(soundId: number, pos: number): Promise<void>;
+
+  getEffectDuration(filePath: string): Promise<number>;
+
+  getEffectCurrentPosition(soundId: number): Promise<number>;
 
   stopEffect(soundId: number): Promise<void>;
 
@@ -3578,8 +3631,19 @@ interface RtcAudioRecorderInterface {
   startAudioRecording(
     filePath: string,
     sampleRate: AudioSampleRateType,
-    quality: AudioRecordingQuality
+    quality: AudioRecordingQuality,
+    recordingPosition?: AudioRecordingPosition
   ): Promise<void>;
+
+  startRhythmPlayer(
+    sound1: string,
+    sound2: string,
+    config: RhythmPlayerConfig
+  ): Promise<void>;
+
+  stopRhythmPlayer(): Promise<void>;
+
+  configRhythmPlayer(config: RhythmPlayerConfig): Promise<void>;
 
   stopAudioRecording(): Promise<void>;
 }
