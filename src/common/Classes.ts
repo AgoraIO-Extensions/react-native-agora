@@ -843,6 +843,31 @@ export class LiveInjectStreamConfig {
   }
 }
 
+export class RhythmPlayerConfig {
+  /**
+   * Width (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same width as the original stream.
+   */
+  beatsPerMeasure?: number;
+  /**
+   * Height (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same height as the original stream.
+   */
+  beatsPerMinute?: number;
+
+  publish?: boolean;
+
+  constructor(params?: {
+    beatsPerMeasure?: number;
+    beatsPerMinute?: number;
+    publish?: boolean;
+  }) {
+    if (params) {
+      this.beatsPerMeasure = params.beatsPerMeasure;
+      this.beatsPerMinute = params.beatsPerMinute;
+      this.publish = params.publish;
+    }
+  }
+}
+
 /**
  * The definition of CameraCapturerConfiguration.
  */

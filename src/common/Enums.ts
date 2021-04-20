@@ -272,6 +272,21 @@ export enum AudioRecordingQuality {
   High = 2,
 }
 
+export enum AudioRecordingPosition {
+  /**
+   * 0: The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+   */
+  PositionMixedRecordingAndPlayback = 0,
+  /**
+   * 1: The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+   */
+  PositionRecording = 1,
+  /**
+   * 2: The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+   */
+  PositionMixedPlayback = 2,
+}
+
 /**
  * The state of the remote audio.
  */
