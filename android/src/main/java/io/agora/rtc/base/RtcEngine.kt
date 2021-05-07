@@ -358,7 +358,7 @@ class RtcEngineManager(
   }
 
   override fun joinChannel(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.joinChannel(params["token"] as? String, params["channelName"] as String, params["optionalInfo"] as? String, (params["optionalUid"] as Number).toInt()))
+    callback.code(engine?.joinChannel(params["token"] as? String, params["channelName"] as String, params["optionalInfo"] as? String, params["optionalUid"]?.toSDKUInt()!!))
   }
 
   override fun switchChannel(params: Map<String, *>, callback: Callback) {
@@ -436,7 +436,7 @@ class RtcEngineManager(
   override fun getUserInfoByUid(params: Map<String, *>, callback: Callback) {
     callback.resolve(engine) {
       val userInfo = UserInfo()
-      it.getUserInfoByUid((params["uid"] as Number).toInt(), userInfo)
+      it.getUserInfoByUid(params["uid"]?.toSDKUInt()!!, userInfo)
       userInfo.toMap()
     }
   }
@@ -458,7 +458,7 @@ class RtcEngineManager(
   }
 
   override fun adjustUserPlaybackSignalVolume(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.adjustUserPlaybackSignalVolume((params["uid"] as Number).toInt(), (params["volume"] as Number).toInt()))
+    callback.code(engine?.adjustUserPlaybackSignalVolume(params["uid"]?.toSDKUInt()!!, (params["volume"] as Number).toInt()))
   }
 
   override fun adjustPlaybackSignalVolume(params: Map<String, *>, callback: Callback) {
@@ -474,7 +474,7 @@ class RtcEngineManager(
   }
 
   override fun muteRemoteAudioStream(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.muteRemoteAudioStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+    callback.code(engine?.muteRemoteAudioStream(params["uid"]?.toSDKUInt()!!, params["muted"] as Boolean))
   }
 
   override fun muteAllRemoteAudioStreams(params: Map<String, *>, callback: Callback) {
@@ -518,7 +518,7 @@ class RtcEngineManager(
   }
 
   override fun muteRemoteVideoStream(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.muteRemoteVideoStream((params["uid"] as Number).toInt(), params["muted"] as Boolean))
+    callback.code(engine?.muteRemoteVideoStream(params["uid"]?.toSDKUInt()!!, params["muted"] as Boolean))
   }
 
   override fun muteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback) {
@@ -662,7 +662,7 @@ class RtcEngineManager(
   }
 
   override fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setRemoteVoicePosition((params["uid"] as Number).toInt(), (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
+    callback.code(engine?.setRemoteVoicePosition(params["uid"]?.toSDKUInt()!!, (params["pan"] as Number).toDouble(), (params["gain"] as Number).toDouble()))
   }
 
   override fun setLiveTranscoding(params: Map<String, *>, callback: Callback) {
@@ -714,7 +714,7 @@ class RtcEngineManager(
   }
 
   override fun setRemoteVideoStreamType(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setRemoteVideoStreamType((params["uid"] as Number).toInt(), (params["streamType"] as Number).toInt()))
+    callback.code(engine?.setRemoteVideoStreamType(params["uid"]?.toSDKUInt()!!, (params["streamType"] as Number).toInt()))
   }
 
   override fun setRemoteDefaultVideoStreamType(params: Map<String, *>, callback: Callback) {
@@ -730,7 +730,7 @@ class RtcEngineManager(
   }
 
   override fun setRemoteUserPriority(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.setRemoteUserPriority((params["uid"] as Number).toInt(), (params["userPriority"] as Number).toInt()))
+    callback.code(engine?.setRemoteUserPriority(params["uid"]?.toSDKUInt()!!, (params["userPriority"] as Number).toInt()))
   }
 
   override fun startEchoTest(params: Map<String, *>, callback: Callback) {
