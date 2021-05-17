@@ -3,6 +3,8 @@ import type {
   AudienceLatencyLevelType,
   AudioChannel,
   AudioCodecProfileType,
+  AudioRecordingPosition,
+  AudioRecordingQuality,
   AudioSampleRateType,
   CameraCaptureOutputPreference,
   CameraDirection,
@@ -843,6 +845,31 @@ export class LiveInjectStreamConfig {
   }
 }
 
+export class RhythmPlayerConfig {
+  /**
+   * Width (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same width as the original stream.
+   */
+  beatsPerMeasure?: number;
+  /**
+   * Height (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same height as the original stream.
+   */
+  beatsPerMinute?: number;
+
+  publish?: boolean;
+
+  constructor(params?: {
+    beatsPerMeasure?: number;
+    beatsPerMinute?: number;
+    publish?: boolean;
+  }) {
+    if (params) {
+      this.beatsPerMeasure = params.beatsPerMeasure;
+      this.beatsPerMinute = params.beatsPerMinute;
+      this.publish = params.publish;
+    }
+  }
+}
+
 /**
  * The definition of CameraCapturerConfiguration.
  */
@@ -1545,14 +1572,14 @@ export class RtcEngineConfig {
   /**
    * The region for connection. This advanced feature applies to scenarios that have regional restrictions.
    *
-   * For the regions that Agora supports, see [`AreaCode`]{@link enum.AreaCode}.
+   * For the regions that Agora supports, see [`AreaCode`]{@link AreaCode}.
    *
    * After specifying the region, the SDK connects to the Agora servers within that region.
    *
    */
   areaCode?: AreaCode;
   /**
-   * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link class.LogConfig}.
+   * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link LogConfig}.
    *
    * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB. These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
    *
@@ -1568,6 +1595,32 @@ export class RtcEngineConfig {
     if (params) {
       this.areaCode = params.areaCode;
       this.logConfig = params.logConfig;
+    }
+  }
+}
+
+/**
+ * TODO(doc)
+ */
+export class AudioRecordingConfiguration {
+  filePath: string;
+  recordingQuality?: AudioRecordingQuality;
+  recordingPosition?: AudioRecordingPosition;
+  recordingSampleRate?: AudioSampleRateType;
+
+  constructor(
+    filePath: string,
+    params?: {
+      recordingQuality?: AudioRecordingQuality;
+      recordingPosition?: AudioRecordingPosition;
+      recordingSampleRate?: AudioSampleRateType;
+    }
+  ) {
+    this.filePath = filePath;
+    if (params) {
+      this.recordingQuality = params.recordingQuality;
+      this.recordingPosition = params.recordingPosition;
+      this.recordingSampleRate = params.recordingSampleRate;
     }
   }
 }
