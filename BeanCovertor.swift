@@ -324,7 +324,7 @@ func mapToAudioRecordingConfiguration(_ map: [String: Any]) -> AgoraAudioRecordi
     if let filePath = map["filePath"] as? String {
         config.filePath = filePath
     }
-    if let recordingQuality = map["quality"] as? NSNumber {
+    if let recordingQuality = map["recordingQuality"] as? NSNumber {
         if let recordingQuality = AgoraAudioRecordingQuality(rawValue: recordingQuality.intValue) {
             config.recordingQuality = recordingQuality
         }
@@ -334,7 +334,7 @@ func mapToAudioRecordingConfiguration(_ map: [String: Any]) -> AgoraAudioRecordi
             config.recordingPosition = recordingPosition
         }
     }
-    if let recordingSampleRate = map["sampleRate"] as? NSNumber {
+    if let recordingSampleRate = map["recordingSampleRate"] as? NSNumber {
         config.recordingSampleRate = recordingSampleRate.intValue
     }
     return config
