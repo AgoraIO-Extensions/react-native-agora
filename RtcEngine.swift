@@ -986,7 +986,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func startAudioRecording(_ params: NSDictionary, _ callback: Callback) {
         if let config = params["config"] as? [String: Any] {
-            callback.code(engine?.startAudioRecording(withConfig: mapToAudioRecordingConfiguration(params as! Dictionary)))
+            callback.code(engine?.startAudioRecording(withConfig: mapToAudioRecordingConfiguration(config)))
             return
         }
         callback.code(engine?.startAudioRecording(params["filePath"] as! String, sampleRate: (params["sampleRate"] as! NSNumber).intValue, quality: AgoraAudioRecordingQuality(rawValue: (params["quality"] as! NSNumber).intValue)!))
