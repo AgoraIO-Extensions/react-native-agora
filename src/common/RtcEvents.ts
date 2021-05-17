@@ -13,7 +13,7 @@ import type {
 import type {
   AudioLocalError,
   AudioLocalState,
-  AudioMixingErrorCode,
+  AudioMixingReason,
   AudioMixingStateCode,
   AudioOutputRouting,
   AudioRemoteState,
@@ -324,9 +324,9 @@ export type RemoteAudioStatsCallback =
 export type AudioMixingStateCallback =
   /**
    * @param state The state code.
-   * @param errorCode The error code.
+   * @param reason The reason.
    */
-  (state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void;
+  (state: AudioMixingStateCode, reason: AudioMixingReason) => void;
 export type SoundIdCallback =
   /**
    * @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
