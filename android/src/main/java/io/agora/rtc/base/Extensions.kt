@@ -160,6 +160,6 @@ fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
 }
 
 @ExperimentalUnsignedTypes
-fun Number.toNativeUInt(): Int {
+internal fun Number.toNativeUInt(): Int {
   return toLong().toUInt().toInt()
 }
