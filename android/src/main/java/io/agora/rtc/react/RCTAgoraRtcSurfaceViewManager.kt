@@ -43,7 +43,7 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
   fun setData(view: RtcSurfaceView, data: ReadableMap) {
     data.toHashMap().let { map ->
       val channel = (map["channelId"] as? String)?.let { getChannel(it) }
-      getEngine()?.let { view.setData(it, channel, (map["uid"] as Number).toInt()) }
+      getEngine()?.let { view.setData(it, channel, map["uid"] as Number) }
     }
   }
 
