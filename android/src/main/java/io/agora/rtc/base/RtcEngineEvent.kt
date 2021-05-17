@@ -413,9 +413,9 @@ class RtcEngineEventHandler(
 
   override fun onAudioMixingStateChanged(
     @Annotations.AgoraAudioMixingStateCode state: Int,
-    @Annotations.AgoraAudioMixingReason reasonCode: Int
+    @Annotations.AgoraAudioMixingReason reason: Int
   ) {
-    callback(RtcEngineEvents.AudioMixingStateChanged, state, reasonCode)
+    callback(RtcEngineEvents.AudioMixingStateChanged, state, reason)
   }
 
   override fun onAudioEffectFinished(soundId: Int) {
