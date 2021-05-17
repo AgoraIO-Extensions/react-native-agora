@@ -25,10 +25,10 @@ class RtcTextureView(
     addView(texture)
   }
 
-  fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Int) {
+  fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Number) {
     this.channel = if (channel != null) WeakReference(channel) else null
     canvas.channelId = this.channel?.get()?.channelId()
-    canvas.uid = uid
+    canvas.uid = uid.toNativeUInt()
     setupVideoCanvas(engine)
   }
 
