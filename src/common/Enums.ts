@@ -145,7 +145,7 @@ export enum AudioLocalState {
 }
 
 /**
- * The error code of the audio mixing file.
+ * The error code of the audio mixing file. // TODO DOC
  */
 export enum AudioMixingReason {
   /**
@@ -161,31 +161,31 @@ export enum AudioMixingReason {
    */
   InterruptedEOF = 703,
   /**
-   * 720: TODO(doc)
+   * 720: // TODO(doc)
    */
   StartedByUser = 720,
   /**
-   * 721: TODO(doc)
+   * 721: // TODO(doc)
    */
   OneLoopCompleted = 721,
   /**
-   * 722: TODO(doc)
+   * 722: // TODO(doc)
    */
   StartNewLoop = 722,
   /**
-   * 723: TODO(doc)
+   * 723: // TODO(doc)
    */
   AllLoopsCompleted = 723,
   /**
-   * 724: TODO(doc)
+   * 724: // TODO(doc)
    */
   StoppedByUser = 724,
   /**
-   * 725: TODO(doc)
+   * 725: // TODO(doc)
    */
   PausedByUser = 725,
   /**
-   * 726: TODO(doc)
+   * 726: // TODO(doc)
    */
   ResumedByUser = 726,
   /**
@@ -207,7 +207,7 @@ export enum AudioMixingStateCode {
    */
   Paused = 711,
   /**
-   * 712: TODO(doc)
+   * 712: // TODO(doc)
    */
   Restart = 712,
   /**
@@ -304,6 +304,7 @@ export enum AudioRecordingQuality {
   High = 2,
 }
 
+// TODO DOC
 export enum AudioRecordingPosition {
   /**
    * 0: The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
@@ -966,7 +967,7 @@ export enum DegradationPreference {
    */
   MaintainFramerate = 1,
   /**
-   * 2: Reserved for future use.
+   * 2: Reserved for future use. // TODO DOC
    */
   MaintainBalanced = 2,
 }
@@ -1486,7 +1487,7 @@ export enum LocalVideoStreamError {
    */
   CaptureMultipleForegroundApps = 7,
   /**
-   * 8: TODO(doc)
+   * 8: // TODO(doc)
    *
    * @since v3.4.0
    */
