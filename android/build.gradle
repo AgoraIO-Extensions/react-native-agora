@@ -3,8 +3,8 @@ buildscript {
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['Agora_kotlinVersion']
 
   repositories {
+    mavenCentral()
     google()
-    jcenter()
   }
 
   dependencies {
@@ -53,7 +53,6 @@ android {
 
 repositories {
   mavenCentral()
-  jcenter()
   google()
 
   def found = false
