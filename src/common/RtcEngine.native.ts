@@ -1,6 +1,7 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 import {
+  AudioRecordingConfiguration,
   BeautyOptions,
   CameraCapturerConfiguration,
   ChannelMediaOptions,
@@ -11,11 +12,11 @@ import {
   LastmileProbeConfig,
   LiveInjectStreamConfig,
   LiveTranscoding,
+  RhythmPlayerConfig,
   RtcEngineConfig,
   UserInfo,
   VideoEncoderConfiguration,
   WatermarkOptions,
-  RhythmPlayerConfig,
 } from './Classes';
 import type {
   AreaCode,
@@ -40,7 +41,6 @@ import type {
   VideoStreamType,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
-  AudioRecordingPosition,
 } from './Enums';
 import type { Listener, RtcEngineEvents, Subscription } from './RtcEvents';
 import RtcChannel from './RtcChannel.native';
@@ -1485,11 +1485,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - Call this method when you are in the channel, otherwise it may cause issues.
    *
-   * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [`TooFrequentCall(702)`]{@link AudioMixingErrorCode.TooFrequentCall} error occurs.
+   * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [`TooFrequentCall(702)`]{@link AudioMixingReason.TooFrequentCall} error occurs.
    *
    * - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
    *
-   * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`CanNotOpen(701)`]{@link AudioMixingErrorCode.CanNotOpen}.
+   * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`CanNotOpen(701)`]{@link AudioMixingReason.CanNotOpen}.
    *
    * - If you call this method on an emulator, only the MP3 file format is supported.
    *
@@ -1506,7 +1506,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param cycle Sets the number of playback loops:
    * - Positive integer: Number of playback loops.
    * - -1: Infinite playback loops.
-   *
+   * @param startPos TODO(doc)
    */
   startAudioMixing(
     filePath: string,
@@ -1591,6 +1591,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param publish Set whether to publish the specified audio effect to the remote stream:
    * - `true`: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
    * - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
+   * @param startPos TODO(doc)
    */
   playEffect(
     soundId: number,
@@ -1614,6 +1615,11 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * TODO(doc)
+   * @param soundId
+   * @param pos
+   */
   setEffectPosition(soundId: number, pos: number): Promise<void> {
     return RtcEngine._callMethod('setEffectPosition', {
       soundId,
@@ -1621,10 +1627,18 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * TODO(doc)
+   * @param filePath
+   */
   getEffectDuration(filePath: string): Promise<number> {
     return RtcEngine._callMethod('getEffectDuration', { filePath });
   }
 
+  /**
+   * TODO(doc)
+   * @param soundId
+   */
   getEffectCurrentPosition(soundId: number): Promise<number> {
     return RtcEngine._callMethod('getEffectCurrentPosition', {
       soundId,
@@ -2446,6 +2460,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Starts an audio recording on the client.
    *
+   * @deprecated
+   *
    * The SDK allows recording during a call. After successfully calling this method,
    * you can record the audio of all the users in the channel and get an audio recording file.
    *
@@ -2466,14 +2482,24 @@ export default class RtcEngine implements RtcEngineInterface {
   startAudioRecording(
     filePath: string,
     sampleRate: AudioSampleRateType,
-    quality: AudioRecordingQuality,
-    recordingPosition?: AudioRecordingPosition
+    quality: AudioRecordingQuality
   ): Promise<void> {
     return RtcEngine._callMethod('startAudioRecording', {
       filePath,
       sampleRate,
       quality,
-      recordingPosition,
+    });
+  }
+
+  /**
+   * TODO(doc)
+   * @param config
+   */
+  startAudioRecordingWithConfig(
+    config: AudioRecordingConfiguration
+  ): Promise<void> {
+    return RtcEngine._callMethod('startAudioRecording', {
+      config,
     });
   }
 
@@ -3631,8 +3657,11 @@ interface RtcAudioRecorderInterface {
   startAudioRecording(
     filePath: string,
     sampleRate: AudioSampleRateType,
-    quality: AudioRecordingQuality,
-    recordingPosition?: AudioRecordingPosition
+    quality: AudioRecordingQuality
+  ): Promise<void>;
+
+  startAudioRecordingWithConfig(
+    config: AudioRecordingConfiguration
   ): Promise<void>;
 
   startRhythmPlayer(

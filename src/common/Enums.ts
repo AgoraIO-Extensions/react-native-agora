@@ -147,7 +147,7 @@ export enum AudioLocalState {
 /**
  * The error code of the audio mixing file.
  */
-export enum AudioMixingErrorCode {
+export enum AudioMixingReason {
   /**
    * 701: The SDK cannot open the audio mixing file.
    */
@@ -160,6 +160,34 @@ export enum AudioMixingErrorCode {
    * 703: The opening of the audio mixing file is interrupted.
    */
   InterruptedEOF = 703,
+  /**
+   * 720: TODO(doc)
+   */
+  StartedByUser = 720,
+  /**
+   * 721: TODO(doc)
+   */
+  OneLoopCompleted = 721,
+  /**
+   * 722: TODO(doc)
+   */
+  StartNewLoop = 722,
+  /**
+   * 723: TODO(doc)
+   */
+  AllLoopsCompleted = 723,
+  /**
+   * 724: TODO(doc)
+   */
+  StoppedByUser = 724,
+  /**
+   * 725: TODO(doc)
+   */
+  PausedByUser = 725,
+  /**
+   * 726: TODO(doc)
+   */
+  ResumedByUser = 726,
   /**
    * 0: No error.
    */
@@ -178,6 +206,10 @@ export enum AudioMixingStateCode {
    * 711: The audio mixing file pauses playing.
    */
   Paused = 711,
+  /**
+   * 712: TODO(doc)
+   */
+  Restart = 712,
   /**
    * 713: The audio mixing file stops playing.
    */
@@ -936,7 +968,7 @@ export enum DegradationPreference {
   /**
    * 2: Reserved for future use.
    */
-  Balanced = 2,
+  MaintainBalanced = 2,
 }
 
 /**
@@ -1453,6 +1485,12 @@ export enum LocalVideoStreamError {
    * @since v3.3.1
    */
   CaptureMultipleForegroundApps = 7,
+  /**
+   * 8: TODO(doc)
+   *
+   * @since v3.4.0
+   */
+  DeviceNotFound = 8,
 }
 
 /**

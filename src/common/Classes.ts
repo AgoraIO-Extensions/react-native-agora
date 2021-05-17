@@ -3,6 +3,8 @@ import type {
   AudienceLatencyLevelType,
   AudioChannel,
   AudioCodecProfileType,
+  AudioRecordingPosition,
+  AudioRecordingQuality,
   AudioSampleRateType,
   CameraCaptureOutputPreference,
   CameraDirection,
@@ -1594,5 +1596,27 @@ export class RtcEngineConfig {
       this.areaCode = params.areaCode;
       this.logConfig = params.logConfig;
     }
+  }
+}
+
+/**
+ * TODO(doc)
+ */
+export class AudioRecordingConfiguration {
+  filePath: string;
+  recordingQuality: AudioRecordingQuality;
+  recordingPosition: AudioRecordingPosition;
+  recordingSampleRate: AudioSampleRateType;
+
+  constructor(
+    filePath: string,
+    recordingQuality: AudioRecordingQuality,
+    recordingPosition: AudioRecordingPosition,
+    recordingSampleRate: AudioSampleRateType
+  ) {
+    this.filePath = filePath;
+    this.recordingQuality = recordingQuality;
+    this.recordingPosition = recordingPosition;
+    this.recordingSampleRate = recordingSampleRate;
   }
 }
