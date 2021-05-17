@@ -1237,6 +1237,10 @@ export enum ErrorCode {
    */
   ModuleNotFound = 157,
   /**
+   * 160: TODO(doc)
+   */
+  AlreadyInRecording = 160,
+  /**
    * 1001: Fails to load the media engine.
    */
   LoadMediaEngine = 1001,
