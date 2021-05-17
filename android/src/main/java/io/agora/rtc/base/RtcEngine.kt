@@ -1152,7 +1152,7 @@ class RtcEngineManager(
 
   override fun startAudioRecording(params: Map<String, *>, callback: Callback) {
     (params["config"] as? Map<*, *>)?.let {
-      callback.code(engine?.startAudioRecording(mapToAudioRecordingConfiguration(params)))
+      callback.code(engine?.startAudioRecording(mapToAudioRecordingConfiguration(it)))
       return@startAudioRecording
     }
     callback.code(
