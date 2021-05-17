@@ -1604,19 +1604,23 @@ export class RtcEngineConfig {
  */
 export class AudioRecordingConfiguration {
   filePath: string;
-  recordingQuality: AudioRecordingQuality;
-  recordingPosition: AudioRecordingPosition;
-  recordingSampleRate: AudioSampleRateType;
+  recordingQuality?: AudioRecordingQuality;
+  recordingPosition?: AudioRecordingPosition;
+  recordingSampleRate?: AudioSampleRateType;
 
   constructor(
     filePath: string,
-    recordingQuality: AudioRecordingQuality,
-    recordingPosition: AudioRecordingPosition,
-    recordingSampleRate: AudioSampleRateType
+    params?: {
+      recordingQuality?: AudioRecordingQuality;
+      recordingPosition?: AudioRecordingPosition;
+      recordingSampleRate?: AudioSampleRateType;
+    }
   ) {
     this.filePath = filePath;
-    this.recordingQuality = recordingQuality;
-    this.recordingPosition = recordingPosition;
-    this.recordingSampleRate = recordingSampleRate;
+    if (params) {
+      this.recordingQuality = params.recordingQuality;
+      this.recordingPosition = params.recordingPosition;
+      this.recordingSampleRate = params.recordingSampleRate;
+    }
   }
 }
