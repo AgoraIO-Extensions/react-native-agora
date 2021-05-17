@@ -3,8 +3,8 @@ buildscript {
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['Agora_kotlinVersion']
 
   repositories {
+    mavenCentral()
     google()
-    jcenter()
   }
 
   dependencies {
@@ -53,8 +53,8 @@ android {
 
 repositories {
   mavenCentral()
-  jcenter()
   google()
+  maven { url 'https://www.jitpack.io' }
 
   def found = false
   def defaultDir = null
@@ -127,7 +127,7 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
-  api 'com.github.agorabuilder:native-full-sdk:3.4.1.1'
+  api 'com.github.agorabuilder:native-full-sdk:3.4.2'
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
