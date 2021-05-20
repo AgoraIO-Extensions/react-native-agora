@@ -323,8 +323,8 @@ export type RemoteAudioStatsCallback =
   (stats: RemoteAudioStats) => void;
 export type AudioMixingStateCallback =
   /**
-   * @param state The state code.
-   * @param reason The reason.
+   * @param state The current music file playback state. See [`AudioMixingStateCode`]{@link AudioMixingStateCode}.
+   * @param reason The reason for the change of the music file playback state. See [`AudioMixingReason`]{@link AudioMixingReason}.
    */
   (state: AudioMixingStateCode, reason: AudioMixingReason) => void;
 export type SoundIdCallback =
@@ -495,7 +495,7 @@ export type UserSuperResolutionEnabledCallback =
    * @param enabled Whether the super-resolution algorithm is successfully enabled:
    *   - `true`: The super-resolution algorithm is successfully enabled.
    *   - `false`: The super-resolution algorithm is not successfully enabled.
-   * @param reason The reason why the super-resolution algorithm is not successfully enabled. See [`SuperResolutionStateReason`]{@link SuperResolutionStateReason}.
+   * @param reason The reason why the super-resolution algorithm is not successfully enabled. See [`SuperResolutionStateReason`]{@link enum.SuperResolutionStateReason}.
    */
   (uid: number, enabled: boolean, reason: SuperResolutionStateReason) => void;
 export type UploadLogResultCallback =
@@ -975,12 +975,12 @@ export interface RtcEngineEvents {
   AudioMixingFinished: EmptyCallback;
 
   /**
-   * Occurs when the state of the local user's audio mixing file changes.
+   * Occurs when the playback state of the local user's music file changes.
    *
-   * When you call [`startAudioMixing`]{@link RtcEngine.startAudioMixing} and the state of audio mixing file changes, the Agora SDK triggers this callback.
-   * - When the audio mixing file plays, pauses playing, or stops playing, this callback returns `710`, `711`, or `713` in state, and `0` in errorCode.
-   * - When exceptions occur during playback, this callback returns `714` in state and an error in errorCode.
-   * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}.
+   * @since 3.4.2
+   *
+   * When the playback state of the local user's music file changes, the SDK triggers this callback and reports
+   * the current playback state and the reason for the change.
    *
    * @event AudioMixingStateChanged
    */

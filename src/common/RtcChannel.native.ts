@@ -211,7 +211,7 @@ export default class RtcChannel implements RtcChannelInterface {
    *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
    *
    * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
-   * @param options? The detailed options of a user, including user level. See {@link ClientRoleOptions}.
+   * @param options The detailed options of a user, including user level. See {@link ClientRoleOptions}.
    *
    * @returns
    * - 0(NoError): Success.
@@ -967,7 +967,7 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * This method does not support data reliability. If the receiver receives a data packet five seconds or more after it was sent, the SDK directly discards the data.
    *
-   * @param config The configurations for the data stream.
+   * @param config The configurations for the data stream. See [`DataStreamConfig`]{@link DataStreamConfig}。
    *
    *
    * @return
