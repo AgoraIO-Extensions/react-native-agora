@@ -846,18 +846,24 @@ export class LiveInjectStreamConfig {
 }
 
 /**
+ * The metronome configuration, which is set in [`startRhythmPlayer`]{@link startRhythmPlayer} or [`configRhythmPlayer`]{@link configRhythmPlayer}.
  *
+ * @since v3.4.2
  */
 export class RhythmPlayerConfig {
   /**
-   * Width (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same width as the original stream.
+   * The number of beats per measure. The range is 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
    */
   beatsPerMeasure?: number;
   /**
-   * Height (pixels) of the added stream to the live interactive streaming. The default value is 0, which is the same height as the original stream.
+   * Tempo (beats per minute). The range is 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
    */
   beatsPerMinute?: number;
-
+  /**
+   * Whether to publish the sound of the metronome to remote users:
+   * - `true`: (Default) Publish. Both the local user and remote users can hear the metronome.
+   * - `false`: Do not publish. Only the local user can hear the metronome.
+   */
   publish?: boolean;
 
   constructor(params?: {
@@ -1528,8 +1534,8 @@ export class LogConfig {
  *
  * | `syncWithAudio` | `ordered` | SDK behaviors                                                |
  * | :-------------- | :-------- | :----------------------------------------------------------- |
- * | `false`         | `false`   | The SDK triggers the `onStreamMessage` callback immediately after the receiver receives a data packet. |
- * | `true`          | `false`   | <ul><li>If the data packet delay is within the audio delay, the SDK triggers the <code>onStreamMessage</code> callback when the synchronized audio packet is played out</li><li>If the data packet delay exceeds the audio delay, the SDK triggers the <code>onStreamMessage</code> callback as soon as the data packet is received. In this case, the data packet is not synchronized with the audio packet.</li></ul>.  |
+ * | `false`         | `false`   | The SDK triggers the `StreamMessage` callback immediately after the receiver receives a data packet. |
+ * | `true`          | `false`   | <ul><li>If the data packet delay is within the audio delay, the SDK triggers the <code>StreamMessage</code> callback when the synchronized audio packet is played out</li><li>If the data packet delay exceeds the audio delay, the SDK triggers the <code>StreamMessage</code> callback as soon as the data packet is received. In this case, the data packet is not synchronized with the audio packet.</li></ul>.  |
  * | `false`         | `true`    | <ul><li>If the delay of a data packet is within five seconds, the SDK corrects the order of the data packet.</li><li>If the delay of a data packet exceeds five seconds, the SDK discards the data packet.</li></ul> |
  * | `true`          | `true`    |    <ul><li>If the delay of a data packet is within the audio delay, the SDK corrects the order of the data packet.</li><li>If the delay of a data packet exceeds the audio delay, the SDK discards this data packet.</li></ul>                                                          |
  */
@@ -1575,14 +1581,14 @@ export class RtcEngineConfig {
   /**
    * The region for connection. This advanced feature applies to scenarios that have regional restrictions.
    *
-   * For the regions that Agora supports, see [`AreaCode`]{@link enum.AreaCode}.
+   * For the regions that Agora supports, see [`AreaCode`]{@link AreaCode}.
    *
    * After specifying the region, the SDK connects to the Agora servers within that region.
    *
    */
   areaCode?: AreaCode;
   /**
-   * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link class.LogConfig}.
+   * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link LogConfig}.
    *
    * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB. These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
    *
@@ -1602,13 +1608,42 @@ export class RtcEngineConfig {
   }
 }
 
+
 /**
- * TODO(doc)
+ * Recording configuration, which is set in [`startAudioRecordingWithConfig`]{@link startAudioRecordingWithConfig}.
  */
 export class AudioRecordingConfiguration {
+  /**
+   *
+   * The absolute path (including the filename extensions) of the recording file. For example:
+   * - On Android: `/sdcard/emulated/0/audio.aac`.
+   * - On iOS: `/var/mobile/Containers/Data/audio.aac`.
+   *
+   * @note
+   * Ensure that the path you specify exists and is writable.
+   */
   filePath: string;
+  /**
+   * Audio recording quality. See [`AudioRecordingQuality`]{@link AudioRecordingQuality}.
+   *
+   * @note This parameter applies to AAC files only.
+   */
   recordingQuality?: AudioRecordingQuality;
+  /**
+   * Recording content. See [`AudioRecordingPosition`]{@link AudioRecordingPosition}.
+   */
   recordingPosition?: AudioRecordingPosition;
+  /**
+   * Recording sample rate (Hz). The following values are supported:
+   * - 16000
+   * - (Default) 32000
+   * - 44100
+   * - 48000
+   *
+   * @note
+   * If this parameter is set to `44100` or `48000`, for better recording effects, Agora recommends recording WAV files or AAC files whose `recordingQuality` is `Medium` or `High`.
+   *
+   */
   recordingSampleRate?: AudioSampleRateType;
 
   constructor(
