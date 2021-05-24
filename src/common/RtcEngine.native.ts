@@ -771,24 +771,18 @@ export default class RtcEngine implements RtcEngineInterface {
    * - This method adjusts the playback volume which is mixed volume of all remote users.
    * - To mute the local audio playback, call both this method and [`adjustAudioMixingVolume`]{@link adjustAudioMixingVolume}, and set `volume` as `0`.
    *
-   * @param volume The playback volume of all remote users. The value ranges from 0 to 400:
-   * - 0: Mute.
-   * - 100: The original volume.
-   * - 400: (Maximum) Four times the original volume with signal clipping protection. To avoid echoes and improve call quality,
-   * Agora recommends setting the value of volume between 0 and 100. If you need to set the value higher than 100, contact support@agora.io first.
+   * @param volume The playback volume.
+   * The range is 0 to 100. The default value is 100, which represents the original volume.
    */
   adjustPlaybackSignalVolume(volume: number): Promise<void> {
     return RtcEngine._callMethod('adjustPlaybackSignalVolume', { volume });
   }
 
   /**
-   * Adjusts the recording volume.
+   * Adjusts the volume of the signal captured by the microphone
    *
-   * @param volume Recording volume. The value ranges between 0 and 400:
-   * - 0: Mute.
-   * - 100: Original volume.
-   * - 400: (Maximum) Four times the original volume with signal-clipping protection. To avoid echoes and improve call quality, Agora recommends setting the value of volume between 0 and 100.
-   * If you need to set the value higher than 100, contact support@agora.io first.
+   * @param volume The volume of the signal captured by the microphone.
+   * The range is 0 to 100. The default value is 100, which represents the original volume.
    */
   adjustRecordingSignalVolume(volume: number): Promise<void> {
     return RtcEngine._callMethod('adjustRecordingSignalVolume', { volume });
@@ -1585,10 +1579,9 @@ export default class RtcEngine implements RtcEngineInterface {
    * - On iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
    * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
    *
-   * @param loopCount Sets the number of times the audio effect loops:
-   * - 0: Plays the audio effect once.
-   * - 1: Plays the audio effect twice.
-   * - -1: Plays the audio effect in a loop indefinitely, until you call the [`stopEffect`]{@link stopEffect} or [`stopAllEffects`]{@link stopAllEffects} method.
+   * @param loopCount The number of times the audio effect loops:
+   * - &ge; 0: The number of loops. For example, `1` means loop one time, which means play the audio effect two times in total.
+   * - -1: Play the audio effect in an indefinite loop.
    * @param pitch Sets the pitch of the audio effect. The value ranges between 0.5 and 2.
    * The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
    * @param pan Sets the spatial position of the audio effect. The value ranges between -1.0 and 1.0.
