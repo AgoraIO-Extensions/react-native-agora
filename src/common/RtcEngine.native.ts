@@ -949,7 +949,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param muted Sets whether to stop publishing the local audio stream.
    *  - `true`: Stop publishing the local audio stream.
-   *  - `false`: (Default) Resumes publishing the local audio stream.
+   *  - `false`: (Default) Resume publishing the local audio stream.
    */
   muteLocalAudioStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalAudioStream', { muted });
@@ -1134,7 +1134,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param muted Sets whether to stop publishing the local video stream.
    *  - `true`: Stop publishing the local video stream.
-   *  - `false`: (Default) Resumes publishing the local video stream.
+   *  - `false`: (Default) Resume publishing the local video stream.
    */
   muteLocalVideoStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalVideoStream', { muted });
@@ -1304,7 +1304,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * Call this method before joining a channel.
+   * Call this method after calling `startPreview`.
    */
   stopPreview(): Promise<void> {
     return RtcEngine._callMethod('stopPreview');
@@ -1488,8 +1488,6 @@ export default class RtcEngine implements RtcEngineInterface {
    * **Note**
    *
    * - To use this method on Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
-   *
-   * - Call this method when you are in the channel, otherwise it may cause issues.
    *
    * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [`TooFrequentCall(702)`]{@link AudioMixingReason.TooFrequentCall} error occurs.
    *
@@ -1821,9 +1819,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * Adds the [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset} method, a more user-friendly method for setting the
-   * local voice reverberation. You can use this method to set the local reverberation effect,
-   * such as Popular, R&B, Rock, Hip-hop, and more.
+   * As of v3.2.1, the SDK provides a more convenient method [`setAudioEffectPreset`]{@link setAudioEffectPreset}, which directly implements the popular music, R&B music, KTV and other preset reverb effects.
    *
    * @param reverbKey The reverberation key: [`AudioReverbType`]{@link AudioReverbType}
    *
@@ -2075,10 +2071,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
    *
-   * **Note**
-   *
-   * - This method applies to the [`Communication`]{@link ChannelProfile.Communication} profile only.
-   * - Call this method before the user joins a channel.
+   * **Note** Call this method before the user joins a channel.
    * @param defaultToSpeaker Sets the default audio route:
    * - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
    * - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
