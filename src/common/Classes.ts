@@ -1581,7 +1581,7 @@ export class RtcEngineConfig {
   /**
    * The region for connection. This advanced feature applies to scenarios that have regional restrictions.
    *
-   * For the regions that Agora supports, see [`AreaCode`]{@link AreaCode}.
+   * For the regions that Agora supports, see [`AreaCode`]{@link AreaCode}. The area codes support bitwise operation.
    *
    * After specifying the region, the SDK connects to the Agora servers within that region.
    *

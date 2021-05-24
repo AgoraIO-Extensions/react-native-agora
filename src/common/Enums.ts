@@ -1126,6 +1126,7 @@ export enum ErrorCode {
    */
   AlreadyInUse = 19,
   /**
+   * @ignore
    * 20: The SDK gave up the request due to too many requests.
    */
   Abort = 20,
@@ -1134,6 +1135,7 @@ export enum ErrorCode {
    */
   InitNetEngine = 21,
   /**
+   * @ignore
    * 22: The app uses too much of the system resources and the SDK fails to allocate the resources.
    */
   ResourceLimited = 22,
