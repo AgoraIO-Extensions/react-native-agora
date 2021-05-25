@@ -1,6 +1,7 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 import {
+  AudioRecordingConfiguration,
   BeautyOptions,
   CameraCapturerConfiguration,
   ChannelMediaOptions,
@@ -11,6 +12,7 @@ import {
   LastmileProbeConfig,
   LiveInjectStreamConfig,
   LiveTranscoding,
+  RhythmPlayerConfig,
   RtcEngineConfig,
   UserInfo,
   VideoEncoderConfiguration,
@@ -119,12 +121,9 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @since v3.3.1.
    *
-   * @param error Detailed warning or error description in [`Warning`]{@link RtcEngineEvents.Warning} or [`Error`]{@link RtcEngineEvents.Error}.
-   * @return
-   * <ul>
-   *     <li>0: Success.</li>
-   *     <li>< 0: Failure.</li>
-   * </ul>
+   * @param error The warning or error code in [`Warning`]{@link RtcEngineEvents.Warning} or [`Error`]{@link RtcEngineEvents.Error}.
+   *
+   * @return The warning or error description.
    *
    */
   static async getErrorDescription(error: number): Promise<string> {
@@ -332,7 +331,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
    *
    * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
-   * @param options? The detailed options of a user, including user level. See {@link ClientRoleOptions}.
+   * @param options The detailed options of a user, including user level. See {@link ClientRoleOptions}.
    *
    * @returns
    * - 0(NoError): Success.
@@ -385,7 +384,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * The uid is represented as a 32-bit unsigned integer in the SDK. Since unsigned integers are not supported by Java, the uid is handled as a 32-bit signed integer and larger numbers are interpreted as negative numbers in Java.
    * If necessary, the uid can be converted to a 64-bit integer through “uid&0xffffffffL”.
    *
-   * @param options? @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
+   * @param options @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
    *
    * @returns
    * - 0(NoError): Success.
@@ -434,7 +433,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-   * @param options? @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
+   * @param options @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
    *
    * @returns
    * - 0(NoError): Success.
@@ -704,7 +703,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
-   * @param options? @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
+   * @param options @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
    *
    * @returns
    * - 0(NoError): Success.
@@ -945,11 +944,12 @@ export default class RtcEngine implements RtcEngineInterface {
    * **Note**
    *
    * - When `muted` is set as `true`, this method does not affect any ongoing audio recording, because it does not disable the microphone.
-   * - If you call `setChannelProfile` after this method, the SDK resets whether or not to stop publishing the local audio according to the channel profile and user role. Therefore, Agora recommends calling this method after the `setChannelProfile` method.
+   * - If you call [`setChannelProfile`]{@link setChannelProfile} and [`setClientRole`]{@link setClientRole} after this method, the SDK resets whether or not to stop publishing the local audio according to the channel profile and user role.
+   * Therefore, Agora recommends calling this method after the `setChannelProfile` and `setClientRole` methods.
    *
    * @param muted Sets whether to stop publishing the local audio stream.
    *  - `true`: Stop publishing the local audio stream.
-   *  - `false`: (Default) Resumes publishing the local audio stream.
+   *  - `false`: (Default) Resume publishing the local audio stream.
    */
   muteLocalAudioStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalAudioStream', { muted });
@@ -978,7 +978,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - You must call this method before calling [`joinChannel`]{@link joinChannel}.
    * - In the [`Communication`]{@link ChannelProfile.Communication} and [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
-   * - In scenarios requiring high-quality audio, we recommend setting profile as `ShowRoom(4)` and scenario as `GameStreaming(3)`. For example, for music education scenarios.
+   * - In scenarios requiring high-quality audio, we recommend setting profile as `MusicHighQuality(4)` and scenario as `GameStreaming(3)`. For example, for music education scenarios.
    *
    * @param profile Sets the sample rate, bitrate, encoding mode, and the number of channels. See [`AudioProfile`]{@link AudioProfile}.
    * @param scenario Sets the audio application scenarios. See [`AudioScenario`]{@link AudioScenario}. Under different audio scenarios, the device uses different volume tracks, i.e. either the in-call volume or the media volume.
@@ -1129,11 +1129,12 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - This method executes faster than the `enableLocalVideo` method, which controls the sending of the local video stream.
    * - When `mute` is set as `true`, this method does not affect any ongoing video recording, because it does not disable the camera.
-   * - You can call this method either before or after joining a channel. If you call `setChannelProfile` after this method, the SDK resets whether or not to stop publishing the local video according to the channel profile and user role. Therefore, Agora recommends calling this method after the `setChannelProfile` method.
+   * - You can call this method either before or after joining a channel. If you call [`setChannelProfile`]{@link setChannelProfile} and [`setClientRole`]{@link setClientRole} after this method, the SDK resets whether or not to stop publishing the local video according to the channel profile and user role.
+   * Therefore, Agora recommends calling this method after the `setChannelProfile` and `setClientRole` methods.
    *
    * @param muted Sets whether to stop publishing the local video stream.
    *  - `true`: Stop publishing the local video stream.
-   *  - `false`: (Default) Resumes publishing the local video stream.
+   *  - `false`: (Default) Resume publishing the local video stream.
    */
   muteLocalVideoStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalVideoStream', { muted });
@@ -1303,7 +1304,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * Call this method before joining a channel.
+   * Call this method after calling `startPreview`.
    */
   stopPreview(): Promise<void> {
     return RtcEngine._callMethod('stopPreview');
@@ -1372,12 +1373,19 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * Call this method after calling `startAudioMixing` and receiving the `AudioMixingStateChanged(Playing)` callback.
    *
+   * @param filePath @since v3.4.2 The file path, including the filename extensions.
+   * - On Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/.
+   * Note: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead.
+   * For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Media Formats Supported by Android](https://developer.android.com/guide/topics/media/media-formats).
+   * - On iOS: Agora supports using an absolute path. For example: "/var/mobile/Containers/Data/audio.mp4".
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
    *  @returns
    * - Returns the audio mixing duration, if the method call is successful.
    * - Error codes: Failure.
    */
-  getAudioMixingDuration(): Promise<number> {
-    return RtcEngine._callMethod('getAudioMixingDuration');
+  getAudioMixingDuration(filePath?: string): Promise<number> {
+    return RtcEngine._callMethod('getAudioMixingDuration', { filePath });
   }
 
   /**
@@ -1481,20 +1489,20 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - To use this method on Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
    *
-   * - Call this method when you are in the channel, otherwise it may cause issues.
-   *
-   * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [`TooFrequentCall(702)`]{@link AudioMixingErrorCode.TooFrequentCall} error occurs.
+   * - If you want to play an online music file, ensure that the time interval between calling this method is more than 100 ms, or the [`TooFrequentCall(702)`]{@link AudioMixingReason.TooFrequentCall} error occurs.
    *
    * - If you want to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
    *
-   * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`CanNotOpen(701)`]{@link AudioMixingErrorCode.CanNotOpen}.
+   * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`CanNotOpen(701)`]{@link AudioMixingReason.CanNotOpen}.
    *
    * - If you call this method on an emulator, only the MP3 file format is supported.
    *
-   * @param filePath Specifies the absolute path (including the suffixes of the filename) of the local or online audio file to be mixed. For example, `/sdcard/emulated/0/audio.mp4`.
-   * Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv, and wav.
-   * - If the path begins with /assets/, the audio file is in the /assets/ directory.
-   * - Otherwise, the audio file is in the absolute path.
+   * @param filePath The file path, including the filename extensions.
+   * - On Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/.
+   * Note: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+   * Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. See [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats) for details.
+   * - On iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
    * @param loopback Sets which user can hear the audio mixing:
    * - `true`: Only the local user can hear the audio mixing.
    * - `false`: Both users can hear the audio mixing.
@@ -1504,19 +1512,21 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param cycle Sets the number of playback loops:
    * - Positive integer: Number of playback loops.
    * - -1: Infinite playback loops.
-   *
+   * @param startPos @since v3.4.2 The playback position (ms) of the music file.
    */
   startAudioMixing(
     filePath: string,
     loopback: boolean,
     replace: boolean,
-    cycle: number
+    cycle: number,
+    startPos?: number
   ): Promise<void> {
     return RtcEngine._callMethod('startAudioMixing', {
       filePath,
       loopback,
       replace,
       cycle,
+      startPos,
     });
   }
 
@@ -1568,10 +1578,13 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param soundId ID of the specified audio effect. Each audio effect has a unique ID. If you preloaded the audio effect into the memory
    * through the [`preloadEffect`]{@link preloadEffect} method, ensure that the `soundID` value is set to the same value as in the [`preloadEffect`]{@link preloadEffect} method.
    *
-   * @param filePath The absolute file path (including the suffixes of the filename) of the audio effect file or
-   * the URL of the online audio effect file. For example, `/sdcard/emulated/0/audio.mp4`.
+   * @param filePath The file path, including the filename extensions.
+   * - On Android: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using a URI address, an absolute path, or a path that starts with /assets/.
+   * Note: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+   * Supported audio formats: mp3, mp4, m4a, aac, 3gp, mkv and wav. See [Supported Media Formats](https://developer.android.com/guide/topics/media/media-formats) for details.
+   * - On iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
    *
-   * Supported audio formats: mp3, mp4, m4a, aac. 3gp, mkv, and wav.
    * @param loopCount Sets the number of times the audio effect loops:
    * - 0: Plays the audio effect once.
    * - 1: Plays the audio effect twice.
@@ -1587,6 +1600,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param publish Set whether to publish the specified audio effect to the remote stream:
    * - `true`: The locally played audio effect is published to the Agora Cloud and the remote users can hear it.
    * - `false`: The locally played audio effect is not published to the Agora Cloud and the remote users cannot hear it.
+   * @param startPos @since v3.4.2 The playback position (ms) of the audio effect file.
    */
   playEffect(
     soundId: number,
@@ -1595,7 +1609,8 @@ export default class RtcEngine implements RtcEngineInterface {
     pitch: number,
     pan: number,
     gain: number,
-    publish: Boolean
+    publish: Boolean,
+    startPos?: number
   ): Promise<void> {
     return RtcEngine._callMethod('playEffect', {
       soundId,
@@ -1605,22 +1620,90 @@ export default class RtcEngine implements RtcEngineInterface {
       pan,
       gain,
       publish,
+      startPos,
+    });
+  }
+
+  /**
+   * Sets the playback position of an audio effect file.
+   *
+   * @since v3.4.2
+   *
+   * After a successful setting, the local audio effect file starts playing at the specified position.
+   *
+   * @note Call this method after `playEffect`.
+   *
+   * @param soundId Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
+   * @param pos The playback position (ms) of the audio effect file.
+   */
+  setEffectPosition(soundId: number, pos: number): Promise<void> {
+    return RtcEngine._callMethod('setEffectPosition', {
+      soundId,
+      pos,
+    });
+  }
+
+  /**
+   * Gets the duration of the audio effect file.
+   *
+   * @since v3.4.2
+   *
+   * @note Call this method after joining a channel.
+   *
+   * @param filePath The file path, including the filename extensions.
+   * - On Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/.
+   * Note: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead.
+   * For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Media Formats Supported by Android](https://developer.android.com/guide/topics/media/media-formats).
+   * - On iOS: Agora supports using an absolute path. For example: "/var/mobile/Containers/Data/audio.mp4".
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
+   *
+   * @return
+   * - &ge; 0: A successful method call. Returns the total duration (ms) of the specified audio effect file.
+   * - < 0: Failure.
+   */
+  getEffectDuration(filePath: string): Promise<number> {
+    return RtcEngine._callMethod('getEffectDuration', { filePath });
+  }
+
+
+  /**
+   * Gets the playback position of the audio effect file.
+   *
+   * @since v3.4.2
+   *
+   * @note Call this method after `playEffect`.
+   *
+   * @param soundId Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
+   *
+   * @return
+   * - &ge; 0: A successful method call. Returns the playback position (ms) of the specified audio effect file.
+   * - < 0: Failure.
+   *
+   */
+  getEffectCurrentPosition(soundId: number): Promise<number> {
+    return RtcEngine._callMethod('getEffectCurrentPosition', {
+      soundId,
     });
   }
 
   /**
    * Preloads a specified audio effect file into the memory.
    *
-   * Supported audio formats: mp3, aac, m4a, 3gp, wav.
-   *
    * **Note**
    * - This method does not support online audio effect files.
-   *
    * - To ensure smooth communication, limit the size of the audio effect file.
    * We recommend using this method to preload the audio effect before calling [`joinChannel`]{@link joinChannel}.
    *
    * @param soundId ID of the audio effect. Each audio effect has a unique ID.
-   * @param filePath Absolute path of the audio effect file.
+   * @param filePath The file path, including the filename extensions.
+   * - On Android: Agora supports using a URI address, an absolute path, or a path that starts with /assets/.
+   * Note: You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead.
+   * For example: "content://com.android.providers.media.documents/document/audio%3A14441".
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Media Formats Supported by Android](https://developer.android.com/guide/topics/media/media-formats).
+   * - On iOS: Agora supports using an absolute path. For example: "/var/mobile/Containers/Data/audio.mp4".
+   * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
+   *
    */
   preloadEffect(soundId: number, filePath: string): Promise<void> {
     return RtcEngine._callMethod('preloadEffect', { soundId, filePath });
@@ -1736,9 +1819,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * Adds the [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset} method, a more user-friendly method for setting the
-   * local voice reverberation. You can use this method to set the local reverberation effect,
-   * such as Popular, R&B, Rock, Hip-hop, and more.
+   * As of v3.2.1, the SDK provides a more convenient method [`setAudioEffectPreset`]{@link setAudioEffectPreset}, which directly implements the popular music, R&B music, KTV and other preset reverb effects.
    *
    * @param reverbKey The reverberation key: [`AudioReverbType`]{@link AudioReverbType}
    *
@@ -1990,10 +2071,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
    *
-   * **Note**
-   *
-   * - This method applies to the [`Communication`]{@link ChannelProfile.Communication} profile only.
-   * - Call this method before the user joins a channel.
+   * **Note** Call this method before the user joins a channel.
    * @param defaultToSpeaker Sets the default audio route:
    * - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
    * - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
@@ -2330,7 +2408,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time.
    * You can implement the watermark function in your application layer.
-   * @param watermarkUrl The local file path of the watermark image to be added. This method supports adding a watermark image from either the local file path or the assets file path. If you use the assets file path, you need to start with `/assets/` when filling in this parameter.
+   * @param watermarkUrl The local file path of the watermark image to be added.
+   * - On Android: Agora supports using a URI address, an absolute path, or a path that starts with `/assets/` to access a local file.
+   * **Note** You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead.
+   * - On iOS: This method supports adding a watermark image from the local file path.
+   * If the watermark image to be added is in the project file, you need to change the image’s Type from PNG image to Data in the Xcode property; otherwise, the Agora Native SDK cannot recognize the image.
    * @param options The options of the watermark image to be added.
    */
   addVideoWatermark(
@@ -2423,6 +2505,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Starts an audio recording on the client.
    *
+   * @deprecated Deprecated from v3.4.2. Use [`startAudioRecordingWithConfig`]{@link startAudioRecordingWithConfig} instead.
+   *
    * The SDK allows recording during a call. After successfully calling this method,
    * you can record the audio of all the users in the channel and get an audio recording file.
    *
@@ -2450,6 +2534,96 @@ export default class RtcEngine implements RtcEngineInterface {
       sampleRate,
       quality,
     });
+  }
+
+  /** Starts an audio recording on the client.
+   *
+   * @since v3.4.2
+   *
+   * The SDK allows recording audio during a call. After successfully calling this method, you can record the audio of users in the channel and get an audio recording file. Supported file formats are as follows:
+   * - WAV: High-fidelity files with typically larger file sizes. For example, if the sample rate is 32,000 Hz, the file size for 10-minute recording is approximately 73 MB.
+   * - AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is `Medium`, the file size for 10-minute recording is approximately 2 MB.
+   *
+   * Once the user leaves the channel, the recording automatically stops.
+   *
+   * @note
+   * Call this method after joining a channel.
+   *
+   * @param config Recording configuration. See [`AudioRecordingConfiguration`]{@link AudioRecordingConfiguration}.
+   */
+  startAudioRecordingWithConfig(
+    config: AudioRecordingConfiguration
+  ): Promise<void> {
+    return RtcEngine._callMethod('startAudioRecording', {
+      config,
+    });
+  }
+
+  /**
+   * Enables the virtual metronome.
+   *
+   * @since v3.4.2
+   *
+   * In music education, physical education, and other scenarios, teachers often need to use a metronome so that students can practice at the correct tempo.
+   * A meter is composed of a downbeat and some number of upbeats (including zero).
+   * The first beat of each measure is called the downbeat, and the rest are called the upbeats.
+   * In this method, you need to set the paths of the upbeat and downbeat files, the number of beats per measure, the tempo, and whether to send the sound of the metronome to remote users.
+   *
+   * @note
+   * After enabling the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration according to the value you set in `beatsPerMinute`.
+   * If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
+   *
+   * @param sound1 The absolute path or URL address (including the filename extensions) of the file for the downbeat.
+   * - Android: For example: `/sdcard/emulated/0/audio.mp4`. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Media Formats Supported by Android](https://developer.android.com/guide/topics/media/media-formats).
+   * - iOS: For example: `/var/mobile/Containers/Data/audio.mp4`. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
+   * @param sound2 The absolute path or URL address (including the filename extensions) of the file for the upbeats.
+   * - Android: For example: `/sdcard/emulated/0/audio.mp4`. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Media Formats Supported by Android](https://developer.android.com/guide/topics/media/media-formats).
+   * - iOS: For example: `/var/mobile/Containers/Data/audio.mp4`. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
+   * @param config The metronome configuration. See [`RhythmPlayerConfig`]{@link RhythmPlayerConfig}.
+   *
+   */
+  startRhythmPlayer(
+    sound1: string,
+    sound2: string,
+    config: RhythmPlayerConfig
+  ): Promise<void> {
+    return RtcEngine._callMethod('startRhythmPlayer', {
+      sound1,
+      sound2,
+      config,
+    });
+  }
+
+
+  /**
+   * Disables the virtual metronome.
+   *
+   * @since v3.4.2
+   *
+   * After calling [`startRhythmPlayer`]{@link startRhythmPlayer}, you can call this method to disable the virtual metronome.
+   *
+   */
+  stopRhythmPlayer(): Promise<void> {
+    return RtcEngine._callMethod('stopRhythmPlayer');
+  }
+
+  /**
+   * Configures the virtual metronome.
+   *
+   * @since v3.4.2
+   *
+   * After calling [`startRhythmPlayer`]{@link startRhythmPlayer}, you can call this method to reconfigure the virtual metronome.
+   *
+   * @note
+   * After reconfiguring the virtual metronome, the SDK plays the specified files from the beginning and controls the beat duration
+   * according to the value you set in `beatsPerMinute`.
+   * If the file duration exceeds the beat duration, the SDK only plays the audio within the beat duration.
+   *
+   * @param config The metronome configuration. See [`RhythmPlayerConfig`]{@link RhythmPlayerConfig}.
+   *
+   */
+  configRhythmPlayer(config: RhythmPlayerConfig): Promise<void> {
+    return RtcEngine._callMethod('configRhythmPlayer', config);
   }
 
   /**
@@ -2546,6 +2720,7 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Gets the maximum zoom ratio supported by the camera.
    *
+   * This method applies to Android only.
    * @returns The maximum camera zoom factor.
    */
   getCameraMaxZoomFactor(): Promise<number> {
@@ -2792,11 +2967,6 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
-   * @param id
-   * @param category
-   * @param event
-   * @param label
-   * @param value
    */
   sendCustomReportMessage(
     id: string,
@@ -3128,9 +3298,9 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @note
    * - You can call this method either before or after joining a channel.
-   * - Do not set the `profile` parameter of `setAudioProfile` to `AUDIO_PROFILE_SPEECH_STANDARD(1)`; otherwise, this method call does not take effect.
+   * - Do not set the `profile` parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call does not take effect.
    * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
-   * - After calling this method, Agora recommends not calling the following methods, because they can override `[setVoiceConversionPreset]`{@link setVoiceConversionPreset}:
+   * - After calling this method, Agora recommends not calling the following methods, because they can override [`setVoiceConversionPreset`]{@link setVoiceConversionPreset}:
    *   - `setAudioEffectPreset`
    *   - `setAudioEffectParameters`
    *   - `setVoiceBeautifierPreset`
@@ -3331,7 +3501,8 @@ interface RtcAudioMixingInterface {
     filePath: string,
     loopback: boolean,
     replace: boolean,
-    cycle: number
+    cycle: number,
+    startPos?: number
   ): Promise<void>;
 
   stopAudioMixing(): Promise<void>;
@@ -3350,7 +3521,7 @@ interface RtcAudioMixingInterface {
 
   getAudioMixingPublishVolume(): Promise<number>;
 
-  getAudioMixingDuration(): Promise<number>;
+  getAudioMixingDuration(filePath?: string): Promise<number>;
 
   getAudioMixingCurrentPosition(): Promise<number>;
 
@@ -3376,8 +3547,15 @@ interface RtcAudioEffectInterface {
     pitch: number,
     pan: number,
     gain: number,
-    publish: Boolean
+    publish: Boolean,
+    startPos?: number
   ): Promise<void>;
+
+  setEffectPosition(soundId: number, pos: number): Promise<void>;
+
+  getEffectDuration(filePath: string): Promise<number>;
+
+  getEffectCurrentPosition(soundId: number): Promise<number>;
 
   stopEffect(soundId: number): Promise<void>;
 
@@ -3580,6 +3758,20 @@ interface RtcAudioRecorderInterface {
     sampleRate: AudioSampleRateType,
     quality: AudioRecordingQuality
   ): Promise<void>;
+
+  startAudioRecordingWithConfig(
+    config: AudioRecordingConfiguration
+  ): Promise<void>;
+
+  startRhythmPlayer(
+    sound1: string,
+    sound2: string,
+    config: RhythmPlayerConfig
+  ): Promise<void>;
+
+  stopRhythmPlayer(): Promise<void>;
+
+  configRhythmPlayer(config: RhythmPlayerConfig): Promise<void>;
 
   stopAudioRecording(): Promise<void>;
 }
