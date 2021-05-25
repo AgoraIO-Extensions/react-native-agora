@@ -1,3 +1,15 @@
+## [3.4.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.3...v3.4.2) (2021-05-25)
+
+
+### Bug Fixes
+
+* **uid compatible:** int to uint ([cdc9eae](https://github.com/AgoraIO-Community/react-native-agora/commit/cdc9eaebc11d49afa4d035ecafc00880d2a2c68c))
+
+
+### Features
+
+* **upgrade native sdk:** 3.4.1 ([2bac9da](https://github.com/AgoraIO-Community/react-native-agora/commit/2bac9da051370d4327f7868a2634c0043eeeb3d5))
+
 ## [3.3.3](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.2...v3.3.3) (2021-04-13)
 
 

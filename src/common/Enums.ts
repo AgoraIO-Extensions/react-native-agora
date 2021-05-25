@@ -145,21 +145,50 @@ export enum AudioLocalState {
 }
 
 /**
- * The error code of the audio mixing file.
+ * The reason for the change of the music file playback state.
  */
-export enum AudioMixingErrorCode {
+export enum AudioMixingReason {
   /**
-   * 701: The SDK cannot open the audio mixing file.
+   * 701: The SDK cannot open the music file.
+   * Possible causes include the local music file does not exist, the SDK does not support the file format, or the SDK cannot access the music file URL.
    */
   CanNotOpen = 701,
   /**
-   * 702: The SDK opens the audio mixing file too frequently.
+   * 702: The SDK opens the music file too frequently. If you need to call `startAudioMixing` multiple times, ensure that the call interval is longer than 500 ms.
    */
   TooFrequentCall = 702,
   /**
-   * 703: The opening of the audio mixing file is interrupted.
+   * 703: The music file playback is interrupted.
    */
   InterruptedEOF = 703,
+  /**
+   * 720: Successfully calls `startAudioMixing` to play a music file.
+   */
+  StartedByUser = 720,
+  /**
+   * 721: The music file completes a loop playback.
+   */
+  OneLoopCompleted = 721,
+  /**
+   * 722: The music file starts a new loop playback.
+   */
+  StartNewLoop = 722,
+  /**
+   * 723: The music file completes all loop playback.
+   */
+  AllLoopsCompleted = 723,
+  /**
+   * 724: Successfully calls [`stopAudioMixing`]{@link stopAudioMixing} to stop playing the music file.
+   */
+  StoppedByUser = 724,
+  /**
+   * 725: Successfully calls [`pauseAudioMixing`]{@link pauseAudioMixing} to pause playing the music file.
+   */
+  PausedByUser = 725,
+  /**
+   * 726: Successfully calls [`resumeAudioMixing`]{@link resumeAudioMixing} to resume playing the music file.
+   */
+  ResumedByUser = 726,
   /**
    * 0: No error.
    */
@@ -171,19 +200,34 @@ export enum AudioMixingErrorCode {
  */
 export enum AudioMixingStateCode {
   /**
-   * 710: The audio mixing file is playing.
+   * 710: The audio mixing file is playing. This state comes with one of the following associated reasons:
+   * - [`StartedByUser(720)`]{@link StartedByUser}: Successfully calls [`startAudioMixing`]{@link startAudioMixing} to play a music file.
+   * - [`OneLoopCompleted(721)`]{@link OneLoopCompleted}: The music file completes a loop playback.
+   * - [`StartNewLoop(722)`]{@link StartNewLoop}: The music file starts a new loop playback.
+   * - [`ResumedByUser(726)`]{@link ResumedByUser}: Successfully calls [`resumeAudioMixing`]{@link resumeAudioMixing} to resume playing the music file.
    */
   Playing = 710,
   /**
-   * 711: The audio mixing file pauses playing.
+   * 711: The audio mixing file pauses playing. This state comes with [`PausedByUser(725)`]{@link PausedByUser}.
    */
   Paused = 711,
   /**
-   * 713: The audio mixing file stops playing.
+   * @ignore
+   */
+  Restart = 712,
+  /**
+   * 713: The audio mixing file stops playing. This state comes with one of the following associated reasons:
+   * - [`AllLoopsCompleted(723)`]{@link AllLoopsCompleted}: The music file completes all loop playback.
+   * - [`StoppedByUser(724)`]{@link StoppedByUser}: Successfully calls [`stopAudioMixing`]{@link stopAudioMixing} to stop playing the music file.
    */
   Stopped = 713,
   /**
-   * 714: An exception occurs when playing the audio mixing file.
+   * 714: An exception occurs when playing the audio mixing file. This state comes with one of the following associated reasons:
+   * - [`CanNotOpen(701)`]{@link CanNotOpen}: The SDK cannot open the music file. Possible causes include the
+   * local music file does not exist, the SDK does not support the file format, or the SDK cannot access the music file URL.
+   * - [`TooFrequentCall(702)`]{@link TooFrequentCall}: The SDK opens the music file too frequently.
+   * If you need to call [`startAudioMixing`]{@link startAudioMixing} multiple times, ensure that the call interval is longer than 500 ms.
+   * - [`InterruptedEOF(703)`]{@link InterruptedEOF}: The music file playback is interrupted.
    */
   Failed = 714,
 }
@@ -259,17 +303,35 @@ export enum AudioProfile {
  */
 export enum AudioRecordingQuality {
   /**
-   * 0: The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording.
+   * 0: Low quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 1.2 MB.
    */
   Low = 0,
   /**
-   * 1: The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording.
+   * 1: (Default) Medium quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 2 MB.
    */
   Medium = 1,
   /**
-   * 2: The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording.
+   * 2: High quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 3.75 MB.
    */
   High = 2,
+}
+
+/**
+ * Recording content.
+ */
+export enum AudioRecordingPosition {
+  /**
+   * 0: (Default) Records the mixed audio of the local user and all remote users.
+   */
+  PositionMixedRecordingAndPlayback = 0,
+  /**
+   * 1: Records the audio of the local user only.
+   */
+  PositionRecording = 1,
+  /**
+   * 2: Records the audio of all remote users only.
+   */
+  PositionMixedPlayback = 2,
 }
 
 /**
@@ -911,17 +973,29 @@ export enum ConnectionStateType {
  */
 export enum DegradationPreference {
   /**
-   * 0: (Default) Degrades the frame rate to guarantee the video quality.
+   * 0: (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth.
+   * This degradation preference is suitable for scenarios where video quality is prioritized.
+   *
+   * @note In the `Communication` channel profile, the resolution of the video sent may change, so remote users need to handle this issue.
+   * See [`VideoSizeChanged`]{@link VideoSizeChanged}.
    */
   MaintainQuality = 0,
   /**
-   * 1: Degrades the video quality to guarantee the frame rate.
+   * 1: Prefers to reduce the video quality while maintaining the video frame rate during video encoding under limited bandwidth.
+   * This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
    */
   MaintainFramerate = 1,
+
   /**
-   * 2: Reserved for future use.
+   * 2: Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth.
+   * `MaintainBalanced` has a lower reduction than `MaintainQuality` and `MaintainFramerate`, and this preference is suitable for scenarios where
+   * both smoothness and video quality are a priority.
+   *
+   * @since v3.4.2
+   *
+   * @note The resolution of the video sent may change, so remote users need to handle this issue. See [`VideoSizeChanged`]{@link VideoSizeChanged}.
    */
-  Balanced = 2,
+  MaintainBalanced = 2,
 }
 
 /**
@@ -1052,6 +1126,7 @@ export enum ErrorCode {
    */
   AlreadyInUse = 19,
   /**
+   * @ignore
    * 20: The SDK gave up the request due to too many requests.
    */
   Abort = 20,
@@ -1060,6 +1135,7 @@ export enum ErrorCode {
    */
   InitNetEngine = 21,
   /**
+   * @ignore
    * 22: The app uses too much of the system resources and the SDK fails to allocate the resources.
    */
   ResourceLimited = 22,
@@ -1189,6 +1265,10 @@ export enum ErrorCode {
    * @since v3.3.1
    */
   ModuleNotFound = 157,
+  /**
+   * 160: The client is already recording audio. To start a new recording, call [`stopAudioRecording`]{@link stopAudioRecording} to stop the current recording first, and then call [`startAudioRecordingWithConfig`]{@link startAudioRecordingWithConfig}.
+   */
+  AlreadyInRecording = 160,
   /**
    * 1001: Fails to load the media engine.
    */
@@ -1438,6 +1518,12 @@ export enum LocalVideoStreamError {
    * @since v3.3.1
    */
   CaptureMultipleForegroundApps = 7,
+  /**
+   * 8: The SDK cannot find the local video capture device.
+   *
+   * @since v3.4.2
+   */
+  DeviceNotFound = 8,
 }
 
 /**
@@ -2822,15 +2908,16 @@ export enum UploadErrorReason {
  */
 export enum CloudProxyType {
   /**
-   * Do not use the cloud proxy.
+   * 0: Do not use the cloud proxy.
    */
   None = 0,
   /**
-   * The cloud proxy for the UDP protocol.
+   * 1: The cloud proxy for the UDP protocol.
    */
   UDP = 1,
   /**
-   * The cloud proxy for the TCP (encryption) protocol.
+   * @ignore
+   * 2: The cloud proxy for the TCP (encryption) protocol.
    */
   TCP = 2,
 }

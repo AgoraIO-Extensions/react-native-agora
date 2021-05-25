@@ -148,7 +148,8 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
           1,
           1,
           100,
-          true
+          true,
+          0
         )
         .then(() => {
           this.setState({ playEffect: true });
