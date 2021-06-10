@@ -1608,7 +1608,6 @@ export class RtcEngineConfig {
   }
 }
 
-
 /**
  * Recording configuration, which is set in [`startAudioRecordingWithConfig`]{@link startAudioRecordingWithConfig}.
  */

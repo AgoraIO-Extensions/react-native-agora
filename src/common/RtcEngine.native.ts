@@ -1666,7 +1666,6 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('getEffectDuration', { filePath });
   }
 
-
   /**
    * Gets the playback position of the audio effect file.
    *
@@ -2593,7 +2592,6 @@ export default class RtcEngine implements RtcEngineInterface {
       config,
     });
   }
-
 
   /**
    * Disables the virtual metronome.
