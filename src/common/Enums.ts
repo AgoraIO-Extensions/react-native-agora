@@ -120,6 +120,10 @@ export enum AudioLocalError {
    * 5: The local audio encoding fails.
    */
   EncodeFailure = 5,
+  /**
+   * TODO(doc)
+   */
+  Interrupted = 8,
 }
 
 /**
@@ -1037,6 +1041,14 @@ export enum EncryptionMode {
    * @since v3.3.1
    */
   AES256GCM = 6,
+  /**
+   * TODO(doc)
+   */
+  AES128GCM2 = 7,
+  /**
+   * TODO(doc)
+   */
+  AES256GCM2 = 8,
 }
 
 /**
@@ -1704,6 +1716,10 @@ export enum RtmpStreamingErrorCode {
    * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
    */
   FormatNotSupported = 10,
+  /**
+   * TODO(doc)
+   */
+  UnPublishOK = 100,
 }
 
 /**
@@ -2484,6 +2500,10 @@ export enum RtmpStreamingEvent {
    * 1: An error occurs when you add a background image or a watermark image to the RTMP or RTMPS stream.
    */
   FailedLoadImage = 1,
+  /**
+   * TODO(doc)
+   */
+  UrlAlreadyInUse = 2,
 }
 
 /**
