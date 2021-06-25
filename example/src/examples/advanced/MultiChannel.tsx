@@ -83,7 +83,10 @@ export default class MultiChannel extends Component<{}, State, any> {
       null,
       null,
       0,
-      new ChannelMediaOptions(true, true)
+      new ChannelMediaOptions({
+        publishLocalAudio: false,
+        publishLocalVideo: false,
+      })
     );
   };
 
@@ -103,7 +106,10 @@ export default class MultiChannel extends Component<{}, State, any> {
       null,
       null,
       0,
-      new ChannelMediaOptions(true, true)
+      new ChannelMediaOptions({
+        publishLocalAudio: false,
+        publishLocalVideo: false,
+      })
     );
   };
 
