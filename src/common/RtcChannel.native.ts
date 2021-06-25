@@ -355,6 +355,9 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Publishes the local stream to the channel.
+   *
+   * @deprecated TODO(doc)
+   *
    * You must keep the following restrictions in mind when calling this method.
    * Otherwise, the SDK returns the [`Refused(-5)`]{@link ErrorCode.Refused}:
    * - This method publishes one stream only to the channel corresponding to the current [`RtcChannel`]{@link RtcChannel} instance.
@@ -367,6 +370,8 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Stops publishing a stream to the channel.
+   *
+   * @deprecated TODO(doc)
    *
    * If you call this method in a channel where you are not publishing streams, the SDK returns [`Refused(-5)`]{@link ErrorCode.Refused}.
    */
@@ -997,6 +1002,22 @@ export default class RtcChannel implements RtcChannelInterface {
   sendStreamMessage(streamId: number, message: string): Promise<void> {
     return this._callMethod('sendStreamMessage', { streamId, message });
   }
+
+  /**
+   * TODO(doc)
+   * @param muted
+   */
+  muteLocalAudioStream(muted: boolean): Promise<void> {
+    return this._callMethod('muteLocalAudioStream', { muted });
+  }
+
+  /**
+   * TODO(doc)
+   * @param muted
+   */
+  muteLocalVideoStream(muted: boolean): Promise<void> {
+    return this._callMethod('muteLocalVideoStream', { muted });
+  }
 }
 
 /**
@@ -1050,6 +1071,8 @@ interface RtcChannelInterface
 interface RtcAudioInterface {
   adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void>;
 
+  muteLocalAudioStream(muted: boolean): Promise<void>;
+
   muteRemoteAudioStream(uid: number, muted: boolean): Promise<void>;
 
   muteAllRemoteAudioStreams(muted: boolean): Promise<void>;
@@ -1061,6 +1084,8 @@ interface RtcAudioInterface {
  * @ignore
  */
 interface RtcVideoInterface {
+  muteLocalVideoStream(muted: boolean): Promise<void>;
+
   muteRemoteVideoStream(uid: number, muted: boolean): Promise<void>;
 
   muteAllRemoteVideoStreams(muted: boolean): Promise<void>;

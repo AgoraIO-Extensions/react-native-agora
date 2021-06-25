@@ -932,7 +932,7 @@ export class ChannelMediaOptions {
    *
    * This member serves a similar function to the [`muteAllRemoteAudioStreams`]{@link RtcEngine.muteAllRemoteAudioStreams} method. After joining the channel, you can call the `muteAllRemoteAudioStreams` method to set whether to subscribe to audio streams in the channel.
    */
-  autoSubscribeAudio: boolean;
+  autoSubscribeAudio?: boolean;
   /**
    * Determines whether to subscribe to video streams when the user joins the channel.
    * - `true`: (Default) Subscribe.
@@ -940,11 +940,28 @@ export class ChannelMediaOptions {
    *
    * This member serves a similar function to the [`muteAllRemoteVideoStreams`]{@link RtcEngine.muteAllRemoteVideoStreams} method. After joining the channel, you can call the `muteAllRemoteVideoStreams` method to set whether to subscribe to audio streams in the channel.
    */
-  autoSubscribeVideo: boolean;
+  autoSubscribeVideo?: boolean;
+  /**
+   * TODO(doc)
+   */
+  publishLocalAudio?: boolean;
+  /**
+   * TODO(doc)
+   */
+  publishLocalVideo?: boolean;
 
-  constructor(autoSubscribeAudio: boolean, autoSubscribeVideo: boolean) {
-    this.autoSubscribeAudio = autoSubscribeAudio;
-    this.autoSubscribeVideo = autoSubscribeVideo;
+  constructor(params: {
+    autoSubscribeAudio?: boolean;
+    autoSubscribeVideo?: boolean;
+    publishLocalAudio?: boolean;
+    publishLocalVideo?: boolean;
+  }) {
+    if (params) {
+      this.autoSubscribeAudio = params.autoSubscribeAudio;
+      this.autoSubscribeVideo = params.autoSubscribeVideo;
+      this.publishLocalAudio = params.publishLocalAudio;
+      this.publishLocalVideo = params.publishLocalVideo;
+    }
   }
 }
 
@@ -966,8 +983,19 @@ export class EncryptionConfig {
    * If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [`InvalidArgument(2)`]{@link ErrorCode.InvalidArgument}.
    */
   encryptionKey: string;
+  /**
+   * TODO(doc)
+   */
+  encryptionKdfSalt?: number[];
 
-  constructor(encryptionMode: EncryptionMode, encryptionKey: string) {
+  constructor(
+    encryptionMode: EncryptionMode,
+    encryptionKey: string,
+    params?: { encryptionKdfSalt?: number[] }
+  ) {
+    if (params) {
+      this.encryptionKdfSalt = params.encryptionKdfSalt;
+    }
     this.encryptionMode = encryptionMode;
     this.encryptionKey = encryptionKey;
   }
@@ -1586,7 +1614,7 @@ export class RtcEngineConfig {
    * After specifying the region, the SDK connects to the Agora servers within that region.
    *
    */
-  areaCode?: AreaCode;
+  areaCode?: AreaCode[];
   /**
    * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link LogConfig}.
    *
@@ -1598,7 +1626,7 @@ export class RtcEngineConfig {
 
   constructor(
     appId: string,
-    params?: { areaCode?: AreaCode; logConfig?: LogConfig }
+    params?: { areaCode?: AreaCode[]; logConfig?: LogConfig }
   ) {
     this.appId = appId;
     if (params) {
