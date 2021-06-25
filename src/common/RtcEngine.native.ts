@@ -181,7 +181,9 @@ export default class RtcEngine implements RtcEngineInterface {
     appId: string,
     areaCode: AreaCode
   ): Promise<RtcEngine> {
-    return RtcEngine.createWithConfig(new RtcEngineConfig(appId, { areaCode }));
+    return RtcEngine.createWithConfig(
+      new RtcEngineConfig(appId, { areaCode: [areaCode] })
+    );
   }
 
   /**

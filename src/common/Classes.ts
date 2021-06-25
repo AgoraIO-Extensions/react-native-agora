@@ -950,7 +950,7 @@ export class ChannelMediaOptions {
    */
   publishLocalVideo?: boolean;
 
-  constructor(params: {
+  constructor(params?: {
     autoSubscribeAudio?: boolean;
     autoSubscribeVideo?: boolean;
     publishLocalAudio?: boolean;
