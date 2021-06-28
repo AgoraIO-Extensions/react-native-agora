@@ -1021,7 +1021,7 @@ export interface RtcStats {
   /**
    * Call duration in seconds, represented by an aggregate value.
    */
-  totalDuration: number;
+  duration: number;
   /**
    * Total number of bytes transmitted, represented by an aggregate value.
    */
@@ -1077,7 +1077,7 @@ export interface RtcStats {
    *  - If the local user is an audience member: The number of users in the channel = The number of hosts in the channel + 1.
    *  - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
    */
-  users: number;
+  userCount: number;
   /**
    * Client-server latency.
    */
