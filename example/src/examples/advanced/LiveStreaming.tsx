@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Button,
   PermissionsAndroid,
   Platform,
   StyleSheet,
   View,
-  Alert,
 } from 'react-native';
 
 import RtcEngine, {
+  AudienceLatencyLevelType,
   ChannelProfile,
   ClientRole,
   RtcEngineConfig,
   RtcLocalView,
+  RtcRemoteView,
   VideoFrameRate,
   VideoOutputOrientationMode,
   VideoRenderMode,
-  AudienceLatencyLevelType,
-  RtcRemoteView,
 } from 'react-native-agora';
 import Item from '../component/Item';
 

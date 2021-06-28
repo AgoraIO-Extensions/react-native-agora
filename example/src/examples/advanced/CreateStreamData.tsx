@@ -1,25 +1,26 @@
 import React, { Component, Fragment } from 'react';
 import {
+  Alert,
   Button,
   PermissionsAndroid,
   Platform,
   StyleSheet,
-  View,
-  Alert,
-  TextInput,
   Text,
+  TextInput,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
+  AudienceLatencyLevelType,
   ChannelProfile,
   ClientRole,
+  DataStreamConfig,
   RtcEngineConfig,
   RtcLocalView,
+  RtcRemoteView,
   VideoFrameRate,
   VideoOutputOrientationMode,
   VideoRenderMode,
-  AudienceLatencyLevelType,
-  RtcRemoteView,
 } from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
@@ -38,12 +39,15 @@ export default class LiveStreaming extends Component<{}, State, any> {
     super(props);
     this.state = { isJoin: false };
   }
+
   onPressSend = async () => {
     const { message } = this.state;
     if (!message) {
       return;
     }
-    const streamId = await this._engine?.createDataStreamWithConfig({});
+    const streamId = await this._engine?.createDataStreamWithConfig(
+      new DataStreamConfig(true, true)
+    );
 
     await this._engine?.sendStreamMessage(streamId!, message);
     this.setState({ message: '' });
