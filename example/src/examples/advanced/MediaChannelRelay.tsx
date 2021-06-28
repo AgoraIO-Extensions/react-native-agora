@@ -4,24 +4,24 @@ import {
   PermissionsAndroid,
   Platform,
   StyleSheet,
-  View,
-  TextInput,
   Text,
+  TextInput,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
+  AudienceLatencyLevelType,
+  ChannelMediaRelayError,
+  ChannelMediaRelayEvent,
+  ChannelMediaRelayState,
   ChannelProfile,
   ClientRole,
   RtcEngineConfig,
   RtcLocalView,
+  RtcRemoteView,
   VideoFrameRate,
   VideoOutputOrientationMode,
   VideoRenderMode,
-  AudienceLatencyLevelType,
-  RtcRemoteView,
-  ChannelMediaRelayState,
-  ChannelMediaRelayError,
-  ChannelMediaRelayEvent,
 } from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
@@ -41,6 +41,7 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
     super(props);
     this.state = { isJoin: false, isRelaying: false };
   }
+
   onPressRelay = async () => {
     const { anotherChannelName } = this.state;
     if (!anotherChannelName) {

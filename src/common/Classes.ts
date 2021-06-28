@@ -47,15 +47,17 @@ export class VideoDimensions {
   /**
    * The video resolution on the horizontal axis.
    */
-  width: number;
+  width?: number;
   /**
    * The video resolution on the vertical axis.
    */
-  height: number;
+  height?: number;
 
-  constructor(width: number, height: number) {
-    this.width = width;
-    this.height = height;
+  constructor(params?: { width?: number; height?: number }) {
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -370,32 +372,36 @@ export class AgoraImage {
   /**
    * Position of the image on the upper left of the broadcasting video on the horizontal axis.
    */
-  x: number;
+  x?: number;
   /**
    * Position of the image on the upper left of the broadcasting video on the vertical axis.
    */
-  y: number;
+  y?: number;
   /**
    * Width of the image on the broadcasting video.
    */
-  width: number;
+  width?: number;
   /**
    * Height of the image on the broadcasting video.
    */
-  height: number;
+  height?: number;
 
   constructor(
     url: string,
-    x: number,
-    y: number,
-    width: number,
-    height: number
+    params?: {
+      x?: number;
+      y?: number;
+      width?: number;
+      height?: number;
+    }
   ) {
     this.url = url;
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    if (params) {
+      this.x = params.x;
+      this.y = params.y;
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -410,11 +416,11 @@ export class TranscodingUser {
   /**
    * Horizontal position of the video frame of the user from the top left corner of the CDN live streaming.
    */
-  x: number;
+  x?: number;
   /**
    * Vertical position of the video frame of the user from the top left corner of the CDN live streaming.
    */
-  y: number;
+  y?: number;
   /**
    * Width of the video frame of the user on the CDN live streaming. The default value is 360.
    */
@@ -449,9 +455,9 @@ export class TranscodingUser {
 
   constructor(
     uid: number,
-    x: number,
-    y: number,
     params?: {
+      x?: number;
+      y?: number;
       width?: number;
       height?: number;
       zOrder?: number;
@@ -460,9 +466,9 @@ export class TranscodingUser {
     }
   ) {
     this.uid = uid;
-    this.x = x;
-    this.y = y;
     if (params) {
+      this.x = params.x;
+      this.y = params.y;
       this.width = params.width;
       this.height = params.height;
       this.zOrder = params.zOrder;
@@ -628,7 +634,7 @@ export class ChannelMediaInfo {
   /**
    * The channel name.
    */
-  channelName?: string;
+  channelName: string;
   /**
    * The token that enables the user to join the channel.
    */
@@ -638,9 +644,9 @@ export class ChannelMediaInfo {
    */
   uid: number;
 
-  constructor(uid: number, params?: { channelName?: string; token?: string }) {
+  constructor(channelName: string, uid: number, params?: { token?: string }) {
+    this.channelName = channelName;
     if (params) {
-      this.channelName = params.channelName;
       this.token = params.token;
     }
     this.uid = uid;
@@ -717,25 +723,32 @@ export class Rectangle {
   /**
    * The horizontal offset from the top-left corner.
    */
-  x: number;
+  x?: number;
   /**
    * The vertical offset from the top-left corner.
    */
-  y: number;
+  y?: number;
   /**
    * The width (pixels) of the watermark image.
    */
-  width: number;
+  width?: number;
   /**
    * The height (pixels) of the watermark image.
    */
-  height: number;
+  height?: number;
 
-  constructor(x: number, y: number, width: number, height: number) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  constructor(params?: {
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+  }) {
+    if (params) {
+      this.x = params.x;
+      this.y = params.y;
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -752,20 +765,22 @@ export class WatermarkOptions {
   /**
    * The watermark position in the landscape mode.
    */
-  positionInLandscapeMode: Rectangle;
+  positionInLandscapeMode?: Rectangle;
   /**
    * The watermark position in the portrait mode.
    */
-  positionInPortraitMode: Rectangle;
+  positionInPortraitMode?: Rectangle;
 
-  constructor(
-    positionInLandscapeMode: Rectangle,
-    positionInPortraitMode: Rectangle,
-    visibleInPreview?: boolean
-  ) {
-    this.visibleInPreview = visibleInPreview;
-    this.positionInLandscapeMode = positionInLandscapeMode;
-    this.positionInPortraitMode = positionInPortraitMode;
+  constructor(params?: {
+    visibleInPreview?: boolean;
+    positionInLandscapeMode?: Rectangle;
+    positionInPortraitMode?: Rectangle;
+  }) {
+    if (params) {
+      this.visibleInPreview = params.visibleInPreview;
+      this.positionInLandscapeMode = params.positionInLandscapeMode;
+      this.positionInPortraitMode = params.positionInPortraitMode;
+    }
   }
 }
 
@@ -886,7 +901,7 @@ export class CameraCapturerConfiguration {
   /**
    * The camera capture preference.
    */
-  preference: CameraCaptureOutputPreference;
+  preference?: CameraCaptureOutputPreference;
   /**
    * The width (px) of the video image captured by the local camera. To customize the width of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureWidth`.
    *
@@ -902,21 +917,19 @@ export class CameraCapturerConfiguration {
   /**
    * The camera direction.
    */
-  cameraDirection: CameraDirection;
+  cameraDirection?: CameraDirection;
 
-  constructor(
-    preference: CameraCaptureOutputPreference,
-    cameraDirection: CameraDirection,
-    params?: {
-      captureWidth?: number;
-      captureHeight?: number;
-    }
-  ) {
-    this.preference = preference;
-    this.cameraDirection = cameraDirection;
+  constructor(params?: {
+    preference?: CameraCaptureOutputPreference;
+    captureWidth?: number;
+    captureHeight?: number;
+    cameraDirection?: CameraDirection;
+  }) {
     if (params) {
+      this.preference = params.preference;
       this.captureWidth = params.captureWidth;
       this.captureHeight = params.captureHeight;
+      this.cameraDirection = params.cameraDirection;
     }
   }
 }
@@ -974,7 +987,7 @@ export class EncryptionConfig {
   /**
    * Encryption mode. The default encryption mode is `AES128XTS`. See [`EncryptionMode`]{@link EncryptionMode}.
    */
-  encryptionMode: EncryptionMode;
+  encryptionMode?: EncryptionMode;
   /**
    * Encryption key in string type.
    *
@@ -982,22 +995,22 @@ export class EncryptionConfig {
    *
    * If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [`InvalidArgument(2)`]{@link ErrorCode.InvalidArgument}.
    */
-  encryptionKey: string;
+  encryptionKey?: string;
   /**
    * TODO(doc)
    */
   encryptionKdfSalt?: number[];
 
-  constructor(
-    encryptionMode: EncryptionMode,
-    encryptionKey: string,
-    params?: { encryptionKdfSalt?: number[] }
-  ) {
+  constructor(params?: {
+    encryptionMode?: EncryptionMode;
+    encryptionKey?: string;
+    encryptionKdfSalt?: number[];
+  }) {
     if (params) {
+      this.encryptionMode = params.encryptionMode;
+      this.encryptionKey = params.encryptionKey;
       this.encryptionKdfSalt = params.encryptionKdfSalt;
     }
-    this.encryptionMode = encryptionMode;
-    this.encryptionKey = encryptionKey;
   }
 }
 
@@ -1509,10 +1522,12 @@ export class ClientRoleOptions {
   /**
    * The latency level of an audience member in a live interactive streaming. See {@link AudienceLatencyLevelType}.
    */
-  audienceLatencyLevel: AudienceLatencyLevelType;
+  audienceLatencyLevel?: AudienceLatencyLevelType;
 
-  constructor(audienceLatencyLevel: AudienceLatencyLevelType) {
-    this.audienceLatencyLevel = audienceLatencyLevel;
+  constructor(params?: { audienceLatencyLevel?: AudienceLatencyLevelType }) {
+    if (params) {
+      this.audienceLatencyLevel = params.audienceLatencyLevel;
+    }
   }
 }
 
@@ -1575,7 +1590,7 @@ export class DataStreamConfig {
    *
    * When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the [`StreamMessage`]{@link RtcEngineEvents.StreamMessage} callback when the synchronized audio packet is played out. Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
    */
-  syncWithAudio?: boolean;
+  syncWithAudio: boolean;
   /**
    * Whether the SDK guarantees that the receiver receives the data in the sent order.
    * - `true`: Guarantee that the receiver receives the data in the sent order.
@@ -1583,13 +1598,11 @@ export class DataStreamConfig {
    *
    * Do not set this parameter to `true` if you need the receiver to receive the data immediately.
    */
-  ordered?: boolean;
+  ordered: boolean;
 
-  constructor(params?: { syncWithAudio?: boolean; ordered?: boolean }) {
-    if (params) {
-      this.syncWithAudio = params.syncWithAudio;
-      this.ordered = params.ordered;
-    }
+  constructor(syncWithAudio: boolean, ordered: boolean) {
+    this.syncWithAudio = syncWithAudio;
+    this.ordered = ordered;
   }
 }
 

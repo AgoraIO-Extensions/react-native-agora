@@ -1,30 +1,31 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
+  Alert,
   Button,
+  FlatList,
   PermissionsAndroid,
   Platform,
   StyleSheet,
-  View,
   Text,
-  FlatList,
-  Alert,
+  View,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import RtcEngine, {
+  AudioEffectPreset,
+  AudioEqualizationBandFrequency,
+  AudioProfile,
+  AudioReverbType,
+  AudioScenario,
   ChannelProfile,
   ClientRole,
   RtcEngineConfig,
-  AudioProfile,
-  AudioScenario,
   VoiceBeautifierPreset,
-  AudioEffectPreset,
-  AudioEqualizationBandFrequency,
-  AudioReverbType,
 } from 'react-native-agora';
 import VoiceChangeConfig, {
   FreqOptions,
   ReverbKeyOptions,
 } from '../config/VoiceChangeConfig';
+
 const config = require('../../../agora.config.json');
 
 interface State {
