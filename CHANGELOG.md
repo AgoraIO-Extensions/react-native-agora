@@ -1,3 +1,12 @@
+## [3.4.5-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.2...v3.4.5-rc.0) (2021-06-28)
+
+
+### Features
+
+* add RtcEngineContext instead of RtcEngineConfig ([d646652](https://github.com/AgoraIO-Community/react-native-agora/commit/d646652723e8669646f0764be45b989d4706a701))
+* optimize constructor for Classes.ts ([d14a41a](https://github.com/AgoraIO-Community/react-native-agora/commit/d14a41a761a6aab96d622496d7ec3b1492af8ae3))
+* support 3.4.5 ([6180a1e](https://github.com/AgoraIO-Community/react-native-agora/commit/6180a1e81ed2dc7c61552f52d36e2bb87076a234))
+
 ## [3.4.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.3...v3.4.2) (2021-05-25)
 
 
