@@ -13,7 +13,7 @@ import {
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
-  RtcEngineConfig,
+  RtcEngineContext,
   RtcLocalView,
   RtcRemoteView,
 } from 'react-native-agora';
@@ -51,8 +51,8 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
     this._addListeners();
 

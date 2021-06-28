@@ -18,7 +18,7 @@ import RtcEngine, {
   AudioScenario,
   ChannelProfile,
   ClientRole,
-  RtcEngineConfig,
+  RtcEngineContext,
   VoiceBeautifierPreset,
 } from 'react-native-agora';
 import VoiceChangeConfig, {
@@ -83,8 +83,8 @@ export default class VoiceChange extends Component<{}, State, any> {
         PermissionsAndroid.PERMISSIONS.CAMERA,
       ]);
     }
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
 
     this._addListeners();
