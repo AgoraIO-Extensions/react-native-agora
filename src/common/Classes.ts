@@ -1611,7 +1611,7 @@ export class DataStreamConfig {
  *
  * @since v3.3.1
  */
-export class RtcEngineConfig {
+export class RtcEngineContext {
   /**
    * The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
    * Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
@@ -1648,6 +1648,15 @@ export class RtcEngineConfig {
     }
   }
 }
+
+/**
+ * @deprecated
+ *
+ * Configurations for the [`RtcEngine`]{@link RtcEngine}.
+ *
+ * @since v3.3.1
+ */
+export class RtcEngineConfig extends RtcEngineContext {}
 
 /**
  * Recording configuration, which is set in [`startAudioRecordingWithConfig`]{@link startAudioRecordingWithConfig}.

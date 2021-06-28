@@ -12,7 +12,7 @@ import RtcEngine, {
   AudienceLatencyLevelType,
   ChannelProfile,
   ClientRole,
-  RtcEngineConfig,
+  RtcEngineContext,
   RtcLocalView,
   RtcRemoteView,
   VideoFrameRate,
@@ -67,8 +67,8 @@ export default class LiveStreaming extends Component<{}, State, any> {
         PermissionsAndroid.PERMISSIONS.CAMERA,
       ]);
     }
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
     this._addListeners();
 
