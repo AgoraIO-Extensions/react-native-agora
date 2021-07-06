@@ -1,25 +1,23 @@
 import React, { Component, Fragment } from 'react';
 import {
+  Alert,
   Button,
   PermissionsAndroid,
   Platform,
   StyleSheet,
-  View,
-  Alert,
-  TextInput,
   Text,
+  TextInput,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
-  RtcEngineConfig,
+  DataStreamConfig,
+  RtcEngineContext,
   RtcLocalView,
-  VideoFrameRate,
-  VideoOutputOrientationMode,
-  VideoRenderMode,
-  AudienceLatencyLevelType,
   RtcRemoteView,
+  VideoRenderMode,
 } from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
@@ -38,12 +36,15 @@ export default class LiveStreaming extends Component<{}, State, any> {
     super(props);
     this.state = { isJoin: false };
   }
+
   onPressSend = async () => {
     const { message } = this.state;
     if (!message) {
       return;
     }
-    const streamId = await this._engine?.createDataStreamWithConfig({});
+    const streamId = await this._engine?.createDataStreamWithConfig(
+      new DataStreamConfig(true, true)
+    );
 
     await this._engine?.sendStreamMessage(streamId!, message);
     this.setState({ message: '' });
@@ -62,8 +63,8 @@ export default class LiveStreaming extends Component<{}, State, any> {
         PermissionsAndroid.PERMISSIONS.CAMERA,
       ]);
     }
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
     this._addListeners();
 
@@ -72,7 +73,7 @@ export default class LiveStreaming extends Component<{}, State, any> {
 
     // make myself a broadcaster
     await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await this._updateClientRole(ClientRole.Broadcaster);
+    await this._engine.setClientRole(ClientRole.Broadcaster);
 
     // Set audio route to speaker
     await this._engine.setDefaultAudioRoutetoSpeakerphone(true);
@@ -133,27 +134,6 @@ export default class LiveStreaming extends Component<{}, State, any> {
         );
       }
     );
-  };
-
-  _updateClientRole = async (role: ClientRole) => {
-    let option;
-    if (role === ClientRole.Broadcaster) {
-      await this._engine?.setVideoEncoderConfiguration({
-        dimensions: {
-          width: 640,
-          height: 360,
-        },
-        frameRate: VideoFrameRate.Fps30,
-        orientationMode: VideoOutputOrientationMode.Adaptative,
-      });
-      // enable camera/mic, this will bring up permission dialog for first time
-      await this._engine?.enableLocalAudio(true);
-      await this._engine?.enableLocalVideo(true);
-    } else {
-      // You have to provide client role options if set to audience
-      option = { audienceLatencyLevel: AudienceLatencyLevelType.LowLatency };
-    }
-    await this._engine?.setClientRole(role, option);
   };
 
   render() {

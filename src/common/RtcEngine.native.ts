@@ -14,6 +14,7 @@ import {
   LiveTranscoding,
   RhythmPlayerConfig,
   RtcEngineConfig,
+  RtcEngineContext,
   UserInfo,
   VideoEncoderConfiguration,
   WatermarkOptions,
@@ -148,7 +149,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *    - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
   static async create(appId: string): Promise<RtcEngine> {
-    return RtcEngine.createWithConfig(new RtcEngineConfig(appId));
+    return RtcEngine.createWithContext(new RtcEngineContext(appId));
   }
 
   /**
@@ -181,7 +182,9 @@ export default class RtcEngine implements RtcEngineInterface {
     appId: string,
     areaCode: AreaCode
   ): Promise<RtcEngine> {
-    return RtcEngine.createWithConfig(new RtcEngineConfig(appId, { areaCode }));
+    return RtcEngine.createWithContext(
+      new RtcEngineContext(appId, { areaCode: [areaCode] })
+    );
   }
 
   /**
@@ -201,9 +204,46 @@ export default class RtcEngine implements RtcEngineInterface {
    * - The error code, if the method call fails.
    *   - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
-  static async createWithConfig(config: RtcEngineConfig) {
+  static async createWithConfig(config: RtcEngineConfig): Promise<RtcEngine> {
+    return this.createWithContext(config);
+  }
+
+  /**
+   * Creates an [`RtcEngine`]{@link RtcEngine} instance.
+   *
+   * @since v3.3.1.
+   *
+   * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
+   *
+   * @note
+   * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
+   * - The Agora RTC Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app for now.
+   *
+   * @param context Configurations for the [`RtcEngine`]{@link RtcEngine} instance. For details, see [`RtcEngineContext`]{@link RtcEngineContext}.
+   * @return
+   * - The [`RtcEngine`]{@link RtcEngine} instance, if the method call succeeds.
+   * - The error code, if the method call fails.
+   *   - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
+   */
+  static async createWithContext(
+    context: RtcEngineContext
+  ): Promise<RtcEngine> {
     if (engine) return engine;
-    await RtcEngine._callMethod('create', { config, appType: 8 });
+    let areaCode: number | undefined;
+    if (context.areaCode) {
+      let code = 0;
+      context.areaCode.forEach((value) => {
+        code |= value;
+      });
+      areaCode = code;
+    }
+    await RtcEngine._callMethod('create', {
+      config: {
+        ...context,
+        areaCode: areaCode,
+      },
+      appType: 8,
+    });
     engine = new RtcEngine();
     return engine;
   }
@@ -1659,7 +1699,6 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('getEffectDuration', { filePath });
   }
 
-
   /**
    * Gets the playback position of the audio effect file.
    *
@@ -2587,7 +2626,6 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-
   /**
    * Disables the virtual metronome.
    *
@@ -2923,7 +2961,6 @@ export default class RtcEngine implements RtcEngineInterface {
    * This method does not support data reliability. If the receiver receives a data packet five seconds or more after it was sent, the SDK directly discards the data.
    *
    * @param config The configurations for the data stream.
-   *
    *
    * @return
    * - Returns the stream ID if you successfully create the data stream.

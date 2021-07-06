@@ -11,11 +11,11 @@
 import React from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   SectionList,
+  StyleSheet,
   Text,
-  View,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
