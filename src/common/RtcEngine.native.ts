@@ -400,7 +400,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * When the connection between the client and Agora server is interrupted due to poor network conditions,
    * the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [`RejoinChannelSuccess`]{@link RtcEngineEvents.RejoinChannelSuccess} callback on the local client.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Once the user joins the channel (switches to another channel), the user publishes the local audio and video streams and automatically subscribes to the audio and video streams of all the other users in the channel.
+   * Subscribing incurs all associated usage costs. To unsubscribe, set the `options` parameter or call the `mute` methods accordingly.
    *
    * **Note**
    *
@@ -722,7 +723,8 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically subscribes to the audio and video streams
+   * of all the other users in the channel. Subscribing incurs all associated usage costs. To unsubscribe, set the `options` parameter or call the `mute` methods accordingly.
    *
    * **Note**
    *
@@ -973,17 +975,28 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * Stops or resumes publishing the local audio stream.
-   * A successful [`muteLocalAudioStream`]{@link muteLocalAudioStream} method call triggers the [`UserMuteAudio`]{@link RtcEngineEvents.UserMuteAudio} callback on the remote client.
+   *
+   * As of v3.4.5, this method only sets the publishing state of the audio stream in the channel of `RtcEngine`.
+   *
+   * A successful method call triggers the [`UserMuteAudio`]{@link RtcEngineEvents.UserMuteAudio} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time. If you create multiple channels,
+   * ensure that you only call `muteLocalAudioStream(false)` in one channel; otherwise, the method call fails,
+   * and the SDK returns `-5 (ERR_REFUSED)`.
    *
    * **Note**
+   * - This method does not change the usage state of the audio-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel` joinChannel]{@link } and [`setClientRole`]{@link setClientRole} methods. For details, see Set the Publishing State.
    *
-   * - When `muted` is set as `true`, this method does not affect any ongoing audio recording, because it does not disable the microphone.
-   * - If you call [`setChannelProfile`]{@link setChannelProfile} and [`setClientRole`]{@link setClientRole} after this method, the SDK resets whether or not to stop publishing the local audio according to the channel profile and user role.
-   * Therefore, Agora recommends calling this method after the `setChannelProfile` and `setClientRole` methods.
    *
    * @param muted Sets whether to stop publishing the local audio stream.
    *  - `true`: Stop publishing the local audio stream.
-   *  - `false`: (Default) Resume publishing the local audio stream.
+   *  - `false`: Resume publishing the local audio stream.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
    */
   muteLocalAudioStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalAudioStream', { muted });
@@ -1157,18 +1170,27 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops or resumes publishing the local video stream.
    *
-   * A successful [`muteLocalVideoStream`]{@link muteLocalVideoStream} method call triggers the [`UserMuteVideo`]{@link RtcEngineEvents.UserMuteVideo} callback on the remote client.
+   * As of v3.4.5, this method only sets the publishing state of the video stream in the channel of `RtcEngine`.
+   *
+   * A successful method call triggers the [`UserMuteVideo`]{@link RtcEngineEvents.UserMuteVideo} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time. If you create multiple channels,
+   * ensure that you only call `muteLocalVideoStream(false)` in one channel; otherwise,
+   * the method call fails, and the SDK returns `-5 (ERR_REFUSED)`.
+   *
    *
    * **Note**
-   *
-   * - This method executes faster than the `enableLocalVideo` method, which controls the sending of the local video stream.
-   * - When `mute` is set as `true`, this method does not affect any ongoing video recording, because it does not disable the camera.
-   * - You can call this method either before or after joining a channel. If you call [`setChannelProfile`]{@link setChannelProfile} and [`setClientRole`]{@link setClientRole} after this method, the SDK resets whether or not to stop publishing the local video according to the channel profile and user role.
-   * Therefore, Agora recommends calling this method after the `setChannelProfile` and `setClientRole` methods.
+   * - This method does not change the usage state of the video-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link joinChannel} and [`setClientRole`]{@link setClientRole} methods. For details, see Set the Publishing State.
    *
    * @param muted Sets whether to stop publishing the local video stream.
    *  - `true`: Stop publishing the local video stream.
-   *  - `false`: (Default) Resume publishing the local video stream.
+   *  - `false`: Resume publishing the local video stream.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
    */
   muteLocalVideoStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalVideoStream', { muted });
@@ -2471,10 +2493,17 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
    *
-   * All users in the same channel must use the same encryption mode and encryption key. After a user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
+   * After a user leaves the channel, the SDK automatically disables the built-in encryption. To re-enable the built-in encryption, call this method before the user joins the channel again.
+   *
+   * As of v3.4.5, Agora recommends using either the `AES128GCM2` or `AES256GCM2` encryption mode, both of which support adding a salt and are more secure.
+   * For details, see *Media Stream Encryption*.
+   *
+   * **Warning**
+   * All users in the same channel must use the same encryption mode, encryption key, and salt; otherwise, users cannot communicate with each other.
    *
    * **Note**
-   * If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
+   * - To enhance security, Agora recommends using a new key and salt every time you enable the media stream encryption.
    *
    * @param enabled Whether to enable the built-in encryption.
    * - `true`: Enable the built-in encryption.

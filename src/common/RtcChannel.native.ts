@@ -233,7 +233,11 @@ export default class RtcChannel implements RtcChannelInterface {
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Compared with the [`joinChannel`]{@link RtcEngine.joinChannel} method in the `RtcEngine` class, this method supports joining multiple channels at a time by creating multiple IChannel objects
+   * and then calling `joinChannel` in each RtcChannel object.
+   *
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically
+   * subscribes to the audio and video streams of all the other users in the channel. Subscribing incurs all associated usage costs. To unsubscribe, set the options parameter or call the mute methods accordingly.
    *
    * @param token The token generated at your server.
    * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
@@ -275,7 +279,12 @@ export default class RtcChannel implements RtcChannelInterface {
    * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Compared with the [`joinChannelWithUserAccount`]{@link RtcEngine..joinChannelWithUserAccount} method in the `RtcEngine` class, this method supports
+   * joining multiple channels at a time by creating multiple RtcChannel objects and then calling `joinChannelWithUserAccount` in each RtcChannel object.
+   *
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically subscribes to
+   * the audio and video streams of all the other users in the channel.
+   * Subscribing incurs all associated usage costs. To unsubscribe, set the options parameter or call the mute methods accordingly.
    *
    * @param token The token generated at your server.
    * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
@@ -353,10 +362,11 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('getConnectionState');
   }
 
-  /**
+  /** // TODO(doc)
    * Publishes the local stream to the channel.
    *
-   * @deprecated TODO(doc)
+   * @deprecated This method is deprecated as of v3.4.5.
+   * Use [`muteLocalAudioStream(false)`]{@link muteLocalAudioStream} or [`muteLocalVideoStream(false)`]{@link muteLocalVideoStream} instead.
    *
    * You must keep the following restrictions in mind when calling this method.
    * Otherwise, the SDK returns the [`Refused(-5)`]{@link ErrorCode.Refused}:
@@ -368,10 +378,11 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('publish');
   }
 
-  /**
+  /** // TODO(doc)
    * Stops publishing a stream to the channel.
    *
-   * @deprecated TODO(doc)
+   * @deprecated This method is deprecated as of v3.4.5.
+   * Use [`muteLocalAudioStream(true)`]{@link muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@Link muteLocalVideoStream} instead.
    *
    * If you call this method in a channel where you are not publishing streams, the SDK returns [`Refused(-5)`]{@link ErrorCode.Refused}.
    */
@@ -1004,16 +1015,63 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * TODO(doc)
-   * @param muted
+   * // TODO(doc)
+   * Stops or resumes publishing the local audio stream.
+   *
+   * @since v3.4.5
+   *
+   * This method only sets the publishing state of the audio stream in the channel of `RtcChannel`.
+   * A successful method call triggers the [`RemoteAudioStateChanged`]{@link RtcChannelEvents.RemoteAudioStateChanged} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time.
+   * If you create multiple channels, ensure that you only call `muteLocalAudioStream(false)` in one channel;
+   * otherwise, the method call fails, and the SDK returns `-5 (ERR_REFUSED)`.
+   *
+   * **Note**
+   * - This method does not change the usage state of the audio-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link RtcChannel.joinChannel} and [`setClientRole`]{@link RtcChannel.setClientRole} methods.
+   * For details, see *Set the Publishing State*.
+   *
+   * @param muted Sets whether to stop publishing the local audio stream:
+   * - true: Stop publishing the local audio stream.
+   * - false: Resume publishing the local audio stream.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
    */
   muteLocalAudioStream(muted: boolean): Promise<void> {
     return this._callMethod('muteLocalAudioStream', { muted });
   }
 
   /**
-   * TODO(doc)
-   * @param muted
+   * // TODO(doc)
+   * Stops or resumes publishing the local video stream.
+   *
+   * @since v3.4.5
+   *
+   * This method only sets the publishing state of the video stream in the channel of RtcChannel.
+   *
+   * A successful method call triggers the [`RemoteVideoStateChanged`]{@link RtcChannelEvents.RemoteVideoStateChanged} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time. If you create multiple channels,
+   * ensure that you only call `muteLocalVideoStream(false)` in one channel; otherwise, the method call fails,
+   * and the SDK returns `-5 (ERR_REFUSED)`.
+   *
+   * **Note**
+   * - This method does not change the usage state of the video-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link RtcChannel.joinChannel} and [`setClientRole`]{@link RtcChannel.setClientRole} methods.
+   * For details, see *Set the Publishing State*.
+   *
+   * @param muted Sets whether to stop publishing the local video stream:
+   * - true: Stop publishing the local video stream.
+   * - false: Resume publishing the local video stream.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
    */
   muteLocalVideoStream(muted: boolean): Promise<void> {
     return this._callMethod('muteLocalVideoStream', { muted });

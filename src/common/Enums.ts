@@ -121,7 +121,8 @@ export enum AudioLocalError {
    */
   EncodeFailure = 5,
   /**
-   * TODO(doc)
+   * // TODO(doc)
+   * 8: (Android only) The local audio capturing is interrupted by the system call.
    */
   Interrupted = 8,
 }
@@ -537,6 +538,10 @@ export enum AudioSampleRateType {
 export enum AudioScenario {
   /**
    * 0: Default audio scenario.
+   * // TODO DOC
+   * **Note**
+   *  If you run the iOS app on an M1 Mac, due to the hardware differences between M1 Macs, iPhones, and iPads,
+   * the default audio scenario of the Agora iOS SDK is the same as that of the Agora macOS SDK.
    */
   Default = 0,
   /**
@@ -1004,6 +1009,9 @@ export enum DegradationPreference {
 
 /**
  * Encryption mode.
+ *
+ * Agora recommends using either the `AES128GCM2` or `AES256GCM2` encryption mode,
+ * both of which support adding a salt and are more secure.
  */
 export enum EncryptionMode {
   /**
@@ -1012,7 +1020,7 @@ export enum EncryptionMode {
    */
   None = 0,
   /**
-   * 1: (Default) 128-bit AES encryption, XTS mode.
+   * 1: 128-bit AES encryption, XTS mode.
    */
   AES128XTS = 1,
   /**
@@ -1042,11 +1050,25 @@ export enum EncryptionMode {
    */
   AES256GCM = 6,
   /**
-   * TODO(doc)
+   * // TODO(doc)
+   *
+   * 7: (Default) 128-bit AES encryption, GCM mode.
+   *
+   * @since v3.4.5
+   *
+   * Compared to `AES128GCM` encryption mode, the `AES128GCM2` encryption mode is more secure and requires you to set the salt (`encryptionKdfSalt`).
+   *
    */
   AES128GCM2 = 7,
   /**
-   * TODO(doc)
+   * // TODO(doc)
+   *
+   * 8: 256-bit AES encryption, GCM mode.
+   *
+   * @since v3.4.5
+   *
+   * Compared to `AES256GCM` encryption mode, `AES256GCM2` encryption mode is more secure and requires you
+   * to set the salt (`encryptionKdfSalt`).
    */
   AES256GCM2 = 8,
 }
@@ -1717,7 +1739,10 @@ export enum RtmpStreamingErrorCode {
    */
   FormatNotSupported = 10,
   /**
-   * TODO(doc)
+   * // TODO(doc)
+   * The streaming has been stopped normally. After you call [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl} to stop streaming, the SDK returns this value.
+   *
+   * @since v3.4.5
    */
   UnPublishOK = 100,
 }
@@ -2501,7 +2526,10 @@ export enum RtmpStreamingEvent {
    */
   FailedLoadImage = 1,
   /**
-   * TODO(doc)
+   * // TODO(doc)
+   * The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
+   *
+   * @since v3.4.5
    */
   UrlAlreadyInUse = 2,
 }
