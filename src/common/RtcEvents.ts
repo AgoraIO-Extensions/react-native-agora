@@ -171,7 +171,7 @@ export type AudioVolumeCallback =
   (speakers: AudioVolumeInfo[], totalVolume: number) => void;
 export type UidCallback =
   /**
-   * @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
+   * @param uid The user ID of the most active remote speaker. A `uid` of 0 represents the local user.
    */
   (uid: number) => void;
 export type ElapsedCallback =
@@ -707,7 +707,7 @@ export interface RtcEngineEvents {
   AudioVolumeIndication: AudioVolumeCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by
    * calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
@@ -904,6 +904,9 @@ export interface RtcEngineEvents {
    * Reports the last mile network quality of each user in the channel once every two seconds.
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
+   *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
    *
    * @event NetworkQuality
    */
@@ -1559,7 +1562,7 @@ export interface RtcChannelEvents {
   RequestToken: EmptyCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
    *
@@ -1628,6 +1631,9 @@ export interface RtcChannelEvents {
    * Reports the last mile network quality of each user in the channel once every two seconds.
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
+   *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
    *
    * @event NetworkQuality
    */

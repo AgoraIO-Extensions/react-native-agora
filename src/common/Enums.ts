@@ -121,7 +121,6 @@ export enum AudioLocalError {
    */
   EncodeFailure = 5,
   /**
-   * // TODO(doc)
    * 8: (Android only) The local audio capturing is interrupted by the system call.
    */
   Interrupted = 8,
@@ -519,15 +518,15 @@ export enum AudioReverbType {
  */
 export enum AudioSampleRateType {
   /**
-   * 32000: (Default) 32000.
+   * 32000: (Default) 32000 Hz.
    */
   Type32000 = 32000,
   /**
-   * 44100: 44100.
+   * 44100: 44100 Hz.
    */
   Type44100 = 44100,
   /**
-   * 48000: 48000.
+   * 48000: 48000 Hz.
    */
   Type48000 = 48000,
 }
@@ -538,7 +537,7 @@ export enum AudioSampleRateType {
 export enum AudioScenario {
   /**
    * 0: Default audio scenario.
-   * // TODO DOC
+   *
    * **Note**
    *  If you run the iOS app on an M1 Mac, due to the hardware differences between M1 Macs, iPhones, and iPads,
    * the default audio scenario of the Agora iOS SDK is the same as that of the Agora macOS SDK.
@@ -1050,9 +1049,7 @@ export enum EncryptionMode {
    */
   AES256GCM = 6,
   /**
-   * // TODO(doc)
-   *
-   * 7: (Default) 128-bit AES encryption, GCM mode.
+   * 7: (Default) 128-bit GCM encryption, GCM mode.
    *
    * @since v3.4.5
    *
@@ -1061,9 +1058,7 @@ export enum EncryptionMode {
    */
   AES128GCM2 = 7,
   /**
-   * // TODO(doc)
-   *
-   * 8: 256-bit AES encryption, GCM mode.
+   * 8: 256-bit GCM encryption, GCM mode.
    *
    * @since v3.4.5
    *
@@ -1739,7 +1734,6 @@ export enum RtmpStreamingErrorCode {
    */
   FormatNotSupported = 10,
   /**
-   * // TODO(doc)
    * The streaming has been stopped normally. After you call [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl} to stop streaming, the SDK returns this value.
    *
    * @since v3.4.5
@@ -2526,7 +2520,6 @@ export enum RtmpStreamingEvent {
    */
   FailedLoadImage = 1,
   /**
-   * // TODO(doc)
    * The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
    *
    * @since v3.4.5

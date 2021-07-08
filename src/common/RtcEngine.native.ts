@@ -157,7 +157,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @deprecated
    *
-   * Deprecated as of v3.3.1. Use [`createWithConfig`]{@link createWithConfig} instead.
+   * Deprecated as of v3.3.1. Use [`createWithContext`]{@link createWithContext} instead.
    *
    * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
    *
@@ -190,6 +190,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Creates an [`RtcEngine`]{@link RtcEngine} instance.
    *
+   * @deprecated Deprecated as of v3.4.5. Use [`createWithContext`]{@link createWithContext} instead.
+   *
    * @since v3.3.1.
    *
    * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
@@ -211,7 +213,7 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Creates an [`RtcEngine`]{@link RtcEngine} instance.
    *
-   * @since v3.3.1.
+   * @since v3.4.5
    *
    * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
    *
@@ -411,7 +413,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * Ensure that the App ID used for creating the token is the same App ID used in the `create` method for creating an [`RtcEngine`]{@link RtcEngine} object. Otherwise, CDN live streaming may fail.
    *
-   * @param token The token generated at your server. See [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param channelName The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -467,7 +469,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * This method applies to the [`Audience`]{@link ClientRole.Audience} role in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel only.
    *
-   * @param token The token generated at your server. See [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param channelName Unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -731,7 +733,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * To ensure smooth communication, use the same parameter type to identify the user.
    * For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account.
    * If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
-   * @param token The token generated at your server. See [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param channelName The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -959,11 +961,13 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops or resumes subscribing to the audio streams of all remote users.
    *
-   * As of v3.3.1, after successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
    * **Note**
    * - Call this method after joining a channel.
-   * - See recommended settings in *Set the Subscribing State*.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteAudioStreams`]{@link setDefaultMuteAllRemoteAudioStreams}.
+   * Agora recommend not calling `muteAllRemoteAudioStreams` and `setDefaultMuteAllRemoteAudioStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
    *
    * @param muted Sets whether to stop subscribing to the audio streams of all remote users.
    *  - `true`: Stop subscribing to the audio streams of all remote users.
@@ -986,7 +990,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    * - This method does not change the usage state of the audio-capturing device.
-   * - Whether this method call takes effect is affected by the [`joinChannel` joinChannel]{@link } and [`setClientRole`]{@link setClientRole} methods. For details, see Set the Publishing State.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link joinChannel} and [`setClientRole`]{@link setClientRole} methods. For details, see Set the Publishing State.
    *
    *
    * @param muted Sets whether to stop publishing the local audio stream.
@@ -1153,11 +1157,13 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops or resumes subscribing to the video streams of all remote users.
    *
-   * As of v3.3.1, after successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
    *
    * **Note**
    * - Call this method after joining a channel.
-   * - See recommended settings in *Set the Subscribing State*.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteVideoStreams`]{@link setDefaultMuteAllRemoteVideoStreams}.
+   * Agora recommend not calling `muteAllRemoteVideoStreams` and `setDefaultMuteAllRemoteVideoStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
    *
    * @param muted Sets whether to stop subscribing to the video streams of all remote users.
    *   - `true`: Stop subscribing to the video streams of all remote users.
@@ -1360,7 +1366,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * Call this method after calling `startPreview`.
+   * Call this method after you start the local video preview and before you join the channel.
    */
   stopPreview(): Promise<void> {
     return RtcEngine._callMethod('stopPreview');
@@ -1411,9 +1417,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * Gets the playback position (ms) of the music file.
    *
    * **Note**
-   *
-   * Call this method after calling `startAudioMixing` and receiving the `AudioMixingStateChanged(Playing)` callback.
-   *
+   * - Call this method after calling `startAudioMixing` and receiving the `AudioMixingStateChanged(Playing)` callback.
+   * - If you need to call `getAudioMixingCurrentPosition` multiple times, ensure that the call interval is longer than 500 ms.
    * @returns
    * - Returns the current playback position of the audio mixing, if the method call is successful.
    * - Error codes: Failure.
@@ -2689,10 +2694,6 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops the audio recording on the client.
    *
-   * **Note**
-   *
-   * You can call this method before calling [`leaveChannel`]{@link leaveChannel};
-   * else, the recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
    */
   stopAudioRecording(): Promise<void> {
     return RtcEngine._callMethod('stopAudioRecording');
@@ -3327,6 +3328,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
    * - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierPreset`:
    *    - `setAudioEffectPreset`
+   *    - `setAudioEffectParameters`
    *    - `setLocalVoiceReverbPreset`
    *    - `setLocalVoiceChanger`
    *    - `setLocalVoicePitch`

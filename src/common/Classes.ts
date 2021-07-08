@@ -955,7 +955,6 @@ export class ChannelMediaOptions {
    */
   autoSubscribeVideo?: boolean;
   /**
-   * // TODO(doc)
    * Determines whether to publish the local audio stream when the user joins a channel:
    * - `true`: (Default) Publish.
    * - `false`: Do not publish.
@@ -967,8 +966,6 @@ export class ChannelMediaOptions {
    */
   publishLocalAudio?: boolean;
   /**
-   * // TODO(doc)
-   *
    * Determines whether to publish the local video stream when the user joins a channel:
    * - `true`: (Default) Publish.
    * - `false`: Do not publish.
@@ -1015,7 +1012,6 @@ export class EncryptionConfig {
    */
   encryptionKey?: string;
   /**
-   * // TODO(doc)
    * The salt. Agora recommends using OpenSSL to generate the salt on your server.
    * For details, see *Media Stream Encryption*.
    *
@@ -1677,9 +1673,10 @@ export class RtcEngineContext {
 }
 
 /**
- * @deprecated
  *
  * Configurations for the [`RtcEngine`]{@link RtcEngine}.
+ *
+ * @deprecated As of v3.4.5, this class is deprecated. Use [`RtcEngineContext`]{@link RtcEngineContext} instead.
  *
  * @since v3.3.1
  */
