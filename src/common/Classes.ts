@@ -955,11 +955,25 @@ export class ChannelMediaOptions {
    */
   autoSubscribeVideo?: boolean;
   /**
-   * TODO(doc)
+   * Determines whether to publish the local audio stream when the user joins a channel:
+   * - `true`: (Default) Publish.
+   * - `false`: Do not publish.
+   *
+   * This member serves a similar function to the [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} method.
+   * After the user joins the channel, you can call the `muteLocalAudioStream` method to set whether to publish the local audio stream in the channel.
+   *
+   * @since v3.4.5
    */
   publishLocalAudio?: boolean;
   /**
-   * TODO(doc)
+   * Determines whether to publish the local video stream when the user joins a channel:
+   * - `true`: (Default) Publish.
+   * - `false`: Do not publish.
+   *
+   * This member serves a similar function to the [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream} method.
+   * After the user joins the channel, you can call the `muteLocalVideoStream` method to set whether to publish the local video stream in the channel.
+   *
+   * @since v3.4.5
    */
   publishLocalVideo?: boolean;
 
@@ -985,7 +999,8 @@ export class ChannelMediaOptions {
  */
 export class EncryptionConfig {
   /**
-   * Encryption mode. The default encryption mode is `AES128XTS`. See [`EncryptionMode`]{@link EncryptionMode}.
+   * Encryption mode. The default encryption mode is `AES128GCM2`.
+   * See [`EncryptionMode`]{@link EncryptionMode}.
    */
   encryptionMode?: EncryptionMode;
   /**
@@ -997,7 +1012,15 @@ export class EncryptionConfig {
    */
   encryptionKey?: string;
   /**
-   * TODO(doc)
+   * The salt. Agora recommends using OpenSSL to generate the salt on your server.
+   * For details, see *Media Stream Encryption*.
+   *
+   * @since v3.4.5
+   *
+   * Note: This parameter is only valid when you set the encryption mode as `AES128GCM2` or `AES256GCM2`.
+   * Ensure that this parameter meets the following requirements:
+   * - Android: This parameter is not 0.
+   * - iOS: This parameter is not nil or 0, and the data length is 32 bytes.
    */
   encryptionKdfSalt?: number[];
 
@@ -1650,9 +1673,10 @@ export class RtcEngineContext {
 }
 
 /**
- * @deprecated
  *
  * Configurations for the [`RtcEngine`]{@link RtcEngine}.
+ *
+ * @deprecated As of v3.4.5, this class is deprecated. Use [`RtcEngineContext`]{@link RtcEngineContext} instead.
  *
  * @since v3.3.1
  */
