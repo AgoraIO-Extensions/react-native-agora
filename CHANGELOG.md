@@ -1,3 +1,10 @@
+## [3.4.6-special.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.6...v3.4.6-special.0) (2021-08-24)
+
+
+### Features
+
+* support setLocalAccessPoint ([6f3cff0](https://github.com/AgoraIO-Community/react-native-agora/commit/6f3cff0f10f72a082d9c129f2dcbf64fcd6182c9))
+
 ## [3.4.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.5...v3.4.6) (2021-07-23)
 
 
