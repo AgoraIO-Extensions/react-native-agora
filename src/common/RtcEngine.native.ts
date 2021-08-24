@@ -3150,6 +3150,10 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('uploadLogFile');
   }
 
+  setLocalAccessPoint(ips: string[], domain: string): Promise<void> {
+    return RtcEngine._callMethod('setLocalAccessPoint', { ips, domain });
+  }
+
   /**
    * Sets parameters for SDK preset audio effects.
    *
@@ -3464,6 +3468,8 @@ interface RtcEngineInterface
   setCloudProxy(proxyType: CloudProxyType): Promise<void>;
 
   uploadLogFile(): Promise<string>;
+
+  setLocalAccessPoint(ips: string[], domain: string): Promise<void>;
 }
 
 /**

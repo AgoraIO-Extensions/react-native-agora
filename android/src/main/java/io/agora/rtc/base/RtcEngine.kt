@@ -64,6 +64,8 @@ class IRtcEngine {
     fun setCloudProxy(params: Map<String, *>, callback: Callback)
 
     fun uploadLogFile(callback: Callback)
+
+    fun setLocalAccessPoint(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcUserInfoInterface {
@@ -517,6 +519,23 @@ class RtcEngineManager(
 
   override fun uploadLogFile(callback: Callback) {
     callback.resolve(engine) { it.uploadLogFile() }
+  }
+
+  override fun setLocalAccessPoint(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.setLocalAccessPoint(
+        arrayListOf<String>().apply {
+          (params["ips"] as? List<*>)?.let { list ->
+            list.forEach { item ->
+              (item as? String)?.let {
+                add(it)
+              }
+            }
+          }
+        },
+        params["domain"] as String
+      )
+    )
   }
 
   override fun registerLocalUserAccount(params: Map<String, *>, callback: Callback) {

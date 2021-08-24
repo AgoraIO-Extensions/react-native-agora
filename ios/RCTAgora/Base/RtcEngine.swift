@@ -83,6 +83,8 @@ protocol RtcEngineInterface:
     func setCloudProxy(_ params: NSDictionary, _ callback: Callback)
 
     func uploadLogFile(_ callback: Callback)
+    
+    func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -1123,5 +1125,16 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableRemoteSuperResolution((params["uid"] as! NSNumber).uintValue, enabled: params["enabled"] as! Bool))
+    }
+    
+    @objc func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback) {
+        let list = params["ips"] as! [Any]
+        var ips: [String] = []
+        for i in list.indices {
+            if let item = list[i] as? String {
+                ips.append(item)
+            }
+        }
+        callback.code(engine?.setLocalAccessPoint(ips, domain: params["domain"] as! String))
     }
 }
