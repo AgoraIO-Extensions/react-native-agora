@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
 
-import RtcEngine, { ChannelProfile, ClientRole } from 'react-native-agora';
+import RtcEngine, {
+  ChannelProfile,
+  ClientRole,
+  RtcEngineConfig,
+} from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
 
@@ -32,7 +36,9 @@ export default class StringUid extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.create(config.appId);
+    this._engine = await RtcEngine.createWithConfig(
+      new RtcEngineConfig(config.appId)
+    );
     this._addListeners();
 
     await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);

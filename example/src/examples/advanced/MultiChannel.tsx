@@ -13,6 +13,7 @@ import RtcEngine, {
   ChannelProfile,
   ClientRole,
   RtcChannel,
+  RtcEngineConfig,
   RtcLocalView,
   RtcRemoteView,
   VideoRemoteState,
@@ -56,7 +57,9 @@ export default class MultiChannel extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.create(config.appId);
+    this._engine = await RtcEngine.createWithConfig(
+      new RtcEngineConfig(config.appId)
+    );
 
     await this._engine.enableVideo();
     await this._engine.startPreview();
