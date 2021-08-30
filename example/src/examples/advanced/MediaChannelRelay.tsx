@@ -4,24 +4,21 @@ import {
   PermissionsAndroid,
   Platform,
   StyleSheet,
-  View,
-  TextInput,
   Text,
+  TextInput,
+  View,
 } from 'react-native';
 
 import RtcEngine, {
-  ChannelProfile,
-  ClientRole,
-  RtcEngineConfig,
-  RtcLocalView,
-  VideoFrameRate,
-  VideoOutputOrientationMode,
-  VideoRenderMode,
-  AudienceLatencyLevelType,
-  RtcRemoteView,
-  ChannelMediaRelayState,
   ChannelMediaRelayError,
   ChannelMediaRelayEvent,
+  ChannelMediaRelayState,
+  ChannelProfile,
+  ClientRole,
+  RtcEngineContext,
+  RtcLocalView,
+  RtcRemoteView,
+  VideoRenderMode,
 } from 'react-native-agora';
 
 const config = require('../../../agora.config.json');
@@ -41,6 +38,7 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
     super(props);
     this.state = { isJoin: false, isRelaying: false };
   }
+
   onPressRelay = async () => {
     const { anotherChannelName } = this.state;
     if (!anotherChannelName) {
@@ -78,8 +76,8 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
         PermissionsAndroid.PERMISSIONS.CAMERA,
       ]);
     }
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
     this._addListeners();
 
@@ -88,7 +86,7 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
 
     // make myself a broadcaster
     await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    await this._updateClientRole(ClientRole.Broadcaster);
+    await this._engine.setClientRole(ClientRole.Broadcaster);
 
     // Set audio route to speaker
     await this._engine.setDefaultAudioRoutetoSpeakerphone(true);
@@ -159,27 +157,6 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
         console.info('ChannelMediaRelayEvent', code);
       }
     );
-  };
-
-  _updateClientRole = async (role: ClientRole) => {
-    let option;
-    if (role === ClientRole.Broadcaster) {
-      await this._engine?.setVideoEncoderConfiguration({
-        dimensions: {
-          width: 640,
-          height: 360,
-        },
-        frameRate: VideoFrameRate.Fps30,
-        orientationMode: VideoOutputOrientationMode.Adaptative,
-      });
-      // enable camera/mic, this will bring up permission dialog for first time
-      await this._engine?.enableLocalAudio(true);
-      await this._engine?.enableLocalVideo(true);
-    } else {
-      // You have to provide client role options if set to audience
-      option = { audienceLatencyLevel: AudienceLatencyLevelType.LowLatency };
-    }
-    await this._engine?.setClientRole(role, option);
   };
 
   render() {

@@ -10,7 +10,7 @@ import {
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
-  RtcEngineConfig,
+  RtcEngineContext,
 } from 'react-native-agora';
 import RNFS from 'react-native-fs';
 import Item from '../component/Item';
@@ -48,8 +48,8 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
     this._addListeners();
 
@@ -148,7 +148,8 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
           1,
           1,
           100,
-          true
+          true,
+          0
         )
         .then(() => {
           this.setState({ playEffect: true });
