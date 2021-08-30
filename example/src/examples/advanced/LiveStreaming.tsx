@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Button,
   PermissionsAndroid,
   Platform,
   StyleSheet,
   View,
-  Alert,
 } from 'react-native';
 
 import RtcEngine, {
+  AudienceLatencyLevelType,
   ChannelProfile,
   ClientRole,
-  RtcEngineConfig,
+  RtcEngineContext,
   RtcLocalView,
+  RtcRemoteView,
   VideoFrameRate,
   VideoOutputOrientationMode,
   VideoRenderMode,
-  AudienceLatencyLevelType,
-  RtcRemoteView,
 } from 'react-native-agora';
 import Item from '../component/Item';
 
@@ -67,8 +67,8 @@ export default class LiveStreaming extends Component<{}, State, any> {
         PermissionsAndroid.PERMISSIONS.CAMERA,
       ]);
     }
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
     this._addListeners();
 

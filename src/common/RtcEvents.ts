@@ -13,7 +13,7 @@ import type {
 import type {
   AudioLocalError,
   AudioLocalState,
-  AudioMixingErrorCode,
+  AudioMixingReason,
   AudioMixingStateCode,
   AudioOutputRouting,
   AudioRemoteState,
@@ -171,7 +171,7 @@ export type AudioVolumeCallback =
   (speakers: AudioVolumeInfo[], totalVolume: number) => void;
 export type UidCallback =
   /**
-   * @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
+   * @param uid The user ID of the most active remote speaker. A `uid` of 0 represents the local user.
    */
   (uid: number) => void;
 export type ElapsedCallback =
@@ -323,10 +323,10 @@ export type RemoteAudioStatsCallback =
   (stats: RemoteAudioStats) => void;
 export type AudioMixingStateCallback =
   /**
-   * @param state The state code.
-   * @param errorCode The error code.
+   * @param state The current music file playback state. See [`AudioMixingStateCode`]{@link AudioMixingStateCode}.
+   * @param reason The reason for the change of the music file playback state. See [`AudioMixingReason`]{@link AudioMixingReason}.
    */
-  (state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void;
+  (state: AudioMixingStateCode, reason: AudioMixingReason) => void;
 export type SoundIdCallback =
   /**
    * @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
@@ -506,7 +506,7 @@ export type UploadLogResultCallback =
    * @param success Whether the log files are successfully uploaded:
    *  - `true`: Successfully upload the log files.
    *  - `false`: Fails to upload the log files. For details, see the reason parameter.
-   * @param reason The reason for the upload failure. See [`UploadErrorReason`]{@link enum.UploadErrorReason}.
+   * @param reason The reason for the upload failure. See [`UploadErrorReason`]{@link UploadErrorReason}.
    */
   (requestId: string, success: boolean, reason: UploadErrorReason) => void;
 
@@ -707,7 +707,7 @@ export interface RtcEngineEvents {
   AudioVolumeIndication: AudioVolumeCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by
    * calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
@@ -740,12 +740,6 @@ export interface RtcEngineEvents {
 
   /**
    * Occurs when a remote user stops/resumes sending the video stream.
-   *
-   * @deprecated
-   *
-   * This callback is deprecated. Use the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters for the same function:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
    *
    * The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream} method.
    *
@@ -911,6 +905,9 @@ export interface RtcEngineEvents {
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
    *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
+   *
    * @event NetworkQuality
    */
   NetworkQuality: NetworkQualityWithUidCallback;
@@ -975,12 +972,12 @@ export interface RtcEngineEvents {
   AudioMixingFinished: EmptyCallback;
 
   /**
-   * Occurs when the state of the local user's audio mixing file changes.
+   * Occurs when the playback state of the local user's music file changes.
    *
-   * When you call [`startAudioMixing`]{@link RtcEngine.startAudioMixing} and the state of audio mixing file changes, the Agora SDK triggers this callback.
-   * - When the audio mixing file plays, pauses playing, or stops playing, this callback returns `710`, `711`, or `713` in state, and `0` in errorCode.
-   * - When exceptions occur during playback, this callback returns `714` in state and an error in errorCode.
-   * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}.
+   * @since 3.4.2
+   *
+   * When the playback state of the local user's music file changes, the SDK triggers this callback and reports
+   * the current playback state and the reason for the change.
    *
    * @event AudioMixingStateChanged
    */
@@ -1127,11 +1124,6 @@ export interface RtcEngineEvents {
   /**
    * Occurs when a remote user stops/resumes sending the audio stream.
    *
-   * @deprecated
-   * Use the [`RemoteAudioStateChanged`]{@link RemoteAudioStateChanged} callback with the following parameters instead:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
-   *
    * The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} method.
    *
    * **Note**
@@ -1199,11 +1191,6 @@ export interface RtcEngineEvents {
   /**
    * Occurs when a remote user enables/disables the video module.
    *
-   * @deprecated
-   * This callback is deprecated and replaced by the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
-   *
    * Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.
    *
    * The SDK triggers this callback when the remote user enables or disables the video module by calling the [`enableVideo`]{@link RtcEngine.enableVideo} or [`disableVideo`]{@link RtcEngine.disableVideo} method.
@@ -1218,12 +1205,6 @@ export interface RtcEngineEvents {
 
   /**
    * Occurs when a remote user enables/disables the local video capture function.
-   *
-   * @deprecated
-   *
-   * This callback is deprecated and replaced by the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
    *
    * The SDK triggers this callback when the remote user resumes or stops capturing the video stream by
    * calling [`enableLocalVideo`]{@link RtcEngine.enableLocalVideo}.
@@ -1581,7 +1562,7 @@ export interface RtcChannelEvents {
   RequestToken: EmptyCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
    *
@@ -1650,6 +1631,9 @@ export interface RtcChannelEvents {
    * Reports the last mile network quality of each user in the channel once every two seconds.
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
+   *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
    *
    * @event NetworkQuality
    */

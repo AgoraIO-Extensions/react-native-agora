@@ -1,30 +1,31 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
+  Alert,
   Button,
+  FlatList,
   PermissionsAndroid,
   Platform,
   StyleSheet,
-  View,
   Text,
-  FlatList,
-  Alert,
+  View,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import RtcEngine, {
-  ChannelProfile,
-  ClientRole,
-  RtcEngineConfig,
-  AudioProfile,
-  AudioScenario,
-  VoiceBeautifierPreset,
   AudioEffectPreset,
   AudioEqualizationBandFrequency,
+  AudioProfile,
   AudioReverbType,
+  AudioScenario,
+  ChannelProfile,
+  ClientRole,
+  RtcEngineContext,
+  VoiceBeautifierPreset,
 } from 'react-native-agora';
 import VoiceChangeConfig, {
   FreqOptions,
   ReverbKeyOptions,
 } from '../config/VoiceChangeConfig';
+
 const config = require('../../../agora.config.json');
 
 interface State {
@@ -82,8 +83,8 @@ export default class VoiceChange extends Component<{}, State, any> {
         PermissionsAndroid.PERMISSIONS.CAMERA,
       ]);
     }
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
 
     this._addListeners();

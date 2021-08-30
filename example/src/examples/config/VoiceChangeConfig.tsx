@@ -1,8 +1,8 @@
 import {
-  VoiceBeautifierPreset,
   AudioEffectPreset,
   AudioEqualizationBandFrequency,
   AudioReverbType,
+  VoiceBeautifierPreset,
 } from 'react-native-agora';
 
 export default [
