@@ -452,15 +452,15 @@ export enum AudioReverbType {
  */
 export enum AudioSampleRateType {
   /**
-   * 32000: 32 kHz.
+   * 32000: (Default) 32000.
    */
   Type32000 = 32000,
   /**
-   * 44100: 44.1 kHz.
+   * 44100: 44100.
    */
   Type44100 = 44100,
   /**
-   * 48000: 48 kHz.
+   * 48000: 48000.
    */
   Type48000 = 48000,
 }
@@ -590,7 +590,7 @@ export enum AudioVoiceChanger {
 }
 
 /**
- * The camera capturer configuration.
+ * The camera capture preference.
  */
 export enum CameraCaptureOutputPreference {
   /**
@@ -606,9 +606,11 @@ export enum CameraCaptureOutputPreference {
    */
   Preview = 2,
   /**
-   * 3: Internal use only
+   * 3: Allows you to customize the width and height of the video image captured by the local camera.
+   *
+   * @since v3.3.1
    */
-  Unkown = 3,
+  Manual = 3,
 }
 
 /**
@@ -858,6 +860,10 @@ export enum ConnectionChangedReason {
    * [`Reconnecting`]{@link ConnectionStateType.Reconnecting}
    */
   KeepAliveTimeout = 14,
+  /**
+   * 15: In cloud proxy mode, the proxy server connection is interrupted.
+   */
+  ProxyServerInterrupted = 15,
 }
 
 /**
@@ -945,6 +951,18 @@ export enum EncryptionMode {
    * @since v3.1.2.
    */
   SM4128ECB = 4,
+  /**
+   * 5: 128-bit AES encryption, GCM mode.
+   *
+   * @since v3.3.1
+   */
+  AES128GCM = 5,
+  /**
+   * 6: 256-bit AES encryption, GCM mode.
+   *
+   * @since v3.3.1
+   */
+  AES256GCM = 6,
 }
 
 /**
@@ -1165,6 +1183,12 @@ export enum ErrorCode {
    * 156: The format of the RTMP or RTMPS stream URL is not supported. Check whether the URL format is correct.
    */
   PublishStreamFormatNotSuppported = 156,
+  /**
+   * 157: The extension library is not integrated, such as the library for enabling deep-learning noise reduction.
+   *
+   * @since v3.3.1
+   */
+  ModuleNotFound = 157,
   /**
    * 1001: Fails to load the media engine.
    */
@@ -1402,6 +1426,18 @@ export enum LocalVideoStreamError {
    * 5: The local video encoding fails.
    */
   EncodeFailure = 5,
+  /**
+   * 6: (iOS only) The application is in the background.
+   *
+   * @since v3.3.1
+   */
+  CaptureInBackground = 6,
+  /**
+   * 7: (iOS only) The application is running in Slide Over, Split View, or Picture in Picture mode.
+   *
+   * @since v3.3.1
+   */
+  CaptureMultipleForegroundApps = 7,
 }
 
 /**
@@ -2624,6 +2660,16 @@ export enum VoiceBeautifierPreset {
   ChatBeautifierVitality = 0x01010300,
 
   /**
+   * Singing beautifier effect.
+   *
+   * - If you call [`setVoiceBeautifierPreset(SingingBeautifier)`]{@link setVoiceBeautifierPreset}, you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends not using `setVoiceBeautifierPreset(SingingBeautifier)` to process a female-sounding voice; otherwise, you may experience vocal distortion.
+   * - If you call [`setVoiceBeautifierParameters(SINGING_BEAUTIFIER, param1, param2)`]{@link setVoiceBeautifierParameters}, you can beautify a male- or female-sounding voice and add a reverberation effect.
+   *
+   * @since v3.3.1
+   */
+  SingingBeautifier = 0x01020100,
+
+  /**
    * A more vigorous voice.
    */
   TimbreTransformationVigorous = 0x01030100,
@@ -2681,4 +2727,182 @@ export enum AudienceLatencyLevelType {
    * 2: (Default) Ultra low latency.
    */
   UltraLowLatency = 2,
+}
+
+/**
+ * Log Level.
+ *
+ * @since v3.3.1.
+ */
+export enum LogLevel {
+  /**
+   * 0: Do not output any log.
+   */
+  None = 0x0000,
+  /**
+   * 0x0001: (Default) Output logs of the FATAL, ERROR, WARN and INFO level. We recommend setting your log filter as this level.
+   */
+  Info = 0x0001,
+  /**
+   * 0x0002: Output logs of the FATAL, ERROR and WARN level.
+   */
+  Warn = 0x0002,
+  /**
+   * 0x0004: Output logs of the FATAL and ERROR level.
+   */
+  Error = 0x0004,
+  /**
+   * 0x0008: Output logs of the FATAL level.
+   */
+  Fatal = 0x0008,
+}
+
+/**
+ * Capture brightness level.
+ *
+ * @since v3.1.1.
+ */
+export enum CaptureBrightnessLevelType {
+  /** -1: The SDK does not detect the brightness level of the video image. Wait a few seconds to get the brightness level from `CaptureBrightnessLevelType` in the next callback. */
+  Invalid = -1,
+  /** 0: The brightness level of the video image is normal. */
+  Normal = 0,
+  /** 1: The brightness level of the video image is too bright. */
+  Bright = 1,
+  /** 2: The brightness level of the video image is too dark. */
+  Dark = 2,
+}
+
+/**
+ * The reason why the super-resolution algorithm is not successfully enabled.
+ */
+export enum SuperResolutionStateReason {
+  /**
+   * 0: The super-resolution algorithm is successfully enabled.
+   */
+  Success = 0,
+  /**
+   * 1: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+   */
+  StreamOverLimitation = 1,
+  /**
+   * 2: Another user is already using the super-resolution algorithm.
+   */
+  UserCountOverLimitation = 2,
+  /**
+   * 3: The device does not support the super-resolution algorithm.
+   */
+  DeviceNotSupported = 3,
+}
+
+/**
+ * The reason for the upload failure.
+ *
+ * @since v3.3.1.
+ */
+export enum UploadErrorReason {
+  /**
+   * 0: The log file is successfully uploaded.
+   */
+  Success = 0,
+  /**
+   * 1: Network error. Check the network connection and call [`uploadLogFile`]{@link uploadLogFile} again to upload the log file.
+   */
+  NetError = 1,
+  /**
+   * 0: Agora 服务器错误，请稍后尝试。
+   */
+  ServerError = 2,
+}
+
+/**
+ * The cloud proxy type.
+ *
+ * @since v3.3.1.
+ */
+export enum CloudProxyType {
+  /**
+   * Do not use the cloud proxy.
+   */
+  None = 0,
+  /**
+   * The cloud proxy for the UDP protocol.
+   */
+  UDP = 1,
+  /**
+   * The cloud proxy for the TCP (encryption) protocol.
+   */
+  TCP = 2,
+}
+
+/**
+ * Quality of experience (QoE) of the local user when receiving a remote audio stream.
+ *
+ * @since v3.3.1.
+ */
+export enum ExperienceQualityType {
+  /**
+   * 0: QoE of the local user is good.
+   */
+  Good = 0,
+  /**
+   * 1: QoE of the local user is poor.
+   */
+  Bad = 1,
+}
+
+/**
+ * The reason for poor QoE of the local user when receiving a remote audio stream.
+ *
+ * @since v3.3.1.
+ */
+export enum ExperiencePoorReason {
+  /**
+   * 0: No reason, indicating good QoE of the local user.
+   */
+  None = 0,
+  /**
+   * 1: The remote user's network quality is poor.
+   */
+  RemoteNetworkQualityPoor = 1,
+  /**
+   * 2: The local user's network quality is poor.
+   */
+  LocalNetworkQualityPoor = 2,
+  /**
+   * 4: The local user's Wi-Fi or mobile network signal is weak.
+   */
+  WirelessSignalPoor = 4,
+  /**
+   * 8: The local user enables both Wi-Fi and bluetooth, and their signals interfere with each other. As a result, audio transmission quality is undermined.
+   */
+  WifiBluetoothCoexist = 8,
+}
+
+/**
+ * The options for SDK preset voice conversion effects.
+ *
+ * @since v3.3.1.
+ */
+export enum VoiceConversionPreset {
+  /**
+   * 0: Turn off voice conversion effects and use the original voice.
+   */
+  Off = 0,
+  /**
+   * 50397440: A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
+   */
+  Neutral = 50397440,
+  /**
+   * 50397696: A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
+   */
+  Sweet = 50397696,
+  /**
+   * 50397952: A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
+   */
+  Solid = 50397952,
+  /**
+   * 50397952: A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
+   */
+  Bass = 50397952,
 }

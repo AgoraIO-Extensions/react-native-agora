@@ -13,6 +13,7 @@ import {
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
+  RtcEngineConfig,
   RtcLocalView,
   RtcRemoteView,
 } from 'react-native-agora';
@@ -50,7 +51,9 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.create(config.appId);
+    this._engine = await RtcEngine.createWithConfig(
+      new RtcEngineConfig(config.appId)
+    );
     this._addListeners();
 
     await this._engine.enableVideo();

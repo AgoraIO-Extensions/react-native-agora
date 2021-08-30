@@ -4,7 +4,7 @@ libs="ios/RCTAgora/Libs"
 
 mkdir -p $temp
 
-version=$(grep "AgoraRtcEngine_iOS_Crypto" react-native-agora.podspec | grep -o '\d.\d.\d' | sed 's/\./_/g')
+version=$(grep "AgoraRtcEngine_iOS" react-native-agora.podspec | grep -o '\d.\d.\d' | sed 's/\./_/g')
 echo $zipName "$version"
 
 if [ ! -f $temp/$zipName"$version".zip ]; then
@@ -13,22 +13,13 @@ if [ ! -f $temp/$zipName"$version".zip ]; then
 fi
 
 echo "start unzip SDK..."
-unzip -o -q $temp/$zipName"$version".zip "**/*_Dynamic.zip" -d $temp/$zipName"$version"
-if [ $? -ne 0 ]; then
-  echo "unzip SDK failed, retry..."
-  unzip -o -q $temp/$zipName"$version".zip "**/ALL_ARCHITECTURE/*" -d $temp/$zipName"$version"
-else
-  echo "unzip SDK success, start unzip dynamic framework..."
-  for zip in $(find $temp/$zipName"$version" -maxdepth 5 -iname '*_Dynamic.zip'); do
-    unzip -o -q "$zip" "**/ALL_ARCHITECTURE/*" -d $temp/$zipName"$version"
-  done
-fi
+unzip -o -q $temp/$zipName"$version".zip "**/libs/*" -d $temp/$zipName"$version"
 
 echo "start transfer dynamic framework to $libs..."
 rm -rf $libs
 mkdir -p $libs
 
-for framework in $(find $temp/$zipName"$version" -maxdepth 5 -iname '*.framework'); do
+for framework in $(find $temp/$zipName"$version" -maxdepth 5 -iname '*.xcframework'); do
   mv -f "$framework" $libs
 done
 

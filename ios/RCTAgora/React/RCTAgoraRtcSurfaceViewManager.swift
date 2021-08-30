@@ -52,9 +52,9 @@ class RtcView: RtcSurfaceView {
         return "bounds"
     }
 
-    @objc func setRenderMode(_ renderMode: Int) {
+    @objc func setRenderMode(_ renderMode: NSNumber) {
         if let engine = getEngine?() {
-            setRenderMode(engine, renderMode)
+            setRenderMode(engine, renderMode.uintValue)
         }
     }
 
@@ -64,13 +64,13 @@ class RtcView: RtcSurfaceView {
             channel = getChannel?(channelId)
         }
         if let engine = getEngine?() {
-            setData(engine, channel, data["uid"] as! Int)
+            setData(engine, channel, (data["uid"] as! NSNumber).uintValue)
         }
     }
 
-    @objc func setMirrorMode(_ mirrorMode: Int) {
+    @objc func setMirrorMode(_ mirrorMode: NSNumber) {
         if let engine = getEngine?() {
-            setMirrorMode(engine, mirrorMode)
+            setMirrorMode(engine, mirrorMode.uintValue)
         }
     }
 }

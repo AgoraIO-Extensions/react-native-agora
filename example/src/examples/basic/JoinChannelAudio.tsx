@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import {
-  View,
-  TextInput,
-  PermissionsAndroid,
-  StyleSheet,
   Button,
+  PermissionsAndroid,
   Platform,
+  StyleSheet,
+  TextInput,
+  View,
 } from 'react-native';
-
-import RtcEngine, { ChannelProfile, ClientRole } from 'react-native-agora';
+import RtcEngine, {
+  ChannelProfile,
+  ClientRole,
+  RtcEngineConfig,
+} from 'react-native-agora';
+import RNFS from 'react-native-fs';
+import Item from '../component/Item';
 
 const config = require('../../../agora.config.json');
 
@@ -17,6 +22,7 @@ interface State {
   isJoined: boolean;
   openMicrophone: boolean;
   enableSpeakerphone: boolean;
+  playEffect: boolean;
 }
 
 export default class JoinChannelAudio extends Component<{}, State, any> {
@@ -29,6 +35,7 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       isJoined: false,
       openMicrophone: true,
       enableSpeakerphone: true,
+      playEffect: false,
     };
   }
 
@@ -41,7 +48,9 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.create(config.appId);
+    this._engine = await RtcEngine.createWithConfig(
+      new RtcEngineConfig(config.appId)
+    );
     this._addListeners();
 
     await this._engine.enableAudio();
@@ -73,6 +82,21 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       config.uid
     );
   };
+  _onChangeRecordingVolume = (value: number) => {
+    this._engine?.adjustRecordingSignalVolume(value * 400);
+  };
+
+  _onChangePlaybackVolume = (value: number) => {
+    this._engine?.adjustPlaybackSignalVolume(value * 400);
+  };
+
+  _toggleInEarMonitoring = (isEnabled: boolean) => {
+    this._engine?.enableInEarMonitoring(isEnabled);
+  };
+
+  _onChangeInEarMonitoringVolume = (value: number) => {
+    this._engine?.setInEarMonitoringVolume(value * 400);
+  };
 
   _leaveChannel = async () => {
     await this._engine?.leaveChannel();
@@ -102,12 +126,46 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       });
   };
 
+  _switchEffect = () => {
+    const { playEffect } = this.state;
+    if (playEffect) {
+      this._engine
+        ?.stopEffect(1)
+        .then(() => {
+          this.setState({ playEffect: false });
+        })
+        .catch((err) => {
+          console.warn('stopEffect', err);
+        });
+    } else {
+      this._engine
+        ?.playEffect(
+          1,
+          Platform.OS === 'ios'
+            ? `${RNFS.MainBundlePath}/Sound_Horizon.mp3`
+            : '/assets/Sound_Horizon.mp3',
+          -1,
+          1,
+          1,
+          100,
+          true
+        )
+        .then(() => {
+          this.setState({ playEffect: true });
+        })
+        .catch((err) => {
+          console.warn('playEffect', err);
+        });
+    }
+  };
+
   render() {
     const {
       channelId,
       isJoined,
       openMicrophone,
       enableSpeakerphone,
+      playEffect,
     } = this.state;
     return (
       <View style={styles.container}>
@@ -123,16 +181,39 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
             title={`${isJoined ? 'Leave' : 'Join'} channel`}
           />
         </View>
-        <View style={styles.float}>
-          <Button
-            onPress={this._switchMicrophone}
-            title={`Microphone ${openMicrophone ? 'on' : 'off'}`}
-          />
-          <Button
-            onPress={this._switchSpeakerphone}
-            title={enableSpeakerphone ? 'Speakerphone' : 'Earpiece'}
-          />
-        </View>
+        {isJoined && (
+          <View style={styles.float}>
+            <Item
+              title={`Microphone ${openMicrophone ? 'on' : 'off'}`}
+              btnOnPress={this._switchMicrophone}
+            />
+            <Item
+              title={enableSpeakerphone ? 'Speakerphone' : 'Earpiece'}
+              btnOnPress={this._switchSpeakerphone}
+            />
+            <Item
+              title={`${playEffect ? 'Stop' : 'Play'} effect`}
+              btnOnPress={this._switchEffect}
+            />
+            <Item
+              title={'RecordingVolume'}
+              isShowSlider
+              onSliderValueChange={this._onChangeRecordingVolume}
+            />
+            <Item
+              title={'PlaybackVolume'}
+              isShowSlider={true}
+              onSliderValueChange={this._onChangePlaybackVolume}
+            />
+            <Item
+              title={'InEar Monitoring Volume'}
+              isShowSlider
+              isShowSwitch
+              onSwitchValueChange={this._toggleInEarMonitoring}
+              onSliderValueChange={this._onChangeInEarMonitoringVolume}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -143,9 +224,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   float: {
+    width: '100%',
     position: 'absolute',
-    right: 0,
-    bottom: 0,
+    alignItems: 'flex-start',
+    bottom: 20,
   },
   top: {
     width: '100%',
