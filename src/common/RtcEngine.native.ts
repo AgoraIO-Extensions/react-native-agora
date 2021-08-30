@@ -1,7 +1,21 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
+import type {
+  BeautyOptions,
+  CameraCapturerConfiguration,
+  ChannelMediaRelayConfiguration,
+  ClientRoleOptions,
+  EncryptionConfig,
+  LastmileProbeConfig,
+  LiveInjectStreamConfig,
+  LiveTranscoding,
+  UserInfo,
+  VideoEncoderConfiguration,
+  WatermarkOptions,
+} from './Classes';
 import {
   AreaCode,
+  AudioEffectPreset,
   AudioEqualizationBandFrequency,
   AudioProfile,
   AudioRecordingQuality,
@@ -11,25 +25,16 @@ import {
   AudioScenario,
   AudioSessionOperationRestriction,
   AudioVoiceChanger,
-  BeautyOptions,
-  CameraCapturerConfiguration,
-  ChannelMediaRelayConfiguration,
   ChannelProfile,
   ClientRole,
   ConnectionStateType,
-  EncryptionConfig,
   EncryptionMode,
-  LastmileProbeConfig,
-  LiveInjectStreamConfig,
-  LiveTranscoding,
   LogFilter,
   StreamFallbackOptions,
-  UserInfo,
   UserPriority,
-  VideoEncoderConfiguration,
   VideoStreamType,
-  WatermarkOptions,
-} from '../Types';
+  VoiceBeautifierPreset,
+} from './Enums';
 import type { Listener, RtcEngineEvents, Subscription } from './RtcEvents';
 import RtcChannel from './RtcChannel.native';
 
@@ -108,6 +113,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @returns
    * - The `RtcEngine` instance, if the method call succeeds.
    * - The error code, if the method call fails.
+   *    - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
   static async create(appId: string): Promise<RtcEngine> {
     return RtcEngine.createWithAreaCode(appId, AreaCode.GLOB);
@@ -134,6 +140,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @returns
    * - The `RtcEngine` instance, if the method call succeeds.
    * - The error code, if the method call fails.
+   *   - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
   static async createWithAreaCode(
     appId: string,
@@ -243,24 +250,42 @@ export default class RtcEngine implements RtcEngineInterface {
    * The Agora [`RtcEngine`]{@link RtcEngine} differentiates channel profiles and applies different optimization algorithms accordingly.
    * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for live interactive video streaming.
    * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   setChannelProfile(profile: ChannelProfile): Promise<void> {
     return RtcEngine._callMethod('setChannelProfile', { profile });
   }
 
   /**
-   * Sets the role of a user ([`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only).
+   * Sets the role of a user in live interactive streaming.
    *
-   * This method sets the role of a user, such as a host or an audience (default), before joining a channel.
-   *
-   * This method can be used to switch the user role after a user joins a channel. In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, when a user switches user roles after joining a channel, a successful call of this method triggers the following callbacks:
+   * You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
    * - The local client: [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged}.
    * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}).
    *
-   * @param role Sets the role of a user.
+   * **Note**
+   * - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
+   * - As of v3.2.0, this method can set the user level in addition to the user role.
+   *    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
+   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
+   *
+   * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
+   * @param options? The detailed options of a user, including user level. See {@link ClientRoleOptions}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
-  setClientRole(role: ClientRole): Promise<void> {
-    return RtcEngine._callMethod('setClientRole', { role });
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void> {
+    return RtcEngine._callMethod('setClientRole', { role, options });
   }
 
   /**
@@ -278,6 +303,8 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * When the connection between the client and Agora server is interrupted due to poor network conditions,
    * the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [`RejoinChannelSuccess`]{@link RtcEngineEvents.RejoinChannelSuccess} callback on the local client.
+   *
+   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
    *
    * **Note**
    *
@@ -302,6 +329,16 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * The uid is represented as a 32-bit unsigned integer in the SDK. Since unsigned integers are not supported by Java, the uid is handled as a 32-bit signed integer and larger numbers are interpreted as negative numbers in Java.
    * If necessary, the uid can be converted to a 64-bit integer through “uid&0xffffffffL”.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected. Possible reasons:
+   *        - You have created an `RtcChannel` object with the same channel name.
+   *        - You have joined and published a stream in a channel created by the `RtcChannel` object.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   joinChannel(
     token: string | undefined | null,
@@ -325,6 +362,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * After the user successfully switches to another channel, the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} and [`JoinChannelSuccess`]{@link RtcEngineEvents.JoinChannelSuccess} callbacks are triggered to
    * indicate that the user has left the original channel and joined a new one.
    *
+   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   *
    * **Note**
    *
    * This method applies to the [`Audience`]{@link ClientRole.Audience} role in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel only.
@@ -338,6 +377,16 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 5(Refused): The request is rejected, probably because the user is not an audience.
+   *    - 7(NotInitialized): The SDK is not initialized.
+   *    - 102(InvalidChannelId): The channel name is invalid.
+   *    - 113(NotInChannel): The user is not in the channel.
    */
   switchChannel(
     token: string | undefined | null,
@@ -363,7 +412,14 @@ export default class RtcEngine implements RtcEngineInterface {
    * **Note**
    * - If you call [`destroy`]{@link destroy} immediately after calling [`leaveChannel`]{@link leaveChannel}, the [`leaveChannel`]{@link leaveChannel} process interrupts, and the SDK does not trigger the [`LeaveChannel`]{@link RtcEngineEvents.LeaveChannel} callback.
    *
-   * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removeInjectStreamUrl`]{@link removeInjectStreamUrl} method.
+   * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removePublishStreamUrl`]{@link removePublishStreamUrl} method.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   leaveChannel(): Promise<void> {
     return RtcEngine._callMethod('leaveChannel');
@@ -379,6 +435,13 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
    * @param token The new token.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   renewToken(token: string): Promise<void> {
     return RtcEngine._callMethod('renewToken', { token });
@@ -429,6 +492,12 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param rating Rating of the call. The value is between 1 (lowest score) and 5 (highest score).
    * If you set a value out of this range, the [`InvalidArgument(-2)`]{@link ErrorCode.InvalidArgument} error occurs.
    * @param description (Optional) The description of the rating. The string length must be less than 800 bytes.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    */
   rate(callId: string, rating: Rate, description?: string): Promise<void> {
     return RtcEngine._callMethod('rate', { callId, rating, description });
@@ -439,6 +508,12 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param callId ID of the call retrieved from the [`getCallId`]{@link getCallId} method.
    * @param description (Optional) The description of the complaint. The string length must be less than 800 bytes.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    */
   complain(callId: string, description: string): Promise<void> {
     return RtcEngine._callMethod('complain', { callId, description });
@@ -529,6 +604,8 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
    *
+   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   *
    * **Note**
    *
    * To ensure smooth communication, use the same parameter type to identify the user.
@@ -550,6 +627,14 @@ export default class RtcEngine implements RtcEngineInterface {
    * - All numeric characters: 0 to 9.
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected.
+   *
    */
   joinChannelWithUserAccount(
     token: string | undefined | null,
@@ -656,11 +741,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
+   * - This method affects the audio module and can be called after calling [`leaveChannel`]{@link leaveChannel}.
    * You can call this method either before or after joining a channel.
    *
-   * - This method resets the engine and takes some time to take effect.
-   * We recommend using the following API methods to control the audio engine modules separately:
+   * - This method enables/disables the audio module and takes some time to take effect.
+   * We recommend using the following API methods to control the audio module separately:
    *
    *  - [`enableLocalAudio`]{@link enableLocalAudio}: Whether to enable the microphone to create the local audio stream.
    *
@@ -681,11 +766,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * - This method affects the internal engine and can be called after calling [`leaveChannel`]{@link leaveChannel}.
+   * - This method affects the audio module and can be called after calling [`leaveChannel`]{@link leaveChannel}.
    * You can call this method either before or after joining a channel.
    *
-   * - This method resets the internal engine and takes some time to take effect.
-   * We recommend using the following API methods to control the audio engine modules separately:
+   * - This method enables/disables the audio module and takes some time to take effect.
+   * We recommend using the following API methods to control the audio module separately:
    *
    *  - [`enableLocalAudio`]{@link enableLocalAudio}: Whether to enable the microphone to create the local audio stream.
    *
@@ -712,7 +797,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * The recommended value is 3.
    * @param report_vad
    * - `true`: Enable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} callback reports the voice activity status of the local user.
-   * - `false`: (Default) Disable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} callback does not report the voice activity status of the local user,
+   * - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the `vad` parameter of the [`AudioVolumeIndication`]{@link RtcEngineEvents.AudioVolumeIndication} callback does not report the voice activity status of the local user,
    * except for scenarios where the engine automatically detects the voice activity of the local user.
    */
   enableAudioVolumeIndication(
@@ -741,7 +826,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * - This method is different from the [`muteLocalAudioStream`]{@link muteLocalAudioStream} method:
+   * This method is different from the [`muteLocalAudioStream`]{@link muteLocalAudioStream} method:
    *
    *  - [`enableLocalAudio`]{@link enableLocalAudio}: Disables/Re-enables the local audio capture and processing.
    * If you disable or re-enable local audio recording using [`enableLocalAudio`]{@link enableLocalAudio}, the local user may hear a pause in the remote audio playback.
@@ -810,11 +895,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - You must call this method before calling [`joinChannel`]{@link joinChannel}.
    * - In the [`Communication`]{@link ChannelProfile.Communication} and [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profiles, the bitrates may be different from your settings due to network self-adaptation.
-   * - In scenarios requiring high-quality audio, we recommend setting profile as [`MusicHighQuality(4)`]{@link AudioProfile.MusicHighQuality} and scenario as [`GameStreaming(3)`]{@link AudioScenario.GameStreaming}.
-   * For example, for music education scenarios.
+   * - In scenarios requiring high-quality audio, we recommend setting profile as `ShowRoom(4)` and scenario as `GameStreaming(3)`. For example, for music education scenarios.
    *
-   * @param profile Sets the sample rate, bitrate, encoding mode, and the number of channels.
-   * @param scenario Sets the audio application scenarios. Under different audio scenarios, the device uses different volume tracks, i.e. either the in-call volume or the media volume.
+   * @param profile Sets the sample rate, bitrate, encoding mode, and the number of channels. See [`AudioProfile`]{@link AudioProfile}.
+   * @param scenario Sets the audio application scenarios. See [`AudioScenario`]{@link AudioScenario}. Under different audio scenarios, the device uses different volume tracks, i.e. either the in-call volume or the media volume.
+   * For details, see [What is the difference between the in-call volume and the media volume?](https://docs.agora.io/en/Voice/faq/system_volume).
    */
   setAudioProfile(
     profile: AudioProfile,
@@ -993,6 +1078,12 @@ export default class RtcEngine implements RtcEngineInterface {
    * - `true`: Enable image enhancement.
    * - `false`: Disable image enhancement.
    * @param options The image enhancement options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 4(NotSupported): The system version is earlier than Android 4.4, which does not support this function.
+   *
    */
   setBeautyEffectOptions(
     enabled: boolean,
@@ -1113,7 +1204,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the current playback position of the audio mixing, if the method call is successful.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingCurrentPosition(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingCurrentPosition');
@@ -1128,7 +1219,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    *  @returns
    * - Returns the audio mixing duration, if the method call is successful.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingDuration(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingDuration');
@@ -1141,7 +1232,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingPlayoutVolume(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingPlayoutVolume');
@@ -1154,7 +1245,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getAudioMixingPublishVolume(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingPublishVolume');
@@ -1244,6 +1335,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param cycle Sets the number of playback loops:
    * - Positive integer: Number of playback loops.
    * - -1: Infinite playback loops.
+   *
    */
   startAudioMixing(
     filePath: string,
@@ -1275,7 +1367,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @returns
    * - Returns the volume, if the method call is successful.
-   * - < 0: Failure.
+   * - Error codes: Failure.
    */
   getEffectsVolume(): Promise<number> {
     return RtcEngine._callMethod('getEffectsVolume');
@@ -1429,6 +1521,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Sets the local voice changer option.
    *
+   * @deprecated Deprecated as of v3.2.0. Use `setAudioEffectPreset` or `setVoiceBeautifierPreset` instead.
+   *
    * **Note**
    *
    * Do not use this method together with [`setLocalVoiceReverbPreset`]{@link setLocalVoiceReverbPreset}, or the method called earlier does not take effect.
@@ -1488,6 +1582,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Sets the preset local voice reverberation effect.
    *
+   * @deprecated Deprecated as of v3.2.0. Use `setAudioEffectPreset` or `setVoiceBeautifierPreset` instead.
+   *
    * **Note**
    *
    * - Do not use this method together with [`setLocalVoiceReverb`]{@link setLocalVoiceReverb}.
@@ -1546,22 +1642,32 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Publishes the local stream to the CDN.
+   * Publishes the local stream to a specified CDN streaming URL.
    *
-   * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback on the local client to report the state of adding a local stream to the CDN.
+   * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN.
+   *
+   * This SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback on the local client to report the state of adding a local stream to the CDN.
    *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
    * - Ensure that the user joins a channel before calling this method.
-   * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
-   * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes.
+   * - This method adds only one CDN streaming URL each time it is called.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
+   *
+   * @param url The CDN streaming URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes.
    * The URL address must not contain special characters, such as Chinese language characters.
-   * @param transcodingEnabled Sets whether transcoding is enabled/disabled.
+   * @param transcodingEnabled Whether to enable transcoding.
    * If you set this parameter as `true`, ensure that you call [`setLiveTranscoding`]{@link setLiveTranscoding} before this method.
    *
    * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
    * - `false`: Disable transcoding.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): Invalid parameter, usually because the URL address is null or the string length is 0.
+   *    - 7(NotInitialized): You have not initialized `RtcEngine` when publishing the stream.
    */
   addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
     return RtcEngine._callMethod('addPublishStreamUrl', {
@@ -1571,17 +1677,18 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Removes an RTMP stream from the CDN.
+   * Removes an RTMP or RTMPS stream from the CDN.
    *
-   * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
+   * This method removes the CDN streaming URL (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
    * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback.
    *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - Ensure that the user joins a channel before calling this method.
    * - This method applies to [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} only.
-   * - This method removes only one stream RTMP URL address each time it is called.
-   * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes.
+   * - This method removes only one CDN streaming URL each time it is called.
+   *
+   * @param url The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes.
    * The URL address must not contain special characters, such as Chinese language characters.
    */
   removePublishStreamUrl(url: string): Promise<void> {
@@ -1601,6 +1708,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in Push Streams to CDN.
    * - Ensure that you call [`setClientRole`]{@link setClientRole} and set the user role as the host.
    * - Ensure that you call [`setLiveTranscoding`]{@link setLiveTranscoding} before calling  [`addPublishStreamUrl`]{@link addPublishStreamUrl}.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
    * @param transcoding Sets the CDN live audio/video transcoding settings.
    */
@@ -1732,8 +1840,13 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - This method is invalid for audience users in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
    *
+   * - Settings of `setAudioProfile` and `setChannelProfile` affect the call result of `setEnableSpeakerphone`. The following are scenarios where `setEnableSpeakerphone` does not take effect:
+   *    - If you set `scenario` as `GameStreaming`, no user can change the audio playback route.
+   *    - If you set `scenario` as `Default` or `ShowRoom`, the audience cannot change the audio playback route. If there is only one host is in the channel, the host cannot change the audio playback route either.
+   *    - If you set `scenario` as `Education`, the audience cannot change the audio playback route.
+   *
    * @param enabled Sets whether to route the audio to the speakerphone or earpiece:
-   * - `true`: Route the audio to the speakerphone.
+   * - `true`: Route the audio to the speakerphone. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the speakerphone.
    * - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
    */
   setEnableSpeakerphone(enabled: boolean): Promise<void> {
@@ -2064,7 +2177,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
    *
    * **Note**
-   * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
    * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
    *
    *
@@ -2072,6 +2185,13 @@ export default class RtcEngine implements RtcEngineInterface {
    * - `true`: Enable the built-in encryption.
    * - `false`: Disable the built-in encryption.
    * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): An invalid parameter is used. Set the parameter with a valid value.
+   *    - 4(NotSupported):  The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
     return RtcEngine._callMethod('enableEncryption', { enabled, config });
@@ -2188,6 +2308,14 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Supported audio codec type: AAC.
    * - Supported video codec type: H264(AVC).
    * @param config The `LiveInjectStreamConfig` object which contains the configuration information for the added voice or video stream.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
+   *    - 3(NotReady): The user is not in the channel.
+   *    - 4(NotSupported): The channel profile is not `LiveBroadcasting`. Call the `setChannelProfile` method and set the channel profile to `LiveBroadcasting` before calling this method.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   addInjectStreamUrl(
     url: string,
@@ -2414,7 +2542,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @return
    * - Returns the stream ID, if the method call is successful.
-   * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
+   * - Error codes: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return RtcEngine._callMethod('createDataStream', { reliable, ordered });
@@ -2470,6 +2598,8 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
+   * The method applies to the iOS platform only. You can call this method either before or after joining a channel.
+   *
    * The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
    *
    * You can call this method at any time to return the control of the audio sessions to the SDK.
@@ -2494,6 +2624,151 @@ export default class RtcEngine implements RtcEngineInterface {
    */
   getNativeHandle(): Promise<number> {
     return RtcEngine._callMethod('getNativeHandle');
+  }
+
+  /**
+   * Sets parameters for SDK preset audio effects.
+   *
+   * @since v3.2.0.
+   *
+   * Call this method to set the following parameters for the local user who send an audio stream:
+   * - 3D voice effect: Sets the cycle period of the 3D voice effect.
+   * - Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches.
+   * Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively.
+   *
+   * After setting parameters, all users in the channel can hear the relevant effect.
+   *
+   * You can call this method directly or after `setAudioEffectPreset`. If you call this method after `setAudioEffectPreset`, ensure that you set the preset parameter of `setAudioEffectPreset` to `RoomAcoustics3DVoice` or `PitchCorrection` and
+   * then call this method to set the same enumerator; otherwise, this method overrides `setAudioEffectPreset`.
+   *
+   * **Note**
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the scenario parameter
+   * to `GameStreaming(3)` before calling this method.
+   * - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)` or `AUDIO_PROFILE_IOT(6)`; otherwise, this method call fails.
+   * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
+   * - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectParameters`:
+   *   - `setAudioEffectPreset`
+   *   - `setVoiceBeautifierPreset`
+   *   - `setLocalVoiceReverbPreset`
+   *   - `setLocalVoiceChanger`
+   *   - `setLocalVoicePitch`
+   *   - `setLocalVoiceEqualization`
+   *   - `setLocalVoiceReverb`
+   *
+   * @param preset The options for SDK preset audio effects:
+   * - 3D voice effect: `RoomAcoustics3DVoice`.
+   *   - Call `setAudioProfile` and set the profile parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)` before setting this enumerator;
+   * otherwise, the enumerator setting does not take effect.
+   *   - If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
+   * - Pitch correction effect: `PitchCorrection`. To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   *
+   * @param param1
+   * - If you set preset to `RoomAcoustics3DVoice`, the `param1` sets the cycle period of the 3D voice effect.
+   * The value range is [1,60] and the unit is a second. The default value is 10 seconds, indicating that the voice moves around you every 10 seconds.
+   * - If you set preset to `PitchCorrection`, `param1` sets the basic mode of the pitch correction effect:
+   *   - 1: (Default) Natural major scale.
+   *   - 2: Natural minor scale.
+   *   - 3: Japanese pentatonic scale.
+   *
+   * @param param2
+   * - If you set `preset` to `RoomAcoustics3DVoice`, you need to set `param2` to `0`.
+   * - If you set `preset` to `PitchCorrection`, `param2` sets the tonic pitch of the pitch correction effect:
+   *   - 1: A
+   *   - 2: A#
+   *   - 3: B
+   *   - 4: (Default) C
+   *   - 5: C#
+   *   - 6: D
+   *   - 7: D#
+   *   - 8: E
+   *   - 9: F
+   *   - 10: F#
+   *   - 11: G
+   *   - 12: G#
+   *
+   * @returns
+   * - 0: Success.
+   * - Error codes: Failure.
+   */
+  setAudioEffectParameters(
+    preset: AudioEffectPreset,
+    param1: number,
+    param2: number
+  ): Promise<void> {
+    return RtcEngine._callMethod('setAudioEffectParameters', {
+      preset,
+      param1,
+      param2,
+    });
+  }
+
+  /**
+   * Sets an SDK preset audio effect.
+   *
+   * @since v3.2.0.
+   *
+   * Call this method to set an SDK preset audio effect for the local user who sends an audio stream.
+   * This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect.
+   *
+   * You can set different audio effects for different scenarios.
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the scenario parameter to `GameStreaming(3)` before calling this method.
+   *
+   * **Note**
+   * - You can call this method either before or after joining a channel.
+   * - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
+   * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
+   * - If you call this method and set the preset parameter to enumerators except `RoomAcoustics3DVoice` or `PitchCorrection`, do not call `setAudioEffectParameters`; otherwise, `setAudioEffectParameters` overrides this method.
+   * - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectPreset`:
+   *    - `setVoiceBeautifierPreset`
+   *    - `setLocalVoiceReverbPreset`
+   *    - `setLocalVoiceChanger`
+   *    - `setLocalVoicePitch`
+   *    - `setLocalVoiceEqualization`
+   *    - `setLocalVoiceReverb`
+   *
+   * @param preset The options for SDK preset audio effects. See [`AudioEffectPreset`]{@link AudioEffectPreset}.
+   *
+   * @returns
+   * - 0: Success.
+   * - Error codes: Failure.
+   */
+  setAudioEffectPreset(preset: AudioEffectPreset): Promise<void> {
+    return RtcEngine._callMethod('setAudioEffectPreset', { preset });
+  }
+
+  /**
+   * Sets an SDK preset voice beautifier effect.
+   *
+   * @since v3.2.0.
+   *
+   * Call this method to set an SDK preset voice beautifier effect for the local user who sends an audio stream.
+   * After setting a voice beautifier effect, all users in the channel can hear the effect.
+   *
+   * You can set different voice beautifier effects for different scenarios.
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the scenario parameter to `GameStreaming(3)` and the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
+   *
+   * **Note**
+   * - You can call this method either before or after joining a channel.
+   * - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
+   * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
+   * - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierPreset`:
+   *    - `setAudioEffectPreset`
+   *    - `setLocalVoiceReverbPreset`
+   *    - `setLocalVoiceChanger`
+   *    - `setLocalVoicePitch`
+   *    - `setLocalVoiceEqualization`
+   *    - `setLocalVoiceReverb`
+   *
+   * @param preset The options for SDK preset voice beautifier effects. See [`VoiceBeautifierPreset`]{@link VoiceBeautifierPreset}.
+   *
+   * @returns
+   * - 0: Success.
+   * - Error codes: Failure.
+   */
+  setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void> {
+    return RtcEngine._callMethod('setVoiceBeautifierPreset', { preset });
   }
 }
 
@@ -2526,7 +2801,7 @@ interface RtcEngineInterface
 
   setChannelProfile(profile: ChannelProfile): Promise<void>;
 
-  setClientRole(role: ClientRole): Promise<void>;
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>;
 
   joinChannel(
     token: string | undefined | null,
@@ -2751,6 +3026,16 @@ interface RtcVoiceChangerInterface {
   ): Promise<void>;
 
   setLocalVoiceReverb(reverbKey: AudioReverbType, value: number): Promise<void>;
+
+  setAudioEffectPreset(preset: AudioEffectPreset): Promise<void>;
+
+  setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void>;
+
+  setAudioEffectParameters(
+    preset: AudioEffectPreset,
+    param1: number,
+    param2: number
+  ): Promise<void>;
 }
 
 /**

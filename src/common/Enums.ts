@@ -389,7 +389,7 @@ export enum AudioReverbPreset {
    */
   FX_VOCAL_CONCERT = 0x00100002,
   /**
-   * The reverberation style typical of an uncle’s voice.
+   * The reverberation style typical of a middle-aged man’s voice.
    */
   FX_UNCLE = 0x00100003,
   /**
@@ -470,29 +470,41 @@ export enum AudioSampleRateType {
  */
 export enum AudioScenario {
   /**
-   * 0: Default.
+   * 0: Default audio scenario.
    */
   Default = 0,
   /**
-   * 1: Entertainment scenario, supporting voice during gameplay.
+   * 1: Entertainment scenario where users need to frequently switch the user role.
    */
   ChatRoomEntertainment = 1,
   /**
-   * 2: Education scenario, prioritizing fluency and stability.
+   * 2: Education scenario where users want smoothness and stability.
    */
   Education = 2,
   /**
-   * 3: Live gaming scenario, enabling the gaming audio effects in the speaker mode in a live broadcast scenario. Choose this scenario for high-fidelity music playback.
+   * 3: High-quality audio chatroom scenario where hosts mainly play music.
    */
   GameStreaming = 3,
   /**
-   * 4: Showroom scenario, optimizing the audio quality with external professional equipment.
+   * 4: Showroom scenario where a single host wants high-quality audio.
    */
   ShowRoom = 4,
   /**
-   * 5: Gaming scenario.
+   * 5: Gaming scenario for group chat that only contains the human voice.
    */
   ChatRoomGaming = 5,
+  /**
+   * IoT (Internet of Things) scenario where users use IoT devices with low power consumption.
+   *
+   * @since v3.2.0.
+   */
+  IOT = 6,
+  /**
+   * Meeting scenario that mainly contains the human voice.
+   *
+   * @since v3.2.0.
+   */
+  MEETING = 8,
 }
 
 /**
@@ -1150,7 +1162,7 @@ export enum ErrorCode {
    */
   PublishStreamNotFound = 155,
   /**
-   * 156: The format of the RTMP stream URL is not supported. Check whether the URL format is correct.
+   * 156: The format of the RTMP or RTMPS stream URL is not supported. Check whether the URL format is correct.
    */
   PublishStreamFormatNotSuppported = 156,
   /**
@@ -1525,7 +1537,7 @@ export enum NetworkType {
  */
 export enum RtmpStreamingErrorCode {
   /**
-   * 0: The RTMP streaming publishes successfully.
+   * 0: The RTMP or RTMPS streaming publishes successfully.
    */
   OK = 0,
   /**
@@ -1535,11 +1547,11 @@ export enum RtmpStreamingErrorCode {
    */
   InvalidParameters = 1,
   /**
-   * 2: The RTMP streaming is encrypted and cannot be published.
+   * 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
    */
   EncryptedStreamNotAllowed = 2,
   /**
-   * 3: Timeout for the RTMP streaming. Call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the streaming again.
+   * 3: Timeout for the RTMP or RTMPS streaming. Call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the streaming again.
    */
   ConnectionTimeout = 3,
   /**
@@ -1547,11 +1559,11 @@ export enum RtmpStreamingErrorCode {
    */
   InternalServerError = 4,
   /**
-   * 5: An error occurs in the RTMP server.
+   * 5: An error occurs in the CDN server.
    */
   RtmpServerError = 5,
   /**
-   * 6: The RTMP streaming publishes too frequently.
+   * 6: The RTMP or RTMPS streaming publishes too frequently.
    */
   TooOften = 6,
   /**
@@ -1563,36 +1575,36 @@ export enum RtmpStreamingErrorCode {
    */
   NotAuthorized = 8,
   /**
-   * 9: Agora’s server fails to find the RTMP streaming.
+   * 9: Agora’s server fails to find the RTMP or RTMPS streaming.
    */
   StreamNotFound = 9,
   /**
-   * 10: The format of the RTMP streaming URL is not supported. Check whether the URL format is correct.
+   * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
    */
   FormatNotSupported = 10,
 }
 
 /**
- * The RTMP streaming state.
+ * The RTMP or RTMPS streaming state.
  */
 export enum RtmpStreamingState {
   /**
-   * 0: The RTMP streaming has not started or has ended. This state is also triggered after you
-   * remove an RTMP address from the CDN by calling [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
+   * 0: The RTMP or RTMPS streaming has not started or has ended. This state is also triggered after you
+   * remove an RTMP or RTMPS stream* from the CDN by calling [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
    */
   Idle = 0,
   /**
-   * 1: The SDK is connecting to Agora’s streaming server and the RTMP server.
+   * 1: The SDK is connecting to Agora’s streaming server and the CDN server.
    * This state is triggered after you call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method.
    */
   Connecting = 1,
   /**
-   * 2: The RTMP streaming is being published. The SDK successfully publishes the RTMP streaming and returns this state.
+   * 2: The RTMP or RTMPS streaming is being published. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
    */
   Running = 2,
   /**
-   * 3: The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted,
-   * the SDK attempts to resume RTMP streaming and returns this state.
+   * 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted,
+   * the SDK attempts to resume RTMP or RTMPS streaming and returns this state.
    *
    * - If the SDK successfully resumes the streaming, [`Running`]{@link RtmpStreamingState.Running} returns.
    * - If the streaming does not resume within 60 seconds or server errors occur,
@@ -1602,8 +1614,8 @@ export enum RtmpStreamingState {
    */
   Recovering = 3,
   /**
-   * 4: The RTMP streaming fails. See the errorCode parameter for the detailed error information.
-   * You can also call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the RTMP streaming again.
+   * 4: The RTMP or RTMPS streaming fails. See the errorCode parameter for the detailed error information.
+   * You can also call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the RTMP or RTMPS streaming again.
    */
   Failure = 4,
 }
@@ -2205,17 +2217,29 @@ export enum WarningCode {
    */
   AdmInconsistentDevices = 1042,
   /**
-   * 1051: Audio Device Module: howling is detected.
+   * 1051: Audio Device Module: Howling is detected.
    */
   ApmHowling = 1051,
   /**
-   * 1052: Audio Device Module: the device is in the glitch state.
+   * 1052: Audio Device Module: The device is in the glitch state.
    */
   AdmGlitchState = 1052,
   /**
    * 1053: Audio processing module: A residual echo is detected, which may be caused by the belated scheduling of system threads or the signal overflow.
    */
   ApmResidualEcho = 1053,
+  /**
+   * 1610: Super-resolution warning: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+   */
+  SuperResolutionStreamOverLimitation = 1610,
+  /**
+   * 1611: Super-resolution warning: Another user is already using the super-resolution algorithm.
+   */
+  SuperResolutionUserCountOverLimitation = 1611,
+  /**
+   * 1612: Super-resolution warning: The device does not support the super-resolution algorithm.
+   */
+  SuperResolutionDeviceNotSupported = 1612,
 }
 
 /**
@@ -2331,11 +2355,11 @@ export enum StreamSubscribeState {
 }
 
 /**
- * Events during the RTMP streaming.
+ * Events during the RTMP or RTMPS streaming.
  */
 export enum RtmpStreamingEvent {
   /**
-   * 1: An error occurs when you add a background image or a watermark image to the RTMP stream.
+   * 1: An error occurs when you add a background image or a watermark image to the RTMP or RTMPS stream.
    */
   FailedLoadImage = 1,
 }
@@ -2364,4 +2388,297 @@ export enum AudioSessionOperationRestriction {
    * The SDK does not configure the audio session anymore.
    */
   All = 1 << 7,
+}
+
+/**
+ * The options for SDK preset audio effects.
+ */
+export enum AudioEffectPreset {
+  /**
+   * Turn off audio effects and use the original voice.
+   */
+  AudioEffectOff = 0x00000000,
+
+  /**
+   * An audio effect typical of a KTV venue.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling setAudioProfile and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  RoomAcousticsKTV = 0x02010100,
+  /**
+   * An audio effect typical of a concert hall.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  RoomAcousticsVocalConcert = 0x02010200,
+
+  /**
+   * An audio effect typical of a recording studio.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  RoomAcousticsStudio = 0x02010300,
+
+  /**
+   * An audio effect typical of a vintage phonograph.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  RoomAcousticsPhonograph = 0x02010400,
+
+  /**
+   * A virtual stereo effect that renders monophonic audio as stereo audio.
+   *
+   * **Note**
+   *
+   * Call `setAudioProfile` and set the profile parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)`
+   * before setting this enumerator; otherwise, the enumerator setting does not take effect.
+   */
+  RoomAcousticsVirtualStereo = 0x02010500,
+
+  /**
+   * A more spatial audio effect.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  RoomAcousticsSpacial = 0x02010600,
+
+  /**
+   * A more ethereal audio effect.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  RoomAcousticsEthereal = 0x02010700,
+
+  /**
+   * A 3D voice effect that makes the voice appear to be moving around the user.
+   * The default cycle period of the 3D voice effect is 10 seconds. To change the cycle period, call `setAudioEffectParameters` after this method.
+   *
+   * **Note**
+   *
+   * - Call `setAudioProfile` and set the profile parameter to `MusicStandardStereo(3)` or `MusicHighQualityStereo(5)` before setting this enumerator;
+   * otherwise, the enumerator setting does not take effect.
+   * - If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
+   */
+  RoomAcoustics3DVoice = 0x02010800,
+
+  /**
+   * The voice of a middle-aged man.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  VoiceChangerEffectUncle = 0x02020100,
+
+  /**
+   * The voice of an old man.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  VoiceChangerEffectOldMan = 0x02020200,
+
+  /**
+   * The voice of a boy.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  VoiceChangerEffectBoy = 0x02020300,
+
+  /**
+   * The voice of a young woman.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  VoiceChangerEffectSister = 0x02020400,
+
+  /**
+   * The voice of a girl.
+   *
+   * **Note**
+   *
+   * - Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
+   * - To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  VoiceChangerEffectGirl = 0x02020500,
+
+  /**
+   * The voice of Pig King, a character in Journey to the West who has a voice like a growling bear.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  VoiceChangerEffectPigKing = 0x02020600,
+
+  /**
+   * The voice of Hulk.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  VoiceChangerEffectHulk = 0x02020700,
+
+  /**
+   * An audio effect typical of R&B music.
+   *
+   * **Note**
+   *
+   * Call `setAudioProfile` and set the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator;
+   * otherwise, the enumerator setting does not take effect.
+   */
+  StyleTransformationRnB = 0x02030100,
+
+  /**
+   * An audio effect typical of popular music.
+   *
+   * **Note**
+   *
+   * Call `setAudioProfile` and set the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator;
+   * otherwise, the enumerator setting does not take effect.
+   */
+  StyleTransformationPopular = 0x02030200,
+
+  /**
+   * A pitch correction effect that corrects the user's pitch based on the pitch of the natural C major scale.
+   * To change the basic mode and tonic pitch, call `setAudioEffectParameters` after this method.
+   *
+   * **Note**
+   *
+   * To achieve better audio effect quality, Agora recommends calling `setAudioProfile` and setting the profile parameter
+   * to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before setting this enumerator.
+   */
+  PitchCorrection = 0x02040100,
+}
+
+/**
+ * The options for SDK preset voice beautifier effects.
+ */
+export enum VoiceBeautifierPreset {
+  /**
+   * Turn off voice beautifier effects and use the original voice.
+   */
+  VoiceBeautifierOff = 0x00000000,
+
+  /**
+   * A more magnetic voice.
+   *
+   * **Note**
+   *
+   * Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may experience vocal distortion.
+   */
+  ChatBeautifierMagnetic = 0x01010100,
+
+  /**
+   * A fresher voice.
+   *
+   * **Note**
+   *
+   * Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+   */
+  ChatBeautifierFresh = 0x01010200,
+
+  /**
+   * A more vital voice.
+   *
+   * **Note**
+   *
+   * Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
+   */
+  ChatBeautifierVitality = 0x01010300,
+
+  /**
+   * A more vigorous voice.
+   */
+  TimbreTransformationVigorous = 0x01030100,
+
+  /**
+   * A deeper voice.
+   */
+  TimbreTransformationDeep = 0x01030200,
+
+  /**
+   * A mellower voice.
+   */
+  TimbreTransformationMellow = 0x01030300,
+
+  /**
+   * A falsetto voice.
+   */
+  TimbreTransformationFalsetto = 0x01030400,
+
+  /**
+   * A fuller voice.
+   */
+  TimbreTransformationFull = 0x01030500,
+
+  /**
+   * A clearer voice.
+   */
+  TimbreTransformationClear = 0x01030600,
+
+  /**
+   * A more resounding voice.
+   */
+  TimbreTransformationResounding = 0x01030700,
+
+  /**
+   * A more ringing voice.
+   */
+  TimbreTransformationRinging = 0x01030800,
+}
+
+/**
+ * The latency level of an audience member in interactive live streaming.
+ *
+ * **Note**
+ *
+ * Takes effect only when the user role is `Broadcaster`.
+ */
+export enum AudienceLatencyLevelType {
+  /**
+   * 1: Low latency.
+   */
+  LowLatency = 1,
+
+  /**
+   * 2: (Default) Ultra low latency.
+   */
+  UltraLowLatency = 2,
 }

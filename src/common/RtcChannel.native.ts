@@ -3,15 +3,18 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 import type {
   ChannelMediaOptions,
   ChannelMediaRelayConfiguration,
-  ClientRole,
-  ConnectionStateType,
+  ClientRoleOptions,
   EncryptionConfig,
-  EncryptionMode,
   LiveInjectStreamConfig,
   LiveTranscoding,
+} from './Classes';
+import type {
+  ClientRole,
+  ConnectionStateType,
+  EncryptionMode,
   UserPriority,
   VideoStreamType,
-} from '../Types';
+} from './Enums';
 import type { Listener, RtcChannelEvents, Subscription } from './RtcEvents';
 
 const {
@@ -111,6 +114,11 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Destroys the [`RtcChannel`]{@link RtcChannel} instance.
+   *
+   *  @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 7(NotInitialized): The `RtcChannel` instance is not initialized before calling this method.
    */
   destroy(): Promise<void> {
     this.removeAllListeners();
@@ -189,19 +197,30 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Sets the role of a user.
+   * Sets the role of a user in live interactive streaming.
    *
-   * This method sets the role of a user, such as a host or an audience member. In a `LiveBroadcasting` channel,
-   * only a host can call the [`publish`]{@link publish} method in the [`RtcChannel`]{@link RtcChannel} class.
-   *
-   * A successful call of this method triggers the following callbacks:
+   * You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
    * - The local client: [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged}.
-   * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined}
-   * or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
-   * @param role The role of the user.
+   * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined} or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
+   *
+   * **Note**
+   * - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
+   * - As of v3.2.0, this method can set the user level in addition to the user role.
+   *    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
+   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
+   *
+   * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
+   * @param options? The detailed options of a user, including user level. See {@link ClientRoleOptions}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
-  setClientRole(role: ClientRole): Promise<void> {
-    return this._callMethod('setClientRole', { role });
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void> {
+    return this._callMethod('setClientRole', { role, options });
   }
 
   /**
@@ -213,12 +232,24 @@ export default class RtcChannel implements RtcChannelInterface {
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
+   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   *
    * @param token The token generated at your server.
    * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
    * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
    * @param optionalInfo Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
    * @param optionalUid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess} callback. The app must maintain this user ID.
    * @param options The channel media options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected. Possible reasons:
+   *        - You have created an `RtcChannel` object with the same channel name.
+   *        - You have joined and published a stream in a channel created by the `RtcChannel` object.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   joinChannel(
     token: string | undefined | null,
@@ -243,6 +274,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
+   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   *
    * @param token The token generated at your server.
    * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
    * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
@@ -253,6 +286,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
    * @param options The channel media options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected.
    */
   joinChannelWithUserAccount(
     token: string | undefined | null,
@@ -272,6 +312,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * A successful call of this method triggers the following callbacks:
    * - The local client: [`LeaveChannel`]{@link RtcChannelEvents.LeaveChannel}.
    * - The remote client: [`UserOffline`]{@link RtcChannelEvents.UserOffline}, if the user leaving the channel is in a `Communication` channel, or is a host in a `LiveBroadcasting` channel.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   leaveChannel(): Promise<void> {
     return this._callMethod('leaveChannel');
@@ -286,6 +333,13 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * You should get a new token from your server and call this method to renew it. Failure to do so results in the SDK disconnecting from the Agora server.
    * @param token The new token.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   renewToken(token: string): Promise<void> {
     return this._callMethod('renewToken', { token });
@@ -444,7 +498,9 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Publishes the local stream to the CDN.
+   * Publishes the local stream to a specified CDN streaming URL.
+   *
+   * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN.
    *
    * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged}
    * callback on the local client to report the state of adding a local stream to the CDN.
@@ -453,30 +509,37 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - Ensure that the user joins a channel before calling this method.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
-   * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
+   * - This method adds only one CDN streaming URL each time it is called.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
-   * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
-   * @param transcodingEnabled Sets whether transcoding is enabled/disabled. If you set this parameter as true,
+   * @param url The CDN streaming URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
+   * @param transcodingEnabled Whether to enable transcoding. If you set this parameter as true,
    * ensure that you call the [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} method before this method.
    * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
    * - `false`: Disable transcoding.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): Invalid parameter, usually because the URL address is null or the string length is 0.
+   *    - 7(NotInitialized): You have not initialized `RtcEngine` when publishing the stream.
    */
   addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
     return this._callMethod('addPublishStreamUrl', { url, transcodingEnabled });
   }
 
   /**
-   * Removes an RTMP stream from the CDN.
+   * Removes an RTMP or RTMPS stream from the CDN.
    *
-   * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
+   * This method removes the CDN streaming URL (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
    * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback.
    *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
-   * - This method removes only one stream HTTP/HTTPS URL address each time it is called.
+   * - This method removes only one CDN streaming URL each time it is called.
    *
-   * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters,
+   * @param url The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters,
    * such as Chinese language characters.
    */
   removePublishStreamUrl(url: string): Promise<void> {
@@ -495,6 +558,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Ensure that the user joins a channel before calling this method.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
    * - Ensure that you call this method before calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} method.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
    * @param transcoding Sets the CDN live audio/video transcoding settings.
    */
@@ -667,7 +731,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
    *
    * **Note**
-   * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
    * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
    *
    *
@@ -675,6 +739,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * - `true`: Enable the built-in encryption.
    * - `false`: Disable the built-in encryption.
    * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): An invalid parameter is used. Set the parameter with a valid value.
+   *    - 4(NotSupported):  The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
     return this._callMethod('enableEncryption', { enabled, config });
@@ -743,6 +814,14 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Supported FLV audio codec type: AAC.
    * - Supported FLV video codec type: H264 (AVC).
    * @param config The [`LiveInjectStreamConfig`]{@link LiveInjectStreamConfig} object, which contains the configuration information for the added voice or video stream.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
+   *    - 3(NotReady): The user is not in the channel.
+   *    - 4(NotSupported): The channel profile is not `LiveBroadcasting`. Call the `setChannelProfile` method and set the channel profile to `LiveBroadcasting` before calling this method.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   addInjectStreamUrl(
     url: string,
@@ -784,7 +863,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * - `false`: The recipients do not receive the data in the sent order.
    * @returns
    * - Returns the stream ID, if the method call is successful.
-   * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
+   * - Error codes: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return this._callMethod('createDataStream', { reliable, ordered });
@@ -828,7 +907,7 @@ interface RtcChannelInterface
     RtcStreamMessageInterface {
   destroy(): Promise<void>;
 
-  setClientRole(role: ClientRole): Promise<void>;
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>;
 
   joinChannel(
     token: string | undefined | null,
