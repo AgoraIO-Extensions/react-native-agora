@@ -40,6 +40,7 @@ import type {
   UserOfflineReason,
   VideoRemoteState,
   VideoRemoteStateReason,
+  VirtualBackgroundSourceStateReason,
   WarningCode,
 } from './Enums';
 
@@ -47,7 +48,6 @@ import type {
  * @internal
  * @ignore
  */
-
 export type Listener = (...args: any[]) => any;
 
 /**
@@ -509,6 +509,11 @@ export type UploadLogResultCallback =
    * @param reason The reason for the upload failure. See [`UploadErrorReason`]{@link UploadErrorReason}.
    */
   (requestId: string, success: boolean, reason: UploadErrorReason) => void;
+export type VirtualBackgroundSourceEnabledCallback =
+  /**
+   * TODO:(doc)
+   */
+  (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
 
 /**
  * Callbacks.
@@ -1789,6 +1794,7 @@ export interface RtcChannelEvents {
 
   /**
    * @ignore
+   *
    * Reports whether the super-resolution algorithm is enabled.
    *
    * @since v3.3.1 (later)
@@ -1796,4 +1802,14 @@ export interface RtcChannelEvents {
    * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use `reason` for troubleshooting.
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
+
+  /**
+   * TODO:(doc)
+   */
+  AirPlayIsConnected: EmptyCallback;
+
+  /**
+   * TODO:(doc)
+   */
+  VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
 }

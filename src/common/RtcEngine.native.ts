@@ -17,6 +17,7 @@ import {
   RtcEngineContext,
   UserInfo,
   VideoEncoderConfiguration,
+  VirtualBackgroundSource,
   WatermarkOptions,
 } from './Classes';
 import type {
@@ -684,6 +685,7 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * @ignore
+   *
    * Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
    *
    * The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
@@ -3134,6 +3136,7 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * @ignore
+   *
    * Uploads all local SDK log files.
    * @since v3.3.1. (later)
    *
@@ -3401,6 +3404,19 @@ export default class RtcEngine implements RtcEngineInterface {
   resumeAllChannelMediaRelay(): Promise<void> {
     return RtcEngine._callMethod('resumeAllChannelMediaRelay');
   }
+
+  /**
+   * TODO:(doc)
+   */
+  enableVirtualBackground(
+    enabled: boolean,
+    backgroundSource: VirtualBackgroundSource
+  ): Promise<void> {
+    return RtcEngine._callMethod('enableVirtualBackground', {
+      enabled,
+      backgroundSource,
+    });
+  }
 }
 
 /**
@@ -3487,6 +3503,11 @@ interface RtcEngineInterface
   uploadLogFile(): Promise<string>;
 
   setLocalAccessPoint(ips: string[], domain: string): Promise<void>;
+
+  enableVirtualBackground(
+    enabled: boolean,
+    backgroundSource: VirtualBackgroundSource
+  ): Promise<void>;
 }
 
 /**
