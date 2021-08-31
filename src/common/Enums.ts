@@ -216,7 +216,7 @@ export enum AudioMixingStateCode {
    */
   Paused = 711,
   /**
-   * @ignore
+   * 712: Ignore this state.
    */
   Restart = 712,
   /**
@@ -1171,7 +1171,6 @@ export enum ErrorCode {
    */
   AlreadyInUse = 19,
   /**
-   * @ignore
    * 20: The SDK gave up the request due to too many requests.
    */
   Abort = 20,
@@ -1180,7 +1179,6 @@ export enum ErrorCode {
    */
   InitNetEngine = 21,
   /**
-   * @ignore
    * 22: The app uses too much of the system resources and the SDK fails to allocate the resources.
    */
   ResourceLimited = 22,
@@ -2953,7 +2951,7 @@ export enum UploadErrorReason {
    */
   NetError = 1,
   /**
-   * 0: Agora 服务器错误，请稍后尝试。
+   * 2: An error occurs in the Agora server. Try uploading the log files later.
    */
   ServerError = 2,
 }
@@ -2973,7 +2971,6 @@ export enum CloudProxyType {
    */
   UDP = 1,
   /**
-   * @ignore
    * 2: The cloud proxy for the TCP (encryption) protocol.
    */
   TCP = 2,
@@ -3049,4 +3046,22 @@ export enum VoiceConversionPreset {
    * 50397952: A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
   Bass = 50397952,
+}
+
+/**
+ * TODO:(doc)
+ */
+export enum VirtualBackgroundSourceType {
+  Color = 1,
+  Img = 2,
+}
+
+/**
+ * TODO:(doc)
+ */
+export enum VirtualBackgroundSourceStateReason {
+  Success = 0,
+  ImageNotExist = 1,
+  ColorFormatNotSupported = 2,
+  DeviceNotSupported = 3,
 }

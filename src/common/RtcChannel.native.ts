@@ -530,6 +530,7 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * @ignore
+   *
    * Enables/Disables the super-resolution algorithm for a remote user's video stream.
    *
    * @since v3.3.1. (later)
