@@ -1,3 +1,12 @@
+## [3.4.7](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.6...v3.4.7) (2021-09-03)
+
+
+### Features
+
+* support 3.2.+ ([c4c1c49](https://github.com/AgoraIO-Community/react-native-agora/commit/c4c1c4927186b09ecea207db118c69289f429a14))
+* support 3.3.+ ([ac57d2a](https://github.com/AgoraIO-Community/react-native-agora/commit/ac57d2a39e6b413b5a8d144710884459d050c82c))
+* support 3.4.+ ([b66bc46](https://github.com/AgoraIO-Community/react-native-agora/commit/b66bc4645b6b7ea6bbaf74b7b69cfa89f05e7403))
+
 ## [3.4.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.5...v3.4.6) (2021-07-23)
 
 
