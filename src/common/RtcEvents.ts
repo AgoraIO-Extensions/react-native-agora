@@ -1,12 +1,23 @@
 import type {
+  AudioVolumeInfo,
+  FacePositionInfo,
+  LastmileProbeResult,
+  LocalAudioStats,
+  LocalVideoStats,
+  Rect,
+  RemoteAudioStats,
+  RemoteVideoStats,
+  RtcStats,
+  UserInfo,
+} from './Classes';
+import type {
   AudioLocalError,
   AudioLocalState,
-  AudioMixingErrorCode,
+  AudioMixingReason,
   AudioMixingStateCode,
   AudioOutputRouting,
   AudioRemoteState,
   AudioRemoteStateReason,
-  AudioVolumeInfo,
   ChannelMediaRelayError,
   ChannelMediaRelayEvent,
   ChannelMediaRelayState,
@@ -14,30 +25,23 @@ import type {
   ConnectionChangedReason,
   ConnectionStateType,
   ErrorCode,
-  FacePositionInfo,
   InjectStreamStatus,
-  LastmileProbeResult,
-  LocalAudioStats,
-  LocalVideoStats,
   LocalVideoStreamError,
   LocalVideoStreamState,
   NetworkQuality,
   NetworkType,
-  Rect,
-  RemoteAudioStats,
-  RemoteVideoStats,
-  RtcStats,
   RtmpStreamingErrorCode,
   RtmpStreamingEvent,
   RtmpStreamingState,
   StreamPublishState,
   StreamSubscribeState,
-  UserInfo,
+  SuperResolutionStateReason,
+  UploadErrorReason,
   UserOfflineReason,
   VideoRemoteState,
   VideoRemoteStateReason,
   WarningCode,
-} from '../Types';
+} from './Enums';
 
 /**
  * @internal
@@ -167,7 +171,7 @@ export type AudioVolumeCallback =
   (speakers: AudioVolumeInfo[], totalVolume: number) => void;
 export type UidCallback =
   /**
-   * @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
+   * @param uid The user ID of the most active remote speaker. A `uid` of 0 represents the local user.
    */
   (uid: number) => void;
 export type ElapsedCallback =
@@ -319,10 +323,10 @@ export type RemoteAudioStatsCallback =
   (stats: RemoteAudioStats) => void;
 export type AudioMixingStateCallback =
   /**
-   * @param state The state code.
-   * @param errorCode The error code.
+   * @param state The current music file playback state. See [`AudioMixingStateCode`]{@link AudioMixingStateCode}.
+   * @param reason The reason for the change of the music file playback state. See [`AudioMixingReason`]{@link AudioMixingReason}.
    */
-  (state: AudioMixingStateCode, errorCode: AudioMixingErrorCode) => void;
+  (state: AudioMixingStateCode, reason: AudioMixingReason) => void;
 export type SoundIdCallback =
   /**
    * @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
@@ -330,8 +334,8 @@ export type SoundIdCallback =
   (soundId: number) => void;
 export type RtmpStreamingStateCallback =
   /**
-   * @param url The RTMP URL address.
-   * @param state The RTMP streaming state.
+   * @param url The CDN streaming URL.
+   * @param state The RTMP or RTMPS streaming state.
    * @param errCode The detailed error information for streaming.
    */
   (
@@ -390,13 +394,13 @@ export type VideoFrameWithUidCallback =
   (uid: number, width: number, height: number, elapsed: number) => void;
 export type UrlWithErrorCallback =
   /**
-   * @param url The RTMP streaming URL.
+   * @param url The RTMP or RTMPS streaming URL.
    * @param error The detailed error information.
    */
   (url: string, error: ErrorCode) => void;
 export type UrlCallback =
   /**
-   * @param url The RTMP URL address.
+   * @param url The CDN streaming URL.
    */
   (url: string) => void;
 export type TransportStatsCallback =
@@ -479,10 +483,32 @@ export type StreamSubscribeStateCallback =
   ) => void;
 export type RtmpStreamingEventCallback =
   /**
-   * @param url The RTMP streaming URL.
+   * @param url The RTMP or RTMPS streaming URL.
    * @param eventCode The event code. See [`RtmpStreamingEvent`]{@link RtmpStreamingEvent}.
    */
   (url: string, eventCode: RtmpStreamingEvent) => void;
+export type UserSuperResolutionEnabledCallback =
+  /**
+   * @ignore
+   *
+   * @param uid The ID of the remote user.
+   * @param enabled Whether the super-resolution algorithm is successfully enabled:
+   *   - `true`: The super-resolution algorithm is successfully enabled.
+   *   - `false`: The super-resolution algorithm is not successfully enabled.
+   * @param reason The reason why the super-resolution algorithm is not successfully enabled. See [`SuperResolutionStateReason`]{@link enum.SuperResolutionStateReason}.
+   */
+  (uid: number, enabled: boolean, reason: SuperResolutionStateReason) => void;
+export type UploadLogResultCallback =
+  /**
+   * @ignore
+   *
+   * @param requestId The request ID. This request ID is the same as requestId returned by `uploadLogFile`, and you can use `requestId` to match a specific upload with a callback.
+   * @param success Whether the log files are successfully uploaded:
+   *  - `true`: Successfully upload the log files.
+   *  - `false`: Fails to upload the log files. For details, see the reason parameter.
+   * @param reason The reason for the upload failure. See [`UploadErrorReason`]{@link UploadErrorReason}.
+   */
+  (requestId: string, success: boolean, reason: UploadErrorReason) => void;
 
 /**
  * Callbacks.
@@ -681,7 +707,7 @@ export interface RtcEngineEvents {
   AudioVolumeIndication: AudioVolumeCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by
    * calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
@@ -715,12 +741,6 @@ export interface RtcEngineEvents {
   /**
    * Occurs when a remote user stops/resumes sending the video stream.
    *
-   * @deprecated
-   *
-   * This callback is deprecated. Use the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters for the same function:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
-   *
    * The SDK triggers this callback when the remote user stops or resumes sending the video stream by calling the [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream} method.
    *
    * **Note**
@@ -749,8 +769,17 @@ export interface RtcEngineEvents {
    * Occurs when the local video state changes.
    *
    * The SDK returns the current video state in this callback.
-   * This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
-   * When the state is [`Failed`]{@link LocalVideoStreamState.Failed}, see the error parameter for details.
+   *
+   * The SDK triggers the `LocalVideoStateChanged(Failed, CaptureFailure)` callback in the following situations:
+   * - On Android:
+   *    - (Android 9 or later) The application exits to the background, and the system recycles the camera.
+   *    - (Android 6 or later) The camera is occupied by a third-party application. When the third-party application releases the camera, the SDK triggers the `LocalVideoStateChanged(Capturing, OK)` callback.
+   *    - The camera starts normally, but the captured video is not output for four seconds.
+   * - On iOS:
+   *    - The application exits to the background, and the system recycles the camera.
+   *    - The camera starts normally, but the captured video is not output for four seconds.
+   *
+   * When the camera outputs the captured video frames, if all the video frames are the same for 15 consecutive frames, the SDK triggers the `LocalVideoStateChanged(Capturing, CaptureFailure)` callback. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps.
    *
    * @event LocalVideoStateChanged
    */
@@ -776,7 +805,7 @@ export interface RtcEngineEvents {
    *
    * **Note**
    *
-   * When the state is [`Failed`]{@link AudioLocalState.Failed}, see the error parameter for details.
+   * When the state is [`Failed`]{@link AudioLocalState.Failed}, see the `error` parameter for details.
    *
    * @event LocalAudioStateChanged
    */
@@ -876,6 +905,9 @@ export interface RtcEngineEvents {
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
    *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
+   *
    * @event NetworkQuality
    */
   NetworkQuality: NetworkQualityWithUidCallback;
@@ -940,12 +972,12 @@ export interface RtcEngineEvents {
   AudioMixingFinished: EmptyCallback;
 
   /**
-   * Occurs when the state of the local user's audio mixing file changes.
+   * Occurs when the playback state of the local user's music file changes.
    *
-   * When you call [`startAudioMixing`]{@link RtcEngine.startAudioMixing} and the state of audio mixing file changes, the Agora SDK triggers this callback.
-   * - When the audio mixing file plays, pauses playing, or stops playing, this callback returns `710`, `711`, or `713` in state, and `0` in errorCode.
-   * - When exceptions occur during playback, this callback returns `714` in state and an error in errorCode.
-   * - If the local audio mixing file does not exist, or if the SDK does not support the file format or cannot access the music file URL, the SDK returns [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError}.
+   * @since 3.4.2
+   *
+   * When the playback state of the local user's music file changes, the SDK triggers this callback and reports
+   * the current playback state and the reason for the change.
    *
    * @event AudioMixingStateChanged
    */
@@ -961,12 +993,12 @@ export interface RtcEngineEvents {
   AudioEffectFinished: SoundIdCallback;
 
   /**
-   * Occurs when the state of the RTMP streaming changes.
+   * Occurs when the state of the RTMP or RTMPS streaming changes.
    *
    * The SDK triggers this callback to report the result of the local user calling [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
    * This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
    *
-   * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
+   * This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
    *
    * @event RtmpStreamingStateChanged
    */
@@ -986,6 +1018,11 @@ export interface RtcEngineEvents {
 
   /**
    * Reports the status of injecting the online media stream.
+   *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
    *
    * @event StreamInjectedStatus
    */
@@ -1087,11 +1124,6 @@ export interface RtcEngineEvents {
   /**
    * Occurs when a remote user stops/resumes sending the audio stream.
    *
-   * @deprecated
-   * Use the [`RemoteAudioStateChanged`]{@link RemoteAudioStateChanged} callback with the following parameters instead:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
-   *
    * The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} method.
    *
    * **Note**
@@ -1109,7 +1141,7 @@ export interface RtcEngineEvents {
    *
    * Use [`RtmpStreamingStateChanged`]{@link RtmpStreamingStateChanged} instead.
    *
-   * This callback indicates whether you have successfully added an RTMP stream to the CDN.
+   * This callback indicates whether you have successfully added an RTMP or RTMPS stream to the CDN.
    *
    * @event StreamPublished
    */
@@ -1122,7 +1154,7 @@ export interface RtcEngineEvents {
    *
    * Use [`RtmpStreamingStateChanged`]{@link RtmpStreamingStateChanged} instead.
    *
-   * This callback indicates whether you have successfully removed an RTMP stream from the CDN.
+   * This callback indicates whether you have successfully removed an RTMP or RTMPS stream from the CDN.
    *
    * @event StreamUnpublished
    */
@@ -1159,11 +1191,6 @@ export interface RtcEngineEvents {
   /**
    * Occurs when a remote user enables/disables the video module.
    *
-   * @deprecated
-   * This callback is deprecated and replaced by the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
-   *
    * Once the video module is disabled, the remote user can only use a voice call. The remote user cannot send or receive any video from other users.
    *
    * The SDK triggers this callback when the remote user enables or disables the video module by calling the [`enableVideo`]{@link RtcEngine.enableVideo} or [`disableVideo`]{@link RtcEngine.disableVideo} method.
@@ -1178,12 +1205,6 @@ export interface RtcEngineEvents {
 
   /**
    * Occurs when a remote user enables/disables the local video capture function.
-   *
-   * @deprecated
-   *
-   * This callback is deprecated and replaced by the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback with the following parameters:
-   * - [`Stopped`]{@link VideoRemoteState.Stopped} and [`RemoteMuted`]{@link VideoRemoteStateReason.RemoteMuted}.
-   * - [`Decoding`]{@link VideoRemoteState.Decoding} and [`RemoteUnmuted`]{@link VideoRemoteStateReason.RemoteUnmuted}.
    *
    * The SDK triggers this callback when the remote user resumes or stops capturing the video stream by
    * calling [`enableLocalVideo`]{@link RtcEngine.enableLocalVideo}.
@@ -1376,13 +1397,35 @@ export interface RtcEngineEvents {
   VideoSubscribeStateChanged: StreamSubscribeStateCallback;
 
   /**
-   * Reports events during the RTMP streaming.
+   * Reports events during the RTMP or RTMPS streaming.
    *
    * @since v3.1.2.
    *
    * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
+
+  /**
+   * @ignore
+   *
+   * Reports whether the super-resolution algorithm is enabled.
+   *
+   * @since v3.3.1 (later)
+   *
+   * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use reason for troubleshooting.
+   */
+  UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
+
+  /**
+   * @ignore
+   *
+   * Reports the result of uploading the SDK log files.
+   *
+   * @since v3.3.1 (later)
+   *
+   * After the method call of `uploadLogFile`, the SDK triggers this callback to report the result of uploading the log files. If the upload fails, refer to the `reason` parameter to troubleshoot.
+   */
+  UploadLogResult: UploadLogResultCallback;
 }
 
 /**
@@ -1519,7 +1562,7 @@ export interface RtcChannelEvents {
   RequestToken: EmptyCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
    *
@@ -1589,6 +1632,9 @@ export interface RtcChannelEvents {
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
    *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
+   *
    * @event NetworkQuality
    */
   NetworkQuality: NetworkQualityWithUidCallback;
@@ -1612,11 +1658,11 @@ export interface RtcChannelEvents {
   RemoteAudioStats: RemoteAudioStatsCallback;
 
   /**
-   * Occurs when the state of the RTMP streaming changes.
+   * Occurs when the state of the RTMP or RTMPS streaming changes.
    *
    * The SDK triggers this callback to report the result of the local user calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcChannel.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
    *
-   * This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
+   * This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
    *
    * @event RtmpStreamingStateChanged
    */
@@ -1637,6 +1683,11 @@ export interface RtcChannelEvents {
 
   /**
    * Reports the status of injecting the online media stream.
+   *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
    *
    * @event StreamInjectedStatus
    */
@@ -1728,11 +1779,21 @@ export interface RtcChannelEvents {
   VideoSubscribeStateChanged: StreamSubscribeStateCallback;
 
   /**
-   * Reports events during the RTMP streaming.
+   * Reports events during the RTMP or RTMPS streaming.
    *
    * @since v3.1.2.
    *
    * @event RtmpStreamingEvent
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
+
+  /**
+   * @ignore
+   * Reports whether the super-resolution algorithm is enabled.
+   *
+   * @since v3.3.1 (later)
+   *
+   * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use `reason` for troubleshooting.
+   */
+  UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 }

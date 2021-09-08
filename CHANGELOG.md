@@ -1,9 +1,134 @@
-## [3.1.7-appbuilder.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.1.7-appbuilder.0) (2020-12-24)
+## [3.4.7](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.6...v3.4.7) (2021-09-03)
 
 
 ### Features
 
-* build for app-builder ([db4b176](https://github.com/AgoraIO-Community/react-native-agora/commit/db4b1764bebef6e784625067a76840a11f0bdbfe))
+* support 3.2.+ ([c4c1c49](https://github.com/AgoraIO-Community/react-native-agora/commit/c4c1c4927186b09ecea207db118c69289f429a14))
+* support 3.3.+ ([ac57d2a](https://github.com/AgoraIO-Community/react-native-agora/commit/ac57d2a39e6b413b5a8d144710884459d050c82c))
+* support 3.4.+ ([b66bc46](https://github.com/AgoraIO-Community/react-native-agora/commit/b66bc4645b6b7ea6bbaf74b7b69cfa89f05e7403))
+
+## [3.4.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.5...v3.4.6) (2021-07-23)
+
+
+### Features
+
+* support 3.4.6 ([aa309e5](https://github.com/AgoraIO-Community/react-native-agora/commit/aa309e5ec805f8fc843d6ae085141861b0963c8a))
+
+## [3.4.5](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.5-rc.0...v3.4.5) (2021-07-15)
+
+## [3.4.5-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.2...v3.4.5-rc.0) (2021-06-28)
+
+
+### Features
+
+* add RtcEngineContext instead of RtcEngineConfig ([d646652](https://github.com/AgoraIO-Community/react-native-agora/commit/d646652723e8669646f0764be45b989d4706a701))
+* optimize constructor for Classes.ts ([d14a41a](https://github.com/AgoraIO-Community/react-native-agora/commit/d14a41a761a6aab96d622496d7ec3b1492af8ae3))
+* support 3.4.5 ([6180a1e](https://github.com/AgoraIO-Community/react-native-agora/commit/6180a1e81ed2dc7c61552f52d36e2bb87076a234))
+
+## [3.4.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.3...v3.4.2) (2021-05-25)
+
+
+### Bug Fixes
+
+* **uid compatible:** int to uint ([cdc9eae](https://github.com/AgoraIO-Community/react-native-agora/commit/cdc9eaebc11d49afa4d035ecafc00880d2a2c68c))
+
+
+### Features
+
+* **upgrade native sdk:** 3.4.1 ([2bac9da](https://github.com/AgoraIO-Community/react-native-agora/commit/2bac9da051370d4327f7868a2634c0043eeeb3d5))
+
+## [3.3.3](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.2...v3.3.3) (2021-04-13)
+
+
+### Features
+
+* upgrade native SDK to 3.3.2 ([a54feda](https://github.com/AgoraIO-Community/react-native-agora/commit/a54fedab614a80f90450cc789352049f8f1d671f))
+* **add example:** channelAudio,liveStream,mediaChannelRelay,streamData ([e4d5ceb](https://github.com/AgoraIO-Community/react-native-agora/commit/e4d5ceb0f42e8ee1a987fc621459eb8b84d25b5c))
+* **add voicechange:** add VoiceChange ([c1722cc](https://github.com/AgoraIO-Community/react-native-agora/commit/c1722ccdf1fbfee4b5b6c84ae34e3990b60b18e6))
+
+## [3.3.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.2-rc.0...v3.3.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* iOS selector error ([2d1ac8f](https://github.com/AgoraIO-Community/react-native-agora/commit/2d1ac8f1b902f71c06b0b1729579adf396b58c9b))
+
+## [3.3.2-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.1...v3.3.2-rc.0) (2021-03-19)
+
+
+### Bug Fixes
+
+* support react-native 0.64.0 close [#334](https://github.com/AgoraIO-Community/react-native-agora/issues/334) ([0140754](https://github.com/AgoraIO-Community/react-native-agora/commit/014075441ec3479e7abe84768c3e00b1da2d97fc))
+
+## [3.3.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.1-rc.0...v3.3.1) (2021-03-12)
+
+## [3.3.1-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.0-rc.1...v3.3.1-rc.0) (2021-03-09)
+
+
+### Bug Fixes
+
+* annotation build warning ([551ebfe](https://github.com/AgoraIO-Community/react-native-agora/commit/551ebfe3c8dec34cfdf7e006d38523c60123bc58))
+* type cast error ([f5af6dc](https://github.com/AgoraIO-Community/react-native-agora/commit/f5af6dc9cec642dd3ae5d1507913141e95dbb71f))
+* type cast error ([98c4331](https://github.com/AgoraIO-Community/react-native-agora/commit/98c4331bd97ab1e2dc7216470fc2978c5d4dcd74))
+
+
+### Features
+
+* add example for `playEffect` ([7987121](https://github.com/AgoraIO-Community/react-native-agora/commit/7987121ff2822c053f327ccdeb60ff17202f6c53))
+* support 3.3.1 for Android ([cd7a2cd](https://github.com/AgoraIO-Community/react-native-agora/commit/cd7a2cdaff747cad9d2e386d79589c7299036ff6))
+* support 3.3.1 for iOS ([836f3b4](https://github.com/AgoraIO-Community/react-native-agora/commit/836f3b4c87f0c0a478c135a4a6ed0ed4279a446e))
+* support 3.3.1 for TS ([b7a1d00](https://github.com/AgoraIO-Community/react-native-agora/commit/b7a1d006bbbd6a635b8cee18c4a50c4a1ab5bbdd))
+
+# [3.3.0-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.0-rc.0...v3.3.0-rc.1) (2021-01-28)
+
+
+### Bug Fixes
+
+* type error ([1ffd0f8](https://github.com/AgoraIO-Community/react-native-agora/commit/1ffd0f8923b2968d1d908d4c672ab8c40072635e))
+
+# [3.3.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.2...v3.3.0-rc.0) (2021-01-28)
+
+
+### Features
+
+* support 3.3.0 for Android ([9c48594](https://github.com/AgoraIO-Community/react-native-agora/commit/9c485942661c0e60c8413f9088b4ed0fa37ae2da))
+* support 3.3.0 for iOS ([b422ce8](https://github.com/AgoraIO-Community/react-native-agora/commit/b422ce8e8660067075317e4f0f16a29f5a49b6b7))
+* support 3.3.0 for TS ([fc9dd70](https://github.com/AgoraIO-Community/react-native-agora/commit/fc9dd70fd32402f5eed281b4007ffd3aacaf51e0))
+
+## [3.2.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.1...v3.2.2) (2020-12-28)
+
+
+### Bug Fixes
+
+* process resolve value type ([d28c79d](https://github.com/AgoraIO-Community/react-native-agora/commit/d28c79d18338604cbc6e723baedd9618e8a11374))
+
+## [3.2.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0...v3.2.1) (2020-12-24)
+
+## [3.2.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.0-rc.0...v3.2.0) (2020-12-23)
+
+
+### Features
+
+* upgrade native SDK to 3.2.1 ([3dcc489](https://github.com/AgoraIO-Community/react-native-agora/commit/3dcc489bb52daaf8a794554f6048f343cbff5d8f))
+
+## [3.2.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.2.0-rc.0) (2020-12-21)
+
+
+### Features
+
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([721604e](https://github.com/AgoraIO-Community/react-native-agora/commit/721604ee94c3f7e3a0485b5b5db7fb5973e30665))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([2fef3ae](https://github.com/AgoraIO-Community/react-native-agora/commit/2fef3aee038b31808af53cee80a0fddc8d444fe8))
+* add `setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>` ([3a55997](https://github.com/AgoraIO-Community/react-native-agora/commit/3a55997db81dcd16e68ee551d69b9079ff8052b0))
+* upgrade to 3.2.0 ([fcb57cc](https://github.com/AgoraIO-Community/react-native-agora/commit/fcb57cc3e2cbb3e16750e9ce8ddca069184ac1c0))
+* upgrade to 3.2.0 ([4ee51a9](https://github.com/AgoraIO-Community/react-native-agora/commit/4ee51a9b405deb17b467f5359f6717033c3961a2))
+* upgrade to 3.2.0 ([680048f](https://github.com/AgoraIO-Community/react-native-agora/commit/680048f7836940f586ce7228559ba2cde9e0de62))
+
+## [3.1.7](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.6...v3.1.7) (2020-12-28)
+
+
+### Bug Fixes
+
+* process resolve value type ([d28c79d](https://github.com/AgoraIO-Community/react-native-agora/commit/d28c79d18338604cbc6e723baedd9618e8a11374))
 
 ## [3.1.6](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.1.5...v3.1.6) (2020-12-21)
 

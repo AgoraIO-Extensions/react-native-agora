@@ -13,6 +13,7 @@ import RtcEngine, {
   ChannelProfile,
   ClientRole,
   RtcChannel,
+  RtcEngineContext,
   RtcLocalView,
   RtcRemoteView,
   VideoRemoteState,
@@ -56,7 +57,9 @@ export default class MultiChannel extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.create(config.appId);
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
+    );
 
     await this._engine.enableVideo();
     await this._engine.startPreview();
@@ -80,7 +83,10 @@ export default class MultiChannel extends Component<{}, State, any> {
       null,
       null,
       0,
-      new ChannelMediaOptions(true, true)
+      new ChannelMediaOptions({
+        publishLocalAudio: false,
+        publishLocalVideo: false,
+      })
     );
   };
 
@@ -100,7 +106,10 @@ export default class MultiChannel extends Component<{}, State, any> {
       null,
       null,
       0,
-      new ChannelMediaOptions(true, true)
+      new ChannelMediaOptions({
+        publishLocalAudio: false,
+        publishLocalVideo: false,
+      })
     );
   };
 

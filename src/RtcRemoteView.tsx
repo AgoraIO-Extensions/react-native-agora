@@ -12,10 +12,6 @@ import {
 /**
  * The SurfaceView class.
  *
- * **Note**
- *
- * SurfaceView is supported on Android only. Use UIView on iOS.
- *
  * @noInheritDoc
  */
 class SurfaceView extends Component<

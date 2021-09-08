@@ -6,7 +6,7 @@ import io.agora.rtc.models.UserInfo
 
 fun UserInfo.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid.toJSUInt(),
+    "uid" to uid.toUInt().toLong(),
     "userAccount" to userAccount
   )
 }
@@ -22,7 +22,7 @@ fun LocalAudioStats.toMap(): Map<String, Any?> {
 
 fun RtcStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "totalDuration" to totalDuration,
+    "duration" to totalDuration,
     "txBytes" to txBytes,
     "rxBytes" to rxBytes,
     "txAudioBytes" to txAudioBytes,
@@ -35,7 +35,7 @@ fun RtcStats.toMap(): Map<String, Any?> {
     "rxAudioKBitRate" to rxAudioKBitRate,
     "txVideoKBitRate" to txVideoKBitRate,
     "rxVideoKBitRate" to rxVideoKBitRate,
-    "users" to users,
+    "userCount" to users,
     "lastmileDelay" to lastmileDelay,
     "txPacketLossRate" to txPacketLossRate,
     "rxPacketLossRate" to rxPacketLossRate,
@@ -59,7 +59,7 @@ fun Rect.toMap(): Map<String, Any?> {
 
 fun RemoteAudioStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid.toJSUInt(),
+    "uid" to uid.toUInt().toLong(),
     "quality" to quality,
     "networkTransportDelay" to networkTransportDelay,
     "jitterBufferDelay" to jitterBufferDelay,
@@ -70,7 +70,10 @@ fun RemoteAudioStats.toMap(): Map<String, Any?> {
     "totalFrozenTime" to totalFrozenTime,
     "frozenRate" to frozenRate,
     "totalActiveTime" to totalActiveTime,
-    "publishDuration" to publishDuration
+    "publishDuration" to publishDuration,
+    "qoeQuality" to qoeQuality,
+    "qualityChangedReason" to qualityChangedReason,
+    "mosValue" to mosValue
   )
 }
 
@@ -89,13 +92,14 @@ fun LocalVideoStats.toMap(): Map<String, Any?> {
     "encodedFrameCount" to encodedFrameCount,
     "codecType" to codecType,
     "txPacketLossRate" to txPacketLossRate,
-    "captureFrameRate" to captureFrameRate
+    "captureFrameRate" to captureFrameRate,
+    "captureBrightnessLevel" to captureBrightnessLevel
   )
 }
 
 fun RemoteVideoStats.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid.toJSUInt(),
+    "uid" to uid.toUInt().toLong(),
     "delay" to delay,
     "width" to width,
     "height" to height,
@@ -113,7 +117,7 @@ fun RemoteVideoStats.toMap(): Map<String, Any?> {
 
 fun AudioVolumeInfo.toMap(): Map<String, Any?> {
   return hashMapOf(
-    "uid" to uid.toJSUInt(),
+    "uid" to uid.toUInt().toLong(),
     "volume" to volume,
     "vad" to vad,
     "channelId" to channelId
@@ -156,10 +160,6 @@ fun Array<out AgoraFacePositionInfo>.toMapList(): List<Map<String, Any?>> {
 }
 
 @ExperimentalUnsignedTypes
-fun Any.toSDKUInt(): Int? {
-  return (this as? Number)?.toLong()?.toUInt()?.toInt()
-}
-
-fun Int.toJSUInt(): Long {
-  return this.toUInt().toLong();
+internal fun Number.toNativeUInt(): Int {
+  return toLong().toUInt().toInt()
 }

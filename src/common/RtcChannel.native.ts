@@ -3,15 +3,19 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 import type {
   ChannelMediaOptions,
   ChannelMediaRelayConfiguration,
-  ClientRole,
-  ConnectionStateType,
+  ClientRoleOptions,
+  DataStreamConfig,
   EncryptionConfig,
-  EncryptionMode,
   LiveInjectStreamConfig,
   LiveTranscoding,
+} from './Classes';
+import type {
+  ClientRole,
+  ConnectionStateType,
+  EncryptionMode,
   UserPriority,
   VideoStreamType,
-} from '../Types';
+} from './Enums';
 import type { Listener, RtcChannelEvents, Subscription } from './RtcEvents';
 
 const {
@@ -111,6 +115,11 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Destroys the [`RtcChannel`]{@link RtcChannel} instance.
+   *
+   *  @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 7(NotInitialized): The `RtcChannel` instance is not initialized before calling this method.
    */
   destroy(): Promise<void> {
     this.removeAllListeners();
@@ -189,19 +198,30 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Sets the role of a user.
+   * Sets the role of a user in live interactive streaming.
    *
-   * This method sets the role of a user, such as a host or an audience member. In a `LiveBroadcasting` channel,
-   * only a host can call the [`publish`]{@link publish} method in the [`RtcChannel`]{@link RtcChannel} class.
-   *
-   * A successful call of this method triggers the following callbacks:
+   * You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
    * - The local client: [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged}.
-   * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined}
-   * or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
-   * @param role The role of the user.
+   * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined} or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
+   *
+   * **Note**
+   * - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
+   * - As of v3.2.0, this method can set the user level in addition to the user role.
+   *    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
+   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
+   *
+   * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
+   * @param options The detailed options of a user, including user level. See {@link ClientRoleOptions}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
-  setClientRole(role: ClientRole): Promise<void> {
-    return this._callMethod('setClientRole', { role });
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void> {
+    return this._callMethod('setClientRole', { role, options });
   }
 
   /**
@@ -213,12 +233,26 @@ export default class RtcChannel implements RtcChannelInterface {
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
-   * @param token The token generated at your server.
-   * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
-   * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * Compared with the [`joinChannel`]{@link RtcEngine.joinChannel} method in the `RtcEngine` class, this method supports joining multiple channels at a time by creating multiple IChannel objects
+   * and then calling `joinChannel` in each RtcChannel object.
+   *
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically
+   * subscribes to the audio and video streams of all the other users in the channel. Subscribing incurs all associated usage costs. To unsubscribe, set the options parameter or call the mute methods accordingly.
+   *
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param optionalInfo Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
    * @param optionalUid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess} callback. The app must maintain this user ID.
    * @param options The channel media options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected. Possible reasons:
+   *        - You have created an `RtcChannel` object with the same channel name.
+   *        - You have joined and published a stream in a channel created by the `RtcChannel` object.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   joinChannel(
     token: string | undefined | null,
@@ -243,9 +277,14 @@ export default class RtcChannel implements RtcChannelInterface {
    * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
-   * @param token The token generated at your server.
-   * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
-   * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * Compared with the [`joinChannelWithUserAccount`]{@link RtcEngine..joinChannelWithUserAccount} method in the `RtcEngine` class, this method supports
+   * joining multiple channels at a time by creating multiple RtcChannel objects and then calling `joinChannelWithUserAccount` in each RtcChannel object.
+   *
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically subscribes to
+   * the audio and video streams of all the other users in the channel.
+   * Subscribing incurs all associated usage costs. To unsubscribe, set the options parameter or call the mute methods accordingly.
+   *
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param userAccount The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -253,6 +292,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * - The space character.
    * - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
    * @param options The channel media options.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
+   *    - 5(Refused): The request is rejected.
    */
   joinChannelWithUserAccount(
     token: string | undefined | null,
@@ -272,6 +318,13 @@ export default class RtcChannel implements RtcChannelInterface {
    * A successful call of this method triggers the following callbacks:
    * - The local client: [`LeaveChannel`]{@link RtcChannelEvents.LeaveChannel}.
    * - The remote client: [`UserOffline`]{@link RtcChannelEvents.UserOffline}, if the user leaving the channel is in a `Communication` channel, or is a host in a `LiveBroadcasting` channel.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   leaveChannel(): Promise<void> {
     return this._callMethod('leaveChannel');
@@ -286,6 +339,13 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * You should get a new token from your server and call this method to renew it. Failure to do so results in the SDK disconnecting from the Agora server.
    * @param token The new token.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 1(Failed): A general error occurs (no specified reason).
+   *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 7(NotInitialized): The SDK is not initialized.
    */
   renewToken(token: string): Promise<void> {
     return this._callMethod('renewToken', { token });
@@ -300,6 +360,10 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Publishes the local stream to the channel.
+   *
+   * @deprecated This method is deprecated as of v3.4.5.
+   * Use [`muteLocalAudioStream(false)`]{@link muteLocalAudioStream} or [`muteLocalVideoStream(false)`]{@link muteLocalVideoStream} instead.
+   *
    * You must keep the following restrictions in mind when calling this method.
    * Otherwise, the SDK returns the [`Refused(-5)`]{@link ErrorCode.Refused}:
    * - This method publishes one stream only to the channel corresponding to the current [`RtcChannel`]{@link RtcChannel} instance.
@@ -312,6 +376,9 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Stops publishing a stream to the channel.
+   *
+   * @deprecated This method is deprecated as of v3.4.5.
+   * Use [`muteLocalAudioStream(true)`]{@link muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@Link muteLocalVideoStream} instead.
    *
    * If you call this method in a channel where you are not publishing streams, the SDK returns [`Refused(-5)`]{@link ErrorCode.Refused}.
    */
@@ -364,11 +431,19 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Stops/Resumes receiving all remote audio streams.
+   * Stops or resumes subscribing to the audio streams of all remote users.
    *
-   * @param muted Determines whether to receive/stop receiving all remote audio streams:
-   * - `true`: Stop receiving all remote audio streams.
-   * - `false`: (Default) Receive all remote audio streams.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+   *
+   * **Note**
+   * - Call this method after joining a channel.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteAudioStreams`]{@link setDefaultMuteAllRemoteAudioStreams}.
+   * Agora recommend not calling `muteAllRemoteAudioStreams` and `setDefaultMuteAllRemoteAudioStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
+   *
+   * @param muted Sets whether to stop subscribing to the audio streams of all remote users.
+   *  - `true`: Stop subscribing to the audio streams of all remote users.
+   *  - `false`: (Default) Resume subscribing to the audio streams of all remote users.
    */
   muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
     return this._callMethod('muteAllRemoteAudioStreams', { muted });
@@ -377,20 +452,40 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Sets whether to receive all remote audio streams by default.
    *
-   * @param muted Determines whether to receive/stop receiving all remote audio streams by default:
-   * - `true`: Stop receiving all remote audio streams by default.
-   * - `false`: (Default) Receive all remote audio streams by default.
+   * @deprecated This method is deprecated from v3.3.1.
+   *
+   * Stops or resumes subscribing to the audio streams of all remote users by default.
+   *
+   * Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.
+   *
+   * @note
+   * If you need to resume subscribing to the audio streams of remote users in the channel after calling `setDefaultMuteAllRemoteAudioStreams(true)`, do the following:
+   *   - If you need to resume subscribing to the audio stream of a specified user, call [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream}, and specify the user ID.
+   *   - If you need to resume subscribing to the audio streams of multiple remote users, call [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream} multiple times.
+   *
+   * @param muted Sets whether to stop subscribing to the audio streams of all remote users by default.
+   *              - `true`: Stop subscribing to the audio streams of all remote users by default.
+   *              - `false`: (Default) Resume subscribing to the audio streams of all remote users by default.
+   *
    */
   setDefaultMuteAllRemoteAudioStreams(muted: boolean): Promise<void> {
     return this._callMethod('setDefaultMuteAllRemoteAudioStreams', { muted });
   }
 
   /**
-   * Stops/Resumes receiving all remote video streams.
+   * Stops or resumes subscribing to the video streams of all remote users.
    *
-   * @param muted Determines whether to receive/stop receiving all remote video streams:
-   * - `true`: Stop receiving all remote video streams.
-   * - `false`: (Default) Receive all remote video streams.
+   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
+   *
+   * **Note**
+   * - Call this method after joining a channel.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteVideoStreams`]{@link setDefaultMuteAllRemoteVideoStreams}.
+   * Agora recommend not calling `muteAllRemoteVideoStreams` and `setDefaultMuteAllRemoteVideoStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
+   *
+   * @param muted Sets whether to stop subscribing to the video streams of all remote users.
+   *   - `true`: Stop subscribing to the video streams of all remote users.
+   *   - `false`: (Default) Resume subscribing to the video streams of all remote users.
    */
   muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
     return this._callMethod('muteAllRemoteVideoStreams', { muted });
@@ -411,12 +506,78 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Sets whether to receive all remote video streams by default.
    *
-   * @param muted Determines whether to receive/stop receiving all remote video streams by default:
-   * - `true`: Stop receiving all remote video streams by default.
-   * - `false`: (Default) Receive all remote video streams by default.
+   * @deprecated This method is deprecated from v3.3.1.
+   *
+   * Stops or resumes subscribing to the video streams of all remote users by default.
+   *
+   * Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the video streams of all subsequent users.
+   *
+   * @note
+   * If you need to resume subscribing to the video streams of remote users in the channel after calling `setDefaultMuteAllRemoteVideoStreams(true)`, do the following:
+   *   - If you need to resume subscribing to the video stream of a specified user, call `muteRemoteVideoStream(false)`, and specify the user ID.
+   *   - If you need to resume subscribing to the video streams of multiple remote users, call `muteRemoteVideoStream(false)` multiple times.
+   *
+   * @param muted Sets whether to stop subscribing to the video streams of all remote users by default.
+   *              - `true`: Stop subscribing to the video streams of all remote users by default.
+   *              - `false`: (Default) Resume subscribing to the video streams of all remote users by default.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
    */
   setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
     return this._callMethod('setDefaultMuteAllRemoteVideoStreams', { muted });
+  }
+
+  /**
+   * @ignore
+   * Enables/Disables the super-resolution algorithm for a remote user's video stream.
+   *
+   * @since v3.3.1. (later)
+   *
+   * The algorithm effectively improves the resolution of the specified remote user's video stream. When the original resolution of the remote video stream is a × b pixels, you can receive and render the stream at a higher resolution (2a × 2b pixels) by enabling the algorithm.
+   *
+   * After calling this method, the SDK triggers the [`UserSuperResolutionEnabled`]{@link RtcChannelEvents.UserSuperResolutionEnabled} callback to report whether you have successfully enabled the super-resolution algorithm.
+   *
+   * @warning
+   * The super-resolution algorithm requires extra system resources. To balance the visual experience and system usage, the SDK poses the following restrictions:
+   * - The algorithm can only be used for a single user at a time.
+   * - On the Android platform, the original resolution of the remote video must not exceed 640 × 360 pixels.
+   * - On the iOS platform, the original resolution of the remote video must not exceed 640 × 480 pixels.
+   *
+   * If you exceed these limitations, the SDK triggers the `Warning` callback with the corresponding warning codes:
+   * - `SuperResolutionStreamOverLimitation(1610)`: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
+   * - `SuperResolutionUserCountOverLimitation(1611)`: Another user is already using the super-resolution algorithm.
+   * - `SuperResolutionDeviceNotSupported(1612)`: The device does not support the super-resolution algorithm.
+   *
+   * @note
+   * Requirements for the user's device:
+   * - Android: The following devices are known to support the method:
+   *   - VIVO: V1821A, NEX S, 1914A, 1916A, and 1824BA
+   *   - OPPO: PCCM00
+   *   - OnePlus: A6000
+   *   - Xiaomi: Mi 8, Mi 9, MIX3, and Redmi K20 Pro
+   *   - SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, and SM-G9750
+   *   - HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, and EVR-AN00
+   * - iOS: This method is supported on devices running iOS 12.0 or later. The following device models are known to support the method:
+   *   - iPhone XR
+   *   - iPhone XS
+   *   - iPhone XS Max
+   *   - iPhone 11
+   *   - iPhone 11 Pro
+   *   - iPhone 11 Pro Max
+   *   - iPad Pro 11-inch (3rd Generation)
+   *   - iPad Pro 12.9-inch (3rd Generation)
+   *   - iPad Air 3 (3rd Generation)
+   * @param uid The ID of the remote user.
+   * @param enable Whether to enable the super-resolution algorithm:
+   *   - `true`: Enable the super-resolution algorithm.
+   *   - `false`: Disable the super-resolution algorithm.
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
+    return this._callMethod('enableRemoteSuperResolution', { uid, enable });
   }
 
   /**
@@ -444,7 +605,9 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Publishes the local stream to the CDN.
+   * Publishes the local stream to a specified CDN streaming URL.
+   *
+   * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN.
    *
    * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged}
    * callback on the local client to report the state of adding a local stream to the CDN.
@@ -453,30 +616,37 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - Ensure that the user joins a channel before calling this method.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
-   * - This method adds only one stream HTTP/HTTPS URL address each time it is called.
+   * - This method adds only one CDN streaming URL each time it is called.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
-   * @param url The CDN streaming URL in the RTMP format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
-   * @param transcodingEnabled Sets whether transcoding is enabled/disabled. If you set this parameter as true,
+   * @param url The CDN streaming URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
+   * @param transcodingEnabled Whether to enable transcoding. If you set this parameter as true,
    * ensure that you call the [`setLiveTranscoding`]{@link RtcChannel.setLiveTranscoding} method before this method.
    * - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
    * - `false`: Disable transcoding.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): Invalid parameter, usually because the URL address is null or the string length is 0.
+   *    - 7(NotInitialized): You have not initialized `RtcEngine` when publishing the stream.
    */
   addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void> {
     return this._callMethod('addPublishStreamUrl', { url, transcodingEnabled });
   }
 
   /**
-   * Removes an RTMP stream from the CDN.
+   * Removes an RTMP or RTMPS stream from the CDN.
    *
-   * This method removes the RTMP URL address (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
+   * This method removes the CDN streaming URL (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
    * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback.
    *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
-   * - This method removes only one stream HTTP/HTTPS URL address each time it is called.
+   * - This method removes only one CDN streaming URL each time it is called.
    *
-   * @param url The RTMP URL address to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters,
+   * @param url The CDN streaming URL to be removed. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters,
    * such as Chinese language characters.
    */
   removePublishStreamUrl(url: string): Promise<void> {
@@ -495,6 +665,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Ensure that the user joins a channel before calling this method.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
    * - Ensure that you call this method before calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} method.
+   * - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
    *
    * @param transcoding Sets the CDN live audio/video transcoding settings.
    */
@@ -664,17 +835,29 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
    *
-   * All users in the same channel must use the same encryption mode and encryption key. Once all users leave the channel, the encryption key of this channel is automatically cleared.
+   * After a user leaves the channel, the SDK automatically disables the built-in encryption. To re-enable the built-in encryption, call this method before the user joins the channel again.
+   *
+   * As of v3.4.5, Agora recommends using either the `AES128GCM2` or `AES256GCM2` encryption mode, both of which support adding a salt and are more secure.
+   * For details, see *Media Stream Encryption*.
+   *
+   * **Warning**
+   * All users in the same channel must use the same encryption mode, encryption key, and salt; otherwise, users cannot communicate with each other.
    *
    * **Note**
-   * - If you enable the built-in encryption, you cannot use the RTMP streaming function.
-   * - Agora supports four encryption modes. If you choose an encryption mode (excepting `SM4128ECB` mode), you need to add an external encryption library when integrating the SDK. For details, see the advanced guide *Channel Encryption*.
-   *
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
+   * - To enhance security, Agora recommends using a new key and salt every time you enable the media stream encryption.
    *
    * @param enabled Whether to enable the built-in encryption.
    * - `true`: Enable the built-in encryption.
    * - `false`: Disable the built-in encryption.
    * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): An invalid parameter is used. Set the parameter with a valid value.
+   *    - 4(NotSupported):  The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   enableEncryption(enabled: boolean, config: EncryptionConfig): Promise<void> {
     return this._callMethod('enableEncryption', { enabled, config });
@@ -735,6 +918,10 @@ export default class RtcChannel implements RtcChannelInterface {
    *  - [`UserJoined`]{@link RtcChannelEvents.UserJoined}(uid: 666), if the method call succeeds and the online
    * media stream is injected into the channel.
    *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
    * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
    * - This method can only be called by a host in a `LiveBroadcasting` channel.
@@ -743,6 +930,14 @@ export default class RtcChannel implements RtcChannelInterface {
    * - Supported FLV audio codec type: AAC.
    * - Supported FLV video codec type: H264 (AVC).
    * @param config The [`LiveInjectStreamConfig`]{@link LiveInjectStreamConfig} object, which contains the configuration information for the added voice or video stream.
+   *
+   * @returns
+   * - 0(NoError): Success.
+   * - Error codes: Failure.
+   *    - 2(InvalidArgument): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
+   *    - 3(NotReady): The user is not in the channel.
+   *    - 4(NotSupported): The channel profile is not `LiveBroadcasting`. Call the `setChannelProfile` method and set the channel profile to `LiveBroadcasting` before calling this method.
+   *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
    */
   addInjectStreamUrl(
     url: string,
@@ -759,6 +954,10 @@ export default class RtcChannel implements RtcChannelInterface {
    * If you successfully remove the URL address from the live interactive streaming, the SDK triggers the
    * [`UserJoined`]{@link RtcChannelEvents.UserJoined} callback, with the stream uid of 666.
    *
+   * **Warning**
+   *
+   * Agora will soon stop the service for injecting online media streams on the client. If you have not implemented this service, Agora recommends that you do not use it.
+   *
    * @param url The URL address to be removed.
    */
   removeInjectStreamUrl(url: string): Promise<void> {
@@ -767,6 +966,10 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Creates a data stream.
+   *
+   * @deprecated
+   *
+   * This method is deprecated from v3.3.1. Use the [`createDataStreamWithConfig`]{@link createDataStreamWithConfig} method instead.
    *
    * Each user can create up to five data streams during the life cycle of the [`RtcChannel`]{@link RtcChannel} instance.
    *
@@ -784,10 +987,30 @@ export default class RtcChannel implements RtcChannelInterface {
    * - `false`: The recipients do not receive the data in the sent order.
    * @returns
    * - Returns the stream ID, if the method call is successful.
-   * - < 0: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
+   * - Error codes: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return this._callMethod('createDataStream', { reliable, ordered });
+  }
+
+  /**
+   * Creates a data stream.
+   *
+   * @since v3.3.1.
+   *
+   * Each user can create up to five data streams in a single channel.
+   *
+   * This method does not support data reliability. If the receiver receives a data packet five seconds or more after it was sent, the SDK directly discards the data.
+   *
+   * @param config The configurations for the data stream. See [`DataStreamConfig`]{@link DataStreamConfig}。
+   *
+   *
+   * @return
+   * - Returns the stream ID if you successfully create the data stream.
+   * - < 0: Fails to create the data stream.
+   */
+  createDataStreamWithConfig(config: DataStreamConfig): Promise<number> {
+    return this._callMethod('createDataStream', { config });
   }
 
   /**
@@ -809,6 +1032,75 @@ export default class RtcChannel implements RtcChannelInterface {
   sendStreamMessage(streamId: number, message: string): Promise<void> {
     return this._callMethod('sendStreamMessage', { streamId, message });
   }
+
+  /**
+   * Stops or resumes publishing the local audio stream.
+   *
+   * @since v3.4.5
+   *
+   * This method only sets the publishing state of the audio stream in the channel of `RtcChannel`.
+   * A successful method call triggers the [`RemoteAudioStateChanged`]{@link RtcChannelEvents.RemoteAudioStateChanged} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time.
+   * If you create multiple channels, ensure that you only call `muteLocalAudioStream(false)` in one channel;
+   * otherwise, the method call fails, and the SDK returns `-5 (ERR_REFUSED)`.
+   *
+   * **Note**
+   * - This method does not change the usage state of the audio-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link RtcChannel.joinChannel} and [`setClientRole`]{@link RtcChannel.setClientRole} methods.
+   * For details, see *Set the Publishing State*.
+   *
+   * @param muted Sets whether to stop publishing the local audio stream:
+   * - true: Stop publishing the local audio stream.
+   * - false: Resume publishing the local audio stream.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
+   */
+  muteLocalAudioStream(muted: boolean): Promise<void> {
+    return this._callMethod('muteLocalAudioStream', { muted });
+  }
+
+  /**
+   * Stops or resumes publishing the local video stream.
+   *
+   * @since v3.4.5
+   *
+   * This method only sets the publishing state of the video stream in the channel of RtcChannel.
+   *
+   * A successful method call triggers the [`RemoteVideoStateChanged`]{@link RtcChannelEvents.RemoteVideoStateChanged} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time. If you create multiple channels,
+   * ensure that you only call `muteLocalVideoStream(false)` in one channel; otherwise, the method call fails,
+   * and the SDK returns `-5 (ERR_REFUSED)`.
+   *
+   * **Note**
+   * - This method does not change the usage state of the video-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link RtcChannel.joinChannel} and [`setClientRole`]{@link RtcChannel.setClientRole} methods.
+   * For details, see *Set the Publishing State*.
+   *
+   * @param muted Sets whether to stop publishing the local video stream:
+   * - true: Stop publishing the local video stream.
+   * - false: Resume publishing the local video stream.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
+   */
+  muteLocalVideoStream(muted: boolean): Promise<void> {
+    return this._callMethod('muteLocalVideoStream', { muted });
+  }
+
+  pauseAllChannelMediaRelay(): Promise<void> {
+    return this._callMethod('pauseAllChannelMediaRelay');
+  }
+
+  resumeAllChannelMediaRelay(): Promise<void> {
+    return this._callMethod('resumeAllChannelMediaRelay');
+  }
 }
 
 /**
@@ -828,7 +1120,7 @@ interface RtcChannelInterface
     RtcStreamMessageInterface {
   destroy(): Promise<void>;
 
-  setClientRole(role: ClientRole): Promise<void>;
+  setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void>;
 
   joinChannel(
     token: string | undefined | null,
@@ -862,6 +1154,8 @@ interface RtcChannelInterface
 interface RtcAudioInterface {
   adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void>;
 
+  muteLocalAudioStream(muted: boolean): Promise<void>;
+
   muteRemoteAudioStream(uid: number, muted: boolean): Promise<void>;
 
   muteAllRemoteAudioStreams(muted: boolean): Promise<void>;
@@ -873,11 +1167,15 @@ interface RtcAudioInterface {
  * @ignore
  */
 interface RtcVideoInterface {
+  muteLocalVideoStream(muted: boolean): Promise<void>;
+
   muteRemoteVideoStream(uid: number, muted: boolean): Promise<void>;
 
   muteAllRemoteVideoStreams(muted: boolean): Promise<void>;
 
   setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void>;
+
+  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void>;
 }
 
 /**
@@ -909,6 +1207,10 @@ interface RtcMediaRelayInterface {
   updateChannelMediaRelay(
     channelMediaRelayConfiguration: ChannelMediaRelayConfiguration
   ): Promise<void>;
+
+  pauseAllChannelMediaRelay(): Promise<void>;
+
+  resumeAllChannelMediaRelay(): Promise<void>;
 
   stopChannelMediaRelay(): Promise<void>;
 }
@@ -973,6 +1275,8 @@ interface RtcInjectStreamInterface {
  */
 interface RtcStreamMessageInterface {
   createDataStream(reliable: boolean, ordered: boolean): Promise<number>;
+
+  createDataStreamWithConfig(config: DataStreamConfig): Promise<number>;
 
   sendStreamMessage(streamId: number, message: string): Promise<void>;
 }

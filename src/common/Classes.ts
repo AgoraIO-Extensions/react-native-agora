@@ -1,13 +1,21 @@
 import type {
+  AreaCode,
+  AudienceLatencyLevelType,
   AudioChannel,
   AudioCodecProfileType,
+  AudioRecordingPosition,
+  AudioRecordingQuality,
   AudioSampleRateType,
   CameraCaptureOutputPreference,
   CameraDirection,
+  CaptureBrightnessLevelType,
   DegradationPreference,
   EncryptionMode,
+  ExperiencePoorReason,
+  ExperienceQualityType,
   LastmileProbeResultState,
   LighteningContrastLevel,
+  LogLevel,
   NetworkQuality,
   VideoCodecProfileType,
   VideoCodecType,
@@ -39,15 +47,17 @@ export class VideoDimensions {
   /**
    * The video resolution on the horizontal axis.
    */
-  width: number;
+  width?: number;
   /**
    * The video resolution on the vertical axis.
    */
-  height: number;
+  height?: number;
 
-  constructor(width: number, height: number) {
-    this.width = width;
-    this.height = height;
+  constructor(params?: { width?: number; height?: number }) {
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -300,14 +310,16 @@ export class VideoEncoderConfiguration {
     degradationPrefer?: DegradationPreference;
     mirrorMode?: VideoMirrorMode;
   }) {
-    this.dimensions = params?.dimensions;
-    this.frameRate = params?.frameRate;
-    this.minFrameRate = params?.minFrameRate;
-    this.bitrate = params?.bitrate;
-    this.minBitrate = params?.minBitrate;
-    this.orientationMode = params?.orientationMode;
-    this.degradationPrefer = params?.degradationPrefer;
-    this.mirrorMode = params?.mirrorMode;
+    if (params) {
+      this.dimensions = params.dimensions;
+      this.frameRate = params.frameRate;
+      this.minFrameRate = params.minFrameRate;
+      this.bitrate = params.bitrate;
+      this.minBitrate = params.minBitrate;
+      this.orientationMode = params.orientationMode;
+      this.degradationPrefer = params.degradationPrefer;
+      this.mirrorMode = params.mirrorMode;
+    }
   }
 }
 
@@ -340,10 +352,12 @@ export class BeautyOptions {
     smoothnessLevel?: number;
     rednessLevel?: number;
   }) {
-    this.lighteningContrastLevel = params?.lighteningContrastLevel;
-    this.lighteningLevel = params?.lighteningLevel;
-    this.smoothnessLevel = params?.smoothnessLevel;
-    this.rednessLevel = params?.rednessLevel;
+    if (params) {
+      this.lighteningContrastLevel = params.lighteningContrastLevel;
+      this.lighteningLevel = params.lighteningLevel;
+      this.smoothnessLevel = params.smoothnessLevel;
+      this.rednessLevel = params.rednessLevel;
+    }
   }
 }
 
@@ -358,32 +372,36 @@ export class AgoraImage {
   /**
    * Position of the image on the upper left of the broadcasting video on the horizontal axis.
    */
-  x: number;
+  x?: number;
   /**
    * Position of the image on the upper left of the broadcasting video on the vertical axis.
    */
-  y: number;
+  y?: number;
   /**
    * Width of the image on the broadcasting video.
    */
-  width: number;
+  width?: number;
   /**
    * Height of the image on the broadcasting video.
    */
-  height: number;
+  height?: number;
 
   constructor(
     url: string,
-    x: number,
-    y: number,
-    width: number,
-    height: number
+    params?: {
+      x?: number;
+      y?: number;
+      width?: number;
+      height?: number;
+    }
   ) {
     this.url = url;
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    if (params) {
+      this.x = params.x;
+      this.y = params.y;
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -398,11 +416,11 @@ export class TranscodingUser {
   /**
    * Horizontal position of the video frame of the user from the top left corner of the CDN live streaming.
    */
-  x: number;
+  x?: number;
   /**
    * Vertical position of the video frame of the user from the top left corner of the CDN live streaming.
    */
-  y: number;
+  y?: number;
   /**
    * Width of the video frame of the user on the CDN live streaming. The default value is 360.
    */
@@ -437,9 +455,9 @@ export class TranscodingUser {
 
   constructor(
     uid: number,
-    x: number,
-    y: number,
     params?: {
+      x?: number;
+      y?: number;
       width?: number;
       height?: number;
       zOrder?: number;
@@ -448,13 +466,15 @@ export class TranscodingUser {
     }
   ) {
     this.uid = uid;
-    this.x = x;
-    this.y = y;
-    this.width = params?.width;
-    this.height = params?.height;
-    this.zOrder = params?.zOrder;
-    this.alpha = params?.alpha;
-    this.audioChannel = params?.audioChannel;
+    if (params) {
+      this.x = params.x;
+      this.y = params.y;
+      this.width = params.width;
+      this.height = params.height;
+      this.zOrder = params.zOrder;
+      this.alpha = params.alpha;
+      this.audioChannel = params.audioChannel;
+    }
   }
 }
 
@@ -586,21 +606,23 @@ export class LiveTranscoding {
       userConfigExtraInfo?: string;
     }
   ) {
-    this.width = params?.width;
-    this.height = params?.height;
-    this.videoBitrate = params?.videoBitrate;
-    this.videoFramerate = params?.videoFramerate;
-    this.lowLatency = params?.lowLatency;
-    this.videoGop = params?.videoGop;
-    this.watermark = params?.watermark;
-    this.backgroundImage = params?.backgroundImage;
-    this.audioSampleRate = params?.audioSampleRate;
-    this.audioBitrate = params?.audioBitrate;
-    this.audioChannels = params?.audioChannels;
-    this.audioCodecProfile = params?.audioCodecProfile;
-    this.videoCodecProfile = params?.videoCodecProfile;
-    this.backgroundColor = params?.backgroundColor;
-    this.userConfigExtraInfo = params?.userConfigExtraInfo;
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+      this.videoBitrate = params.videoBitrate;
+      this.videoFramerate = params.videoFramerate;
+      this.lowLatency = params.lowLatency;
+      this.videoGop = params.videoGop;
+      this.watermark = params.watermark;
+      this.backgroundImage = params.backgroundImage;
+      this.audioSampleRate = params.audioSampleRate;
+      this.audioBitrate = params.audioBitrate;
+      this.audioChannels = params.audioChannels;
+      this.audioCodecProfile = params.audioCodecProfile;
+      this.videoCodecProfile = params.videoCodecProfile;
+      this.backgroundColor = params.backgroundColor;
+      this.userConfigExtraInfo = params.userConfigExtraInfo;
+    }
     this.transcodingUsers = transcodingUsers;
   }
 }
@@ -612,7 +634,7 @@ export class ChannelMediaInfo {
   /**
    * The channel name.
    */
-  channelName?: string;
+  channelName: string;
   /**
    * The token that enables the user to join the channel.
    */
@@ -622,9 +644,11 @@ export class ChannelMediaInfo {
    */
   uid: number;
 
-  constructor(uid: number, params?: { channelName?: string; token?: string }) {
-    this.channelName = params?.channelName;
-    this.token = params?.token;
+  constructor(channelName: string, uid: number, params?: { token?: string }) {
+    this.channelName = channelName;
+    if (params) {
+      this.token = params.token;
+    }
     this.uid = uid;
   }
 }
@@ -699,25 +723,32 @@ export class Rectangle {
   /**
    * The horizontal offset from the top-left corner.
    */
-  x: number;
+  x?: number;
   /**
    * The vertical offset from the top-left corner.
    */
-  y: number;
+  y?: number;
   /**
    * The width (pixels) of the watermark image.
    */
-  width: number;
+  width?: number;
   /**
    * The height (pixels) of the watermark image.
    */
-  height: number;
+  height?: number;
 
-  constructor(x: number, y: number, width: number, height: number) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  constructor(params?: {
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+  }) {
+    if (params) {
+      this.x = params.x;
+      this.y = params.y;
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -734,20 +765,22 @@ export class WatermarkOptions {
   /**
    * The watermark position in the landscape mode.
    */
-  positionInLandscapeMode: Rectangle;
+  positionInLandscapeMode?: Rectangle;
   /**
    * The watermark position in the portrait mode.
    */
-  positionInPortraitMode: Rectangle;
+  positionInPortraitMode?: Rectangle;
 
-  constructor(
-    positionInLandscapeMode: Rectangle,
-    positionInPortraitMode: Rectangle,
-    visibleInPreview?: boolean
-  ) {
-    this.visibleInPreview = visibleInPreview;
-    this.positionInLandscapeMode = positionInLandscapeMode;
-    this.positionInPortraitMode = positionInPortraitMode;
+  constructor(params?: {
+    visibleInPreview?: boolean;
+    positionInLandscapeMode?: Rectangle;
+    positionInPortraitMode?: Rectangle;
+  }) {
+    if (params) {
+      this.visibleInPreview = params.visibleInPreview;
+      this.positionInLandscapeMode = params.positionInLandscapeMode;
+      this.positionInPortraitMode = params.positionInPortraitMode;
+    }
   }
 }
 
@@ -814,14 +847,50 @@ export class LiveInjectStreamConfig {
     audioBitrate?: number;
     audioChannels?: AudioChannel;
   }) {
-    this.width = params?.width;
-    this.height = params?.height;
-    this.videoGop = params?.videoGop;
-    this.videoFramerate = params?.videoFramerate;
-    this.videoBitrate = params?.videoBitrate;
-    this.audioSampleRate = params?.audioSampleRate;
-    this.audioBitrate = params?.audioBitrate;
-    this.audioChannels = params?.audioChannels;
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+      this.videoGop = params.videoGop;
+      this.videoFramerate = params.videoFramerate;
+      this.videoBitrate = params.videoBitrate;
+      this.audioSampleRate = params.audioSampleRate;
+      this.audioBitrate = params.audioBitrate;
+      this.audioChannels = params.audioChannels;
+    }
+  }
+}
+
+/**
+ * The metronome configuration, which is set in [`startRhythmPlayer`]{@link startRhythmPlayer} or [`configRhythmPlayer`]{@link configRhythmPlayer}.
+ *
+ * @since v3.4.2
+ */
+export class RhythmPlayerConfig {
+  /**
+   * The number of beats per measure. The range is 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
+   */
+  beatsPerMeasure?: number;
+  /**
+   * Tempo (beats per minute). The range is 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
+   */
+  beatsPerMinute?: number;
+  /**
+   * Whether to publish the sound of the metronome to remote users:
+   * - `true`: (Default) Publish. Both the local user and remote users can hear the metronome.
+   * - `false`: Do not publish. Only the local user can hear the metronome.
+   */
+  publish?: boolean;
+
+  constructor(params?: {
+    beatsPerMeasure?: number;
+    beatsPerMinute?: number;
+    publish?: boolean;
+  }) {
+    if (params) {
+      this.beatsPerMeasure = params.beatsPerMeasure;
+      this.beatsPerMinute = params.beatsPerMinute;
+      this.publish = params.publish;
+    }
   }
 }
 
@@ -830,20 +899,38 @@ export class LiveInjectStreamConfig {
  */
 export class CameraCapturerConfiguration {
   /**
-   * The camera capturer configuration.
+   * The camera capture preference.
    */
-  preference: CameraCaptureOutputPreference;
+  preference?: CameraCaptureOutputPreference;
+  /**
+   * The width (px) of the video image captured by the local camera. To customize the width of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureWidth`.
+   *
+   * @since v3.3.1.
+   */
+  captureWidth?: number;
+  /**
+   * The height (px) of the video image captured by the local camera. To customize the height of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureHeight`.
+   *
+   * @since v3.3.1.
+   */
+  captureHeight?: number;
   /**
    * The camera direction.
    */
-  cameraDirection: CameraDirection;
+  cameraDirection?: CameraDirection;
 
-  constructor(
-    preference: CameraCaptureOutputPreference,
-    cameraDirection: CameraDirection
-  ) {
-    this.preference = preference;
-    this.cameraDirection = cameraDirection;
+  constructor(params?: {
+    preference?: CameraCaptureOutputPreference;
+    captureWidth?: number;
+    captureHeight?: number;
+    cameraDirection?: CameraDirection;
+  }) {
+    if (params) {
+      this.preference = params.preference;
+      this.captureWidth = params.captureWidth;
+      this.captureHeight = params.captureHeight;
+      this.cameraDirection = params.cameraDirection;
+    }
   }
 }
 
@@ -858,7 +945,7 @@ export class ChannelMediaOptions {
    *
    * This member serves a similar function to the [`muteAllRemoteAudioStreams`]{@link RtcEngine.muteAllRemoteAudioStreams} method. After joining the channel, you can call the `muteAllRemoteAudioStreams` method to set whether to subscribe to audio streams in the channel.
    */
-  autoSubscribeAudio: boolean;
+  autoSubscribeAudio?: boolean;
   /**
    * Determines whether to subscribe to video streams when the user joins the channel.
    * - `true`: (Default) Subscribe.
@@ -866,11 +953,42 @@ export class ChannelMediaOptions {
    *
    * This member serves a similar function to the [`muteAllRemoteVideoStreams`]{@link RtcEngine.muteAllRemoteVideoStreams} method. After joining the channel, you can call the `muteAllRemoteVideoStreams` method to set whether to subscribe to audio streams in the channel.
    */
-  autoSubscribeVideo: boolean;
+  autoSubscribeVideo?: boolean;
+  /**
+   * Determines whether to publish the local audio stream when the user joins a channel:
+   * - `true`: (Default) Publish.
+   * - `false`: Do not publish.
+   *
+   * This member serves a similar function to the [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} method.
+   * After the user joins the channel, you can call the `muteLocalAudioStream` method to set whether to publish the local audio stream in the channel.
+   *
+   * @since v3.4.5
+   */
+  publishLocalAudio?: boolean;
+  /**
+   * Determines whether to publish the local video stream when the user joins a channel:
+   * - `true`: (Default) Publish.
+   * - `false`: Do not publish.
+   *
+   * This member serves a similar function to the [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream} method.
+   * After the user joins the channel, you can call the `muteLocalVideoStream` method to set whether to publish the local video stream in the channel.
+   *
+   * @since v3.4.5
+   */
+  publishLocalVideo?: boolean;
 
-  constructor(autoSubscribeAudio: boolean, autoSubscribeVideo: boolean) {
-    this.autoSubscribeAudio = autoSubscribeAudio;
-    this.autoSubscribeVideo = autoSubscribeVideo;
+  constructor(params?: {
+    autoSubscribeAudio?: boolean;
+    autoSubscribeVideo?: boolean;
+    publishLocalAudio?: boolean;
+    publishLocalVideo?: boolean;
+  }) {
+    if (params) {
+      this.autoSubscribeAudio = params.autoSubscribeAudio;
+      this.autoSubscribeVideo = params.autoSubscribeVideo;
+      this.publishLocalAudio = params.publishLocalAudio;
+      this.publishLocalVideo = params.publishLocalVideo;
+    }
   }
 }
 
@@ -881,9 +999,10 @@ export class ChannelMediaOptions {
  */
 export class EncryptionConfig {
   /**
-   * Encryption mode. The default encryption mode is `AES128XTS`. See [`EncryptionMode`]{@link EncryptionMode}.
+   * Encryption mode. The default encryption mode is `AES128GCM2`.
+   * See [`EncryptionMode`]{@link EncryptionMode}.
    */
-  encryptionMode: EncryptionMode;
+  encryptionMode?: EncryptionMode;
   /**
    * Encryption key in string type.
    *
@@ -891,11 +1010,30 @@ export class EncryptionConfig {
    *
    * If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [`InvalidArgument(2)`]{@link ErrorCode.InvalidArgument}.
    */
-  encryptionKey: string;
+  encryptionKey?: string;
+  /**
+   * The salt. Agora recommends using OpenSSL to generate the salt on your server.
+   * For details, see *Media Stream Encryption*.
+   *
+   * @since v3.4.5
+   *
+   * Note: This parameter is only valid when you set the encryption mode as `AES128GCM2` or `AES256GCM2`.
+   * Ensure that this parameter meets the following requirements:
+   * - Android: This parameter is not 0.
+   * - iOS: This parameter is not nil or 0, and the data length is 32 bytes.
+   */
+  encryptionKdfSalt?: number[];
 
-  constructor(encryptionMode: EncryptionMode, encryptionKey: string) {
-    this.encryptionMode = encryptionMode;
-    this.encryptionKey = encryptionKey;
+  constructor(params?: {
+    encryptionMode?: EncryptionMode;
+    encryptionKey?: string;
+    encryptionKdfSalt?: number[];
+  }) {
+    if (params) {
+      this.encryptionMode = params.encryptionMode;
+      this.encryptionKey = params.encryptionKey;
+      this.encryptionKdfSalt = params.encryptionKdfSalt;
+    }
   }
 }
 
@@ -906,7 +1044,7 @@ export interface RtcStats {
   /**
    * Call duration in seconds, represented by an aggregate value.
    */
-  totalDuration: number;
+  duration: number;
   /**
    * Total number of bytes transmitted, represented by an aggregate value.
    */
@@ -962,7 +1100,7 @@ export interface RtcStats {
    *  - If the local user is an audience member: The number of users in the channel = The number of hosts in the channel + 1.
    *  - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
    */
-  users: number;
+  userCount: number;
   /**
    * Client-server latency.
    */
@@ -977,10 +1115,18 @@ export interface RtcStats {
   rxPacketLossRate: number;
   /**
    * System CPU usage (%).
+   *
+   * **Note**
+   *
+   * The `cpuTotalUsage` reported in the `LeaveChannel` callback is always 0.
    */
   cpuTotalUsage: number;
   /**
    * Application CPU usage (%).
+   *
+   * **Note**
+   *
+   * The `cpuAppUsage` reported in the `LeaveChannel` callback is always 0.
    */
   cpuAppUsage: number;
   /**
@@ -1194,6 +1340,12 @@ export interface LocalVideoStats {
    * @since v3.1.2.
    */
   captureFrameRate: number;
+  /**
+   * The brightness level of the video image captured by the local camera. See [`CaptureBrightnessLevelType`]{@link CaptureBrightnessLevelType}.
+   *
+   * @since v3.3.1.
+   */
+  captureBrightnessLevel: CaptureBrightnessLevelType;
 }
 
 /**
@@ -1214,6 +1366,10 @@ export interface RemoteAudioStats {
   networkTransportDelay: number;
   /**
    * Network delay (ms) from the receiver to the jitter buffer.
+   *
+   * **Note**
+   *
+   * When the receiver is an audience member and `AudienceLatencyLevelType` is `1`, this parameter does not take effect.
    */
   jitterBufferDelay: number;
   /**
@@ -1251,6 +1407,37 @@ export interface RemoteAudioStats {
    *
    */
   publishDuration: number;
+  /**
+   * Quality of experience (QoE) of the local user when receiving a remote audio stream. See [`ExperienceQualityType`]{@link ExperienceQualityType}.
+   *
+   * @since 3.3.1.
+   */
+  qoeQuality: ExperienceQualityType;
+  /**
+   * The reason for poor QoE of the local user when receiving a remote audio stream. See [`ExperiencePoorReason`]{@link ExperiencePoorReason}.
+   *
+   * @since 3.3.1.
+   */
+  qualityChangedReason: ExperiencePoorReason;
+  /**
+   * The quality of the remote audio stream as determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method in the reported interval. The return value ranges from 0 to 500. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.
+   *
+   * @since v3.3.1.
+   *
+   * The subjective perception of audio quality corresponding to the Agora
+   * real-time audio MOS scores is as follows:
+   *
+   * | MOS score       | Perception of audio quality                                                                                                                                 |
+   * |-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+   * | Greater than 4  | Excellent. The audio sounds clear and smooth.                                                                                                               |
+   * | From 3.5 to 4   | Good. The audio has some perceptible impairment, but still sounds clear.                                                                                    |
+   * | From 3 to 3.5   | Fair. The audio freezes occasionally and requires attentive listening.                                                                                      |
+   * | From 2.5 to 3   | Poor. The audio sounds choppy and requires considerable effort to understand.                                                                               |
+   * | From 2 to 2.5   | Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.  |
+   * | Less than 2     | Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible. |
+   *
+   */
+  mosValue: number;
 }
 
 /**
@@ -1347,4 +1534,204 @@ export interface FacePositionInfo {
    * The distance (cm) between the human face and the screen.
    */
   distance: number;
+}
+
+/**
+ * The detailed options of a user.
+ *
+ * @since v3.2.0.
+ */
+export class ClientRoleOptions {
+  /**
+   * The latency level of an audience member in a live interactive streaming. See {@link AudienceLatencyLevelType}.
+   */
+  audienceLatencyLevel?: AudienceLatencyLevelType;
+
+  constructor(params?: { audienceLatencyLevel?: AudienceLatencyLevelType }) {
+    if (params) {
+      this.audienceLatencyLevel = params.audienceLatencyLevel;
+    }
+  }
+}
+
+/**
+ * Log file configurations.
+ *
+ * @since v3.3.1.
+ */
+export class LogConfig {
+  /**
+   * The absolute path of log files. The default file path is as follows:
+   *   - Android: `/storage/emulated/0/Android/data/<package_name>/files/agorasdk.log`
+   *   - iOS: `App Sandbox/Library/caches/agorasdk.log`
+   * Ensure that the directory for the log files exists and is writable. You can use this parameter to rename the log files.
+   */
+  filePath?: string;
+  /**
+   * The size (KB) of a log file. The default value is 1024 KB. If you set `fileSize` to 1024 KB, the SDK outputs at most 5 MB log files; if you set it to less than 1024 KB, the setting is invalid, and the maximum size of a log file is still 1024 KB.
+   */
+  fileSize?: number;
+  /**
+   * The output log level of the SDK.
+   *
+   * For example, if you set the log level to `WARN`, the SDK outputs the logs within levels `FATAL`, `ERROR`, and `WARN`.
+   *
+   * See [`LogLevel`]{@link enum LogLevel}.
+   */
+  level?: LogLevel;
+
+  constructor(params?: {
+    filePath?: string;
+    fileSize?: number;
+    level?: LogLevel;
+  }) {
+    if (params) {
+      this.filePath = params.filePath;
+      this.fileSize = params.fileSize;
+      this.level = params.level;
+    }
+  }
+}
+
+/**
+ * The configurations for the data stream.
+ *
+ * @since v3.3.1
+ *
+ * | `syncWithAudio` | `ordered` | SDK behaviors                                                |
+ * | :-------------- | :-------- | :----------------------------------------------------------- |
+ * | `false`         | `false`   | The SDK triggers the `StreamMessage` callback immediately after the receiver receives a data packet. |
+ * | `true`          | `false`   | <ul><li>If the data packet delay is within the audio delay, the SDK triggers the <code>StreamMessage</code> callback when the synchronized audio packet is played out</li><li>If the data packet delay exceeds the audio delay, the SDK triggers the <code>StreamMessage</code> callback as soon as the data packet is received. In this case, the data packet is not synchronized with the audio packet.</li></ul>.  |
+ * | `false`         | `true`    | <ul><li>If the delay of a data packet is within five seconds, the SDK corrects the order of the data packet.</li><li>If the delay of a data packet exceeds five seconds, the SDK discards the data packet.</li></ul> |
+ * | `true`          | `true`    |    <ul><li>If the delay of a data packet is within the audio delay, the SDK corrects the order of the data packet.</li><li>If the delay of a data packet exceeds the audio delay, the SDK discards this data packet.</li></ul>                                                          |
+ */
+export class DataStreamConfig {
+  /**
+   * Whether to synchronize the data packet with the published audio packet.
+   * - `true`: Synchronize the data packet with the audio packet.
+   * - `false`: Do not synchronize the data packet with the audio packet.
+   *
+   * When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the [`StreamMessage`]{@link RtcEngineEvents.StreamMessage} callback when the synchronized audio packet is played out. Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
+   */
+  syncWithAudio: boolean;
+  /**
+   * Whether the SDK guarantees that the receiver receives the data in the sent order.
+   * - `true`: Guarantee that the receiver receives the data in the sent order.
+   * - `false`: Do not guarantee that the receiver receives the data in the sent order.
+   *
+   * Do not set this parameter to `true` if you need the receiver to receive the data immediately.
+   */
+  ordered: boolean;
+
+  constructor(syncWithAudio: boolean, ordered: boolean) {
+    this.syncWithAudio = syncWithAudio;
+    this.ordered = ordered;
+  }
+}
+
+/**
+ * Configurations for the [`RtcEngine`]{@link RtcEngine}.
+ *
+ * @since v3.3.1
+ */
+export class RtcEngineContext {
+  /**
+   * The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
+   * Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
+   * one `IRtcEngine` instance. To change your App ID, call `release` to destroy the current `IRtcEngine` instance and then call `createAgoraRtcEngine`
+   * and `initialize` to create an `IRtcEngine` instance with the new App ID.
+   */
+  appId: string;
+  /**
+   * The region for connection. This advanced feature applies to scenarios that have regional restrictions.
+   *
+   * For the regions that Agora supports, see [`AreaCode`]{@link AreaCode}. The area codes support bitwise operation.
+   *
+   * After specifying the region, the SDK connects to the Agora servers within that region.
+   *
+   */
+  areaCode?: AreaCode[];
+  /**
+   * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link LogConfig}.
+   *
+   * By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB. These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
+   *
+   * The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable.
+   */
+  logConfig?: LogConfig;
+
+  constructor(
+    appId: string,
+    params?: { areaCode?: AreaCode[]; logConfig?: LogConfig }
+  ) {
+    this.appId = appId;
+    if (params) {
+      this.areaCode = params.areaCode;
+      this.logConfig = params.logConfig;
+    }
+  }
+}
+
+/**
+ *
+ * Configurations for the [`RtcEngine`]{@link RtcEngine}.
+ *
+ * @deprecated As of v3.4.5, this class is deprecated. Use [`RtcEngineContext`]{@link RtcEngineContext} instead.
+ *
+ * @since v3.3.1
+ */
+export class RtcEngineConfig extends RtcEngineContext {}
+
+/**
+ * Recording configuration, which is set in [`startAudioRecordingWithConfig`]{@link startAudioRecordingWithConfig}.
+ */
+export class AudioRecordingConfiguration {
+  /**
+   *
+   * The absolute path (including the filename extensions) of the recording file. For example:
+   * - On Android: `/sdcard/emulated/0/audio.aac`.
+   * - On iOS: `/var/mobile/Containers/Data/audio.aac`.
+   *
+   * @note
+   * Ensure that the path you specify exists and is writable.
+   */
+  filePath: string;
+  /**
+   * Audio recording quality. See [`AudioRecordingQuality`]{@link AudioRecordingQuality}.
+   *
+   * @note This parameter applies to AAC files only.
+   */
+  recordingQuality?: AudioRecordingQuality;
+  /**
+   * Recording content. See [`AudioRecordingPosition`]{@link AudioRecordingPosition}.
+   */
+  recordingPosition?: AudioRecordingPosition;
+  /**
+   * Recording sample rate (Hz). The following values are supported:
+   * - 16000
+   * - (Default) 32000
+   * - 44100
+   * - 48000
+   *
+   * @note
+   * If this parameter is set to `44100` or `48000`, for better recording effects, Agora recommends recording WAV files or AAC files whose `recordingQuality` is `Medium` or `High`.
+   *
+   */
+  recordingSampleRate?: AudioSampleRateType;
+
+  constructor(
+    filePath: string,
+    params?: {
+      recordingQuality?: AudioRecordingQuality;
+      recordingPosition?: AudioRecordingPosition;
+      recordingSampleRate?: AudioSampleRateType;
+    }
+  ) {
+    this.filePath = filePath;
+    if (params) {
+      this.recordingQuality = params.recordingQuality;
+      this.recordingPosition = params.recordingPosition;
+      this.recordingSampleRate = params.recordingSampleRate;
+    }
+  }
 }
