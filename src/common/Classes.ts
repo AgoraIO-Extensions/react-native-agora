@@ -1632,7 +1632,7 @@ export class DataStreamConfig {
 /**
  * Configurations for the [`RtcEngine`]{@link RtcEngine}.
  *
- * @since v3.3.1
+ * @since v3.4.5
  */
 export class RtcEngineContext {
   /**
