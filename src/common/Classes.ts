@@ -24,6 +24,7 @@ import type {
   VideoOutputOrientationMode,
   VideoQualityAdaptIndication,
   VideoStreamType,
+  VirtualBackgroundSourceType,
 } from './Enums';
 
 /**
@@ -1732,6 +1733,27 @@ export class AudioRecordingConfiguration {
       this.recordingQuality = params.recordingQuality;
       this.recordingPosition = params.recordingPosition;
       this.recordingSampleRate = params.recordingSampleRate;
+    }
+  }
+}
+
+/**
+ * TODO:(doc)
+ */
+export class VirtualBackgroundSource {
+  backgroundSourceType?: VirtualBackgroundSourceType;
+  color?: Color;
+  source?: string;
+
+  constructor(params?: {
+    backgroundSourceType?: VirtualBackgroundSourceType;
+    color?: Color;
+    source?: string;
+  }) {
+    if (params) {
+      this.backgroundSourceType = params.backgroundSourceType;
+      this.color = params.color;
+      this.source = params.source;
     }
   }
 }

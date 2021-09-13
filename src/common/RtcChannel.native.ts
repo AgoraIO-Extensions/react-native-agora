@@ -530,6 +530,7 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * @ignore
+   *
    * Enables/Disables the super-resolution algorithm for a remote user's video stream.
    *
    * @since v3.3.1. (later)
@@ -1093,6 +1094,14 @@ export default class RtcChannel implements RtcChannelInterface {
   muteLocalVideoStream(muted: boolean): Promise<void> {
     return this._callMethod('muteLocalVideoStream', { muted });
   }
+
+  pauseAllChannelMediaRelay(): Promise<void> {
+    return this._callMethod('pauseAllChannelMediaRelay');
+  }
+
+  resumeAllChannelMediaRelay(): Promise<void> {
+    return this._callMethod('resumeAllChannelMediaRelay');
+  }
 }
 
 /**
@@ -1199,6 +1208,10 @@ interface RtcMediaRelayInterface {
   updateChannelMediaRelay(
     channelMediaRelayConfiguration: ChannelMediaRelayConfiguration
   ): Promise<void>;
+
+  pauseAllChannelMediaRelay(): Promise<void>;
+
+  resumeAllChannelMediaRelay(): Promise<void>;
 
   stopChannelMediaRelay(): Promise<void>;
 }

@@ -804,6 +804,22 @@ export enum ChannelMediaRelayEvent {
    * 11: The video profile is sent to the server.
    */
   VideoProfileUpdate = 11,
+  /**
+   * @ignore
+   */
+  PauseSendPacketToDestChannelSuccess = 12,
+  /**
+   * @ignore
+   */
+  PauseSendPacketToDestChannelFailed = 13,
+  /**
+   * @ignore
+   */
+  ResumeSendPacketToDestChannelSuccess = 14,
+  /**
+   * @ignore
+   */
+  ResumeSendPacketToDestChannelFailed = 15,
 }
 
 /**
@@ -2937,7 +2953,7 @@ export enum UploadErrorReason {
    */
   NetError = 1,
   /**
-   * 0: Agora 服务器错误，请稍后尝试。
+   * 2: An error occurs in the Agora server. Try uploading the log files later.
    */
   ServerError = 2,
 }
@@ -3033,4 +3049,22 @@ export enum VoiceConversionPreset {
    * 50397952: A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
   Bass = 50397952,
+}
+
+/**
+ * TODO:(doc)
+ */
+export enum VirtualBackgroundSourceType {
+  Color = 1,
+  Img = 2,
+}
+
+/**
+ * TODO:(doc)
+ */
+export enum VirtualBackgroundSourceStateReason {
+  Success = 0,
+  ImageNotExist = 1,
+  ColorFormatNotSupported = 2,
+  DeviceNotSupported = 3,
 }
