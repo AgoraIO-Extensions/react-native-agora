@@ -849,7 +849,7 @@ export enum ChannelMediaRelayState {
  */
 export enum ChannelProfile {
   /**
-   * 0: (Default) The Communication profile.
+   * 0: The Communication profile.
    * Use this profile in one-on-one calls or group calls, where all users can talk freely.
    */
   Communication = 0,
@@ -870,11 +870,17 @@ export enum ChannelProfile {
  */
 export enum ClientRole {
   /**
-   * 1: A host can both send and receive streams.
+   * 1: Host.
+   *
+   * A host can both send and receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(false)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(false)`]{@link muteLocalVideoStream}.
    */
   Broadcaster = 1,
   /**
-   * 2: The default role. An audience can only receive streams.
+   * 2: Audience.
+   *
+   * An audience member can only receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(true)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(true)`]{@link muteLocalVideoStream}.
    */
   Audience = 2,
 }
@@ -947,6 +953,7 @@ export enum ConnectionChangedReason {
    */
   KeepAliveTimeout = 14,
   /**
+   * @ignore
    * 15: In cloud proxy mode, the proxy server connection is interrupted.
    */
   ProxyServerInterrupted = 15,
@@ -3053,7 +3060,6 @@ export enum VoiceConversionPreset {
 }
 
 /**
- * // TODO:(doc)
  * The type of the custom background image.
  */
 export enum VirtualBackgroundSourceType {
@@ -3068,7 +3074,6 @@ export enum VirtualBackgroundSourceType {
 }
 
 /**
- * // TODO:(doc)
  * The reason why the virtual background is not successfully enabled or the message that confirms success.
  */
 export enum VirtualBackgroundSourceStateReason {
