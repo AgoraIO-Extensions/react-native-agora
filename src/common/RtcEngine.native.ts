@@ -2135,26 +2135,20 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Sets the default audio playback route.
+   * Sets the default audio route.
    *
-   * This method sets whether the received audio is routed to the earpiece or speakerphone
-   * by default before joining a channel. If a user does not call this method,
-   * the audio is routed to the earpiece by default. If you need to change the default audio route after
-   * joining a channel, call [`setEnableSpeakerphone`]{@link setEnableSpeakerphone}.
+   * If the default audio route of the SDK (see [Set the Audio Route](https://docs.agora.io/en/Video/set_audio_route_android?platform=Android) ) cannot meet your requirements,
+   * you can call this method to switch the default audio route. After successfully switching the audio route,
+   * the SDK triggers the [`AudioRouteChanged`]{@link AudioRouteChanged} callback to indicate the changes.
    *
-   * The default audio route for each scenario:
-   * - In the [`Communication`]{@link ChannelProfile.Communication} profile:
+   * **Note**
    *
-   *  - For a voice call, the default audio route is the earpiece.
-   *  - For a video call, the default audio route is the speaker. If the user disables the video
-   * using [`disableVideo`]{@link disableVideo}, or [`muteLocalVideoStream`]{@link muteLocalVideoStream} and [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}, the default audio route automatically switches back to the earpiece.
+   * - Call this method before calling `joinChannel`. If you need to switch the audio route after joining a channel, call [`setEnableSpeakerphone`]{@link setEnableSpeakerphone}.
+   * - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
    *
-   * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
-   *
-   * **Note** Call this method before the user joins a channel.
-   * @param defaultToSpeaker Sets the default audio route:
-   * - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
-   * - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
+   * @param defaultToSpeaker Sets the default audio route as follows:
+   * - `true`: Set to the speakerphone.
+   * - `false`: Set to the earpiece.
    */
   setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker: boolean): Promise<void> {
     return RtcEngine._callMethod('setDefaultAudioRoutetoSpeakerphone', {
@@ -2163,25 +2157,22 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Enables/Disables the audio playback route to the speakerphone.
+   * Enables/Disables the audio route to the speakerphone.
    *
-   * This method sets whether the audio is routed to the speakerphone or earpiece.
-   * After calling this method, the SDK returns the [`AudioRouteChanged`]{@link RtcEngineEvents.AudioRouteChanged} callback to indicate the changes.
+   * If the default audio route of the SDK (see [Set the Audio Route](https://docs.agora.io/en/Video/set_audio_route_android?platform=Android) ) or
+   * the setting in [`setDefaultAudioRoutetoSpeakerphone`]{@link setDefaultAudioRoutetoSpeakerphone} cannot meet your requirements,
+   * you can call this method to switch the current audio route. After successfully switching the audio route, the SDK triggers the [`AudioRouteChanged`]{@link RtcEngineEvents.AudioRouteChanged} callback to indicate the changes.
+   *
+   * This method only sets the audio route in the current channel and does not influence the default audio route. If the user leaves the current channel and joins another channel, the default audio route is used.
    *
    * **Note**
    *
-   * - Ensure that you have successfully called [`joinChannel`]{@link joinChannel} before calling this method.
+   * - Call this method after calling `joinChannel`.
+   * - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
    *
-   * - This method is invalid for audience users in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
-   *
-   * - Settings of `setAudioProfile` and `setChannelProfile` affect the call result of `setEnableSpeakerphone`. The following are scenarios where `setEnableSpeakerphone` does not take effect:
-   *    - If you set `scenario` as `GameStreaming`, no user can change the audio playback route.
-   *    - If you set `scenario` as `Default` or `ShowRoom`, the audience cannot change the audio playback route. If there is only one host is in the channel, the host cannot change the audio playback route either.
-   *    - If you set `scenario` as `Education`, the audience cannot change the audio playback route.
-   *
-   * @param enabled Sets whether to route the audio to the speakerphone or earpiece:
-   * - `true`: Route the audio to the speakerphone. If the playback device connects to the headset or Bluetooth, the audio cannot be routed to the speakerphone.
-   * - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
+   * @param enabled Sets whether to enable the speakerphone or earpiece
+   * - `true`: Enable the speakerphone. The audio route is the speakerphone.
+   * - `false`: Disable the speakerphone. The audio route is the earpiece.
    */
   setEnableSpeakerphone(enabled: boolean): Promise<void> {
     return RtcEngine._callMethod('setEnableSpeakerphone', { enabled });
