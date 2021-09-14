@@ -511,7 +511,11 @@ export type UploadLogResultCallback =
   (requestId: string, success: boolean, reason: UploadErrorReason) => void;
 export type VirtualBackgroundSourceEnabledCallback =
   /**
-   * TODO:(doc)
+   * // TODO:(doc)
+   * @param enabled Whether the virtual background is successfully enabled:
+   *  - `true`: The virtual background is successfully enabled.
+   *  - `false`: The virtual background is not successfully enabled.
+   * @param reason The reason why the virtual background is not successfully enabled or the message that confirms success. See [`VirtualBackgroundSourceStateReason`]{@link VirtualBackgroundSourceStateReason}.
    */
   (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
 
@@ -1804,12 +1808,21 @@ export interface RtcChannelEvents {
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 
   /**
-   * TODO:(doc)
+   * // TODO:(doc) 这是什么？
    */
   AirPlayIsConnected: EmptyCallback;
 
   /**
-   * TODO:(doc)
+   * // TODO:(doc)
+   * Reports whether the virtual background is successfully enabled. (beta function)
+   *
+   * @since v3.5.0.3
+   *
+   * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
+   *
+   * @note
+   * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
+   *
    */
   VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
 }

@@ -1738,11 +1738,32 @@ export class AudioRecordingConfiguration {
 }
 
 /**
- * TODO:(doc)
+ * // TODO doc
+ * The custom background image.
+ *
+ * @since v3.5.0.3
  */
 export class VirtualBackgroundSource {
+  /**
+   * The type of the custom background image. See [`VirtualBackgroundSourceType`]{@link VirtualBackgroundSourceType}.
+   */
   backgroundSourceType?: VirtualBackgroundSourceType;
+  /**
+   * The color of the custom background image.
+   * The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink.
+   * The default value is 0xFFFFFF, which signifies white. The value range is [0x000000,0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.
+   *
+   * @note
+   * This parameter takes effect only when the type of the custom background image is `Color`.
+   */
   color?: Color;
+  /**
+   * The local absolute path of the custom background image. PNG and JPG formats are supported.
+   * If the path is invalid, the SDK replaces the original background image with a white background image.
+   *
+   * @note
+   * This parameter takes effect only when the type of the custom background image is `Img`.
+   */
   source?: string;
 
   constructor(params?: {

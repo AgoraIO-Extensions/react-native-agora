@@ -2917,6 +2917,7 @@ export enum CaptureBrightnessLevelType {
 }
 
 /**
+ * @ignore
  * The reason why the super-resolution algorithm is not successfully enabled.
  */
 export enum SuperResolutionStateReason {
@@ -3052,19 +3053,39 @@ export enum VoiceConversionPreset {
 }
 
 /**
- * TODO:(doc)
+ * // TODO:(doc)
+ * The type of the custom background image.
  */
 export enum VirtualBackgroundSourceType {
+  /**
+   * (Default) The background image is a solid color.
+   */
   Color = 1,
+  /**
+   * The background image is a file in PNG or JPG format.
+   */
   Img = 2,
 }
 
 /**
- * TODO:(doc)
+ * // TODO:(doc)
+ * The reason why the virtual background is not successfully enabled or the message that confirms success.
  */
 export enum VirtualBackgroundSourceStateReason {
+  /**
+   * The virtual background is successfully enabled.
+   */
   Success = 0,
+  /**
+   * The custom background image does not exist. Please check the value of source in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
   ImageNotExist = 1,
+  /**
+   * The color format of the custom background image is invalid. Please check the value of color in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
   ColorFormatNotSupported = 2,
+  /**
+   * The device does not support using the virtual background.
+   */
   DeviceNotSupported = 3,
 }

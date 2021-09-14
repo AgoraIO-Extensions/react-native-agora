@@ -3406,7 +3406,40 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * TODO:(doc)
+   * Enables/Disables the virtual background function. (beta function)
+   *
+   * @since v3.5.0.3
+   *
+   * After enabling the virtual background function, you can replace the original background image of the local user with a custom background image.
+   * After the replacement, all users in the channel can see the custom background image. You can find out from the
+   * [`VirtualBackgroundSourceEnabled`]{@link RtcChannelEvents.VirtualBackgroundSourceEnabled} callback whether the virtual background is successfully enabled or the cause of any errors.
+   *
+   * @note
+   * - Call this method after [`enableVideo`]{@link enableVideo}.
+   * - This functions requires a high-performance device. Agora recommends that you use this function on the following devices:
+   *   - Android: Devices with the following chips:
+   *     - Snapdragon 700 series 750G and later
+   *     - Snapdragon 800 series 835 and later
+   *     - Dimensity 700 series 720 and later
+   *     - Kirin 800 series 810 and later
+   *     - Kirin 900 series 980 and later
+   *   - iOS: Devices with an A9 chip and better, as follows:
+   *     - iPhone 6S and later
+   *     - iPad Air (3rd generation) and later
+   *     - iPad (5th generation) and later
+   *     - iPad Pro (1st generation) and later
+   *     - iPad mini (5th generation) and later
+   * - Agora recommends that you use this function in scenarios that meet the following conditions:
+   *   - A high-definition camera device is used, and the environment is uniformly lit.
+   *   - The captured video image is uncluttered, the user's portrait is half-length and largely unobstructed, and the background is a single color that differs from the color of the user's clothing.
+   *
+   * @param enabled Sets whether to enable the virtual background:
+   * - `true`: Enable.
+   * - `false`: Disable.
+   * @param backgroundSource The custom background image. See [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   * Note: To adapt the resolution of the custom background image to the resolution of the SDK capturing video, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
+   *
+   * // TODO 有没有返回值？
    */
   enableVirtualBackground(
     enabled: boolean,
