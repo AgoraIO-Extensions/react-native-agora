@@ -48,7 +48,7 @@ class RCTAgoraRtcEngineModule(
   }
 
   @ReactMethod
-  fun removeListeners(count: Number) {
+  fun removeListeners(count: Int) {
     // Keep: Required for RN built in Event Emitter Calls.
   }
 
