@@ -216,7 +216,7 @@ export enum AudioMixingStateCode {
    */
   Paused = 711,
   /**
-   * 712: Ignore this state.
+   * @ignore
    */
   Restart = 712,
   /**
@@ -849,7 +849,7 @@ export enum ChannelMediaRelayState {
  */
 export enum ChannelProfile {
   /**
-   * 0: (Default) The Communication profile.
+   * 0: The Communication profile.
    * Use this profile in one-on-one calls or group calls, where all users can talk freely.
    */
   Communication = 0,
@@ -870,11 +870,17 @@ export enum ChannelProfile {
  */
 export enum ClientRole {
   /**
-   * 1: A host can both send and receive streams.
+   * 1: Host.
+   *
+   * A host can both send and receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(false)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(false)`]{@link muteLocalVideoStream}.
    */
   Broadcaster = 1,
   /**
-   * 2: The default role. An audience can only receive streams.
+   * 2: Audience.
+   *
+   * An audience member can only receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(true)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(true)`]{@link muteLocalVideoStream}.
    */
   Audience = 2,
 }
@@ -947,6 +953,7 @@ export enum ConnectionChangedReason {
    */
   KeepAliveTimeout = 14,
   /**
+   * @ignore
    * 15: In cloud proxy mode, the proxy server connection is interrupted.
    */
   ProxyServerInterrupted = 15,
@@ -1171,6 +1178,7 @@ export enum ErrorCode {
    */
   AlreadyInUse = 19,
   /**
+   * @ignore
    * 20: The SDK gave up the request due to too many requests.
    */
   Abort = 20,
@@ -1179,6 +1187,7 @@ export enum ErrorCode {
    */
   InitNetEngine = 21,
   /**
+   * @ignore
    * 22: The app uses too much of the system resources and the SDK fails to allocate the resources.
    */
   ResourceLimited = 22,
@@ -2915,6 +2924,7 @@ export enum CaptureBrightnessLevelType {
 }
 
 /**
+ * @ignore
  * The reason why the super-resolution algorithm is not successfully enabled.
  */
 export enum SuperResolutionStateReason {
@@ -2971,6 +2981,7 @@ export enum CloudProxyType {
    */
   UDP = 1,
   /**
+   * @ignore
    * 2: The cloud proxy for the TCP (encryption) protocol.
    */
   TCP = 2,
@@ -3049,19 +3060,37 @@ export enum VoiceConversionPreset {
 }
 
 /**
- * TODO:(doc)
+ * The type of the custom background image.
  */
 export enum VirtualBackgroundSourceType {
+  /**
+   * (Default) The background image is a solid color.
+   */
   Color = 1,
+  /**
+   * The background image is a file in PNG or JPG format.
+   */
   Img = 2,
 }
 
 /**
- * TODO:(doc)
+ * The reason why the virtual background is not successfully enabled or the message that confirms success.
  */
 export enum VirtualBackgroundSourceStateReason {
+  /**
+   * The virtual background is successfully enabled.
+   */
   Success = 0,
+  /**
+   * The custom background image does not exist. Please check the value of source in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
   ImageNotExist = 1,
+  /**
+   * The color format of the custom background image is invalid. Please check the value of color in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
   ColorFormatNotSupported = 2,
+  /**
+   * The device does not support using the virtual background.
+   */
   DeviceNotSupported = 3,
 }
