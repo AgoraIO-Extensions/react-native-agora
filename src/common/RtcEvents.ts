@@ -511,7 +511,10 @@ export type UploadLogResultCallback =
   (requestId: string, success: boolean, reason: UploadErrorReason) => void;
 export type VirtualBackgroundSourceEnabledCallback =
   /**
-   * TODO:(doc)
+   * @param enabled Whether the virtual background is successfully enabled:
+   *  - `true`: The virtual background is successfully enabled.
+   *  - `false`: The virtual background is not successfully enabled.
+   * @param reason The reason why the virtual background is not successfully enabled or the message that confirms success. See [`VirtualBackgroundSourceStateReason`]{@link VirtualBackgroundSourceStateReason}.
    */
   (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
 
@@ -835,8 +838,8 @@ export interface RtcEngineEvents {
    * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set
    * option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly},
    * this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due
-   * to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after
-   * the uplink network condition improves.
+   * to poor downlink conditions, or when the remotely subscribed media stream switches back to the video after
+   * the downlink network condition improves.
    *
    * @event RemoteSubscribeFallbackToAudioOnly
    */
@@ -1614,7 +1617,9 @@ export interface RtcChannelEvents {
   /**
    * Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
    *
-   * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
+   * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly},
+   * this callback is triggered when the remote media stream falls back to audio-only mode due to poor downlink
+   * conditions, or when the remote media stream switches back to the video after the downlink network condition improves.
    *
    * **Note**
    *
@@ -1804,12 +1809,21 @@ export interface RtcChannelEvents {
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 
   /**
-   * TODO:(doc)
+   * @ignore
    */
   AirPlayIsConnected: EmptyCallback;
 
   /**
-   * TODO:(doc)
+   * Reports whether the virtual background is successfully enabled. (beta function)
+   *
+   * **since** v3.5.0.3
+   *
+   * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
+   *
+   * **Note**
+   *
+   * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
+   *
    */
   VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
 }
