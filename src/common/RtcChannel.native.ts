@@ -170,16 +170,16 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param event The event type.
    * @param listener The [`RtcChannelEvents`]{@link RtcChannelEvents} handler.
    */
-  private removeListener<EventType extends keyof RtcChannelEvents>(
+  removeListener<EventType extends keyof RtcChannelEvents>(
     event: EventType,
     listener: RtcChannelEvents[EventType],
-    subscription: EmitterSubscription
+    subscription?: EmitterSubscription
   ) {
     const map = this._listeners.get(event);
     if (map === undefined) return;
     map.get(listener);
 
-    if ('remove' in subscription) {
+    if (subscription && 'remove' in subscription) {
       subscription.remove();
     } else {
       RtcChannelEvent.removeListener(

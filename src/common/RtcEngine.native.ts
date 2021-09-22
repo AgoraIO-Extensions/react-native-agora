@@ -316,16 +316,16 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param event The event type.
    * @param listener The [`RtcEngineEvents`]{@link RtcEngineEvents} handler.
    */
-  private removeListener<EventType extends keyof RtcEngineEvents>(
+  removeListener<EventType extends keyof RtcEngineEvents>(
     event: EventType,
     listener: RtcEngineEvents[EventType],
-    subscription: EmitterSubscription
+    subscription?: EmitterSubscription
   ) {
     const map = this._listeners.get(event);
     if (map === undefined) return;
     map.get(listener);
 
-    if ('remove' in subscription) {
+    if (subscription && 'remove' in subscription) {
       subscription.remove();
     } else {
       RtcEngineEvent.removeListener(
