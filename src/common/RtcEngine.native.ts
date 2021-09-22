@@ -1,4 +1,8 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import {
+  EmitterSubscription,
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
 
 import {
   AudioRecordingConfiguration,
@@ -296,11 +300,11 @@ export default class RtcEngine implements RtcEngineInterface {
       map = new Map<Listener, Listener>();
       this._listeners.set(event, map);
     }
-    RtcEngineEvent.addListener(Prefix + event, callback);
+    const subscription = RtcEngineEvent.addListener(Prefix + event, callback);
     map.set(listener, callback);
     return {
       remove: () => {
-        this.removeListener(event, listener);
+        this.removeListener(event, listener, subscription);
       },
     };
   }
@@ -312,16 +316,23 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param event The event type.
    * @param listener The [`RtcEngineEvents`]{@link RtcEngineEvents} handler.
    */
-  removeListener<EventType extends keyof RtcEngineEvents>(
+  private removeListener<EventType extends keyof RtcEngineEvents>(
     event: EventType,
-    listener: RtcEngineEvents[EventType]
+    listener: RtcEngineEvents[EventType],
+    subscription: EmitterSubscription
   ) {
     const map = this._listeners.get(event);
     if (map === undefined) return;
-    RtcEngineEvent.removeListener(
-      Prefix + event,
-      map.get(listener) as Listener
-    );
+    map.get(listener);
+
+    if ('remove' in subscription) {
+      subscription.remove();
+    } else {
+      RtcEngineEvent.removeListener(
+        Prefix + event,
+        map.get(listener) as Listener
+      );
+    }
     map.delete(listener);
   }
 

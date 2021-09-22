@@ -1,4 +1,8 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import {
+  EmitterSubscription,
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
 
 import type {
   ChannelMediaOptions,
@@ -150,11 +154,11 @@ export default class RtcChannel implements RtcChannelInterface {
       map = new Map<Listener, Listener>();
       this._listeners.set(event, map);
     }
-    RtcChannelEvent.addListener(Prefix + event, callback);
+    const subscription = RtcChannelEvent.addListener(Prefix + event, callback);
     map.set(listener, callback);
     return {
       remove: () => {
-        this.removeListener(event, listener);
+        this.removeListener(event, listener, subscription);
       },
     };
   }
@@ -166,16 +170,23 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param event The event type.
    * @param listener The [`RtcChannelEvents`]{@link RtcChannelEvents} handler.
    */
-  removeListener<EventType extends keyof RtcChannelEvents>(
+  private removeListener<EventType extends keyof RtcChannelEvents>(
     event: EventType,
-    listener: RtcChannelEvents[EventType]
+    listener: RtcChannelEvents[EventType],
+    subscription: EmitterSubscription
   ) {
     const map = this._listeners.get(event);
     if (map === undefined) return;
-    RtcChannelEvent.removeListener(
-      Prefix + event,
-      map.get(listener) as Listener
-    );
+    map.get(listener);
+
+    if ('remove' in subscription) {
+      subscription.remove();
+    } else {
+      RtcChannelEvent.removeListener(
+        Prefix + event,
+        map.get(listener) as Listener
+      );
+    }
     map.delete(listener);
   }
 
