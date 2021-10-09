@@ -7,6 +7,7 @@ import {
   ChannelMediaOptions,
   ChannelMediaRelayConfiguration,
   ClientRoleOptions,
+  ContentInspectConfig,
   DataStreamConfig,
   EncryptionConfig,
   LastmileProbeConfig,
@@ -3401,6 +3402,17 @@ export default class RtcEngine implements RtcEngineInterface {
   resumeAllChannelMediaRelay(): Promise<void> {
     return RtcEngine._callMethod('resumeAllChannelMediaRelay');
   }
+
+  enableContentInspect(
+    enabled: boolean,
+    config: ContentInspectConfig
+  ): Promise<void> {
+    return RtcEngine._callMethod('enableContentInspect', { enabled, config });
+  }
+
+  takeSnapshot(channel: string, uid: number, filePath: string): Promise<void> {
+    return RtcEngine._callMethod('takeSnapshot', { channel, uid, filePath });
+  }
 }
 
 /**
@@ -3487,6 +3499,13 @@ interface RtcEngineInterface
   uploadLogFile(): Promise<string>;
 
   setLocalAccessPoint(ips: string[], domain: string): Promise<void>;
+
+  takeSnapshot(channel: string, uid: number, filePath: string): Promise<void>;
+
+  enableContentInspect(
+    enabled: boolean,
+    config: ContentInspectConfig
+  ): Promise<void>;
 }
 
 /**

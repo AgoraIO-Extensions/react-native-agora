@@ -41,6 +41,7 @@ import type {
   VideoRemoteState,
   VideoRemoteStateReason,
   WarningCode,
+  ContentInspectResult,
 } from './Enums';
 
 /**
@@ -509,6 +510,23 @@ export type UploadLogResultCallback =
    * @param reason The reason for the upload failure. See [`UploadErrorReason`]{@link UploadErrorReason}.
    */
   (requestId: string, success: boolean, reason: UploadErrorReason) => void;
+export type ContentInspectResultCallback =
+  /**
+   * TODO(doc)
+   */
+  (result: ContentInspectResult) => void;
+export type SnapshotTakenCallback =
+  /**
+   * TODO(doc)
+   */
+  (
+    channel: string,
+    uid: number,
+    filePath: string,
+    width: number,
+    height: number,
+    errCode: number
+  ) => void;
 
 /**
  * Callbacks.
@@ -1426,6 +1444,10 @@ export interface RtcEngineEvents {
    * After the method call of `uploadLogFile`, the SDK triggers this callback to report the result of uploading the log files. If the upload fails, refer to the `reason` parameter to troubleshoot.
    */
   UploadLogResult: UploadLogResultCallback;
+
+  ContentInspectResult: ContentInspectResultCallback;
+
+  SnapshotTaken: SnapshotTakenCallback;
 }
 
 /**

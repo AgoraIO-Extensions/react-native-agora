@@ -9,6 +9,7 @@ import type {
   CameraCaptureOutputPreference,
   CameraDirection,
   CaptureBrightnessLevelType,
+  ContentInspectType,
   DegradationPreference,
   EncryptionMode,
   ExperiencePoorReason,
@@ -1732,6 +1733,35 @@ export class AudioRecordingConfiguration {
       this.recordingQuality = params.recordingQuality;
       this.recordingPosition = params.recordingPosition;
       this.recordingSampleRate = params.recordingSampleRate;
+    }
+  }
+}
+
+export class ContentInspectModule {
+  type?: ContentInspectType;
+
+  frequency?: number;
+
+  constructor(params: { type?: ContentInspectType; frequency?: number }) {
+    if (params) {
+      this.type = params.type;
+      this.frequency = params.frequency;
+    }
+  }
+}
+
+export class ContentInspectConfig {
+  extraInfo?: string;
+
+  modules?: ContentInspectModule[];
+
+  constructor(params: {
+    extraInfo?: string;
+    modules?: ContentInspectModule[];
+  }) {
+    if (params) {
+      this.extraInfo = params.extraInfo;
+      this.modules = params.modules;
     }
   }
 }

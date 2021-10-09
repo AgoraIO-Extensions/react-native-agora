@@ -62,6 +62,7 @@ class RCTAgoraRtcChannelModule(
           method.invoke(manager, *parameters.toTypedArray(), PromiseCallback(callback))
         } catch (e: Exception) {
           e.printStackTrace()
+          callback?.reject(e.javaClass.simpleName, e.message, e.cause)
         }
       }
     }

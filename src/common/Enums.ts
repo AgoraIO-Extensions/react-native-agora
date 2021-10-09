@@ -3050,3 +3050,24 @@ export enum VoiceConversionPreset {
    */
   Bass = 50397952,
 }
+
+/** Content inspect type. */
+export enum ContentInspectType {
+  /** default type is invalid
+   */
+  Invalid = 0,
+  /** content inspect type moderation
+   */
+  Moderation = 1,
+  /** content inspect type supervise
+   */
+  Supervise = 2,
+}
+
+export enum ContentInspectResult {
+  Neutral = 1,
+  // background image does not exist
+  Sexy = 2,
+  // color format is not supported
+  Porn = 3,
+}
