@@ -1,3 +1,10 @@
+## [3.4.8-special.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.7...v3.4.8-special.1) (2021-10-11)
+
+
+### Features
+
+* support 3.4.8.1 ([63911f8](https://github.com/AgoraIO-Community/react-native-agora/commit/63911f8bfbc923f40733a66eeb943f4be10db6df))
+
 ## [3.4.7](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.6...v3.4.7) (2021-09-03)
 
 
