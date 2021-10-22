@@ -87,6 +87,7 @@ class RtcEngineEvents {
     const val UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     const val UploadLogResult = "UploadLogResult"
     const val VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
+    const val ProxyConnected = "ProxyConnected"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -687,5 +688,22 @@ class RtcEngineEventHandler(
     @Annotations.AgoraVirtualBackgroundSourceStateReason reason: Int
   ) {
     callback(RtcEngineEvents.VirtualBackgroundSourceEnabled, enabled, reason)
+  }
+
+  override fun onProxyConnected(
+    channel: String?,
+    uid: Int,
+    proxyType: Int,
+    localProxyIpList: String?,
+    elapsed: Int
+  ) {
+    callback(
+      RtcEngineEvents.ProxyConnected,
+      channel,
+      uid.toUInt().toLong(),
+      proxyType,
+      localProxyIpList,
+      elapsed
+    )
   }
 }

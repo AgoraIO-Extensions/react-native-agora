@@ -517,6 +517,17 @@ export type VirtualBackgroundSourceEnabledCallback =
    * @param reason The reason why the virtual background is not successfully enabled or the message that confirms success. See [`VirtualBackgroundSourceStateReason`]{@link VirtualBackgroundSourceStateReason}.
    */
   (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
+export type ProxyConnectedCallback =
+  /**
+   *
+   */
+  (
+    channel: string,
+    uid: number,
+    proxyType: number,
+    localProxyIpList: string,
+    elapsed: number
+  ) => void;
 
 /**
  * Callbacks.
@@ -1434,6 +1445,8 @@ export interface RtcEngineEvents {
    * After the method call of `uploadLogFile`, the SDK triggers this callback to report the result of uploading the log files. If the upload fails, refer to the `reason` parameter to troubleshoot.
    */
   UploadLogResult: UploadLogResultCallback;
+
+  ProxyConnected: ProxyConnectedCallback;
 }
 
 /**
