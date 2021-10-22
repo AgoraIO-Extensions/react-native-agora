@@ -1,3 +1,33 @@
+## [3.5.1-appbuilder.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.1...v3.5.1-appbuilder.0) (2021-10-22)
+
+
+### Features
+
+* support native 3.5.1.245 for Android ([c3af525](https://github.com/AgoraIO-Community/react-native-agora/commit/c3af5253ebfc2bbcdc05189832d4f95dda257671))
+
+
+
+## [3.4.7-appbuilder.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.1...v3.5.1-appbuilder.0) (2021-09-08)
+
+
+### Bug Fixes
+
+* **uid:** int to uint ([7aa8b39](https://github.com/AgoraIO-Community/react-native-agora/commit/7aa8b39010fe942a6e94fb824a9bac3656384d27))
+
+
+### Features
+
+* support native 3.4.7.70 ([0bf3174](https://github.com/AgoraIO-Community/react-native-agora/commit/0bf3174a6022ade3f8eca316e060596047b94acb))
+
+
+
+## [3.1.7-appbuilder.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.1...v3.5.1-appbuilder.0) (2020-12-24)
+
+
+### Features
+
+* build for app-builder ([db4b176](https://github.com/AgoraIO-Community/react-native-agora/commit/db4b1764bebef6e784625067a76840a11f0bdbfe))
+
 ## [3.4.7-appbuilder.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.7...v3.4.7-appbuilder.0) (2021-09-08)
 
 
