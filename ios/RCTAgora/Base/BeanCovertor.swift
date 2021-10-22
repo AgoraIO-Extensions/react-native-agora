@@ -360,7 +360,7 @@ func mapToEncryptionConfig(_ map: [String: Any]) -> AgoraEncryptionConfig {
         var encryptionKdfSalt: [UInt8] = []
         for i in list.indices {
             if let item = list[i] as? NSNumber {
-                encryptionKdfSalt[i] = item.uint8Value
+                encryptionKdfSalt.append(item.uint8Value)
             }
         }
         config.encryptionKdfSalt = Data(bytes: encryptionKdfSalt)
@@ -415,4 +415,20 @@ func mapToDataStreamConfig(_ map: [String: Any]) -> AgoraDataStreamConfig {
         config.ordered = ordered
     }
     return config
+}
+
+func mapToVirtualBackgroundSource(_ map: [String: Any]) -> AgoraVirtualBackgroundSource {
+    let backgroundSource = AgoraVirtualBackgroundSource()
+    if let backgroundSourceType = map["backgroundSourceType"] as? NSNumber {
+        if let backgroundSourceType = AgoraVirtualBackgroundSourceType(rawValue: backgroundSourceType.uintValue) {
+            backgroundSource.backgroundSourceType = backgroundSourceType
+        }
+    }
+    if let color = map["color"] as? [String: Any] {
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+        mapToColor(color).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        backgroundSource.color = UInt(red * 255.0) << 16 + UInt(green * 255.0) << 8 + UInt(blue * 255.0)
+    }
+    backgroundSource.source = map["source"] as? String
+    return backgroundSource
 }

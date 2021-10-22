@@ -24,6 +24,7 @@ import type {
   VideoOutputOrientationMode,
   VideoQualityAdaptIndication,
   VideoStreamType,
+  VirtualBackgroundSourceType,
 } from './Enums';
 
 /**
@@ -507,13 +508,15 @@ export class Color {
  */
 export class LiveTranscoding {
   /**
-   * Width (pixel) of the video. The default value is 360. If you push video streams to the CDN, set the value of width × height to at least 64 × 64, or the SDK adjusts it to 64 x 64.
-   * If you push audio streams to the CDN, set the value of width × height to 0 × 0.
+   * Width (pixel) of the video. The default value is 360.
+   * - When pushing video streams to the CDN, the value range of `width` is [64,1920]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1920, Agora server automatically adjusts it to 1920.
+   * - If you push audio streams to the CDN, set the value of width × height to 0 × 0.
    */
   width?: number;
   /**
-   * Height (pixel) of the video. The default value is 640. If you push video streams to the CDN, set the value of width × height to at least 64 × 64, or the SDK adjusts it to 64 x 64.
-   * If you push audio streams to the CDN, set the value of width × height to 0 × 0.
+   * Height (pixel) of the video. The default value is 640.
+   * - When pushing video streams to the CDN, the value range of `height` is [64,1080]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1080, Agora server automatically adjusts it to 1080.
+   * - If you push audio streams to the CDN, set the value of width × height to 0 × 0.
    */
   height?: number;
   /**
@@ -1004,7 +1007,7 @@ export class EncryptionConfig {
    */
   encryptionMode?: EncryptionMode;
   /**
-   * Encryption key in string type.
+   * Encryption key in string type with unlimited length. Agora recommends using a 32-byte key.
    *
    * **Note**
    *
@@ -1012,7 +1015,7 @@ export class EncryptionConfig {
    */
   encryptionKey?: string;
   /**
-   * The salt. Agora recommends using OpenSSL to generate the salt on your server.
+   * The salt with the length of 32 bytes. Agora recommends using OpenSSL to generate the salt on your server.
    * For details, see *Media Stream Encryption*.
    *
    * @since v3.4.5
@@ -1180,7 +1183,7 @@ export interface AudioVolumeInfo {
    * - 1: The local user is speaking.
    *
    * **Note**
-   * - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
+   * - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` is always 1.
    * - Ensure that you set `report_vad(true)` in the [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication} method to enable the voice activity detection of the local user.
    */
   vad: number;
@@ -1632,7 +1635,7 @@ export class DataStreamConfig {
 /**
  * Configurations for the [`RtcEngine`]{@link RtcEngine}.
  *
- * @since v3.3.1
+ * @since v3.4.5
  */
 export class RtcEngineContext {
   /**
@@ -1732,6 +1735,47 @@ export class AudioRecordingConfiguration {
       this.recordingQuality = params.recordingQuality;
       this.recordingPosition = params.recordingPosition;
       this.recordingSampleRate = params.recordingSampleRate;
+    }
+  }
+}
+
+/**
+ * The custom background image.
+ *
+ * @since v3.5.0.3
+ */
+export class VirtualBackgroundSource {
+  /**
+   * The type of the custom background image. See [`VirtualBackgroundSourceType`]{@link VirtualBackgroundSourceType}.
+   */
+  backgroundSourceType?: VirtualBackgroundSourceType;
+  /**
+   * The color of the custom background image.
+   * The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink.
+   * The default value is 0xFFFFFF, which signifies white. The value range is [0x000000,0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.
+   *
+   * @note
+   * This parameter takes effect only when the type of the custom background image is `Color`.
+   */
+  color?: Color;
+  /**
+   * The local absolute path of the custom background image. PNG and JPG formats are supported.
+   * If the path is invalid, the SDK replaces the original background image with a white background image.
+   *
+   * @note
+   * This parameter takes effect only when the type of the custom background image is `Img`.
+   */
+  source?: string;
+
+  constructor(params?: {
+    backgroundSourceType?: VirtualBackgroundSourceType;
+    color?: Color;
+    source?: string;
+  }) {
+    if (params) {
+      this.backgroundSourceType = params.backgroundSourceType;
+      this.color = params.color;
+      this.source = params.source;
     }
   }
 }

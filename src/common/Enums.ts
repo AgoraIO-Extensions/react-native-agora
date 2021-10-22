@@ -849,7 +849,7 @@ export enum ChannelMediaRelayState {
  */
 export enum ChannelProfile {
   /**
-   * 0: (Default) The Communication profile.
+   * 0: The Communication profile.
    * Use this profile in one-on-one calls or group calls, where all users can talk freely.
    */
   Communication = 0,
@@ -870,11 +870,17 @@ export enum ChannelProfile {
  */
 export enum ClientRole {
   /**
-   * 1: A host can both send and receive streams.
+   * 1: Host.
+   *
+   * A host can both send and receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(false)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(false)`]{@link muteLocalVideoStream}.
    */
   Broadcaster = 1,
   /**
-   * 2: The default role. An audience can only receive streams.
+   * 2: Audience.
+   *
+   * An audience member can only receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(true)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(true)`]{@link muteLocalVideoStream}.
    */
   Audience = 2,
 }
@@ -947,6 +953,7 @@ export enum ConnectionChangedReason {
    */
   KeepAliveTimeout = 14,
   /**
+   * @ignore
    * 15: In cloud proxy mode, the proxy server connection is interrupted.
    */
   ProxyServerInterrupted = 15,
@@ -2917,6 +2924,7 @@ export enum CaptureBrightnessLevelType {
 }
 
 /**
+ * @ignore
  * The reason why the super-resolution algorithm is not successfully enabled.
  */
 export enum SuperResolutionStateReason {
@@ -2953,7 +2961,7 @@ export enum UploadErrorReason {
    */
   NetError = 1,
   /**
-   * 0: Agora 服务器错误，请稍后尝试。
+   * 2: An error occurs in the Agora server. Try uploading the log files later.
    */
   ServerError = 2,
 }
@@ -3049,4 +3057,40 @@ export enum VoiceConversionPreset {
    * 50397952: A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
   Bass = 50397952,
+}
+
+/**
+ * The type of the custom background image.
+ */
+export enum VirtualBackgroundSourceType {
+  /**
+   * (Default) The background image is a solid color.
+   */
+  Color = 1,
+  /**
+   * The background image is a file in PNG or JPG format.
+   */
+  Img = 2,
+}
+
+/**
+ * The reason why the virtual background is not successfully enabled or the message that confirms success.
+ */
+export enum VirtualBackgroundSourceStateReason {
+  /**
+   * The virtual background is successfully enabled.
+   */
+  Success = 0,
+  /**
+   * The custom background image does not exist. Please check the value of source in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
+  ImageNotExist = 1,
+  /**
+   * The color format of the custom background image is invalid. Please check the value of color in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
+  ColorFormatNotSupported = 2,
+  /**
+   * The device does not support using the virtual background.
+   */
+  DeviceNotSupported = 3,
 }
