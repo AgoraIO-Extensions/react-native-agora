@@ -802,10 +802,10 @@ class RtcEngineManager(
   }
 
   override fun getAudioMixingDuration(params: Map<String, *>, callback: Callback) {
-    (params["filePath"] as? String)?.let { file ->
-      callback.code(engine?.getAudioMixingDuration(file)) { it }
-      return@getAudioMixingDuration
-    }
+//    (params["filePath"] as? String)?.let { file ->
+//      callback.code(engine?.getAudioMixingDuration(file)) { it }
+//      return@getAudioMixingDuration
+//    }
     callback.code(engine?.audioMixingDuration) { it }
   }
 

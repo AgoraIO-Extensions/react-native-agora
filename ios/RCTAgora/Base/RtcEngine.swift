@@ -689,12 +689,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func getAudioMixingDuration(_ params: NSDictionary, _ callback: Callback) {
-        if let filePath = (params["filePath"] as? String) {
-            callback.code(engine?.getAudioMixingDuration(filePath)) {
-                $0
-            }
-            return
-        }
+//        if let filePath = (params["filePath"] as? String) {
+//            callback.code(engine?.getAudioMixingDuration(filePath)) {
+//                $0
+//            }
+//            return
+//        }
         callback.code(engine?.getAudioMixingDuration()) {
             $0
         }
