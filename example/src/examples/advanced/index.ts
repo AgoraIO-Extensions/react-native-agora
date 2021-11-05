@@ -1,31 +1,26 @@
-import MultiChannel from './MultiChannel';
-import CreateStreamData from './CreateStreamData';
-import MediaChannelRelay from './MediaChannelRelay';
-import LiveStreaming from './LiveStreaming';
-import VoiceChange from './VoiceChange';
+import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
+import StreamMessage from './StreamMessage/StreamMessage';
+import ChannelMediaRelay from './ChannelMediaRelay/ChannelMediaRelay';
+import VoiceChanger from './VoiceChanger/VoiceChanger';
 
 const Advanced = {
   title: 'Advanced',
   data: [
     {
-      name: 'MultiChannel',
-      component: MultiChannel,
+      name: 'JoinMultipleChannel',
+      component: JoinMultipleChannel,
     },
     {
-      name: 'Live Streaming',
-      component: LiveStreaming,
+      name: 'StreamMessage',
+      component: StreamMessage,
     },
     {
-      name: 'CreateStreamData',
-      component: CreateStreamData,
+      name: 'ChannelMediaRelay',
+      component: ChannelMediaRelay,
     },
     {
-      name: 'MediaChannelRelay',
-      component: MediaChannelRelay,
-    },
-    {
-      name: 'VoiceChange',
-      component: VoiceChange,
+      name: 'VoiceChanger',
+      component: VoiceChanger,
     },
   ],
 };
