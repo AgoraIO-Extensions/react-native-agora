@@ -24,9 +24,9 @@ import RtcEngine, {
 import VoiceChangeConfig, {
   FreqOptions,
   ReverbKeyOptions,
-} from '../config/VoiceChangeConfig';
+} from './VoiceChangerConfig';
 
-const config = require('../../../agora.config.json');
+const config = require('../../../config/agora.config.json');
 
 interface State {
   channelId?: string;
@@ -56,7 +56,7 @@ interface State {
   reverbValue?: number;
 }
 
-export default class VoiceChange extends Component<{}, State, any> {
+export default class VoiceChanger extends Component<{}, State, any> {
   _engine?: RtcEngine;
 
   constructor(props: {}) {

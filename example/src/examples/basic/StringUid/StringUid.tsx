@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { Button, StyleSheet, TextInput, View, Alert } from 'react-native';
 
 import RtcEngine, {
   ChannelProfile,
@@ -7,7 +7,7 @@ import RtcEngine, {
   RtcEngineContext,
 } from 'react-native-agora';
 
-const config = require('../../../agora.config.json');
+const config = require('../../../config/agora.config.json');
 
 interface State {
   channelId: string;
@@ -46,6 +46,12 @@ export default class StringUid extends Component<{}, State, any> {
   };
 
   _addListeners = () => {
+    this._engine?.addListener('Warning', (warningCode) => {
+      console.info('Warning', warningCode);
+    });
+    this._engine?.addListener('Error', (errorCode) => {
+      console.info('Error', errorCode);
+    });
     this._engine?.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
       console.info('JoinChannelSuccess', channel, uid, elapsed);
       this.setState({ isJoined: true });
@@ -75,8 +81,7 @@ export default class StringUid extends Component<{}, State, any> {
       ?.getUserInfoByUserAccount(stringUid)
       .then((userInfo) => {
         console.debug('getUserInfoByUserAccount', userInfo);
-        // @ts-ignore
-        alert(JSON.stringify(userInfo));
+        Alert.alert(JSON.stringify(userInfo));
       })
       .catch((err) => {
         console.error('getUserInfoByUserAccount', err);
