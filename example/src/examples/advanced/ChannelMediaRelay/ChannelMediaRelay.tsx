@@ -21,22 +21,22 @@ import RtcEngine, {
   VideoRenderMode,
 } from 'react-native-agora';
 
-const config = require('../../../agora.config.json');
+const config = require('../../../config/agora.config.json');
 
 interface State {
   channelId?: string;
-  isJoin: boolean;
+  isJoined: boolean;
   remoteUid?: number;
   anotherChannelName?: string;
   isRelaying: boolean;
 }
 
-export default class MediaChannelRelay extends Component<{}, State, any> {
+export default class ChannelMediaRelay extends Component<{}, State, any> {
   _engine?: RtcEngine;
 
   constructor(props: {}) {
     super(props);
-    this.state = { isJoin: false, isRelaying: false };
+    this.state = { isJoined: false, isRelaying: false };
   }
 
   onPressRelay = async () => {
@@ -63,19 +63,15 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
     await this._engine?.stopChannelMediaRelay();
   };
 
-  UNSAFE_componentWillMount() {}
+  UNSAFE_componentWillMount() {
+    this._initEngine();
+  }
 
   componentWillUnmount() {
     this._engine?.destroy();
   }
 
   _initEngine = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-    }
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
@@ -90,21 +86,8 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
 
     // Set audio route to speaker
     await this._engine.setDefaultAudioRoutetoSpeakerphone(true);
-
-    // start joining channel
-    // 1. Users can only see each other after they join the
-    // same channel successfully using the same app id.
-    // 2. If app certificate is turned on at dashboard, token is needed
-    // when joining channel. The channel name and uid used to calculate
-    // the token has to match the ones used for channel join
-    await this._engine.joinChannel(
-      config.token,
-      config.channelId,
-      null,
-      0,
-      undefined
-    );
   };
+
   _addListeners = () => {
     this._engine?.addListener('Warning', (warningCode) => {
       console.info('Warning', warningCode);
@@ -115,7 +98,7 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
     this._engine?.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
       console.info('JoinChannelSuccess', channel, uid, elapsed);
       // RtcLocalView.SurfaceView must render after engine init and channel join
-      this.setState({ isJoin: true });
+      this.setState({ isJoined: true });
     });
     this._engine?.addListener('UserJoined', async (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
@@ -159,13 +142,43 @@ export default class MediaChannelRelay extends Component<{}, State, any> {
     );
   };
 
+  _joinChannel = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+    }
+
+    // start joining channel
+    // 1. Users can only see each other after they join the
+    // same channel successfully using the same app id.
+    // 2. If app certificate is turned on at dashboard, token is needed
+    // when joining channel. The channel name and uid used to calculate
+    // the token has to match the ones used for channel join
+    await this._engine?.joinChannel(
+      config.token,
+      config.channelId,
+      null,
+      0,
+      undefined
+    );
+  };
+
+  _leaveChannel = async () => {
+    await this._engine?.leaveChannel();
+  };
+
   render() {
-    const { isJoin } = this.state;
+    const { isJoined } = this.state;
     return (
       <View style={styles.container}>
-        {!isJoin && <Button onPress={this._initEngine} title="Join channel" />}
-        {isJoin && this._renderVideo()}
-        {isJoin && this._renderToolBar()}
+        <Button
+          onPress={isJoined ? this._leaveChannel : this._joinChannel}
+          title={`${isJoined ? 'Leave' : 'Join'} channel`}
+        />
+        {isJoined && this._renderVideo()}
+        {isJoined && this._renderToolBar()}
       </View>
     );
   }
