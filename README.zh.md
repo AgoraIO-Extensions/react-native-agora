@@ -91,7 +91,7 @@ RtcEngine.create('YOUR APP ID');
 
 ## 常见错误
 
-### Pod install 失败 (React Native >= 0.62.0) 
+### Pod install 失败 (React Native >= 0.62.0)
 
 错误日志：
 
