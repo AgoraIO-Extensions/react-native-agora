@@ -35,8 +35,8 @@ The project uses a single app to combine a variety of functionalities.
 
 *Steps from cloning the code to running the project*
 
-1. Open the [CONTRIBUTING.md](../CONTRIBUTING.md)
-2. Read the [Development workflow](../CONTRIBUTING.md#development-workflow)
+1. Open the [CONTRIBUTING.md](../CONTRIBUTING.md).
+2. Read the [Development workflow](../CONTRIBUTING.md#development-workflow).
 3. Open [agora.config.json](./src/config/agora.config.json) file and specify your App ID and Token.
 
    > See [Set up Authentication](https://docs.agora.io/en/Agora%20Platform/token) to learn how to get an App ID and access token. You can get a temporary access token to quickly try out this sample project.
