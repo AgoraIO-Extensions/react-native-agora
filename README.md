@@ -91,7 +91,7 @@ We suggest you use TypeScript to develop, or use TypeScript eslint to lint your 
 
 ## Troubleshooting
 
-### Pod install failed (React Native >= 0.62.0) 
+### Pod install failed (React Native >= 0.62.0)
 
 The error log:
 
