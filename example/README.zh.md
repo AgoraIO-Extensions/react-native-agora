@@ -1,37 +1,41 @@
-# 示例项目
+# API-Example-ReactNative
 
-_[English](README.md) | 中文_
+*Read this in other languages: [English](README.md)*
 
 ## 简介
 
-该仓库包含了使用 RTC React Native SDK 的示例项目。
+这个开源示例项目演示了不同场景下，Agora SDK 的基本集成逻辑。 项目中每个 Scene 都是一个独立的场景，都可以成功独立运行。
 
-*项目运行效果图*
+在这个示例项目中包含的所有场景都可以独立运行：
 
 ![img.png](img.png)
 
 ## 项目结构
 
-此项目使用一个单独的 app 实现了多种功能。
+* **基础案例:**
 
-| 功能                                             | 位置                                                                                                                    |
-| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 音频直播                                         | [JoinChannelAudio.tsx](./src/examples/basic/JoinChannelAudio/JoinChannelAudio.tsx)                  |
-| 视频直播                                         | [JoinChannelVideo.tsx](./src/examples/basic/JoinChannelVideo/JoinChannelVideo.tsx)                  |
-| 视频直播                                         | [StringUid.tsx](./src/examples/basic/StringUid/StringUid.tsx)                  |
-| 加入多频道                                        | [JoinMultipleChannel.tsx](./src/examples/advanced/JoinMultipleChannel/JoinMultipleChannel.tsx)                  |
-| 音频效果                                         | [VoiceChanger.tsx](./src/examples/advanced/VoiceChanger/VoiceChanger.tsx)                  |
-| 频道媒体流转发                                    | [ChannelMediaRelay.tsx](./src/examples/advanced/ChannelMediaRelay/ChannelMediaRelay.tsx)                  |
-| 发送数据流                                        | [StreamMessage.tsx](./src/examples/advanced/StreamMessage/StreamMessage.tsx)                  |
-| ...                                             | ...                  |
+| Demo                                                         | Description                                        | APIs                                                         |
+| ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ |
+| [JoinChannelAudio](./src/examples/basic/JoinChannelAudio) | 音频直播 | GetEngine, JoinChannelByKey, LeaveChannel |
+| [JoinChannelVideo](./src/examples/basic/JoinChannelVideo) | 视频直播 | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+| [StringUid](./src/examples/basic/StringUid) | 字符串用户ID | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
 
-## 如何运行示例项目
+* **进阶案例:**
 
-### 前提条件
+| Demo                                                         | Description                                                  | APIs                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [JoinMultipleChannel](./src/examples/advanced/JoinMultipleChannel) | 加入多频道 | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [VoiceChanger](./src/examples/advanced/VoiceChanger) | 音频效果 | SetOnCaptureVideoFrameCallback, SetOnRenderVideoFrameCallback, OnRenderVideoFrameHandler, OnCaptureVideoFrameHandler |
+| [ChannelMediaRelay](./src/examples/advanced/ChannelMediaRelay) | 频道媒体流转发 | RegisterAudioRawDataObserver, SetOnPlaybackAudioFrameCallback, OnPlaybackAudioFrameHandler |
+| [StreamMessage](./src/examples/advanced/StreamMessage) | 发送数据流 | SetVideoEncoderConfiguration, SetLiveTranscoding, AddPublishStreamUrl, RemovePublishStreamUrl |
+
+## 如何运行示例程序
+
+#### 运行环境
 
 - [React Native](https://reactnative.dev/docs/environment-setup)
 
-### 运行步骤
+#### 运行步骤
 
 *从拉取仓库到成功运行的全部步骤*
 
@@ -67,7 +71,7 @@ _[English](README.md) | 中文_
 - 如果你想了解声网 SDK 在复杂场景下的应用，可以参考[官方场景案例](https://github.com/AgoraIO-usecase)
 - 如果你想了解声网的一些社区开发者维护的项目，可以查看[社区](https://github.com/AgoraIO-Community)
 - 若遇到问题需要开发者帮助，你可以到[开发者社区](https://rtcdeveloper.com/)提问
-- 如果需要售后技术支持, 你可以在[Agora Dashboard](https://dashboard.agora.io)提交工单
+- 如果需要售后技术支持, 你可以在[Agora Dashboard](https://dashboard.agora.io/)提交工单
 
 ## 代码许可
 
