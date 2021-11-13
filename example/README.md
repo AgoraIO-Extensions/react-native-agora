@@ -1,37 +1,41 @@
-# API Example
+# API-Example-ReactNative
 
-_English | [中文](README.zh.md)_
+*__其他语言版本：__  [__简体中文__](README.zh.md)*
 
 ## Overview
 
-This repository contains sample projects using the Agora RTC React Native SDK .
+The API-Example-ReactNative project is an open-source demo that will show you different scenes on how to integrate Agora SDK APIs into your project.
 
-*image_of_a_running_project*
+Any scene of this project can run successfully alone.
 
 ![img.png](img.png)
 
 ## Project structure
 
-The project uses a single app to combine a variety of functionalities.
+* **Basic demos:**
 
-| Function                                                                        | Location                                                                                                                                 |
-| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Audio live streaming                                                            | [JoinChannelAudio.tsx](./src/examples/basic/JoinChannelAudio/JoinChannelAudio.tsx)                  |
-| Video live streaming                                                            | [JoinChannelVideo.tsx](./src/examples/basic/JoinChannelVideo/JoinChannelVideo.tsx)                  |
-| String user ID                                                                  | [StringUid.tsx](./src/examples/basic/StringUid/StringUid.tsx)                  |
-| Join multiple channels                                                          | [JoinMultipleChannel.tsx](./src/examples/advanced/JoinMultipleChannel/JoinMultipleChannel.tsx)                  |
-| Voice effects                                                                   | [VoiceChanger.tsx](./src/examples/advanced/VoiceChanger/VoiceChanger.tsx)                  |
-| Channel media relay                                                             | [ChannelMediaRelay.tsx](./src/examples/advanced/ChannelMediaRelay/ChannelMediaRelay.tsx)                  |
-| Send data stream                                                                | [StreamMessage.tsx](./src/examples/advanced/StreamMessage/StreamMessage.tsx)                  |
-| ...                                                            | ...                  |
+| Demo                                                         | Description                                        | APIs                                                         |
+| ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ |
+| [JoinChannelAudio](./src/examples/basic/JoinChannelAudio) | Audio live streaming | GetEngine, JoinChannelByKey, LeaveChannel |
+| [JoinChannelVideo](./src/examples/basic/JoinChannelVideo) | Video live streaming | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+| [StringUid](./src/examples/basic/StringUid) | String user ID | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+
+* **Advanced demos:**
+
+| Demo                                                         | Description                                                  | APIs                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [JoinMultipleChannel](./src/examples/advanced/JoinMultipleChannel) | Join multiple channels | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [VoiceChanger](./src/examples/advanced/VoiceChanger) | Voice effects | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [ChannelMediaRelay](./src/examples/advanced/ChannelMediaRelay) | Channel media relay | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [StreamMessage](./src/examples/advanced/StreamMessage) | Send data stream  | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
 
 ## How to run the sample project
 
-### Prerequisites
+#### Developer Environment Requirements
 
 - [React Native](https://reactnative.dev/docs/environment-setup)
 
-### Steps to run
+#### Steps to run
 
 *Steps from cloning the code to running the project*
 
