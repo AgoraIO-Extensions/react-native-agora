@@ -48,6 +48,16 @@ class RCTAgoraRtcChannelModule(
   }
 
   @ReactMethod
+  fun addListener(eventName: String) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
+  @ReactMethod
+  fun removeListeners(count: Int) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
+  @ReactMethod
   fun callMethod(methodName: String, params: ReadableMap?, callback: Promise?) {
     manager.javaClass.declaredMethods.find { it.name == methodName }?.let { function ->
       function.let { method ->
@@ -62,6 +72,7 @@ class RCTAgoraRtcChannelModule(
           method.invoke(manager, *parameters.toTypedArray(), PromiseCallback(callback))
         } catch (e: Exception) {
           e.printStackTrace()
+          callback?.reject(e.javaClass.simpleName, e.message, e.cause)
         }
       }
     }
