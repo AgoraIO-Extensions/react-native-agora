@@ -177,7 +177,6 @@ export default class RtcChannel implements RtcChannelInterface {
   ) {
     const map = this._listeners.get(event);
     if (map === undefined) return;
-    map.get(listener);
 
     if (subscription && 'remove' in subscription) {
       subscription.remove();
