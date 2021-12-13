@@ -1,4 +1,5 @@
 import type {
+  AudioFileInfo,
   AudioVolumeInfo,
   FacePositionInfo,
   LastmileProbeResult,
@@ -11,6 +12,7 @@ import type {
   UserInfo,
 } from './Classes';
 import type {
+  AudioFileInfoError,
   AudioLocalError,
   AudioLocalState,
   AudioMixingReason,
@@ -517,6 +519,34 @@ export type VirtualBackgroundSourceEnabledCallback =
    * @param reason The reason why the virtual background is not successfully enabled or the message that confirms success. See [`VirtualBackgroundSourceStateReason`]{@link VirtualBackgroundSourceStateReason}.
    */
   (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
+export type RequestAudioFileInfoCallback =
+  /**
+   * @param info The information of an audio file. See AudioFileInfo.
+   * @param error The information acquisition state. See #AUDIO_FILE_INFO_ERROR.
+   */
+  (info: AudioFileInfo, error: AudioFileInfoError) => void;
+export type SnapshotTakenCallback =
+  /**
+   * @param channel The channel name.
+   * @param uid The user ID of the user. A `uid` of 0 indicates the local user.
+   * @param filePath The local path of the snapshot.
+   * @param width The width (px) of the snapshot.
+   * @param height The height (px) of the snapshot.
+   * @param errCode The message that confirms success or the reason why the snapshot is not successfully taken:
+   * - `0`: Success.
+   * - < 0: Failure:
+   *  - `-1`: The SDK fails to write data to a file or encode a JPEG image.
+   *  - `-2`: The SDK does not find the video stream of the specified user within one second after
+   * the \ref IRtcEngine::takeSnapshot "takeSnapshot" method call succeeds.
+   */
+  (
+    channel: string,
+    uid: number,
+    filePath: string,
+    width: number,
+    height: number,
+    errCode: number
+  ) => void;
 
 /**
  * Callbacks.
@@ -1421,6 +1451,8 @@ export interface RtcEngineEvents {
    * @since v3.3.1 (later)
    *
    * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use reason for troubleshooting.
+   *
+   * @event UserSuperResolutionEnabled
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 
@@ -1432,8 +1464,34 @@ export interface RtcEngineEvents {
    * @since v3.3.1 (later)
    *
    * After the method call of `uploadLogFile`, the SDK triggers this callback to report the result of uploading the log files. If the upload fails, refer to the `reason` parameter to troubleshoot.
+   *
+   * @event UploadLogResultCallback
    */
   UploadLogResult: UploadLogResultCallback;
+
+  /**
+   * Reports the information of an audio file.
+   *
+   * @since v3.5.1
+   *
+   * After successfully calling \ref IRtcEngine::getAudioFileInfo "getAudioFileInfo", the SDK triggers this
+   * callback to report the information of the audio file, such as the file path and duration.
+   *
+   * @event UploadLogResultCallback
+   */
+  RequestAudioFileInfo: RequestAudioFileInfoCallback;
+
+  /**
+   * Reports the result of taking a video snapshot.
+   *
+   * @since v3.5.2
+   *
+   * After a successful \ref IRtcEngine::takeSnapshot "takeSnapshot" method call, the SDK triggers this callback to
+   * report whether the snapshot is successfully taken as well as the details for the snapshot taken.
+   *
+   * @event SnapshotTaken
+   */
+  SnapshotTaken: SnapshotTakenCallback;
 }
 
 /**
