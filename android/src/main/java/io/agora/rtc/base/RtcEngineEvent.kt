@@ -33,6 +33,7 @@ class RtcEngineEvents {
     const val LocalVideoStateChanged = "LocalVideoStateChanged"
     const val RemoteAudioStateChanged = "RemoteAudioStateChanged"
     const val LocalAudioStateChanged = "LocalAudioStateChanged"
+    const val RequestAudioFileInfo = "RequestAudioFileInfo"
     const val LocalPublishFallbackToAudioOnly = "LocalPublishFallbackToAudioOnly"
     const val RemoteSubscribeFallbackToAudioOnly = "RemoteSubscribeFallbackToAudioOnly"
     const val AudioRouteChanged = "AudioRouteChanged"
@@ -87,6 +88,7 @@ class RtcEngineEvents {
     const val UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     const val UploadLogResult = "UploadLogResult"
     const val VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
+    const val SnapshotTaken = "SnapshotTaken"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -116,6 +118,7 @@ class RtcEngineEvents {
         "LocalVideoStateChanged" to LocalVideoStateChanged,
         "RemoteAudioStateChanged" to RemoteAudioStateChanged,
         "LocalAudioStateChanged" to LocalAudioStateChanged,
+        "RequestAudioFileInfo" to RequestAudioFileInfo,
         "LocalPublishFallbackToAudioOnly" to LocalPublishFallbackToAudioOnly,
         "RemoteSubscribeFallbackToAudioOnly" to RemoteSubscribeFallbackToAudioOnly,
         "AudioRouteChanged" to AudioRouteChanged,
@@ -169,7 +172,8 @@ class RtcEngineEvents {
         "RtmpStreamingEvent" to RtmpStreamingEvent,
         "UserSuperResolutionEnabled" to UserSuperResolutionEnabled,
         "UploadLogResult" to UploadLogResult,
-        "VirtualBackgroundSourceEnabled" to VirtualBackgroundSourceEnabled
+        "VirtualBackgroundSourceEnabled" to VirtualBackgroundSourceEnabled,
+        "SnapshotTaken" to SnapshotTaken
       )
     }
   }
@@ -323,6 +327,10 @@ class RtcEngineEventHandler(
     @Annotations.AgoraAudioLocalError error: Int
   ) {
     callback(RtcEngineEvents.LocalAudioStateChanged, state, error)
+  }
+
+  override fun onRequestAudioFileInfo(info: AudioFileInfo?, error: Int) {
+    callback(RtcEngineEvents.RequestAudioFileInfo, info?.toMap(), error)
   }
 
   override fun onLocalPublishFallbackToAudioOnly(isFallbackOrRecover: Boolean) {
@@ -687,5 +695,24 @@ class RtcEngineEventHandler(
     @Annotations.AgoraVirtualBackgroundSourceStateReason reason: Int
   ) {
     callback(RtcEngineEvents.VirtualBackgroundSourceEnabled, enabled, reason)
+  }
+
+  override fun onSnapshotTaken(
+    channel: String?,
+    uid: Int,
+    filePath: String?,
+    width: Int,
+    height: Int,
+    errCode: Int
+  ) {
+    callback(
+      RtcEngineEvents.SnapshotTaken,
+      channel,
+      uid.toUInt().toLong(),
+      filePath,
+      width,
+      height,
+      errCode
+    )
   }
 }

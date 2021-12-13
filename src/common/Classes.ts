@@ -24,6 +24,7 @@ import type {
   VideoOutputOrientationMode,
   VideoQualityAdaptIndication,
   VideoStreamType,
+  VirtualBackgroundBlurDegree,
   VirtualBackgroundSourceType,
 } from './Enums';
 
@@ -1721,6 +1722,14 @@ export class AudioRecordingConfiguration {
    *
    */
   recordingSampleRate?: AudioSampleRateType;
+  /**
+   * The degree of blurring applied to the custom background image. See #BACKGROUND_BLUR_DEGREE.
+   *
+   * @note This parameter takes effect only when the type of the custom background image is `BACKGROUND_BLUR`.
+   *
+   * @since v3.5.1
+   */
+  blur_degree?: VirtualBackgroundBlurDegree;
 
   constructor(
     filePath: string,
@@ -1776,6 +1785,69 @@ export class VirtualBackgroundSource {
       this.backgroundSourceType = params.backgroundSourceType;
       this.color = params.color;
       this.source = params.source;
+    }
+  }
+}
+
+/**
+ * The information of an audio file. This struct is reported
+ * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
+ *
+ * @since v3.5.1
+ */
+export interface AudioFileInfo {
+  /** The file path.
+   */
+  filePath: string;
+  /** The file duration (ms).
+   */
+  durationMs: number;
+}
+
+/**
+ * The configuration of the audio and video call loop test.
+ *
+ * @since v3.5.2
+ */
+export class EchoTestConfiguration {
+  /**
+   * Whether to enable the audio device for the call loop test:
+   * - true: (Default) Enables the audio device. To test the audio device, set this parameter as `true`.
+   * - false: Disables the audio device.
+   */
+  enableAudio?: boolean;
+  /**
+   * Whether to enable the video device for the call loop test:
+   * - true: (Default) Enables the video device. To test the video device, set this parameter as `true`.
+   * - false: Disables the video device.
+   */
+  enableVideo?: boolean;
+  /**
+   * The token used to secure the audio and video call loop test. If you do not enable App Certificate in Agora
+   * Console, you do not need to pass a value in this parameter; if you have enabled App Certificate in Agora Console,
+   * you must pass a token in this parameter, the `uid` used when you generate the token must be 0xFFFFFFFF, and the
+   * channel name used must be the channel name that identifies each audio and video call loop tested. For server-side
+   * token generation, see [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
+   */
+  token?: string;
+  /**
+   * The channel name that identifies each audio and video call loop. To ensure proper loop test functionality, the
+   * channel name passed in to identify each loop test cannot be the same when users of the same project (App ID)
+   * perform audio and video call loop tests on different devices.
+   */
+  channelId?: string;
+
+  constructor(params?: {
+    enableAudio?: boolean;
+    enableVideo?: boolean;
+    token?: string;
+    channelId?: string;
+  }) {
+    if (params) {
+      this.enableAudio = params.enableAudio;
+      this.enableVideo = params.enableVideo;
+      this.token = params.token;
+      this.channelId = params.channelId;
     }
   }
 }

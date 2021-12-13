@@ -68,6 +68,8 @@ class IRtcEngine {
     fun setLocalAccessPoint(params: Map<String, *>, callback: Callback)
 
     fun enableVirtualBackground(params: Map<String, *>, callback: Callback)
+
+    fun takeSnapshot(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcUserInfoInterface {
@@ -161,11 +163,21 @@ class IRtcEngine {
 
     fun getAudioMixingDuration(params: Map<String, *>, callback: Callback)
 
+    fun getAudioFileInfo(params: Map<String, *>, callback: Callback)
+
     fun getAudioMixingCurrentPosition(callback: Callback)
 
     fun setAudioMixingPosition(params: Map<String, *>, callback: Callback)
 
     fun setAudioMixingPitch(params: Map<String, *>, callback: Callback)
+
+    fun setAudioMixingPlaybackSpeed(params: Map<String, *>, callback: Callback)
+
+    fun getAudioTrackCount(callback: Callback)
+
+    fun selectAudioTrack(params: Map<String, *>, callback: Callback)
+
+    fun setAudioMixingDualMonoMode(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcAudioEffectInterface {
@@ -371,31 +383,51 @@ class IRtcEngine {
   }
 }
 
-class RtcEngineManager(
-  private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit
+open class RtcEngineFactory {
+  open fun create(
+    params: Map<String, *>,
+    rtcEngineEventHandler: RtcEngineEventHandler
+  ): RtcEngine? {
+    val engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
+      mContext = params["context"] as Context
+      mEventHandler = rtcEngineEventHandler
+    })
+
+    return engine
+  }
+}
+
+open class RtcEngineManager(
+  private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit,
+  private val rtcEngineFactory: RtcEngineFactory = RtcEngineFactory()
 ) : IRtcEngine.RtcEngineInterface {
   var engine: RtcEngine? = null
     private set
   private var mediaObserver: MediaObserver? = null
 
   fun release() {
-    RtcEngine.destroy()
-    engine = null
+    if (engine != null) {
+      RtcEngine.destroy()
+      engine = null
+    }
     mediaObserver = null
   }
 
   override fun create(params: Map<String, *>, callback: Callback) {
-    engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
-      mContext = params["context"] as Context
-      mEventHandler = RtcEngineEventHandler { methodName, data ->
-        emit(methodName, data)
-      }
+    engine = rtcEngineFactory.create(params, RtcEngineEventHandler { methodName, data ->
+      emit(methodName, data)
     })
-    callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
+    callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt())) {
+      RtcEngineRegistry.instance.onRtcEngineCreated(engine)
+      it
+    }
   }
 
   override fun destroy(callback: Callback) {
-    callback.resolve(engine) { release() }
+    callback.resolve(engine) {
+      release()
+      RtcEngineRegistry.instance.onRtcEngineDestroyed()
+    }
   }
 
   override fun setChannelProfile(params: Map<String, *>, callback: Callback) {
@@ -549,6 +581,16 @@ class RtcEngineManager(
       engine?.enableVirtualBackground(
         params["enabled"] as Boolean,
         mapToVirtualBackgroundSource(params["backgroundSource"] as Map<*, *>)
+      )
+    )
+  }
+
+  override fun takeSnapshot(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.takeSnapshot(
+        params["channel"] as String,
+        (params["uid"] as Number).toNativeUInt(),
+        params["filePath"] as String
       )
     )
   }
@@ -802,11 +844,11 @@ class RtcEngineManager(
   }
 
   override fun getAudioMixingDuration(params: Map<String, *>, callback: Callback) {
-    (params["filePath"] as? String)?.let { file ->
-      callback.code(engine?.getAudioMixingDuration(file)) { it }
-      return@getAudioMixingDuration
-    }
     callback.code(engine?.audioMixingDuration) { it }
+  }
+
+  override fun getAudioFileInfo(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.getAudioFileInfo(params["filePath"] as String))
   }
 
   override fun getAudioMixingCurrentPosition(callback: Callback) {
@@ -819,6 +861,22 @@ class RtcEngineManager(
 
   override fun setAudioMixingPitch(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setAudioMixingPitch((params["pitch"] as Number).toInt()))
+  }
+
+  override fun setAudioMixingPlaybackSpeed(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioMixingPlaybackSpeed((params["speed"] as Number).toInt()))
+  }
+
+  override fun getAudioTrackCount(callback: Callback) {
+    callback.code(engine?.audioTrackCount) { it }
+  }
+
+  override fun selectAudioTrack(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.selectAudioTrack((params["index"] as Number).toInt()))
+  }
+
+  override fun setAudioMixingDualMonoMode(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.setAudioMixingDualMonoMode((params["mode"] as Number).toInt()))
   }
 
   override fun getEffectsVolume(callback: Callback) {
@@ -1033,13 +1091,11 @@ class RtcEngineManager(
   }
 
   override fun pauseAllChannelMediaRelay(callback: Callback) {
-    callback.code(-Constants.ERR_NOT_SUPPORTED)
-//    callback.code(engine?.pauseAllChannelMediaRelay())
+    callback.code(engine?.pauseAllChannelMediaRelay())
   }
 
   override fun resumeAllChannelMediaRelay(callback: Callback) {
-    callback.code(-Constants.ERR_NOT_SUPPORTED)
-//    callback.code(engine?.resumeAllChannelMediaRelay())
+    callback.code(engine?.resumeAllChannelMediaRelay())
   }
 
   override fun setDefaultAudioRoutetoSpeakerphone(params: Map<String, *>, callback: Callback) {
@@ -1097,7 +1153,15 @@ class RtcEngineManager(
   }
 
   override fun startEchoTest(params: Map<String, *>, callback: Callback) {
-    callback.code(engine?.startEchoTest((params["intervalInSeconds"] as Number).toInt()))
+    (params["intervalInSeconds"] as? Number)?.let { intervalInSeconds ->
+      callback.code(engine?.startEchoTest(intervalInSeconds.toInt()))
+      return@startEchoTest
+    }
+    (params["config"] as? Map<*, *>)?.let { config ->
+      callback.code(engine?.startEchoTest(mapToEchoTestConfiguration(config)))
+      return@startEchoTest
+    }
+    callback.code(engine?.startEchoTest())
   }
 
   override fun stopEchoTest(callback: Callback) {
