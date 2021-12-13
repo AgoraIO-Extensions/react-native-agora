@@ -16,7 +16,7 @@ class RCTAgoraRtcEngineModule(
     const val REACT_CLASS = "RCTAgoraRtcEngineModule"
   }
 
-  private val manager = RtcEngineManager { methodName, data -> emit(methodName, data) }
+  private val manager = RtcEngineManager(emit = { methodName, data -> emit(methodName, data) })
 
   override fun getName(): String {
     return REACT_CLASS
