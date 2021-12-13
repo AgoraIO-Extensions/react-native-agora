@@ -1704,6 +1704,10 @@ export enum NetworkType {
    * 5: The network type is mobile 4G.
    */
   Mobile4G = 5,
+  /**
+   * 6: The network type is mobile 5G.
+   */
+  Mobile5G = 6,
 }
 
 /**
@@ -3071,6 +3075,10 @@ export enum VirtualBackgroundSourceType {
    * The background image is a file in PNG or JPG format.
    */
   Img = 2,
+  /**
+   * The degree of blurring applied to the custom background image.
+   */
+  Blur = 3,
 }
 
 /**
@@ -3093,4 +3101,71 @@ export enum VirtualBackgroundSourceStateReason {
    * The device does not support using the virtual background.
    */
   DeviceNotSupported = 3,
+}
+
+/** The information acquisition state. This enum is reported
+ * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
+ *
+ * @since v3.5.1
+ */
+export enum AudioFileInfoError {
+  /** 0: Successfully get the information of an audio file.
+   */
+  Ok = 0,
+  /** 1: Fail to get the information of an audio file.
+   */
+  Failure = 1,
+}
+
+/**
+ * The channel mode. Set in \ref agora::rtc::IRtcEngine::setAudioMixingDualMonoMode "setAudioMixingDualMonoMode".
+ *
+ * @since v3.5.1
+ */
+export enum AudioMixingDualMonoMode {
+  /**
+   * 0: Original mode.
+   */
+  AUTO = 0,
+  /**
+   * 1: Left channel mode. This mode replaces the audio of the right channel
+   * with the audio of the left channel, which means the user can only hear
+   * the audio of the left channel.
+   */
+  L = 1,
+  /**
+   * 2: Right channel mode. This mode replaces the audio of the left channel with
+   * the audio of the right channel, which means the user can only hear the audio
+   * of the right channel.
+   */
+  R = 2,
+  /**
+   * 3: Mixed channel mode. This mode mixes the audio of the left channel and
+   * the right channel, which means the user can hear the audio of the left
+   * channel and the right channel at the same time.
+   */
+  MIX = 3,
+}
+
+/**
+ * The degree of blurring applied to the custom background image.
+ *
+ * @since v3.5.1
+ */
+export enum VirtualBackgroundBlurDegree {
+  /**
+   * 1: The degree of blurring applied to the custom background image is low.
+   * The user can almost see the background clearly.
+   */
+  Low = 1,
+  /**
+   * The degree of blurring applied to the custom background image is medium.
+   * It is difficult for the user to recognize details in the background.
+   */
+  Medium = 2,
+  /**
+   * (Default) The degree of blurring applied to the custom background image is high.
+   * The user can barely see any distinguishing features in the background.
+   */
+  High = 3,
 }
