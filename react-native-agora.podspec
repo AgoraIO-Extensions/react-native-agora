@@ -19,6 +19,6 @@ Pod::Spec.new do |s|
   s.static_framework = true
   s.swift_version = "4.0"
 
-  s.dependency "React"
+  s.dependency "React-Core"
   s.dependency "AgoraRtcEngine_iOS", "3.5.2"
 end
