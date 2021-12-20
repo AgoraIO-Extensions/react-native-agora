@@ -13,13 +13,13 @@ import RtcEngine, {
   ChannelProfile,
   ClientRole,
   RtcChannel,
-  RtcEngineConfig,
+  RtcEngineContext,
   RtcLocalView,
   RtcRemoteView,
   VideoRemoteState,
 } from 'react-native-agora';
 
-const config = require('../../../agora.config.json');
+const config = require('../../../config/agora.config.json');
 
 interface State {
   renderChannelId: string;
@@ -32,7 +32,7 @@ interface State {
 const channelId0 = 'channel0';
 const channelId1 = 'channel1';
 
-export default class MultiChannel extends Component<{}, State, any> {
+export default class JoinMultipleChannel extends Component<{}, State, any> {
   _engine: RtcEngine | undefined;
   _channel0: RtcChannel | undefined;
   _channel1: RtcChannel | undefined;
@@ -57,8 +57,8 @@ export default class MultiChannel extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
 
     await this._engine.enableVideo();
@@ -83,7 +83,10 @@ export default class MultiChannel extends Component<{}, State, any> {
       null,
       null,
       0,
-      new ChannelMediaOptions(true, true)
+      new ChannelMediaOptions({
+        publishLocalAudio: false,
+        publishLocalVideo: false,
+      })
     );
   };
 
@@ -103,7 +106,10 @@ export default class MultiChannel extends Component<{}, State, any> {
       null,
       null,
       0,
-      new ChannelMediaOptions(true, true)
+      new ChannelMediaOptions({
+        publishLocalAudio: false,
+        publishLocalVideo: false,
+      })
     );
   };
 

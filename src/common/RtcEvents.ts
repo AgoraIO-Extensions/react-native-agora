@@ -1,4 +1,5 @@
 import type {
+  AudioFileInfo,
   AudioVolumeInfo,
   FacePositionInfo,
   LastmileProbeResult,
@@ -11,6 +12,7 @@ import type {
   UserInfo,
 } from './Classes';
 import type {
+  AudioFileInfoError,
   AudioLocalError,
   AudioLocalState,
   AudioMixingReason,
@@ -40,6 +42,7 @@ import type {
   UserOfflineReason,
   VideoRemoteState,
   VideoRemoteStateReason,
+  VirtualBackgroundSourceStateReason,
   WarningCode,
 } from './Enums';
 
@@ -47,7 +50,6 @@ import type {
  * @internal
  * @ignore
  */
-
 export type Listener = (...args: any[]) => any;
 
 /**
@@ -171,7 +173,7 @@ export type AudioVolumeCallback =
   (speakers: AudioVolumeInfo[], totalVolume: number) => void;
 export type UidCallback =
   /**
-   * @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
+   * @param uid The user ID of the most active remote speaker. A `uid` of 0 represents the local user.
    */
   (uid: number) => void;
 export type ElapsedCallback =
@@ -509,6 +511,42 @@ export type UploadLogResultCallback =
    * @param reason The reason for the upload failure. See [`UploadErrorReason`]{@link UploadErrorReason}.
    */
   (requestId: string, success: boolean, reason: UploadErrorReason) => void;
+export type VirtualBackgroundSourceEnabledCallback =
+  /**
+   * @param enabled Whether the virtual background is successfully enabled:
+   *  - `true`: The virtual background is successfully enabled.
+   *  - `false`: The virtual background is not successfully enabled.
+   * @param reason The reason why the virtual background is not successfully enabled or the message that confirms success. See [`VirtualBackgroundSourceStateReason`]{@link VirtualBackgroundSourceStateReason}.
+   */
+  (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
+export type RequestAudioFileInfoCallback =
+  /**
+   * @param info The information of an audio file. See AudioFileInfo.
+   * @param error The information acquisition state. See #AUDIO_FILE_INFO_ERROR.
+   */
+  (info: AudioFileInfo, error: AudioFileInfoError) => void;
+export type SnapshotTakenCallback =
+  /**
+   * @param channel The channel name.
+   * @param uid The user ID of the user. A `uid` of 0 indicates the local user.
+   * @param filePath The local path of the snapshot.
+   * @param width The width (px) of the snapshot.
+   * @param height The height (px) of the snapshot.
+   * @param errCode The message that confirms success or the reason why the snapshot is not successfully taken:
+   * - `0`: Success.
+   * - < 0: Failure:
+   *  - `-1`: The SDK fails to write data to a file or encode a JPEG image.
+   *  - `-2`: The SDK does not find the video stream of the specified user within one second after
+   * the \ref IRtcEngine::takeSnapshot "takeSnapshot" method call succeeds.
+   */
+  (
+    channel: string,
+    uid: number,
+    filePath: string,
+    width: number,
+    height: number,
+    errCode: number
+  ) => void;
 
 /**
  * Callbacks.
@@ -707,7 +745,7 @@ export interface RtcEngineEvents {
   AudioVolumeIndication: AudioVolumeCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by
    * calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
@@ -830,8 +868,8 @@ export interface RtcEngineEvents {
    * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set
    * option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly},
    * this callback is triggered when the remotely subscribed media stream falls back to audio-only mode due
-   * to poor uplink conditions, or when the remotely subscribed media stream switches back to the video after
-   * the uplink network condition improves.
+   * to poor downlink conditions, or when the remotely subscribed media stream switches back to the video after
+   * the downlink network condition improves.
    *
    * @event RemoteSubscribeFallbackToAudioOnly
    */
@@ -904,6 +942,9 @@ export interface RtcEngineEvents {
    * Reports the last mile network quality of each user in the channel once every two seconds.
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
+   *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
    *
    * @event NetworkQuality
    */
@@ -1410,6 +1451,8 @@ export interface RtcEngineEvents {
    * @since v3.3.1 (later)
    *
    * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use reason for troubleshooting.
+   *
+   * @event UserSuperResolutionEnabled
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 
@@ -1421,8 +1464,34 @@ export interface RtcEngineEvents {
    * @since v3.3.1 (later)
    *
    * After the method call of `uploadLogFile`, the SDK triggers this callback to report the result of uploading the log files. If the upload fails, refer to the `reason` parameter to troubleshoot.
+   *
+   * @event UploadLogResultCallback
    */
   UploadLogResult: UploadLogResultCallback;
+
+  /**
+   * Reports the information of an audio file.
+   *
+   * @since v3.5.1
+   *
+   * After successfully calling \ref IRtcEngine::getAudioFileInfo "getAudioFileInfo", the SDK triggers this
+   * callback to report the information of the audio file, such as the file path and duration.
+   *
+   * @event UploadLogResultCallback
+   */
+  RequestAudioFileInfo: RequestAudioFileInfoCallback;
+
+  /**
+   * Reports the result of taking a video snapshot.
+   *
+   * @since v3.5.2
+   *
+   * After a successful \ref IRtcEngine::takeSnapshot "takeSnapshot" method call, the SDK triggers this callback to
+   * report whether the snapshot is successfully taken as well as the details for the snapshot taken.
+   *
+   * @event SnapshotTaken
+   */
+  SnapshotTaken: SnapshotTakenCallback;
 }
 
 /**
@@ -1559,7 +1628,7 @@ export interface RtcChannelEvents {
   RequestToken: EmptyCallback;
 
   /**
-   * Reports which user is the loudest speaker.
+   * Occurs when the most active remote speaker is detected.
    *
    * This callback reports the speaker with the highest accumulative volume during a certain period. If the user enables the audio volume indication by calling [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication}, this callback returns the uid of the active speaker whose voice is detected by the audio volume detection module of the SDK.
    *
@@ -1606,7 +1675,9 @@ export interface RtcChannelEvents {
   /**
    * Occurs when the remote media stream falls back to audio-only stream due to poor network conditions or switches back to video stream after the network conditions improve.
    *
-   * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly}, this callback is triggered when the remote media stream falls back to audio-only mode due to poor uplink conditions, or when the remote media stream switches back to the video after the uplink network condition improves.
+   * If you call [`setRemoteSubscribeFallbackOption`]{@link RtcEngine.setRemoteSubscribeFallbackOption} and set option as [`AudioOnly`]{@link StreamFallbackOptions.AudioOnly},
+   * this callback is triggered when the remote media stream falls back to audio-only mode due to poor downlink
+   * conditions, or when the remote media stream switches back to the video after the downlink network condition improves.
    *
    * **Note**
    *
@@ -1628,6 +1699,9 @@ export interface RtcChannelEvents {
    * Reports the last mile network quality of each user in the channel once every two seconds.
    *
    * Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, then this callback will be triggered as many times.
+   *
+   * **Note**
+   * `txQuality` is `Unknown` when the user is not sending a stream; `rxQuality` is `Unknown` when the user is not receiving a stream.
    *
    * @event NetworkQuality
    */
@@ -1783,6 +1857,7 @@ export interface RtcChannelEvents {
 
   /**
    * @ignore
+   *
    * Reports whether the super-resolution algorithm is enabled.
    *
    * @since v3.3.1 (later)
@@ -1790,4 +1865,23 @@ export interface RtcChannelEvents {
    * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use `reason` for troubleshooting.
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
+
+  /**
+   * @ignore
+   */
+  AirPlayIsConnected: EmptyCallback;
+
+  /**
+   * Reports whether the virtual background is successfully enabled. (beta function)
+   *
+   * **since** v3.5.0.3
+   *
+   * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
+   *
+   * **Note**
+   *
+   * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
+   *
+   */
+  VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
 }

@@ -12,6 +12,7 @@ import io.agora.rtc.live.LiveTranscoding.TranscodingUser
 import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.rtc.models.ClientRoleOptions
 import io.agora.rtc.models.DataStreamConfig
+import io.agora.rtc.models.EchoTestConfiguration
 import io.agora.rtc.video.*
 
 fun mapToVideoDimensions(map: Map<*, *>): VideoEncoderConfiguration.VideoDimensions {
@@ -199,6 +200,25 @@ fun mapToChannelMediaOptions(map: Map<*, *>): ChannelMediaOptions {
   return ChannelMediaOptions().apply {
     (map["autoSubscribeAudio"] as? Boolean)?.let { autoSubscribeAudio = it }
     (map["autoSubscribeVideo"] as? Boolean)?.let { autoSubscribeVideo = it }
+    (map["publishLocalAudio"] as? Boolean)?.let { publishLocalAudio = it }
+    (map["publishLocalVideo"] as? Boolean)?.let { publishLocalVideo = it }
+  }
+}
+
+fun mapToRtcEngineConfig(map: Map<*, *>): RtcEngineConfig {
+  return RtcEngineConfig().apply {
+    mAppId = map["appId"] as String
+    (map["areaCode"] as? Number)?.toInt()?.let { mAreaCode = it }
+    (map["logConfig"] as? Map<*, *>)?.let { mLogConfig = mapToLogConfig(it) }
+  }
+}
+
+fun mapToAudioRecordingConfiguration(map: Map<*, *>): AudioRecordingConfiguration {
+  return AudioRecordingConfiguration().apply {
+    (map["filePath"] as? String)?.let { filePath = it }
+    (map["recordingQuality"] as? Number)?.let { recordingQuality = it.toInt() }
+    (map["recordingPosition"] as? Number)?.let { recordingPosition = it.toInt() }
+    (map["recordingSampleRate"] as? Number)?.let { recordingSampleRate = it.toInt() }
   }
 }
 
@@ -223,6 +243,52 @@ fun mapToEncryptionConfig(map: Map<*, *>): EncryptionConfig {
   return EncryptionConfig().apply {
     (map["encryptionMode"] as? Number)?.let { encryptionMode = intToEncryptionMode(it.toInt()) }
     (map["encryptionKey"] as? String)?.let { encryptionKey = it }
+    (map["encryptionKdfSalt"] as? List<*>)?.let { list ->
+      for (i in list.indices) {
+        (list[i] as? Number)?.let {
+          encryptionKdfSalt[i] = it.toByte()
+        }
+      }
+    }
+  }
+}
+
+fun mapToClientRoleOptions(map: Map<*, *>): ClientRoleOptions {
+  return ClientRoleOptions().apply {
+    (map["audienceLatencyLevel"] as? Number)?.let { audienceLatencyLevel = it.toInt() }
+  }
+}
+
+fun mapToLogConfig(map: Map<*, *>): RtcEngineConfig.LogConfig {
+  return RtcEngineConfig.LogConfig().apply {
+    (map["filePath"] as? String)?.let { filePath = it }
+    (map["fileSize"] as? Number)?.let { fileSize = it.toInt() }
+    (map["level"] as? Number)?.let { level = it.toInt() }
+  }
+}
+
+fun mapToDataStreamConfig(map: Map<*, *>): DataStreamConfig {
+  return DataStreamConfig().apply {
+    (map["syncWithAudio"] as? Boolean)?.let { syncWithAudio = it }
+    (map["ordered"] as? Boolean)?.let { ordered = it }
+  }
+}
+
+fun mapToVirtualBackgroundSource(map: Map<*, *>): VirtualBackgroundSource {
+  return VirtualBackgroundSource().apply {
+    (map["backgroundSourceType"] as? Number)?.let { backgroundSourceType = it.toInt() }
+    (map["color"] as? Map<*, *>)?.let { color = mapToColor(it) }
+    (map["source"] as? String)?.let { source = it }
+    (map["blur_degree"] as? Int)?.let { blur_degree = it }
+  }
+}
+
+fun mapToEchoTestConfiguration(map: Map<*, *>): EchoTestConfiguration {
+  return EchoTestConfiguration().apply {
+    (map["enableAudio"] as? Boolean)?.let { enableAudio = it }
+    (map["enableVideo"] as? Boolean)?.let { enableVideo = it }
+    (map["token"] as? String)?.let { token = it }
+    (map["channelId"] as? String)?.let { channelId = it }
   }
 }
 

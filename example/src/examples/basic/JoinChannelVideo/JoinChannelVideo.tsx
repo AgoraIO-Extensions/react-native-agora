@@ -13,12 +13,12 @@ import {
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
-  RtcEngineConfig,
+  RtcEngineContext,
   RtcLocalView,
   RtcRemoteView,
 } from 'react-native-agora';
 
-const config = require('../../../agora.config.json');
+const config = require('../../../config/agora.config.json');
 
 interface State {
   channelId: string;
@@ -28,7 +28,7 @@ interface State {
   switchRender: boolean;
 }
 
-export default class JoinChannelAudio extends Component<{}, State, any> {
+export default class JoinChannelVideo extends Component<{}, State, any> {
   _engine: RtcEngine | undefined;
 
   constructor(props: {}) {
@@ -51,8 +51,8 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
-    this._engine = await RtcEngine.createWithConfig(
-      new RtcEngineConfig(config.appId)
+    this._engine = await RtcEngine.createWithContext(
+      new RtcEngineContext(config.appId)
     );
     this._addListeners();
 
@@ -63,6 +63,12 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
   };
 
   _addListeners = () => {
+    this._engine?.addListener('Warning', (warningCode) => {
+      console.info('Warning', warningCode);
+    });
+    this._engine?.addListener('Error', (errorCode) => {
+      console.info('Error', errorCode);
+    });
     this._engine?.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
       console.info('JoinChannelSuccess', channel, uid, elapsed);
       this.setState({ isJoined: true });

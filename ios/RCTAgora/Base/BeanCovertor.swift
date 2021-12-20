@@ -123,10 +123,10 @@ func mapToTranscodingUser(_ map: [String: Any]) -> AgoraLiveTranscodingUser {
 
 func mapToColor(_ map: [String: Any]) -> UIColor {
     return UIColor(
-        red: CGFloat((map["red"] as! NSNumber).intValue),
-        green: CGFloat((map["green"] as! NSNumber).intValue),
-        blue: CGFloat((map["blue"] as! NSNumber).intValue),
-        alpha: 1.0
+            red: CGFloat((map["red"] as! NSNumber).intValue),
+            green: CGFloat((map["green"] as! NSNumber).intValue),
+            blue: CGFloat((map["blue"] as! NSNumber).intValue),
+            alpha: 1.0
     )
 }
 
@@ -304,6 +304,12 @@ func mapToChannelMediaOptions(_ map: [String: Any]) -> AgoraRtcChannelMediaOptio
     if let autoSubscribeVideo = map["autoSubscribeVideo"] as? Bool {
         options.autoSubscribeVideo = autoSubscribeVideo
     }
+    if let publishLocalAudio = map["publishLocalAudio"] as? Bool {
+        options.publishLocalAudio = publishLocalAudio
+    }
+    if let publishLocalVideo = map["publishLocalVideo"] as? Bool {
+        options.publishLocalVideo = publishLocalVideo
+    }
     return options
 }
 
@@ -349,6 +355,15 @@ func mapToEncryptionConfig(_ map: [String: Any]) -> AgoraEncryptionConfig {
     }
     if let encryptionKey = map["encryptionKey"] as? String {
         config.encryptionKey = encryptionKey
+    }
+    if let list = map["encryptionKdfSalt"] as? [Any] {
+        var encryptionKdfSalt: [UInt8] = []
+        for i in list.indices {
+            if let item = list[i] as? NSNumber {
+                encryptionKdfSalt.append(item.uint8Value)
+            }
+        }
+        config.encryptionKdfSalt = Data(bytes: encryptionKdfSalt)
     }
     return config
 }
@@ -398,6 +413,44 @@ func mapToDataStreamConfig(_ map: [String: Any]) -> AgoraDataStreamConfig {
     }
     if let ordered = map["ordered"] as? Bool {
         config.ordered = ordered
+    }
+    return config
+}
+
+func mapToVirtualBackgroundSource(_ map: [String: Any]) -> AgoraVirtualBackgroundSource {
+    let backgroundSource = AgoraVirtualBackgroundSource()
+    if let backgroundSourceType = map["backgroundSourceType"] as? NSNumber {
+        if let backgroundSourceType = AgoraVirtualBackgroundSourceType(rawValue: backgroundSourceType.uintValue) {
+            backgroundSource.backgroundSourceType = backgroundSourceType
+        }
+    }
+    if let color = map["color"] as? [String: Any] {
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+        mapToColor(color).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        backgroundSource.color = UInt(red * 255.0) << 16 + UInt(green * 255.0) << 8 + UInt(blue * 255.0)
+    }
+    backgroundSource.source = map["source"] as? String
+    if let blurDegree = map["blur_degree"] as? NSNumber {
+        if let blurDegree = AgoraBlurDegree(rawValue: blurDegree.uintValue) {
+            backgroundSource.blur_degree = blurDegree
+        }
+    }
+    return backgroundSource
+}
+
+func mapToEchoTestConfiguration(_ map: [String: Any]) -> AgoraEchoTestConfiguration {
+    let config = AgoraEchoTestConfiguration()
+    if let enableAudio = map["enableAudio"] as? NSNumber {
+        config.enableAudio = enableAudio.boolValue
+    }
+    if let enableVideo = map["enableVideo"] as? NSNumber {
+        config.enableVideo = enableVideo.boolValue
+    }
+    if let token = map["token"] as? String {
+        config.token = token
+    }
+    if let channelId = map["channelId"] as? String {
+        config.channelId = channelId
     }
     return config
 }

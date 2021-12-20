@@ -24,6 +24,8 @@ import type {
   VideoOutputOrientationMode,
   VideoQualityAdaptIndication,
   VideoStreamType,
+  VirtualBackgroundBlurDegree,
+  VirtualBackgroundSourceType,
 } from './Enums';
 
 /**
@@ -47,15 +49,17 @@ export class VideoDimensions {
   /**
    * The video resolution on the horizontal axis.
    */
-  width: number;
+  width?: number;
   /**
    * The video resolution on the vertical axis.
    */
-  height: number;
+  height?: number;
 
-  constructor(width: number, height: number) {
-    this.width = width;
-    this.height = height;
+  constructor(params?: { width?: number; height?: number }) {
+    if (params) {
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -370,32 +374,36 @@ export class AgoraImage {
   /**
    * Position of the image on the upper left of the broadcasting video on the horizontal axis.
    */
-  x: number;
+  x?: number;
   /**
    * Position of the image on the upper left of the broadcasting video on the vertical axis.
    */
-  y: number;
+  y?: number;
   /**
    * Width of the image on the broadcasting video.
    */
-  width: number;
+  width?: number;
   /**
    * Height of the image on the broadcasting video.
    */
-  height: number;
+  height?: number;
 
   constructor(
     url: string,
-    x: number,
-    y: number,
-    width: number,
-    height: number
+    params?: {
+      x?: number;
+      y?: number;
+      width?: number;
+      height?: number;
+    }
   ) {
     this.url = url;
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    if (params) {
+      this.x = params.x;
+      this.y = params.y;
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -410,11 +418,11 @@ export class TranscodingUser {
   /**
    * Horizontal position of the video frame of the user from the top left corner of the CDN live streaming.
    */
-  x: number;
+  x?: number;
   /**
    * Vertical position of the video frame of the user from the top left corner of the CDN live streaming.
    */
-  y: number;
+  y?: number;
   /**
    * Width of the video frame of the user on the CDN live streaming. The default value is 360.
    */
@@ -449,9 +457,9 @@ export class TranscodingUser {
 
   constructor(
     uid: number,
-    x: number,
-    y: number,
     params?: {
+      x?: number;
+      y?: number;
       width?: number;
       height?: number;
       zOrder?: number;
@@ -460,9 +468,9 @@ export class TranscodingUser {
     }
   ) {
     this.uid = uid;
-    this.x = x;
-    this.y = y;
     if (params) {
+      this.x = params.x;
+      this.y = params.y;
       this.width = params.width;
       this.height = params.height;
       this.zOrder = params.zOrder;
@@ -501,13 +509,15 @@ export class Color {
  */
 export class LiveTranscoding {
   /**
-   * Width (pixel) of the video. The default value is 360. If you push video streams to the CDN, set the value of width × height to at least 64 × 64, or the SDK adjusts it to 64 x 64.
-   * If you push audio streams to the CDN, set the value of width × height to 0 × 0.
+   * Width (pixel) of the video. The default value is 360.
+   * - When pushing video streams to the CDN, the value range of `width` is [64,1920]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1920, Agora server automatically adjusts it to 1920.
+   * - If you push audio streams to the CDN, set the value of width × height to 0 × 0.
    */
   width?: number;
   /**
-   * Height (pixel) of the video. The default value is 640. If you push video streams to the CDN, set the value of width × height to at least 64 × 64, or the SDK adjusts it to 64 x 64.
-   * If you push audio streams to the CDN, set the value of width × height to 0 × 0.
+   * Height (pixel) of the video. The default value is 640.
+   * - When pushing video streams to the CDN, the value range of `height` is [64,1080]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1080, Agora server automatically adjusts it to 1080.
+   * - If you push audio streams to the CDN, set the value of width × height to 0 × 0.
    */
   height?: number;
   /**
@@ -628,7 +638,7 @@ export class ChannelMediaInfo {
   /**
    * The channel name.
    */
-  channelName?: string;
+  channelName: string;
   /**
    * The token that enables the user to join the channel.
    */
@@ -638,9 +648,9 @@ export class ChannelMediaInfo {
    */
   uid: number;
 
-  constructor(uid: number, params?: { channelName?: string; token?: string }) {
+  constructor(channelName: string, uid: number, params?: { token?: string }) {
+    this.channelName = channelName;
     if (params) {
-      this.channelName = params.channelName;
       this.token = params.token;
     }
     this.uid = uid;
@@ -717,25 +727,32 @@ export class Rectangle {
   /**
    * The horizontal offset from the top-left corner.
    */
-  x: number;
+  x?: number;
   /**
    * The vertical offset from the top-left corner.
    */
-  y: number;
+  y?: number;
   /**
    * The width (pixels) of the watermark image.
    */
-  width: number;
+  width?: number;
   /**
    * The height (pixels) of the watermark image.
    */
-  height: number;
+  height?: number;
 
-  constructor(x: number, y: number, width: number, height: number) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  constructor(params?: {
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+  }) {
+    if (params) {
+      this.x = params.x;
+      this.y = params.y;
+      this.width = params.width;
+      this.height = params.height;
+    }
   }
 }
 
@@ -752,20 +769,22 @@ export class WatermarkOptions {
   /**
    * The watermark position in the landscape mode.
    */
-  positionInLandscapeMode: Rectangle;
+  positionInLandscapeMode?: Rectangle;
   /**
    * The watermark position in the portrait mode.
    */
-  positionInPortraitMode: Rectangle;
+  positionInPortraitMode?: Rectangle;
 
-  constructor(
-    positionInLandscapeMode: Rectangle,
-    positionInPortraitMode: Rectangle,
-    visibleInPreview?: boolean
-  ) {
-    this.visibleInPreview = visibleInPreview;
-    this.positionInLandscapeMode = positionInLandscapeMode;
-    this.positionInPortraitMode = positionInPortraitMode;
+  constructor(params?: {
+    visibleInPreview?: boolean;
+    positionInLandscapeMode?: Rectangle;
+    positionInPortraitMode?: Rectangle;
+  }) {
+    if (params) {
+      this.visibleInPreview = params.visibleInPreview;
+      this.positionInLandscapeMode = params.positionInLandscapeMode;
+      this.positionInPortraitMode = params.positionInPortraitMode;
+    }
   }
 }
 
@@ -886,7 +905,19 @@ export class CameraCapturerConfiguration {
   /**
    * The camera capture preference.
    */
-  preference: CameraCaptureOutputPreference;
+  preference?: CameraCaptureOutputPreference;
+  /**
+   * The width (px) of the video image captured by the local camera. To customize the width of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureWidth`.
+   *
+   * @since v3.3.1.
+   */
+  captureWidth?: number;
+  /**
+   * The height (px) of the video image captured by the local camera. To customize the height of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureHeight`.
+   *
+   * @since v3.3.1.
+   */
+  captureHeight?: number;
   /**
    * The width (px) of the video image captured by the local camera. To customize the width of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureWidth`.
    *
@@ -902,21 +933,19 @@ export class CameraCapturerConfiguration {
   /**
    * The camera direction.
    */
-  cameraDirection: CameraDirection;
+  cameraDirection?: CameraDirection;
 
-  constructor(
-    preference: CameraCaptureOutputPreference,
-    cameraDirection: CameraDirection,
-    params?: {
-      captureWidth?: number;
-      captureHeight?: number;
-    }
-  ) {
-    this.preference = preference;
-    this.cameraDirection = cameraDirection;
+  constructor(params?: {
+    preference?: CameraCaptureOutputPreference;
+    captureWidth?: number;
+    captureHeight?: number;
+    cameraDirection?: CameraDirection;
+  }) {
     if (params) {
+      this.preference = params.preference;
       this.captureWidth = params.captureWidth;
       this.captureHeight = params.captureHeight;
+      this.cameraDirection = params.cameraDirection;
     }
   }
 }
@@ -932,7 +961,7 @@ export class ChannelMediaOptions {
    *
    * This member serves a similar function to the [`muteAllRemoteAudioStreams`]{@link RtcEngine.muteAllRemoteAudioStreams} method. After joining the channel, you can call the `muteAllRemoteAudioStreams` method to set whether to subscribe to audio streams in the channel.
    */
-  autoSubscribeAudio: boolean;
+  autoSubscribeAudio?: boolean;
   /**
    * Determines whether to subscribe to video streams when the user joins the channel.
    * - `true`: (Default) Subscribe.
@@ -940,11 +969,42 @@ export class ChannelMediaOptions {
    *
    * This member serves a similar function to the [`muteAllRemoteVideoStreams`]{@link RtcEngine.muteAllRemoteVideoStreams} method. After joining the channel, you can call the `muteAllRemoteVideoStreams` method to set whether to subscribe to audio streams in the channel.
    */
-  autoSubscribeVideo: boolean;
+  autoSubscribeVideo?: boolean;
+  /**
+   * Determines whether to publish the local audio stream when the user joins a channel:
+   * - `true`: (Default) Publish.
+   * - `false`: Do not publish.
+   *
+   * This member serves a similar function to the [`muteLocalAudioStream`]{@link RtcEngine.muteLocalAudioStream} method.
+   * After the user joins the channel, you can call the `muteLocalAudioStream` method to set whether to publish the local audio stream in the channel.
+   *
+   * @since v3.4.5
+   */
+  publishLocalAudio?: boolean;
+  /**
+   * Determines whether to publish the local video stream when the user joins a channel:
+   * - `true`: (Default) Publish.
+   * - `false`: Do not publish.
+   *
+   * This member serves a similar function to the [`muteLocalVideoStream`]{@link RtcEngine.muteLocalVideoStream} method.
+   * After the user joins the channel, you can call the `muteLocalVideoStream` method to set whether to publish the local video stream in the channel.
+   *
+   * @since v3.4.5
+   */
+  publishLocalVideo?: boolean;
 
-  constructor(autoSubscribeAudio: boolean, autoSubscribeVideo: boolean) {
-    this.autoSubscribeAudio = autoSubscribeAudio;
-    this.autoSubscribeVideo = autoSubscribeVideo;
+  constructor(params?: {
+    autoSubscribeAudio?: boolean;
+    autoSubscribeVideo?: boolean;
+    publishLocalAudio?: boolean;
+    publishLocalVideo?: boolean;
+  }) {
+    if (params) {
+      this.autoSubscribeAudio = params.autoSubscribeAudio;
+      this.autoSubscribeVideo = params.autoSubscribeVideo;
+      this.publishLocalAudio = params.publishLocalAudio;
+      this.publishLocalVideo = params.publishLocalVideo;
+    }
   }
 }
 
@@ -955,21 +1015,41 @@ export class ChannelMediaOptions {
  */
 export class EncryptionConfig {
   /**
-   * Encryption mode. The default encryption mode is `AES128XTS`. See [`EncryptionMode`]{@link EncryptionMode}.
+   * Encryption mode. The default encryption mode is `AES128GCM2`.
+   * See [`EncryptionMode`]{@link EncryptionMode}.
    */
-  encryptionMode: EncryptionMode;
+  encryptionMode?: EncryptionMode;
   /**
-   * Encryption key in string type.
+   * Encryption key in string type with unlimited length. Agora recommends using a 32-byte key.
    *
    * **Note**
    *
    * If you do not set an encryption key or set it as null, you cannot use the built-in encryption, and the SDK returns [`InvalidArgument(2)`]{@link ErrorCode.InvalidArgument}.
    */
-  encryptionKey: string;
+  encryptionKey?: string;
+  /**
+   * The salt with the length of 32 bytes. Agora recommends using OpenSSL to generate the salt on your server.
+   * For details, see *Media Stream Encryption*.
+   *
+   * @since v3.4.5
+   *
+   * Note: This parameter is only valid when you set the encryption mode as `AES128GCM2` or `AES256GCM2`.
+   * Ensure that this parameter meets the following requirements:
+   * - Android: This parameter is not 0.
+   * - iOS: This parameter is not nil or 0, and the data length is 32 bytes.
+   */
+  encryptionKdfSalt?: number[];
 
-  constructor(encryptionMode: EncryptionMode, encryptionKey: string) {
-    this.encryptionMode = encryptionMode;
-    this.encryptionKey = encryptionKey;
+  constructor(params?: {
+    encryptionMode?: EncryptionMode;
+    encryptionKey?: string;
+    encryptionKdfSalt?: number[];
+  }) {
+    if (params) {
+      this.encryptionMode = params.encryptionMode;
+      this.encryptionKey = params.encryptionKey;
+      this.encryptionKdfSalt = params.encryptionKdfSalt;
+    }
   }
 }
 
@@ -980,7 +1060,7 @@ export interface RtcStats {
   /**
    * Call duration in seconds, represented by an aggregate value.
    */
-  totalDuration: number;
+  duration: number;
   /**
    * Total number of bytes transmitted, represented by an aggregate value.
    */
@@ -1036,7 +1116,7 @@ export interface RtcStats {
    *  - If the local user is an audience member: The number of users in the channel = The number of hosts in the channel + 1.
    *  - If the local user is a host: The number of users in the channel = The number of hosts in the channel.
    */
-  users: number;
+  userCount: number;
   /**
    * Client-server latency.
    */
@@ -1116,7 +1196,7 @@ export interface AudioVolumeInfo {
    * - 1: The local user is speaking.
    *
    * **Note**
-   * - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
+   * - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` is always 1.
    * - Ensure that you set `report_vad(true)` in the [`enableAudioVolumeIndication`]{@link RtcEngine.enableAudioVolumeIndication} method to enable the voice activity detection of the local user.
    */
   vad: number;
@@ -1481,10 +1561,12 @@ export class ClientRoleOptions {
   /**
    * The latency level of an audience member in a live interactive streaming. See {@link AudienceLatencyLevelType}.
    */
-  audienceLatencyLevel: AudienceLatencyLevelType;
+  audienceLatencyLevel?: AudienceLatencyLevelType;
 
-  constructor(audienceLatencyLevel: AudienceLatencyLevelType) {
-    this.audienceLatencyLevel = audienceLatencyLevel;
+  constructor(params?: { audienceLatencyLevel?: AudienceLatencyLevelType }) {
+    if (params) {
+      this.audienceLatencyLevel = params.audienceLatencyLevel;
+    }
   }
 }
 
@@ -1547,7 +1629,7 @@ export class DataStreamConfig {
    *
    * When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay range, the SDK triggers the [`StreamMessage`]{@link RtcEngineEvents.StreamMessage} callback when the synchronized audio packet is played out. Do not set this parameter as `true` if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example lyric synchronization.
    */
-  syncWithAudio?: boolean;
+  syncWithAudio: boolean;
   /**
    * Whether the SDK guarantees that the receiver receives the data in the sent order.
    * - `true`: Guarantee that the receiver receives the data in the sent order.
@@ -1555,22 +1637,20 @@ export class DataStreamConfig {
    *
    * Do not set this parameter to `true` if you need the receiver to receive the data immediately.
    */
-  ordered?: boolean;
+  ordered: boolean;
 
-  constructor(params?: { syncWithAudio?: boolean; ordered?: boolean }) {
-    if (params) {
-      this.syncWithAudio = params.syncWithAudio;
-      this.ordered = params.ordered;
-    }
+  constructor(syncWithAudio: boolean, ordered: boolean) {
+    this.syncWithAudio = syncWithAudio;
+    this.ordered = ordered;
   }
 }
 
 /**
  * Configurations for the [`RtcEngine`]{@link RtcEngine}.
  *
- * @since v3.3.1
+ * @since v3.4.5
  */
-export class RtcEngineConfig {
+export class RtcEngineContext {
   /**
    * The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id).
    * Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only
@@ -1586,7 +1666,7 @@ export class RtcEngineConfig {
    * After specifying the region, the SDK connects to the Agora servers within that region.
    *
    */
-  areaCode?: AreaCode;
+  areaCode?: AreaCode[];
   /**
    * The configuration of the log files that the SDK outputs. See [`LogConfig`]{@link LogConfig}.
    *
@@ -1598,7 +1678,7 @@ export class RtcEngineConfig {
 
   constructor(
     appId: string,
-    params?: { areaCode?: AreaCode; logConfig?: LogConfig }
+    params?: { areaCode?: AreaCode[]; logConfig?: LogConfig }
   ) {
     this.appId = appId;
     if (params) {
@@ -1608,6 +1688,15 @@ export class RtcEngineConfig {
   }
 }
 
+/**
+ *
+ * Configurations for the [`RtcEngine`]{@link RtcEngine}.
+ *
+ * @deprecated As of v3.4.5, this class is deprecated. Use [`RtcEngineContext`]{@link RtcEngineContext} instead.
+ *
+ * @since v3.3.1
+ */
+export class RtcEngineConfig extends RtcEngineContext {}
 
 /**
  * Recording configuration, which is set in [`startAudioRecordingWithConfig`]{@link startAudioRecordingWithConfig}.
@@ -1645,6 +1734,14 @@ export class AudioRecordingConfiguration {
    *
    */
   recordingSampleRate?: AudioSampleRateType;
+  /**
+   * The degree of blurring applied to the custom background image. See #BACKGROUND_BLUR_DEGREE.
+   *
+   * @note This parameter takes effect only when the type of the custom background image is `BACKGROUND_BLUR`.
+   *
+   * @since v3.5.1
+   */
+  blur_degree?: VirtualBackgroundBlurDegree;
 
   constructor(
     filePath: string,
@@ -1659,6 +1756,110 @@ export class AudioRecordingConfiguration {
       this.recordingQuality = params.recordingQuality;
       this.recordingPosition = params.recordingPosition;
       this.recordingSampleRate = params.recordingSampleRate;
+    }
+  }
+}
+
+/**
+ * The custom background image.
+ *
+ * @since v3.5.0.3
+ */
+export class VirtualBackgroundSource {
+  /**
+   * The type of the custom background image. See [`VirtualBackgroundSourceType`]{@link VirtualBackgroundSourceType}.
+   */
+  backgroundSourceType?: VirtualBackgroundSourceType;
+  /**
+   * The color of the custom background image.
+   * The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink.
+   * The default value is 0xFFFFFF, which signifies white. The value range is [0x000000,0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.
+   *
+   * @note
+   * This parameter takes effect only when the type of the custom background image is `Color`.
+   */
+  color?: Color;
+  /**
+   * The local absolute path of the custom background image. PNG and JPG formats are supported.
+   * If the path is invalid, the SDK replaces the original background image with a white background image.
+   *
+   * @note
+   * This parameter takes effect only when the type of the custom background image is `Img`.
+   */
+  source?: string;
+
+  constructor(params?: {
+    backgroundSourceType?: VirtualBackgroundSourceType;
+    color?: Color;
+    source?: string;
+  }) {
+    if (params) {
+      this.backgroundSourceType = params.backgroundSourceType;
+      this.color = params.color;
+      this.source = params.source;
+    }
+  }
+}
+
+/**
+ * The information of an audio file. This struct is reported
+ * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
+ *
+ * @since v3.5.1
+ */
+export interface AudioFileInfo {
+  /** The file path.
+   */
+  filePath: string;
+  /** The file duration (ms).
+   */
+  durationMs: number;
+}
+
+/**
+ * The configuration of the audio and video call loop test.
+ *
+ * @since v3.5.2
+ */
+export class EchoTestConfiguration {
+  /**
+   * Whether to enable the audio device for the call loop test:
+   * - true: (Default) Enables the audio device. To test the audio device, set this parameter as `true`.
+   * - false: Disables the audio device.
+   */
+  enableAudio?: boolean;
+  /**
+   * Whether to enable the video device for the call loop test:
+   * - true: (Default) Enables the video device. To test the video device, set this parameter as `true`.
+   * - false: Disables the video device.
+   */
+  enableVideo?: boolean;
+  /**
+   * The token used to secure the audio and video call loop test. If you do not enable App Certificate in Agora
+   * Console, you do not need to pass a value in this parameter; if you have enabled App Certificate in Agora Console,
+   * you must pass a token in this parameter, the `uid` used when you generate the token must be 0xFFFFFFFF, and the
+   * channel name used must be the channel name that identifies each audio and video call loop tested. For server-side
+   * token generation, see [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
+   */
+  token?: string;
+  /**
+   * The channel name that identifies each audio and video call loop. To ensure proper loop test functionality, the
+   * channel name passed in to identify each loop test cannot be the same when users of the same project (App ID)
+   * perform audio and video call loop tests on different devices.
+   */
+  channelId?: string;
+
+  constructor(params?: {
+    enableAudio?: boolean;
+    enableVideo?: boolean;
+    token?: string;
+    channelId?: string;
+  }) {
+    if (params) {
+      this.enableAudio = params.enableAudio;
+      this.enableVideo = params.enableVideo;
+      this.token = params.token;
+      this.channelId = params.channelId;
     }
   }
 }

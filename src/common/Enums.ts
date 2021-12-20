@@ -120,6 +120,10 @@ export enum AudioLocalError {
    * 5: The local audio encoding fails.
    */
   EncodeFailure = 5,
+  /**
+   * 8: (Android only) The local audio capturing is interrupted by the system call.
+   */
+  Interrupted = 8,
 }
 
 /**
@@ -514,15 +518,15 @@ export enum AudioReverbType {
  */
 export enum AudioSampleRateType {
   /**
-   * 32000: (Default) 32000.
+   * 32000: (Default) 32000 Hz.
    */
   Type32000 = 32000,
   /**
-   * 44100: 44100.
+   * 44100: 44100 Hz.
    */
   Type44100 = 44100,
   /**
-   * 48000: 48000.
+   * 48000: 48000 Hz.
    */
   Type48000 = 48000,
 }
@@ -533,6 +537,10 @@ export enum AudioSampleRateType {
 export enum AudioScenario {
   /**
    * 0: Default audio scenario.
+   *
+   * **Note**
+   *  If you run the iOS app on an M1 Mac, due to the hardware differences between M1 Macs, iPhones, and iPads,
+   * the default audio scenario of the Agora iOS SDK is the same as that of the Agora macOS SDK.
    */
   Default = 0,
   /**
@@ -796,6 +804,22 @@ export enum ChannelMediaRelayEvent {
    * 11: The video profile is sent to the server.
    */
   VideoProfileUpdate = 11,
+  /**
+   * @ignore
+   */
+  PauseSendPacketToDestChannelSuccess = 12,
+  /**
+   * @ignore
+   */
+  PauseSendPacketToDestChannelFailed = 13,
+  /**
+   * @ignore
+   */
+  ResumeSendPacketToDestChannelSuccess = 14,
+  /**
+   * @ignore
+   */
+  ResumeSendPacketToDestChannelFailed = 15,
 }
 
 /**
@@ -825,7 +849,7 @@ export enum ChannelMediaRelayState {
  */
 export enum ChannelProfile {
   /**
-   * 0: (Default) The Communication profile.
+   * 0: The Communication profile.
    * Use this profile in one-on-one calls or group calls, where all users can talk freely.
    */
   Communication = 0,
@@ -846,11 +870,17 @@ export enum ChannelProfile {
  */
 export enum ClientRole {
   /**
-   * 1: A host can both send and receive streams.
+   * 1: Host.
+   *
+   * A host can both send and receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(false)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(false)`]{@link muteLocalVideoStream}.
    */
   Broadcaster = 1,
   /**
-   * 2: The default role. An audience can only receive streams.
+   * 2: Audience.
+   *
+   * An audience member can only receive streams. If you set this user role in the channel, the SDK automatically
+   * calls [`muteLocalAudioStream(true)`]{@link muteLocalAudioStream} and [`muteLocalVideoStream(true)`]{@link muteLocalVideoStream}.
    */
   Audience = 2,
 }
@@ -923,6 +953,7 @@ export enum ConnectionChangedReason {
    */
   KeepAliveTimeout = 14,
   /**
+   * @ignore
    * 15: In cloud proxy mode, the proxy server connection is interrupted.
    */
   ProxyServerInterrupted = 15,
@@ -1000,6 +1031,9 @@ export enum DegradationPreference {
 
 /**
  * Encryption mode.
+ *
+ * Agora recommends using either the `AES128GCM2` or `AES256GCM2` encryption mode,
+ * both of which support adding a salt and are more secure.
  */
 export enum EncryptionMode {
   /**
@@ -1008,7 +1042,7 @@ export enum EncryptionMode {
    */
   None = 0,
   /**
-   * 1: (Default) 128-bit AES encryption, XTS mode.
+   * 1: 128-bit AES encryption, XTS mode.
    */
   AES128XTS = 1,
   /**
@@ -1037,6 +1071,24 @@ export enum EncryptionMode {
    * @since v3.3.1
    */
   AES256GCM = 6,
+  /**
+   * 7: (Default) 128-bit GCM encryption, GCM mode.
+   *
+   * @since v3.4.5
+   *
+   * Compared to `AES128GCM` encryption mode, the `AES128GCM2` encryption mode is more secure and requires you to set the salt (`encryptionKdfSalt`).
+   *
+   */
+  AES128GCM2 = 7,
+  /**
+   * 8: 256-bit GCM encryption, GCM mode.
+   *
+   * @since v3.4.5
+   *
+   * Compared to `AES256GCM` encryption mode, `AES256GCM2` encryption mode is more secure and requires you
+   * to set the salt (`encryptionKdfSalt`).
+   */
+  AES256GCM2 = 8,
 }
 
 /**
@@ -1652,6 +1704,10 @@ export enum NetworkType {
    * 5: The network type is mobile 4G.
    */
   Mobile4G = 5,
+  /**
+   * 6: The network type is mobile 5G.
+   */
+  Mobile5G = 6,
 }
 
 /**
@@ -1704,6 +1760,12 @@ export enum RtmpStreamingErrorCode {
    * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
    */
   FormatNotSupported = 10,
+  /**
+   * The streaming has been stopped normally. After you call [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl} to stop streaming, the SDK returns this value.
+   *
+   * @since v3.4.5
+   */
+  UnPublishOK = 100,
 }
 
 /**
@@ -2484,6 +2546,12 @@ export enum RtmpStreamingEvent {
    * 1: An error occurs when you add a background image or a watermark image to the RTMP or RTMPS stream.
    */
   FailedLoadImage = 1,
+  /**
+   * The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
+   *
+   * @since v3.4.5
+   */
+  UrlAlreadyInUse = 2,
 }
 
 /**
@@ -2860,6 +2928,7 @@ export enum CaptureBrightnessLevelType {
 }
 
 /**
+ * @ignore
  * The reason why the super-resolution algorithm is not successfully enabled.
  */
 export enum SuperResolutionStateReason {
@@ -2896,7 +2965,7 @@ export enum UploadErrorReason {
    */
   NetError = 1,
   /**
-   * 0: Agora 服务器错误，请稍后尝试。
+   * 2: An error occurs in the Agora server. Try uploading the log files later.
    */
   ServerError = 2,
 }
@@ -2992,4 +3061,111 @@ export enum VoiceConversionPreset {
    * 50397952: A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
   Bass = 50397952,
+}
+
+/**
+ * The type of the custom background image.
+ */
+export enum VirtualBackgroundSourceType {
+  /**
+   * (Default) The background image is a solid color.
+   */
+  Color = 1,
+  /**
+   * The background image is a file in PNG or JPG format.
+   */
+  Img = 2,
+  /**
+   * The degree of blurring applied to the custom background image.
+   */
+  Blur = 3,
+}
+
+/**
+ * The reason why the virtual background is not successfully enabled or the message that confirms success.
+ */
+export enum VirtualBackgroundSourceStateReason {
+  /**
+   * The virtual background is successfully enabled.
+   */
+  Success = 0,
+  /**
+   * The custom background image does not exist. Please check the value of source in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
+  ImageNotExist = 1,
+  /**
+   * The color format of the custom background image is invalid. Please check the value of color in [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   */
+  ColorFormatNotSupported = 2,
+  /**
+   * The device does not support using the virtual background.
+   */
+  DeviceNotSupported = 3,
+}
+
+/** The information acquisition state. This enum is reported
+ * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
+ *
+ * @since v3.5.1
+ */
+export enum AudioFileInfoError {
+  /** 0: Successfully get the information of an audio file.
+   */
+  Ok = 0,
+  /** 1: Fail to get the information of an audio file.
+   */
+  Failure = 1,
+}
+
+/**
+ * The channel mode. Set in \ref agora::rtc::IRtcEngine::setAudioMixingDualMonoMode "setAudioMixingDualMonoMode".
+ *
+ * @since v3.5.1
+ */
+export enum AudioMixingDualMonoMode {
+  /**
+   * 0: Original mode.
+   */
+  AUTO = 0,
+  /**
+   * 1: Left channel mode. This mode replaces the audio of the right channel
+   * with the audio of the left channel, which means the user can only hear
+   * the audio of the left channel.
+   */
+  L = 1,
+  /**
+   * 2: Right channel mode. This mode replaces the audio of the left channel with
+   * the audio of the right channel, which means the user can only hear the audio
+   * of the right channel.
+   */
+  R = 2,
+  /**
+   * 3: Mixed channel mode. This mode mixes the audio of the left channel and
+   * the right channel, which means the user can hear the audio of the left
+   * channel and the right channel at the same time.
+   */
+  MIX = 3,
+}
+
+/**
+ * The degree of blurring applied to the custom background image.
+ *
+ * @since v3.5.1
+ */
+export enum VirtualBackgroundBlurDegree {
+  /**
+   * 1: The degree of blurring applied to the custom background image is low.
+   * The user can almost see the background clearly.
+   */
+  Low = 1,
+  /**
+   * The degree of blurring applied to the custom background image is medium.
+   * It is difficult for the user to recognize details in the background.
+   */
+  Medium = 2,
+  /**
+   * (Default) The degree of blurring applied to the custom background image is high.
+   * The user can barely see any distinguishing features in the background.
+   */
+  High = 3,
 }

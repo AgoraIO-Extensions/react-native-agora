@@ -1,4 +1,8 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import {
+  EmitterSubscription,
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
 
 import type {
   ChannelMediaOptions,
@@ -117,8 +121,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * Destroys the [`RtcChannel`]{@link RtcChannel} instance.
    *
    *  @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 7(NotInitialized): The `RtcChannel` instance is not initialized before calling this method.
    */
   destroy(): Promise<void> {
@@ -150,11 +154,11 @@ export default class RtcChannel implements RtcChannelInterface {
       map = new Map<Listener, Listener>();
       this._listeners.set(event, map);
     }
-    RtcChannelEvent.addListener(Prefix + event, callback);
+    const subscription = RtcChannelEvent.addListener(Prefix + event, callback);
     map.set(listener, callback);
     return {
       remove: () => {
-        this.removeListener(event, listener);
+        this.removeListener(event, listener, subscription);
       },
     };
   }
@@ -168,14 +172,20 @@ export default class RtcChannel implements RtcChannelInterface {
    */
   removeListener<EventType extends keyof RtcChannelEvents>(
     event: EventType,
-    listener: RtcChannelEvents[EventType]
+    listener: RtcChannelEvents[EventType],
+    subscription?: EmitterSubscription
   ) {
     const map = this._listeners.get(event);
     if (map === undefined) return;
-    RtcChannelEvent.removeListener(
-      Prefix + event,
-      map.get(listener) as Listener
-    );
+
+    if (subscription && 'remove' in subscription) {
+      subscription.remove();
+    } else {
+      RtcChannelEvent.removeListener(
+        Prefix + event,
+        map.get(listener) as Listener
+      );
+    }
     map.delete(listener);
   }
 
@@ -200,24 +210,31 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Sets the role of a user in live interactive streaming.
    *
-   * You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
-   * - The local client: [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged}.
-   * - The remote client: [`UserJoined`]{@link RtcChannelEvents.UserJoined} or [`UserOffline(BecomeAudience)`]{@link UserOfflineReason.BecomeAudience}.
+   * In the `LiveBroadcasting` profile, the SDK sets the user role as audience by default. You can call `setClientRole` to set the user role as host.
+   *
+   * You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
+   * - Calls [`muteLocalAudioStream`]{@link RtcChannel.muteLocalAudioStream} and [`muteLocalVideoStream`]{@link RtcChannel.muteLocalVideoStream} to change the publishing state.
+   * - Triggers [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged} on the local client.
+   * - Triggers [`UserJoined`]{@link RtcChannelEvents.UserJoined} or [`UserOffline`]{@link RtcChannelEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}) on the remote client.
    *
    * **Note**
    * - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
    * - As of v3.2.0, this method can set the user level in addition to the user role.
    *    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
-   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
+   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience member can choose to receive remote streams with low latency or ultra low latency. **User level affects the pricing of services**.
    *
    * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
    * @param options The detailed options of a user, including user level. See {@link ClientRoleOptions}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 1(Failed): A general error occurs (no specified reason).
    *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 5(Refused): The request is rejected. In multichannel scenarios, if you have set any of the following in one channel, the SDK returns this error code when the user switches the user role to host in another channel:
+   *      - Call `joinChannel` with the `options` parameter and use the default settings `publishLocalAudio = true` or `publishLocalVideo = true`.
+   *      - Call `setClientRole` to set the user role as host.
+   *      - Call `muteLocalAudioStream(false)` or `muteLocalVideoStream(false)`.
    *    - 7(NotInitialized): The SDK is not initialized.
    */
   setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void> {
@@ -233,18 +250,20 @@ export default class RtcChannel implements RtcChannelInterface {
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Compared with the [`joinChannel`]{@link RtcEngine.joinChannel} method in the `RtcEngine` class, this method supports joining multiple channels at a time by creating multiple IChannel objects
+   * and then calling `joinChannel` in each RtcChannel object.
    *
-   * @param token The token generated at your server.
-   * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
-   * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically
+   * subscribes to the audio and video streams of all the other users in the channel. Subscribing incurs all associated usage costs. To unsubscribe, set the options parameter or call the mute methods accordingly.
+   *
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param optionalInfo Additional information about the channel. This parameter can be set as null. Other users in the channel do not receive this information.
    * @param optionalUid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (232-1). This parameter must be unique. If uid is not assigned (or set as 0), the SDK assigns a uid and reports it in the [`JoinChannelSuccess`]{@link RtcChannelEvents.JoinChannelSuccess} callback. The app must maintain this user ID.
    * @param options The channel media options.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    *    - 5(Refused): The request is rejected. Possible reasons:
@@ -274,12 +293,16 @@ export default class RtcChannel implements RtcChannelInterface {
    * - We recommend using different user accounts for different channels.
    * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
+   * - Before using a String user name, ensure that you read [How can I use string user names](https://docs.agora.io/en/faq/string) for getting details about the limitations and implementation steps.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Compared with the [`joinChannelWithUserAccount`]{@link RtcEngine..joinChannelWithUserAccount} method in the `RtcEngine` class, this method supports
+   * joining multiple channels at a time by creating multiple RtcChannel objects and then calling `joinChannelWithUserAccount` in each RtcChannel object.
    *
-   * @param token The token generated at your server.
-   * - In situations not requiring high security: You can use the temporary token generated at Console. For details, see [Get a temporary token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#get-a-temporary-token).
-   * - In situations requiring high security: Set it as the token generated at your server. For details, see [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically subscribes to
+   * the audio and video streams of all the other users in the channel.
+   * Subscribing incurs all associated usage costs. To unsubscribe, set the options parameter or call the mute methods accordingly.
+   *
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param userAccount The user account. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null.
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -289,8 +312,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param options The channel media options.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    *    - 5(Refused): The request is rejected.
@@ -315,8 +338,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * - The remote client: [`UserOffline`]{@link RtcChannelEvents.UserOffline}, if the user leaving the channel is in a `Communication` channel, or is a host in a `LiveBroadcasting` channel.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 1(Failed): A general error occurs (no specified reason).
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 7(NotInitialized): The SDK is not initialized.
@@ -336,8 +359,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param token The new token.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 1(Failed): A general error occurs (no specified reason).
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 7(NotInitialized): The SDK is not initialized.
@@ -355,6 +378,10 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Publishes the local stream to the channel.
+   *
+   * @deprecated This method is deprecated as of v3.4.5.
+   * Use [`muteLocalAudioStream(false)`]{@link muteLocalAudioStream} or [`muteLocalVideoStream(false)`]{@link muteLocalVideoStream} instead.
+   *
    * You must keep the following restrictions in mind when calling this method.
    * Otherwise, the SDK returns the [`Refused(-5)`]{@link ErrorCode.Refused}:
    * - This method publishes one stream only to the channel corresponding to the current [`RtcChannel`]{@link RtcChannel} instance.
@@ -367,6 +394,9 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Stops publishing a stream to the channel.
+   *
+   * @deprecated This method is deprecated as of v3.4.5.
+   * Use [`muteLocalAudioStream(true)`]{@link muteLocalAudioStream} or [`muteLocalVideoStream(true)`]{@Link muteLocalVideoStream} instead.
    *
    * If you call this method in a channel where you are not publishing streams, the SDK returns [`Refused(-5)`]{@link ErrorCode.Refused}.
    */
@@ -419,11 +449,19 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Stops/Resumes receiving all remote audio streams.
+   * Stops or resumes subscribing to the audio streams of all remote users.
    *
-   * @param muted Determines whether to receive/stop receiving all remote audio streams:
-   * - `true`: Stop receiving all remote audio streams.
-   * - `false`: (Default) Receive all remote audio streams.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+   *
+   * **Note**
+   * - Call this method after joining a channel.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteAudioStreams`]{@link setDefaultMuteAllRemoteAudioStreams}.
+   * Agora recommend not calling `muteAllRemoteAudioStreams` and `setDefaultMuteAllRemoteAudioStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
+   *
+   * @param muted Sets whether to stop subscribing to the audio streams of all remote users.
+   *  - `true`: Stop subscribing to the audio streams of all remote users.
+   *  - `false`: (Default) Resume subscribing to the audio streams of all remote users.
    */
   muteAllRemoteAudioStreams(muted: boolean): Promise<void> {
     return this._callMethod('muteAllRemoteAudioStreams', { muted });
@@ -453,11 +491,19 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Stops/Resumes receiving all remote video streams.
+   * Stops or resumes subscribing to the video streams of all remote users.
    *
-   * @param muted Determines whether to receive/stop receiving all remote video streams:
-   * - `true`: Stop receiving all remote video streams.
-   * - `false`: (Default) Receive all remote video streams.
+   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
+   *
+   * **Note**
+   * - Call this method after joining a channel.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteVideoStreams`]{@link setDefaultMuteAllRemoteVideoStreams}.
+   * Agora recommend not calling `muteAllRemoteVideoStreams` and `setDefaultMuteAllRemoteVideoStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
+   *
+   * @param muted Sets whether to stop subscribing to the video streams of all remote users.
+   *   - `true`: Stop subscribing to the video streams of all remote users.
+   *   - `false`: (Default) Resume subscribing to the video streams of all remote users.
    */
   muteAllRemoteVideoStreams(muted: boolean): Promise<void> {
     return this._callMethod('muteAllRemoteVideoStreams', { muted });
@@ -492,9 +538,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param muted Sets whether to stop subscribing to the video streams of all remote users by default.
    *              - `true`: Stop subscribing to the video streams of all remote users by default.
    *              - `false`: (Default) Resume subscribing to the video streams of all remote users by default.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
+   *
    */
   setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void> {
     return this._callMethod('setDefaultMuteAllRemoteVideoStreams', { muted });
@@ -502,6 +546,7 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * @ignore
+   *
    * Enables/Disables the super-resolution algorithm for a remote user's video stream.
    *
    * @since v3.3.1. (later)
@@ -544,9 +589,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param enable Whether to enable the super-resolution algorithm:
    *   - `true`: Enable the super-resolution algorithm.
    *   - `false`: Disable the super-resolution algorithm.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
+   *
    */
   enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
     return this._callMethod('enableRemoteSuperResolution', { uid, enable });
@@ -598,8 +641,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * - `false`: Disable transcoding.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): Invalid parameter, usually because the URL address is null or the string length is 0.
    *    - 7(NotInitialized): You have not initialized `RtcEngine` when publishing the stream.
    */
@@ -807,10 +850,17 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
    *
-   * All users in the same channel must use the same encryption mode and encryption key. After a user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
+   * After a user leaves the channel, the SDK automatically disables the built-in encryption. To re-enable the built-in encryption, call this method before the user joins the channel again.
+   *
+   * As of v3.4.5, Agora recommends using either the `AES128GCM2` or `AES256GCM2` encryption mode, both of which support adding a salt and are more secure.
+   * For details, see *Media Stream Encryption*.
+   *
+   * **Warning**
+   * All users in the same channel must use the same encryption mode, encryption key, and salt; otherwise, users cannot communicate with each other.
    *
    * **Note**
-   * If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
+   * - To enhance security, Agora recommends using a new key and salt every time you enable the media stream encryption.
    *
    * @param enabled Whether to enable the built-in encryption.
    * - `true`: Enable the built-in encryption.
@@ -818,8 +868,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): An invalid parameter is used. Set the parameter with a valid value.
    *    - 4(NotSupported):  The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
    *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
@@ -897,8 +947,8 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param config The [`LiveInjectStreamConfig`]{@link LiveInjectStreamConfig} object, which contains the configuration information for the added voice or video stream.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
    *    - 3(NotReady): The user is not in the channel.
    *    - 4(NotSupported): The channel profile is not `LiveBroadcasting`. Call the `setChannelProfile` method and set the channel profile to `LiveBroadcasting` before calling this method.
@@ -952,7 +1002,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * - `false`: The recipients do not receive the data in the sent order.
    * @returns
    * - Returns the stream ID, if the method call is successful.
-   * - Error codes: Failure. The error code is related to the integer displayed in [Error Codes]{@link ErrorCode}.
+   * - An error code if the method call fails.
    */
   createDataStream(reliable: boolean, ordered: boolean): Promise<number> {
     return this._callMethod('createDataStream', { reliable, ordered });
@@ -971,8 +1021,8 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    *
    * @return
-   * - Returns the stream ID if you successfully create the data stream.
-   * - < 0: Fails to create the data stream.
+   * - The stream ID if the method call succeeds.
+   * - An error code if the method call fails.
    */
   createDataStreamWithConfig(config: DataStreamConfig): Promise<number> {
     return this._callMethod('createDataStream', { config });
@@ -996,6 +1046,111 @@ export default class RtcChannel implements RtcChannelInterface {
    */
   sendStreamMessage(streamId: number, message: string): Promise<void> {
     return this._callMethod('sendStreamMessage', { streamId, message });
+  }
+
+  /**
+   * Stops or resumes publishing the local audio stream.
+   *
+   * @since v3.4.5
+   *
+   * This method only sets the publishing state of the audio stream in the channel of `RtcChannel`.
+   * A successful method call triggers the [`RemoteAudioStateChanged`]{@link RtcChannelEvents.RemoteAudioStateChanged} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time.
+   * If you create multiple channels, ensure that you only call `muteLocalAudioStream(false)` in one channel;
+   * otherwise, the method call fails, and the SDK returns `-5 (ERR_REFUSED)`.
+   *
+   * **Note**
+   * - This method does not change the usage state of the audio-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link RtcChannel.joinChannel} and [`setClientRole`]{@link RtcChannel.setClientRole} methods.
+   * For details, see *Set the Publishing State*.
+   *
+   * @param muted Sets whether to stop publishing the local audio stream:
+   * - true: Stop publishing the local audio stream.
+   * - false: Resume publishing the local audio stream.
+   *
+   * @return
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
+   */
+  muteLocalAudioStream(muted: boolean): Promise<void> {
+    return this._callMethod('muteLocalAudioStream', { muted });
+  }
+
+  /**
+   * Stops or resumes publishing the local video stream.
+   *
+   * @since v3.4.5
+   *
+   * This method only sets the publishing state of the video stream in the channel of RtcChannel.
+   *
+   * A successful method call triggers the [`RemoteVideoStateChanged`]{@link RtcChannelEvents.RemoteVideoStateChanged} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time. If you create multiple channels,
+   * ensure that you only call `muteLocalVideoStream(false)` in one channel; otherwise, the method call fails,
+   * and the SDK returns `-5 (ERR_REFUSED)`.
+   *
+   * **Note**
+   * - This method does not change the usage state of the video-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link RtcChannel.joinChannel} and [`setClientRole`]{@link RtcChannel.setClientRole} methods.
+   * For details, see *Set the Publishing State*.
+   *
+   * @param muted Sets whether to stop publishing the local video stream:
+   * - true: Stop publishing the local video stream.
+   * - false: Resume publishing the local video stream.
+   *
+   * @return
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
+   */
+  muteLocalVideoStream(muted: boolean): Promise<void> {
+    return this._callMethod('muteLocalVideoStream', { muted });
+  }
+
+  /**
+   * Pauses the media stream relay to all destination channels.
+   *
+   * @since v3.5.1
+   *
+   * After the cross-channel media stream relay starts, you can call this method
+   * to pause relaying media streams to all destination channels; after the pause,
+   * if you want to resume the relay, call \ref IChannel::resumeAllChannelMediaRelay "resumeAllChannelMediaRelay".
+   *
+   * After a successful method call, the SDK triggers the
+   * \ref IChannelEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent"
+   * callback to report whether the media stream relay is successfully paused.
+   *
+   * @note Call this method after the \ref IChannel::startChannelMediaRelay "startChannelMediaRelay" method.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  pauseAllChannelMediaRelay(): Promise<void> {
+    return this._callMethod('pauseAllChannelMediaRelay');
+  }
+
+  /** Resumes the media stream relay to all destination channels.
+   *
+   * @since v3.5.1
+   *
+   * After calling the \ref IChannel::pauseAllChannelMediaRelay "pauseAllChannelMediaRelay" method,
+   * you can call this method to resume relaying media streams to all destination channels.
+   *
+   * After a successful method call, the SDK triggers the
+   * \ref IChannelEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent"
+   * callback to report whether the media stream relay is successfully resumed.
+   *
+   * @note Call this method after the \ref IChannel::pauseAllChannelMediaRelay "pauseAllChannelMediaRelay" method.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  resumeAllChannelMediaRelay(): Promise<void> {
+    return this._callMethod('resumeAllChannelMediaRelay');
   }
 }
 
@@ -1050,6 +1205,8 @@ interface RtcChannelInterface
 interface RtcAudioInterface {
   adjustUserPlaybackSignalVolume(uid: number, volume: number): Promise<void>;
 
+  muteLocalAudioStream(muted: boolean): Promise<void>;
+
   muteRemoteAudioStream(uid: number, muted: boolean): Promise<void>;
 
   muteAllRemoteAudioStreams(muted: boolean): Promise<void>;
@@ -1061,6 +1218,8 @@ interface RtcAudioInterface {
  * @ignore
  */
 interface RtcVideoInterface {
+  muteLocalVideoStream(muted: boolean): Promise<void>;
+
   muteRemoteVideoStream(uid: number, muted: boolean): Promise<void>;
 
   muteAllRemoteVideoStreams(muted: boolean): Promise<void>;
@@ -1099,6 +1258,10 @@ interface RtcMediaRelayInterface {
   updateChannelMediaRelay(
     channelMediaRelayConfiguration: ChannelMediaRelayConfiguration
   ): Promise<void>;
+
+  pauseAllChannelMediaRelay(): Promise<void>;
+
+  resumeAllChannelMediaRelay(): Promise<void>;
 
   stopChannelMediaRelay(): Promise<void>;
 }

@@ -1,4 +1,8 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import {
+  EmitterSubscription,
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
 
 import {
   AudioRecordingConfiguration,
@@ -8,14 +12,17 @@ import {
   ChannelMediaRelayConfiguration,
   ClientRoleOptions,
   DataStreamConfig,
+  EchoTestConfiguration,
   EncryptionConfig,
   LastmileProbeConfig,
   LiveInjectStreamConfig,
   LiveTranscoding,
   RhythmPlayerConfig,
   RtcEngineConfig,
+  RtcEngineContext,
   UserInfo,
   VideoEncoderConfiguration,
+  VirtualBackgroundSource,
   WatermarkOptions,
 } from './Classes';
 import type {
@@ -41,6 +48,7 @@ import type {
   VideoStreamType,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
+  AudioMixingDualMonoMode,
 } from './Enums';
 import type { Listener, RtcEngineEvents, Subscription } from './RtcEvents';
 import RtcChannel from './RtcChannel.native';
@@ -148,7 +156,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *    - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
   static async create(appId: string): Promise<RtcEngine> {
-    return RtcEngine.createWithConfig(new RtcEngineConfig(appId));
+    return RtcEngine.createWithContext(new RtcEngineContext(appId));
   }
 
   /**
@@ -156,7 +164,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @deprecated
    *
-   * Deprecated as of v3.3.1. Use [`createWithConfig`]{@link createWithConfig} instead.
+   * Deprecated as of v3.3.1. Use [`createWithContext`]{@link createWithContext} instead.
    *
    * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
    *
@@ -181,11 +189,15 @@ export default class RtcEngine implements RtcEngineInterface {
     appId: string,
     areaCode: AreaCode
   ): Promise<RtcEngine> {
-    return RtcEngine.createWithConfig(new RtcEngineConfig(appId, { areaCode }));
+    return RtcEngine.createWithContext(
+      new RtcEngineContext(appId, { areaCode: [areaCode] })
+    );
   }
 
   /**
    * Creates an [`RtcEngine`]{@link RtcEngine} instance.
+   *
+   * @deprecated Deprecated as of v3.4.5. Use [`createWithContext`]{@link createWithContext} instead.
    *
    * @since v3.3.1.
    *
@@ -201,9 +213,46 @@ export default class RtcEngine implements RtcEngineInterface {
    * - The error code, if the method call fails.
    *   - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
    */
-  static async createWithConfig(config: RtcEngineConfig) {
+  static async createWithConfig(config: RtcEngineConfig): Promise<RtcEngine> {
+    return this.createWithContext(config);
+  }
+
+  /**
+   * Creates an [`RtcEngine`]{@link RtcEngine} instance.
+   *
+   * @since v3.4.5
+   *
+   * Unless otherwise specified, all the methods provided by the [`RtcEngine`]{@link RtcEngine} class are executed asynchronously. Agora recommends calling these methods in the same thread.
+   *
+   * @note
+   * - You must create an [`RtcEngine`]{@link RtcEngine} instance before calling any other method.
+   * - The Agora RTC Native SDK supports creating only one [`RtcEngine`]{@link RtcEngine} instance for an app for now.
+   *
+   * @param context Configurations for the [`RtcEngine`]{@link RtcEngine} instance. For details, see [`RtcEngineContext`]{@link RtcEngineContext}.
+   * @return
+   * - The [`RtcEngine`]{@link RtcEngine} instance, if the method call succeeds.
+   * - The error code, if the method call fails.
+   *   - 101(InvalidAppId): The app ID is invalid. Check if it is in the correct format.
+   */
+  static async createWithContext(
+    context: RtcEngineContext
+  ): Promise<RtcEngine> {
     if (engine) return engine;
-    await RtcEngine._callMethod('create', { config, appType: 8 });
+    let areaCode: number | undefined;
+    if (context.areaCode) {
+      let code = 0;
+      context.areaCode.forEach((value) => {
+        code |= value;
+      });
+      areaCode = code;
+    }
+    await RtcEngine._callMethod('create', {
+      config: {
+        ...context,
+        areaCode: areaCode,
+      },
+      appType: 8,
+    });
     engine = new RtcEngine();
     return engine;
   }
@@ -253,11 +302,11 @@ export default class RtcEngine implements RtcEngineInterface {
       map = new Map<Listener, Listener>();
       this._listeners.set(event, map);
     }
-    RtcEngineEvent.addListener(Prefix + event, callback);
+    const subscription = RtcEngineEvent.addListener(Prefix + event, callback);
     map.set(listener, callback);
     return {
       remove: () => {
-        this.removeListener(event, listener);
+        this.removeListener(event, listener, subscription);
       },
     };
   }
@@ -271,14 +320,20 @@ export default class RtcEngine implements RtcEngineInterface {
    */
   removeListener<EventType extends keyof RtcEngineEvents>(
     event: EventType,
-    listener: RtcEngineEvents[EventType]
+    listener: RtcEngineEvents[EventType],
+    subscription?: EmitterSubscription
   ) {
     const map = this._listeners.get(event);
     if (map === undefined) return;
-    RtcEngineEvent.removeListener(
-      Prefix + event,
-      map.get(listener) as Listener
-    );
+
+    if (subscription && 'remove' in subscription) {
+      subscription.remove();
+    } else {
+      RtcEngineEvent.removeListener(
+        Prefix + event,
+        map.get(listener) as Listener
+      );
+    }
     map.delete(listener);
   }
 
@@ -303,13 +358,15 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Sets the channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
    *
+   * After initialization, the SDK uses the communication channel profile by default. You can call `setChannelProfile` to set the channel profile.
+   *
    * The Agora [`RtcEngine`]{@link RtcEngine} differentiates channel profiles and applies different optimization algorithms accordingly.
    * For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for live interactive video streaming.
    * @param profile The channel profile of the Agora [`RtcEngine`]{@link RtcEngine}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 7(NotInitialized): The SDK is not initialized.
    */
@@ -318,26 +375,33 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Sets the role of a user in live interactive streaming.
+   * Sets the role of a user in interactive live streaming.
    *
-   * You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
-   * - The local client: [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged}.
-   * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}).
+   * After calling [`setChannelProfile(LiveBroadcasting)`]{@link setChannelProfile}, the SDK sets the user role as audience by default. You can call `setClientRole` to set the user role as host.
+   *
+   * You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
+   * - Calls [`muteLocalAudioStream`]{@link muteLocalAudioStream} and [`muteLocalVideoStream`]{@link muteLocalVideoStream} to change the publishing state.
+   * - Triggers [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged} on the local client.
+   * - Triggers [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}) on the remote client.
    *
    * **Note**
    * - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
    * - As of v3.2.0, this method can set the user level in addition to the user role.
    *    - The user role determines the permissions that the SDK grants to a user, such as permission to send local streams, receive remote streams, and push streams to a CDN address.
-   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience can choose to receive remote streams with low latency or ultra low latency. **Levels affect prices**.
+   *    - The user level determines the level of services that a user can enjoy within the permissions of the user's role. For example, an audience member can choose to receive remote streams with low latency or ultra low latency. **User level affects the pricing of services**.
    *
    * @param role The role of a user in interactive live streaming. See {@link ClientRole}.
    * @param options The detailed options of a user, including user level. See {@link ClientRoleOptions}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 1(Failed): A general error occurs (no specified reason).
    *    - 2(InvalidArgument): The parameter is invalid.
+   *    - 5(Refused): The request is rejected. In multichannel scenarios, if you have set any of the following in one channel, the SDK returns this error code when the user switches the user role to host in another channel:
+   *      - Call `joinChannel` with the `options` parameter and use the default settings `publishLocalAudio = true` or `publishLocalVideo = true`.
+   *      - Call `setClientRole` to set the user role as host.
+   *      - Call `muteLocalAudioStream(false)` or `muteLocalVideoStream(false)`.
    *    - 7(NotInitialized): The SDK is not initialized.
    */
   setClientRole(role: ClientRole, options?: ClientRoleOptions): Promise<void> {
@@ -360,7 +424,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * When the connection between the client and Agora server is interrupted due to poor network conditions,
    * the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [`RejoinChannelSuccess`]{@link RtcEngineEvents.RejoinChannelSuccess} callback on the local client.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Once the user joins the channel (switches to another channel), the user publishes the local audio and video streams and automatically subscribes to the audio and video streams of all the other users in the channel.
+   * Subscribing incurs all associated usage costs. To unsubscribe, set the `options` parameter or call the `mute` methods accordingly.
    *
    * **Note**
    *
@@ -370,7 +435,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * Ensure that the App ID used for creating the token is the same App ID used in the `create` method for creating an [`RtcEngine`]{@link RtcEngine} object. Otherwise, CDN live streaming may fail.
    *
-   * @param token The token generated at your server. See [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param channelName The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -387,8 +452,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param options @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    *    - 5(Refused): The request is rejected. Possible reasons:
@@ -426,7 +491,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * This method applies to the [`Audience`]{@link ClientRole.Audience} role in a [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} channel only.
    *
-   * @param token The token generated at your server. See [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param channelName Unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -436,8 +501,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param options @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 1(Failed): A general error occurs (no specified reason).
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 5(Refused): The request is rejected, probably because the user is not an audience.
@@ -477,8 +542,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * - If you call [`leaveChannel`]{@link leaveChannel} during CDN live streaming, the SDK triggers the [`removePublishStreamUrl`]{@link removePublishStreamUrl} method.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 1(Failed): A general error occurs (no specified reason).
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 7(NotInitialized): The SDK is not initialized.
@@ -499,8 +564,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param token The new token.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 1(Failed): A general error occurs (no specified reason).
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 7(NotInitialized): The SDK is not initialized.
@@ -519,6 +584,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param enabled Sets whether to enable/disable interoperability with the Agora Web SDK:
    * - `true`: Enable.
    * - `false`: (Default) Disable.
+   *
    */
   enableWebSdkInteroperability(enabled: boolean): Promise<void> {
     return RtcEngine._callMethod('enableWebSdkInteroperability', { enabled });
@@ -526,6 +592,9 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * Gets the connection state of the SDK.
+   *
+   * @returns
+   * The connection state of the SDK if the method call succeeds.
    */
   getConnectionState(): Promise<ConnectionStateType> {
     return RtcEngine._callMethod('getConnectionState');
@@ -556,8 +625,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param description (Optional) The description of the rating. The string length must be less than 800 bytes.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    */
@@ -572,8 +641,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param description (Optional) The description of the complaint. The string length must be less than 800 bytes.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    */
@@ -641,6 +710,7 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * @ignore
+   *
    * Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
    *
    * The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
@@ -657,6 +727,9 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * After receiving the [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated} callback, you can call this method to get the user ID of the remote user from the [`UserInfo`]{@link UserInfo} object by passing in the user account.
    * @param uid The user ID of the user. Ensure that you set this parameter.
+   *
+   * @returns
+   * The user information if the method call succeeds.
    */
   getUserInfoByUid(uid: number): Promise<UserInfo> {
     return RtcEngine._callMethod('getUserInfoByUid', { uid });
@@ -669,6 +742,9 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * After receiving the [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated} callback, you can call this method to get the user ID of the remote user from the [`UserInfo`]{@link UserInfo} object by passing in the user account.
    * @param userAccount The user account of the user. Ensure that you set this parameter.
+   *
+   * @returns
+   * The user information if the method call succeeds.
    */
   getUserInfoByUserAccount(userAccount: string): Promise<UserInfo> {
     return RtcEngine._callMethod('getUserInfoByUserAccount', { userAccount });
@@ -682,14 +758,17 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - The remote client: [`UserJoined`]{@link RtcEngineEvents.UserJoined} and [`UserInfoUpdated`]{@link RtcEngineEvents.UserInfoUpdated}, if the user joining the channel is in the [`Communication`]{@link ChannelProfile.Communication} profile, or is a [`Broadcaster`]{@link ClientRole.Broadcaster} in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
    *
-   * Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the `mute` methods accordingly.
+   * Once the user joins the channel, the user publishes the local audio and video streams and automatically subscribes to the audio and video streams
+   * of all the other users in the channel. Subscribing incurs all associated usage costs. To unsubscribe, set the `options` parameter or call the `mute` methods accordingly.
    *
    * **Note**
    *
-   * To ensure smooth communication, use the same parameter type to identify the user.
+   * - To ensure smooth communication, use the same parameter type to identify the user.
    * For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account.
-   * If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
-   * @param token The token generated at your server. See [Generate a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
+   * - If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
+   * - Before using a String user name, ensure that you read [How can I use string user names](https://docs.agora.io/en/faq/string) for getting details about the limitations and implementation steps.
+   *
+   * @param token The token generated at your server. See [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    * @param channelName The channel name. The maximum length of this parameter is 64 bytes. Supported character scopes are:
    * - All lowercase English letters: a to z.
    * - All uppercase English letters: A to Z.
@@ -706,8 +785,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param options @since v3.3.1. (Optional) The channel media options: [`ChannelMediaOptions`]{@link ChannelMediaOptions}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    *    - 5(Refused): The request is rejected.
@@ -771,24 +850,18 @@ export default class RtcEngine implements RtcEngineInterface {
    * - This method adjusts the playback volume which is mixed volume of all remote users.
    * - To mute the local audio playback, call both this method and [`adjustAudioMixingVolume`]{@link adjustAudioMixingVolume}, and set `volume` as `0`.
    *
-   * @param volume The playback volume of all remote users. The value ranges from 0 to 400:
-   * - 0: Mute.
-   * - 100: The original volume.
-   * - 400: (Maximum) Four times the original volume with signal clipping protection. To avoid echoes and improve call quality,
-   * Agora recommends setting the value of volume between 0 and 100. If you need to set the value higher than 100, contact support@agora.io first.
+   * @param volume The playback volume.
+   * The range is 0 to 100. The default value is 100, which represents the original volume.
    */
   adjustPlaybackSignalVolume(volume: number): Promise<void> {
     return RtcEngine._callMethod('adjustPlaybackSignalVolume', { volume });
   }
 
   /**
-   * Adjusts the recording volume.
+   * Adjusts the volume of the signal captured by the microphone
    *
-   * @param volume Recording volume. The value ranges between 0 and 400:
-   * - 0: Mute.
-   * - 100: Original volume.
-   * - 400: (Maximum) Four times the original volume with signal-clipping protection. To avoid echoes and improve call quality, Agora recommends setting the value of volume between 0 and 100.
-   * If you need to set the value higher than 100, contact support@agora.io first.
+   * @param volume The volume of the signal captured by the microphone.
+   * The range is 0 to 100. The default value is 100, which represents the original volume.
    */
   adjustRecordingSignalVolume(volume: number): Promise<void> {
     return RtcEngine._callMethod('adjustRecordingSignalVolume', { volume });
@@ -897,7 +970,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * The audio function is enabled by default. This method disables/re-enables the local audio function, that is,
    * to stop or restart local audio capture and processing.
    *
-   * This method does not affect receiving or playing the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios
+   * This method does not affect receiving the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios
    * where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
    *
    * Once the local audio function is disabled or re-enabled, the SDK triggers the [`LocalAudioStateChanged`]{@link RtcEngineEvents.LocalAudioStateChanged} callback, which reports [`Stopped`]{@link AudioLocalState.Stopped} or [`Recording`]{@link AudioLocalState.Recording}.
@@ -923,11 +996,13 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops or resumes subscribing to the audio streams of all remote users.
    *
-   * As of v3.3.1, after successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
    * **Note**
    * - Call this method after joining a channel.
-   * - See recommended settings in *Set the Subscribing State*.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteAudioStreams`]{@link setDefaultMuteAllRemoteAudioStreams}.
+   * Agora recommend not calling `muteAllRemoteAudioStreams` and `setDefaultMuteAllRemoteAudioStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
    *
    * @param muted Sets whether to stop subscribing to the audio streams of all remote users.
    *  - `true`: Stop subscribing to the audio streams of all remote users.
@@ -939,17 +1014,28 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * Stops or resumes publishing the local audio stream.
-   * A successful [`muteLocalAudioStream`]{@link muteLocalAudioStream} method call triggers the [`UserMuteAudio`]{@link RtcEngineEvents.UserMuteAudio} callback on the remote client.
+   *
+   * As of v3.4.5, this method only sets the publishing state of the audio stream in the channel of `RtcEngine`.
+   *
+   * A successful method call triggers the [`UserMuteAudio`]{@link RtcEngineEvents.UserMuteAudio} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time. If you create multiple channels,
+   * ensure that you only call `muteLocalAudioStream(false)` in one channel; otherwise, the method call fails,
+   * and the SDK returns `-5 (ERR_REFUSED)`.
    *
    * **Note**
+   * - This method does not change the usage state of the audio-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link joinChannel} and [`setClientRole`]{@link setClientRole} methods. For details, see Set the Publishing State.
    *
-   * - When `muted` is set as `true`, this method does not affect any ongoing audio recording, because it does not disable the microphone.
-   * - If you call [`setChannelProfile`]{@link setChannelProfile} and [`setClientRole`]{@link setClientRole} after this method, the SDK resets whether or not to stop publishing the local audio according to the channel profile and user role.
-   * Therefore, Agora recommends calling this method after the `setChannelProfile` and `setClientRole` methods.
    *
    * @param muted Sets whether to stop publishing the local audio stream.
    *  - `true`: Stop publishing the local audio stream.
-   *  - `false`: (Default) Resume publishing the local audio stream.
+   *  - `false`: Resume publishing the local audio stream.
+   *
+   * @return
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
    */
   muteLocalAudioStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalAudioStream', { muted });
@@ -1106,11 +1192,13 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops or resumes subscribing to the video streams of all remote users.
    *
-   * As of v3.3.1, after successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
    *
    * **Note**
    * - Call this method after joining a channel.
-   * - See recommended settings in *Set the Subscribing State*.
+   * - As of v3.3.1, this method contains the function of [`setDefaultMuteAllRemoteVideoStreams`]{@link setDefaultMuteAllRemoteVideoStreams}.
+   * Agora recommend not calling `muteAllRemoteVideoStreams` and `setDefaultMuteAllRemoteVideoStreams` together;
+   * otherwise, the settings may not take effect. See *Set the Subscribing State*.
    *
    * @param muted Sets whether to stop subscribing to the video streams of all remote users.
    *   - `true`: Stop subscribing to the video streams of all remote users.
@@ -1123,18 +1211,27 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops or resumes publishing the local video stream.
    *
-   * A successful [`muteLocalVideoStream`]{@link muteLocalVideoStream} method call triggers the [`UserMuteVideo`]{@link RtcEngineEvents.UserMuteVideo} callback on the remote client.
+   * As of v3.4.5, this method only sets the publishing state of the video stream in the channel of `RtcEngine`.
+   *
+   * A successful method call triggers the [`UserMuteVideo`]{@link RtcEngineEvents.UserMuteVideo} callback on the remote client.
+   *
+   * You can only publish the local stream in one channel at a time. If you create multiple channels,
+   * ensure that you only call `muteLocalVideoStream(false)` in one channel; otherwise,
+   * the method call fails, and the SDK returns `-5 (ERR_REFUSED)`.
+   *
    *
    * **Note**
-   *
-   * - This method executes faster than the `enableLocalVideo` method, which controls the sending of the local video stream.
-   * - When `mute` is set as `true`, this method does not affect any ongoing video recording, because it does not disable the camera.
-   * - You can call this method either before or after joining a channel. If you call [`setChannelProfile`]{@link setChannelProfile} and [`setClientRole`]{@link setClientRole} after this method, the SDK resets whether or not to stop publishing the local video according to the channel profile and user role.
-   * Therefore, Agora recommends calling this method after the `setChannelProfile` and `setClientRole` methods.
+   * - This method does not change the usage state of the video-capturing device.
+   * - Whether this method call takes effect is affected by the [`joinChannel`]{@link joinChannel} and [`setClientRole`]{@link setClientRole} methods. For details, see Set the Publishing State.
    *
    * @param muted Sets whether to stop publishing the local video stream.
    *  - `true`: Stop publishing the local video stream.
-   *  - `false`: (Default) Resume publishing the local video stream.
+   *  - `false`: Resume publishing the local video stream.
+   *
+   * @return
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *   - `-5 (ERR_REFUSED)`: The request is rejected.
    */
   muteLocalVideoStream(muted: boolean): Promise<void> {
     return RtcEngine._callMethod('muteLocalVideoStream', { muted });
@@ -1170,8 +1267,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param options The image enhancement options.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 4(NotSupported): The system version is earlier than Android 4.4, which does not support this function.
    *
    */
@@ -1230,9 +1327,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param enable Whether to enable the super-resolution algorithm:
    *   - `true`: Enable the super-resolution algorithm.
    *   - `false`: Disable the super-resolution algorithm.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
+   *
    */
   enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
     return RtcEngine._callMethod('enableRemoteSuperResolution', {
@@ -1304,7 +1399,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * **Note**
    *
-   * Call this method after calling `startPreview`.
+   * Call this method after you start the local video preview and before you join the channel.
    */
   stopPreview(): Promise<void> {
     return RtcEngine._callMethod('stopPreview');
@@ -1355,12 +1450,11 @@ export default class RtcEngine implements RtcEngineInterface {
    * Gets the playback position (ms) of the music file.
    *
    * **Note**
-   *
-   * Call this method after calling `startAudioMixing` and receiving the `AudioMixingStateChanged(Playing)` callback.
-   *
+   * - Call this method after calling `startAudioMixing` and receiving the `AudioMixingStateChanged(Playing)` callback.
+   * - If you need to call `getAudioMixingCurrentPosition` multiple times, ensure that the call interval is longer than 500 ms.
    * @returns
-   * - Returns the current playback position of the audio mixing, if the method call is successful.
-   * - Error codes: Failure.
+   * - The current playback position of the audio mixing, if the method call is successful.
+   * - An error code if the method call fails.
    */
   getAudioMixingCurrentPosition(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingCurrentPosition');
@@ -1381,8 +1475,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * - On iOS: Agora supports using an absolute path. For example: "/var/mobile/Containers/Data/audio.mp4".
    * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
    *  @returns
-   * - Returns the audio mixing duration, if the method call is successful.
-   * - Error codes: Failure.
+   * - The audio mixing duration, if the method call is successful.
+   * - An error code if the method call fails.
    */
   getAudioMixingDuration(filePath?: string): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingDuration', { filePath });
@@ -1399,8 +1493,8 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    *
    * @returns
-   * - Returns the audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
-   * - Error codes: Failure.
+   * - The audio mixing volume for local playback, if the method call is successful. The value range is [0,100].
+   * - An error code if the method call fails.
    */
   getAudioMixingPlayoutVolume(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingPlayoutVolume');
@@ -1416,8 +1510,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * Call this method after calling `startAudioMixing` and receiving the `AudioMixingStateChanged(Playing)` callback.
    *
    * @returns
-   * - Returns the audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
-   * - Error codes: Failure.
+   * - The audio mixing volume for publishing, if the method call is successful. The value range is [0,100].
+   * - An error code if the method call fails.
    */
   getAudioMixingPublishVolume(): Promise<number> {
     return RtcEngine._callMethod('getAudioMixingPublishVolume');
@@ -1585,10 +1679,9 @@ export default class RtcEngine implements RtcEngineInterface {
    * - On iOS: To access an online file, Agora supports using a URL address; to access a local file, Agora supports using an absolute path. For example: /var/mobile/Containers/Data/audio.mp4.
    * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
    *
-   * @param loopCount Sets the number of times the audio effect loops:
-   * - 0: Plays the audio effect once.
-   * - 1: Plays the audio effect twice.
-   * - -1: Plays the audio effect in a loop indefinitely, until you call the [`stopEffect`]{@link stopEffect} or [`stopAllEffects`]{@link stopAllEffects} method.
+   * @param loopCount The number of times the audio effect loops:
+   * - &ge; 0: The number of loops. For example, `1` means loop one time, which means play the audio effect two times in total.
+   * - -1: Play the audio effect in an indefinite loop.
    * @param pitch Sets the pitch of the audio effect. The value ranges between 0.5 and 2.
    * The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
    * @param pan Sets the spatial position of the audio effect. The value ranges between -1.0 and 1.0.
@@ -1659,13 +1752,12 @@ export default class RtcEngine implements RtcEngineInterface {
    * Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. For more information, see [Best Practices for iOS Audio](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/MultimediaPG/UsingAudio/UsingAudio.html#//apple_ref/doc/uid/TP40009767-CH2-SW28).
    *
    * @return
-   * - &ge; 0: A successful method call. Returns the total duration (ms) of the specified audio effect file.
-   * - < 0: Failure.
+   * - The total duration (ms) of the specified audio effect file, if the method call succeeds.
+   * - An error code if the method call fails.
    */
   getEffectDuration(filePath: string): Promise<number> {
     return RtcEngine._callMethod('getEffectDuration', { filePath });
   }
-
 
   /**
    * Gets the playback position of the audio effect file.
@@ -1677,8 +1769,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param soundId Audio effect ID. Ensure that this parameter is set to the same value as in `playEffect`.
    *
    * @return
-   * - &ge; 0: A successful method call. Returns the playback position (ms) of the specified audio effect file.
-   * - < 0: Failure.
+   * - The playback position (ms) of the specified audio effect file, if the method call succeeds.
+   * - An error code if the method call fails.
    *
    */
   getEffectCurrentPosition(soundId: number): Promise<number> {
@@ -1917,8 +2009,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * - `false`: Disable transcoding.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): Invalid parameter, usually because the URL address is null or the string length is 0.
    *    - 7(NotInitialized): You have not initialized `RtcEngine` when publishing the stream.
    */
@@ -2055,26 +2147,20 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Sets the default audio playback route.
+   * Sets the default audio route.
    *
-   * This method sets whether the received audio is routed to the earpiece or speakerphone
-   * by default before joining a channel. If a user does not call this method,
-   * the audio is routed to the earpiece by default. If you need to change the default audio route after
-   * joining a channel, call [`setEnableSpeakerphone`]{@link setEnableSpeakerphone}.
+   * If the default audio route of the SDK (see [Set the Audio Route](https://docs.agora.io/en/Video/set_audio_route_android?platform=Android) ) cannot meet your requirements,
+   * you can call this method to switch the default audio route. After successfully switching the audio route,
+   * the SDK triggers the [`AudioRouteChanged`]{@link AudioRouteChanged} callback to indicate the changes.
    *
-   * The default audio route for each scenario:
-   * - In the [`Communication`]{@link ChannelProfile.Communication} profile:
+   * **Note**
    *
-   *  - For a voice call, the default audio route is the earpiece.
-   *  - For a video call, the default audio route is the speaker. If the user disables the video
-   * using [`disableVideo`]{@link disableVideo}, or [`muteLocalVideoStream`]{@link muteLocalVideoStream} and [`muteAllRemoteVideoStreams`]{@link muteAllRemoteVideoStreams}, the default audio route automatically switches back to the earpiece.
+   * - Call this method before calling `joinChannel`. If you need to switch the audio route after joining a channel, call [`setEnableSpeakerphone`]{@link setEnableSpeakerphone}.
+   * - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
    *
-   * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile: The default audio route is the speaker.
-   *
-   * **Note** Call this method before the user joins a channel.
-   * @param defaultToSpeaker Sets the default audio route:
-   * - `true`: Route the audio to the speaker. If the playback device connects to the earpiece or Bluetooth, the audio cannot be routed to the earpiece.
-   * - `false`: (Default) Route the audio to the earpiece. If a headset is plugged in, the audio is routed to the headset.
+   * @param defaultToSpeaker Sets the default audio route as follows:
+   * - `true`: Set to the speakerphone.
+   * - `false`: Set to the earpiece.
    */
   setDefaultAudioRoutetoSpeakerphone(defaultToSpeaker: boolean): Promise<void> {
     return RtcEngine._callMethod('setDefaultAudioRoutetoSpeakerphone', {
@@ -2083,25 +2169,22 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Enables/Disables the audio playback route to the speakerphone.
+   * Enables/Disables the audio route to the speakerphone.
    *
-   * This method sets whether the audio is routed to the speakerphone or earpiece.
-   * After calling this method, the SDK returns the [`AudioRouteChanged`]{@link RtcEngineEvents.AudioRouteChanged} callback to indicate the changes.
+   * If the default audio route of the SDK (see [Set the Audio Route](https://docs.agora.io/en/Video/set_audio_route_android?platform=Android) ) or
+   * the setting in [`setDefaultAudioRoutetoSpeakerphone`]{@link setDefaultAudioRoutetoSpeakerphone} cannot meet your requirements,
+   * you can call this method to switch the current audio route. After successfully switching the audio route, the SDK triggers the [`AudioRouteChanged`]{@link RtcEngineEvents.AudioRouteChanged} callback to indicate the changes.
+   *
+   * This method only sets the audio route in the current channel and does not influence the default audio route. If the user leaves the current channel and joins another channel, the default audio route is used.
    *
    * **Note**
    *
-   * - Ensure that you have successfully called [`joinChannel`]{@link joinChannel} before calling this method.
+   * - Call this method after calling `joinChannel`.
+   * - If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
    *
-   * - This method is invalid for audience users in the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile.
-   *
-   * - Settings of `setAudioProfile` and `setChannelProfile` affect the call result of `setEnableSpeakerphone`. The following are scenarios where `setEnableSpeakerphone` does not take effect:
-   *    - If you set `scenario` as `GameStreaming`, no user can change the audio playback route.
-   *    - If you set `scenario` as `Default` or `ShowRoom`, the audience cannot change the audio playback route. If there is only one host is in the channel, the host cannot change the audio playback route either.
-   *    - If you set `scenario` as `Education`, the audience cannot change the audio playback route.
-   *
-   * @param enabled Sets whether to route the audio to the speakerphone or earpiece:
-   * - `true`: Route the audio to the speakerphone. If the playback device connects to the headset or Bluetooth, the audio cannot be routed to the speakerphone.
-   * - `false`: Route the audio to the earpiece. If the headset is plugged in, the audio is routed to the headset.
+   * @param enabled Sets whether to enable the speakerphone or earpiece
+   * - `true`: Enable the speakerphone. The audio route is the speakerphone.
+   * - `false`: Disable the speakerphone. The audio route is the earpiece.
    */
   setEnableSpeakerphone(enabled: boolean): Promise<void> {
     return RtcEngine._callMethod('setEnableSpeakerphone', { enabled });
@@ -2439,10 +2522,17 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * In scenarios requiring high security, Agora recommends calling `enableEncryption` to enable the built-in encryption before joining a channel.
    *
-   * All users in the same channel must use the same encryption mode and encryption key. After a user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
+   * After a user leaves the channel, the SDK automatically disables the built-in encryption. To re-enable the built-in encryption, call this method before the user joins the channel again.
+   *
+   * As of v3.4.5, Agora recommends using either the `AES128GCM2` or `AES256GCM2` encryption mode, both of which support adding a salt and are more secure.
+   * For details, see *Media Stream Encryption*.
+   *
+   * **Warning**
+   * All users in the same channel must use the same encryption mode, encryption key, and salt; otherwise, users cannot communicate with each other.
    *
    * **Note**
-   * If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
+   * - If you enable the built-in encryption, you cannot use the RTMP or RTMPS streaming function.
+   * - To enhance security, Agora recommends using a new key and salt every time you enable the media stream encryption.
    *
    * @param enabled Whether to enable the built-in encryption.
    * - `true`: Enable the built-in encryption.
@@ -2450,8 +2540,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param config Configurations of built-in encryption schemas. See [`EncryptionConfig`]{@link EncryptionConfig}.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): An invalid parameter is used. Set the parameter with a valid value.
    *    - 4(NotSupported):  The encryption mode is incorrect or the SDK fails to load the external encryption library. Check the enumeration or reload the external encryption library.
    *    - 7(NotInitialized): The SDK is not initialized. Initialize the `RtcEngine` instance before calling this method.
@@ -2594,7 +2684,6 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-
   /**
    * Disables the virtual metronome.
    *
@@ -2629,10 +2718,6 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Stops the audio recording on the client.
    *
-   * **Note**
-   *
-   * You can call this method before calling [`leaveChannel`]{@link leaveChannel};
-   * else, the recording automatically stops when you call [`leaveChannel`]{@link leaveChannel}.
    */
   stopAudioRecording(): Promise<void> {
     return RtcEngine._callMethod('stopAudioRecording');
@@ -2669,8 +2754,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param config The `LiveInjectStreamConfig` object which contains the configuration information for the added voice or video stream.
    *
    * @returns
-   * - 0(NoError): Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *    - 2(InvalidArgument): The injected URL does not exist. Call this method again to inject the stream and ensure that the URL is valid.
    *    - 3(NotReady): The user is not in the channel.
    *    - 4(NotSupported): The channel profile is not `LiveBroadcasting`. Call the `setChannelProfile` method and set the channel profile to `LiveBroadcasting` before calling this method.
@@ -2709,6 +2794,9 @@ export default class RtcEngine implements RtcEngineInterface {
    * - The position of the human face in the local video.
    * - The distance between the human face and the device screen.
    *
+   * @note
+   * You can call this method either before or after joining a channel.
+   *
    * @param enable Determines whether to enable the face detection function for the local user:
    * - `true`: Enable face detection.
    * - `false`: (Default) Disable face detection.
@@ -2721,7 +2809,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * Gets the maximum zoom ratio supported by the camera.
    *
    * This method applies to Android only.
-   * @returns The maximum camera zoom factor.
+   * @returns The maximum camera zoom factor if the method call succeeds.
    */
   getCameraMaxZoomFactor(): Promise<number> {
     return RtcEngine._callMethod('getCameraMaxZoomFactor');
@@ -2931,10 +3019,9 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param config The configurations for the data stream.
    *
-   *
    * @return
    * - Returns the stream ID if you successfully create the data stream.
-   * - < 0: Fails to create the data stream.
+   * - An error code if the method call fails.
    */
   createDataStreamWithConfig(config: DataStreamConfig): Promise<number> {
     return RtcEngine._callMethod('createDataStream', { config });
@@ -3008,6 +3095,9 @@ export default class RtcEngine implements RtcEngineInterface {
    * Gets the native handle of the SDK engine.
    *
    * This interface is used to retrieve the native C++ handle of the SDK engine used in special scenarios, such as registering the audio and video frame observer.
+   *
+   * @returns
+   * The native handle of the SDK engine if the method call succeeds.
    */
   getNativeHandle(): Promise<number> {
     return RtcEngine._callMethod('getNativeHandle');
@@ -3037,8 +3127,8 @@ export default class RtcEngine implements RtcEngineInterface {
    *   - `true`: (Default) Enables deep-learning noise reduction.
    *   - `false`: Disables deep-learning noise reduction.
    * @return
-   * - 0: Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *   - 157(ModuleNotFound): The library for enabling deep-learning noise reduction is not integrated.
    */
   enableDeepLearningDenoise(enabled: boolean): Promise<void> {
@@ -3063,8 +3153,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * @param proxyType The cloud proxy type. This parameter is required, and the SDK reports an error if you do not pass in a value. See [`CloudProxyType`]{@link CloudProxyType}.
    *
    * @return
-   * - 0: Success.
-   * - Error codes: Failure.
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
    *   - `2(InvalidArgument)`: The parameter is invalid.
    *   - `7(NotInitialized)`: The SDK is not initialized.
    */
@@ -3074,6 +3164,7 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * @ignore
+   *
    * Uploads all local SDK log files.
    * @since v3.3.1. (later)
    *
@@ -3088,6 +3179,13 @@ export default class RtcEngine implements RtcEngineInterface {
    */
   uploadLogFile(): Promise<string> {
     return RtcEngine._callMethod('uploadLogFile');
+  }
+
+  /**
+   * @ignore
+   */
+  setLocalAccessPoint(ips: string[], domain: string): Promise<void> {
+    return RtcEngine._callMethod('setLocalAccessPoint', { ips, domain });
   }
 
   /**
@@ -3148,9 +3246,6 @@ export default class RtcEngine implements RtcEngineInterface {
    *   - 11: G
    *   - 12: G#
    *
-   * @returns
-   * - 0: Success.
-   * - Error codes: Failure.
    */
   setAudioEffectParameters(
     preset: AudioEffectPreset,
@@ -3198,9 +3293,6 @@ export default class RtcEngine implements RtcEngineInterface {
    *               - `1`: The reverberation effect sounds like singing in a small room.
    *               - `2`: The reverberation effect sounds like singing in a large room.
    *               - `3`: The reverberation effect sounds like singing in a hall.
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
    */
   setVoiceBeautifierParameters(
     preset: VoiceBeautifierPreset,
@@ -3242,9 +3334,6 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param preset The options for SDK preset audio effects. See [`AudioEffectPreset`]{@link AudioEffectPreset}.
    *
-   * @returns
-   * - 0: Success.
-   * - Error codes: Failure.
    */
   setAudioEffectPreset(preset: AudioEffectPreset): Promise<void> {
     return RtcEngine._callMethod('setAudioEffectPreset', { preset });
@@ -3268,6 +3357,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
    * - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierPreset`:
    *    - `setAudioEffectPreset`
+   *    - `setAudioEffectParameters`
    *    - `setLocalVoiceReverbPreset`
    *    - `setLocalVoiceChanger`
    *    - `setLocalVoicePitch`
@@ -3277,9 +3367,6 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param preset The options for SDK preset voice beautifier effects. See [`VoiceBeautifierPreset`]{@link VoiceBeautifierPreset}.
    *
-   * @returns
-   * - 0: Success.
-   * - Error codes: Failure.
    */
   setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): Promise<void> {
     return RtcEngine._callMethod('setVoiceBeautifierPreset', { preset });
@@ -3312,12 +3399,272 @@ export default class RtcEngine implements RtcEngineInterface {
    *   - `setLocalVoiceReverb`
    *
    * @param preset The options for SDK preset voice conversion effects. See [`VoiceConversionPreset`]{@link VoiceConversionPreset}.
+   *
+   */
+  setVoiceConversionPreset(preset: VoiceConversionPreset): Promise<void> {
+    return RtcEngine._callMethod('setVoiceConversionPreset', { preset });
+  }
+
+  /**
+   * Pauses the media stream relay to all destination channels.
+   *
+   * @since v3.5.1
+   *
+   * After the cross-channel media stream relay starts, you can call this method
+   * to pause relaying media streams to all destination channels; after the pause,
+   * if you want to resume the relay, call \ref IRtcEngine::resumeAllChannelMediaRelay "resumeAllChannelMediaRelay".
+   *
+   * After a successful method call, the SDK triggers the
+   * \ref IRtcEngineEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent"
+   * callback to report whether the media stream relay is successfully paused.
+   *
+   * @note Call this method after the \ref IRtcEngine::startChannelMediaRelay "startChannelMediaRelay" method.
+   *
    * @return
    * - 0: Success.
    * - < 0: Failure.
    */
-  setVoiceConversionPreset(preset: VoiceConversionPreset): Promise<void> {
-    return RtcEngine._callMethod('setVoiceConversionPreset', { preset });
+  pauseAllChannelMediaRelay(): Promise<void> {
+    return RtcEngine._callMethod('pauseAllChannelMediaRelay');
+  }
+
+  /** Resumes the media stream relay to all destination channels.
+   *
+   * @since v3.5.1
+   *
+   * After calling the \ref IRtcEngine::pauseAllChannelMediaRelay "pauseAllChannelMediaRelay" method,
+   * you can call this method to resume relaying media streams to all destination channels.
+   *
+   * After a successful method call, the SDK triggers the
+   * \ref IRtcEngineEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent"
+   * callback to report whether the media stream relay is successfully resumed.
+   *
+   * @note Call this method after the \ref IRtcEngine::pauseAllChannelMediaRelay "pauseAllChannelMediaRelay" method.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  resumeAllChannelMediaRelay(): Promise<void> {
+    return RtcEngine._callMethod('resumeAllChannelMediaRelay');
+  }
+
+  /**
+   * Enables/Disables the virtual background function. (beta function)
+   *
+   * @since v3.5.0.3
+   *
+   * After enabling the virtual background function, you can replace the original background image of the local user with a custom background image.
+   * After the replacement, all users in the channel can see the custom background image. You can find out from the
+   * [`VirtualBackgroundSourceEnabled`]{@link RtcChannelEvents.VirtualBackgroundSourceEnabled} callback whether the virtual background is successfully enabled or the cause of any errors.
+   *
+   * **Note**
+   * - Call this method after [`enableVideo`]{@link enableVideo}.
+   * - This functions requires a high-performance device. Agora recommends that you use this function on the following devices:
+   *   - Android: Devices with the following chips:
+   *     - Snapdragon 700 series 750G and later
+   *     - Snapdragon 800 series 835 and later
+   *     - Dimensity 700 series 720 and later
+   *     - Kirin 800 series 810 and later
+   *     - Kirin 900 series 980 and later
+   *   - iOS: Devices with an A9 chip and better, as follows:
+   *     - iPhone 6S and later
+   *     - iPad Air (3rd generation) and later
+   *     - iPad (5th generation) and later
+   *     - iPad Pro (1st generation) and later
+   *     - iPad mini (5th generation) and later
+   * - Agora recommends that you use this function in scenarios that meet the following conditions:
+   *   - A high-definition camera device is used, and the environment is uniformly lit.
+   *   - The captured video image is uncluttered, the user's portrait is half-length and largely unobstructed, and the background is a single color that differs from the color of the user's clothing.
+   *
+   * @param enabled Sets whether to enable the virtual background:
+   * - `true`: Enable.
+   * - `false`: Disable.
+   * @param backgroundSource The custom background image. See [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}.
+   * Note: To adapt the resolution of the custom background image to the resolution of the SDK capturing video, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
+   *
+   */
+  enableVirtualBackground(
+    enabled: boolean,
+    backgroundSource: VirtualBackgroundSource
+  ): Promise<void> {
+    return RtcEngine._callMethod('enableVirtualBackground', {
+      enabled,
+      backgroundSource,
+    });
+  }
+
+  /** Gets the information of a specified audio file.
+   *
+   * @since v3.5.1
+   *
+   * After calling this method successfully, the SDK triggers the
+   * \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo"
+   * callback to report the information of an audio file, such as audio duration.
+   * You can call this method multiple times to get the information of multiple audio files.
+   *
+   * @note
+   * - Call this method after joining a channel.
+   * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   *
+   * @param filePath The file path:
+   * - Windows: The absolute path or URL address (including the filename extensions) of
+   * the audio file. For example: `C:\music\audio.mp4`.
+   * - Android: The file path, including the filename extensions. To access an online file,
+   * Agora supports using a URL address; to access a local file, Agora supports using a URI
+   * address, an absolute path, or a path that starts with `/assets/`. You might encounter
+   * permission issues if you use an absolute path to access a local file, so Agora recommends
+   * using a URI address instead. For example: `content://com.android.providers.media.documents/document/audio%3A14441`.
+   * - iOS or macOS: The absolute path or URL address (including the filename extensions) of the audio file.
+   * For example: `/var/mobile/Containers/Data/audio.mp4`.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  getAudioFileInfo(filePath: string): Promise<void> {
+    return RtcEngine._callMethod('getAudioFileInfo', {
+      filePath,
+    });
+  }
+
+  /**
+   * Gets the audio track index of the current music file.
+   *
+   * @since v3.5.1
+   *
+   * @note
+   * - This method is for Android, iOS, and Windows only.
+   * - Call this method after calling \ref IRtcEngine::startAudioMixing(const char*,bool,bool,int,int) "startAudioMixing" [2/2]
+   * and receiving the \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (AUDIO_MIXING_STATE_PLAYING) callback.
+   * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   *
+   * @return
+   * - ≥ 0: The audio track index of the current music file, if this method call succeeds.
+   * - < 0: Failure.
+   */
+  getAudioTrackCount(): Promise<number> {
+    return RtcEngine._callMethod('getAudioTrackCount');
+  }
+
+  /**
+   * Specifies the playback track of the current music file.
+   *
+   * @since v3.5.1
+   *
+   * After getting the audio track index of the current music file, call this
+   * method to specify any audio track to play. For example, if different tracks
+   * of a multitrack file store songs in different languages, you can call this
+   * method to set the language of the music file to play.
+   *
+   * @note
+   * - This method is for Android, iOS, and Windows only.
+   * - Call this method after calling \ref IRtcEngine::startAudioMixing(const char*,bool,bool,int,int) "startAudioMixing" [2/2]
+   * and receiving the \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (AUDIO_MIXING_STATE_PLAYING) callback.
+   * - For the audio file formats supported by this method, see [What formats of audio files does the Agora RTC SDK support](https://docs.agora.io/en/faq/audio_format).
+   *
+   * @param index The specified playback track. This parameter must be less than or equal to the return value
+   * of \ref IRtcEngine::getAudioTrackCount "getAudioTrackCount".
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  selectAudioTrack(index: number): Promise<void> {
+    return RtcEngine._callMethod('selectAudioTrack', {
+      index,
+    });
+  }
+
+  /**
+   * Sets the channel mode of the current music file.
+   *
+   * @since v3.5.1
+   *
+   * In a stereo music file, the left and right channels can store different audio data.
+   * According to your needs, you can set the channel mode to original mode, left channel mode,
+   * right channel mode, or mixed channel mode. For example, in the KTV scenario, the left
+   * channel of the music file stores the musical accompaniment, and the right channel
+   * stores the singing voice. If you only need to listen to the accompaniment, call this
+   * method to set the channel mode of the music file to left channel mode; if you need to
+   * listen to the accompaniment and the singing voice at the same time, call this method
+   * to set the channel mode to mixed channel mode.
+   *
+   * @note
+   * - Call this method after calling \ref IRtcEngine::startAudioMixing(const char*,bool,bool,int,int) "startAudioMixing" [2/2]
+   * and receiving the \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (AUDIO_MIXING_STATE_PLAYING) callback.
+   * - This method only applies to stereo audio files.
+   *
+   * @param mode The channel mode. See \ref agora::media::AUDIO_MIXING_DUAL_MONO_MODE "AUDIO_MIXING_DUAL_MONO_MODE".
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  setAudioMixingDualMonoMode(mode: AudioMixingDualMonoMode): Promise<void> {
+    return RtcEngine._callMethod('setAudioMixingDualMonoMode', {
+      mode,
+    });
+  }
+
+  /**
+   * Sets the playback speed of the current music file.
+   *
+   * @since v3.5.1
+   *
+   * @note Call this method after calling \ref IRtcEngine::startAudioMixing(const char*,bool,bool,int,int) "startAudioMixing" [2/2]
+   * and receiving the \ref IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (AUDIO_MIXING_STATE_PLAYING) callback.
+   *
+   * @param speed The playback speed. Agora recommends that you limit this value to between 50 and 400, defined as follows:
+   * - 50: Half the original speed.
+   * - 100: The original speed.
+   * - 400: 4 times the original speed.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  setAudioMixingPlaybackSpeed(speed: number): Promise<void> {
+    return RtcEngine._callMethod('setAudioMixingPlaybackSpeed', {
+      speed,
+    });
+  }
+
+  /**
+   * Takes a snapshot of a video stream.
+   *
+   * @since v3.5.2
+   *
+   * This method takes a snapshot of a video stream from the specified user, generates a JPG image,
+   * and saves it to the specified path.
+   *
+   * The method is asynchronous, and the SDK has not taken the snapshot when the method call returns.
+   * After a successful method call, the SDK triggers the \ref IRtcEngineEventHandler::onSnapshotTaken "onSnapshotTaken"
+   * callback to report whether the snapshot is successfully taken as well as the details of the snapshot taken.
+   *
+   * @note
+   * - Call this method after joining a channel.
+   * - If the video of the specified user is pre-processed, for example, added with watermarks or image enhancement
+   * effects, the generated snapshot also includes the pre-processing effects.
+   *
+   * @param channel The channel name.
+   * @param uid The user ID of the user. Set `uid` as 0 if you want to take a snapshot of the local user's video.
+   * @param filePath The local path (including the filename extensions) of the snapshot. For example,
+   * `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg` on Windows,
+   * `/App Sandbox/Library/Caches/example.jpg` on iOS, `～/Library/Logs/example.jpg` on macOS, and
+   * `/storage/emulated/0/Android/data/<package name>/files/example.jpg` on Android. Ensure that the path you specify
+   * exists and is writable.
+   *
+   * @return
+   * - 0: Success.
+   * - < 0: Failure.
+   */
+  takeSnapshot(channel: string, uid: number, filePath: string): Promise<void> {
+    return RtcEngine._callMethod('takeSnapshot', {
+      channel,
+      uid,
+      filePath,
+    });
   }
 }
 
@@ -3403,6 +3750,15 @@ interface RtcEngineInterface
   setCloudProxy(proxyType: CloudProxyType): Promise<void>;
 
   uploadLogFile(): Promise<string>;
+
+  setLocalAccessPoint(ips: string[], domain: string): Promise<void>;
+
+  enableVirtualBackground(
+    enabled: boolean,
+    backgroundSource: VirtualBackgroundSource
+  ): Promise<void>;
+
+  takeSnapshot(channel: string, uid: number, filePath: string): Promise<void>;
 }
 
 /**
@@ -3528,6 +3884,16 @@ interface RtcAudioMixingInterface {
   setAudioMixingPosition(pos: number): Promise<void>;
 
   setAudioMixingPitch(pitch: number): Promise<void>;
+
+  getAudioFileInfo(filePath: string): Promise<void>;
+
+  setAudioMixingPlaybackSpeed(speed: number): Promise<void>;
+
+  getAudioTrackCount(): Promise<number>;
+
+  selectAudioTrack(audioIndex: number): Promise<void>;
+
+  setAudioMixingDualMonoMode(mode: AudioMixingDualMonoMode): Promise<void>;
 }
 
 /**
@@ -3646,6 +4012,10 @@ interface RtcMediaRelayInterface {
     channelMediaRelayConfiguration: ChannelMediaRelayConfiguration
   ): Promise<void>;
 
+  pauseAllChannelMediaRelay(): Promise<void>;
+
+  resumeAllChannelMediaRelay(): Promise<void>;
+
   stopChannelMediaRelay(): Promise<void>;
 }
 
@@ -3700,7 +4070,10 @@ interface RtcFallbackInterface {
  * @ignore
  */
 interface RtcTestInterface {
-  startEchoTest(intervalInSeconds: number): Promise<void>;
+  startEchoTest(
+    intervalInSeconds?: number,
+    config?: EchoTestConfiguration
+  ): Promise<void>;
 
   stopEchoTest(): Promise<void>;
 
