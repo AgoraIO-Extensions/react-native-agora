@@ -1282,12 +1282,10 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-  /**
-   * @ignore
-   *
+  /** // TODO DOC
    * Enables/Disables the super-resolution algorithm for a remote user's video stream.
    *
-   * @since v3.3.1 (later)
+   * @since v3.5.2
    *
    * The algorithm effectively improves the resolution of the specified remote user's video stream. When the original resolution of the remote video stream is a × b pixels, you can receive and render the stream at a higher resolution (2a × 2b pixels) by enabling the algorithm.
    *
@@ -3405,7 +3403,7 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('setVoiceConversionPreset', { preset });
   }
 
-  /**
+  /** // TODO DOC
    * Pauses the media stream relay to all destination channels.
    *
    * @since v3.5.1
@@ -3428,7 +3426,8 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('pauseAllChannelMediaRelay');
   }
 
-  /** Resumes the media stream relay to all destination channels.
+  /** // TODO DOC
+   * Resumes the media stream relay to all destination channels.
    *
    * @since v3.5.1
    *
@@ -3494,7 +3493,8 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-  /** Gets the information of a specified audio file.
+  /** // TODO DOC
+   * Gets the information of a specified audio file.
    *
    * @since v3.5.1
    *
@@ -3528,7 +3528,7 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-  /**
+  /** // TODO DOC
    * Gets the audio track index of the current music file.
    *
    * @since v3.5.1
@@ -3547,7 +3547,7 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('getAudioTrackCount');
   }
 
-  /**
+  /** // TODO DOC
    * Specifies the playback track of the current music file.
    *
    * @since v3.5.1
@@ -3576,7 +3576,7 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-  /**
+  /** // TODO DOC
    * Sets the channel mode of the current music file.
    *
    * @since v3.5.1
@@ -3607,7 +3607,7 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-  /**
+  /** // TODO DOC
    * Sets the playback speed of the current music file.
    *
    * @since v3.5.1
@@ -3630,7 +3630,7 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
-  /**
+  /** // TODO DOC
    * Takes a snapshot of a video stream.
    *
    * @since v3.5.2

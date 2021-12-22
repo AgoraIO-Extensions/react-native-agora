@@ -805,19 +805,19 @@ export enum ChannelMediaRelayEvent {
    */
   VideoProfileUpdate = 11,
   /**
-   * @ignore
+   * @ignore // TODO DOC
    */
   PauseSendPacketToDestChannelSuccess = 12,
   /**
-   * @ignore
+   * @ignore // TODO DOC
    */
   PauseSendPacketToDestChannelFailed = 13,
   /**
-   * @ignore
+   * @ignore // TODO DOC
    */
   ResumeSendPacketToDestChannelSuccess = 14,
   /**
-   * @ignore
+   * @ignore // TODO DOC
    */
   ResumeSendPacketToDestChannelFailed = 15,
 }
@@ -2950,7 +2950,7 @@ export enum SuperResolutionStateReason {
   DeviceNotSupported = 3,
 }
 
-/**
+/** // TODO DOC
  * The reason for the upload failure.
  *
  * @since v3.3.1.
@@ -3078,7 +3078,7 @@ export enum VirtualBackgroundSourceType {
   /**
    * The degree of blurring applied to the custom background image.
    */
-  Blur = 3,
+  Blur = 3, // TODO DOC
 }
 
 /**
@@ -3103,7 +3103,8 @@ export enum VirtualBackgroundSourceStateReason {
   DeviceNotSupported = 3,
 }
 
-/** The information acquisition state. This enum is reported
+/** // TODO DOC
+ * The information acquisition state. This enum is reported
  * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
  *
  * @since v3.5.1
@@ -3117,7 +3118,7 @@ export enum AudioFileInfoError {
   Failure = 1,
 }
 
-/**
+/** // TODO DOC
  * The channel mode. Set in \ref agora::rtc::IRtcEngine::setAudioMixingDualMonoMode "setAudioMixingDualMonoMode".
  *
  * @since v3.5.1
@@ -3147,7 +3148,7 @@ export enum AudioMixingDualMonoMode {
   MIX = 3,
 }
 
-/**
+/**// TODO DOC
  * The degree of blurring applied to the custom background image.
  *
  * @since v3.5.1

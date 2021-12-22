@@ -544,8 +544,7 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('setDefaultMuteAllRemoteVideoStreams', { muted });
   }
 
-  /**
-   * @ignore
+  /** // TODO doc v3.5.2
    *
    * Enables/Disables the super-resolution algorithm for a remote user's video stream.
    *
@@ -1109,7 +1108,7 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('muteLocalVideoStream', { muted });
   }
 
-  /**
+  /** // TODO DOC
    * Pauses the media stream relay to all destination channels.
    *
    * @since v3.5.1
@@ -1132,7 +1131,8 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('pauseAllChannelMediaRelay');
   }
 
-  /** Resumes the media stream relay to all destination channels.
+  /** // TODO DOC
+   * Resumes the media stream relay to all destination channels.
    *
    * @since v3.5.1
    *

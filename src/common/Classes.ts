@@ -1739,9 +1739,9 @@ export class AudioRecordingConfiguration {
    *
    * @note This parameter takes effect only when the type of the custom background image is `BACKGROUND_BLUR`.
    *
-   * @since v3.5.1
+   * @since v3.5.2
    */
-  blur_degree?: VirtualBackgroundBlurDegree;
+  blur_degree?: VirtualBackgroundBlurDegree; // TODO DOC
 
   constructor(
     filePath: string,
@@ -1801,7 +1801,7 @@ export class VirtualBackgroundSource {
   }
 }
 
-/**
+/** // TODO DOC
  * The information of an audio file. This struct is reported
  * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
  *
@@ -1816,7 +1816,7 @@ export interface AudioFileInfo {
   durationMs: number;
 }
 
-/**
+/** // TODO DOC
  * The configuration of the audio and video call loop test.
  *
  * @since v3.5.2

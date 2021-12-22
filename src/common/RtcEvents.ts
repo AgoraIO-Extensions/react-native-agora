@@ -490,8 +490,8 @@ export type RtmpStreamingEventCallback =
    */
   (url: string, eventCode: RtmpStreamingEvent) => void;
 export type UserSuperResolutionEnabledCallback =
-  /**
-   * @ignore
+  /** // TODO Doc
+   *
    *
    * @param uid The ID of the remote user.
    * @param enabled Whether the super-resolution algorithm is successfully enabled:
@@ -501,8 +501,7 @@ export type UserSuperResolutionEnabledCallback =
    */
   (uid: number, enabled: boolean, reason: SuperResolutionStateReason) => void;
 export type UploadLogResultCallback =
-  /**
-   * @ignore
+  /** // TODO DoC
    *
    * @param requestId The request ID. This request ID is the same as requestId returned by `uploadLogFile`, and you can use `requestId` to match a specific upload with a callback.
    * @param success Whether the log files are successfully uploaded:
@@ -520,13 +519,13 @@ export type VirtualBackgroundSourceEnabledCallback =
    */
   (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
 export type RequestAudioFileInfoCallback =
-  /**
+  /** // TODO DoC
    * @param info The information of an audio file. See AudioFileInfo.
    * @param error The information acquisition state. See #AUDIO_FILE_INFO_ERROR.
    */
   (info: AudioFileInfo, error: AudioFileInfoError) => void;
 export type SnapshotTakenCallback =
-  /**
+  /** // TODO DoC
    * @param channel The channel name.
    * @param uid The user ID of the user. A `uid` of 0 indicates the local user.
    * @param filePath The local path of the snapshot.
@@ -1443,8 +1442,8 @@ export interface RtcEngineEvents {
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
 
-  /**
-   * @ignore
+  /** // TODO DOC
+   *
    *
    * Reports whether the super-resolution algorithm is enabled.
    *
@@ -1457,7 +1456,7 @@ export interface RtcEngineEvents {
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 
   /**
-   * @ignore
+   * // TODO DoC
    *
    * Reports the result of uploading the SDK log files.
    *
@@ -1469,7 +1468,7 @@ export interface RtcEngineEvents {
    */
   UploadLogResult: UploadLogResultCallback;
 
-  /**
+  /** // TODO DoC
    * Reports the information of an audio file.
    *
    * @since v3.5.1
@@ -1481,7 +1480,7 @@ export interface RtcEngineEvents {
    */
   RequestAudioFileInfo: RequestAudioFileInfoCallback;
 
-  /**
+  /** // TODO DoC
    * Reports the result of taking a video snapshot.
    *
    * @since v3.5.2
@@ -1855,7 +1854,7 @@ export interface RtcChannelEvents {
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
 
-  /**
+  /** // TODO DOC 3.5.2
    * @ignore
    *
    * Reports whether the super-resolution algorithm is enabled.
