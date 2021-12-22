@@ -805,19 +805,27 @@ export enum ChannelMediaRelayEvent {
    */
   VideoProfileUpdate = 11,
   /**
-   * @ignore // TODO DOC
+   * 12: The SDK successfully pauses relaying the media stream to destination channels.
+   *
+   * @since v3.5.2
    */
   PauseSendPacketToDestChannelSuccess = 12,
   /**
-   * @ignore // TODO DOC
+   * 13: The SDK fails to pause relaying the media stream to destination channels.
+   *
+   * @since v3.5.2
    */
   PauseSendPacketToDestChannelFailed = 13,
   /**
-   * @ignore // TODO DOC
+   * 14: The SDK successfully resumes relaying the media stream to destination channels.
+   *
+   * @since v3.5.2
    */
   ResumeSendPacketToDestChannelSuccess = 14,
   /**
-   * @ignore // TODO DOC
+   * 15: The SDK fails to resume relaying the media stream to destination channels.
+   *
+   * @since v3.5.2
    */
   ResumeSendPacketToDestChannelFailed = 15,
 }
@@ -2950,7 +2958,9 @@ export enum SuperResolutionStateReason {
   DeviceNotSupported = 3,
 }
 
-/** // TODO DOC
+/**
+ * @ignore
+ *
  * The reason for the upload failure.
  *
  * @since v3.3.1.
@@ -3076,9 +3086,11 @@ export enum VirtualBackgroundSourceType {
    */
   Img = 2,
   /**
-   * The degree of blurring applied to the custom background image.
+   * The background image is blurred.
+   *
+   * @since v3.5.2
    */
-  Blur = 3, // TODO DOC
+  Blur = 3,
 }
 
 /**
@@ -3103,11 +3115,11 @@ export enum VirtualBackgroundSourceStateReason {
   DeviceNotSupported = 3,
 }
 
-/** // TODO DOC
- * The information acquisition state. This enum is reported
- * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
+/**
+ * The information acquisition state, which is reported
+ * in [`RequestAudioFileInfo`]{@link RequestAudioFileInfo}.
  *
- * @since v3.5.1
+ * @since v3.5.2
  */
 export enum AudioFileInfoError {
   /** 0: Successfully get the information of an audio file.
@@ -3118,10 +3130,10 @@ export enum AudioFileInfoError {
   Failure = 1,
 }
 
-/** // TODO DOC
- * The channel mode. Set in \ref agora::rtc::IRtcEngine::setAudioMixingDualMonoMode "setAudioMixingDualMonoMode".
+/**
+ * The channel mode, which is set in [`setAudioMixingDualMonoMode`]{@link setAudioMixingDualMonoMode}.
  *
- * @since v3.5.1
+ * @since v3.5.2
  */
 export enum AudioMixingDualMonoMode {
   /**
@@ -3148,10 +3160,10 @@ export enum AudioMixingDualMonoMode {
   MIX = 3,
 }
 
-/**// TODO DOC
- * The degree of blurring applied to the custom background image.
+/**
+ * The degree of blurring applied to the custom background image. See
  *
- * @since v3.5.1
+ * @since v3.5.2
  */
 export enum VirtualBackgroundBlurDegree {
   /**

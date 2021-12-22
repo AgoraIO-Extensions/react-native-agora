@@ -1134,7 +1134,8 @@ export interface RtcStats {
    *
    * **Note**
    *
-   * The `cpuTotalUsage` reported in the `LeaveChannel` callback is always 0.
+   * - The `cpuTotalUsage` reported in the `LeaveChannel` callback is always 0.
+   * - As of Android 8.1, you might not be able to get the CPU usage from this attribute due to system limitations.
    */
   cpuTotalUsage: number;
   /**
@@ -1142,7 +1143,8 @@ export interface RtcStats {
    *
    * **Note**
    *
-   * The `cpuAppUsage` reported in the `LeaveChannel` callback is always 0.
+   * - The `cpuAppUsage` reported in the `LeaveChannel` callback is always 0.
+   * - - As of Android 8.1, you might not be able to get the CPU usage from this attribute due to system limitations.
    */
   cpuAppUsage: number;
   /**
@@ -1735,13 +1737,13 @@ export class AudioRecordingConfiguration {
    */
   recordingSampleRate?: AudioSampleRateType;
   /**
-   * The degree of blurring applied to the custom background image. See #BACKGROUND_BLUR_DEGREE.
+   * The degree of blurring applied to the custom background image. See [`VirtualBackgroundBlurDegree`]{@link VirtualBackgroundBlurDegree}.
    *
-   * @note This parameter takes effect only when the type of the custom background image is `BACKGROUND_BLUR`.
+   * @note This parameter takes effect only when the type of the custom background image is `blur`.
    *
    * @since v3.5.2
    */
-  blur_degree?: VirtualBackgroundBlurDegree; // TODO DOC
+  blur_degree?: VirtualBackgroundBlurDegree;
 
   constructor(
     filePath: string,
@@ -1801,11 +1803,11 @@ export class VirtualBackgroundSource {
   }
 }
 
-/** // TODO DOC
- * The information of an audio file. This struct is reported
- * in \ref IRtcEngineEventHandler::onRequestAudioFileInfo "onRequestAudioFileInfo".
+
+/**
+ * The information of an audio file, which is reported in [`RequestAudioFileInfo`]{@link RequestAudioFileInfo}.
  *
- * @since v3.5.1
+ * @since v3.5.2
  */
 export interface AudioFileInfo {
   /** The file path.
@@ -1816,7 +1818,7 @@ export interface AudioFileInfo {
   durationMs: number;
 }
 
-/** // TODO DOC
+/**
  * The configuration of the audio and video call loop test.
  *
  * @since v3.5.2
@@ -1829,9 +1831,7 @@ export class EchoTestConfiguration {
    */
   enableAudio?: boolean;
   /**
-   * Whether to enable the video device for the call loop test:
-   * - true: (Default) Enables the video device. To test the video device, set this parameter as `true`.
-   * - false: Disables the video device.
+   * Reversed for future use.
    */
   enableVideo?: boolean;
   /**

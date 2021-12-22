@@ -490,18 +490,17 @@ export type RtmpStreamingEventCallback =
    */
   (url: string, eventCode: RtmpStreamingEvent) => void;
 export type UserSuperResolutionEnabledCallback =
-  /** // TODO Doc
-   *
-   *
-   * @param uid The ID of the remote user.
-   * @param enabled Whether the super-resolution algorithm is successfully enabled:
-   *   - `true`: The super-resolution algorithm is successfully enabled.
-   *   - `false`: The super-resolution algorithm is not successfully enabled.
-   * @param reason The reason why the super-resolution algorithm is not successfully enabled. See [`SuperResolutionStateReason`]{@link enum.SuperResolutionStateReason}.
+  /**
+   * @param uid The user ID of the remote user.
+   * @param enabled Whether super resolution is successfully enabled:
+   *   - `true`: Super resolution is successfully enabled.
+   *   - `false`: Super resolution is not successfully enabled.
+   * @param reason The reason why super resolution is not successfully enabled or the message that confirms success. See [`SuperResolutionStateReason`]{@link enum.SuperResolutionStateReason}.
    */
   (uid: number, enabled: boolean, reason: SuperResolutionStateReason) => void;
 export type UploadLogResultCallback =
-  /** // TODO DoC
+  /**
+   * @ignore
    *
    * @param requestId The request ID. This request ID is the same as requestId returned by `uploadLogFile`, and you can use `requestId` to match a specific upload with a callback.
    * @param success Whether the log files are successfully uploaded:
@@ -519,13 +518,13 @@ export type VirtualBackgroundSourceEnabledCallback =
    */
   (enabled: boolean, reason: VirtualBackgroundSourceStateReason) => void;
 export type RequestAudioFileInfoCallback =
-  /** // TODO DoC
-   * @param info The information of an audio file. See AudioFileInfo.
-   * @param error The information acquisition state. See #AUDIO_FILE_INFO_ERROR.
+  /**
+   * @param info The information of an audio file. See [`AudioFileInfo`]{@link AudioFileInfo}.
+   * @param error The information acquisition state. See [`AudioFileInfoError`]{@link AudioFileInfoError}.
    */
   (info: AudioFileInfo, error: AudioFileInfoError) => void;
 export type SnapshotTakenCallback =
-  /** // TODO DoC
+  /**
    * @param channel The channel name.
    * @param uid The user ID of the user. A `uid` of 0 indicates the local user.
    * @param filePath The local path of the snapshot.
@@ -536,7 +535,7 @@ export type SnapshotTakenCallback =
    * - < 0: Failure:
    *  - `-1`: The SDK fails to write data to a file or encode a JPEG image.
    *  - `-2`: The SDK does not find the video stream of the specified user within one second after
-   * the \ref IRtcEngine::takeSnapshot "takeSnapshot" method call succeeds.
+   * the [`takeSnapshot`]{@link takeSnapshot} method call succeeds.
    */
   (
     channel: string,
@@ -995,11 +994,6 @@ export interface RtcEngineEvents {
   /**
    * Occurs when the audio mixing file playback finishes.
    *
-   * @deprecated
-   *
-   * This callback is deprecated.
-   * Use [`AudioMixingStateChanged`]{@link AudioMixingStateChanged} instead.
-   *
    * You can start an audio mixing file playback by calling [`startAudioMixing`]{@link RtcEngine.startAudioMixing}. This callback is triggered when the audio mixing file playback finishes.
    *
    * If the [`startAudioMixing`]{@link RtcEngine.startAudioMixing} method call fails, an [`AudioMixingOpenError`]{@link WarningCode.AudioMixingOpenError} warning returns in the [`Warning`]{@link Warning} callback.
@@ -1442,21 +1436,20 @@ export interface RtcEngineEvents {
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
 
-  /** // TODO DOC
+  /**
+   * Reports whether the super resolution feature is successfully enabled. (beta feature)
    *
+   * @since v3.5.2
    *
-   * Reports whether the super-resolution algorithm is enabled.
-   *
-   * @since v3.3.1 (later)
-   *
-   * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use reason for troubleshooting.
+   * After calling [`enableRemoteSuperResolution`]{@link enableRemoteSuperResolution}, the SDK triggers this callback to report whether
+   * super resolution is successfully enabled. If it is not successfully enabled, use `reason` for troubleshooting.
    *
    * @event UserSuperResolutionEnabled
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
 
   /**
-   * // TODO DoC
+   * @ignore
    *
    * Reports the result of uploading the SDK log files.
    *
@@ -1468,25 +1461,44 @@ export interface RtcEngineEvents {
    */
   UploadLogResult: UploadLogResultCallback;
 
-  /** // TODO DoC
+  /**
+   * @ignore
+   */
+   AirPlayIsConnected: EmptyCallback;
+
+   /**
+    * Reports whether the virtual background is successfully enabled. (beta function)
+    *
+    * **since** v3.5.0.3
+    *
+    * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
+    *
+    * **Note**
+    *
+    * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
+    *
+    */
+   VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
+
+  /**
    * Reports the information of an audio file.
    *
-   * @since v3.5.1
+   * @since v3.5.2
    *
-   * After successfully calling \ref IRtcEngine::getAudioFileInfo "getAudioFileInfo", the SDK triggers this
-   * callback to report the information of the audio file, such as the file path and duration.
+   * After successfully calling [`getAudioFileInfo`]{@link getAudioFileInfo},
+   * the SDK triggers this callback to report the information of the audio file, such as the file path and
+   * duration.
    *
-   * @event UploadLogResultCallback
+   * @event RequestAudioFileInfo
    */
   RequestAudioFileInfo: RequestAudioFileInfoCallback;
 
-  /** // TODO DoC
+  /**
    * Reports the result of taking a video snapshot.
    *
    * @since v3.5.2
    *
-   * After a successful \ref IRtcEngine::takeSnapshot "takeSnapshot" method call, the SDK triggers this callback to
-   * report whether the snapshot is successfully taken as well as the details for the snapshot taken.
+   * After a successful [`takeSnapshot`]{@link RtcEngine.takeSnapshot} method call, the SDK triggers this callback to report whether the snapshot is successfully taken as well as the details for the snapshot taken.
    *
    * @event SnapshotTaken
    */
@@ -1854,33 +1866,15 @@ export interface RtcChannelEvents {
    */
   RtmpStreamingEvent: RtmpStreamingEventCallback;
 
-  /** // TODO DOC 3.5.2
-   * @ignore
+  /**
+   * Reports whether the super resolution feature is successfully enabled. (beta feature)
    *
-   * Reports whether the super-resolution algorithm is enabled.
+   * @since v3.5.2
    *
-   * @since v3.3.1 (later)
+   * After calling [`enableRemoteSuperResolution`]{@link enableRemoteSuperResolution}, the SDK triggers this callback to report whether
+   * super resolution is successfully enabled. If it is not successfully enabled, use `reason` for troubleshooting.
    *
-   * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use `reason` for troubleshooting.
+   * @event UserSuperResolutionEnabled
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
-
-  /**
-   * @ignore
-   */
-  AirPlayIsConnected: EmptyCallback;
-
-  /**
-   * Reports whether the virtual background is successfully enabled. (beta function)
-   *
-   * **since** v3.5.0.3
-   *
-   * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
-   *
-   * **Note**
-   *
-   * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
-   *
-   */
-  VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
 }
