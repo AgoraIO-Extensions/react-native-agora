@@ -2379,8 +2379,18 @@ export default class RtcEngine implements RtcEngineInterface {
    * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, only a host can call this method.
    * @param intervalInSeconds The time interval (s) between when you speak and when the recording plays back.
    */
-  startEchoTest(intervalInSeconds: number): Promise<void> {
-    return RtcEngine._callMethod('startEchoTest', { intervalInSeconds });
+  startEchoTest(
+    intervalInSeconds?: number,
+    config?: EchoTestConfiguration
+  ): Promise<void> {
+    console.assert(
+      intervalInSeconds === undefined || config === undefined,
+      'Only need one of the params'
+    );
+    return RtcEngine._callMethod('startEchoTest', {
+      intervalInSeconds,
+      config,
+    });
   }
 
   /**

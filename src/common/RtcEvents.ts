@@ -1470,6 +1470,25 @@ export interface RtcEngineEvents {
   UploadLogResult: UploadLogResultCallback;
 
   /**
+   * @ignore
+   */
+  AirPlayIsConnected: EmptyCallback;
+
+  /**
+   * Reports whether the virtual background is successfully enabled. (beta function)
+   *
+   * **since** v3.5.0.3
+   *
+   * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
+   *
+   * **Note**
+   *
+   * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
+   *
+   */
+  VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
+
+  /**
    * Reports the information of an audio file.
    *
    * @since v3.5.1
@@ -1865,23 +1884,4 @@ export interface RtcChannelEvents {
    * After calling `enableRemoteSuperResolution`, the SDK triggers this callback to report whether the super-resolution algorithm is successfully enabled. If not successfully enabled, you can use `reason` for troubleshooting.
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
-
-  /**
-   * @ignore
-   */
-  AirPlayIsConnected: EmptyCallback;
-
-  /**
-   * Reports whether the virtual background is successfully enabled. (beta function)
-   *
-   * **since** v3.5.0.3
-   *
-   * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
-   *
-   * **Note**
-   *
-   * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
-   *
-   */
-  VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
 }
