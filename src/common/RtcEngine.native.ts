@@ -2396,25 +2396,6 @@ export default class RtcEngine implements RtcEngineInterface {
    * - In the [`LiveBroadcasting`]{@link ChannelProfile.LiveBroadcasting} profile, only a host can call this method.
    * @param intervalInSeconds The time interval (s) between when you speak and when the recording plays back.
    */
-  /**
-   * Starts an audio call loop test.
-   *
-   * @since v3.5.2
-   *
-   * Before joining a channel, to test whether the user's local sending and receiving streams are normal,
-   * you can call this method to perform an audio call loop test, which tests whether the audio device and the user's upstream and downstream networks are working properly.
-   *
-   * After starting the test, the user needs to make a sound.
-   * The audio is output after about two seconds. If the audio playback is normal, the audio device and the user's upstream and downstream
-   * networks are working properly.
-   *
-   * **Note**
-   * - Call this method before joining a channel.
-   * - After calling this method, call [`stopEchoTest`]{@link stopEchoTest} to end the test; otherwise, the user cannot perform the next audio call loop test and cannot join the channel.
-   * - In the `LIVE_BROADCASTING` profile, only a host can call this method.
-   * @param intervalInSeconds The time interval (s) between when you speak and when the recording plays back.
-   * @param config The configuration of the audio call loop test. See [`EchoTestConfiguration`]{@link EchoTestConfiguration}.
-   */
   startEchoTest(
     intervalInSeconds?: number,
     config?: EchoTestConfiguration

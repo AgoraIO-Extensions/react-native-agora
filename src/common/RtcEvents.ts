@@ -1464,21 +1464,21 @@ export interface RtcEngineEvents {
   /**
    * @ignore
    */
-   AirPlayIsConnected: EmptyCallback;
+  AirPlayIsConnected: EmptyCallback;
 
-   /**
-    * Reports whether the virtual background is successfully enabled. (beta function)
-    *
-    * **since** v3.5.0.3
-    *
-    * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
-    *
-    * **Note**
-    *
-    * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
-    *
-    */
-   VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
+  /**
+   * Reports whether the virtual background is successfully enabled. (beta function)
+   *
+   * **since** v3.5.0.3
+   *
+   * After you call [`enableVirtualBackground`]{@link enableVirtualBackground}, the SDK triggers this callback to report whether the virtual background is successfully enabled.
+   *
+   * **Note**
+   *
+   * If the background image customized in the virtual background is in PNG or JPG format, the triggering of this callback is delayed until the image is read.
+   *
+   */
+  VirtualBackgroundSourceEnabled: VirtualBackgroundSourceEnabledCallback;
 
   /**
    * Reports the information of an audio file.
