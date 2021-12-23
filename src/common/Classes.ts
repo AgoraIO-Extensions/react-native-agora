@@ -1776,15 +1776,19 @@ export class VirtualBackgroundSource {
    */
   source?: string;
 
+  blur_degree?: VirtualBackgroundBlurDegree;
+
   constructor(params?: {
     backgroundSourceType?: VirtualBackgroundSourceType;
     color?: Color;
     source?: string;
+    blur_degree?: VirtualBackgroundBlurDegree;
   }) {
     if (params) {
       this.backgroundSourceType = params.backgroundSourceType;
       this.color = params.color;
       this.source = params.source;
+      this.blur_degree = params.blur_degree;
     }
   }
 }
