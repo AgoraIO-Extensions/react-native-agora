@@ -919,18 +919,6 @@ export class CameraCapturerConfiguration {
    */
   captureHeight?: number;
   /**
-   * The width (px) of the video image captured by the local camera. To customize the width of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureWidth`.
-   *
-   * @since v3.3.1.
-   */
-  captureWidth?: number;
-  /**
-   * The height (px) of the video image captured by the local camera. To customize the height of the video image, set `preference` as [`Manual`]{@link CameraCaptureOutputPreference.Manual} first, and then use `captureHeight`.
-   *
-   * @since v3.3.1.
-   */
-  captureHeight?: number;
-  /**
    * The camera direction.
    */
   cameraDirection?: CameraDirection;
