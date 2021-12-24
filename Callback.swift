@@ -6,24 +6,36 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-import Foundation
 import AgoraRtcKit
+import Foundation
 
+@objc
 protocol Callback: class {
-    associatedtype T
-
-    func success(_ data: Self.T?)
+    func success(_ data: Any?)
 
     func failure(_ code: String, _ message: String)
 }
 
 extension Callback {
-    func code(_ code: Int32?) {
-        let newCode: Int = Int(code ?? Int32(AgoraErrorCode.notInitialized.rawValue))
-        if newCode == 0 {
-            success(nil)
-        } else if newCode < 0 {
-            failure(String(newCode), AgoraRtcEngineKit.getErrorDescription(abs(newCode)) ?? "")
+    func code(_ code: Int32?, _ runnable: ((Int32?) -> Any?)? = nil) {
+        if code == nil || code! < 0 {
+            let newCode = abs(Int(code ?? Int32(AgoraErrorCode.notInitialized.rawValue)))
+            failure(String(newCode), AgoraRtcEngineKit.getErrorDescription(newCode) ?? "")
+            return
         }
+
+        let res = runnable?(code)
+        success(res)
+    }
+
+    func resolve<T>(_ source: T?, _ runnable: (T) -> Any?) {
+        guard let source = source else {
+            let code = AgoraErrorCode.notInitialized.rawValue
+            failure(String(code), AgoraRtcEngineKit.getErrorDescription(code) ?? "")
+            return
+        }
+
+        let res = runnable(source)
+        success(res)
     }
 }
