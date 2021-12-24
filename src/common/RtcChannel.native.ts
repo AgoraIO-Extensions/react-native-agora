@@ -593,12 +593,12 @@ export default class RtcChannel implements RtcChannelInterface {
    *   - iPad Air (4th generation)
    *
    * @param uid The user ID of the remote user.
-   * @param enable Determines whether to enable super resolution for the remote user's video:
+   * @param enabled Determines whether to enable super resolution for the remote user's video:
    *   - `true`: Enable super resolution.
    *   - `false`: Do not enable super resolution.
    */
-  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
-    return this._callMethod('enableRemoteSuperResolution', { uid, enable });
+  enableRemoteSuperResolution(uid: number, enabled: boolean): Promise<void> {
+    return this._callMethod('enableRemoteSuperResolution', { uid, enabled });
   }
 
   /**
@@ -1230,7 +1230,7 @@ interface RtcVideoInterface {
 
   setDefaultMuteAllRemoteVideoStreams(muted: boolean): Promise<void>;
 
-  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void>;
+  enableRemoteSuperResolution(uid: number, enabled: boolean): Promise<void>;
 }
 
 /**
