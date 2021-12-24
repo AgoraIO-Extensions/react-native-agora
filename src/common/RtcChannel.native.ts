@@ -246,7 +246,6 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * **Note**
    * - If you are already in a channel, you cannot rejoin it with the same UID.
-   * - We recommend using different UIDs for different channels.
    * - If you want to join the same channel from different devices, ensure that the UIDs in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    *
@@ -270,6 +269,8 @@ export default class RtcChannel implements RtcChannelInterface {
    *        - You have created an `RtcChannel` object with the same channel name.
    *        - You have joined and published a stream in a channel created by the `RtcChannel` object.
    *    - 7(NotInitialized): The SDK is not initialized.
+   *    - 17(JoinChannelRejected): The request to join the channel is rejected. The SDK does not support joining the same `RtcChannel` channel repeatedly.
+   * Therefore, the SDK returns this error code when a user who has already joined an `RtcChannel` channel calls the joining channel method of this `RtcChannel` object.
    */
   joinChannel(
     token: string | undefined | null,
@@ -290,7 +291,6 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * **Note**
    * - If you are already in a channel, you cannot rejoin it with the same user account.
-   * - We recommend using different user accounts for different channels.
    * - If you want to join the same channel from different devices, ensure that the user accounts in all devices are different.
    * - Ensure that the app ID you use to generate the token is the same with the app ID used when creating the [`RtcEngine`]{@link RtcEngine} instance.
    * - Before using a String user name, ensure that you read [How can I use string user names](https://docs.agora.io/en/faq/string) for getting details about the limitations and implementation steps.
@@ -317,6 +317,8 @@ export default class RtcChannel implements RtcChannelInterface {
    *    - 2(InvalidArgument): The parameter is invalid.
    *    - 3(NotReady): The SDK fails to be initialized. You can try re-initializing the SDK.
    *    - 5(Refused): The request is rejected.
+   *    - 17(JoinChannelRejected): The request to join the channel is rejected. The SDK does not support joining the same `RtcChannel` channel repeatedly.
+   * Therefore, the SDK returns this error code when a user who has already joined an `RtcChannel` channel calls the joining channel method of this `RtcChannel` object.
    */
   joinChannelWithUserAccount(
     token: string | undefined | null,
@@ -544,52 +546,56 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('setDefaultMuteAllRemoteVideoStreams', { muted });
   }
 
-  /**
-   * @ignore
+  /** Enables/Disables the super-resolution algorithm for a remote user's video stream.
    *
-   * Enables/Disables the super-resolution algorithm for a remote user's video stream.
+   * @since v3.5.2
    *
-   * @since v3.3.1. (later)
+   * This feature effectively boosts the resolution of a remote user's video seen by the local user.
+   * If the original resolution of a remote user's video is a × b, the local user's device can render the remote video at a resolution of 2a × 2b after you enable this feature.
    *
-   * The algorithm effectively improves the resolution of the specified remote user's video stream. When the original resolution of the remote video stream is a × b pixels, you can receive and render the stream at a higher resolution (2a × 2b pixels) by enabling the algorithm.
+   * After calling this method, the SDK triggers the [`UserSuperResolutionEnabled`]{@link RtcChannelEvents.UserSuperResolutionEnabled} callback to report whether you have successfully enabled super resolution.
    *
-   * After calling this method, the SDK triggers the [`UserSuperResolutionEnabled`]{@link RtcChannelEvents.UserSuperResolutionEnabled} callback to report whether you have successfully enabled the super-resolution algorithm.
+   * **Warning**
+   * The original resolution of the remote user's video cannot exceed a certain range.
+   * If the local user use super resolution on Android, the original resolution of the remote user's video
+   * cannot exceed 640 × 360 pixels; if the local user use super resolution on iOS, the original resolution
+   * of the remote user's video cannot exceed 640 × 480 pixels.
    *
-   * @warning
-   * The super-resolution algorithm requires extra system resources. To balance the visual experience and system usage, the SDK poses the following restrictions:
-   * - The algorithm can only be used for a single user at a time.
-   * - On the Android platform, the original resolution of the remote video must not exceed 640 × 360 pixels.
-   * - On the iOS platform, the original resolution of the remote video must not exceed 640 × 480 pixels.
-   *
-   * If you exceed these limitations, the SDK triggers the `Warning` callback with the corresponding warning codes:
-   * - `SuperResolutionStreamOverLimitation(1610)`: The origin resolution of the remote video is beyond the range where the super-resolution algorithm can be applied.
-   * - `SuperResolutionUserCountOverLimitation(1611)`: Another user is already using the super-resolution algorithm.
-   * - `SuperResolutionDeviceNotSupported(1612)`: The device does not support the super-resolution algorithm.
+   * If you exceed these limitations, the SDK triggers the {@link IRtcEngineEventHandler#onWarning onWarning} callback and returns the corresponding warning codes:
+   *  - `SuperResolutionStreamOverLimitation(1610)`: The original resolution of the remote user's video is beyond the range where super resolution can be applied.
+   *  - `SuperResolutionUserCountOverLimitation(1611)`: Super resolution is already being used to boost another remote user's video.
+   *  - `SuperResolutionDeviceNotSupported(1612)`: The device does not support using super resolution.
    *
    * @note
-   * Requirements for the user's device:
-   * - Android: The following devices are known to support the method:
-   *   - VIVO: V1821A, NEX S, 1914A, 1916A, and 1824BA
-   *   - OPPO: PCCM00
+   * Because this method has certain system performance requirements, Agora recommends that you use the following devices or better:
+   * - Android:
+   *   - VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 Pro
+   *   - OPPO: PCCM00, Find X3
    *   - OnePlus: A6000
-   *   - Xiaomi: Mi 8, Mi 9, MIX3, and Redmi K20 Pro
-   *   - SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, and SM-G9750
-   *   - HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, and EVR-AN00
-   * - iOS: This method is supported on devices running iOS 12.0 or later. The following device models are known to support the method:
+   *   - Xiaomi: Mi 8, Mi 9, Mi 10, Mi 11, MIX3, Redmi K20 Pro
+   *   - SAMSUNG: SM-G9600, SM-G9650, SM-N9600, SM-G9708, SM-G960U, SM-G9750, S20, S21
+   *   - HUAWEI: SEA-AL00, ELE-AL00, VOG-AL00, YAL-AL10, HMA-AL00, EVR-AN00, nova 4, nova 5 Pro, nova 6 5G, nova 7 5G, Mate 30, Mate 30 Pro, Mate 40, Mate 40 Pro, P40 P40 Pro, HUAWEI MediaPad M6, MatePad 10.8
+   * - iOS (iOS 12.0 or later):
    *   - iPhone XR
    *   - iPhone XS
    *   - iPhone XS Max
    *   - iPhone 11
    *   - iPhone 11 Pro
    *   - iPhone 11 Pro Max
-   *   - iPad Pro 11-inch (3rd Generation)
-   *   - iPad Pro 12.9-inch (3rd Generation)
-   *   - iPad Air 3 (3rd Generation)
-   * @param uid The ID of the remote user.
-   * @param enable Whether to enable the super-resolution algorithm:
-   *   - `true`: Enable the super-resolution algorithm.
-   *   - `false`: Disable the super-resolution algorithm.
+   *   - iPhone 12
+   *   - iPhone 12 mini
+   *   - iPhone 12 Pro
+   *   - iPhone 12 Pro Max
+   *   - iPhone 12 SE (2nd generation)
+   *   - iPad Pro 11-inch (3rd generation)
+   *   - iPad Pro 12.9-inch (3rd generation)
+   *   - iPad Air (3rd generation)
+   *   - iPad Air (4th generation)
    *
+   * @param uid The user ID of the remote user.
+   * @param enable Determines whether to enable super resolution for the remote user's video:
+   *   - `true`: Enable super resolution.
+   *   - `false`: Do not enable super resolution.
    */
   enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
     return this._callMethod('enableRemoteSuperResolution', { uid, enable });
@@ -755,7 +761,12 @@ export default class RtcChannel implements RtcChannelInterface {
   }
 
   /**
-   * Sets the default video-stream type of the remote video stream when the remote user sends dual streams.
+   * Sets the default video-stream type of the remotely subscribed video stream
+   * when the remote user sends dual streams.
+   *
+   * **Note**
+   * - This method can only be called before joining a channel. Agora does not support you to change the default subscribed video stream type after joining a channel.
+   * - If you call both this method and [`setRemoteVideoStreamType`]{@link setRemoteVideoStreamType}, the SDK applies the settings in the `setRemoteVideoStreamType` method.
    *
    * @param streamType Sets the default video-stream type.
    */
@@ -1112,42 +1123,35 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Pauses the media stream relay to all destination channels.
    *
-   * @since v3.5.1
+   * @since v3.5.2
    *
-   * After the cross-channel media stream relay starts, you can call this method
-   * to pause relaying media streams to all destination channels; after the pause,
-   * if you want to resume the relay, call \ref IChannel::resumeAllChannelMediaRelay "resumeAllChannelMediaRelay".
+   * After the cross-channel media stream relay starts, you can call this method to pause relaying media streams to all destination channels; after the pause,
+   * if you want to resume the relay, call [`resumeAllChannelMediaRelay`]{@link resumeAllChannelMediaRelay}.
    *
    * After a successful method call, the SDK triggers the
-   * \ref IChannelEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent"
-   * callback to report whether the media stream relay is successfully paused.
+   * [`ChannelMediaRelayEvent`]{@link RtcChannelEvents.ChannelMediaRelayEvent} callback to report whether the media stream relay is successfully paused.
    *
-   * @note Call this method after the \ref IChannel::startChannelMediaRelay "startChannelMediaRelay" method.
+   * @note
+   * Call this method after the [`startChannelMediaRelay`]{@link startChannelMediaRelay} method.
    *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
    */
   pauseAllChannelMediaRelay(): Promise<void> {
     return this._callMethod('pauseAllChannelMediaRelay');
   }
 
-  /** Resumes the media stream relay to all destination channels.
+  /**
+   * Resumes the media stream relay to all destination channels.
    *
-   * @since v3.5.1
+   * @since v3.5.2
    *
-   * After calling the \ref IChannel::pauseAllChannelMediaRelay "pauseAllChannelMediaRelay" method,
-   * you can call this method to resume relaying media streams to all destination channels.
+   * After calling the [`pauseAllChannelMediaRelay`]{@link pauseAllChannelMediaRelay} method, you can call this method to resume relaying media streams to all destination channels.
    *
-   * After a successful method call, the SDK triggers the
-   * \ref IChannelEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent"
-   * callback to report whether the media stream relay is successfully resumed.
+   * After a successful method call, the SDK triggers the [`ChannelMediaRelayEvent`]{@link RtcChannelEvents.ChannelMediaRelayEvent} callback
+   * to report whether the media stream relay is successfully resumed.
    *
-   * @note Call this method after the \ref IChannel::pauseAllChannelMediaRelay "pauseAllChannelMediaRelay" method.
+   * @note
+   * Call this method after the [`pauseAllChannelMediaRelay`]{@link pauseAllChannelMediaRelay} method.
    *
-   * @return
-   * - 0: Success.
-   * - < 0: Failure.
    */
   resumeAllChannelMediaRelay(): Promise<void> {
     return this._callMethod('resumeAllChannelMediaRelay');
