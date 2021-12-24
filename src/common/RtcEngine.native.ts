@@ -1324,15 +1324,15 @@ export default class RtcEngine implements RtcEngineInterface {
    *   - iPad Pro 12.9-inch (3rd Generation)
    *   - iPad Air 3 (3rd Generation)
    * @param uid The ID of the remote user.
-   * @param enable Whether to enable the super-resolution algorithm:
+   * @param enabled Whether to enable the super-resolution algorithm:
    *   - `true`: Enable the super-resolution algorithm.
    *   - `false`: Disable the super-resolution algorithm.
    *
    */
-  enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void> {
+  enableRemoteSuperResolution(uid: number, enabled: boolean): Promise<void> {
     return RtcEngine._callMethod('enableRemoteSuperResolution', {
       uid,
-      enable,
+      enabled,
     });
   }
 
