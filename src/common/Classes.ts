@@ -1807,7 +1807,7 @@ export interface AudioFileInfo {
 }
 
 /**
- * The configuration of the audio and video call loop test.
+ * The configuration of the audio call loop test.
  *
  * @since v3.5.2
  */
@@ -1823,17 +1823,17 @@ export class EchoTestConfiguration {
    */
   enableVideo?: boolean;
   /**
-   * The token used to secure the audio and video call loop test. If you do not enable App Certificate in Agora
+   * The token used to secure the audio call loop test. If you do not enable App Certificate in Agora
    * Console, you do not need to pass a value in this parameter; if you have enabled App Certificate in Agora Console,
    * you must pass a token in this parameter, the `uid` used when you generate the token must be 0xFFFFFFFF, and the
-   * channel name used must be the channel name that identifies each audio and video call loop tested. For server-side
+   * channel name used must be the channel name that identifies each audio loop tested. For server-side
    * token generation, see [Authenticate Your Users with Tokens](https://docs.agora.io/en/Interactive%20Broadcast/token_server?platform=All%20Platforms).
    */
   token?: string;
   /**
-   * The channel name that identifies each audio and video call loop. To ensure proper loop test functionality, the
+   * The channel name that identifies each audio call loop. To ensure proper loop test functionality, the
    * channel name passed in to identify each loop test cannot be the same when users of the same project (App ID)
-   * perform audio and video call loop tests on different devices.
+   * perform audio call loop tests on different devices.
    */
   channelId?: string;
 
