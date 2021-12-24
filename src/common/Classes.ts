@@ -1777,7 +1777,11 @@ export class VirtualBackgroundSource {
    * This parameter takes effect only when the type of the custom background image is `Img`.
    */
   source?: string;
-
+  /**
+   * The degree of blurring applied to the custom background image. See [`VirtualBackgroundBlurDegree`]{@link VirtualBackgroundBlurDegree}.
+   *
+   * **Since** v3.5.2
+   */
   blur_degree?: VirtualBackgroundBlurDegree;
 
   constructor(params?: {
