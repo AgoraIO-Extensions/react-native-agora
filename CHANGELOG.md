@@ -1,3 +1,12 @@
+## [3.5.2-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.2-rc.0...v3.5.2-rc.1) (2021-12-24)
+
+
+### Bug Fixes
+
+* add `blur_degree` to VirtualBackgroundSource ([f7d7b35](https://github.com/AgoraIO-Community/react-native-agora/commit/f7d7b35b493c3c355a7d80fd8c12c2f456d946c5))
+* enable to enabled ([3525f2c](https://github.com/AgoraIO-Community/react-native-agora/commit/3525f2c8ff5fb6574e21b94588f8a951e109c639))
+* some defined issues ([30a9f36](https://github.com/AgoraIO-Community/react-native-agora/commit/30a9f36702f9335142607fb06fe5e8fc7e2df3bf))
+
 ## [3.5.2-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.1...v3.5.2-rc.0) (2021-12-14)
 
 
