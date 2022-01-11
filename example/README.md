@@ -14,20 +14,20 @@ Any scene of this project can run successfully alone.
 
 * **Basic demos:**
 
-| Demo                                                         | Description                                        | APIs                                                         |
-| ------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------------ |
-| [JoinChannelAudio](./src/examples/basic/JoinChannelAudio) | Audio live streaming | GetEngine, JoinChannelByKey, LeaveChannel |
-| [JoinChannelVideo](./src/examples/basic/JoinChannelVideo) | Video live streaming | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
-| [StringUid](./src/examples/basic/StringUid) | String user ID | SetChannelProfile,SetClientRole,EnableVideo,EnableVideoObserver, JoinChannelByKey, VideoSurface |
+| Demo                                                         | Description                                        | APIs                                                        |
+| ------------------------------------------------------------ | -------------------------------------------------- | ----------------------------------------------------------- |
+| [JoinChannelAudio](./src/examples/basic/JoinChannelAudio) | Audio live streaming | |
+| [JoinChannelVideo](./src/examples/basic/JoinChannelVideo) | Video live streaming | |
+| [StringUid](./src/examples/basic/StringUid) | String user ID | |
 
 * **Advanced demos:**
 
 | Demo                                                         | Description                                                  | APIs                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [JoinMultipleChannel](./src/examples/advanced/JoinMultipleChannel) | Join multiple channels | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
-| [VoiceChanger](./src/examples/advanced/VoiceChanger) | Voice effects | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
-| [ChannelMediaRelay](./src/examples/advanced/ChannelMediaRelay) | Channel media relay | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
-| [StreamMessage](./src/examples/advanced/StreamMessage) | Send data stream  | CreateChannel, SetClientRole, EnableEncryption, LeaveChannel, ReleaseChannel |
+| [JoinMultipleChannel](./src/examples/advanced/JoinMultipleChannel) | Join multiple channels | |
+| [VoiceChanger](./src/examples/advanced/VoiceChanger) | Voice effects | |
+| [ChannelMediaRelay](./src/examples/advanced/ChannelMediaRelay) | Channel media relay | |
+| [StreamMessage](./src/examples/advanced/StreamMessage) | Send data stream  | |
 
 ## How to run the sample project
 
