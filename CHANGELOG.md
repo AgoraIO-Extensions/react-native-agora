@@ -1,3 +1,5 @@
+## [3.5.3](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.2...v3.5.3) (2022-02-08)
+
 ## [3.5.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.2-rc.1...v3.5.2) (2022-01-11)
 
 ## [3.5.2-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.2-rc.0...v3.5.2-rc.1) (2021-12-24)
