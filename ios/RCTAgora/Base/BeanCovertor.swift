@@ -123,9 +123,9 @@ func mapToTranscodingUser(_ map: [String: Any]) -> AgoraLiveTranscodingUser {
 
 func mapToColor(_ map: [String: Any]) -> UIColor {
     return UIColor(
-            red: CGFloat((map["red"] as! NSNumber).intValue),
-            green: CGFloat((map["green"] as! NSNumber).intValue),
-            blue: CGFloat((map["blue"] as! NSNumber).intValue),
+            red: (map["red"] as! CGFloat) / 255,
+            green: (map["green"] as! CGFloat) / 255,
+            blue: (map["blue"] as! CGFloat) / 255,
             alpha: 1.0
     )
 }

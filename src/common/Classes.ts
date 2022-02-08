@@ -481,22 +481,27 @@ export class TranscodingUser {
 }
 
 /**
- * Color.
+ * Color for [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}
  */
 export class Color {
   /**
-   * Red.
+   * Red value (0 - 255)
    */
   red: number;
   /**
-   * Green.
+   * Green value (0 - 255)
    */
   green: number;
   /**
-   * Blue.
+   * Blue value (0 - 255)
    */
   blue: number;
-
+  /**
+   * Create a color for [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}
+   * @param red Red value (0 - 255)
+   * @param green Green value (0 - 255)
+   * @param blue Blue value (0 - 255)
+   */
   constructor(red: number, green: number, blue: number) {
     this.red = red;
     this.green = green;
@@ -1798,7 +1803,6 @@ export class VirtualBackgroundSource {
     }
   }
 }
-
 
 /**
  * The information of an audio file, which is reported in [`RequestAudioFileInfo`]{@link RequestAudioFileInfo}.
