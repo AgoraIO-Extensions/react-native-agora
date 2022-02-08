@@ -268,6 +268,10 @@ export enum AudioOutputRouting {
    * 5: Bluetooth headset.
    */
   HeadsetBluetooth = 5,
+  /**
+   * 9: Apple AirPlay.
+   */
+  AirPlay = 9,
 }
 
 /**
