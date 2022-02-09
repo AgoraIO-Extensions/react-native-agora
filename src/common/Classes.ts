@@ -496,6 +496,7 @@ export class Color {
    * Blue value (0 - 255)
    */
   blue: number;
+
   /**
    * Create a color for [`VirtualBackgroundSource`]{@link VirtualBackgroundSource}
    * @param red Red value (0 - 255)
