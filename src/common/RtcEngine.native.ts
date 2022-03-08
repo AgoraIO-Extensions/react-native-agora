@@ -11,16 +11,21 @@ import {
   ChannelMediaOptions,
   ChannelMediaRelayConfiguration,
   ClientRoleOptions,
+  ColorEnhanceOptions,
+  ContentInspectConfig,
   DataStreamConfig,
   EchoTestConfiguration,
   EncryptionConfig,
   LastmileProbeConfig,
   LiveInjectStreamConfig,
   LiveTranscoding,
+  LowLightEnhanceOptions,
+  MediaRecorderConfiguration,
   RhythmPlayerConfig,
   RtcEngineConfig,
   RtcEngineContext,
   UserInfo,
+  VideoDenoiserOptions,
   VideoEncoderConfiguration,
   VirtualBackgroundSource,
   WatermarkOptions,
@@ -3666,6 +3671,85 @@ export default class RtcEngine implements RtcEngineInterface {
       filePath,
     });
   }
+
+  enableContentInspect(
+    enabled: boolean,
+    config: ContentInspectConfig
+  ): Promise<void> {
+    return RtcEngine._callMethod('enableContentInspect', { enabled, config });
+  }
+
+  enableWirelessAccelerate(enabled: boolean): Promise<void> {
+    return RtcEngine._callMethod('enableWirelessAccelerate', { enabled });
+  }
+
+  setAgoraLibPath(path: string): Promise<void> {
+    return RtcEngine._callMethod('setAgoraLibPath', { path });
+  }
+
+  setColorEnhanceOptions(
+    enabled: boolean,
+    options: ColorEnhanceOptions
+  ): Promise<void> {
+    return RtcEngine._callMethod('setColorEnhanceOptions', {
+      enabled,
+      options,
+    });
+  }
+
+  setLowLightEnhanceOptions(
+    enabled: boolean,
+    options: LowLightEnhanceOptions
+  ): Promise<void> {
+    return RtcEngine._callMethod('setLowLightEnhanceOptions', {
+      enabled,
+      options,
+    });
+  }
+
+  setVideoDenoiserOptions(
+    enabled: boolean,
+    options: VideoDenoiserOptions
+  ): Promise<void> {
+    return RtcEngine._callMethod('setVideoDenoiserOptions', {
+      enabled,
+      options,
+    });
+  }
+
+  startRecording(config: MediaRecorderConfiguration): Promise<void> {
+    return RtcEngine._callMethod('startRecording', { config });
+  }
+
+  startRtmpStreamWithTranscoding(
+    url: string,
+    transcoding: LiveTranscoding
+  ): Promise<void> {
+    return RtcEngine._callMethod('startRtmpStreamWithTranscoding', {
+      url,
+      transcoding,
+    });
+  }
+
+  startRtmpStreamWithoutTranscoding(url: string): Promise<void> {
+    return RtcEngine._callMethod('startRtmpStreamWithoutTranscoding', { url });
+  }
+
+  stopRecording(): Promise<void> {
+    return RtcEngine._callMethod('stopRecording');
+  }
+
+  stopRtmpStream(url: string): Promise<void> {
+    return RtcEngine._callMethod('stopRtmpStream', { url });
+  }
+
+  updateRtmpTranscoding(transcoding: LiveTranscoding): Promise<void> {
+    return RtcEngine._callMethod('updateRtmpTranscoding', { transcoding });
+  }
+
+  setAVSyncSource(channelId: string, uid: number): Promise<void> {
+    return RtcEngine._callMethod('setAVSyncSource', { channelId, uid });
+  }
 }
 
 /**
@@ -3692,7 +3776,8 @@ interface RtcEngineInterface
     RtcAudioRecorderInterface,
     RtcInjectStreamInterface,
     RtcCameraInterface,
-    RtcStreamMessageInterface {
+    RtcStreamMessageInterface,
+    RtcMediaRecorderInterface {
   destroy(): Promise<void>;
 
   setChannelProfile(profile: ChannelProfile): Promise<void>;
@@ -3759,6 +3844,17 @@ interface RtcEngineInterface
   ): Promise<void>;
 
   takeSnapshot(channel: string, uid: number, filePath: string): Promise<void>;
+
+  enableWirelessAccelerate(enabled: boolean): Promise<void>;
+
+  enableContentInspect(
+    enabled: boolean,
+    config: ContentInspectConfig
+  ): Promise<void>;
+
+  setAgoraLibPath(path: string): Promise<void>;
+
+  setAVSyncSource(channelId: string, uid: number): Promise<void>;
 }
 
 /**
@@ -3847,6 +3943,21 @@ interface RtcVideoInterface {
   ): Promise<void>;
 
   enableRemoteSuperResolution(uid: number, enable: boolean): Promise<void>;
+
+  setVideoDenoiserOptions(
+    enabled: boolean,
+    options: VideoDenoiserOptions
+  ): Promise<void>;
+
+  setLowLightEnhanceOptions(
+    enabled: boolean,
+    options: LowLightEnhanceOptions
+  ): Promise<void>;
+
+  setColorEnhanceOptions(
+    enabled: boolean,
+    options: ColorEnhanceOptions
+  ): Promise<void>;
 }
 
 /**
@@ -3998,6 +4109,17 @@ interface RtcPublishStreamInterface {
   addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void>;
 
   removePublishStreamUrl(url: string): Promise<void>;
+
+  startRtmpStreamWithoutTranscoding(url: string): Promise<void>;
+
+  startRtmpStreamWithTranscoding(
+    url: string,
+    transcoding: LiveTranscoding
+  ): Promise<void>;
+
+  updateRtmpTranscoding(transcoding: LiveTranscoding): Promise<void>;
+
+  stopRtmpStream(url: string): Promise<void>;
 }
 
 /**
@@ -4211,4 +4333,13 @@ interface RtcStreamMessageInterface {
   createDataStreamWithConfig(config: DataStreamConfig): Promise<number>;
 
   sendStreamMessage(streamId: number, message: string): Promise<void>;
+}
+
+/**
+ * @ignore
+ */
+interface RtcMediaRecorderInterface {
+  startRecording(config: MediaRecorderConfiguration): Promise<void>;
+
+  stopRecording(): Promise<void>;
 }
