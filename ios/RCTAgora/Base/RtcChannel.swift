@@ -44,6 +44,8 @@ protocol RtcChannelInterface:
     func unpublish(_ params: NSDictionary, _ callback: Callback)
 
     func getCallId(_ params: NSDictionary, _ callback: Callback)
+
+    func setAVSyncSource(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcChannelAudioInterface {
@@ -82,6 +84,14 @@ protocol RtcChannelPublishStreamInterface {
     func addPublishStreamUrl(_ params: NSDictionary, _ callback: Callback)
 
     func removePublishStreamUrl(_ params: NSDictionary, _ callback: Callback)
+
+    func startRtmpStreamWithoutTranscoding(_ params: NSDictionary, _ callback: Callback)
+
+    func startRtmpStreamWithTranscoding(_ params: NSDictionary, _ callback: Callback)
+
+    func updateRtmpTranscoding(_ params: NSDictionary, _ callback: Callback)
+
+    func stopRtmpStream(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcChannelMediaRelayInterface {
@@ -392,12 +402,30 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func pauseAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
-//        callback.code(self[params["channelId"] as! String]?.pauseAllChannelMediaRelay())
+        callback.code(self[params["channelId"] as! String]?.pauseAllChannelMediaRelay())
     }
 
     @objc func resumeAllChannelMediaRelay(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
-//        callback.code(self[params["channelId"] as! String]?.resumeAllChannelMediaRelay())
+        callback.code(self[params["channelId"] as! String]?.resumeAllChannelMediaRelay())
+    }
+
+    @objc func setAVSyncSource(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.setAVSyncSource(params["channelId"] as? String, uid: (params["uid"] as! NSNumber).uintValue))
+    }
+
+    @objc func startRtmpStreamWithoutTranscoding(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.startRtmpStreamWithoutTranscoding(params["url"] as! String))
+    }
+
+    @objc func startRtmpStreamWithTranscoding(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.startRtmpStream(withTranscoding: params["url"] as! String, transcoding: mapToLiveTranscoding(params["transcoding"] as! [String: Any])))
+    }
+
+    @objc func updateRtmpTranscoding(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.updateRtmpTranscoding(mapToLiveTranscoding(params["transcoding"] as! [String: Any])))
+    }
+
+    @objc func stopRtmpStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(self[params["channelId"] as! String]?.stopRtmpStream(params["url"] as! String))
     }
 }

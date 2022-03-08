@@ -93,6 +93,13 @@ class RtcEngineEvents {
     static let AirPlayIsConnected = "AirPlayIsConnected"
     static let VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
     static let SnapshotTaken = "SnapshotTaken"
+    static let RecorderStateChanged = "RecorderStateChanged"
+    static let RecorderInfoUpdated = "RecorderInfoUpdated"
+    static let ProxyConnected = "ProxyConnected"
+    static let ContentInspectResult = "ContentInspectResult"
+    static let WlAccMessage = "WlAccMessage"
+    static let WlAccStats = "WlAccStats"
+    static let ClientRoleChangeFailed = "ClientRoleChangeFailed"
 
     static func toMap() -> [String: String] {
         return [
@@ -179,6 +186,14 @@ class RtcEngineEvents {
             "AirPlayIsConnected": AirPlayIsConnected,
             "VirtualBackgroundSourceEnabled": VirtualBackgroundSourceEnabled,
             "SnapshotTaken": SnapshotTaken,
+            "SnapshotTaken": SnapshotTaken,
+            "RecorderStateChanged": RecorderStateChanged,
+            "RecorderInfoUpdated": RecorderInfoUpdated,
+            "ProxyConnected": ProxyConnected,
+            "ContentInspectResult": ContentInspectResult,
+            "WlAccMessage": WlAccMessage,
+            "WlAccStats": WlAccStats,
+            "ClientRoleChangeFailed": ClientRoleChangeFailed,
         ]
     }
 }
@@ -197,7 +212,7 @@ class RtcEngineEventHandler: NSObject {
     }
 }
 
-extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
+extension RtcEngineEventHandler: AgoraRtcEngineDelegate, AgoraMediaRecorderDelegate {
     public func rtcEngine(_: AgoraRtcEngineKit, didOccurWarning warningCode: AgoraWarningCode) {
         callback(RtcEngineEvents.Warning, warningCode.rawValue)
     }
@@ -532,5 +547,33 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate {
 
     public func rtcEngine(_ engine: AgoraRtcEngineKit, snapshotTaken channel: String, uid: UInt, filePath: String, width: Int, height: Int, errCode: Int) {
         callback(RtcEngineEvents.SnapshotTaken, channel, uid, filePath, width, height, errCode)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, contentInspectResult result: AgoraContentInspectResult) {
+        callback(RtcEngineEvents.ContentInspectResult, result.rawValue)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, wlAccStats currentStats: AgoraWlAccStats, averageStats: AgoraWlAccStats) {
+        callback(RtcEngineEvents.WlAccStats, currentStats.toMap(), averageStats.toMap())
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didClientRoleChangeFailed reason: AgoraClientRoleChangeFailedReason, currentRole: AgoraClientRole) {
+        callback(RtcEngineEvents.ClientRoleChangeFailed, reason.rawValue, currentRole.rawValue)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, wlAccMessage reason: AgoraWlAccReason, action: AgoraWlAccAction, wlAccMsg: String) {
+        callback(RtcEngineEvents.WlAccMessage, reason.rawValue, action.rawValue, wlAccMsg)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didProxyConnected channel: String, withUid uid: UInt, proxyType: AgoraProxyType, localProxyIp: String, elapsed: Int) {
+        callback(RtcEngineEvents.ProxyConnected, channel, uid, proxyType.rawValue, localProxyIp, elapsed)
+    }
+    
+    func mediaRecorder(_ recorder: AgoraMediaRecorder, stateDidChanged state: AgoraMediaRecorderState, error: AgoraMediaRecorderErrorCode) {
+        callback(RtcEngineEvents.RecorderStateChanged, state.rawValue, error.rawValue)
+    }
+    
+    func mediaRecorder(_ recorder: AgoraMediaRecorder, informationDidUpdated info: AgoraMediaRecorderInfo) {
+        callback(RtcEngineEvents.RecorderInfoUpdated, info.toMap())
     }
 }

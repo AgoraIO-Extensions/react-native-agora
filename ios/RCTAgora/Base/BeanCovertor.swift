@@ -89,6 +89,9 @@ func mapToBeautyOptions(_ map: [String: Any]) -> AgoraBeautyOptions {
     if let rednessLevel = map["rednessLevel"] as? NSNumber {
         options.rednessLevel = rednessLevel.floatValue
     }
+    if let sharpnessLevel = map["sharpnessLevel"] as? NSNumber {
+        options.sharpnessLevel = sharpnessLevel.floatValue
+    }
     return options
 }
 
@@ -100,6 +103,12 @@ func mapToAgoraImage(_ map: [String: Any]) -> AgoraImage {
         }
     }
     image.rect = mapToRect(map)
+    if let zOrder = map["zOrder"] as? NSNumber {
+        image.zOrder = zOrder.intValue
+    }
+    if let alpha = map["alpha"] as? NSNumber {
+        image.alpha = alpha.doubleValue
+    }
     return image
 }
 
@@ -148,8 +157,26 @@ func mapToLiveTranscoding(_ map: [String: Any]) -> AgoraLiveTranscoding {
     if let watermark = map["watermark"] as? [String: Any] {
         transcoding.watermark = mapToAgoraImage(watermark)
     }
+    if let watermarkList = map["watermarkList"] as? [Any] {
+        var array = [AgoraImage]()
+        watermarkList.forEach {
+            if let item = $0 as? [String: Any] {
+                array.append(mapToAgoraImage(item))
+            }
+        }
+        transcoding.watermarkArray = array;
+    }
     if let backgroundImage = map["backgroundImage"] as? [String: Any] {
         transcoding.backgroundImage = mapToAgoraImage(backgroundImage)
+    }
+    if let backgroundImageList = map["backgroundImageList"] as? [Any] {
+        var array = [AgoraImage]()
+        backgroundImageList.forEach {
+            if let item = $0 as? [String: Any] {
+                array.append(mapToAgoraImage(item))
+            }
+        }
+        transcoding.backgroundImageArray = array;
     }
     if let audioSampleRate = map["audioSampleRate"] as? NSNumber {
         if let audioSampleRate = AgoraAudioSampleRateType(rawValue: audioSampleRate.intValue) {
@@ -172,6 +199,11 @@ func mapToLiveTranscoding(_ map: [String: Any]) -> AgoraLiveTranscoding {
             transcoding.videoCodecProfile = videoCodecProfile
         }
     }
+    if let videoCodecType = map["videoCodecType"] as? NSNumber {
+        if let videoCodecType = AgoraVideoCodecTypeForStream(rawValue: videoCodecType.intValue) {
+            transcoding.videoCodecType = videoCodecType
+        }
+    }
     if let backgroundColor = map["backgroundColor"] as? [String: Any] {
         transcoding.backgroundColor = mapToColor(backgroundColor)
     }
@@ -183,6 +215,11 @@ func mapToLiveTranscoding(_ map: [String: Any]) -> AgoraLiveTranscoding {
             if let item = $0 as? [String: Any] {
                 transcoding.add(mapToTranscodingUser(item))
             }
+        }
+    }
+    if let advancedFeatures = map["advancedFeatures"] as? [String: Bool] {
+        advancedFeatures.forEach {
+            transcoding.setAdvancedFeatures($0.key, opened: $0.value)
         }
     }
     return transcoding
@@ -343,6 +380,9 @@ func mapToAudioRecordingConfiguration(_ map: [String: Any]) -> AgoraAudioRecordi
     if let recordingSampleRate = map["recordingSampleRate"] as? NSNumber {
         config.recordingSampleRate = recordingSampleRate.intValue
     }
+    if let recordingChannel = map["recordingChannel"] as? NSNumber {
+        config.recordingChannel = recordingChannel.intValue
+    }
     return config
 }
 
@@ -453,4 +493,130 @@ func mapToEchoTestConfiguration(_ map: [String: Any]) -> AgoraEchoTestConfigurat
         config.channelId = channelId
     }
     return config
+}
+
+func mapToMediaRecorderConfiguration(_ map: [String: Any]) -> AgoraMediaRecorderConfiguration {
+    let config = AgoraMediaRecorderConfiguration()
+    if let storagePath = map["storagePath"] as? String {
+        config.storagePath = storagePath
+    }
+    if let containerFormat = map["containerFormat"] as? NSNumber {
+        if let containerFormat = AgoraMediaRecorderContainerFormat(rawValue: containerFormat.intValue) {
+            config.containerFormat = containerFormat
+        }
+    }
+    if let streamType = map["streamType"] as? NSNumber {
+        if let streamType = AgoraMediaRecorderStreamType(rawValue: streamType.intValue) {
+            config.streamType = streamType
+        }
+    }
+    if let maxDurationMs = map["maxDurationMs"] as? NSNumber {
+        config.maxDurationMs = maxDurationMs.uintValue
+    }
+    if let recorderInfoUpdateInterval = map["recorderInfoUpdateInterval"] as? NSNumber {
+        config.recorderInfoUpdateInterval = recorderInfoUpdateInterval.uintValue
+    }
+    return config
+}
+
+func mapToContentInspectModule(_ map: [String: Any]) -> AgoraContentInspectModule {
+    let module = AgoraContentInspectModule()
+    if let type = map["type"] as? NSNumber {
+        if let type = AgoraContentInspectType(rawValue: type.intValue) {
+            module.type = type
+        }
+    }
+    if let interval = map["interval"] as? NSNumber {
+        module.interval = interval.intValue
+    }
+    return module
+}
+
+func mapToContentInspectConfig(_ map: [String: Any]) -> AgoraContentInspectConfig {
+    let config = AgoraContentInspectConfig()
+    if let extraInfo = map["extraInfo"] as? String {
+        config.extraInfo = extraInfo
+    }
+    if let modules = map["modules"] as? [Any] {
+        var array = [AgoraContentInspectModule]()
+        modules.forEach {
+            if let item = $0 as? [String: Any] {
+                array.append(mapToContentInspectModule(item))
+            }
+        }
+        config.modules = array
+    }
+    return config
+}
+
+func mapToLocalAccessPointConfiguration(_ map: [String: Any]) -> AgoraLocalAccessPointConfiguration {
+    let config = AgoraLocalAccessPointConfiguration()
+    if let ipList = map["ipList"] as? [Any] {
+        var array = [String]()
+        ipList.forEach {
+            if let item = $0 as? String {
+                array.append(item)
+            }
+        }
+        config.ipList = array
+    }
+    if let domainList = map["domainList"] as? [Any] {
+        var array = [String]()
+        domainList.forEach {
+            if let item = $0 as? String {
+                array.append(item)
+            }
+        }
+        config.domainList = array
+    }
+    if let verifyDomainName = map["verifyDomainName"] as? String {
+        config.verifyDomainName = verifyDomainName
+    }
+    if let mode = map["mode"] as? NSNumber {
+        if let mode = AgoraLocalProxyMode(rawValue: mode.uintValue) {
+            config.mode = mode
+        }
+    }
+    return config
+}
+
+func mapToVideoDenoiserOptions(_ map: [String: Any]) -> AgoraVideoDenoiserOptions {
+    let options = AgoraVideoDenoiserOptions()
+    if let mode = map["mode"] as? NSNumber {
+        if let mode = AgoraVideoDenoiserMode(rawValue: mode.uintValue) {
+            options.mode = mode
+        }
+    }
+    if let level = map["level"] as? NSNumber {
+        if let level = AgoraVideoDenoiserLevel(rawValue: level.uintValue) {
+            options.level = level
+        }
+    }
+    return options
+}
+
+func mapToLowLightEnhanceOptions(_ map: [String: Any]) -> AgoraLowlightEnhanceOptions {
+    let options = AgoraLowlightEnhanceOptions()
+    if let mode = map["mode"] as? NSNumber {
+        if let mode = AgoraLowlightEnhanceMode(rawValue: mode.uintValue) {
+            options.mode = mode
+        }
+    }
+    if let level = map["level"] as? NSNumber {
+        if let level = AgoraLowlightEnhanceLevel(rawValue: level.uintValue) {
+            options.level = level
+        }
+    }
+    return options
+}
+
+func mapToColorEnhanceOptions(_ map: [String: Any]) -> AgoraColorEnhanceOptions {
+    let options = AgoraColorEnhanceOptions()
+    if let strengthLevel = map["strengthLevel"] as? NSNumber {
+        options.strengthLevel = strengthLevel.floatValue
+    }
+    if let skinProtectLevel = map["skinProtectLevel"] as? NSNumber {
+        options.skinProtectLevel = skinProtectLevel.floatValue
+    }
+    return options
 }
