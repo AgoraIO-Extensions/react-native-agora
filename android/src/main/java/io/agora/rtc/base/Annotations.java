@@ -53,11 +53,13 @@ public class Annotations {
   @IntDef({
     AgoraAudioCodecProfileType.LC_AAC,
     AgoraAudioCodecProfileType.HE_AAC,
+    AgoraAudioCodecProfileType.HE_AAC_V2,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioCodecProfileType {
     int LC_AAC = 0;
     int HE_AAC = 1;
+    int HE_AAC_V2 = 2;
   }
 
   @IntDef({
@@ -157,6 +159,7 @@ public class Annotations {
     Constants.AUDIO_RECORDING_QUALITY_LOW,
     Constants.AUDIO_RECORDING_QUALITY_MEDIUM,
     Constants.AUDIO_RECORDING_QUALITY_HIGH,
+    Constants.AUDIO_RECORDING_QUALITY_ULTRA_HIGH
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudioRecordingQuality {
@@ -379,7 +382,8 @@ public class Annotations {
     Constants.CONNECTION_CHANGED_RENEW_TOKEN,
     Constants.CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED,
     Constants.CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT,
-    Constants.CONNECTION_CHANGED_PROXY_SERVER_INTERRUPTED,
+    Constants.CONNECTION_CHANGED_SAME_UID_LOGIN,
+    Constants.CONNECTION_CHANGED_TOO_MANY_BROADCASTERS,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraConnectionChangedReason {
@@ -506,6 +510,7 @@ public class Annotations {
     Constants.ERR_VCM_ENCODER_INIT_ERROR,
     Constants.ERR_VCM_ENCODER_ENCODE_ERROR,
     Constants.ERR_VCM_ENCODER_SET_ERROR,
+    Constants.ERR_AUDIO_BT_NO_ROUTE,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraErrorCode {
@@ -621,6 +626,10 @@ public class Annotations {
     Constants.RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED,
     Constants.RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND,
     Constants.RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED,
+    Constants.RTMP_STREAM_PUBLISH_ERROR_NOT_BROADCASTER,
+    Constants.RTMP_STREAM_PUBLISH_ERROR_TRANSCODING_NO_MIX_STREAM,
+    Constants.RTMP_STREAM_PUBLISH_ERROR_NET_DOWN,
+    Constants.RTMP_STREAM_PUBLISH_ERROR_INVALID_APPID,
     Constants.RTMP_STREAM_UNPUBLISH_ERROR_OK,
   })
   @Retention(RetentionPolicy.SOURCE)
@@ -633,6 +642,7 @@ public class Annotations {
     Constants.RTMP_STREAM_PUBLISH_STATE_RUNNING,
     Constants.RTMP_STREAM_PUBLISH_STATE_RECOVERING,
     Constants.RTMP_STREAM_PUBLISH_STATE_FAILURE,
+    Constants.RTMP_STREAM_PUBLISH_STATE_DISCONNECTING
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingState {
@@ -674,6 +684,16 @@ public class Annotations {
     int BASELINE = 66;
     int MAIN = 77;
     int HIGH = 100;
+  }
+
+  @IntDef({
+    AgoraVideoCodecType.H264,
+    AgoraVideoCodecType.H265,
+  })
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AgoraVideoCodecType {
+    int H264 = 1;
+    int H265 = 2;
   }
 
   @IntDef({
@@ -840,6 +860,8 @@ public class Annotations {
   @IntDef({
     Constants.RTMP_STREAMING_EVENT_FAILED_LOAD_IMAGE,
     Constants.RTMP_STREAMING_EVENT_URL_ALREADY_IN_USE,
+    Constants.RTMP_STREAMING_EVENT_ADVANCED_FEATURE_NOT_SUPPORT,
+    Constants.RTMP_STREAMING_EVENT_REQUEST_TOO_OFTEN,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraRtmpStreamingEvent {
