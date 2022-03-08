@@ -5,11 +5,13 @@ import type {
   LastmileProbeResult,
   LocalAudioStats,
   LocalVideoStats,
+  RecorderInfo,
   Rect,
   RemoteAudioStats,
   RemoteVideoStats,
   RtcStats,
   UserInfo,
+  WlAccStats,
 } from './Classes';
 import type {
   AudioFileInfoError,
@@ -44,6 +46,11 @@ import type {
   VideoRemoteStateReason,
   VirtualBackgroundSourceStateReason,
   WarningCode,
+  ContentInspectResult,
+  ProxyType,
+  WlAccAction,
+  WlAccReason,
+  ClientRoleChangeFailedReason,
 } from './Enums';
 
 /**
@@ -545,6 +552,47 @@ export type SnapshotTakenCallback =
     height: number,
     errCode: number
   ) => void;
+export type ProxyConnectedCallback =
+  /**
+   * TODO(doc)
+   */
+  (
+    channel: string,
+    uid: number,
+    proxyType: ProxyType,
+    localProxyIp: string,
+    elapsed: number
+  ) => void;
+export type ClientRoleChangeCallback =
+  /**
+   * TODO(doc)
+   */
+  (reason: ClientRoleChangeFailedReason, currentRole: ClientRole) => void;
+export type RecorderStateChangedCallback =
+  /**
+   * TODO(doc)
+   */
+  (reason: number, state: number) => void;
+export type RecorderInfoCallback =
+  /**
+   * TODO(doc)
+   */
+  (info: RecorderInfo) => void;
+export type ContentInspectResultCallback =
+  /**
+   * TODO(doc)
+   */
+  (result: ContentInspectResult) => void;
+export type WlAccMessageCallback =
+  /**
+   * TODO(doc)
+   */
+  (reason: WlAccReason, action: WlAccAction, wlAccMsg: string) => void;
+export type WlAccStatsCallback =
+  /**
+   * TODO(doc)
+   */
+  (currentStats: WlAccStats, averageStats: WlAccStats) => void;
 
 /**
  * Callbacks.
@@ -1503,6 +1551,20 @@ export interface RtcEngineEvents {
    * @event SnapshotTaken
    */
   SnapshotTaken: SnapshotTakenCallback;
+
+  RecorderStateChanged: RecorderStateChangedCallback;
+
+  RecorderInfoUpdated: RecorderInfoCallback;
+
+  ProxyConnected: ProxyConnectedCallback;
+
+  ContentInspectResult: ContentInspectResultCallback;
+
+  WlAccMessage: WlAccMessageCallback;
+
+  WlAccStats: WlAccStatsCallback;
+
+  ClientRoleChangeFailed: ClientRoleChangeCallback;
 }
 
 /**
@@ -1877,4 +1939,14 @@ export interface RtcChannelEvents {
    * @event UserSuperResolutionEnabled
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
+
+  /**
+   * TODO(doc)
+   */
+  ProxyConnected: ProxyConnectedCallback;
+
+  /**
+   * TODO(doc)
+   */
+  ClientRoleChangeFailed: ClientRoleChangeCallback;
 }

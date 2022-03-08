@@ -44,6 +44,10 @@ export enum AudioCodecProfileType {
    * 1: HE-AAC, which is the high-efficiency audio codec profile.
    */
   HEAAC = 1,
+  /**
+   * TODO(doc)
+   */
+  HE_AAC_V2 = 2,
 }
 
 /**
@@ -322,6 +326,10 @@ export enum AudioRecordingQuality {
    * 2: High quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 3.75 MB.
    */
   High = 2,
+  /**
+   * TODO(doc)
+   */
+  UltraHigh = 3,
 }
 
 /**
@@ -969,6 +977,14 @@ export enum ConnectionChangedReason {
    * 15: In cloud proxy mode, the proxy server connection is interrupted.
    */
   ProxyServerInterrupted = 15,
+  /**
+   * TODO(doc)
+   */
+  SameUidLogin = 19,
+  /**
+   * TODO(doc)
+   */
+  TooManyBroadcasters = 20,
 }
 
 /**
@@ -1454,6 +1470,10 @@ export enum ErrorCode {
    * This error code is deprecated.
    */
   VcmEncoderSetError = 1603,
+  /**
+   * TODO(doc)
+   */
+  AudioBtNoRoute = 1800,
 }
 
 /**
@@ -1773,6 +1793,22 @@ export enum RtmpStreamingErrorCode {
    */
   FormatNotSupported = 10,
   /**
+   * TODO(doc)
+   */
+  NotBroadcaster = 11,
+  /**
+   * TODO(doc)
+   */
+  TranscodingNoMixStream = 13,
+  /**
+   * TODO(doc)
+   */
+  NetDown = 14,
+  /**
+   * TODO(doc)
+   */
+  InvalidAppid = 15,
+  /**
    * The streaming has been stopped normally. After you call [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl} to stop streaming, the SDK returns this value.
    *
    * @since v3.4.5
@@ -1814,6 +1850,10 @@ export enum RtmpStreamingState {
    * You can also call the [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} method to publish the RTMP or RTMPS streaming again.
    */
   Failure = 4,
+  /**
+   * TODO(doc)
+   */
+  Disconnecting = 5,
 }
 
 /**
@@ -2564,6 +2604,14 @@ export enum RtmpStreamingEvent {
    * @since v3.4.5
    */
   UrlAlreadyInUse = 2,
+  /**
+   * TODO(doc)
+   */
+  AdvancedFeatureNotSupport = 3,
+  /**
+   * TODO(doc)
+   */
+  RequestTooOften = 4,
 }
 
 /**
@@ -3185,4 +3233,79 @@ export enum VirtualBackgroundBlurDegree {
    * The user can barely see any distinguishing features in the background.
    */
   High = 3,
+}
+
+/** The video codec type of the output video stream.
+
+ @since v3.2.0
+ */
+export enum VideoCodecTypeForStream {
+  /** 1: (Default) H.264 */
+  H264 = 1,
+  /** 2: H.265 */
+  H265 = 2,
+}
+
+/** The proxy type.
+
+ @since v3.6.2
+ */
+export enum ProxyType {
+  /** 0: Reserved for future use.
+   */
+  None = 0,
+  /** 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode.
+   In this mode, the SDK always transmits data over UDP.
+   */
+  Udp = 1,
+  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode.
+   In this mode, the SDK always transmits data over TLS 443.
+   */
+  Tcp = 2,
+  /** 3: Reserved for future use.
+   */
+  Local = 3,
+  /** 4: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically
+   switches to TLS 443 if the attempt fails.
+   */
+  TcpAutoFallback = 4,
+}
+
+/** API for future use. */
+export enum ContentInspectResult {
+  Neutral = 1,
+  Sexy = 2,
+  Porn = 3,
+}
+
+/** API for future use.
+ */
+export enum WlAccReason {
+  WeakSignal = 0,
+
+  ChannelCongestion = 1,
+}
+
+/** API for future use.
+ */
+export enum WlAccAction {
+  CloseToWIFI = 0,
+
+  ConnectSSID = 1,
+
+  Check5G = 2,
+
+  ModifySSID = 3,
+}
+
+/** API for future use.
+ */
+export enum ClientRoleChangeFailedReason {
+  TooManyBroadcasters = 1,
+
+  NotAuthorized = 2,
+
+  RequestTimeOut = 3,
+
+  ConnectionFailed = 4,
 }

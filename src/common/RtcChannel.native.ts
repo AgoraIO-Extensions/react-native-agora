@@ -1156,6 +1156,32 @@ export default class RtcChannel implements RtcChannelInterface {
   resumeAllChannelMediaRelay(): Promise<void> {
     return this._callMethod('resumeAllChannelMediaRelay');
   }
+
+  setAVSyncSource(channelId: string, uid: number): Promise<void> {
+    return this._callMethod('setAVSyncSource', { channelId, uid });
+  }
+
+  startRtmpStreamWithTranscoding(
+    url: string,
+    transcoding: LiveTranscoding
+  ): Promise<void> {
+    return this._callMethod('startRtmpStreamWithTranscoding', {
+      url,
+      transcoding,
+    });
+  }
+
+  startRtmpStreamWithoutTranscoding(url: string): Promise<void> {
+    return this._callMethod('startRtmpStreamWithoutTranscoding', { url });
+  }
+
+  stopRtmpStream(url: string): Promise<void> {
+    return this._callMethod('stopRtmpStream', { url });
+  }
+
+  updateRtmpTranscoding(transcoding: LiveTranscoding): Promise<void> {
+    return this._callMethod('updateRtmpTranscoding', { transcoding });
+  }
 }
 
 /**
@@ -1201,6 +1227,8 @@ interface RtcChannelInterface
   unpublish(): Promise<void>;
 
   getCallId(): Promise<string>;
+
+  setAVSyncSource(channelId: string, uid: number): Promise<void>;
 }
 
 /**
@@ -1249,6 +1277,17 @@ interface RtcPublishStreamInterface {
   addPublishStreamUrl(url: string, transcodingEnabled: boolean): Promise<void>;
 
   removePublishStreamUrl(url: string): Promise<void>;
+
+  startRtmpStreamWithoutTranscoding(url: string): Promise<void>;
+
+  startRtmpStreamWithTranscoding(
+    url: string,
+    transcoding: LiveTranscoding
+  ): Promise<void>;
+
+  updateRtmpTranscoding(transcoding: LiveTranscoding): Promise<void>;
+
+  stopRtmpStream(url: string): Promise<void>;
 }
 
 /**

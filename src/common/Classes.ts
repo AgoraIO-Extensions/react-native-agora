@@ -26,6 +26,7 @@ import type {
   VideoStreamType,
   VirtualBackgroundBlurDegree,
   VirtualBackgroundSourceType,
+  VideoCodecTypeForStream,
 } from './Enums';
 
 /**
@@ -347,18 +348,24 @@ export class BeautyOptions {
    * The default value is 0.1. This parameter adjusts the red saturation level.
    */
   rednessLevel?: number;
+  /**
+   * TODO(doc)
+   */
+  sharpnessLevel?: number;
 
   constructor(params?: {
     lighteningContrastLevel?: LighteningContrastLevel;
     lighteningLevel?: number;
     smoothnessLevel?: number;
     rednessLevel?: number;
+    sharpnessLevel?: number;
   }) {
     if (params) {
       this.lighteningContrastLevel = params.lighteningContrastLevel;
       this.lighteningLevel = params.lighteningLevel;
       this.smoothnessLevel = params.smoothnessLevel;
       this.rednessLevel = params.rednessLevel;
+      this.sharpnessLevel = params.sharpnessLevel;
     }
   }
 }
@@ -387,6 +394,14 @@ export class AgoraImage {
    * Height of the image on the broadcasting video.
    */
   height?: number;
+  /**
+   * TODO(doc)
+   */
+  zOrder?: number;
+  /**
+   * TODO(doc)
+   */
+  alpha?: number;
 
   constructor(
     url: string,
@@ -395,6 +410,8 @@ export class AgoraImage {
       y?: number;
       width?: number;
       height?: number;
+      zOrder?: number;
+      alpha?: number;
     }
   ) {
     this.url = url;
@@ -403,6 +420,8 @@ export class AgoraImage {
       this.y = params.y;
       this.width = params.width;
       this.height = params.height;
+      this.zOrder = params.zOrder;
+      this.alpha = params.alpha;
     }
   }
 }
@@ -552,10 +571,18 @@ export class LiveTranscoding {
    */
   watermark?: AgoraImage;
   /**
+   * TODO(doc)
+   */
+  watermarkList?: AgoraImage[];
+  /**
    * The background image added to the CDN live publishing stream. Once a background image is added,
    * the audience of the CDN live publishing stream can see it.
    */
   backgroundImage?: AgoraImage;
+  /**
+   * TODO(doc)
+   */
+  backgroundImageList?: AgoraImage[];
   /**
    * Self-defined audio-sample rate: AudioSampleRateType.
    */
@@ -584,6 +611,10 @@ export class LiveTranscoding {
    */
   videoCodecProfile?: VideoCodecProfileType;
   /**
+   * TODO(doc)
+   */
+  videoCodecType?: VideoCodecTypeForStream;
+  /**
    * Sets the background color.
    */
   backgroundColor?: Color;
@@ -592,9 +623,17 @@ export class LiveTranscoding {
    */
   userConfigExtraInfo?: string;
   /**
+   * TODO(doc)
+   */
+  metadata?: string;
+  /**
    * An TranscodingUser object managing the user layout configuration in the CDN live stream. Agora supports a maximum of 17 transcoding users in a CDN live stream channel.
    */
   transcodingUsers: TranscodingUser[];
+  /**
+   * TODO(doc)
+   */
+  advancedFeatures?: Map<String, boolean>;
 
   constructor(
     transcodingUsers: TranscodingUser[],
@@ -606,14 +645,19 @@ export class LiveTranscoding {
       lowLatency?: boolean;
       videoGop?: number;
       watermark?: AgoraImage;
+      watermarkList?: AgoraImage[];
       backgroundImage?: AgoraImage;
+      backgroundImageList?: AgoraImage[];
       audioSampleRate?: AudioSampleRateType;
       audioBitrate?: number;
       audioChannels?: AudioChannel;
       audioCodecProfile?: AudioCodecProfileType;
       videoCodecProfile?: VideoCodecProfileType;
+      videoCodecType?: VideoCodecTypeForStream;
       backgroundColor?: Color;
       userConfigExtraInfo?: string;
+      metadata?: string;
+      advancedFeatures?: Map<String, boolean>;
     }
   ) {
     if (params) {
@@ -624,14 +668,19 @@ export class LiveTranscoding {
       this.lowLatency = params.lowLatency;
       this.videoGop = params.videoGop;
       this.watermark = params.watermark;
+      this.watermarkList = params.watermarkList;
       this.backgroundImage = params.backgroundImage;
+      this.backgroundImageList = params.backgroundImageList;
       this.audioSampleRate = params.audioSampleRate;
       this.audioBitrate = params.audioBitrate;
       this.audioChannels = params.audioChannels;
       this.audioCodecProfile = params.audioCodecProfile;
       this.videoCodecProfile = params.videoCodecProfile;
+      this.videoCodecType = params.videoCodecType;
       this.backgroundColor = params.backgroundColor;
       this.userConfigExtraInfo = params.userConfigExtraInfo;
+      this.metadata = params.metadata;
+      this.advancedFeatures = params.advancedFeatures;
     }
     this.transcodingUsers = transcodingUsers;
   }
@@ -1731,13 +1780,9 @@ export class AudioRecordingConfiguration {
    */
   recordingSampleRate?: AudioSampleRateType;
   /**
-   * The degree of blurring applied to the custom background image. See [`VirtualBackgroundBlurDegree`]{@link VirtualBackgroundBlurDegree}.
-   *
-   * @note This parameter takes effect only when the type of the custom background image is `blur`.
-   *
-   * @since v3.5.2
+   * TODO(doc)
    */
-  blur_degree?: VirtualBackgroundBlurDegree;
+  recordingChannel?: number;
 
   constructor(
     filePath: string,
@@ -1745,6 +1790,7 @@ export class AudioRecordingConfiguration {
       recordingQuality?: AudioRecordingQuality;
       recordingPosition?: AudioRecordingPosition;
       recordingSampleRate?: AudioSampleRateType;
+      recordingChannel?: number;
     }
   ) {
     this.filePath = filePath;
@@ -1752,6 +1798,7 @@ export class AudioRecordingConfiguration {
       this.recordingQuality = params.recordingQuality;
       this.recordingPosition = params.recordingPosition;
       this.recordingSampleRate = params.recordingSampleRate;
+      this.recordingChannel = params.recordingChannel;
     }
   }
 }
@@ -1863,4 +1910,74 @@ export class EchoTestConfiguration {
       this.channelId = params.channelId;
     }
   }
+}
+
+/**
+ * TODO(doc)
+ */
+export class MediaRecorderConfiguration {
+  storagePath: string;
+  containerFormat: number;
+  streamType: number;
+  maxDurationMs: number;
+  recorderInfoUpdateInterval: number;
+
+  constructor(
+    storagePath: string,
+    containerFormat: number,
+    streamType: number,
+    maxDurationMs: number,
+    recorderInfoUpdateInterval: number
+  ) {
+    this.storagePath = storagePath;
+    this.containerFormat = containerFormat;
+    this.streamType = streamType;
+    this.maxDurationMs = maxDurationMs;
+    this.recorderInfoUpdateInterval = recorderInfoUpdateInterval;
+  }
+}
+
+export class ContentInspectModule {
+  type?: number;
+  interval?: number;
+}
+
+export class ContentInspectConfig {
+  extraInfo?: string;
+  modules?: ContentInspectModule[];
+  moduleCount?: number;
+}
+
+export class LocalAccessPointConfiguration {
+  ipList?: string[];
+  domainList?: string[];
+  verifyDomainName?: string;
+  mode?: number;
+}
+
+export class VideoDenoiserOptions {
+  denoiserMode?: number;
+  denoiserLevel?: number;
+}
+
+export class LowLightEnhanceOptions {
+  lowlightEnhanceMode?: number;
+  lowlightEnhanceLevel?: number;
+}
+
+export class ColorEnhanceOptions {
+  strengthLevel?: number;
+  skinProtectLevel?: number;
+}
+
+export interface RecorderInfo {
+  fileName: string;
+  durationMs: number;
+  fileSize: number;
+}
+
+export interface WlAccStats {
+  e2eDelayPercent: number;
+  frozenRatioPercent: number;
+  lossRatePercent: number;
 }
