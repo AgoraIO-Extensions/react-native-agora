@@ -69,6 +69,15 @@ fun intToVideoCodecProfile(@Annotations.AgoraVideoCodecProfileType intValue: Int
   throw RuntimeException("LiveTranscoding.VideoCodecProfileType not contains $intValue")
 }
 
+fun intToVideoCodecType(@Annotations.AgoraVideoCodecType intValue: Int): LiveTranscoding.VideoCodecType {
+  for (value in LiveTranscoding.VideoCodecType.values()) {
+    if (LiveTranscoding.VideoCodecType.getValue(value) == intValue) {
+      return value
+    }
+  }
+  throw RuntimeException("LiveTranscoding.VideoCodecType not contains $intValue")
+}
+
 fun intToCapturerOutputPreference(@Annotations.AgoraCameraCaptureOutputPreference intValue: Int): CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE {
   for (value in CameraCapturerConfiguration.CAPTURER_OUTPUT_PREFERENCE.values()) {
     if (value.value == intValue) {
