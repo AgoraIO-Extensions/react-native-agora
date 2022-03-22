@@ -1965,8 +1965,30 @@ export class LowLightEnhanceOptions {
   lowlightEnhanceLevel?: number;
 }
 
+/**
+ * The color enhancement options.
+ *
+ * @since v3.6.2
+ */
 export class ColorEnhanceOptions {
+  /**
+   * The level of color enhancement.
+   * The value range is [0.0,1.0]. `0.0` means no color enhancement is applied to the video.
+   * The higher the value, the higher the level of color enhancement.
+   * The default value is `0.5` on Android and `0.0` on iOS.
+   */
   strengthLevel?: number;
+  /**
+   * The level of skin tone protection.
+   * The value range is [0.0,1.0].
+   * `0.0` means no skin tone protection.
+   * The higher the value, the higher the level of skin tone protection.
+   * The default value is `1.0`. When the level of color enhancement is higher,
+   * the portrait skin tone can be significantly distorted, so you need to set the level of skin
+   * tone protection; when the level of skin tone protection is higher, the color enhancement effect
+   * can be slightly reduced. Therefore, to get the best color enhancement effect, Agora recommends
+   * that you adjust strengthLevel and skinProtectLevel to get the most appropriate values.
+   */
   skinProtectLevel?: number;
 }
 

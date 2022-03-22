@@ -3683,10 +3683,61 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('enableWirelessAccelerate', { enabled });
   }
 
+  /**
+   * Sets the storage directory of `.so` files.
+   *
+   * @since v3.6.2
+   *
+   * By default, the SDK loads `.so` files from the app's `nativeLibraryPath`.
+   * You can call this method to specify the directory where you store `.so` files.
+   * After a successful method call, the SDK automatically loads `.so` files based on your specified directory
+   * when initializing the `RtcEngine` instance.
+   *
+   * Normally, you need to package required `.so` files when compiling the app, but this can increase
+   * the app package size. To reduce the app package size, you can call this method to enable the app to
+   * load required `.so` files dynamically when the app runs.
+   * For detailed instructions, see [Reduce App Size](https://docs.agora.io/en/Video/reduce_rtc_app_size?platform=Android).
+   *
+   * @note
+   * - This method applies to the Android platform only.
+   * - Call this method before creating an `RtcEngine` instance.
+   * - This method is applicable when you integrate the SDK manually but not when you integrate the SDK with Maven Central or JitPack.
+   *
+   * @param path The directory where you store `.so` files, which must be a private directory of the app
+   * and can be obtained using `Context.getDir()`. Ensure the specified directory exists; otherwise, the SDK reports the `InvalidParameterException` error.
+   *
+   */
   setAgoraLibPath(path: string): Promise<void> {
     return RtcEngine._callMethod('setAgoraLibPath', { path });
   }
 
+  /**
+   * Sets color enhancement.
+   *
+   * @since v3.6.2
+   *
+   * The video images captured by the camera can have color distortion.
+   * The color enhancement feature intelligently adjusts video characteristics such as saturation and
+   * contrast to enhance the video color richness and color reproduction, making the video more vivid.
+   *
+   * You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
+   *
+   * @note
+   * - Before calling this method, ensure that you have integrated the following dynamic library:
+   *   - Android: `libagora_video_process_extension.so`
+   *   - iOS: `AgoraVideoProcessExtension.xcframework`
+   * - Call this method after [`enableVideo`]{@link enableVideo}.
+   * - The video noise reduction feature has certain performance requirements on devices.
+   * If your device overheats after you enable video noise reduction, Agora recommends modifying the video
+   * noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.
+   *
+   * @param enabled Sets whether to enable video noise reduction:
+   * - `true`: Enable.
+   * - `false`: (Default) Disable.
+   *
+   * @param options The video noise reduction options. See [`ColorEnhanceOptions`]{@link ColorEnhanceOptions}.
+   *
+   */
   setColorEnhanceOptions(
     enabled: boolean,
     options: ColorEnhanceOptions
