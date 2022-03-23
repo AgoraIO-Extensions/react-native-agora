@@ -321,7 +321,7 @@ fun mapToContentInspectConfig(map: Map<*, *>): ContentInspectConfig {
           modules[index] = mapToContentInspectModule(it)
         }
       }
-      moduleCount = list.toInt()
+      moduleCount = list.size
     }
   }
 }

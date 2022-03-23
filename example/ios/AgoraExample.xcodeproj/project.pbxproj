@@ -153,7 +153,7 @@
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = GM72UGLGZW;
+						DevelopmentTeam = PV44H27855;
 						LastSwiftMigration = 1110;
 						ProvisioningStyle = Manual;
 					};
@@ -338,7 +338,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				DEVELOPMENT_TEAM = PV44H27855;
 				INFOPLIST_FILE = AgoraExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_CFLAGS = (
@@ -352,7 +352,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.react.AgoraExample;
 				PRODUCT_NAME = AgoraExample;
-				PROVISIONING_PROFILE_SPECIFIER = App;
+				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_OBJC_BRIDGING_HEADER = "AgoraExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -368,7 +368,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GM72UGLGZW;
+				DEVELOPMENT_TEAM = PV44H27855;
 				INFOPLIST_FILE = AgoraExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_CFLAGS = (
@@ -382,7 +382,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.react.AgoraExample;
 				PRODUCT_NAME = AgoraExample;
-				PROVISIONING_PROFILE_SPECIFIER = App;
+				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_OBJC_BRIDGING_HEADER = "AgoraExample-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
