@@ -115,8 +115,23 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
 
   _addListener = (rtcChannel: RtcChannel) => {
     const { channelId } = rtcChannel;
+    rtcChannel.addListener('Warning', (warningCode) => {
+      console.info('Warning', channelId, warningCode);
+    });
+    rtcChannel.addListener('Error', (errorCode) => {
+      console.info('Error', channelId, errorCode);
+    });
     rtcChannel.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
       console.info('JoinChannelSuccess', channel, uid, elapsed);
+      if (channelId === channelId0) {
+        this.setState({ isJoined0: true });
+      } else if (channelId === channelId1) {
+        this.setState({ isJoined1: true });
+      }
+    });
+    rtcChannel?.addListener('LeaveChannel', (stats) => {
+      console.info('LeaveChannel', channelId, stats);
+      // RtcLocalView.SurfaceView must render after engine init and channel join
       if (channelId === channelId0) {
         this.setState({ isJoined0: true });
       } else if (channelId === channelId1) {
