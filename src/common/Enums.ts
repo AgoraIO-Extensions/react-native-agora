@@ -37,15 +37,17 @@ export enum AreaCode {
  */
 export enum AudioCodecProfileType {
   /**
-   * 0: (Default) LC-AAC, which is the low-complexity audio codec profile.
+   * 0: (Default) LC-AAC.
    */
   LCAAC = 0,
   /**
-   * 1: HE-AAC, which is the high-efficiency audio codec profile.
+   * 1: HE-AAC.
    */
   HEAAC = 1,
   /**
-   * TODO(doc)
+   * 2: HE-AAC v2.
+   *
+   * @since v3.6.2
    */
   HE_AAC_V2 = 2,
 }
@@ -978,10 +980,12 @@ export enum ConnectionChangedReason {
    */
   ProxyServerInterrupted = 15,
   /**
+   * @ignore
    * TODO(doc)
    */
   SameUidLogin = 19,
   /**
+   * @ignore
    * TODO(doc)
    */
   TooManyBroadcasters = 20,
@@ -1793,19 +1797,30 @@ export enum RtmpStreamingErrorCode {
    */
   FormatNotSupported = 10,
   /**
-   * TODO(doc)
+   * 11: The user role is not host, so the user cannot use the CDN live streaming function.
+   * Check your application code logic.
+   *
+   * @since v3.6.2
    */
   NotBroadcaster = 11,
   /**
-   * TODO(doc)
+   * 13: The `updateRtmpTranscoding` or `setLiveTranscoding` method is called to update the transcoding
+   * configuration in a scenario where there is streaming without transcoding.
+   * Check your application code logic.
+   *
+   * @since v3.6.2
    */
   TranscodingNoMixStream = 13,
   /**
-   * TODO(doc)
+   * 14: Errors occurred in the host's network.
    */
   NetDown = 14,
   /**
-   * TODO(doc)
+   * 15: Your App ID does not have permission to use the CDN live streaming function.
+   * Refer to [Prerequisites in Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android) to
+   * enable the CDN live streaming permission.
+   *
+   * @since v3.6.2
    */
   InvalidAppid = 15,
   /**
@@ -1851,7 +1866,11 @@ export enum RtmpStreamingState {
    */
   Failure = 4,
   /**
-   * TODO(doc)
+   * 5: The SDK is disconnecting from the Agora streaming server and CDN.
+   * When you call remove or stop to stop the streaming normally, the SDK reports the streaming state
+   * as `Disconnecting`, `Idle` in sequence.
+   *
+   * @since v3.6.2
    */
   Disconnecting = 5,
 }
@@ -2605,11 +2624,13 @@ export enum RtmpStreamingEvent {
    */
   UrlAlreadyInUse = 2,
   /**
-   * TODO(doc)
+   * 3: The feature is not supported.
+   *
+   * @since v3.6.2
    */
   AdvancedFeatureNotSupport = 3,
   /**
-   * TODO(doc)
+   * 4: Reserved.
    */
   RequestTooOften = 4,
 }
@@ -3039,16 +3060,21 @@ export enum UploadErrorReason {
  */
 export enum CloudProxyType {
   /**
-   * 0: Do not use the cloud proxy.
+   * 0: Automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and
+   * automatically switches to TLS 443 if the attempt fails.
+   * As of v3.6.2, the SDK has this mode enabled by default.
    */
   None = 0,
   /**
-   * 1: The cloud proxy for the UDP protocol.
+   * 1: The cloud proxy for the UDP protocol, that is, Force UDP cloud proxy mode.
+   * In this mode, the SDK always transmits data over UDP.
    */
   UDP = 1,
   /**
-   * @ignore
-   * 2: The cloud proxy for the TCP (encryption) protocol.
+   * 2: The cloud proxy for the TCP (encryption) protocol, that is, Force TCP cloud proxy mode.
+   * In this mode, the SDK always transmits data over TLS 443.
+   *
+   * @since v3.6.2
    */
   TCP = 2,
 }
@@ -3247,31 +3273,33 @@ export enum VideoCodecTypeForStream {
 }
 
 /** The proxy type.
-
- @since v3.6.2
+ *
+ * @since v3.6.2
  */
 export enum ProxyType {
   /** 0: Reserved for future use.
    */
   None = 0,
-  /** 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode.
-   In this mode, the SDK always transmits data over UDP.
+  /** 1: The cloud proxy for the UDP protocol, that is, Force UDP cloud proxy mode.
+   * In this mode, the SDK always transmits data over UDP.
    */
   Udp = 1,
-  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode.
+  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, Force TCP cloud proxy mode.
    In this mode, the SDK always transmits data over TLS 443.
    */
   Tcp = 2,
   /** 3: Reserved for future use.
    */
   Local = 3,
-  /** 4: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically
+  /** 4: Automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically
    switches to TLS 443 if the attempt fails.
    */
   TcpAutoFallback = 4,
 }
 
-/** API for future use. */
+/** API for future use.
+ * @ignore
+ */
 export enum ContentInspectResult {
   Neutral = 1,
   Sexy = 2,
@@ -3279,6 +3307,7 @@ export enum ContentInspectResult {
 }
 
 /** API for future use.
+ * @ignore
  */
 export enum WlAccReason {
   WeakSignal = 0,
@@ -3287,6 +3316,7 @@ export enum WlAccReason {
 }
 
 /** API for future use.
+ * @ignore
  */
 export enum WlAccAction {
   CloseToWIFI = 0,
@@ -3299,6 +3329,7 @@ export enum WlAccAction {
 }
 
 /** API for future use.
+ * @ignore
  */
 export enum ClientRoleChangeFailedReason {
   TooManyBroadcasters = 1,

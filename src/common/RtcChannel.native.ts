@@ -628,6 +628,10 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Publishes the local stream to a specified CDN streaming URL.
    *
+   * @deprecated
+   *
+   * This method is deprecated as of v3.6.2. See [Release Notes](https://docs.agora.io/en/Video/release_react_native_video?platform=React%20Native) for an alternative solution.
+   *
    * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN.
    *
    * This method call triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged}
@@ -659,6 +663,10 @@ export default class RtcChannel implements RtcChannelInterface {
   /**
    * Removes an RTMP or RTMPS stream from the CDN.
    *
+   * @deprecated
+   *
+   * This method is deprecated as of v3.6.2. See [Release Notes](https://docs.agora.io/en/Video/release_react_native_video?platform=React%20Native) for an alternative solution.
+   *
    * This method removes the CDN streaming URL (added by [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl}) from a CDN live stream.
    * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback.
    *
@@ -676,6 +684,10 @@ export default class RtcChannel implements RtcChannelInterface {
 
   /**
    * Sets the video layout and audio settings for CDN live.
+   *
+   * @deprecated
+   *
+   * This method is deprecated as of v3.6.2. See [Release Notes](https://docs.agora.io/en/Video/release_react_native_video?platform=React%20Native) for an alternative solution.
    *
    * The SDK triggers the [`TranscodingUpdated`]{@link RtcChannelEvents.TranscodingUpdated} callback when you
    * call this method to update the [`LiveTranscoding`]{@link LiveTranscoding} class. If you call this method to set the [`LiveTranscoding`]{@link LiveTranscoding}
@@ -1161,6 +1173,36 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('setAVSyncSource', { channelId, uid });
   }
 
+  /**
+   * Starts pushing media streams to a CDN and sets the transcoding configuration.
+   *
+   * @since v3.6.2
+   *
+   * You can call this method to push a live audio-and-video stream to the specified CDN address and set
+   * the transcoding configuration. This method can push media streams to only one CDN address at a time,
+   * so if you need to push streams to multiple addresses, call this method multiple times.
+   *
+   * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback
+   * on the local client to report the state of the streaming.
+   *
+   * @note
+   * - Ensure that you enable the RTMP Converter service before using this function.
+   * See Prerequisites in [Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android).
+   * - Call this method after joining a channel.
+   * - Only hosts in the `LiveBroadcasting` profile can call this method.
+   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream{@link stopRtmpStream} first,
+   * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+   *
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS.
+   * The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+   * @param transcoding The transcoding configuration for CDN live streaming. See [`LiveTranscoding`]{@link LiveTranscoding}.
+   *
+   * @returns
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *    - 2(InvalidArgument): `url` is null or the string length is 0.
+   *    - 7(NotInitialized): The SDK is not initialized before calling this method.
+   */
   startRtmpStreamWithTranscoding(
     url: string,
     transcoding: LiveTranscoding
@@ -1171,14 +1213,69 @@ export default class RtcChannel implements RtcChannelInterface {
     });
   }
 
+  /**
+   * Starts pushing media streams to a CDN without transcoding.
+   *
+   * @since v3.6.2
+   *
+   * You can call this method to push a live audio-and-video stream to the specified CDN address.
+   * This method can push media streams to only one CDN address at a time, so if you need to push streams
+   * to multiple addresses, call this method multiple times.
+   *
+   * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback
+   * on the local client to report the state of the streaming.
+   *
+   * @note
+   * - Ensure that you enable the RTMP Converter service before using this function.
+   * See Prerequisites in [Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android).
+   * - Call this method after joining a channel.
+   * - Only hosts in the `LiveBroadcasting` profile can call this method.
+   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream{@link stopRtmpStream} first,
+   * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+   *
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS.
+   * The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+   *
+   * @returns
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *    - 2(InvalidArgument): `url` is null or the string length is 0.
+   *    - 7(NotInitialized): The SDK is not initialized before calling this method.
+   */
   startRtmpStreamWithoutTranscoding(url: string): Promise<void> {
     return this._callMethod('startRtmpStreamWithoutTranscoding', { url });
   }
 
+  /**
+   * Stops pushing media streams to a CDN.
+   *
+   * @since v3.6.2
+   *
+   * You can call this method to stop the live stream on the specified CDN address.
+   * This method can stop pushing media streams to only one CDN address at a time,
+   * so if you need to stop pushing streams to multiple addresses, call this method multiple times.
+   *
+   * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback
+   * on the local client to report the state of the streaming.
+   *
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
+   * Special characters such as Chinese characters are not supported.
+   */
   stopRtmpStream(url: string): Promise<void> {
     return this._callMethod('stopRtmpStream', { url });
   }
 
+  /**
+   * Updates the transcoding configuration.
+   *
+   * @since v3.6.2
+   *
+   * After you start pushing media streams to CDN with transcoding, you can dynamically update the
+   * transcoding configuration according to the scenario. The SDK triggers the [`TranscodingUpdated`]{@link RtcChannelEvents.TranscodingUpdated} callback
+   * after the transcoding configuration is updated.
+   *
+   * @param transcoding The transcoding configuration for CDN live streaming. See [`LiveTranscoding`]{@link LiveTranscoding}.
+   */
   updateRtmpTranscoding(transcoding: LiveTranscoding): Promise<void> {
     return this._callMethod('updateRtmpTranscoding', { transcoding });
   }

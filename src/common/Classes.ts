@@ -331,25 +331,29 @@ export class VideoEncoderConfiguration {
  */
 export class BeautyOptions {
   /**
-   * The lightening contrast level.
+   * he contrast level, often used in conjunction with `lighteningLevel`.
+   * The higher the value, the greater the contrast level. See [`LighteningContrastLevel`]{@link LighteningContrastLevel}.
    */
   lighteningContrastLevel?: LighteningContrastLevel;
   /**
-   * The brightness level. The value ranges between 0.0 (original) and 1.0. The default value is 0.7.
+   * The brightening level, in the range [0.0,1.0], where 0.0 means the original brightening. The default value is 0.6. The higher the value, the greater the brightening level.
    */
   lighteningLevel?: number;
   /**
-   * The sharpness level. The value ranges between 0.0 (original) and 1.0.
-   * The default value is 0.5. This parameter is usually used to remove blemishes.
+   * The smoothness level, in the range [0.0,1.0], where 0.0 means the original smoothness.
+   * The default value is 0.5. The higher the value, the greater the smoothness level.
    */
   smoothnessLevel?: number;
   /**
-   * The redness level. The value ranges between 0.0 (original) and 1.0.
-   * The default value is 0.1. This parameter adjusts the red saturation level.
+   * The redness level, in the range [0.0,1.0], where 0.0 means the original redness.
+   * The default value is 0.1. The higher the value, the greater the redness level.
    */
   rednessLevel?: number;
   /**
-   * TODO(doc)
+   * The sharpness level, in the range [0.0,1.0], where 0.0 means the original sharpness.
+   * The default value is 0.3. The higher the value, the greater the sharpness level.
+   *
+   * @since v3.6.2
    */
   sharpnessLevel?: number;
 
@@ -395,11 +399,21 @@ export class AgoraImage {
    */
   height?: number;
   /**
-   * TODO(doc)
+   * The layer number of the watermark or background image.
+   *
+   * When you use the watermark array to add a watermark or multiple watermarks, you must pass a value to `zOrder` in the range [1,255];
+   * otherwise, the SDK reports an error. In other cases, `zOrder` can optionally be passed in the range [0,255],
+   * with 0 being the default value. `0` means the bottom layer and `255` means the top layer.
+   *
+   * @since v3.6.2
    */
   zOrder?: number;
   /**
-   * TODO(doc)
+   * The transparency of the watermark or background image. The value range is [0.0,1.0]:
+   * - `0.0`: Completely transparent.
+   * - `1.0`: (Default) Opaque.
+   *
+   * @since v3.6.2
    */
   alpha?: number;
 
@@ -568,19 +582,28 @@ export class LiveTranscoding {
   /**
    * The watermark image added to the CDN live publishing stream. Ensure that the format of the image is PNG. Once a watermark image is added,
    * the audience of the CDN live publishing stream can see it.
+   *
+   * The watermark on the live video. The format must be in the PNG format.
    */
   watermark?: AgoraImage;
   /**
-   * TODO(doc)
+   * The array of watermarks on the live video. You can use `watermarkList` to add one or more watermarks.
+   * The image format must be PNG.
+   *
+   * The total number of watermarks and background images on the live video must be greater than or equal to 0 and less than or equal to 10.
+   *
+   * @since v3.6.2
    */
   watermarkList?: AgoraImage[];
   /**
-   * The background image added to the CDN live publishing stream. Once a background image is added,
-   * the audience of the CDN live publishing stream can see it.
+   * The background image on the live video. The format must be in the PNG format.
    */
   backgroundImage?: AgoraImage;
   /**
-   * TODO(doc)
+   * The array of background images on the live video. You can use `backgroundImageList` to add one or more background images. The image format must be PNG.
+   * The total number of watermarks and background images on the live video must be greater than or equal to 0 and less than or equal to 10.
+   *
+   * @since v3.6.2
    */
   backgroundImageList?: AgoraImage[];
   /**
@@ -1780,7 +1803,11 @@ export class AudioRecordingConfiguration {
    */
   recordingSampleRate?: AudioSampleRateType;
   /**
-   * TODO(doc)
+   * The recorded audio channel. The following values are supported:
+   * - `1`: (Default) Mono channel.
+   * - `2`: Dual channel.
+   *
+   * @since v3.6.2
    */
   recordingChannel?: number;
 
@@ -1913,13 +1940,41 @@ export class EchoTestConfiguration {
 }
 
 /**
- * TODO(doc)
+ * Configurations for the local audio and video recording.
+ *
+ * @since v3.6.2
  */
 export class MediaRecorderConfiguration {
+  /**
+   * The absolute path (including the filename extensions) for the recording file.
+   * For example:
+   * - Android: `/storage/emulated/0/Android/data/<package name>/files/example.mp4`
+   * - iOS: `/App Sandbox/Library/Caches/example.mp4`
+   *
+   * @note
+   * Ensure that the specified path exists and is writable.
+   */
   storagePath: string;
+  /**
+   * The format of the recording file. The SDK currently supports only `1`, which is MP4 format.
+   */
   containerFormat: number;
+  /**
+   * The recording content:
+   * - `0x1`: Only audio.
+   * - `0x2`: Only video.
+   * - `0x3`: (Default) Audio and video.
+   */
   streamType: number;
+  /**
+   * The maximum recording duration, in milliseconds. The default value is `120000`.
+   */
   maxDurationMs: number;
+  /**
+   * The interval (ms) of updating the recording information.
+   * The value range is [1000,10000]. Based on the set value of `recorderInfoUpdateInterval`,
+   * the SDK triggers the [`RecorderInfoUpdated`]{@link RtcEngineEvents.RecorderInfoUpdated} callback to report the updated recording information.
+   */
   recorderInfoUpdateInterval: number;
 
   constructor(
@@ -1937,17 +1992,26 @@ export class MediaRecorderConfiguration {
   }
 }
 
+/**
+ * @ignore For future use
+ */
 export class ContentInspectModule {
   type?: number;
   interval?: number;
 }
 
+/**
+ * @ignore For future use
+ */
 export class ContentInspectConfig {
   extraInfo?: string;
   modules?: ContentInspectModule[];
   moduleCount?: number;
 }
 
+/**
+ * @ignore For future use
+ */
 export class LocalAccessPointConfiguration {
   ipList?: string[];
   domainList?: string[];
@@ -1955,13 +2019,60 @@ export class LocalAccessPointConfiguration {
   mode?: number;
 }
 
+/**
+ * The video noise reduction options.
+ *
+ * @since v3.6.2
+ */
 export class VideoDenoiserOptions {
+  /**
+   * The video noise reduction mode：
+   * - `0`: (Default) Automatic mode. The SDK automatically enables or disables the video noise reduction feature according to the ambient light.
+   * - `1`: Manual mode. Users need to enable or disable the video noise reduction feature manually.
+   */
   denoiserMode?: number;
+  /**
+   * The video noise reduction level:
+   *
+   * - `0`: (Default) Promotes video quality during video noise reduction.
+   * `0` balances performance consumption and video noise reduction quality.
+   * The performance consumption is moderate, the video noise reduction speed is moderate,
+   * and the overall video quality is optimal.
+   * - `1`: Promotes reducing performance consumption during video noise reduction.
+   * `1` prioritizes reducing performance consumption over video noise reduction quality.
+   * The performance consumption is lower, and the video noise reduction speed is faster.
+   * To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video,
+   * Agora recommends that you use `1` when the camera is fixed.
+   * - `2`: Enhanced video noise reduction. `2` prioritizes video noise reduction quality over reducing
+   * performance consumption. The performance consumption is higher, the video noise reduction speed is slower,
+   * and the video noise reduction quality is better. If `0` is not enough for your video noise reduction needs, you can use `2`.
+   */
   denoiserLevel?: number;
 }
 
+/**
+ * The low-light enhancement options.
+ *
+ * @since v3.6.2
+ */
 export class LowLightEnhanceOptions {
+  /**
+   * The low-light enhancement mode:
+   *
+   * - `0`: (Default) Automatic mode. The SDK automatically enables or disables the low-light enhancement feature according
+   * to the ambient light to compensate for the lighting level or prevent overexposure, as necessary.
+   * - `1`: Manual mode. Users need to enable or disable the low-light enhancement feature manually.
+   */
   lowlightEnhanceMode?: number;
+  /**
+   * The low-light enhancement level:
+   *
+   * - `0`: (Default) Promotes video quality during low-light enhancement. It processes the brightness, details,
+   * and noise of the video image. The performance consumption is moderate, the processing speed is moderate, and
+   * the overall video quality is optimal.
+   * - `1`: Promotes performance during low-light enhancement. It processes the brightness and details of the video image.
+   * The processing speed is faster.
+   */
   lowlightEnhanceLevel?: number;
 }
 
@@ -1992,12 +2103,29 @@ export class ColorEnhanceOptions {
   skinProtectLevel?: number;
 }
 
+/**
+ * Information for the recording file.
+ *
+ * @since v3.6.2
+ */
 export interface RecorderInfo {
+  /**
+   * The absolute path of the recording file.
+   */
   fileName: string;
+  /**
+   * The recording duration, in milliseconds.
+   */
   durationMs: number;
+  /**
+   * The size in bytes of the recording file.
+   */
   fileSize: number;
 }
 
+/**
+ * @ignore For future user
+ */
 export interface WlAccStats {
   e2eDelayPercent: number;
   frozenRatioPercent: number;

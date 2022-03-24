@@ -1271,6 +1271,11 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * - Call this method after calling [`enableVideo`]{@link enableVideo}.
    * - On Android，this method applies to Android 4.4 or later.
+   * - Agora has updated the Agora image enhancement algorithm from v3.6.2 to enhance image enhancement effects and support sharpness adjustment.
+   * If you want to experience optimized image enhancement effects or set the sharpness, ensure that you have integrated the following dynamic library into the project before calling this method:
+   *
+   *  - Android: `libagora_video_process_extension.so`
+   *  - iOS: `AgoraVideoProcessExtension.xcframework`
    *
    * @param enabled Sets whether to enable image enhancement:
    * - `true`: Enable image enhancement.
@@ -2009,6 +2014,10 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Publishes the local stream to a specified CDN streaming URL.
    *
+   * @deprecated
+   *
+   * This method is deprecated as of v3.6.2. See [Release Notes](https://docs.agora.io/en/Video/release_react_native_video?platform=React%20Native) for an alternative solution.
+   *
    * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN.
    *
    * This SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback on the local client to report the state of adding a local stream to the CDN.
@@ -2044,6 +2053,10 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * Removes an RTMP or RTMPS stream from the CDN.
    *
+   * @deprecated
+   *
+   * This method is deprecated as of v3.6.2. See [Release Notes](https://docs.agora.io/en/Video/release_react_native_video?platform=React%20Native) for an alternative solution.
+   *
    * This method removes the CDN streaming URL (added by [`addPublishStreamUrl`]{@link addPublishStreamUrl}) from a CDN live stream.
    * The SDK reports the result of this method call in the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback.
    *
@@ -2062,6 +2075,10 @@ export default class RtcEngine implements RtcEngineInterface {
 
   /**
    * Sets the video layout and audio settings for CDN live.
+   *
+   * @deprecated
+   *
+   * This method is deprecated as of v3.6.2. See [Release Notes](https://docs.agora.io/en/Video/release_react_native_video?platform=React%20Native) for an alternative solution.
    *
    * The SDK triggers the [`TranscodingUpdated`]{@link RtcEngineEvents.TranscodingUpdated} callback when you call this method to update the [`LiveTranscoding`]{@link LiveTranscoding} class.
    * If you call this method to set the [`LiveTranscoding`]{@link LiveTranscoding} class for the first time,
@@ -3182,17 +3199,30 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @since v3.3.1.
    *
-   * When the user's firewall restricts the IP address and port, refer to *Use Cloud Proxy* to add the specific IP addresses and ports to the firewall whitelist; then, call this method to enable the cloud proxy and set the `proxyType` parameter as `UDP(1)`, which is the cloud proxy for the UDP protocol.
+   * When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses
+   * and ports provided by Agora; then, call this method to enable the cloud proxy and
+   * set the cloud proxy type with the `proxyType` parameter.
    *
    * After a successfully cloud proxy connection, the SDK triggers the [`ConnectionStateChanged(Connecting, SettingProxyServer)`]{@link RtcEngineEvents.ConnectionStateChanged} callback.
    *
-   * To disable the cloud proxy that has been set, call `setCloudProxy(None)`. To change the cloud proxy type that has been set, call `setCloudProxy(None)` first, and then call `setCloudProxy`, and pass the value that you expect in `proxyType`.
+   * As of v3.6.2, when a user calls this method and then joins a channel successfully,
+   * the SDK triggers the [`ProxyConnected`]{@link RtcEngineEvents.ProxyConnected} callback to report the user ID,
+   * the proxy type connected, and the time elapsed from the user calling `joinChannel` until this callback is triggered
+   *
+   * To disable the cloud proxy that has been set, call `setCloudProxy(None)`.
+   * To change the cloud proxy type that has been set, call `setCloudProxy(None)` first, and
+   * then call `setCloudProxy` with the desired `proxyType`.
    *
    * @note
    * - Agora recommends that you call this method before joining the channel or after leaving the channel.
-   * - When you use the cloud proxy for the UDP protocol, the services for pushing streams to CDN and co-hosting across channels are not available.
+   * - For the SDK v3.3.x, when users use the Force UDP cloud proxy, the services for Media Push and
+   * cohosting across channels are not available; for the SDK v3.4.0 or later, when users behind a firewall
+   * use the Force UDP cloud proxy, the services for Media Push and cohosting across channels are not available.
+   * - When you use the Force TCP cloud proxy, note the following:
+   *   - An error occurs when calling [`startAudioMixing`]{@link startAudioMixing} to play online music files in the HTTP protocol.
+   *   - The services for Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
    *
-   * @param proxyType The cloud proxy type. This parameter is required, and the SDK reports an error if you do not pass in a value. See [`CloudProxyType`]{@link CloudProxyType}.
+   * @param proxyType The cloud proxy type. See [`CloudProxyType`]{@link CloudProxyType}. This parameter is required, and the SDK reports an error if you do not pass in a value.
    *
    * @return
    * - Void if the method call succeeds.
@@ -3748,6 +3778,33 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * Sets low-light enhancement.
+   *
+   * @since v3.6.2
+   *
+   * The low-light enhancement feature can adaptively adjust the brightness value of the video captured
+   * in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or
+   * highlights the image details and improves the overall visual effect of the video.
+   *
+   * You can call this method to enable the low-light enhancement feature and set the options of
+   * the low-light enhancement effect.
+   *
+   * @note
+   * - Before calling this method, ensure that you have integrated the following dynamic library:
+   *   - Android: `libagora_video_process_extension.so`
+   *   - iOS: `AgoraVideoProcessExtension.xcframework`
+   * - Call this method after [`enableVideo`]{@link enableVideo}.
+   * - The low-light enhancement feature has certain performance requirements on devices.
+   * If your device overheats after you enable low-light enhancement, Agora recommends modifying the
+   * low-light enhancement options to a less performance-consuming level or disabling low-light enhancement
+   * entirely.
+   *
+   * @param enabled Sets whether to enable low-light enhancement:
+   * - `true`: Enable.
+   * - `false`: (Default) Disable.
+   * @param options The low-light enhancement options. See [`LowLightEnhanceOptions`]{@link LowLightEnhanceOptions}.
+   */
   setLowLightEnhanceOptions(
     enabled: boolean,
     options: LowLightEnhanceOptions
@@ -3758,6 +3815,32 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * Sets video noise reduction.
+   *
+   * @since v3.6.2
+   *
+   * Underlit environments and low-end video capture devices can cause video images to
+   * contain significant noise, which affects video quality. In real-time interactive scenarios,
+   * video noise also consumes bitstream resources and reduces encoding efficiency during encoding.
+   *
+   * You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.
+   *
+   * @note
+   * - Before calling this method, ensure that you have integrated the following dynamic library:
+   *   - Android: `libagora_video_process_extension.so`
+   *   - iOS: `AgoraVideoProcessExtension.xcframework`
+   * - Call this method after [`enableVideo`]{@link enableVideo}.
+   * - The video noise reduction feature has certain performance requirements on devices.
+   * If your device overheats after you enable video noise reduction, Agora recommends modifying the
+   * video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.
+   *
+   * @param enabled Sets whether to enable video noise reduction:
+   * - `true`: Enable.
+   * - `false`: (Default) Disable.
+   * @param options he video noise reduction options. See [`VideoDenoiserOptions`]{@link VideoDenoiserOptions}.
+   *
+   */
   setVideoDenoiserOptions(
     enabled: boolean,
     options: VideoDenoiserOptions
@@ -3768,10 +3851,73 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * Starts recording the local audio and video.
+   *
+   * @since v3.6.2
+   *
+   * You can call this method to enable the recording of the local audio and video.
+   *
+   * This method can record the following content:
+   * - The audio captured by the local microphone and encoded in AAC format.
+   * - The video captured by the local camera and encoded by the SDK.
+   *
+   * The SDK can generate a recording file only when it detects the recordable audio and video streams;
+   * when there are no audio and video streams to be recorded or the audio and video streams are interrupted
+   * for more than five seconds, the SDK stops recording and triggers the [`RecorderStateChanged(-1, 2)`]{@link RtcEngineEvents.RecorderStateChanged} callback.
+   *
+   * @note
+   * Call this method after joining the channel.
+   *
+   * @param config The recording configurations. See [`MediaRecorderConfiguration`]{@link MediaRecorderConfiguration}.
+   *
+   * @returns
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *    - 2(InvalidArgument): The parameter is invalid. Ensure the following:
+   *       - The specified path of the recording file exists and is writable.
+   *       - The specified format of the recording file is supported.
+   *       - The maximum recording duration is correctly set.
+   *    - 4(NotSupported): `RtcEngine` does not support the request due to one of the following reasons:
+   *       - The recording is ongoing.
+   *       - The recording stops because an error occurs.
+   *    - 7(NotInitialized): This method is called before the initialization of `RtcEngine`.
+   * Ensure that you have called `getMediaRecorder` before calling startRecording. // TODO CT 为什么没有 getMediaRecorder 方法？
+   */
   startRecording(config: MediaRecorderConfiguration): Promise<void> {
     return RtcEngine._callMethod('startRecording', { config });
   }
 
+  /**
+   * Starts pushing media streams to a CDN and sets the transcoding configuration.
+   *
+   * @since v3.6.2
+   *
+   * You can call this method to push a live audio-and-video stream to the specified CDN address and set
+   * the transcoding configuration. This method can push media streams to only one CDN address at a time,
+   * so if you need to push streams to multiple addresses, call this method multiple times.
+   *
+   * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback
+   * on the local client to report the state of the streaming.
+   *
+   * @note
+   * - Ensure that you enable the RTMP Converter service before using this function.
+   * See Prerequisites in [Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android).
+   * - Call this method after joining a channel.
+   * - Only hosts in the `LiveBroadcasting` profile can call this method.
+   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream{@link stopRtmpStream} first,
+   * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+   *
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS.
+   * The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+   * @param transcoding The transcoding configuration for CDN live streaming. See [`LiveTranscoding`]{@link LiveTranscoding}.
+   *
+   * @returns
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *    - 2(InvalidArgument): `url` is null or the string length is 0.
+   *    - 7(NotInitialized): The SDK is not initialized before calling this method.
+   */
   startRtmpStreamWithTranscoding(
     url: string,
     transcoding: LiveTranscoding
@@ -3782,18 +3928,87 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * Starts pushing media streams to a CDN without transcoding.
+   *
+   * @since v3.6.2
+   *
+   * You can call this method to push a live audio-and-video stream to the specified CDN address.
+   * This method can push media streams to only one CDN address at a time, so if you need to push streams
+   * to multiple addresses, call this method multiple times.
+   *
+   * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback
+   * on the local client to report the state of the streaming.
+   *
+   * @note
+   * - Ensure that you enable the RTMP Converter service before using this function.
+   * See Prerequisites in [Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android).
+   * - Call this method after joining a channel.
+   * - Only hosts in the `LiveBroadcasting` profile can call this method.
+   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream{@link stopRtmpStream} first,
+   * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
+   *
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS.
+   * The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+   *
+   * @returns
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *    - 2(InvalidArgument): `url` is null or the string length is 0.
+   *    - 7(NotInitialized): The SDK is not initialized before calling this method.
+   */
   startRtmpStreamWithoutTranscoding(url: string): Promise<void> {
     return RtcEngine._callMethod('startRtmpStreamWithoutTranscoding', { url });
   }
 
+  /**
+   * Stops recording the local audio and video.
+   *
+   * @since v3.6.2
+   *
+   * @note
+   * After calling [`startRecording`]{@link startRecording}, if you want to stop the recording, you must call `stopRecording`; otherwise,
+   * the generated recording files might not be playable.
+   *
+   * @returns
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *    - 7(NotInitialized): The SDK is not initialized before calling this method.
+   */
   stopRecording(): Promise<void> {
     return RtcEngine._callMethod('stopRecording');
   }
 
+  /**
+   * Stops pushing media streams to a CDN.
+   *
+   * @since v3.6.2
+   *
+   * You can call this method to stop the live stream on the specified CDN address.
+   * This method can stop pushing media streams to only one CDN address at a time,
+   * so if you need to stop pushing streams to multiple addresses, call this method multiple times.
+   *
+   * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcEngineEvents.RtmpStreamingStateChanged} callback
+   * on the local client to report the state of the streaming.
+   *
+   * @param url The address of the CDN live streaming. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes.
+   * Special characters such as Chinese characters are not supported.
+   */
   stopRtmpStream(url: string): Promise<void> {
     return RtcEngine._callMethod('stopRtmpStream', { url });
   }
 
+  /**
+   * Updates the transcoding configuration.
+   *
+   * @since v3.6.2
+   *
+   * After you start pushing media streams to CDN with transcoding, you can dynamically update the
+   * transcoding configuration according to the scenario. The SDK triggers the [`TranscodingUpdated`]{@link RtcEngineEvents.TranscodingUpdated} callback
+   * after the transcoding configuration is updated.
+   *
+   * @param transcoding The transcoding configuration for CDN live streaming. See [`LiveTranscoding`]{@link LiveTranscoding}.
+   */
   updateRtmpTranscoding(transcoding: LiveTranscoding): Promise<void> {
     return RtcEngine._callMethod('updateRtmpTranscoding', { transcoding });
   }
