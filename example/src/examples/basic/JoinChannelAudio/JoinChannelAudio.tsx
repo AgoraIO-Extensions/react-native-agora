@@ -88,6 +88,7 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       config.uid
     );
   };
+
   _onChangeRecordingVolume = (value: number) => {
     this._engine?.adjustRecordingSignalVolume(value * 400);
   };

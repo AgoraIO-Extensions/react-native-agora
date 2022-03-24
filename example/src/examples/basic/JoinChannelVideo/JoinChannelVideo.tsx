@@ -73,6 +73,10 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       console.info('JoinChannelSuccess', channel, uid, elapsed);
       this.setState({ isJoined: true });
     });
+    this._engine?.addListener('LeaveChannel', (stats) => {
+      console.info('LeaveChannel', stats);
+      this.setState({ isJoined: false, remoteUid: [] });
+    });
     this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
       this.setState({ remoteUid: [...this.state.remoteUid, uid] });
@@ -82,10 +86,6 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       this.setState({
         remoteUid: this.state.remoteUid.filter((value) => value !== uid),
       });
-    });
-    this._engine?.addListener('LeaveChannel', (stats) => {
-      console.info('LeaveChannel', stats);
-      this.setState({ isJoined: false, remoteUid: [] });
     });
   };
 

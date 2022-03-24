@@ -7,6 +7,7 @@ import {
   Platform,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
@@ -29,8 +30,8 @@ import VoiceChangeConfig, {
 const config = require('../../../config/agora.config.json');
 
 interface State {
-  channelId?: string;
-  isJoin: boolean;
+  channelId: string;
+  isJoined: boolean;
   remoteUids: Array<number>;
   uidMySelf?: number;
   selectedVoiceToolBtn?: number;
@@ -62,7 +63,8 @@ export default class VoiceChanger extends Component<{}, State, any> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      isJoin: false,
+      channelId: config.channelId,
+      isJoined: false,
       remoteUids: [],
       isEnableSlider1: false,
       isEnableSlider2: false,
@@ -72,21 +74,18 @@ export default class VoiceChanger extends Component<{}, State, any> {
     };
   }
 
+  UNSAFE_componentWillMount() {
+    this._initEngine();
+  }
+
   componentWillUnmount() {
     this._engine?.destroy();
   }
 
   _initEngine = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-    }
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
-
     this._addListeners();
 
     // Before calling the method, you need to set the profile
@@ -107,21 +106,8 @@ export default class VoiceChanger extends Component<{}, State, any> {
 
     // Set audio route to speaker
     await this._engine.setDefaultAudioRoutetoSpeakerphone(true);
-
-    // start joining channel
-    // 1. Users can only see each other after they join the
-    // same channel successfully using the same app id.
-    // 2. If app certificate is turned on at dashboard, token is needed
-    // when joining channel. The channel name and uid used to calculate
-    // the token has to match the ones used for channel join
-    await this._engine.joinChannel(
-      config.token,
-      config.channelId,
-      null,
-      0,
-      undefined
-    );
   };
+
   _addListeners = () => {
     this._engine?.addListener('Warning', (warningCode) => {
       console.info('Warning', warningCode);
@@ -132,7 +118,12 @@ export default class VoiceChanger extends Component<{}, State, any> {
     this._engine?.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
       console.info('JoinChannelSuccess', channel, uid, elapsed);
       // RtcLocalView.SurfaceView must render after engine init and channel join
-      this.setState({ isJoin: true, uidMySelf: uid });
+      this.setState({ isJoined: true, uidMySelf: uid });
+    });
+    this._engine?.addListener('LeaveChannel', (stats) => {
+      console.info('LeaveChannel', stats);
+      // RtcLocalView.SurfaceView must render after engine init and channel join
+      this.setState({ isJoined: false });
     });
     this._engine?.addListener('UserJoined', async (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
@@ -145,6 +136,31 @@ export default class VoiceChanger extends Component<{}, State, any> {
         remoteUids: this.state.remoteUids.filter((value) => value !== uid),
       });
     });
+  };
+
+  _joinChannel = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      ]);
+    }
+
+    // start joining channel
+    // 1. Users can only see each other after they join the
+    // same channel successfully using the same app id.
+    // 2. If app certificate is turned on at dashboard, token is needed
+    // when joining channel. The channel name and uid used to calculate
+    // the token has to match the ones used for channel join
+    await this._engine?.joinChannel(
+      config.token,
+      this.state.channelId,
+      null,
+      config.uid
+    );
+  };
+
+  _leaveChannel = async () => {
+    await this._engine?.leaveChannel();
   };
 
   onPressBFButtonn = async (
@@ -203,6 +219,7 @@ export default class VoiceChanger extends Component<{}, State, any> {
         break;
     }
   };
+
   onAudioEffectUpdate = ({
     value1,
     value2,
@@ -233,6 +250,7 @@ export default class VoiceChanger extends Component<{}, State, any> {
       }
     );
   };
+
   onPressChangeFreq = () => {
     Alert.alert(
       'Set Band Frequency',
@@ -250,6 +268,7 @@ export default class VoiceChanger extends Component<{}, State, any> {
       }))
     );
   };
+
   onPressChangeReverbKey = () => {
     Alert.alert(
       'Set Reverb Key',
@@ -262,16 +281,27 @@ export default class VoiceChanger extends Component<{}, State, any> {
       }))
     );
   };
+
   keyExtractor = (_item: any, index: number) => `${_item}${index}`;
 
   render() {
-    const { isJoin } = this.state;
-
+    const { channelId, isJoined } = this.state;
     return (
       <View style={styles.container}>
-        {!isJoin && <Button onPress={this._initEngine} title="Join channel" />}
-        {isJoin && this._renderUserUid()}
-        {isJoin && this._renderToolContainer()}
+        <View style={styles.top}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => this.setState({ channelId: text })}
+            placeholder={'Channel ID'}
+            value={channelId}
+          />
+          <Button
+            onPress={isJoined ? this._leaveChannel : this._joinChannel}
+            title={`${isJoined ? 'Leave' : 'Join'} channel`}
+          />
+        </View>
+        {isJoined && this._renderUserUid()}
+        {isJoined && this._renderToolContainer()}
       </View>
     );
   }
@@ -286,6 +316,7 @@ export default class VoiceChanger extends Component<{}, State, any> {
       />
     );
   };
+
   renderItem = ({ item, index }: { item: number; index: number }) => {
     return (
       <View style={styles.listItem}>
@@ -296,6 +327,7 @@ export default class VoiceChanger extends Component<{}, State, any> {
       </View>
     );
   };
+
   _renderToolContainer = () => {
     const {
       selectedVoiceToolBtn,
@@ -455,6 +487,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 40,
+  },
+  top: {
+    width: '100%',
+  },
+  input: {
+    borderColor: 'gray',
+    borderWidth: 1,
   },
   toolBarTitle: {
     marginTop: 48,
