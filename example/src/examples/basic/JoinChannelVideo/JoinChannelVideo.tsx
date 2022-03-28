@@ -17,6 +17,7 @@ import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
 } from 'react-native-agora';
+import Item from '../JoinChannelAudio/Item';
 
 const config = require('../../../config/agora.config.json');
 
@@ -26,6 +27,7 @@ interface State {
   remoteUid: number[];
   switchCamera: boolean;
   switchRender: boolean;
+  isRenderSurfaceView: boolean;
 }
 
 export default class JoinChannelVideo extends Component<{}, State, any> {
@@ -39,6 +41,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       remoteUid: [],
       switchCamera: true,
       switchRender: true,
+      isRenderSurfaceView: false,
     };
   }
 
@@ -128,6 +131,13 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
     });
   };
 
+  _switchRenderView = () => {
+    const { isRenderSurfaceView } = this.state;
+    this.setState({
+      isRenderSurfaceView: !isRenderSurfaceView,
+    });
+  };
+
   render() {
     const { channelId, isJoined, switchCamera } = this.state;
     return (
@@ -144,6 +154,11 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
             title={`${isJoined ? 'Leave' : 'Join'} channel`}
           />
         </View>
+        <Item
+          title={'Rendered By SurfaceView (Default TextureView):'}
+          isShowSwitch
+          btnOnPress={this._switchRenderView}
+        />
         {this._renderVideo()}
         <View style={styles.float}>
           <Button
@@ -156,10 +171,14 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   }
 
   _renderVideo = () => {
-    const { remoteUid } = this.state;
+    const { isRenderSurfaceView, remoteUid } = this.state;
     return (
       <View style={styles.container}>
-        <RtcLocalView.SurfaceView style={styles.local} />
+        {isRenderSurfaceView ? (
+          <RtcLocalView.SurfaceView style={styles.local} />
+        ) : (
+          <RtcLocalView.TextureView style={styles.local} />
+        )}
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
             {remoteUid.map((value, index) => (
@@ -168,11 +187,18 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
                 style={styles.remote}
                 onPress={this._switchRender}
               >
-                <RtcRemoteView.SurfaceView
-                  style={styles.container}
-                  uid={value}
-                  zOrderMediaOverlay={true}
-                />
+                {isRenderSurfaceView ? (
+                  <RtcRemoteView.SurfaceView
+                    style={styles.container}
+                    uid={value}
+                    zOrderMediaOverlay={true}
+                  />
+                ) : (
+                  <RtcRemoteView.TextureView
+                    style={styles.container}
+                    uid={value}
+                  />
+                )}
               </TouchableOpacity>
             ))}
           </ScrollView>
