@@ -569,7 +569,7 @@ export type ProxyConnectedCallback =
   ) => void;
 export type ClientRoleChangeCallback =
   /**
-   * TODO(doc) @ignore API for v3.7.0
+   * @ignore For future use
    */
   (reason: ClientRoleChangeFailedReason, currentRole: ClientRole) => void;
 export type RecorderStateChangedCallback =
@@ -594,17 +594,17 @@ export type RecorderInfoCallback =
   (info: RecorderInfo) => void;
 export type ContentInspectResultCallback =
   /**
-   * TODO(doc) @ignore For future use
+   * @ignore For future use
    */
   (result: ContentInspectResult) => void;
 export type WlAccMessageCallback =
   /**
-   * TODO(doc) @ignore For future use
+   * @ignore For future use
    */
   (reason: WlAccReason, action: WlAccAction, wlAccMsg: string) => void;
 export type WlAccStatsCallback =
   /**
-   * TODO(doc) @ignore For future use
+   * @ignore For future use
    */
   (currentStats: WlAccStats, averageStats: WlAccStats) => void;
 
@@ -1604,12 +1604,24 @@ export interface RtcEngineEvents {
    */
   ProxyConnected: ProxyConnectedCallback;
 
+  /**
+   * @ignore For future use
+   */
   ContentInspectResult: ContentInspectResultCallback;
 
+  /**
+   * @ignore For future use
+   */
   WlAccMessage: WlAccMessageCallback;
 
+  /**
+   * @ignore For future use
+   */
   WlAccStats: WlAccStatsCallback;
 
+  /**
+   * @ignore For future use
+   */
   ClientRoleChangeFailed: ClientRoleChangeCallback;
 }
 
@@ -2001,7 +2013,7 @@ export interface RtcChannelEvents {
   ProxyConnected: ProxyConnectedCallback;
 
   /**
-   * TODO(doc)
+   * @ignore For future use
    */
   ClientRoleChangeFailed: ClientRoleChangeCallback;
 }

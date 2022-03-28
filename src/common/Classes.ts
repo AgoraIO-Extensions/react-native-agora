@@ -331,7 +331,7 @@ export class VideoEncoderConfiguration {
  */
 export class BeautyOptions {
   /**
-   * he contrast level, often used in conjunction with `lighteningLevel`.
+   * The contrast level, often used in conjunction with `lighteningLevel`.
    * The higher the value, the greater the contrast level. See [`LighteningContrastLevel`]{@link LighteningContrastLevel}.
    */
   lighteningContrastLevel?: LighteningContrastLevel;
@@ -580,10 +580,7 @@ export class LiveTranscoding {
    */
   videoGop?: number;
   /**
-   * The watermark image added to the CDN live publishing stream. Ensure that the format of the image is PNG. Once a watermark image is added,
-   * the audience of the CDN live publishing stream can see it.
-   *
-   * The watermark on the live video. The format must be in the PNG format.
+   * The watermark on the live video. The image format must be PNG.
    */
   watermark?: AgoraImage;
   /**
@@ -634,7 +631,9 @@ export class LiveTranscoding {
    */
   videoCodecProfile?: VideoCodecProfileType;
   /**
-   * TODO(doc)
+   * The video codec type of the output video stream.
+   *
+   * @since v3.2.0
    */
   videoCodecType?: VideoCodecTypeForStream;
   /**
@@ -646,7 +645,9 @@ export class LiveTranscoding {
    */
   userConfigExtraInfo?: string;
   /**
-   * TODO(doc)
+   * The metadata sent to the CDN live client.
+   *
+   * @deprecated This property is deprecated.
    */
   metadata?: string;
   /**
@@ -654,7 +655,7 @@ export class LiveTranscoding {
    */
   transcodingUsers: TranscodingUser[];
   /**
-   * TODO(doc)
+   * @ignore
    */
   advancedFeatures?: Map<String, boolean>;
 
@@ -1776,14 +1777,14 @@ export class AudioRecordingConfiguration {
    * - On Android: `/sdcard/emulated/0/audio.aac`.
    * - On iOS: `/var/mobile/Containers/Data/audio.aac`.
    *
-   * @note
+   * **Note**
    * Ensure that the path you specify exists and is writable.
    */
   filePath: string;
   /**
    * Audio recording quality. See [`AudioRecordingQuality`]{@link AudioRecordingQuality}.
    *
-   * @note This parameter applies to AAC files only.
+   * **Note** This parameter applies to AAC files only.
    */
   recordingQuality?: AudioRecordingQuality;
   /**
@@ -1797,7 +1798,7 @@ export class AudioRecordingConfiguration {
    * - 44100
    * - 48000
    *
-   * @note
+   * **Note**
    * If this parameter is set to `44100` or `48000`, for better recording effects, Agora recommends recording WAV files or AAC files whose `recordingQuality` is `Medium` or `High`.
    *
    */
@@ -1845,7 +1846,7 @@ export class VirtualBackgroundSource {
    * The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink.
    * The default value is 0xFFFFFF, which signifies white. The value range is [0x000000,0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.
    *
-   * @note
+   * **Note**
    * This parameter takes effect only when the type of the custom background image is `Color`.
    */
   color?: Color;
@@ -1853,7 +1854,7 @@ export class VirtualBackgroundSource {
    * The local absolute path of the custom background image. PNG and JPG formats are supported.
    * If the path is invalid, the SDK replaces the original background image with a white background image.
    *
-   * @note
+   * **Note**
    * This parameter takes effect only when the type of the custom background image is `Img`.
    */
   source?: string;
@@ -1951,7 +1952,7 @@ export class MediaRecorderConfiguration {
    * - Android: `/storage/emulated/0/Android/data/<package name>/files/example.mp4`
    * - iOS: `/App Sandbox/Library/Caches/example.mp4`
    *
-   * @note
+   * **Note**
    * Ensure that the specified path exists and is writable.
    */
   storagePath: string;

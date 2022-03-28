@@ -478,7 +478,7 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all subsequent users.
    *
-   * @note
+   * **Note**
    * If you need to resume subscribing to the audio streams of remote users in the channel after calling `setDefaultMuteAllRemoteAudioStreams(true)`, do the following:
    *   - If you need to resume subscribing to the audio stream of a specified user, call [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream}, and specify the user ID.
    *   - If you need to resume subscribing to the audio streams of multiple remote users, call [`muteRemoteAudioStream(false)`]{@link muteRemoteAudioStream} multiple times.
@@ -532,7 +532,7 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * Call this method after joining a channel. After successfully calling this method, the local user stops or resumes subscribing to the video streams of all subsequent users.
    *
-   * @note
+   * **Note**
    * If you need to resume subscribing to the video streams of remote users in the channel after calling `setDefaultMuteAllRemoteVideoStreams(true)`, do the following:
    *   - If you need to resume subscribing to the video stream of a specified user, call `muteRemoteVideoStream(false)`, and specify the user ID.
    *   - If you need to resume subscribing to the video streams of multiple remote users, call `muteRemoteVideoStream(false)` multiple times.
@@ -566,7 +566,7 @@ export default class RtcChannel implements RtcChannelInterface {
    *  - `SuperResolutionUserCountOverLimitation(1611)`: Super resolution is already being used to boost another remote user's video.
    *  - `SuperResolutionDeviceNotSupported(1612)`: The device does not support using super resolution.
    *
-   * @note
+   * **Note**
    * Because this method has certain system performance requirements, Agora recommends that you use the following devices or better:
    * - Android:
    *   - VIVO: V1821A, NEX S, 1914A, 1916A, 1962A, 1824BA, X60, X60 Pro
@@ -1143,7 +1143,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * After a successful method call, the SDK triggers the
    * [`ChannelMediaRelayEvent`]{@link RtcChannelEvents.ChannelMediaRelayEvent} callback to report whether the media stream relay is successfully paused.
    *
-   * @note
+   * **Note**
    * Call this method after the [`startChannelMediaRelay`]{@link startChannelMediaRelay} method.
    *
    */
@@ -1161,7 +1161,7 @@ export default class RtcChannel implements RtcChannelInterface {
    * After a successful method call, the SDK triggers the [`ChannelMediaRelayEvent`]{@link RtcChannelEvents.ChannelMediaRelayEvent} callback
    * to report whether the media stream relay is successfully resumed.
    *
-   * @note
+   * **Note**
    * Call this method after the [`pauseAllChannelMediaRelay`]{@link pauseAllChannelMediaRelay} method.
    *
    */
@@ -1169,6 +1169,9 @@ export default class RtcChannel implements RtcChannelInterface {
     return this._callMethod('resumeAllChannelMediaRelay');
   }
 
+  /**
+   * @ignore For future use
+   */
   setAVSyncSource(channelId: string, uid: number): Promise<void> {
     return this._callMethod('setAVSyncSource', { channelId, uid });
   }
@@ -1185,12 +1188,12 @@ export default class RtcChannel implements RtcChannelInterface {
    * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback
    * on the local client to report the state of the streaming.
    *
-   * @note
+   * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function.
    * See Prerequisites in [Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android).
    * - Call this method after joining a channel.
    * - Only hosts in the `LiveBroadcasting` profile can call this method.
-   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream{@link stopRtmpStream} first,
+   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream`]{@link stopRtmpStream} first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
    *
    * @param url The address of the CDN live streaming. The format is RTMP or RTMPS.
@@ -1225,12 +1228,12 @@ export default class RtcChannel implements RtcChannelInterface {
    * After you call this method, the SDK triggers the [`RtmpStreamingStateChanged`]{@link RtcChannelEvents.RtmpStreamingStateChanged} callback
    * on the local client to report the state of the streaming.
    *
-   * @note
+   * **Note**
    * - Ensure that you enable the RTMP Converter service before using this function.
    * See Prerequisites in [Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android).
    * - Call this method after joining a channel.
    * - Only hosts in the `LiveBroadcasting` profile can call this method.
-   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream{@link stopRtmpStream} first,
+   * - If you want to retry pushing streams after a failed push, make sure to call [`stopRtmpStream`]{@link stopRtmpStream} first,
    * then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
    *
    * @param url The address of the CDN live streaming. The format is RTMP or RTMPS.

@@ -127,7 +127,7 @@ export enum AudioLocalError {
    */
   EncodeFailure = 5,
   /**
-   * 8: (Android only) The local audio capturing is interrupted by the system call.
+   * 8: The local audio capturing is interrupted by the system call.
    */
   Interrupted = 8,
 }
@@ -329,7 +329,9 @@ export enum AudioRecordingQuality {
    */
   High = 2,
   /**
-   * TODO(doc)
+   * 3： Ultra-high quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 7.5 MB.
+   *
+   * **since** v3.6.2
    */
   UltraHigh = 3,
 }
@@ -981,12 +983,13 @@ export enum ConnectionChangedReason {
   ProxyServerInterrupted = 15,
   /**
    * @ignore
-   * TODO(doc)
+   *
+   * For future use
    */
   SameUidLogin = 19,
   /**
    * @ignore
-   * TODO(doc)
+   * For future use
    */
   TooManyBroadcasters = 20,
 }
@@ -1039,7 +1042,7 @@ export enum DegradationPreference {
    * 0: (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth.
    * This degradation preference is suitable for scenarios where video quality is prioritized.
    *
-   * @note In the `Communication` channel profile, the resolution of the video sent may change, so remote users need to handle this issue.
+   * **Note** In the `Communication` channel profile, the resolution of the video sent may change, so remote users need to handle this issue.
    * See [`VideoSizeChanged`]{@link VideoSizeChanged}.
    */
   MaintainQuality = 0,
@@ -1056,7 +1059,7 @@ export enum DegradationPreference {
    *
    * @since v3.4.2
    *
-   * @note The resolution of the video sent may change, so remote users need to handle this issue. See [`VideoSizeChanged`]{@link VideoSizeChanged}.
+   * **Note** The resolution of the video sent may change, so remote users need to handle this issue. See [`VideoSizeChanged`]{@link VideoSizeChanged}.
    */
   MaintainBalanced = 2,
 }
@@ -1088,7 +1091,7 @@ export enum EncryptionMode {
   /**
    * 4: 128-bit SM4 encryption, ECB mode.
    *
-   * @since v3.1.2.
+   * @since v3.1.2
    */
   SM4128ECB = 4,
   /**
@@ -1475,7 +1478,7 @@ export enum ErrorCode {
    */
   VcmEncoderSetError = 1603,
   /**
-   * TODO(doc)
+   * @ignore
    */
   AudioBtNoRoute = 1800,
 }
@@ -2441,7 +2444,7 @@ export enum WarningCode {
   /**
    * 1029: During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
    *
-   * @since v3.1.2.
+   * @since v3.1.2
    */
   AdmCategoryNotPlayAndRecord = 1029,
   /**
@@ -2468,7 +2471,7 @@ export enum WarningCode {
   /**
    * 1042: Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
    *
-   * @since v3.1.2.
+   * @since v3.1.2
    */
   AdmInconsistentDevices = 1042,
   /**
@@ -3056,7 +3059,7 @@ export enum UploadErrorReason {
 /**
  * The cloud proxy type.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum CloudProxyType {
   /**
@@ -3082,7 +3085,7 @@ export enum CloudProxyType {
 /**
  * Quality of experience (QoE) of the local user when receiving a remote audio stream.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum ExperienceQualityType {
   /**
@@ -3098,7 +3101,7 @@ export enum ExperienceQualityType {
 /**
  * The reason for poor QoE of the local user when receiving a remote audio stream.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum ExperiencePoorReason {
   /**
@@ -3126,7 +3129,7 @@ export enum ExperiencePoorReason {
 /**
  * The options for SDK preset voice conversion effects.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum VoiceConversionPreset {
   /**
@@ -3328,8 +3331,10 @@ export enum WlAccAction {
   ModifySSID = 3,
 }
 
-/** API for future use.
+/**
  * @ignore
+ *
+ * For future use
  */
 export enum ClientRoleChangeFailedReason {
   TooManyBroadcasters = 1,
