@@ -27,7 +27,7 @@ interface State {
   remoteUid: number[];
   switchCamera: boolean;
   switchRender: boolean;
-  isRenderSurfaceView: boolean;
+  isRenderTextureView: boolean;
 }
 
 export default class JoinChannelVideo extends Component<{}, State, any> {
@@ -41,7 +41,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       remoteUid: [],
       switchCamera: true,
       switchRender: true,
-      isRenderSurfaceView: false,
+      isRenderTextureView: false,
     };
   }
 
@@ -131,10 +131,9 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
     });
   };
 
-  _switchRenderView = () => {
-    const { isRenderSurfaceView } = this.state;
+  _switchRenderView = (value: boolean) => {
     this.setState({
-      isRenderSurfaceView: !isRenderSurfaceView,
+      isRenderTextureView: value,
     });
   };
 
@@ -154,11 +153,13 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
             title={`${isJoined ? 'Leave' : 'Join'} channel`}
           />
         </View>
-        <Item
-          title={'Rendered By SurfaceView (Default TextureView):'}
-          isShowSwitch
-          btnOnPress={this._switchRenderView}
-        />
+        {Platform.OS === 'android' && (
+          <Item
+            title={'Rendered By TextureView (Default SurfaceView):'}
+            isShowSwitch
+            onSwitchValueChange={this._switchRenderView}
+          />
+        )}
         {this._renderVideo()}
         <View style={styles.float}>
           <Button
@@ -171,13 +172,13 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   }
 
   _renderVideo = () => {
-    const { isRenderSurfaceView, remoteUid } = this.state;
+    const { isRenderTextureView, remoteUid } = this.state;
     return (
       <View style={styles.container}>
-        {isRenderSurfaceView ? (
-          <RtcLocalView.SurfaceView style={styles.local} />
-        ) : (
+        {isRenderTextureView ? (
           <RtcLocalView.TextureView style={styles.local} />
+        ) : (
+          <RtcLocalView.SurfaceView style={styles.local} />
         )}
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
@@ -187,16 +188,16 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
                 style={styles.remote}
                 onPress={this._switchRender}
               >
-                {isRenderSurfaceView ? (
+                {isRenderTextureView ? (
+                  <RtcRemoteView.TextureView
+                    style={styles.container}
+                    uid={value}
+                  />
+                ) : (
                   <RtcRemoteView.SurfaceView
                     style={styles.container}
                     uid={value}
                     zOrderMediaOverlay={true}
-                  />
-                ) : (
-                  <RtcRemoteView.TextureView
-                    style={styles.container}
-                    uid={value}
                   />
                 )}
               </TouchableOpacity>

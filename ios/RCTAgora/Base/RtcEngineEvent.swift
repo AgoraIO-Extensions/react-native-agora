@@ -186,7 +186,6 @@ class RtcEngineEvents {
             "AirPlayIsConnected": AirPlayIsConnected,
             "VirtualBackgroundSourceEnabled": VirtualBackgroundSourceEnabled,
             "SnapshotTaken": SnapshotTaken,
-            "SnapshotTaken": SnapshotTaken,
             "RecorderStateChanged": RecorderStateChanged,
             "RecorderInfoUpdated": RecorderInfoUpdated,
             "ProxyConnected": ProxyConnected,
