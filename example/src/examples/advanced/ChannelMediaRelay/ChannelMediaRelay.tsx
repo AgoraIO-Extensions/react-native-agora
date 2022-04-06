@@ -257,7 +257,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   remote: {
-    backgroundColor: 'green',
     width: '50%',
     aspectRatio: 1,
   },
