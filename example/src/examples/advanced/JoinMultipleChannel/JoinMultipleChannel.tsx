@@ -40,7 +40,7 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      renderChannelId: channelId0,
+      renderChannelId: '',
       isJoined0: false,
       isJoined1: false,
       remoteUid0: [],
