@@ -108,7 +108,7 @@ export default class ChannelMediaRelay extends Component<{}, State, any> {
     this._engine?.addListener('LeaveChannel', (stats) => {
       console.info('LeaveChannel', stats);
       // RtcLocalView.SurfaceView must render after engine init and channel join
-      this.setState({ isJoined: false });
+      this.setState({ isJoined: false, isRelaying: false });
     });
     this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
