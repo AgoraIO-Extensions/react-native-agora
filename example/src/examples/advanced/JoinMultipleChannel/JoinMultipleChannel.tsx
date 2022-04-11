@@ -75,8 +75,10 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
       ]);
     }
 
-    this._channel0 = await RtcChannel.create(channelId0);
-    this._addListener(this._channel0);
+    if (this._channel0 === undefined) {
+      this._channel0 = await RtcChannel.create(channelId0);
+      this._addListener(this._channel0);
+    }
 
     await this._channel0.setClientRole(ClientRole.Broadcaster);
     await this._channel0.joinChannel(
@@ -98,8 +100,10 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
       ]);
     }
 
-    this._channel1 = await RtcChannel.create(channelId1);
-    this._addListener(this._channel1);
+    if (this._channel1 === undefined) {
+      this._channel1 = await RtcChannel.create(channelId1);
+      this._addListener(this._channel1);
+    }
 
     await this._channel1.setClientRole(ClientRole.Broadcaster);
     await this._channel1.joinChannel(
@@ -133,9 +137,9 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
       console.info('LeaveChannel', channelId, stats);
       // RtcLocalView.SurfaceView must render after engine init and channel join
       if (channelId === channelId0) {
-        this.setState({ isJoined0: true });
+        this.setState({ isJoined0: false, remoteUid0: [] });
       } else if (channelId === channelId1) {
-        this.setState({ isJoined1: true });
+        this.setState({ isJoined1: false, remoteUid1: [] });
       }
     });
     rtcChannel.addListener('UserJoined', (uid, elapsed) => {
@@ -143,14 +147,6 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
     });
     rtcChannel.addListener('UserOffline', (uid, reason) => {
       console.info('UserOffline', channelId, uid, reason);
-    });
-    rtcChannel.addListener('LeaveChannel', (stats) => {
-      console.info('LeaveChannel', channelId, stats);
-      if (channelId === channelId0) {
-        this.setState({ isJoined0: false, remoteUid0: [] });
-      } else if (channelId === channelId1) {
-        this.setState({ isJoined1: false, remoteUid1: [] });
-      }
     });
     rtcChannel.addListener(
       'RemoteVideoStateChanged',
@@ -256,8 +252,9 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
         />
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
-            {remoteUid.map((value) => (
+            {remoteUid.map((value, index) => (
               <RtcRemoteView.SurfaceView
+                key={index}
                 style={styles.remote}
                 channelId={renderChannelId}
                 uid={value}

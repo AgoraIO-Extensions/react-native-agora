@@ -26,7 +26,7 @@ const config = require('../../../config/agora.config.json');
 interface State {
   channelId: string;
   isJoined: boolean;
-  remoteUid?: number;
+  remoteUid: number[];
   anotherChannelName?: string;
   isRelaying: boolean;
 }
@@ -39,6 +39,7 @@ export default class ChannelMediaRelay extends Component<{}, State, any> {
     this.state = {
       channelId: config.channelId,
       isJoined: false,
+      remoteUid: [],
       isRelaying: false,
     };
   }
@@ -61,7 +62,6 @@ export default class ChannelMediaRelay extends Component<{}, State, any> {
         },
       ],
     });
-    this.setState({ anotherChannelName: '' });
   };
 
   onPressStop = async () => {
@@ -108,15 +108,17 @@ export default class ChannelMediaRelay extends Component<{}, State, any> {
     this._engine?.addListener('LeaveChannel', (stats) => {
       console.info('LeaveChannel', stats);
       // RtcLocalView.SurfaceView must render after engine init and channel join
-      this.setState({ isJoined: false, isRelaying: false });
+      this.setState({ isJoined: false, remoteUid: [], isRelaying: false });
     });
     this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
-      this.setState({ remoteUid: uid });
+      this.setState({ remoteUid: [...this.state.remoteUid, uid] });
     });
     this._engine?.addListener('UserOffline', (uid, reason) => {
       console.info('UserOffline', uid, reason);
-      this.setState({ remoteUid: undefined });
+      this.setState({
+        remoteUid: this.state.remoteUid.filter((value) => value !== uid),
+      });
     });
     this._engine?.addListener(
       'ChannelMediaRelayStateChanged',
@@ -207,8 +209,11 @@ export default class ChannelMediaRelay extends Component<{}, State, any> {
           style={styles.local}
           renderMode={VideoRenderMode.Hidden}
         />
-        {!!remoteUid && (
-          <RtcRemoteView.SurfaceView style={styles.remote} uid={remoteUid} />
+        {remoteUid.length > 0 && (
+          <RtcRemoteView.SurfaceView
+            style={styles.remote}
+            uid={remoteUid[remoteUid.length - 1]}
+          />
         )}
       </View>
     );

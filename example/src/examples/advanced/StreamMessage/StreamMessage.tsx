@@ -25,7 +25,7 @@ const config = require('../../../config/agora.config.json');
 interface State {
   channelId: string;
   isJoined: boolean;
-  remoteUid?: number;
+  remoteUid: number[];
   message?: string;
 }
 
@@ -34,7 +34,11 @@ export default class StreamMessage extends Component<{}, State, any> {
 
   constructor(props: {}) {
     super(props);
-    this.state = { channelId: config.channelId, isJoined: false };
+    this.state = {
+      channelId: config.channelId,
+      remoteUid: [],
+      isJoined: false,
+    };
   }
 
   UNSAFE_componentWillMount() {
@@ -77,15 +81,17 @@ export default class StreamMessage extends Component<{}, State, any> {
     this._engine?.addListener('LeaveChannel', (stats) => {
       console.info('LeaveChannel', stats);
       // RtcLocalView.SurfaceView must render after engine init and channel join
-      this.setState({ isJoined: false });
+      this.setState({ isJoined: false, remoteUid: [] });
     });
     this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
-      this.setState({ remoteUid: uid });
+      this.setState({ remoteUid: [...this.state.remoteUid, uid] });
     });
     this._engine?.addListener('UserOffline', (uid, reason) => {
       console.info('UserOffline', uid, reason);
-      this.setState({ remoteUid: undefined });
+      this.setState({
+        remoteUid: this.state.remoteUid.filter((value) => value !== uid),
+      });
     });
     this._engine?.addListener('StreamMessage', (uid, streamId, data) => {
       console.info('UserOffline', uid, streamId, data);
@@ -167,8 +173,11 @@ export default class StreamMessage extends Component<{}, State, any> {
           style={styles.local}
           renderMode={VideoRenderMode.Hidden}
         />
-        {!!remoteUid && (
-          <RtcRemoteView.SurfaceView style={styles.remote} uid={remoteUid} />
+        {remoteUid.length > 0 && (
+          <RtcRemoteView.SurfaceView
+            style={styles.remote}
+            uid={remoteUid[remoteUid.length - 1]}
+          />
         )}
       </View>
     );
