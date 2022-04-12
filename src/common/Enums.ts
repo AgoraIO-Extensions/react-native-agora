@@ -37,15 +37,17 @@ export enum AreaCode {
  */
 export enum AudioCodecProfileType {
   /**
-   * 0: (Default) LC-AAC, which is the low-complexity audio codec profile.
+   * 0: (Default) LC-AAC.
    */
   LCAAC = 0,
   /**
-   * 1: HE-AAC, which is the high-efficiency audio codec profile.
+   * 1: HE-AAC.
    */
   HEAAC = 1,
   /**
-   * TODO(doc)
+   * 2: HE-AAC v2.
+   *
+   * @since v3.6.2
    */
   HE_AAC_V2 = 2,
 }
@@ -125,7 +127,7 @@ export enum AudioLocalError {
    */
   EncodeFailure = 5,
   /**
-   * 8: (Android only) The local audio capturing is interrupted by the system call.
+   * 8: The local audio capturing is interrupted by the system call.
    */
   Interrupted = 8,
 }
@@ -327,7 +329,9 @@ export enum AudioRecordingQuality {
    */
   High = 2,
   /**
-   * TODO(doc)
+   * 3： Ultra-high quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 7.5 MB.
+   *
+   * **since** v3.6.2
    */
   UltraHigh = 3,
 }
@@ -978,11 +982,14 @@ export enum ConnectionChangedReason {
    */
   ProxyServerInterrupted = 15,
   /**
-   * TODO(doc)
+   * @ignore
+   *
+   * For future use
    */
   SameUidLogin = 19,
   /**
-   * TODO(doc)
+   * @ignore
+   * For future use
    */
   TooManyBroadcasters = 20,
 }
@@ -1035,7 +1042,7 @@ export enum DegradationPreference {
    * 0: (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth.
    * This degradation preference is suitable for scenarios where video quality is prioritized.
    *
-   * @note In the `Communication` channel profile, the resolution of the video sent may change, so remote users need to handle this issue.
+   * **Note** In the `Communication` channel profile, the resolution of the video sent may change, so remote users need to handle this issue.
    * See [`VideoSizeChanged`]{@link VideoSizeChanged}.
    */
   MaintainQuality = 0,
@@ -1052,7 +1059,7 @@ export enum DegradationPreference {
    *
    * @since v3.4.2
    *
-   * @note The resolution of the video sent may change, so remote users need to handle this issue. See [`VideoSizeChanged`]{@link VideoSizeChanged}.
+   * **Note** The resolution of the video sent may change, so remote users need to handle this issue. See [`VideoSizeChanged`]{@link VideoSizeChanged}.
    */
   MaintainBalanced = 2,
 }
@@ -1084,7 +1091,7 @@ export enum EncryptionMode {
   /**
    * 4: 128-bit SM4 encryption, ECB mode.
    *
-   * @since v3.1.2.
+   * @since v3.1.2
    */
   SM4128ECB = 4,
   /**
@@ -1471,7 +1478,7 @@ export enum ErrorCode {
    */
   VcmEncoderSetError = 1603,
   /**
-   * TODO(doc)
+   * @ignore
    */
   AudioBtNoRoute = 1800,
 }
@@ -1793,19 +1800,30 @@ export enum RtmpStreamingErrorCode {
    */
   FormatNotSupported = 10,
   /**
-   * TODO(doc)
+   * 11: The user role is not host, so the user cannot use the CDN live streaming function.
+   * Check your application code logic.
+   *
+   * @since v3.6.2
    */
   NotBroadcaster = 11,
   /**
-   * TODO(doc)
+   * 13: The `updateRtmpTranscoding` or `setLiveTranscoding` method is called to update the transcoding
+   * configuration in a scenario where there is streaming without transcoding.
+   * Check your application code logic.
+   *
+   * @since v3.6.2
    */
   TranscodingNoMixStream = 13,
   /**
-   * TODO(doc)
+   * 14: Errors occurred in the host's network.
    */
   NetDown = 14,
   /**
-   * TODO(doc)
+   * 15: Your App ID does not have permission to use the CDN live streaming function.
+   * Refer to [Prerequisites in Media Push](https://docs.agora.io/en/Interactive%20Broadcast/cdn_streaming_android?platform=Android) to
+   * enable the CDN live streaming permission.
+   *
+   * @since v3.6.2
    */
   InvalidAppid = 15,
   /**
@@ -1851,7 +1869,11 @@ export enum RtmpStreamingState {
    */
   Failure = 4,
   /**
-   * TODO(doc)
+   * 5: The SDK is disconnecting from the Agora streaming server and CDN.
+   * When you call remove or stop to stop the streaming normally, the SDK reports the streaming state
+   * as `Disconnecting`, `Idle` in sequence.
+   *
+   * @since v3.6.2
    */
   Disconnecting = 5,
 }
@@ -2422,7 +2444,7 @@ export enum WarningCode {
   /**
    * 1029: During a call, `AudioSessionCategory` should be set to `AVAudioSessionCategoryPlayAndRecord`, and the SDK monitors this value. If the `AudioSessionCategory` is set to other values, this warning code is triggered and the SDK will forcefully set it back to `AVAudioSessionCategoryPlayAndRecord`.
    *
-   * @since v3.1.2.
+   * @since v3.1.2
    */
   AdmCategoryNotPlayAndRecord = 1029,
   /**
@@ -2449,7 +2471,7 @@ export enum WarningCode {
   /**
    * 1042: Audio device module: The audio recording device is different from the audio playback device, which may cause echoes problem. Agora recommends using the same audio device to record and playback audio.
    *
-   * @since v3.1.2.
+   * @since v3.1.2
    */
   AdmInconsistentDevices = 1042,
   /**
@@ -2605,11 +2627,13 @@ export enum RtmpStreamingEvent {
    */
   UrlAlreadyInUse = 2,
   /**
-   * TODO(doc)
+   * 3: The feature is not supported.
+   *
+   * @since v3.6.2
    */
   AdvancedFeatureNotSupport = 3,
   /**
-   * TODO(doc)
+   * 4: Reserved.
    */
   RequestTooOften = 4,
 }
@@ -3035,20 +3059,25 @@ export enum UploadErrorReason {
 /**
  * The cloud proxy type.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum CloudProxyType {
   /**
-   * 0: Do not use the cloud proxy.
+   * 0: Automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and
+   * automatically switches to TLS 443 if the attempt fails.
+   * As of v3.6.2, the SDK has this mode enabled by default.
    */
   None = 0,
   /**
-   * 1: The cloud proxy for the UDP protocol.
+   * 1: The cloud proxy for the UDP protocol, that is, Force UDP cloud proxy mode.
+   * In this mode, the SDK always transmits data over UDP.
    */
   UDP = 1,
   /**
-   * @ignore
-   * 2: The cloud proxy for the TCP (encryption) protocol.
+   * 2: The cloud proxy for the TCP (encryption) protocol, that is, Force TCP cloud proxy mode.
+   * In this mode, the SDK always transmits data over TLS 443.
+   *
+   * @since v3.6.2
    */
   TCP = 2,
 }
@@ -3056,7 +3085,7 @@ export enum CloudProxyType {
 /**
  * Quality of experience (QoE) of the local user when receiving a remote audio stream.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum ExperienceQualityType {
   /**
@@ -3072,7 +3101,7 @@ export enum ExperienceQualityType {
 /**
  * The reason for poor QoE of the local user when receiving a remote audio stream.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum ExperiencePoorReason {
   /**
@@ -3100,7 +3129,7 @@ export enum ExperiencePoorReason {
 /**
  * The options for SDK preset voice conversion effects.
  *
- * @since v3.3.1.
+ * @since v3.3.1
  */
 export enum VoiceConversionPreset {
   /**
@@ -3247,31 +3276,33 @@ export enum VideoCodecTypeForStream {
 }
 
 /** The proxy type.
-
- @since v3.6.2
+ *
+ * @since v3.6.2
  */
 export enum ProxyType {
   /** 0: Reserved for future use.
    */
   None = 0,
-  /** 1: The cloud proxy for the UDP protocol, that is, the Force UDP cloud proxy mode.
-   In this mode, the SDK always transmits data over UDP.
+  /** 1: The cloud proxy for the UDP protocol, that is, Force UDP cloud proxy mode.
+   * In this mode, the SDK always transmits data over UDP.
    */
   Udp = 1,
-  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, the Force TCP cloud proxy mode.
+  /** 2: The cloud proxy for the TCP (encryption) protocol, that is, Force TCP cloud proxy mode.
    In this mode, the SDK always transmits data over TLS 443.
    */
   Tcp = 2,
   /** 3: Reserved for future use.
    */
   Local = 3,
-  /** 4: The automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically
+  /** 4: Automatic mode. In this mode, the SDK attempts a direct connection to SD-RTN™ and automatically
    switches to TLS 443 if the attempt fails.
    */
   TcpAutoFallback = 4,
 }
 
-/** API for future use. */
+/** API for future use.
+ * @ignore
+ */
 export enum ContentInspectResult {
   Neutral = 1,
   Sexy = 2,
@@ -3279,6 +3310,7 @@ export enum ContentInspectResult {
 }
 
 /** API for future use.
+ * @ignore
  */
 export enum WlAccReason {
   WeakSignal = 0,
@@ -3287,6 +3319,7 @@ export enum WlAccReason {
 }
 
 /** API for future use.
+ * @ignore
  */
 export enum WlAccAction {
   CloseToWIFI = 0,
@@ -3298,7 +3331,10 @@ export enum WlAccAction {
   ModifySSID = 3,
 }
 
-/** API for future use.
+/**
+ * @ignore
+ *
+ * For future use
  */
 export enum ClientRoleChangeFailedReason {
   TooManyBroadcasters = 1,
