@@ -1,3 +1,18 @@
+## [3.6.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.3...v3.6.2) (2022-04-13)
+
+
+### Bug Fixes
+
+* improve Xcode 12 support ([#452](https://github.com/AgoraIO-Community/react-native-agora/issues/452)) ([d2b9880](https://github.com/AgoraIO-Community/react-native-agora/commit/d2b9880dedbdc7d2610976f11581b66d23fd43e9))
+* iOS virtualbackground color ([#472](https://github.com/AgoraIO-Community/react-native-agora/issues/472)) ([5fcf108](https://github.com/AgoraIO-Community/react-native-agora/commit/5fcf108d671bb0c0329a2b55aa826f7e9cb17836))
+* remove green background color ([14a127e](https://github.com/AgoraIO-Community/react-native-agora/commit/14a127e59d73aff76912845ca2c525da834286f1))
+
+
+### Features
+
+* support 3.6.2 ([1133c71](https://github.com/AgoraIO-Community/react-native-agora/commit/1133c71d211e059c500b0cc8b4813c8c112edcf3))
+* support 3.6.2.70 ([00b9775](https://github.com/AgoraIO-Community/react-native-agora/commit/00b97751e726544e48d55c0a71c13ab9a341d8fd))
+
 ## [3.5.3](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.2...v3.5.3) (2022-02-08)
 
 ## [3.5.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.2-rc.1...v3.5.2) (2022-01-11)
