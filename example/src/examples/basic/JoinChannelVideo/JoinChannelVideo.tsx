@@ -17,6 +17,7 @@ import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
 } from 'react-native-agora';
+import Item from '../JoinChannelAudio/Item';
 
 const config = require('../../../config/agora.config.json');
 
@@ -26,6 +27,7 @@ interface State {
   remoteUid: number[];
   switchCamera: boolean;
   switchRender: boolean;
+  isRenderTextureView: boolean;
 }
 
 export default class JoinChannelVideo extends Component<{}, State, any> {
@@ -39,6 +41,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       remoteUid: [],
       switchCamera: true,
       switchRender: true,
+      isRenderTextureView: false,
     };
   }
 
@@ -73,6 +76,10 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       console.info('JoinChannelSuccess', channel, uid, elapsed);
       this.setState({ isJoined: true });
     });
+    this._engine?.addListener('LeaveChannel', (stats) => {
+      console.info('LeaveChannel', stats);
+      this.setState({ isJoined: false, remoteUid: [] });
+    });
     this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
       this.setState({ remoteUid: [...this.state.remoteUid, uid] });
@@ -82,10 +89,6 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       this.setState({
         remoteUid: this.state.remoteUid.filter((value) => value !== uid),
       });
-    });
-    this._engine?.addListener('LeaveChannel', (stats) => {
-      console.info('LeaveChannel', stats);
-      this.setState({ isJoined: false, remoteUid: [] });
     });
   };
 
@@ -128,6 +131,12 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
     });
   };
 
+  _switchRenderView = (value: boolean) => {
+    this.setState({
+      isRenderTextureView: value,
+    });
+  };
+
   render() {
     const { channelId, isJoined, switchCamera } = this.state;
     return (
@@ -144,6 +153,13 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
             title={`${isJoined ? 'Leave' : 'Join'} channel`}
           />
         </View>
+        {Platform.OS === 'android' && (
+          <Item
+            title={'Rendered By TextureView (Default SurfaceView):'}
+            isShowSwitch
+            onSwitchValueChange={this._switchRenderView}
+          />
+        )}
         {this._renderVideo()}
         <View style={styles.float}>
           <Button
@@ -156,10 +172,14 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   }
 
   _renderVideo = () => {
-    const { remoteUid } = this.state;
+    const { isRenderTextureView, remoteUid } = this.state;
     return (
       <View style={styles.container}>
-        <RtcLocalView.SurfaceView style={styles.local} />
+        {isRenderTextureView ? (
+          <RtcLocalView.TextureView style={styles.local} />
+        ) : (
+          <RtcLocalView.SurfaceView style={styles.local} />
+        )}
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
             {remoteUid.map((value, index) => (
@@ -168,11 +188,18 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
                 style={styles.remote}
                 onPress={this._switchRender}
               >
-                <RtcRemoteView.SurfaceView
-                  style={styles.container}
-                  uid={value}
-                  zOrderMediaOverlay={true}
-                />
+                {isRenderTextureView ? (
+                  <RtcRemoteView.TextureView
+                    style={styles.container}
+                    uid={value}
+                  />
+                ) : (
+                  <RtcRemoteView.SurfaceView
+                    style={styles.container}
+                    uid={value}
+                    zOrderMediaOverlay={true}
+                  />
+                )}
               </TouchableOpacity>
             ))}
           </ScrollView>

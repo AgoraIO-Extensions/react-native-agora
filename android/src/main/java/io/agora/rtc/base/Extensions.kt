@@ -1,6 +1,7 @@
 package io.agora.rtc.base
 
 import android.graphics.Rect
+import io.agora.rtc.AgoraMediaRecorder
 import io.agora.rtc.IRtcEngineEventHandler.*
 import io.agora.rtc.models.UserInfo
 
@@ -159,6 +160,22 @@ fun AudioFileInfo.toMap(): Map<String, Any?> {
   return hashMapOf(
     "filePath" to filePath,
     "durationMs" to durationMs
+  )
+}
+
+fun AgoraMediaRecorder.RecorderInfo.toMap(): Map<String, Any?> {
+  return hashMapOf(
+    "fileName" to fileName,
+    "durationMs" to durationMs,
+    "fileSize" to fileSize
+  )
+}
+
+fun WlAccStats.toMap(): Map<String, Any?> {
+  return hashMapOf(
+    "e2eDelayPercent" to e2eDelayPercent,
+    "frozenRatioPercent" to frozenRatioPercent,
+    "lossRatePercent" to lossRatePercent
   )
 }
 

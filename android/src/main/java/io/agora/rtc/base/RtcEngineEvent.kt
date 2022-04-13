@@ -2,6 +2,7 @@ package io.agora.rtc.base
 
 import android.graphics.Rect
 import androidx.annotation.IntRange
+import io.agora.rtc.AgoraMediaRecorder
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.models.UserInfo
 
@@ -89,6 +90,13 @@ class RtcEngineEvents {
     const val UploadLogResult = "UploadLogResult"
     const val VirtualBackgroundSourceEnabled = "VirtualBackgroundSourceEnabled"
     const val SnapshotTaken = "SnapshotTaken"
+    const val RecorderStateChanged = "RecorderStateChanged"
+    const val RecorderInfoUpdated = "RecorderInfoUpdated"
+    const val ProxyConnected = "ProxyConnected"
+    const val ContentInspectResult = "ContentInspectResult"
+    const val WlAccMessage = "WlAccMessage"
+    const val WlAccStats = "WlAccStats"
+    const val ClientRoleChangeFailed = "ClientRoleChangeFailed"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -173,7 +181,14 @@ class RtcEngineEvents {
         "UserSuperResolutionEnabled" to UserSuperResolutionEnabled,
         "UploadLogResult" to UploadLogResult,
         "VirtualBackgroundSourceEnabled" to VirtualBackgroundSourceEnabled,
-        "SnapshotTaken" to SnapshotTaken
+        "SnapshotTaken" to SnapshotTaken,
+        "RecorderStateChanged" to RecorderStateChanged,
+        "RecorderInfoUpdated" to RecorderInfoUpdated,
+        "ProxyConnected" to ProxyConnected,
+        "ContentInspectResult" to ContentInspectResult,
+        "WlAccMessage" to WlAccMessage,
+        "WlAccStats" to WlAccStats,
+        "ClientRoleChangeFailed" to ClientRoleChangeFailed
       )
     }
   }
@@ -181,7 +196,7 @@ class RtcEngineEvents {
 
 class RtcEngineEventHandler(
   private val emitter: (methodName: String, data: Map<String, Any?>?) -> Unit
-) : IRtcEngineEventHandler() {
+) : IRtcEngineEventHandler(), AgoraMediaRecorder.IMediaRecorderCallback {
   companion object {
     const val PREFIX = "io.agora.rtc."
   }
@@ -714,5 +729,46 @@ class RtcEngineEventHandler(
       height,
       errCode
     )
+  }
+
+  override fun onRecorderStateChanged(state: Int, error: Int) {
+    callback(RtcEngineEvents.RecorderStateChanged, state, error)
+  }
+
+  override fun onRecorderInfoUpdated(info: AgoraMediaRecorder.RecorderInfo?) {
+    callback(RtcEngineEvents.RecorderInfoUpdated, info?.toMap())
+  }
+
+  override fun onProxyConnected(
+    channel: String?,
+    uid: Int,
+    proxyType: Int,
+    localProxyIp: String?,
+    elapsed: Int
+  ) {
+    callback(
+      RtcEngineEvents.ProxyConnected,
+      channel,
+      uid.toUInt().toLong(),
+      proxyType,
+      localProxyIp,
+      elapsed
+    )
+  }
+
+  override fun onContentInspectResult(result: Int) {
+    callback(RtcEngineEvents.ContentInspectResult, result)
+  }
+
+  override fun onWlAccMessage(reason: Int, action: Int, wlAccMsg: String?) {
+    callback(RtcEngineEvents.WlAccMessage, reason, action, wlAccMsg)
+  }
+
+  override fun onWlAccStats(currentStats: WlAccStats?, averageStats: WlAccStats?) {
+    callback(RtcEngineEvents.WlAccStats, currentStats?.toMap(), averageStats?.toMap())
+  }
+
+  override fun onClientRoleChangeFailed(reason: Int, currentRole: Int) {
+    callback(RtcEngineEvents.ClientRoleChangeFailed, reason, currentRole)
   }
 }

@@ -30,7 +30,8 @@ protocol RtcEngineInterface:
         RtcEngineAudioRecorderInterface,
         RtcEngineInjectStreamInterface,
         RtcEngineCameraInterface,
-        RtcEngineStreamMessageInterface {
+        RtcEngineStreamMessageInterface,
+        RtcEngineMediaRecorderInterface {
     func create(_ params: NSDictionary, _ callback: Callback)
 
     func destroy(_ callback: Callback)
@@ -88,6 +89,14 @@ protocol RtcEngineInterface:
     func enableVirtualBackground(_ params: NSDictionary, _ callback: Callback)
 
     func takeSnapshot(_ params: NSDictionary, _ callback: Callback)
+
+    func enableWirelessAccelerate(_ params: NSDictionary, _ callback: Callback)
+
+    func enableContentInspect(_ params: NSDictionary, _ callback: Callback)
+
+    func setAgoraLibPath(_ params: NSDictionary, _ callback: Callback)
+
+    func setAVSyncSource(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineUserInfoInterface {
@@ -158,6 +167,12 @@ protocol RtcEngineVideoInterface {
     func setBeautyEffectOptions(_ params: NSDictionary, _ callback: Callback)
 
     func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback)
+
+    func setVideoDenoiserOptions(_ params: NSDictionary, _ callback: Callback)
+
+    func setLowLightEnhanceOptions(_ params: NSDictionary, _ callback: Callback)
+
+    func setColorEnhanceOptions(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioMixingInterface {
@@ -280,6 +295,14 @@ protocol RtcEngineMediaRelayInterface {
     func resumeAllChannelMediaRelay(_ callback: Callback)
 
     func stopChannelMediaRelay(_ callback: Callback)
+
+    func startRtmpStreamWithoutTranscoding(_ params: NSDictionary, _ callback: Callback)
+
+    func startRtmpStreamWithTranscoding(_ params: NSDictionary, _ callback: Callback)
+
+    func updateRtmpTranscoding(_ params: NSDictionary, _ callback: Callback)
+
+    func stopRtmpStream(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioRouteInterface {
@@ -400,6 +423,12 @@ protocol RtcEngineStreamMessageInterface {
     func sendStreamMessage(_ params: NSDictionary, _ callback: Callback)
 }
 
+protocol RtcEngineMediaRecorderInterface {
+    func startRecording(_ params: NSDictionary, _ callback: Callback)
+
+    func stopRecording(_ callback: Callback)
+}
+
 internal class AgoraRtcEngineKitFactory {
   func create(_ params: NSDictionary, _ delegate: RtcEngineEventHandler) -> AgoraRtcEngineKit? {
     let engine = AgoraRtcEngineKit.sharedEngine(
@@ -417,6 +446,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     private(set) var engine: AgoraRtcEngineKit?
     private var delegate: RtcEngineEventHandler?
     private var mediaObserver: MediaObserver?
+    private var mediaRecorder: AgoraMediaRecorder?
 
     init(_ emitter: @escaping (_ methodName: String, _ data: [String: Any?]?) -> Void,
          _ agoraRtcEngineKitFactory: AgoraRtcEngineKitFactory = AgoraRtcEngineKitFactory()) {
@@ -425,6 +455,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     func Release() {
+        if (mediaRecorder != nil) {
+            AgoraMediaRecorder.destroy()
+            mediaRecorder = nil
+        }
         if (engine != nil) {
             AgoraRtcEngineKit.destroy()
             engine = nil
@@ -1196,14 +1230,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback) {
-        let list = params["ips"] as! [Any]
-        var ips: [String] = []
-        for i in list.indices {
-            if let item = list[i] as? String {
-                ips.append(item)
-            }
-        }
-        callback.code(engine?.setLocalAccessPoint(ips, domain: params["domain"] as! String))
+        callback.code(engine?.setLocalAccessPoint(mapToLocalAccessPointConfiguration(params["config"] as! [String: Any])))
     }
 
     @objc func pauseAllChannelMediaRelay(_ callback: Callback) {
@@ -1224,5 +1251,60 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
             code = Int32(ret);
         }
         callback.code(code)
+    }
+
+    @objc func enableWirelessAccelerate(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableWirelessAccelerate(params["enabled"] as! Bool))
+    }
+
+    @objc func enableContentInspect(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableContentInspect(params["enabled"] as! Bool, config: mapToContentInspectConfig(params["config"] as! [String: Any])))
+    }
+
+    @objc func setAgoraLibPath(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(-Int32(AgoraErrorCode.notSupported.rawValue))
+    }
+
+    @objc func setVideoDenoiserOptions(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setVideoDenoiserOptions(params["enabled"] as! Bool, options: mapToVideoDenoiserOptions(params["options"] as! [String: Any])))
+    }
+
+    @objc func setLowLightEnhanceOptions(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setLowlightEnhanceOptions(params["enabled"] as! Bool, options: mapToLowLightEnhanceOptions(params["options"] as! [String: Any])))
+    }
+
+    @objc func setColorEnhanceOptions(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setColorEnhanceOptions(params["enabled"] as! Bool, options: mapToColorEnhanceOptions(params["options"] as! [String: Any])))
+    }
+
+    @objc func startRtmpStreamWithoutTranscoding(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startRtmpStreamWithoutTranscoding(params["url"] as! String))
+    }
+
+    @objc func startRtmpStreamWithTranscoding(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startRtmpStream(withTranscoding: params["url"] as! String, transcoding: mapToLiveTranscoding(params["transcoding"] as! [String: Any])))
+    }
+
+    @objc func updateRtmpTranscoding(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.updateRtmpTranscoding(mapToLiveTranscoding(params["transcoding"] as! [String: Any])))
+    }
+
+    @objc func stopRtmpStream(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.stopRtmpStream(params["url"] as! String))
+    }
+
+    @objc func startRecording(_ params: NSDictionary, _ callback: Callback) {
+        if (mediaRecorder == nil) {
+            mediaRecorder = AgoraMediaRecorder.sharedMediaRecorder(withRtcEngine: engine!, delegate: delegate)
+        }
+        callback.code(mediaRecorder?.startRecording(mapToMediaRecorderConfiguration(params["config"] as! [String: Any])))
+    }
+
+    @objc func stopRecording(_ callback: Callback) {
+        callback.code(mediaRecorder?.stopRecording())
+    }
+
+    @objc func setAVSyncSource(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setAVSyncSource(params["channelId"] as? String, uid: (params["uid"] as! NSNumber).uintValue))
     }
 }

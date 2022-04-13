@@ -48,6 +48,7 @@ export default class StringUid extends Component<{}, State, any> {
   _addListeners = () => {
     this._engine?.addListener('Warning', (warningCode) => {
       console.info('Warning', warningCode);
+      Alert.alert('Warning', warningCode.toString());
     });
     this._engine?.addListener('Error', (errorCode) => {
       console.info('Error', errorCode);

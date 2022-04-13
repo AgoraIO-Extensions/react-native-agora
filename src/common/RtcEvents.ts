@@ -5,11 +5,13 @@ import type {
   LastmileProbeResult,
   LocalAudioStats,
   LocalVideoStats,
+  RecorderInfo,
   Rect,
   RemoteAudioStats,
   RemoteVideoStats,
   RtcStats,
   UserInfo,
+  WlAccStats,
 } from './Classes';
 import type {
   AudioFileInfoError,
@@ -44,6 +46,11 @@ import type {
   VideoRemoteStateReason,
   VirtualBackgroundSourceStateReason,
   WarningCode,
+  ContentInspectResult,
+  ProxyType,
+  WlAccAction,
+  WlAccReason,
+  ClientRoleChangeFailedReason,
 } from './Enums';
 
 /**
@@ -545,6 +552,61 @@ export type SnapshotTakenCallback =
     height: number,
     errCode: number
   ) => void;
+export type ProxyConnectedCallback =
+  /**
+   * @param channel The channel name.
+   * @param uid The user ID.
+   * @param proxyType The proxy type connected. See [`ProxyType`]{@link ProxyType}.
+   * @param localProxyIp Reserved for future use.
+   * @param elapsed The time elapsed (ms) from the user calling `joinChannel` until this callback is triggered.
+   */
+  (
+    channel: string,
+    uid: number,
+    proxyType: ProxyType,
+    localProxyIp: string,
+    elapsed: number
+  ) => void;
+export type ClientRoleChangeCallback =
+  /**
+   * @ignore For future use
+   */
+  (reason: ClientRoleChangeFailedReason, currentRole: ClientRole) => void;
+export type RecorderStateChangedCallback =
+  /**
+   * @param reason The current recording state:
+   * - `-1`: An error occurs during the recording. See `error` message for the reason.
+   * - `2`: The audio and video recording is started.
+   * - `3`: The audio and video recording is stopped.
+   * @param state The reason for the state change:
+   * - `0`: No error occurs.
+   * - `1`: The SDK fails to write the recorded data to a file.
+   * - `2`: The SDK does not detect audio and video streams to be recorded, or audio and video streams are interrupted for more than five seconds during recording.
+   * - `3`: The recording duration exceeds the upper limit.
+   * - `4`: The recording configuration changes.
+   * -  `5`: The SDK detects audio and video streams from users using versions of the SDK earlier than v3.0.0 in the `Communication` channel profile.
+   */
+  (reason: number, state: number) => void;
+export type RecorderInfoCallback =
+  /**
+   * @param info Information for the recording file. See [`RecorderInfo`]{@link RecorderInfo}.
+   */
+  (info: RecorderInfo) => void;
+export type ContentInspectResultCallback =
+  /**
+   * @ignore For future use
+   */
+  (result: ContentInspectResult) => void;
+export type WlAccMessageCallback =
+  /**
+   * @ignore For future use
+   */
+  (reason: WlAccReason, action: WlAccAction, wlAccMsg: string) => void;
+export type WlAccStatsCallback =
+  /**
+   * @ignore For future use
+   */
+  (currentStats: WlAccStats, averageStats: WlAccStats) => void;
 
 /**
  * Callbacks.
@@ -1026,10 +1088,10 @@ export interface RtcEngineEvents {
   /**
    * Occurs when the state of the RTMP or RTMPS streaming changes.
    *
-   * The SDK triggers this callback to report the result of the local user calling [`addPublishStreamUrl`]{@link RtcEngine.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcEngine.removePublishStreamUrl}.
-   * This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
+   * When the CDN live streaming state changes, the SDK triggers this callback to report the current state and the reason why the state has changed.
    *
-   * This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
+   * This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur,
+   * you can troubleshoot issues by referring to the detailed error descriptions in the `errCode` parameter.
    *
    * @event RtmpStreamingStateChanged
    */
@@ -1503,6 +1565,64 @@ export interface RtcEngineEvents {
    * @event SnapshotTaken
    */
   SnapshotTaken: SnapshotTakenCallback;
+
+  /**
+   * Occurs when the recording state changes.
+   *
+   * @since v3.6.2
+   *
+   * When the local audio and video recording state changes, the SDK triggers this callback to report the current recording state and the reason for the change.
+   *
+   */
+  RecorderStateChanged: RecorderStateChangedCallback;
+
+  /**
+   * Occurs when the recording information is updated.
+   *
+   * @since v3.6.2
+   *
+   * After you successfully register this callback and enable the local audio and video recording,
+   * the SDK periodically triggers the `RecorderInfoUpdated` callback based on the set value of
+   * `recorderInfoUpdateInterval`.
+   *
+   * This callback reports the filename, duration, and size of the current recording file.
+   *
+   */
+  RecorderInfoUpdated: RecorderInfoCallback;
+
+  /**
+   * Reports the proxy connection state.
+   *
+   * @since v3.6.2
+   *
+   * You can use this callback to listen for the state of the SDK connecting to a proxy.
+   * For example, when a user calls [`setCloudProxy`]{@link RtcEngine.setCloudProxy} and joins a channel successfully,
+   * the SDK triggers this callback to report the user ID, the proxy type connected,
+   * and the time elapsed from the user calling `joinChannel` until this callback is triggered.
+   *
+   * @event ProxyConnectedCallback
+   */
+  ProxyConnected: ProxyConnectedCallback;
+
+  /**
+   * @ignore For future use
+   */
+  ContentInspectResult: ContentInspectResultCallback;
+
+  /**
+   * @ignore For future use
+   */
+  WlAccMessage: WlAccMessageCallback;
+
+  /**
+   * @ignore For future use
+   */
+  WlAccStats: WlAccStatsCallback;
+
+  /**
+   * @ignore For future use
+   */
+  ClientRoleChangeFailed: ClientRoleChangeCallback;
 }
 
 /**
@@ -1739,7 +1859,7 @@ export interface RtcChannelEvents {
   /**
    * Occurs when the state of the RTMP or RTMPS streaming changes.
    *
-   * The SDK triggers this callback to report the result of the local user calling the [`addPublishStreamUrl`]{@link RtcChannel.addPublishStreamUrl} or [`removePublishStreamUrl`]{@link RtcChannel.removePublishStreamUrl} method. This callback returns the URL and its current streaming state. When the streaming state is [`Failure`]{@link RtmpStreamingState.Failure}, see the errCode parameter for details.
+   * When the CDN live streaming state changes, the SDK triggers this callback to report the current state and the reason why the state has changed.
    *
    * This callback indicates the state of the RTMP or RTMPS streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the errCode parameter.
    *
@@ -1877,4 +1997,23 @@ export interface RtcChannelEvents {
    * @event UserSuperResolutionEnabled
    */
   UserSuperResolutionEnabled: UserSuperResolutionEnabledCallback;
+
+  /**
+   * Reports the proxy connection state.
+   *
+   * @since v3.6.2
+   *
+   * You can use this callback to listen for the state of the SDK connecting to a proxy.
+   * For example, when a user calls [`setCloudProxy`]{@link RtcEngine.setCloudProxy} and joins a channel successfully,
+   * the SDK triggers this callback to report the user ID, the proxy type connected,
+   * and the time elapsed from the user calling `joinChannel` until this callback is triggered.
+   *
+   * @event ProxyConnectedCallback
+   */
+  ProxyConnected: ProxyConnectedCallback;
+
+  /**
+   * @ignore For future use
+   */
+  ClientRoleChangeFailed: ClientRoleChangeCallback;
 }
