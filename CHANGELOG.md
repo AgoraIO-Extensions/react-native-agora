@@ -52,9 +52,9 @@
 
 * support native 3.5.0.4 ([cfa6422](https://github.com/AgoraIO-Community/react-native-agora/commit/cfa64225307aa4e305cacde21dc060dcf6df43c1))
 
-# [3.5.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.0-rc.0...v3.5.0) (2021-09-16)
+## [3.5.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.0-rc.0...v3.5.0) (2021-09-16)
 
-# [3.5.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.7...v3.5.0-rc.0) (2021-09-08)
+## [3.5.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.4.7...v3.5.0-rc.0) (2021-09-08)
 
 
 ### Features
@@ -143,14 +143,14 @@
 * support 3.3.1 for iOS ([836f3b4](https://github.com/AgoraIO-Community/react-native-agora/commit/836f3b4c87f0c0a478c135a4a6ed0ed4279a446e))
 * support 3.3.1 for TS ([b7a1d00](https://github.com/AgoraIO-Community/react-native-agora/commit/b7a1d006bbbd6a635b8cee18c4a50c4a1ab5bbdd))
 
-# [3.3.0-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.0-rc.0...v3.3.0-rc.1) (2021-01-28)
+## [3.3.0-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.3.0-rc.0...v3.3.0-rc.1) (2021-01-28)
 
 
 ### Bug Fixes
 
 * type error ([1ffd0f8](https://github.com/AgoraIO-Community/react-native-agora/commit/1ffd0f8923b2968d1d908d4c672ab8c40072635e))
 
-# [3.3.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.2...v3.3.0-rc.0) (2021-01-28)
+## [3.3.0-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.2.2...v3.3.0-rc.0) (2021-01-28)
 
 
 ### Features
