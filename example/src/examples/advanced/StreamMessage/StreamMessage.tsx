@@ -23,9 +23,9 @@ import RtcEngine, {
 const config = require('../../../config/agora.config.json');
 
 interface State {
-  channelId?: string;
+  channelId: string;
   isJoined: boolean;
-  remoteUid?: number;
+  remoteUid: number[];
   message?: string;
 }
 
@@ -34,7 +34,11 @@ export default class StreamMessage extends Component<{}, State, any> {
 
   constructor(props: {}) {
     super(props);
-    this.state = { isJoined: false };
+    this.state = {
+      channelId: config.channelId,
+      remoteUid: [],
+      isJoined: false,
+    };
   }
 
   UNSAFE_componentWillMount() {
@@ -74,13 +78,20 @@ export default class StreamMessage extends Component<{}, State, any> {
       // RtcLocalView.SurfaceView must render after engine init and channel join
       this.setState({ isJoined: true });
     });
-    this._engine?.addListener('UserJoined', async (uid, elapsed) => {
+    this._engine?.addListener('LeaveChannel', (stats) => {
+      console.info('LeaveChannel', stats);
+      // RtcLocalView.SurfaceView must render after engine init and channel join
+      this.setState({ isJoined: false, remoteUid: [] });
+    });
+    this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
-      this.setState({ remoteUid: uid });
+      this.setState({ remoteUid: [...this.state.remoteUid, uid] });
     });
     this._engine?.addListener('UserOffline', (uid, reason) => {
       console.info('UserOffline', uid, reason);
-      this.setState({ remoteUid: undefined });
+      this.setState({
+        remoteUid: this.state.remoteUid.filter((value) => value !== uid),
+      });
     });
     this._engine?.addListener('StreamMessage', (uid, streamId, data) => {
       console.info('UserOffline', uid, streamId, data);
@@ -122,10 +133,9 @@ export default class StreamMessage extends Component<{}, State, any> {
     // the token has to match the ones used for channel join
     await this._engine?.joinChannel(
       config.token,
-      config.channelId,
+      this.state.channelId,
       null,
-      0,
-      undefined
+      config.uid
     );
   };
 
@@ -134,13 +144,21 @@ export default class StreamMessage extends Component<{}, State, any> {
   };
 
   render() {
-    const { isJoined } = this.state;
+    const { channelId, isJoined } = this.state;
     return (
       <View style={styles.container}>
-        <Button
-          onPress={isJoined ? this._leaveChannel : this._joinChannel}
-          title={`${isJoined ? 'Leave' : 'Join'} channel`}
-        />
+        <View style={styles.top}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => this.setState({ channelId: text })}
+            placeholder={'Channel ID'}
+            value={channelId}
+          />
+          <Button
+            onPress={isJoined ? this._leaveChannel : this._joinChannel}
+            title={`${isJoined ? 'Leave' : 'Join'} channel`}
+          />
+        </View>
         {isJoined && this._renderVideo()}
         {isJoined && this._renderToolBar()}
       </View>
@@ -155,8 +173,11 @@ export default class StreamMessage extends Component<{}, State, any> {
           style={styles.local}
           renderMode={VideoRenderMode.Hidden}
         />
-        {!!remoteUid && (
-          <RtcRemoteView.SurfaceView style={styles.remote} uid={remoteUid} />
+        {remoteUid.length > 0 && (
+          <RtcRemoteView.SurfaceView
+            style={styles.remote}
+            uid={remoteUid[remoteUid.length - 1]}
+          />
         )}
       </View>
     );
@@ -199,7 +220,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 40,
   },
-
+  top: {
+    width: '100%',
+  },
+  input: {
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
   videoContainer: {
     width: '100%',
     flexDirection: 'row',
@@ -209,7 +236,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   remote: {
-    backgroundColor: 'green',
     width: '50%',
     aspectRatio: 1,
   },
@@ -221,10 +247,5 @@ const styles = StyleSheet.create({
   infoContainer: {
     width: '100%',
     flexDirection: 'row',
-  },
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    flex: 1,
   },
 });

@@ -88,24 +88,15 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
       config.uid
     );
   };
-  _onChangeRecordingVolume = (value: number) => {
-    this._engine?.adjustRecordingSignalVolume(value * 400);
-  };
-
-  _onChangePlaybackVolume = (value: number) => {
-    this._engine?.adjustPlaybackSignalVolume(value * 400);
-  };
-
-  _toggleInEarMonitoring = (isEnabled: boolean) => {
-    this._engine?.enableInEarMonitoring(isEnabled);
-  };
-
-  _onChangeInEarMonitoringVolume = (value: number) => {
-    this._engine?.setInEarMonitoringVolume(value * 400);
-  };
 
   _leaveChannel = async () => {
     await this._engine?.leaveChannel();
+    this.setState({
+      isJoined: false,
+      openMicrophone: true,
+      enableSpeakerphone: true,
+      playEffect: false,
+    });
   };
 
   _switchMicrophone = () => {
@@ -150,12 +141,11 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
           Platform.OS === 'ios'
             ? `${RNFS.MainBundlePath}/Sound_Horizon.mp3`
             : '/assets/Sound_Horizon.mp3',
-          -1,
+          1,
           1,
           1,
           100,
-          true,
-          0
+          true
         )
         .then(() => {
           this.setState({ playEffect: true });
@@ -164,6 +154,22 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
           console.warn('playEffect', err);
         });
     }
+  };
+
+  _onChangeRecordingVolume = (value: number) => {
+    this._engine?.adjustRecordingSignalVolume(value * 400);
+  };
+
+  _onChangePlaybackVolume = (value: number) => {
+    this._engine?.adjustPlaybackSignalVolume(value * 400);
+  };
+
+  _onChangeInEarMonitoringVolume = (value: number) => {
+    this._engine?.setInEarMonitoringVolume(value * 400);
+  };
+
+  _toggleInEarMonitoring = (isEnabled: boolean) => {
+    this._engine?.enableInEarMonitoring(isEnabled);
   };
 
   render() {
@@ -188,39 +194,42 @@ export default class JoinChannelAudio extends Component<{}, State, any> {
             title={`${isJoined ? 'Leave' : 'Join'} channel`}
           />
         </View>
-        {isJoined && (
-          <View style={styles.float}>
-            <Item
-              title={`Microphone ${openMicrophone ? 'on' : 'off'}`}
-              btnOnPress={this._switchMicrophone}
-            />
-            <Item
-              title={enableSpeakerphone ? 'Speakerphone' : 'Earpiece'}
-              btnOnPress={this._switchSpeakerphone}
-            />
-            <Item
-              title={`${playEffect ? 'Stop' : 'Play'} effect`}
-              btnOnPress={this._switchEffect}
-            />
-            <Item
-              title={'RecordingVolume'}
-              isShowSlider
-              onSliderValueChange={this._onChangeRecordingVolume}
-            />
-            <Item
-              title={'PlaybackVolume'}
-              isShowSlider={true}
-              onSliderValueChange={this._onChangePlaybackVolume}
-            />
-            <Item
-              title={'InEar Monitoring Volume'}
-              isShowSlider
-              isShowSwitch
-              onSwitchValueChange={this._toggleInEarMonitoring}
-              onSliderValueChange={this._onChangeInEarMonitoringVolume}
-            />
-          </View>
-        )}
+        <View style={styles.float}>
+          <Item
+            title={`Microphone ${openMicrophone ? 'on' : 'off'}`}
+            btnOnPress={this._switchMicrophone}
+          />
+          <Item
+            disabled={!isJoined}
+            title={enableSpeakerphone ? 'Speakerphone' : 'Earpiece'}
+            btnOnPress={this._switchSpeakerphone}
+          />
+          <Item
+            disabled={!isJoined}
+            title={`${playEffect ? 'Stop' : 'Play'} effect`}
+            btnOnPress={this._switchEffect}
+          />
+          <Item
+            disabled={!isJoined}
+            title={'RecordingVolume'}
+            isShowSlider
+            onSliderValueChange={this._onChangeRecordingVolume}
+          />
+          <Item
+            disabled={!isJoined}
+            title={'PlaybackVolume'}
+            isShowSlider
+            onSliderValueChange={this._onChangePlaybackVolume}
+          />
+          <Item
+            disabled={!isJoined}
+            title={'InEar Monitoring Volume'}
+            isShowSlider
+            isShowSwitch
+            onSwitchValueChange={this._toggleInEarMonitoring}
+            onSliderValueChange={this._onChangeInEarMonitoringVolume}
+          />
+        </View>
       </View>
     );
   }

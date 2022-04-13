@@ -46,6 +46,8 @@ class RtcChannelEvents {
     static let VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
     static let RtmpStreamingEvent = "RtmpStreamingEvent"
     static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
+    static let ProxyConnected = "ProxyConnected"
+    static let ClientRoleChangeFailed = "ClientRoleChangeFailed"
 
     static func toMap() -> [String: String] {
         return [
@@ -85,6 +87,8 @@ class RtcChannelEvents {
             "VideoSubscribeStateChanged": VideoSubscribeStateChanged,
             "RtmpStreamingEvent": RtmpStreamingEvent,
             "UserSuperResolutionEnabled": UserSuperResolutionEnabled,
+            "ProxyConnected": ProxyConnected,
+            "ClientRoleChangeFailed": ClientRoleChangeFailed,
         ]
     }
 }
@@ -245,5 +249,13 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, superResolutionEnabledOfUid uid: UInt, enabled: Bool, reason: AgoraSuperResolutionStateReason) {
         callback(RtcChannelEvents.UserSuperResolutionEnabled, rtcChannel, uid, enabled, reason.rawValue)
+    }
+
+    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didProxyConnected uid: UInt, proxyType: AgoraProxyType, localProxyIp: String, elapsed: Int) {
+        callback(RtcChannelEvents.ProxyConnected, rtcChannel, rtcChannel.getId(), uid, proxyType.rawValue, localProxyIp, elapsed)
+    }
+
+    func rtcChannel(_ rtcChannel: AgoraRtcChannel, didClientRoleChangeFailed reason: AgoraClientRoleChangeFailedReason, currentRole: AgoraClientRole) {
+        callback(RtcChannelEvents.ClientRoleChangeFailed, rtcChannel, reason.rawValue, currentRole.rawValue)
     }
 }
