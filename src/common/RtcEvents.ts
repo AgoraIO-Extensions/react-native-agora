@@ -607,6 +607,11 @@ export type WlAccStatsCallback =
    * @ignore For future use
    */
   (currentStats: WlAccStats, averageStats: WlAccStats) => void;
+export type LocalVoicePitchInHzCallback =
+  /**
+   * @ignore For future use
+   */
+  (pitchInHz: number) => void;
 
 /**
  * Callbacks.
@@ -1623,6 +1628,8 @@ export interface RtcEngineEvents {
    * @ignore For future use
    */
   ClientRoleChangeFailed: ClientRoleChangeCallback;
+
+  LocalVoicePitchInHz: LocalVoicePitchInHzCallback;
 }
 
 /**
@@ -2016,4 +2023,6 @@ export interface RtcChannelEvents {
    * @ignore For future use
    */
   ClientRoleChangeFailed: ClientRoleChangeCallback;
+
+  FirstRemoteVideoFrame: VideoFrameWithUidCallback;
 }

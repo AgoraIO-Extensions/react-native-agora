@@ -97,6 +97,7 @@ class RtcEngineEvents {
     const val WlAccMessage = "WlAccMessage"
     const val WlAccStats = "WlAccStats"
     const val ClientRoleChangeFailed = "ClientRoleChangeFailed"
+    const val LocalVoicePitchInHz = "LocalVoicePitchInHz"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -770,5 +771,9 @@ class RtcEngineEventHandler(
 
   override fun onClientRoleChangeFailed(reason: Int, currentRole: Int) {
     callback(RtcEngineEvents.ClientRoleChangeFailed, reason, currentRole)
+  }
+
+  override fun onLocalVoicePitchInHz(pitchInHz: Int) {
+    callback(RtcEngineEvents.LocalVoicePitchInHz, pitchInHz)
   }
 }

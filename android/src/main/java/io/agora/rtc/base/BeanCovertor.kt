@@ -2,8 +2,10 @@ package io.agora.rtc.base
 
 import io.agora.rtc.AgoraMediaRecorder
 import io.agora.rtc.RtcEngineConfig
+import io.agora.rtc.ScreenCaptureParameters
 import io.agora.rtc.audio.AgoraRhythmPlayerConfig
 import io.agora.rtc.audio.AudioRecordingConfiguration
+import io.agora.rtc.audio.SpatialAudioParams
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.internal.LastmileProbeConfig
 import io.agora.rtc.live.LiveInjectStreamConfig
@@ -365,5 +367,52 @@ fun mapToColorEnhanceOptions(map: Map<*, *>): ColorEnhanceOptions {
   return ColorEnhanceOptions().apply {
     (map["strengthLevel"] as? Number)?.let { strengthLevel = it.toFloat() }
     (map["skinProtectLevel"] as? Number)?.let { skinProtectLevel = it.toFloat() }
+  }
+}
+
+fun mapToScreenCaptureParameters(map: Map<*, *>): ScreenCaptureParameters {
+  return ScreenCaptureParameters().apply {
+    (map["captureAudio"] as? Boolean)?.let { captureAudio = it }
+    (map["audioParams"] as? Map<*, *>)?.let {
+      audioCaptureParameters = mapToAudioCaptureParameters(it)
+    }
+    (map["captureVideo"] as? Boolean)?.let { captureVideo = it }
+    (map["videoParams"] as? Map<*, *>)?.let {
+      videoCaptureParameters = mapToVideoCaptureParameters(it)
+    }
+  }
+}
+
+fun mapToVideoCaptureParameters(map: Map<*, *>): ScreenCaptureParameters.VideoCaptureParameters {
+  return ScreenCaptureParameters.VideoCaptureParameters().apply {
+    (map["bitrate"] as? Number)?.let { bitrate = it.toInt() }
+    (map["frameRate"] as? Number)?.let { framerate = it.toInt() }
+    (map["dimensions"] as? Map<*, *>)?.let { it ->
+      mapToVideoDimensions(it).let {
+        width = it.width
+        height = it.height
+      }
+    }
+    (map["contentHint"] as? Number)?.let { contentHint = it.toInt() }
+  }
+}
+
+fun mapToAudioCaptureParameters(map: Map<*, *>): ScreenCaptureParameters.AudioCaptureParameters {
+  return ScreenCaptureParameters.AudioCaptureParameters().apply {
+    (map["sampleRate"] as? Number)?.let { sampleRate = it.toInt() }
+    (map["channels"] as? Number)?.let { channels = it.toInt() }
+    (map["captureSignalVolume"] as? Number)?.let { captureSignalVolume = it.toInt() }
+    (map["allowCaptureCurrentApp"] as? Boolean)?.let { allowCaptureCurrentApp = it }
+  }
+}
+
+fun mapToSpatialAudioParams(map: Map<*, *>): SpatialAudioParams {
+  return SpatialAudioParams().apply {
+    (map["speaker_azimuth"] as? Number)?.let { spk_azimuth = it.toDouble() }
+    (map["speaker_elevation"] as? Number)?.let { spk_elevation = it.toDouble() }
+    (map["speaker_distance"] as? Number)?.let { spk_distance = it.toDouble() }
+    (map["speaker_orientation"] as? Number)?.let { spk_orientation = it.toInt() }
+    (map["enable_blur"] as? Boolean)?.let { enable_blur = it }
+    (map["enable_air_absorb"] as? Boolean)?.let { enable_air_absorb = it }
   }
 }

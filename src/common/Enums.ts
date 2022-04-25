@@ -1615,6 +1615,10 @@ export enum LocalVideoStreamError {
    * @since v3.4.2
    */
   DeviceNotFound = 8,
+  ExtensionCaptureStarted = 13,
+  ExtensionCaptureStoped = 14,
+  ExtensionCaptureDisconnected = 15,
+  ScreenCapturePermissionDenied = 16,
 }
 
 /**
@@ -3344,4 +3348,12 @@ export enum ClientRoleChangeFailedReason {
   RequestTimeOut = 3,
 
   ConnectionFailed = 4,
+}
+
+export enum VideoContentHint {
+  None = 0,
+
+  Motion = 1,
+
+  Details = 2,
 }

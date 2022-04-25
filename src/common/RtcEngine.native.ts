@@ -29,6 +29,9 @@ import {
   VideoEncoderConfiguration,
   VirtualBackgroundSource,
   WatermarkOptions,
+  ScreenCaptureParameters,
+  SpatialAudioParams,
+  LocalAccessPointConfiguration,
 } from './Classes';
 import type {
   AreaCode,
@@ -3257,8 +3260,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * @ignore
    */
-  setLocalAccessPoint(ips: string[], domain: string): Promise<void> {
-    return RtcEngine._callMethod('setLocalAccessPoint', { ips, domain });
+  setLocalAccessPoint(config: LocalAccessPointConfiguration): Promise<void> {
+    return RtcEngine._callMethod('setLocalAccessPoint', { config });
   }
 
   /**
@@ -4026,6 +4029,42 @@ export default class RtcEngine implements RtcEngineInterface {
   setAVSyncSource(channelId: string, uid: number): Promise<void> {
     return RtcEngine._callMethod('setAVSyncSource', { channelId, uid });
   }
+
+  enableLocalVoicePitchCallback(interval: number): Promise<void> {
+    return RtcEngine._callMethod('enableLocalVoicePitchCallback', { interval });
+  }
+
+  enableSpatialAudio(enabled: boolean): Promise<void> {
+    return RtcEngine._callMethod('enableSpatialAudio', { enabled });
+  }
+
+  setRemoteUserSpatialAudioParams(
+    uid: number,
+    params: SpatialAudioParams
+  ): Promise<void> {
+    return RtcEngine._callMethod('setRemoteUserSpatialAudioParams', {
+      uid,
+      params,
+    });
+  }
+
+  startScreenCapture(parameters: ScreenCaptureParameters): Promise<void> {
+    return RtcEngine._callMethod('startScreenCapture', {
+      parameters,
+    });
+  }
+
+  stopScreenCapture(): Promise<void> {
+    return RtcEngine._callMethod('stopScreenCapture');
+  }
+
+  updateScreenCaptureParameters(
+    parameters: ScreenCaptureParameters
+  ): Promise<void> {
+    return RtcEngine._callMethod('updateScreenCaptureParameters', {
+      parameters,
+    });
+  }
 }
 
 /**
@@ -4112,7 +4151,7 @@ interface RtcEngineInterface
 
   uploadLogFile(): Promise<string>;
 
-  setLocalAccessPoint(ips: string[], domain: string): Promise<void>;
+  setLocalAccessPoint(config: LocalAccessPointConfiguration): Promise<void>;
 
   enableVirtualBackground(
     enabled: boolean,
@@ -4233,6 +4272,14 @@ interface RtcVideoInterface {
   setColorEnhanceOptions(
     enabled: boolean,
     options: ColorEnhanceOptions
+  ): Promise<void>;
+
+  startScreenCapture(parameters: ScreenCaptureParameters): Promise<void>;
+
+  stopScreenCapture(): Promise<void>;
+
+  updateScreenCaptureParameters(
+    parameters: ScreenCaptureParameters
   ): Promise<void>;
 }
 
@@ -4365,6 +4412,8 @@ interface RtcVoiceChangerInterface {
     param1: number,
     param2: number
   ): Promise<void>;
+
+  enableLocalVoicePitchCallback(interval: number): Promise<void>;
 }
 
 /**
@@ -4374,6 +4423,13 @@ interface RtcVoicePositionInterface {
   enableSoundPositionIndication(enabled: boolean): Promise<void>;
 
   setRemoteVoicePosition(uid: number, pan: number, gain: number): Promise<void>;
+
+  enableSpatialAudio(enabled: boolean): Promise<void>;
+
+  setRemoteUserSpatialAudioParams(
+    uid: number,
+    params: SpatialAudioParams
+  ): Promise<void>;
 }
 
 /**

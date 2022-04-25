@@ -13,7 +13,7 @@ import RtcEngine, {
   RtcEngineContext,
 } from 'react-native-agora';
 import RNFS from 'react-native-fs';
-import Item from './Item';
+import Item from '../../../components/Item';
 
 const config = require('../../../config/agora.config.json');
 

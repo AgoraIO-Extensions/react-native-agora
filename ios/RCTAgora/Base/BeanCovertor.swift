@@ -620,3 +620,70 @@ func mapToColorEnhanceOptions(_ map: [String: Any]) -> AgoraColorEnhanceOptions 
     }
     return options
 }
+
+func mapToScreenCaptureParameters(_ map: [String: Any]) -> AgoraScreenCaptureParameters2 {
+    let params = AgoraScreenCaptureParameters2()
+    if let captureAudio = map["captureAudio"] as? Bool {
+        params.captureAudio = captureAudio;
+    }
+    if let audioParams = map["audioParams"] as? [String: Any] {
+        params.audioParams = mapToScreenAudioParameters(audioParams)
+    }
+    if let captureVideo = map["captureVideo"] as? Bool {
+        params.captureVideo = captureVideo
+    }
+    if let videoParams = map["videoParams"] as? [String: Any] {
+        params.videoParams = mapToScreenVideoParameters(videoParams)
+    }
+    return params
+}
+
+func mapToScreenVideoParameters(_ map: [String: Any]) -> AgoraScreenVideoParameters {
+    let params = AgoraScreenVideoParameters()
+    if let bitrate = map["bitrate"] as? NSNumber {
+        params.bitrate = bitrate.intValue
+    }
+    if let frameRate = map["frameRate"] as? NSNumber {
+        params.frameRate = frameRate.intValue
+    }
+    if let dimensions = map["dimensions"] as? [String: Any] {
+        params.dimensions = mapToSize(dimensions)
+    }
+    if let contentHint = map["contentHint"] as? NSNumber {
+        if let contentHint = AgoraVideoContentHint(rawValue: contentHint.uintValue) {
+            params.contentHint = contentHint;
+        }
+    }
+    return params
+}
+
+func mapToScreenAudioParameters(_ map: [String: Any]) -> AgoraScreenAudioParameters {
+    let params = AgoraScreenAudioParameters()
+    if let captureSignalVolume = map["captureSignalVolume"] as? NSNumber {
+        params.captureSignalVolume = captureSignalVolume.intValue
+    }
+    return params
+}
+
+func mapToSpatialAudioParams(_ map: [String: Any]) -> AgoraSpatialAudioParams {
+    let params = AgoraSpatialAudioParams()
+    if let speaker_azimuth = map["speaker_azimuth"] as? NSNumber {
+        params.speaker_azimuth = AgoraRtcDoubleOptional.of(speaker_azimuth.doubleValue)
+    }
+    if let speaker_elevation = map["speaker_elevation"] as? NSNumber {
+        params.speaker_elevation = AgoraRtcDoubleOptional.of(speaker_elevation.doubleValue)
+    }
+    if let speaker_distance = map["speaker_distance"] as? NSNumber {
+        params.speaker_distance = AgoraRtcDoubleOptional.of(speaker_distance.doubleValue)
+    }
+    if let speaker_orientation = map["speaker_orientation"] as? NSNumber {
+        params.speaker_orientation = AgoraRtcIntOptional.of(speaker_orientation.int32Value)
+    }
+    if let enable_blur = map["enable_blur"] as? Bool {
+        params.enable_blur = AgoraRtcBoolOptional.of(enable_blur)
+    }
+    if let enable_air_absorb = map["enable_air_absorb"] as? Bool {
+        params.enable_air_absorb = AgoraRtcBoolOptional.of(enable_air_absorb)
+    }
+    return params
+}

@@ -27,6 +27,7 @@ import type {
   VirtualBackgroundBlurDegree,
   VirtualBackgroundSourceType,
   VideoCodecTypeForStream,
+  VideoContentHint,
 } from './Enums';
 
 /**
@@ -2131,4 +2132,34 @@ export interface WlAccStats {
   e2eDelayPercent: number;
   frozenRatioPercent: number;
   lossRatePercent: number;
+}
+
+export class ScreenCaptureParameters {
+  captureAudio?: boolean;
+  audioParams?: ScreenAudioParameters;
+  captureVideo?: boolean;
+  videoParams?: ScreenVideoParameters;
+}
+
+export class ScreenVideoParameters {
+  bitrate?: number;
+  frameRate?: number;
+  dimensions?: VideoDimensions;
+  contentHint?: VideoContentHint;
+}
+
+export class ScreenAudioParameters {
+  sampleRate?: number;
+  channels?: number;
+  captureSignalVolume?: number;
+  allowCaptureCurrentApp?: boolean;
+}
+
+export class SpatialAudioParams {
+  speaker_azimuth?: number;
+  speaker_elevation?: number;
+  speaker_distance?: number;
+  speaker_orientation?: number;
+  enable_blur?: number;
+  enable_air_absorb?: number;
 }

@@ -2,6 +2,7 @@ import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
 import StreamMessage from './StreamMessage/StreamMessage';
 import ChannelMediaRelay from './ChannelMediaRelay/ChannelMediaRelay';
 import VoiceChanger from './VoiceChanger/VoiceChanger';
+import ScreenSharing from './ScreenSharing/ScreenSharing';
 
 const Advanced = {
   title: 'Advanced',
@@ -21,6 +22,10 @@ const Advanced = {
     {
       name: 'VoiceChanger',
       component: VoiceChanger,
+    },
+    {
+      name: 'ScreenSharing',
+      component: ScreenSharing,
     },
   ],
 };
