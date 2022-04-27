@@ -19,6 +19,7 @@ import {
   LastmileProbeConfig,
   LiveInjectStreamConfig,
   LiveTranscoding,
+  LocalAccessPointConfiguration,
   LowLightEnhanceOptions,
   MediaRecorderConfiguration,
   RhythmPlayerConfig,
@@ -3257,8 +3258,8 @@ export default class RtcEngine implements RtcEngineInterface {
   /**
    * @ignore
    */
-  setLocalAccessPoint(ips: string[], domain: string): Promise<void> {
-    return RtcEngine._callMethod('setLocalAccessPoint', { ips, domain });
+  setLocalAccessPoint(config: LocalAccessPointConfiguration): Promise<void> {
+    return RtcEngine._callMethod('setLocalAccessPoint', { config });
   }
 
   /**
@@ -4112,7 +4113,7 @@ interface RtcEngineInterface
 
   uploadLogFile(): Promise<string>;
 
-  setLocalAccessPoint(ips: string[], domain: string): Promise<void>;
+  setLocalAccessPoint(config: LocalAccessPointConfiguration): Promise<void>;
 
   enableVirtualBackground(
     enabled: boolean,
