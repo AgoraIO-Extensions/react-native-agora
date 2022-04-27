@@ -1,3 +1,10 @@
+## [3.6.3-rc.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.6.2...v3.6.3-rc.0) (2022-04-27)
+
+
+### Bug Fixes
+
+* setLocalAccessPoint issue ([07c7df4](https://github.com/AgoraIO-Community/react-native-agora/commit/07c7df4738ddf8ac54ee7a10ca6c74380ffe9c35))
+
 ## [3.6.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.3...v3.6.2) (2022-04-13)
 
 
