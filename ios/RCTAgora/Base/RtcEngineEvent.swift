@@ -306,7 +306,10 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate, AgoraMediaRecorderDeleg
         callback(RtcEngineEvents.RemoteVideoStateChanged, uid, state.rawValue, reason.rawValue, elapsed)
     }
 
-    public func rtcEngine(_: AgoraRtcEngineKit, localVideoStateChange state: AgoraLocalVideoStreamState, error: AgoraLocalVideoStreamError) {
+    public func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChange state: AgoraLocalVideoStreamState, error: AgoraLocalVideoStreamError) {
+        if error == .extensionCaptureDisconnected || error == .extensionCaptureStoped {
+            engine.setVideoSource(AgoraRtcDefaultCamera())
+        }
         callback(RtcEngineEvents.LocalVideoStateChanged, state.rawValue, error.rawValue)
     }
 

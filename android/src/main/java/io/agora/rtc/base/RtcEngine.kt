@@ -443,8 +443,11 @@ open class RtcEngineManager(
   private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit,
   private val rtcEngineFactory: RtcEngineFactory = RtcEngineFactory()
 ) : IRtcEngine.RtcEngineInterface {
-  var engine: RtcEngine? = null
-    private set
+  companion object {
+    var engine: RtcEngine? = null
+      private set
+  }
+
   private var eventHandler: RtcEngineEventHandler = RtcEngineEventHandler { methodName, data ->
     emit(methodName, data)
   }

@@ -3,7 +3,9 @@ package io.agora.rtc.base
 import android.graphics.Rect
 import androidx.annotation.IntRange
 import io.agora.rtc.AgoraMediaRecorder
+import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
+import io.agora.rtc.mediaio.AgoraDefaultSource
 import io.agora.rtc.models.UserInfo
 
 class RtcEngineEvents {
@@ -326,6 +328,9 @@ class RtcEngineEventHandler(
     @Annotations.AgoraLocalVideoStreamState localVideoState: Int,
     @Annotations.AgoraLocalVideoStreamError error: Int
   ) {
+    if (error == Constants.ERR_SCREEN_CAPTURE_PERMISSION_DENIED) {
+      RtcEngineManager.engine?.setVideoSource(AgoraDefaultSource())
+    }
     callback(RtcEngineEvents.LocalVideoStateChanged, localVideoState, error)
   }
 

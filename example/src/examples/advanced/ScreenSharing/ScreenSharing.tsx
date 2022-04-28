@@ -129,7 +129,6 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
     const { isScreenSharing } = this.state;
     if (isScreenSharing) {
       await this._engine?.stopScreenCapture();
-      await this._engine?.startPreview();
     } else {
       await this._engine?.startScreenCapture({
         captureAudio: true,

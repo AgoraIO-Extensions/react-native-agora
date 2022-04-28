@@ -3,10 +3,9 @@ package io.agora.rtc.react
 import com.facebook.react.bridge.*
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import io.agora.rtc.RtcChannel
-import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcChannelEventHandler
 import io.agora.rtc.base.RtcChannelManager
+import io.agora.rtc.base.RtcEngineManager
 import io.agora.rtc.react.RCTAgoraRtcChannelModule.Companion.REACT_CLASS
 
 @ReactModule(name = REACT_CLASS)
@@ -39,14 +38,6 @@ class RCTAgoraRtcChannelModule(
       .emit("${RtcChannelEventHandler.PREFIX}$methodName", Arguments.makeNativeMap(data))
   }
 
-  private fun engine(): RtcEngine? {
-    return reactApplicationContext.getNativeModule(RCTAgoraRtcEngineModule::class.java)?.engine()
-  }
-
-  fun channel(channelId: String): RtcChannel? {
-    return manager[channelId]
-  }
-
   @ReactMethod
   fun addListener(eventName: String) {
     // Keep: Required for RN built in Event Emitter Calls.
@@ -65,7 +56,7 @@ class RCTAgoraRtcChannelModule(
           val parameters = mutableListOf<Any?>()
           params?.toHashMap()?.toMutableMap()?.let {
             if (methodName == "create") {
-              it["engine"] = engine()
+              it["engine"] = RtcEngineManager.engine
             }
             parameters.add(it)
           }

@@ -3,7 +3,6 @@ package io.agora.rtc.react
 import com.facebook.react.bridge.*
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineEventHandler
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.rtc.react.RCTAgoraRtcEngineModule.Companion.REACT_CLASS
@@ -36,10 +35,6 @@ class RCTAgoraRtcEngineModule(
   private fun emit(methodName: String, data: Map<String, Any?>?) {
     reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
       .emit("${RtcEngineEventHandler.PREFIX}$methodName", Arguments.makeNativeMap(data))
-  }
-
-  fun engine(): RtcEngine? {
-    return manager.engine
   }
 
   @ReactMethod
