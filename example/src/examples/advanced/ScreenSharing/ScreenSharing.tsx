@@ -16,6 +16,7 @@ import RtcEngine, {
   RtcEngineContext,
   RtcLocalView,
   RtcRemoteView,
+  VideoRenderMode,
 } from 'react-native-agora';
 
 const config = require('../../../config/agora.config.json');
@@ -128,6 +129,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
     const { isScreenSharing } = this.state;
     if (isScreenSharing) {
       await this._engine?.stopScreenCapture();
+      await this._engine?.startPreview();
     } else {
       await this._engine?.startScreenCapture({
         captureAudio: true,
@@ -168,7 +170,10 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
     const { remoteUid } = this.state;
     return (
       <View style={styles.container}>
-        <RtcLocalView.SurfaceView style={styles.local} />
+        <RtcLocalView.SurfaceView
+          style={styles.local}
+          renderMode={VideoRenderMode.Fit}
+        />
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
             {remoteUid.map((value, index) => (
@@ -177,6 +182,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
                 style={styles.remote}
                 uid={value}
                 zOrderMediaOverlay={true}
+                renderMode={VideoRenderMode.Fit}
               />
             ))}
           </ScrollView>

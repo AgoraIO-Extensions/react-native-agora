@@ -3,6 +3,7 @@ package io.agora.rtc.base
 import android.content.Context
 import io.agora.rtc.*
 import io.agora.rtc.internal.EncryptionConfig
+import io.agora.rtc.mediaio.AgoraDefaultSource
 import io.agora.rtc.models.UserInfo
 
 class IRtcEngine {
@@ -662,6 +663,7 @@ open class RtcEngineManager(
   }
 
   override fun stopScreenCapture(callback: Callback) {
+    engine?.setVideoSource(AgoraDefaultSource())
     callback.code(engine?.stopScreenCapture())
   }
 
