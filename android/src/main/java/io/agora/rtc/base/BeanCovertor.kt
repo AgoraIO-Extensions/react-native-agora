@@ -158,7 +158,7 @@ fun mapToLastmileProbeConfig(map: Map<*, *>): LastmileProbeConfig {
     (map["probeUplink"] as? Boolean)?.let { probeUplink = it }
     (map["probeDownlink"] as? Boolean)?.let { probeDownlink = it }
     (map["expectedUplinkBitrate"] as? Number)?.let { expectedUplinkBitrate = it.toInt() }
-    (map["expectedDownlinkBitrate"] as? Number)?.let { expectedUplinkBitrate = it.toInt() }
+    (map["expectedDownlinkBitrate"] as? Number)?.let { expectedDownlinkBitrate = it.toInt() }
   }
 }
 
