@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   input: {
     borderColor: 'gray',
     borderWidth: 1,
+    color: 'black',
   },
   local: {
     flex: 1,
