@@ -2160,6 +2160,6 @@ export class SpatialAudioParams {
   speaker_elevation?: number;
   speaker_distance?: number;
   speaker_orientation?: number;
-  enable_blur?: number;
-  enable_air_absorb?: number;
+  enable_blur?: boolean;
+  enable_air_absorb?: boolean;
 }
