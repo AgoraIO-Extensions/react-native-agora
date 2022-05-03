@@ -389,7 +389,7 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls [`muteLocalAudioStream`]{@link muteLocalAudioStream} and [`muteLocalVideoStream`]{@link muteLocalVideoStream} to change the publishing state.
-   * - Triggers [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged} on the local client.
+   * - Triggers [`ClientRoleChanged`]{@link RtcEngineEvents.ClientRoleChanged} or [`ClientRoleChangeFailed`]{@link RtcEngineEvents.ClientRoleChangeFailed} on the local client.
    * - Triggers [`UserJoined`]{@link RtcEngineEvents.UserJoined} or [`UserOffline`]{@link RtcEngineEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}) on the remote client.
    *
    * **Note**
@@ -4030,14 +4030,42 @@ export default class RtcEngine implements RtcEngineInterface {
     return RtcEngine._callMethod('setAVSyncSource', { channelId, uid });
   }
 
+  /**
+   * Enables reporting the voice pitch of the local user.
+   *
+   * @since v3.7.0
+   *
+   * This method enables the SDK to regularly report the voice pitch of the local user.
+   * After the local audio capture is enabled, and you call this method, the SDK triggers
+   * the [`LocalVoicePitchInHz`]{@link RtcEngineEvents.LocalVoicePitchInHz} callback at the time interval set in this method.
+   *
+   * **Note**
+   * You can call this method either before or after joining a channel.
+   *
+   * @param interval Sets the time interval at which the SDK triggers the `LocalVoicePitchInHz` callback:
+   * - ≤ 0: Disables the `LocalVoicePitchInHz` callback.
+   * - &gt; 0: The time interval (ms) at which the SDK triggers the `LocalVoicePitchInHz` callback.
+   * The value must be greater than or equal to 10. If the value is less than 10, the SDK automatically
+   * changes it to 10.
+   */
   enableLocalVoicePitchCallback(interval: number): Promise<void> {
     return RtcEngine._callMethod('enableLocalVoicePitchCallback', { interval });
   }
 
+  /**
+   * @ignore Contact support@agora.io.
+   *
+   * @since v3.7.0
+   */
   enableSpatialAudio(enabled: boolean): Promise<void> {
     return RtcEngine._callMethod('enableSpatialAudio', { enabled });
   }
 
+  /**
+   * @ignore Contact support@agora.io.
+   *
+   * @since v3.7.0
+   */
   setRemoteUserSpatialAudioParams(
     uid: number,
     params: SpatialAudioParams
@@ -4048,16 +4076,63 @@ export default class RtcEngine implements RtcEngineInterface {
     });
   }
 
+  /**
+   * Starts screen sharing.
+   *
+   * @since v3.7.0
+   *
+   * On Android, during screen sharing, make sure the following:
+   * - The user has granted screen capture permission to the application; otherwise, the SDK triggers
+   * the [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged} callback and reports `ScreenCapturePermissionDenied`(16).
+   * - the Android API level is not earlier than 21; otherwise, the SDK reports error codes ERR_SCREEN_CAPTURE_SYSTEM_NOT_SUPPORTED(2). // TODO Doc error code? 通过什么回调？
+   * - To capture system audio during screen sharing, ensure that the Android API level is not earlier than 29 as well; otherwise, the SDK reports the error code ERR_SCREEN_CAPTURE_SYSTEM_AUDIO_NOT_SUPPORTED(3). // TODO Doc error code? 通过什么回调？
+   *
+   * On iOS, When the screen sharing extension process starts, ends, or quits unexpectedly, the SDK triggers
+   * the [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged} callback and reports `ExtensionCaptureStarted`(13), `ExtensionCaptureStoped`(14), and `ExtensionCaptureDisconnected`(15) accordingly.
+   *
+   * **Note**
+   * - Call this method after joining a channel.
+   * - The billing of the screen sharing stream is based on the value of dimensions
+   * in `ScreenCaptureParameters`. When you do not pass in a value, Agora bills you at 1280 × 720; when you pass a value in, Agora bills you at that value.
+   * For details, see [Pricing for Real-time Communication](https://docs.agora.io/en/Interactive%20Broadcast/billing_rtc?platform=React%20Native).
+   * - On iOS, note the following:
+   *   - This feature is only available for iOS 11 or later.
+   *   - This feature requires a high-performance device. Agora recommends that you use this feature on iPhone X or later models.
+   *   - If you are using the custom audio source instead of the SDK to capture audio, Agora recommends you add the keep-alive processing logic to your application to avoid screen sharing stopping when the application goes to the background.
+   * - On Android, note the following:
+   *   - On Android 9 and later, to avoid the application being killed by the system after going to the background,
+   * Agora recommends you add the foreground service permission (`android.permission.FOREGROUND_SERVICE`) to the `/app/Manifests/AndroidManifest.xml` file.
+   *   - Due to performance limitations, screen sharing is not supported on Android TV.
+   *   - Due to system limitations, if you are using Huawei phones, do not adjust the video encoding resolution of the screen sharing stream during the screen sharing, or you could experience crashes.
+   *
+   * @param parameters The configuration of the screen sharing. See [`ScreenCaptureParameters`]{@link ScreenCaptureParameters}.
+   *
+   */
   startScreenCapture(parameters: ScreenCaptureParameters): Promise<void> {
     return RtcEngine._callMethod('startScreenCapture', {
       parameters,
     });
   }
 
+  /**
+   * Stops screen sharing.
+   *
+   * @since v3.7.0
+   */
   stopScreenCapture(): Promise<void> {
     return RtcEngine._callMethod('stopScreenCapture');
   }
 
+  /**
+   * Updates the screen sharing configuration.
+   *
+   * @since v3.7.0
+   *
+   * **Note**
+   * Call this method after [`startScreenCapture`]{@link startScreenCapture}.
+   *
+   * @param parameters The configuration of the screen sharing. See [`ScreenCaptureParameters`]{@link ScreenCaptureParameters}.
+   */
   updateScreenCaptureParameters(
     parameters: ScreenCaptureParameters
   ): Promise<void> {

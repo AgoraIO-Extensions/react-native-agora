@@ -982,14 +982,20 @@ export enum ConnectionChangedReason {
    */
   ProxyServerInterrupted = 15,
   /**
-   * @ignore
+   * 19: Join the same channel from different devices using the same user ID.
    *
-   * For future use
+   * @since v3.7.0
    */
   SameUidLogin = 19,
   /**
-   * @ignore
-   * For future use
+   * 20: The number of hosts in the channel is already at the upper limit.
+   *
+   * @since v3.7.0
+   *
+   * **Note**
+   * This enumerator is reported only when the support for 128 users is enabled.
+   * The maximum number of hosts is based on the actual number of hosts configured when you
+   * enable the 128-user feature.
    */
   TooManyBroadcasters = 20,
 }
@@ -2407,6 +2413,9 @@ export enum WarningCode {
   SetClientRoleTimeout = 118,
   /**
    * 119: The client role is unauthorized.
+   *
+   * @deprecated Deprecated as of v3.7.0.
+   * Use [`ClientRoleChangeFailedReaso`]{@link ClientRoleChangeFailedReason} reported in `ClientRoleChangeFailed` instead.
    */
   SetClientRoleNotAuthorized = 119,
   /**
@@ -3336,24 +3345,55 @@ export enum WlAccAction {
 }
 
 /**
- * @ignore
+ * Reasons for a user role switch failure.
  *
- * For future use
+ * @since v3.7.0
  */
 export enum ClientRoleChangeFailedReason {
+  /**
+   * `1`: The number of hosts in the channel is already at the upper limit.
+   *
+   * **Note**
+   * This enumerator is reported only when the support for 128 users is enabled.
+   * The maximum number of hosts is based on the actual number of hosts configured when you enable
+   * the 128-user feature.
+   */
   TooManyBroadcasters = 1,
 
+  /**
+   * `2`: The request is rejected by the Agora server.
+   * Agora recommends you prompt the user to try to switch their user role again.
+   */
   NotAuthorized = 2,
 
+  /**
+   * `3`: The request is timed out.
+   * Agora recommends you prompt the user to check the network connection and try to switch their user role again.
+   */
   RequestTimeOut = 3,
 
+  /**
+   * `4`: he SDK connection fails.
+   * You can use reason reported in the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback to troubleshoot the failure.
+   */
   ConnectionFailed = 4,
 }
-
+/**
+ * The content hint of the screen sharing.
+ *
+ * @since v3.7.0
+ */
 export enum VideoContentHint {
+  /**
+   * (Default) No content hint.
+   */
   None = 0,
-
+  /**
+   * Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
+   */
   Motion = 1,
-
+  /**
+   * Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slide, or text.
+   */
   Details = 2,
 }
