@@ -1534,7 +1534,7 @@ export interface RtcEngineEvents {
   AirPlayIsConnected: EmptyCallback;
 
   /**
-   * Reports whether the virtual background is successfully enabled. (beta function)
+   * Reports whether the virtual background is successfully enabled.
    *
    * **since** v3.5.0.3
    *

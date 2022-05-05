@@ -3187,7 +3187,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - This method dynamically loads `libagora_ai_denoise_extension.so` on Android or `AgoraAIDenoiseExtension.xcframework` on iOS, so Agora recommends calling this method before joining a channel.
    * - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
    * @param enabled Sets whether to enable deep-learning noise reduction.
-   *   - `true`: (Default) Enables deep-learning noise reduction.
+   *   - `true`: Enables deep-learning noise reduction.
    *   - `false`: Disables deep-learning noise reduction.
    * @return
    * - Void if the method call succeeds.
@@ -3519,7 +3519,7 @@ export default class RtcEngine implements RtcEngineInterface {
   }
 
   /**
-   * Enables/Disables the virtual background function. (beta function)
+   * Enables/Disables the virtual background function.
    *
    * @since v3.5.0.3
    *
@@ -3545,7 +3545,7 @@ export default class RtcEngine implements RtcEngineInterface {
    * - Agora recommends that you use this function in scenarios that meet the following conditions:
    *   - A high-definition camera device is used, and the environment is uniformly lit.
    *   - The captured video image is uncluttered, the user's portrait is half-length and largely unobstructed, and the background is a single color that differs from the color of the user's clothing.
-   * - The virtual background feature does not support video in the Texture format or video obtained from custom video capture by the Push method.
+   * - For versions earlier than v3.6.2, the virtual background feature does not support video in the Texture format.
    *
    * @param enabled Sets whether to enable the virtual background:
    * - `true`: Enable.
@@ -4084,8 +4084,8 @@ export default class RtcEngine implements RtcEngineInterface {
    * On Android, during screen sharing, make sure the following:
    * - The user has granted screen capture permission to the application; otherwise, the SDK triggers
    * the [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged} callback and reports `ScreenCapturePermissionDenied`(16).
-   * - the Android API level is not earlier than 21; otherwise, the SDK reports error codes ERR_SCREEN_CAPTURE_SYSTEM_NOT_SUPPORTED(2). // TODO Doc error code? 通过什么回调？
-   * - To capture system audio during screen sharing, ensure that the Android API level is not earlier than 29 as well; otherwise, the SDK reports the error code ERR_SCREEN_CAPTURE_SYSTEM_AUDIO_NOT_SUPPORTED(3). // TODO Doc error code? 通过什么回调？
+   * - the Android API level is not earlier than 21; otherwise, the method call fails and returns the error code `2`.
+   * - To capture system audio during screen sharing, ensure that the Android API level is not earlier than 29 as well; otherwise, the method call fails and returns the error code `3`.
    *
    * On iOS, When the screen sharing extension process starts, ends, or quits unexpectedly, the SDK triggers
    * the [`LocalVideoStateChanged`]{@link RtcEngineEvents.LocalVideoStateChanged} callback and reports `ExtensionCaptureStarted`(13), `ExtensionCaptureStoped`(14), and `ExtensionCaptureDisconnected`(15) accordingly.
@@ -4107,6 +4107,13 @@ export default class RtcEngine implements RtcEngineInterface {
    *
    * @param parameters The configuration of the screen sharing. See [`ScreenCaptureParameters`]{@link ScreenCaptureParameters}.
    *
+   * @returns
+   * - Void if the method call succeeds.
+   * - An error code if the method call fails. Possible errors include:
+   *    - 2: Due to system limitations, screen capture is not available on systems earlier than Android 5 (that is, Android API level 21).
+   * The SDK reports this error code when you call `startScreenCapture` on systems earlier than Android 5.
+   *    - 3: Due to system limitations, system audio cannot be captured on systems earlier than Android 10 (that is, API level 29).
+   * The SDK reports this error when you call `startScreenCapture` and set `captureAudio` as `true` on systems later than Android 5 (API level 21) and earlier than Android 10 (API level 29).
    */
   startScreenCapture(parameters: ScreenCaptureParameters): Promise<void> {
     return RtcEngine._callMethod('startScreenCapture', {

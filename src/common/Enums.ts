@@ -1621,9 +1621,29 @@ export enum LocalVideoStreamError {
    * @since v3.4.2
    */
   DeviceNotFound = 8,
+  /**
+   * 13: (iOS only) The screen sharing extension process starts.
+   *
+   * @since v3.7.0
+   */
   ExtensionCaptureStarted = 13,
+  /**
+   * 14: (iOS only) The screen sharing extension process ends.
+   *
+   * @since v3.7.0
+   */
   ExtensionCaptureStoped = 14,
+  /**
+   * 15: (iOS only) The screen sharing extension process quits unexpectedly.
+   *
+   * @since v3.7.0
+   */
   ExtensionCaptureDisconnected = 15,
+  /**
+   * 16: (Android only) The user refuses to grant screen capture permission to the application.
+   *
+   * @since v3.7.0
+   */
   ScreenCapturePermissionDenied = 16,
 }
 
@@ -2415,11 +2435,11 @@ export enum WarningCode {
    * 119: The client role is unauthorized.
    *
    * @deprecated Deprecated as of v3.7.0.
-   * Use [`ClientRoleChangeFailedReaso`]{@link ClientRoleChangeFailedReason} reported in `ClientRoleChangeFailed` instead.
+   * Use [`ClientRoleChangeFailedReason`]{@link ClientRoleChangeFailedReason} reported in `ClientRoleChangeFailed` instead.
    */
   SetClientRoleNotAuthorized = 119,
   /**
-   * 121: The ticket to open the channel is invalid.
+   * 121: The SDK fails to join a channel.
    */
   OpenChannelInvalidTicket = 121,
   /**
@@ -3374,7 +3394,7 @@ export enum ClientRoleChangeFailedReason {
 
   /**
    * `4`: he SDK connection fails.
-   * You can use reason reported in the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback to troubleshoot the failure.
+   * You can use `reason` reported in the [`ConnectionStateChanged`]{@link RtcEngineEvents.ConnectionStateChanged} callback to troubleshoot the failure.
    */
   ConnectionFailed = 4,
 }
