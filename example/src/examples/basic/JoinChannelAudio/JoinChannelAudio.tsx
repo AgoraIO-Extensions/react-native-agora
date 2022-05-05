@@ -240,10 +240,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   float: {
-    width: '100%',
     position: 'absolute',
-    alignItems: 'flex-start',
-    bottom: 20,
+    right: 0,
+    bottom: 0,
   },
   top: {
     width: '100%',

@@ -68,7 +68,7 @@ export default class SpatialAudio extends Component<{}, State, any> {
     });
     this._engine?.addListener('LeaveChannel', (stats) => {
       console.info('LeaveChannel', stats);
-      this.setState({ isJoined: false });
+      this.setState({ isJoined: false, enableSpatialAudio: false });
     });
     this._engine?.addListener('UserJoined', (uid, elapsed) => {
       console.info('UserJoined', uid, elapsed);
@@ -172,10 +172,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   float: {
-    width: '100%',
     position: 'absolute',
-    alignItems: 'flex-start',
-    bottom: 20,
+    right: 0,
+    bottom: 0,
   },
   top: {
     width: '100%',

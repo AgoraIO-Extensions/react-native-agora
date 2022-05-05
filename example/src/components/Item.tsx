@@ -18,11 +18,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     marginVertical: 10,
   },
   slider: {
-    width: '35%',
+    width: '100%',
     height: 40,
   },
   top: {
