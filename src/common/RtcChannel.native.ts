@@ -214,7 +214,7 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
    * - Calls [`muteLocalAudioStream`]{@link RtcChannel.muteLocalAudioStream} and [`muteLocalVideoStream`]{@link RtcChannel.muteLocalVideoStream} to change the publishing state.
-   * - Triggers [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged} on the local client.
+   * - Triggers [`ClientRoleChanged`]{@link RtcChannelEvents.ClientRoleChanged} or [`ClientRoleChangeFailed`]{@link RtcChannelEvents.ClientRoleChangeFailed} on the local client.
    * - Triggers [`UserJoined`]{@link RtcChannelEvents.UserJoined} or [`UserOffline`]{@link RtcChannelEvents.UserOffline} ([`BecomeAudience`]{@link UserOfflineReason.BecomeAudience}) on the remote client.
    *
    * **Note**

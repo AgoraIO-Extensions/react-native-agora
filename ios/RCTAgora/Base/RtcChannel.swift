@@ -410,7 +410,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func setAVSyncSource(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.setAVSyncSource(params["channelId"] as? String, uid: (params["uid"] as! NSNumber).uintValue))
+        callback.code(self[params["channelId"] as! String]?.setAVSyncSource(channelId: params["channelId"] as? String, uid: (params["uid"] as! NSNumber).uintValue))
     }
 
     @objc func startRtmpStreamWithoutTranscoding(_ params: NSDictionary, _ callback: Callback) {

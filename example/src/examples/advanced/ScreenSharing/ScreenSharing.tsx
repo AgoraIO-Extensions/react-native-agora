@@ -6,18 +6,18 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
+  LocalVideoStreamError,
   RtcEngineContext,
   RtcLocalView,
   RtcRemoteView,
+  VideoRenderMode,
 } from 'react-native-agora';
-import Item from '../../../components/Item';
 
 const config = require('../../../config/agora.config.json');
 
@@ -25,9 +25,7 @@ interface State {
   channelId: string;
   isJoined: boolean;
   remoteUid: number[];
-  switchCamera: boolean;
-  switchRender: boolean;
-  isRenderTextureView: boolean;
+  isScreenSharing: boolean;
 }
 
 export default class JoinChannelVideo extends Component<{}, State, any> {
@@ -39,9 +37,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       channelId: config.channelId,
       isJoined: false,
       remoteUid: [],
-      switchCamera: true,
-      switchRender: true,
-      isRenderTextureView: false,
+      isScreenSharing: false,
     };
   }
 
@@ -90,6 +86,24 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
         remoteUid: this.state.remoteUid.filter((value) => value !== uid),
       });
     });
+    this._engine?.addListener(
+      'LocalVideoStateChanged',
+      (localVideoState, error) => {
+        console.info('LocalVideoStateChanged', localVideoState, error);
+        switch (error) {
+          case LocalVideoStreamError.ExtensionCaptureStarted:
+            this.setState({ isScreenSharing: true });
+            break;
+          case LocalVideoStreamError.ExtensionCaptureStoped:
+          case LocalVideoStreamError.ExtensionCaptureDisconnected:
+          case LocalVideoStreamError.ScreenCapturePermissionDenied:
+            this.setState({ isScreenSharing: false });
+            break;
+          default:
+            break;
+        }
+      }
+    );
   };
 
   _joinChannel = async () => {
@@ -111,34 +125,23 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
     await this._engine?.leaveChannel();
   };
 
-  _switchCamera = () => {
-    const { switchCamera } = this.state;
-    this._engine
-      ?.switchCamera()
-      .then(() => {
-        this.setState({ switchCamera: !switchCamera });
-      })
-      .catch((err) => {
-        console.warn('switchCamera', err);
+  _startScreenShare = async () => {
+    const { isScreenSharing } = this.state;
+    if (isScreenSharing) {
+      await this._engine?.stopScreenCapture();
+    } else {
+      await this._engine?.startScreenCapture({
+        captureAudio: true,
+        captureVideo: true,
       });
-  };
-
-  _switchRender = () => {
-    const { switchRender, remoteUid } = this.state;
-    this.setState({
-      switchRender: !switchRender,
-      remoteUid: remoteUid.reverse(),
-    });
-  };
-
-  _switchRenderView = (value: boolean) => {
-    this.setState({
-      isRenderTextureView: value,
-    });
+    }
+    if (Platform.OS === 'android') {
+      this.setState({ isScreenSharing: !isScreenSharing });
+    }
   };
 
   render() {
-    const { channelId, isJoined, switchCamera } = this.state;
+    const { channelId, isJoined, isScreenSharing } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.top}>
@@ -152,55 +155,34 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
             onPress={isJoined ? this._leaveChannel : this._joinChannel}
             title={`${isJoined ? 'Leave' : 'Join'} channel`}
           />
-        </View>
-        {Platform.OS === 'android' && (
-          <Item
-            title={'Rendered By TextureView (Default SurfaceView):'}
-            isShowSwitch
-            onSwitchValueChange={this._switchRenderView}
-          />
-        )}
-        {this._renderVideo()}
-        <View style={styles.float}>
           <Button
-            onPress={this._switchCamera}
-            title={`Camera ${switchCamera ? 'front' : 'rear'}`}
+            title={`${isScreenSharing ? 'Stop' : 'Start'} screen sharing`}
+            onPress={this._startScreenShare}
           />
         </View>
+        {this._renderVideo()}
       </View>
     );
   }
 
   _renderVideo = () => {
-    const { isRenderTextureView, remoteUid } = this.state;
+    const { remoteUid } = this.state;
     return (
       <View style={styles.container}>
-        {isRenderTextureView ? (
-          <RtcLocalView.TextureView style={styles.local} />
-        ) : (
-          <RtcLocalView.SurfaceView style={styles.local} />
-        )}
+        <RtcLocalView.SurfaceView
+          style={styles.local}
+          renderMode={VideoRenderMode.Fit}
+        />
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
             {remoteUid.map((value, index) => (
-              <TouchableOpacity
+              <RtcRemoteView.SurfaceView
                 key={index}
                 style={styles.remote}
-                onPress={this._switchRender}
-              >
-                {isRenderTextureView ? (
-                  <RtcRemoteView.TextureView
-                    style={styles.container}
-                    uid={value}
-                  />
-                ) : (
-                  <RtcRemoteView.SurfaceView
-                    style={styles.container}
-                    uid={value}
-                    zOrderMediaOverlay={true}
-                  />
-                )}
-              </TouchableOpacity>
+                uid={value}
+                zOrderMediaOverlay={true}
+                renderMode={VideoRenderMode.Fit}
+              />
             ))}
           </ScrollView>
         )}

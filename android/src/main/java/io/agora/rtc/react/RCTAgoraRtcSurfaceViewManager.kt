@@ -4,8 +4,8 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import io.agora.rtc.RtcChannel
-import io.agora.rtc.RtcEngine
+import io.agora.rtc.base.RtcChannelManager
+import io.agora.rtc.base.RtcEngineManager
 import io.agora.rtc.base.RtcSurfaceView
 
 class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
@@ -42,26 +42,18 @@ class RCTAgoraRtcSurfaceViewManager : SimpleViewManager<RtcSurfaceView>() {
   @ReactProp(name = "data")
   fun setData(view: RtcSurfaceView, data: ReadableMap) {
     data.toHashMap().let { map ->
-      val channel = (map["channelId"] as? String)?.let { getChannel(it) }
-      getEngine()?.let { view.setData(it, channel, map["uid"] as Number) }
+      val channel = (map["channelId"] as? String)?.let { RtcChannelManager[it] }
+      RtcEngineManager.engine?.let { view.setData(it, channel, map["uid"] as Number) }
     }
   }
 
   @ReactProp(name = "renderMode")
   fun setRenderMode(view: RtcSurfaceView, renderMode: Int) {
-    getEngine()?.let { view.setRenderMode(it, renderMode) }
+    RtcEngineManager.engine?.let { view.setRenderMode(it, renderMode) }
   }
 
   @ReactProp(name = "mirrorMode")
   fun setMirrorMode(view: RtcSurfaceView, mirrorMode: Int) {
-    getEngine()?.let { view.setMirrorMode(it, mirrorMode) }
-  }
-
-  private fun getEngine(): RtcEngine? {
-    return reactContext?.getNativeModule(RCTAgoraRtcEngineModule::class.java)?.engine()
-  }
-
-  private fun getChannel(channelId: String): RtcChannel? {
-    return reactContext?.getNativeModule(RCTAgoraRtcChannelModule::class.java)?.channel(channelId)
+    RtcEngineManager.engine?.let { view.setMirrorMode(it, mirrorMode) }
   }
 }

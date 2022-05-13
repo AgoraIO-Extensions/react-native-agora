@@ -27,6 +27,7 @@ import type {
   VirtualBackgroundBlurDegree,
   VirtualBackgroundSourceType,
   VideoCodecTypeForStream,
+  VideoContentHint,
 } from './Enums';
 
 /**
@@ -48,11 +49,11 @@ export interface UserInfo {
  */
 export class VideoDimensions {
   /**
-   * The video resolution on the horizontal axis.
+   * The width (px) of the video encoding resolution.
    */
   width?: number;
   /**
-   * The video resolution on the vertical axis.
+   * The height (px) of the video encoding resolution.
    */
   height?: number;
 
@@ -2131,4 +2132,131 @@ export interface WlAccStats {
   e2eDelayPercent: number;
   frozenRatioPercent: number;
   lossRatePercent: number;
+}
+
+/**
+ * The configuration of the screen sharing.
+ *
+ * @since v3.7.0
+ */
+export class ScreenCaptureParameters {
+  /**
+   * Determines whether to capture system audio during screen sharing:
+   * - `true`: Capture.
+   * - `false`: (Default) Do not capture.
+   *
+   * **Note**
+   * On Android, due to system limitations, capturing system audio is only available for Android API level 29
+   * and later (that is, Android 10 and later).
+   */
+  captureAudio?: boolean;
+  /**
+   * The audio configuration for the shared screen stream. See [`ScreenAudioParameters`]{@link ScreenAudioParameters}.
+   *
+   * **Note**
+   * This parameter is only available for scenarios where `captureAudio` is `true`.
+   */
+  audioParams?: ScreenAudioParameters;
+  /**
+   * Determines whether to capture the screen during screen sharing:
+   * - `true`: Capture.
+   * - `false`: (Default) Do not capture.
+   *
+   * **Note**
+   * On Android, due to system limitations, screen capture is only available for Android API level 21
+   * and later (that is, Android 5 and later).
+   */
+  captureVideo?: boolean;
+  /**
+   * The video configuration for the shared screen stream. See [`ScreenVideoParameters`]{@link ScreenVideoParameters}.
+   *
+   * **Note**
+   * This parameter is only available for scenarios where `captureVideo` is `false`.
+   */
+  videoParams?: ScreenVideoParameters;
+}
+
+/**
+ * The video configuration for the shared screen stream.
+ *
+ * Only available for scenarios where `captureVideo` is `true`.
+ *
+ * @since v3.7.0
+ */
+export class ScreenVideoParameters {
+  /**
+   * The video encoding bitrate (Kbps). For recommended values,
+   * see [Recommended video profiles](https://docs.agora.io/en/Interactive%20Broadcast/game_streaming_video_profile?platform=Android#recommended-video-profiles).
+   */
+  bitrate?: number;
+  /**
+   * The video encoding frame rate (fps). The default value is 15. For recommended values,
+   * see [Recommended video profiles](https://docs.agora.io/en/Interactive%20Broadcast/game_streaming_video_profile?platform=Android#recommended-video-profiles).
+   */
+  frameRate?: number;
+  /**
+   * The video encoding resolution. The default value is 1280 × 720. For recommended values,
+   * see [Recommended video profiles](https://docs.agora.io/en/Interactive%20Broadcast/game_streaming_video_profile?platform=Android#recommended-video-profiles).
+   *
+   * If the aspect ratio is different between `dimensions` and the screen, the SDK adjusts the video encoding resolution according to the
+   * following rules (using an example value for `dimensions` of 1280 × 720):
+   * - When the width and height of the screen are both lower than those of `dimensions`, the SDK uses the resolution of the screen for video encoding.
+   * For example, if the screen is 640 × 360, the SDK uses 640 × 360 for video encoding.
+   * - When either the width or height of the screen is higher than that of `dimension`, the SDK uses the maximum values that do not exceed those of `dimensions`
+   * while maintaining the aspect ratio of the screen for video encoding. For example, if the screen is 2000 × 1500, the SDK uses 960 × 720 for video encoding.
+   *
+   * **Note**
+   * - The billing of the screen sharing stream is based on the value of `dimensions`.
+   * When you do not pass in a value, Agora bills you at 1280 × 720; when you pass a value in,
+   * Agora bills you at that value. For details, see [Pricing for Real-time Communication](https://docs.agora.io/en/Interactive%20Broadcast/billing_rtc?platform=React%20Native).
+   * - This value does not indicate the orientation mode of the output ratio. For how to set the video orientation, see [`VideoOutputOrientationMode`]{@link VideoOutputOrientationMode}.
+   * - Whether the SDK can support a resolution at 720P depends on the performance of the device. If you set 720P but the device cannot support it, the video frame rate can be lower.
+   */
+  dimensions?: VideoDimensions;
+  /**
+   * The content hint of the screen sharing. See [`VideoContentHint`]{@link VideoContentHint}.
+   */
+  contentHint?: VideoContentHint;
+}
+
+/**
+ * The audio configuration for the shared screen stream.
+ *
+ * Only available for scenarios where `captureAudio` is `true`.
+ *
+ * @since v3.7.0
+ */
+export class ScreenAudioParameters {
+  /**
+   * The audio sample rate (Hz). The default value is 16000.
+   */
+  sampleRate?: number;
+  /**
+   * The number of audio channels. The default value is 2, indicating dual channels.
+   */
+  channels?: number;
+  /**
+   * The volume of the captured system audio. The value range is [0,100]. The default value is 100.
+   */
+  captureSignalVolume?: number;
+  /**
+   * Determines whether to capture the audio played by the current application:
+   * - `true`: Capture.
+   * - `false`: (Default) Do not capture.
+   */
+  allowCaptureCurrentApp?: boolean;
+}
+
+/**
+ * @ignore Contact support@agora.io.
+ *
+ * @since v3.7.0
+ */
+export class SpatialAudioParams {
+  speaker_azimuth?: number;
+  speaker_elevation?: number;
+  speaker_distance?: number;
+  speaker_orientation?: number;
+  enable_blur?: boolean;
+  enable_air_absorb?: boolean;
 }
