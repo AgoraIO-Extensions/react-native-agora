@@ -1,3 +1,10 @@
+# [3.7.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.6.2...v3.7.0) (2022-05-13)
+
+
+### Features
+
+* support 3.7.0 ([#490](https://github.com/AgoraIO-Community/react-native-agora/issues/490)) ([0d9e681](https://github.com/AgoraIO-Community/react-native-agora/commit/0d9e6819a1a460b23620ec486356dd6dce2ea30f)), closes [#494](https://github.com/AgoraIO-Community/react-native-agora/issues/494)
+
 ## [3.6.2](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.5.3...v3.6.2) (2022-04-13)
 
 
