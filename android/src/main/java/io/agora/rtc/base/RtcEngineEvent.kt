@@ -3,7 +3,9 @@ package io.agora.rtc.base
 import android.graphics.Rect
 import androidx.annotation.IntRange
 import io.agora.rtc.AgoraMediaRecorder
+import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
+import io.agora.rtc.mediaio.AgoraDefaultSource
 import io.agora.rtc.models.UserInfo
 
 class RtcEngineEvents {
@@ -97,6 +99,7 @@ class RtcEngineEvents {
     const val WlAccMessage = "WlAccMessage"
     const val WlAccStats = "WlAccStats"
     const val ClientRoleChangeFailed = "ClientRoleChangeFailed"
+    const val LocalVoicePitchInHz = "LocalVoicePitchInHz"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -325,6 +328,9 @@ class RtcEngineEventHandler(
     @Annotations.AgoraLocalVideoStreamState localVideoState: Int,
     @Annotations.AgoraLocalVideoStreamError error: Int
   ) {
+    if (error == Constants.ERR_SCREEN_CAPTURE_PERMISSION_DENIED) {
+      RtcEngineManager.engine?.setVideoSource(AgoraDefaultSource())
+    }
     callback(RtcEngineEvents.LocalVideoStateChanged, localVideoState, error)
   }
 
@@ -770,5 +776,9 @@ class RtcEngineEventHandler(
 
   override fun onClientRoleChangeFailed(reason: Int, currentRole: Int) {
     callback(RtcEngineEvents.ClientRoleChangeFailed, reason, currentRole)
+  }
+
+  override fun onLocalVoicePitchInHz(pitchInHz: Int) {
+    callback(RtcEngineEvents.LocalVoicePitchInHz, pitchInHz)
   }
 }

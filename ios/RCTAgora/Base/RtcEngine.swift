@@ -8,6 +8,7 @@
 
 import AgoraRtcKit
 import Foundation
+import ReplayKit
 
 protocol RtcEngineInterface:
         RtcEngineUserInfoInterface,
@@ -173,6 +174,12 @@ protocol RtcEngineVideoInterface {
     func setLowLightEnhanceOptions(_ params: NSDictionary, _ callback: Callback)
 
     func setColorEnhanceOptions(_ params: NSDictionary, _ callback: Callback)
+
+    func startScreenCapture(_ params: NSDictionary, _ callback: Callback)
+
+    func stopScreenCapture(_ callback: Callback)
+
+    func updateScreenCapture(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioMixingInterface {
@@ -269,12 +276,18 @@ protocol RtcEngineVoiceChangerInterface {
     func setAudioEffectParameters(_ params: NSDictionary, _ callback: Callback)
 
     func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback)
+
+    func enableLocalVoicePitchCallback(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineVoicePositionInterface {
     func enableSoundPositionIndication(_ params: NSDictionary, _ callback: Callback)
 
     func setRemoteVoicePosition(_ params: NSDictionary, _ callback: Callback)
+
+    func enableSpatialAudio(_ params: NSDictionary, _ callback: Callback)
+
+    func setRemoteUserSpatialAudioParams(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEnginePublishStreamInterface {
@@ -1306,5 +1319,47 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func setAVSyncSource(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setAVSyncSource(params["channelId"] as? String, uid: (params["uid"] as! NSNumber).uintValue))
+    }
+
+    @objc func startScreenCapture(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.startScreenCapture(mapToScreenCaptureParameters(params["parameters"] as! [String: Any])))
+        if #available(iOS 12.0, *) {
+            let pickerView = RPSystemBroadcastPickerView(frame: CGRect(x: 0, y:0, width: 50, height: 50))
+            if let url = Bundle.main.url(forResource: params["extensionName"] as? String, withExtension: "appex", subdirectory: "PlugIns") {
+                if let bundle = Bundle(url: url) {
+                    pickerView.preferredExtension = bundle.bundleIdentifier
+                    pickerView.showsMicrophoneButton = false
+
+                    // Auto click RPSystemBroadcastPickerView
+                    for view in pickerView.subviews {
+                        if let startButton = view as? UIButton {
+                            startButton.sendActions(for: .allTouchEvents)
+                        }
+                    }
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+
+    @objc func stopScreenCapture(_ callback: Callback) {
+        callback.code(engine?.stopScreenCapture())
+    }
+
+    @objc func updateScreenCapture(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.updateScreenCapture(mapToScreenCaptureParameters(params["parameters"] as! [String: Any])))
+    }
+
+    @objc func enableLocalVoicePitchCallback(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableLocalVoicePitchCallback((params["interval"] as! NSNumber).intValue))
+    }
+
+    @objc func enableSpatialAudio(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableSpatialAudio(params["enabled"] as! Bool))
+    }
+
+    @objc func setRemoteUserSpatialAudioParams(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.setRemoteUserSpatialAudioParams((params["uid"] as! NSNumber).uintValue, param: mapToSpatialAudioParams(params["params"] as! [String: Any])))
     }
 }

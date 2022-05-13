@@ -24,3 +24,7 @@ target 'AgoraExample' do
     react_native_post_install(installer)
   end
 end
+
+target 'ScreenSharing' do
+  pod 'AgoraRtcEngine_iOS', '3.7.0'
+end

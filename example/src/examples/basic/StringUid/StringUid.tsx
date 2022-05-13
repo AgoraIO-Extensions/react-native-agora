@@ -102,6 +102,7 @@ export default class StringUid extends Component<{}, State, any> {
           />
           <TextInput
             style={styles.input}
+            editable={!isJoined}
             onChangeText={(text) => this.setState({ stringUid: text })}
             placeholder={'String User ID'}
             value={stringUid}
@@ -134,5 +135,6 @@ const styles = StyleSheet.create({
   input: {
     borderColor: 'gray',
     borderWidth: 1,
+    color: 'black',
   },
 });

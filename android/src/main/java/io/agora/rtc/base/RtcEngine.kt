@@ -3,6 +3,7 @@ package io.agora.rtc.base
 import android.content.Context
 import io.agora.rtc.*
 import io.agora.rtc.internal.EncryptionConfig
+import io.agora.rtc.mediaio.AgoraDefaultSource
 import io.agora.rtc.models.UserInfo
 
 class IRtcEngine {
@@ -155,6 +156,12 @@ class IRtcEngine {
     fun setLowLightEnhanceOptions(params: Map<String, *>, callback: Callback)
 
     fun setColorEnhanceOptions(params: Map<String, *>, callback: Callback)
+
+    fun startScreenCapture(params: Map<String, *>, callback: Callback)
+
+    fun stopScreenCapture(callback: Callback)
+
+    fun updateScreenCaptureParameters(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcAudioMixingInterface {
@@ -251,12 +258,18 @@ class IRtcEngine {
     fun setAudioEffectParameters(params: Map<String, *>, callback: Callback)
 
     fun setVoiceBeautifierParameters(params: Map<String, *>, callback: Callback)
+
+    fun enableLocalVoicePitchCallback(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcVoicePositionInterface {
     fun enableSoundPositionIndication(params: Map<String, *>, callback: Callback)
 
     fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback)
+
+    fun enableSpatialAudio(params: Map<String, *>, callback: Callback)
+
+    fun setRemoteUserSpatialAudioParams(params: Map<String, *>, callback: Callback)
   }
 
   interface RtcPublishStreamInterface {
@@ -430,8 +443,11 @@ open class RtcEngineManager(
   private val emit: (methodName: String, data: Map<String, Any?>?) -> Unit,
   private val rtcEngineFactory: RtcEngineFactory = RtcEngineFactory()
 ) : IRtcEngine.RtcEngineInterface {
-  var engine: RtcEngine? = null
-    private set
+  companion object {
+    var engine: RtcEngine? = null
+      private set
+  }
+
   private var eventHandler: RtcEngineEventHandler = RtcEngineEventHandler { methodName, data ->
     emit(methodName, data)
   }
@@ -641,6 +657,27 @@ open class RtcEngineManager(
       engine?.setAVSyncSource(
         params["channelId"] as String,
         (params["uid"] as Number).toNativeUInt()
+      )
+    )
+  }
+
+  override fun startScreenCapture(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.startScreenCapture(mapToScreenCaptureParameters(params["parameters"] as Map<*, *>)))
+  }
+
+  override fun stopScreenCapture(callback: Callback) {
+    engine?.setVideoSource(AgoraDefaultSource())
+    callback.code(engine?.stopScreenCapture())
+  }
+
+  override fun updateScreenCaptureParameters(params: Map<String, *>, callback: Callback) {
+    val screenCaptureParameters =
+      mapToScreenCaptureParameters(params["parameters"] as Map<*, *>)
+    callback.code(
+      engine?.updateScreenCaptureParameters(
+        screenCaptureParameters.captureVideo,
+        screenCaptureParameters.captureAudio,
+        screenCaptureParameters.videoCaptureParameters
       )
     )
   }
@@ -1062,6 +1099,19 @@ open class RtcEngineManager(
     callback.code(-Constants.ERR_NOT_SUPPORTED)
   }
 
+  override fun enableSpatialAudio(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableSpatialAudio(params["enabled"] as Boolean))
+  }
+
+  override fun setRemoteUserSpatialAudioParams(params: Map<String, *>, callback: Callback) {
+    callback.code(
+      engine?.setRemoteUserSpatialAudioParams(
+        (params["uid"] as Number).toNativeUInt(),
+        mapToSpatialAudioParams(params["params"] as Map<*, *>)
+      )
+    )
+  }
+
   override fun setLocalVoiceChanger(params: Map<String, *>, callback: Callback) {
     callback.code(engine?.setLocalVoiceChanger((params["voiceChanger"] as Number).toInt()))
   }
@@ -1122,6 +1172,10 @@ open class RtcEngineManager(
         (params["param2"] as Number).toInt()
       )
     )
+  }
+
+  override fun enableLocalVoicePitchCallback(params: Map<String, *>, callback: Callback) {
+    callback.code(engine?.enableLocalVoicePitchCallback((params["interval"] as Number).toInt()))
   }
 
   override fun enableSoundPositionIndication(params: Map<String, *>, callback: Callback) {

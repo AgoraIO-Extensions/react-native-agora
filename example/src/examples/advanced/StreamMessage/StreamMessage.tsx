@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
   input: {
     borderColor: 'gray',
     borderWidth: 1,
+    color: 'black',
   },
   videoContainer: {
     width: '100%',

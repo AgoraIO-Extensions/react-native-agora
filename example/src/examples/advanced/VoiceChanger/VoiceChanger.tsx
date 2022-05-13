@@ -22,7 +22,7 @@ import RtcEngine, {
   RtcEngineContext,
   VoiceBeautifierPreset,
 } from 'react-native-agora';
-import Item from '../../basic/JoinChannelAudio/Item';
+import Item from '../../../components/Item';
 
 const config = require('../../../config/agora.config.json');
 
@@ -374,5 +374,6 @@ const styles = StyleSheet.create({
   input: {
     borderColor: 'gray',
     borderWidth: 1,
+    color: 'black',
   },
 });

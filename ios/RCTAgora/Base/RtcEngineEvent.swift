@@ -100,6 +100,7 @@ class RtcEngineEvents {
     static let WlAccMessage = "WlAccMessage"
     static let WlAccStats = "WlAccStats"
     static let ClientRoleChangeFailed = "ClientRoleChangeFailed"
+    static let LocalVoicePitchInHz = "LocalVoicePitchInHz"
 
     static func toMap() -> [String: String] {
         return [
@@ -193,6 +194,7 @@ class RtcEngineEvents {
             "WlAccMessage": WlAccMessage,
             "WlAccStats": WlAccStats,
             "ClientRoleChangeFailed": ClientRoleChangeFailed,
+            "LocalVoicePitchInHz": LocalVoicePitchInHz,
         ]
     }
 }
@@ -260,7 +262,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate, AgoraMediaRecorderDeleg
         callback(RtcEngineEvents.ConnectionStateChanged, state.rawValue, reason.rawValue)
     }
 
-    public func rtcEngine(_: AgoraRtcEngineKit, networkTypeChangedTo type: AgoraNetworkType) {
+    public func rtcEngine(_: AgoraRtcEngineKit, networkTypeChangedToType type: AgoraNetworkType) {
         callback(RtcEngineEvents.NetworkTypeChanged, type.rawValue)
     }
 
@@ -304,7 +306,10 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate, AgoraMediaRecorderDeleg
         callback(RtcEngineEvents.RemoteVideoStateChanged, uid, state.rawValue, reason.rawValue, elapsed)
     }
 
-    public func rtcEngine(_: AgoraRtcEngineKit, localVideoStateChange state: AgoraLocalVideoStreamState, error: AgoraLocalVideoStreamError) {
+    public func rtcEngine(_ engine: AgoraRtcEngineKit, localVideoStateChange state: AgoraLocalVideoStreamState, error: AgoraLocalVideoStreamError) {
+        if error == .extensionCaptureDisconnected || error == .extensionCaptureStoped {
+            engine.setVideoSource(AgoraRtcDefaultCamera())
+        }
         callback(RtcEngineEvents.LocalVideoStateChanged, state.rawValue, error.rawValue)
     }
 
@@ -574,5 +579,9 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate, AgoraMediaRecorderDeleg
     
     func mediaRecorder(_ recorder: AgoraMediaRecorder, informationDidUpdated info: AgoraMediaRecorderInfo) {
         callback(RtcEngineEvents.RecorderInfoUpdated, info.toMap())
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, reportLocalVoicePitchFrequency pitchInHz: Int) {
+        callback(RtcEngineEvents.LocalVoicePitchInHz, pitchInHz)
     }
 }

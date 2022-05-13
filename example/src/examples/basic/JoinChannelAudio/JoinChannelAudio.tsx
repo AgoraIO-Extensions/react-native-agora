@@ -13,7 +13,7 @@ import RtcEngine, {
   RtcEngineContext,
 } from 'react-native-agora';
 import RNFS from 'react-native-fs';
-import Item from './Item';
+import Item from '../../../components/Item';
 
 const config = require('../../../config/agora.config.json');
 
@@ -240,10 +240,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   float: {
-    width: '100%',
     position: 'absolute',
-    alignItems: 'flex-start',
-    bottom: 20,
+    right: 0,
+    bottom: 0,
   },
   top: {
     width: '100%',
@@ -251,5 +250,6 @@ const styles = StyleSheet.create({
   input: {
     borderColor: 'gray',
     borderWidth: 1,
+    color: 'black',
   },
 });

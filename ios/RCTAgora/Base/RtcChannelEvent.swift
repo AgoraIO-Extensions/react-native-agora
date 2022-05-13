@@ -48,6 +48,7 @@ class RtcChannelEvents {
     static let UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
     static let ProxyConnected = "ProxyConnected"
     static let ClientRoleChangeFailed = "ClientRoleChangeFailed"
+    static let FirstRemoteVideoFrame = "FirstRemoteVideoFrame"
 
     static func toMap() -> [String: String] {
         return [
@@ -89,6 +90,7 @@ class RtcChannelEvents {
             "UserSuperResolutionEnabled": UserSuperResolutionEnabled,
             "ProxyConnected": ProxyConnected,
             "ClientRoleChangeFailed": ClientRoleChangeFailed,
+            "FirstRemoteVideoFrame": FirstRemoteVideoFrame,
         ]
     }
 }
@@ -257,5 +259,9 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
 
     func rtcChannel(_ rtcChannel: AgoraRtcChannel, didClientRoleChangeFailed reason: AgoraClientRoleChangeFailedReason, currentRole: AgoraClientRole) {
         callback(RtcChannelEvents.ClientRoleChangeFailed, rtcChannel, reason.rawValue, currentRole.rawValue)
+    }
+    
+    func rtcChannel(_ rtcChannel: AgoraRtcChannel, firstRemoteVideoFrameOfUid uid: UInt, size: CGSize, elapsed: Int) {
+        callback(RtcChannelEvents.FirstRemoteVideoFrame, rtcChannel, uid, Int(size.width), Int(size.height), elapsed)
     }
 }
