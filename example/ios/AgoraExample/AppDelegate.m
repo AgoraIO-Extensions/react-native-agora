@@ -10,6 +10,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "AgoraExample-Swift.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -28,6 +29,12 @@ static void InitializeFlipper(UIApplication *application) {
   [client start];
 }
 #endif
+
+@interface AppDelegate()
+
+@property(nonatomic, strong) Plugin* plugin;
+
+@end
 
 @implementation AppDelegate
 
@@ -54,7 +61,15 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  _plugin = [Plugin new];
+  [Plugin registerWithPlugin:_plugin];
+  
   return YES;
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+  [Plugin unregisterWithPlugin:_plugin];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
