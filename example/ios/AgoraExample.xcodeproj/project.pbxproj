@@ -12,7 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		20F357B024636CDF00C146DC /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F357AF24636CDF00C146DC /* File.swift */; };
+		20F357B024636CDF00C146DC /* Plugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F357AF24636CDF00C146DC /* Plugin.swift */; };
 		F550788525DF9BB20027CF64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F550788425DF9BB20027CF64 /* LaunchScreen.storyboard */; };
 		F55AC4EA2816A4AA00FAF1D9 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55AC4E92816A4AA00FAF1D9 /* ReplayKit.framework */; };
 		F55AC4EE2816A4AA00FAF1D9 /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F55AC4ED2816A4AA00FAF1D9 /* SampleHandler.m */; };
@@ -54,7 +54,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AgoraExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = AgoraExample/main.m; sourceTree = "<group>"; };
 		20F357AE24636CDF00C146DC /* AgoraExample-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AgoraExample-Bridging-Header.h"; sourceTree = "<group>"; };
-		20F357AF24636CDF00C146DC /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		20F357AF24636CDF00C146DC /* Plugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plugin.swift; sourceTree = "<group>"; };
 		4D7192F03A36A017E887435B /* Pods-AgoraExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraExample.release.xcconfig"; path = "Target Support Files/Pods-AgoraExample/Pods-AgoraExample.release.xcconfig"; sourceTree = "<group>"; };
 		871719007ECC5EAD276C345C /* Pods-AgoraExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraExample.debug.xcconfig"; path = "Target Support Files/Pods-AgoraExample/Pods-AgoraExample.debug.xcconfig"; sourceTree = "<group>"; };
 		BCEA90A70F4BEAD7E9FA28B2 /* libPods-AgoraExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgoraExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,7 +137,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				20F357AF24636CDF00C146DC /* File.swift */,
+				F5A104C628337F88005A7DE7 /* Plugin */,
 				20F357AE24636CDF00C146DC /* AgoraExample-Bridging-Header.h */,
 				13B07FAE1A68108700A75B9A /* AgoraExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -169,6 +169,14 @@
 				F55AC4EF2816A4AA00FAF1D9 /* Info.plist */,
 			);
 			path = ScreenSharing;
+			sourceTree = "<group>";
+		};
+		F5A104C628337F88005A7DE7 /* Plugin */ = {
+			isa = PBXGroup;
+			children = (
+				20F357AF24636CDF00C146DC /* Plugin.swift */,
+			);
+			path = Plugin;
 			sourceTree = "<group>";
 		};
 		F5A97ED525D3ADEF00263532 /* Resources */ = {
@@ -437,7 +445,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				20F357B024636CDF00C146DC /* File.swift in Sources */,
+				20F357B024636CDF00C146DC /* Plugin.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
