@@ -1,0 +1,9 @@
+rootProject.name = 'ReactNativeAgoraRtcNgExample'
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app'
+
+include ':react-native-agora-rtc-ng'
+project(':react-native-agora-rtc-ng').projectDir = new File(rootProject.projectDir, '../../android')
+
+include ':iris'
+project(':iris').projectDir = new File('/Users/lxh/Agora/iris/dcg/android/app')
