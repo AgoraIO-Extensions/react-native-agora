@@ -207,6 +207,7 @@ export default class JoinChannelVideo
                 <RtcSurfaceView
                   key={`${value}-${index}`}
                   style={STYLES.videoSmall}
+                  zOrderMediaOverlay={true}
                   canvas={{ uid: value, setupMode }}
                 />
               )
@@ -223,7 +224,9 @@ export default class JoinChannelVideo
     return (
       <>
         <ActionItem
-          disabled={!startPreview && !joinChannelSuccess}
+          disabled={
+            (!startPreview && !joinChannelSuccess) || Platform.OS !== 'android'
+          }
           title={`renderByTextureView`}
           isShowSwitch={true}
           switchValue={renderByTextureView}

@@ -152,9 +152,23 @@ export default class SendMultiVideoStream
   };
 
   /**
+   * Step 3-3: destroyMediaPlayer
+   */
+  destroyMediaPlayer = () => {
+    if (!this.player) {
+      console.error('player is invalid');
+      return;
+    }
+
+    this.engine?.destroyMediaPlayer(this.player);
+    this.setState({ open: false });
+  };
+
+  /**
    * Step 4: leaveChannel
    */
   protected leaveChannel() {
+    this.destroyMediaPlayer();
     this.engine?.leaveChannel();
   }
 
@@ -263,8 +277,8 @@ export default class SendMultiVideoStream
     return (
       <>
         <ActionItem
-          title={`create Media Player`}
-          onPress={this.createMediaPlayer}
+          title={`${open ? 'destroy' : 'create'} Media Player`}
+          onPress={open ? this.destroyMediaPlayer : this.createMediaPlayer}
         />
         <ActionItem
           disabled={!open}

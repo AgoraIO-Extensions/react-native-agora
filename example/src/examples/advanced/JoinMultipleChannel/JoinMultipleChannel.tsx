@@ -428,6 +428,7 @@ export default class JoinMultipleChannel
                 key={`${value}-${index}`}
                 style={STYLES.videoSmall}
                 canvas={{ uid: value }}
+                zOrderMediaOverlay={true}
                 connection={{ channelId, localUid: uid }}
               />
             ))}
