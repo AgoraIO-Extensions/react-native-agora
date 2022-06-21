@@ -27,6 +27,7 @@ export class RtcEngineInternal extends IRtcEngineExImpl {
 
   release(sync: boolean = false) {
     RtcEngineInternal._handlers = [];
+    MediaPlayerInternal._observers.clear();
     super.release(sync);
   }
 
@@ -58,6 +59,12 @@ export class RtcEngineInternal extends IRtcEngineExImpl {
     // @ts-ignore
     const mediaPlayerId = super.createMediaPlayer() as number;
     return new MediaPlayerInternal(mediaPlayerId);
+  }
+
+  destroyMediaPlayer(mediaPlayer: IMediaPlayer): number {
+    const ret = super.destroyMediaPlayer(mediaPlayer);
+    MediaPlayerInternal._observers.delete(mediaPlayer.getMediaPlayerId());
+    return ret;
   }
 
   startDirectCdnStreaming(

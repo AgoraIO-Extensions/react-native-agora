@@ -16,6 +16,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Keyboard,
 } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,7 +32,13 @@ const DATA = [Basic, Advanced];
 const App = () => {
   return (
     <NavigationContainer>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+        onStartShouldSetResponder={(_) => {
+          Keyboard.dismiss();
+          return false;
+        }}
+      >
         <Stack.Navigator>
           <Stack.Screen name={'APIExample'} component={Home} />
           {DATA.map((value) =>

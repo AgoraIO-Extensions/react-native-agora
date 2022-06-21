@@ -1,7 +1,5 @@
 PODS:
-  - AgoraRtcEngine_iOS_Beta (4.0.0.beta.1)
-  - AgoraRtcWrapper (3.8.201):
-    - AgoraRtcEngine_iOS_Beta (= 4.0.0-beta.1)
+  - AgoraRtcWrapper (3.8.201)
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -413,7 +411,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AgoraRtcEngine_iOS_Beta
     - boost-for-react-native
     - CocoaAsyncSocket
     - Flipper
@@ -504,8 +501,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraRtcEngine_iOS_Beta: 9b9f5402acea6b8a30efbfe149b916dae90ddcb1
-  AgoraRtcWrapper: 7775373007131bd1b4a849a2f31744305e13f82e
+  AgoraRtcWrapper: c304a7810fd82e917073fe2133da6593a2f96898
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de

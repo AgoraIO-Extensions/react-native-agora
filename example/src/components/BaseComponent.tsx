@@ -228,6 +228,7 @@ export abstract class BaseComponent<
               <RtcSurfaceView
                 key={`${value}-${index}`}
                 style={STYLES.videoSmall}
+                zOrderMediaOverlay={true}
                 canvas={{ uid: value }}
               />
             ))}
