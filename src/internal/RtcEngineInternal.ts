@@ -1,28 +1,30 @@
+import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
+import { MediaPlayerInternal } from './MediaPlayerInternal';
+import { callIrisApi } from './IrisApiEngine';
 import {
-  AudioRecordingConfiguration,
   ChannelMediaOptions,
-  ClientRoleOptions,
-  ClientRoleType,
-  DataStreamConfig,
   DirectCdnStreamingMediaOptions,
-  IAudioDeviceManager,
   IDirectCdnStreamingEventHandler,
-  IMediaPlayer,
   IMetadataObserver,
   IRtcEngineEventHandler,
   IVideoDeviceManager,
   LeaveChannelOptions,
   MetadataType,
-  RtcConnection,
   RtcEngineContext,
   SDKBuildInfo,
+} from '../IAgoraRtcEngine';
+import { IMediaPlayer } from '../IAgoraMediaPlayer';
+import {
+  AudioRecordingConfiguration,
+  ClientRoleOptions,
+  ClientRoleType,
+  DataStreamConfig,
   SimulcastStreamConfig,
   VideoSourceType,
   WatermarkOptions,
-} from 'react-native-agora-rtc-ng';
-import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
-import { MediaPlayerInternal } from './MediaPlayerInternal';
-import { callIrisApi } from './IrisApiEngine';
+} from '../AgoraBase';
+import { RtcConnection } from '../IAgoraRtcEngineEx';
+import { IAudioDeviceManager } from '../IAudioDeviceManager';
 
 export class RtcEngineInternal extends IRtcEngineExImpl {
   static _handlers: (

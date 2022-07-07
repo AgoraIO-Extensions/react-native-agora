@@ -2,11 +2,10 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 
 import {
   IDirectCdnStreamingEventHandler,
-  IMediaPlayer,
   IMetadataObserver,
   IRtcEngineEventHandler,
-} from 'react-native-agora-rtc-ng';
-
+} from '../IAgoraRtcEngine';
+import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import { RtcEngineInternal } from './RtcEngineInternal';
 import {
   processIDirectCdnStreamingEventHandler,
@@ -15,10 +14,10 @@ import {
 } from '../impl/IAgoraRtcEngineImpl';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
+import { Buffer } from 'buffer';
 
 const base64 = require('base-64');
 const utf8 = require('utf8');
-import { Buffer } from 'buffer';
 
 const {
   /**

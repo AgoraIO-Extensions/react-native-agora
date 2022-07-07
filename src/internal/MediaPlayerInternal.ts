@@ -1,8 +1,5 @@
-import {
-  ErrorCodeType,
-  IMediaPlayerSourceObserver,
-} from 'react-native-agora-rtc-ng';
-
+import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
+import { ErrorCodeType } from '../AgoraBase';
 import { IMediaPlayerImpl } from '../impl/IAgoraMediaPlayerImpl';
 import { callIrisApi } from './IrisApiEngine';
 
