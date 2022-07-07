@@ -7,11 +7,11 @@ import {
   VideoMirrorModeType,
   ConnectionStateType,
   EncryptionConfig,
-  DataStreamConfig,
   WatermarkOptions,
   UserInfo,
   VideoSourceType,
   SimulcastStreamConfig,
+  DataStreamConfig,
 } from './AgoraBase';
 import { RenderModeType } from './AgoraMediaBase';
 
@@ -96,17 +96,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     config: EncryptionConfig
   ): number;
 
-  abstract createDataStreamEx(
-    reliable: boolean,
-    ordered: boolean,
-    connection: RtcConnection
-  ): number;
-
-  abstract createDataStreamEx2(
-    config: DataStreamConfig,
-    connection: RtcConnection
-  ): number;
-
   abstract sendStreamMessageEx(
     streamId: number,
     data: Uint8Array,
@@ -162,6 +151,11 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   abstract addPublishStreamUrlEx(
     url: string,
     transcodingEnabled: boolean,
+    connection: RtcConnection
+  ): number;
+
+  abstract createDataStreamEx(
+    config: DataStreamConfig,
     connection: RtcConnection
   ): number;
 }

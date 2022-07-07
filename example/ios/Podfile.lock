@@ -1,5 +1,6 @@
 PODS:
-  - AgoraRtcWrapper (3.8.201)
+  - AgoraIrisRTC_iOS (3.8.201)
+  - AgoraRtcEngine_Special_iOS (3.8.201.2)
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -265,7 +266,8 @@ PODS:
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
   - react-native-agora-rtc-ng (0.1.0):
-    - AgoraRtcWrapper
+    - AgoraIrisRTC_iOS (= 3.8.201)
+    - AgoraRtcEngine_Special_iOS (= 3.8.201.2)
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
@@ -350,7 +352,6 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AgoraRtcWrapper (from `../../ios`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
@@ -411,6 +412,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AgoraIrisRTC_iOS
+    - AgoraRtcEngine_Special_iOS
     - boost-for-react-native
     - CocoaAsyncSocket
     - Flipper
@@ -425,8 +428,6 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
-  AgoraRtcWrapper:
-    :path: "../../ios"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -501,7 +502,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraRtcWrapper: c304a7810fd82e917073fe2133da6593a2f96898
+  AgoraIrisRTC_iOS: adb6eef45f7af8e4c3b651226588fe81aa480e49
+  AgoraRtcEngine_Special_iOS: e3639c355d902bf0fbe326fa0db3d34c4c251d4d
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
@@ -528,7 +530,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-agora-rtc-ng: 555a16a92718f422c4f025cbf80bdf7a4486c5cc
+  react-native-agora-rtc-ng: 6ba48a238561566f6c69c8c5357728a07d4330d2
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
@@ -551,6 +553,6 @@ SPEC CHECKSUMS:
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 19399eaa7f0ce9531c17a29bfee2830014acb8f1
+PODFILE CHECKSUM: e310f52724aa670d930adf8673adab85cae399f9
 
 COCOAPODS: 1.11.3

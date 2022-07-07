@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 10,
   },
   slider: {
     width: '100%',

@@ -10,12 +10,14 @@ import {
   View,
 } from 'react-native';
 import {
+  ErrorCodeType,
   IRtcEngine,
   IRtcEngineEventHandler,
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
   UserOfflineReasonType,
+  WarnCodeType,
 } from 'react-native-agora-rtc-ng';
 import {
   copyFileAssets,
@@ -110,11 +112,11 @@ export abstract class BaseComponent<
 
   protected abstract releaseRtcEngine(): void;
 
-  onWarning(warn: number, msg: string) {
+  onWarning(warn: WarnCodeType, msg: string) {
     this.warn('onWarning', 'warn', warn, 'msg', msg);
   }
 
-  onError(err: number, msg: string) {
+  onError(err: ErrorCodeType, msg: string) {
     this.error('onError', 'err', err, 'msg', msg);
   }
 

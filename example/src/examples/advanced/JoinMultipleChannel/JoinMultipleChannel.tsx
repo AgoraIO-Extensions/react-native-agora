@@ -169,7 +169,7 @@ export default class JoinMultipleChannel
   /**
    * Step 3: publishStreamToChannel
    */
-  publishStreamToChannel = async () => {
+  publishStreamToChannel = () => {
     const { channelId, channelId2, uid, uid2 } = this.state;
     this.engine?.updateChannelMediaOptionsEx(
       { publishAudioTrack: false, publishCameraTrack: false },
@@ -190,7 +190,7 @@ export default class JoinMultipleChannel
   /**
    * Step 3: publishStreamToChannel2
    */
-  publishStreamToChannel2 = async () => {
+  publishStreamToChannel2 = () => {
     const { channelId, channelId2, uid, uid2 } = this.state;
     this.engine?.updateChannelMediaOptionsEx(
       { publishAudioTrack: false, publishCameraTrack: false },

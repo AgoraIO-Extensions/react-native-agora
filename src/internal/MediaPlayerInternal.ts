@@ -4,6 +4,7 @@ import {
 } from 'react-native-agora-rtc-ng';
 
 import { IMediaPlayerImpl } from '../impl/IAgoraMediaPlayerImpl';
+import { callIrisApi } from './IrisApiEngine';
 
 export class MediaPlayerInternal extends IMediaPlayerImpl {
   static _observers: Map<number, IMediaPlayerSourceObserver[]> = new Map<
@@ -41,5 +42,37 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
       observers.filter((value) => value !== observer)
     );
     return ErrorCodeType.ErrOk;
+  }
+
+  setPlayerOptionInInt(key: string, value: number): number {
+    const apiType = 'MediaPlayer_setPlayerOption';
+    const jsonParams = {
+      key,
+      value,
+      toJSON: () => {
+        return {
+          key,
+          value,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  setPlayerOptionInString(key: string, value: string): number {
+    const apiType = 'MediaPlayer_setPlayerOption2';
+    const jsonParams = {
+      key,
+      value,
+      toJSON: () => {
+        return {
+          key,
+          value,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
   }
 }

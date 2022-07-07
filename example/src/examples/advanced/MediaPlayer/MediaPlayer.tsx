@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { Button, TextInput } from 'react-native';
 import {
   createAgoraRtcEngine,
   IMediaPlayer,
@@ -28,6 +28,9 @@ interface State extends BaseComponentState {
   pause: boolean;
   position: number;
   duration: number;
+  mute: boolean;
+  playoutVolume: number;
+  loopCount: number;
 }
 
 export default class MediaPlayer
@@ -46,6 +49,9 @@ export default class MediaPlayer
       pause: false,
       position: 0,
       duration: 0,
+      mute: false,
+      playoutVolume: 100,
+      loopCount: 1,
     };
   }
 
@@ -91,11 +97,16 @@ export default class MediaPlayer
    * Step 3-2: play
    */
   play = () => {
-    this.player?.play();
+    const { position, duration } = this.state;
+    if (position === duration) {
+      this.player?.seek(0);
+    } else {
+      this.player?.play();
+    }
   };
 
   /**
-   * Step 3-3(Optional): seek
+   * Step 3-3 (Optional): seek
    */
   seek = (percent: number) => {
     if (percent < 0 || percent > 1) {
@@ -127,7 +138,56 @@ export default class MediaPlayer
   };
 
   /**
-   * Step 3-6: stop
+   * Step 3-6 (Optional): mute
+   */
+  mute = () => {
+    this.player?.mute(true);
+    this.setState({ mute: true });
+  };
+
+  /**
+   * Step 3-7 (Optional): unmute
+   */
+  unmute = () => {
+    this.player?.mute(false);
+    this.setState({ mute: false });
+  };
+
+  /**
+   * Step 3-8 (Optional): adjustPlayoutVolume
+   */
+  adjustPlayoutVolume = () => {
+    const { playoutVolume } = this.state;
+    this.player?.adjustPlayoutVolume(playoutVolume);
+  };
+
+  /**
+   * Step 3-9 (Optional): setLoopCount
+   */
+  setLoopCount = () => {
+    const { loopCount } = this.state;
+    this.player?.setLoopCount(loopCount);
+  };
+
+  /**
+   * Step 3-10 (Optional): getStreamInfo
+   */
+  getStreamInfo = () => {
+    const streamCount = this.player?.getStreamCount();
+    if (streamCount === undefined || streamCount <= 0) {
+      console.error(`streamCount is invalid`);
+    }
+
+    const streamInfo = this.player?.getStreamInfo(0);
+    if (streamInfo) {
+      this.debug('getStreamInfo', 'streamInfo', streamInfo);
+    } else {
+      this.error('getStreamInfo');
+    }
+  };
+
+  /**
+   * Step 3-11: stop
    */
   stop = () => {
     this.player?.stop();
@@ -168,8 +228,10 @@ export default class MediaPlayer
         break;
       case MediaPlayerState.PlayerStatePlaybackCompleted:
       case MediaPlayerState.PlayerStatePlaybackAllLoopsCompleted:
+        this.setState({ play: false });
+        break;
       case MediaPlayerState.PlayerStateStopped:
-        this.setState({ open: false, play: false });
+        this.setState({ open: false, play: false, pause: false });
         break;
       case MediaPlayerState.PlayerStatePausingInternal:
         break;
@@ -216,7 +278,30 @@ export default class MediaPlayer
   }
 
   protected renderBottom(): React.ReactNode {
-    const { url, open, position, duration } = this.state;
+    const { url, open, position, duration, playoutVolume, loopCount } =
+      this.state;
+
+    const renderSlider = (
+      key: string,
+      value: number,
+      min: number,
+      max: number
+    ) => {
+      return (
+        <ActionItem
+          title={`${key} ${value}`}
+          isShowSlider={true}
+          sliderValue={(value - min) / (max - min)}
+          onSliderValueChange={(value) => {
+            // @ts-ignore
+            this.setState({
+              [key]: +((max - min) * value + min).toFixed(0),
+            });
+          }}
+        />
+      );
+    };
+
     return (
       <>
         <TextInput
@@ -235,6 +320,33 @@ export default class MediaPlayer
           onSliderValueChange={(value) => {
             this.seek(value);
           }}
+        />
+        <Divider />
+        {renderSlider('playoutVolume', playoutVolume, 0, 400)}
+        <Button
+          disabled={!open}
+          title={'adjust Playout Volume'}
+          onPress={this.adjustPlayoutVolume}
+        />
+        <Divider />
+        <TextInput
+          style={STYLES.input}
+          onChangeText={(text) => {
+            this.setState({ loopCount: +text });
+          }}
+          keyboardType={'numeric'}
+          placeholder={`loopCount (defaults: ${loopCount})`}
+          placeholderTextColor={'gray'}
+          value={
+            loopCount === this.createState().loopCount
+              ? ''
+              : loopCount.toString()
+          }
+        />
+        <Button
+          disabled={!open}
+          title={'set Loop Count'}
+          onPress={this.setLoopCount}
         />
         <Divider />
       </>
@@ -259,7 +371,7 @@ export default class MediaPlayer
   }
 
   protected renderFloat(): React.ReactNode {
-    const { open, play, pause } = this.state;
+    const { open, play, pause, mute } = this.state;
     return (
       <>
         <ActionItem disabled={open} title={`open`} onPress={this.open} />
@@ -272,6 +384,16 @@ export default class MediaPlayer
           disabled={!play}
           title={`${pause ? 'resume' : 'pause'} Media Player`}
           onPress={pause ? this.resume : this.pause}
+        />
+        <ActionItem
+          disabled={!play}
+          title={`${mute ? 'un' : ''}mute`}
+          onPress={mute ? this.unmute : this.mute}
+        />
+        <ActionItem
+          disabled={!open}
+          title={`get Stream Info`}
+          onPress={this.getStreamInfo}
         />
       </>
     );
