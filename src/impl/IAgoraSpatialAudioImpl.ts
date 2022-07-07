@@ -312,17 +312,11 @@ export class ICloudSpatialAudioEngineImpl
     return jsonResults.result;
   }
 
-  getTeammates(uids: number[]): number {
+  getTeammates(): number[] {
     const apiType = 'CloudSpatialAudioEngine_getTeammates';
-    const jsonParams = {
-      uids,
-      toJSON: () => {
-        return { uids };
-      },
-    };
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    const userCount = jsonResults.userCount;
-    return userCount;
+    return jsonResults.result;
   }
 }
 

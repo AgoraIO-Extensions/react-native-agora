@@ -99,7 +99,7 @@ export default class AudioMixing
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannel2(token, channelId, uid, {
+    this.engine?.joinChannelWithOptions(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -123,13 +123,7 @@ export default class AudioMixing
       return;
     }
 
-    this.engine?.startAudioMixing2(
-      filePath,
-      loopback,
-      replace,
-      cycle,
-      startPos
-    );
+    this.engine?.startAudioMixing(filePath, loopback, replace, cycle, startPos);
   };
 
   /**

@@ -1,26 +1,49 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, TextInput } from 'react-native';
+import {
+  PermissionsAndroid,
+  Platform,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
   createAgoraRtcEngine,
+  DegradationPreference,
   DirectCdnStreamingError,
   DirectCdnStreamingState,
   DirectCdnStreamingStats,
   IDirectCdnStreamingEventHandler,
   IRtcEngineEventHandler,
+  OrientationMode,
+  RtcConnection,
+  RtcStats,
+  VideoCodecType,
+  VideoMirrorModeType,
 } from 'react-native-agora-rtc-ng';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
+  Divider,
   STYLES,
 } from '../../../components/BaseComponent';
 import Config from '../../../config/agora.config.json';
 import { ActionItem } from '../../../components/ActionItem';
+import { PickerView } from '../../../components/PickerView';
 
 interface State extends BaseVideoComponentState {
   url: string;
+  codecType: VideoCodecType;
+  width: number;
+  height: number;
+  frameRate: number;
+  bitrate: number;
+  minBitrate: number;
+  orientationMode: OrientationMode;
+  degradationPreference: DegradationPreference;
+  mirrorMode: VideoMirrorModeType;
   startDirectCdnStreaming: boolean;
 }
 
@@ -39,6 +62,15 @@ export default class StartDirectCdnStreaming
       remoteUsers: [],
       startPreview: false,
       url: 'rtmp://vid-218.push.chinanetcenter.broadcastapp.agora.io/live/test',
+      codecType: VideoCodecType.VideoCodecH264,
+      width: 640,
+      height: 360,
+      frameRate: 15,
+      bitrate: 0,
+      minBitrate: -1,
+      orientationMode: OrientationMode.OrientationModeAdaptive,
+      degradationPreference: DegradationPreference.MaintainQuality,
+      mirrorMode: VideoMirrorModeType.VideoMirrorModeDisabled,
       startDirectCdnStreaming: false,
     };
   }
@@ -93,7 +125,7 @@ export default class StartDirectCdnStreaming
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannel2(token, channelId, uid, {
+    this.engine?.joinChannelWithOptions(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -102,7 +134,7 @@ export default class StartDirectCdnStreaming
   /**
    * Step 3-1: startDirectCdnStreaming
    */
-  startDirectCdnStreaming = async () => {
+  startDirectCdnStreaming = () => {
     const { url } = this.state;
     if (!url) {
       console.error('url is invalid');
@@ -116,9 +148,39 @@ export default class StartDirectCdnStreaming
   };
 
   /**
-   * Step 3-2: stopDirectCdnStreaming
+   * Step 3-2 (Optional): setDirectCdnStreamingVideoConfiguration
    */
-  stopDirectCdnStreaming = async () => {
+  setDirectCdnStreamingVideoConfiguration = () => {
+    const {
+      codecType,
+      width,
+      height,
+      frameRate,
+      bitrate,
+      minBitrate,
+      orientationMode,
+      degradationPreference,
+      mirrorMode,
+    } = this.state;
+    this.engine?.setDirectCdnStreamingVideoConfiguration({
+      codecType,
+      dimensions: {
+        width: width,
+        height: height,
+      },
+      frameRate,
+      bitrate,
+      minBitrate,
+      orientationMode,
+      degradationPreference,
+      mirrorMode,
+    });
+  };
+
+  /**
+   * Step 3-3: stopDirectCdnStreaming
+   */
+  stopDirectCdnStreaming = () => {
     this.engine?.stopDirectCdnStreaming();
   };
 
@@ -134,6 +196,14 @@ export default class StartDirectCdnStreaming
    */
   protected releaseRtcEngine() {
     this.engine?.release();
+  }
+
+  onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
+    const { startDirectCdnStreaming } = this.state;
+    if (startDirectCdnStreaming) {
+      this.stopDirectCdnStreaming();
+    }
+    super.onLeaveChannel(connection, stats);
   }
 
   onDirectCdnStreamingStateChanged(
@@ -170,7 +240,19 @@ export default class StartDirectCdnStreaming
   }
 
   protected renderBottom(): React.ReactNode {
-    const { url } = this.state;
+    const {
+      url,
+      codecType,
+      width,
+      height,
+      frameRate,
+      bitrate,
+      minBitrate,
+      orientationMode,
+      degradationPreference,
+      mirrorMode,
+      startDirectCdnStreaming,
+    } = this.state;
     return (
       <>
         <TextInput
@@ -182,16 +264,128 @@ export default class StartDirectCdnStreaming
           placeholderTextColor={'gray'}
           value={url}
         />
+        <View style={styles.container}>
+          <PickerView
+            title={'codecType'}
+            type={VideoCodecType}
+            selectedValue={codecType}
+            onValueChange={(value) => {
+              this.setState({ codecType: value });
+            }}
+          />
+        </View>
+        <Divider />
+        <View style={styles.container}>
+          <TextInput
+            style={STYLES.input}
+            onChangeText={(text) => {
+              this.setState({ width: +text });
+            }}
+            keyboardType={'numeric'}
+            placeholder={`width (defaults: ${width})`}
+            placeholderTextColor={'gray'}
+            value={width === this.createState().width ? '' : width.toString()}
+          />
+          <TextInput
+            style={STYLES.input}
+            onChangeText={(text) => {
+              this.setState({ height: +text });
+            }}
+            keyboardType={'numeric'}
+            placeholder={`height (defaults: ${height})`}
+            placeholderTextColor={'gray'}
+            value={
+              height === this.createState().height ? '' : height.toString()
+            }
+          />
+        </View>
+        <TextInput
+          style={STYLES.input}
+          onChangeText={(text) => {
+            this.setState({ frameRate: +text });
+          }}
+          keyboardType={'numeric'}
+          placeholder={`frameRate (defaults: ${frameRate})`}
+          placeholderTextColor={'gray'}
+          value={
+            frameRate === this.createState().frameRate
+              ? ''
+              : frameRate.toString()
+          }
+        />
+        <TextInput
+          style={STYLES.input}
+          onChangeText={(text) => {
+            this.setState({ bitrate: +text });
+          }}
+          keyboardType={'numeric'}
+          placeholder={`bitrate (defaults: ${bitrate})`}
+          placeholderTextColor={'gray'}
+          value={
+            bitrate === this.createState().bitrate ? '' : bitrate.toString()
+          }
+        />
+        <TextInput
+          style={STYLES.input}
+          onChangeText={(text) => {
+            this.setState({ minBitrate: +text });
+          }}
+          keyboardType={'numeric'}
+          placeholder={`minBitrate (defaults: ${minBitrate})`}
+          placeholderTextColor={'gray'}
+          value={
+            minBitrate === this.createState().minBitrate
+              ? ''
+              : minBitrate.toString()
+          }
+        />
+        <View style={styles.container}>
+          <PickerView
+            title={'orientationMode'}
+            type={OrientationMode}
+            selectedValue={orientationMode}
+            onValueChange={(value) => {
+              this.setState({ orientationMode: value });
+            }}
+          />
+        </View>
+        <Divider />
+        <View style={styles.container}>
+          <PickerView
+            title={'degradationPreference'}
+            type={DegradationPreference}
+            selectedValue={degradationPreference}
+            onValueChange={(value) => {
+              this.setState({ degradationPreference: value });
+            }}
+          />
+        </View>
+        <Divider />
+        <View style={styles.container}>
+          <PickerView
+            title={'mirrorMode'}
+            type={VideoMirrorModeType}
+            selectedValue={mirrorMode}
+            onValueChange={(value) => {
+              this.setState({ mirrorMode: value });
+            }}
+          />
+        </View>
+        <Divider />
+        <ActionItem
+          disabled={startDirectCdnStreaming}
+          title={`set Direct Cdn Streaming Video Configuration`}
+          onPress={this.setDirectCdnStreamingVideoConfiguration}
+        />
       </>
     );
   }
 
   protected renderFloat(): React.ReactNode {
-    const { joinChannelSuccess, startDirectCdnStreaming } = this.state;
+    const { startDirectCdnStreaming } = this.state;
     return (
       <>
         <ActionItem
-          disabled={!joinChannelSuccess}
           title={`${
             startDirectCdnStreaming ? 'stop' : 'start'
           } Direct Cdn Streaming`}
@@ -205,3 +399,12 @@ export default class StartDirectCdnStreaming
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+});

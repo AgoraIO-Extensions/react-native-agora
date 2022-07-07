@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   PermissionsAndroid,
   Platform,
   StyleSheet,
@@ -26,6 +25,7 @@ import {
 } from '../../../components/BaseComponent';
 import Config from '../../../config/agora.config.json';
 import { PickerView } from '../../../components/PickerView';
+import { ActionItem } from '../../../components/ActionItem';
 
 interface State extends BaseVideoComponentState {
   encryptionMode: EncryptionMode;
@@ -105,7 +105,7 @@ export default class EnableEncryption
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannel2(token, channelId, uid, {
+    this.engine?.joinChannelWithOptions(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -207,7 +207,7 @@ export default class EnableEncryption
     const { joinChannelSuccess, enableEncryption } = this.state;
     return (
       <>
-        <Button
+        <ActionItem
           disabled={joinChannelSuccess}
           title={`${enableEncryption ? 'disable' : 'enable'} Encryption`}
           onPress={

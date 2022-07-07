@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -115,7 +109,7 @@ export default class SetBeautyEffectOptions
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannel2(token, channelId, uid, {
+    this.engine?.joinChannelWithOptions(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -124,7 +118,7 @@ export default class SetBeautyEffectOptions
   /**
    * Step 3-1: enableBeautyEffect
    */
-  enableBeautyEffect = async () => {
+  enableBeautyEffect = () => {
     const {
       lighteningContrastLevel,
       lighteningLevel,
@@ -238,7 +232,7 @@ export default class SetBeautyEffectOptions
     const { startPreview, joinChannelSuccess, enableBeautyEffect } = this.state;
     return (
       <>
-        <Button
+        <ActionItem
           disabled={!(startPreview || joinChannelSuccess)}
           title={`${enableBeautyEffect ? 'disable' : 'enable'} Beauty Effect`}
           onPress={

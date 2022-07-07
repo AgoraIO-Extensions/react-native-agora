@@ -9,6 +9,9 @@ import {
   ClientRoleType,
   AudienceLatencyLevelType,
   ChannelProfileType,
+  WarnCodeType,
+  ErrorCodeType,
+  QualityType,
   LastmileProbeResult,
   AudioVolumeInfo,
   RtcStats,
@@ -32,6 +35,7 @@ import {
   RtmpStreamingEvent,
   ChannelMediaRelayState,
   ChannelMediaRelayError,
+  ChannelMediaRelayEvent,
   ConnectionStateType,
   ConnectionChangedReasonType,
   NetworkType,
@@ -43,21 +47,17 @@ import {
   StreamPublishState,
   AudioScenarioType,
   ThreadPriorityType,
-  ClientRoleOptions,
   LastmileProbeConfig,
   VideoEncoderConfiguration,
   BeautyOptions,
   VirtualBackgroundSource,
   VideoCanvas,
-  AudioProfileType,
-  AudioRecordingQualityType,
-  AudioRecordingConfiguration,
   SpatialAudioParams,
   VoiceBeautifierPreset,
   AudioEffectPreset,
   VoiceConversionPreset,
   VideoMirrorModeType,
-  SimulcastStreamConfig,
+  EarMonitoringFilterType,
   AudioSessionOperationRestriction,
   DeviceInfo,
   VideoContentHint,
@@ -65,11 +65,14 @@ import {
   LocalTranscoderConfiguration,
   VideoOrientation,
   EncryptionConfig,
-  DataStreamConfig,
-  RtcImage,
-  WatermarkOptions,
   ChannelMediaRelayConfiguration,
+  AudioProfileType,
   FishCorrectionParams,
+  ClientRoleOptions,
+  AudioRecordingConfiguration,
+  SimulcastStreamConfig,
+  DataStreamConfig,
+  WatermarkOptions,
 } from './AgoraBase';
 import {
   RenderModeType,
@@ -87,7 +90,7 @@ import {
   RhythmPlayerErrorType,
   AgoraRhythmPlayerConfig,
 } from './IAgoraRhythmPlayer';
-import { LogConfig, LogLevel } from './IAgoraLog';
+import { LogConfig, LogFilterType, LogLevel } from './IAgoraLog';
 import { IMediaPlayer } from './IAgoraMediaPlayer';
 import { IAudioDeviceManager } from './IAudioDeviceManager';
 
@@ -365,9 +368,9 @@ export enum LocalProxyMode {
 }
 
 export class LocalAccessPointConfiguration {
-  ipList?: string;
+  ipList?: string[];
   ipListSize?: number;
-  domainList?: string;
+  domainList?: string[];
   domainListSize?: number;
   verifyDomainName?: string;
   mode?: LocalProxyMode;
@@ -384,14 +387,14 @@ export abstract class IRtcEngineEventHandler {
 
   onRejoinChannelSuccess?(connection: RtcConnection, elapsed: number): void;
 
-  onWarning?(warn: number, msg: string): void;
+  onWarning?(warn: WarnCodeType, msg: string): void;
 
-  onError?(err: number, msg: string): void;
+  onError?(err: ErrorCodeType, msg: string): void;
 
   onAudioQuality?(
     connection: RtcConnection,
     remoteUid: number,
-    quality: number,
+    quality: QualityType,
     delay: number,
     lost: number
   ): void;
@@ -411,7 +414,7 @@ export abstract class IRtcEngineEventHandler {
 
   onAudioDeviceStateChanged?(
     deviceId: string,
-    deviceType: number,
+    deviceType: MediaDeviceType,
     deviceState: number
   ): void;
 
@@ -421,17 +424,17 @@ export abstract class IRtcEngineEventHandler {
 
   onVideoDeviceStateChanged?(
     deviceId: string,
-    deviceType: number,
+    deviceType: MediaDeviceType,
     deviceState: number
   ): void;
 
-  onMediaDeviceChanged?(deviceType: number): void;
+  onMediaDeviceChanged?(deviceType: MediaDeviceType): void;
 
   onNetworkQuality?(
     connection: RtcConnection,
     remoteUid: number,
-    txQuality: number,
-    rxQuality: number
+    txQuality: QualityType,
+    rxQuality: QualityType
   ): void;
 
   onIntraRequestReceived?(connection: RtcConnection): void;
@@ -440,7 +443,7 @@ export abstract class IRtcEngineEventHandler {
 
   onDownlinkNetworkInfoUpdated?(info: DownlinkNetworkInfo): void;
 
-  onLastmileQuality?(quality: number): void;
+  onLastmileQuality?(quality: QualityType): void;
 
   onFirstLocalVideoFrame?(
     connection: RtcConnection,
@@ -541,7 +544,7 @@ export abstract class IRtcEngineEventHandler {
     enabled: boolean
   ): void;
 
-  onApiCallExecuted?(err: number, api: string, result: string): void;
+  onApiCallExecuted?(err: ErrorCodeType, api: string, result: string): void;
 
   onLocalAudioStats?(connection: RtcConnection, stats: LocalAudioStats): void;
 
@@ -606,7 +609,7 @@ export abstract class IRtcEngineEventHandler {
     connection: RtcConnection,
     remoteUid: number,
     streamId: number,
-    code: number,
+    code: ErrorCodeType,
     missed: number,
     cached: number
   ): void;
@@ -684,7 +687,7 @@ export abstract class IRtcEngineEventHandler {
 
   onRtmpStreamingEvent?(url: string, eventCode: RtmpStreamingEvent): void;
 
-  onStreamPublished?(url: string, error: number): void;
+  onStreamPublished?(url: string, error: ErrorCodeType): void;
 
   onStreamUnpublished?(url: string): void;
 
@@ -697,7 +700,7 @@ export abstract class IRtcEngineEventHandler {
     code: ChannelMediaRelayError
   ): void;
 
-  onChannelMediaRelayEvent?(code: number): void;
+  onChannelMediaRelayEvent?(code: ChannelMediaRelayEvent): void;
 
   onLocalPublishFallbackToAudioOnly?(isFallbackOrRecover: boolean): void;
 
@@ -903,54 +906,17 @@ export abstract class IRtcEngine {
 
   abstract getErrorDescription(code: number): string;
 
-  abstract joinChannel(
-    token: string,
-    channelId: string,
-    info: string,
-    uid: number
-  ): number;
-
-  abstract joinChannel2(
-    token: string,
-    channelId: string,
-    uid: number,
-    options: ChannelMediaOptions
-  ): number;
-
   abstract updateChannelMediaOptions(options: ChannelMediaOptions): number;
-
-  abstract leaveChannel(): number;
-
-  abstract leaveChannel2(options: LeaveChannelOptions): number;
 
   abstract renewToken(token: string): number;
 
   abstract setChannelProfile(profile: ChannelProfileType): number;
-
-  abstract setClientRole(role: ClientRoleType): number;
-
-  abstract setClientRole2(
-    role: ClientRoleType,
-    options: ClientRoleOptions
-  ): number;
-
-  abstract startEchoTest(): number;
-
-  abstract startEchoTest2(intervalInSeconds: number): number;
 
   abstract stopEchoTest(): number;
 
   abstract enableVideo(): number;
 
   abstract disableVideo(): number;
-
-  abstract startPreview(): number;
-
-  abstract startPreview2(sourceType: VideoSourceType): number;
-
-  abstract stopPreview(): number;
-
-  abstract stopPreview2(sourceType: VideoSourceType): number;
 
   abstract startLastmileProbeTest(config: LastmileProbeConfig): number;
 
@@ -980,13 +946,6 @@ export abstract class IRtcEngine {
   abstract enableAudio(): number;
 
   abstract disableAudio(): number;
-
-  abstract setAudioProfile(
-    profile: AudioProfileType,
-    scenario: AudioScenarioType
-  ): number;
-
-  abstract setAudioProfile2(profile: AudioProfileType): number;
 
   abstract enableLocalAudio(enabled: boolean): number;
 
@@ -1021,39 +980,11 @@ export abstract class IRtcEngine {
     reportVad: boolean
   ): number;
 
-  abstract startAudioRecording(
-    filePath: string,
-    quality: AudioRecordingQualityType
-  ): number;
-
-  abstract startAudioRecording2(
-    filePath: string,
-    sampleRate: number,
-    quality: AudioRecordingQualityType
-  ): number;
-
-  abstract startAudioRecording3(config: AudioRecordingConfiguration): number;
-
   abstract stopAudioRecording(): number;
 
   abstract createMediaPlayer(): IMediaPlayer;
 
   abstract destroyMediaPlayer(mediaPlayer: IMediaPlayer): number;
-
-  abstract startAudioMixing(
-    filePath: string,
-    loopback: boolean,
-    replace: boolean,
-    cycle: number
-  ): number;
-
-  abstract startAudioMixing2(
-    filePath: string,
-    loopback: boolean,
-    replace: boolean,
-    cycle: number,
-    startPos: number
-  ): number;
 
   abstract stopAudioMixing(): number;
 
@@ -1181,7 +1112,7 @@ export abstract class IRtcEngine {
 
   abstract setLogFile(filePath: string): number;
 
-  abstract setLogFilter(filter: number): number;
+  abstract setLogFilter(filter: LogFilterType): number;
 
   abstract setLogLevel(level: LogLevel): number;
 
@@ -1189,33 +1120,13 @@ export abstract class IRtcEngine {
 
   abstract uploadLogFile(requestId: string): number;
 
-  abstract setLocalRenderMode(
-    renderMode: RenderModeType,
-    mirrorMode: VideoMirrorModeType
-  ): number;
-
   abstract setRemoteRenderMode(
     uid: number,
     renderMode: RenderModeType,
     mirrorMode: VideoMirrorModeType
   ): number;
 
-  abstract setLocalRenderMode2(renderMode: RenderModeType): number;
-
   abstract setLocalVideoMirrorMode(mirrorMode: VideoMirrorModeType): number;
-
-  abstract enableDualStreamMode(enabled: boolean): number;
-
-  abstract enableDualStreamMode2(
-    sourceType: VideoSourceType,
-    enabled: boolean
-  ): number;
-
-  abstract enableDualStreamMode3(
-    sourceType: VideoSourceType,
-    enabled: boolean,
-    streamConfig: SimulcastStreamConfig
-  ): number;
 
   abstract enableEchoCancellationExternal(
     enabled: boolean,
@@ -1289,7 +1200,7 @@ export abstract class IRtcEngine {
 
   abstract enableInEarMonitoring(
     enabled: boolean,
-    includeAudioFilters: number
+    includeAudioFilters: EarMonitoringFilterType
   ): number;
 
   abstract setInEarMonitoringVolume(volume: number): number;
@@ -1504,21 +1415,10 @@ export abstract class IRtcEngine {
 
   abstract enableEncryption(enabled: boolean, config: EncryptionConfig): number;
 
-  abstract createDataStream(reliable: boolean, ordered: boolean): number;
-
-  abstract createDataStream2(config: DataStreamConfig): number;
-
   abstract sendStreamMessage(
     streamId: number,
     data: Uint8Array,
     length: number
-  ): number;
-
-  abstract addVideoWatermark(watermark: RtcImage): number;
-
-  abstract addVideoWatermark2(
-    watermarkUrl: string,
-    options: WatermarkOptions
   ): number;
 
   abstract clearVideoWatermark(): number;
@@ -1570,19 +1470,6 @@ export abstract class IRtcEngine {
   ): number;
 
   abstract registerLocalUserAccount(appId: string, userAccount: string): number;
-
-  abstract joinChannelWithUserAccount(
-    token: string,
-    channelId: string,
-    userAccount: string
-  ): number;
-
-  abstract joinChannelWithUserAccount2(
-    token: string,
-    channelId: string,
-    userAccount: string,
-    options: ChannelMediaOptions
-  ): number;
 
   abstract joinChannelWithUserAccountEx(
     token: string,
@@ -1667,6 +1554,73 @@ export abstract class IRtcEngine {
   abstract setAdvancedAudioOptions(options: AdvancedAudioOptions): number;
 
   abstract setAVSyncSource(channelId: string, uid: number): number;
+
+  abstract joinChannel(
+    token: string,
+    channelId: string,
+    info: string,
+    uid: number
+  ): number;
+
+  abstract joinChannelWithOptions(
+    token: string,
+    channelId: string,
+    uid: number,
+    options: ChannelMediaOptions
+  ): number;
+
+  abstract leaveChannel(options?: LeaveChannelOptions): number;
+
+  abstract setClientRole(
+    role: ClientRoleType,
+    options?: ClientRoleOptions
+  ): number;
+
+  abstract startEchoTest(intervalInSeconds?: number): number;
+
+  abstract startPreview(sourceType?: VideoSourceType): number;
+
+  abstract stopPreview(sourceType?: VideoSourceType): number;
+
+  abstract setAudioProfile(
+    profile: AudioProfileType,
+    scenario?: AudioScenarioType
+  ): number;
+
+  abstract startAudioRecording(config: AudioRecordingConfiguration): number;
+
+  abstract startAudioMixing(
+    filePath: string,
+    loopback: boolean,
+    replace: boolean,
+    cycle: number,
+    startPos?: number
+  ): number;
+
+  abstract setLocalRenderMode(
+    renderMode: RenderModeType,
+    mirrorMode?: VideoMirrorModeType
+  ): number;
+
+  abstract enableDualStreamMode(
+    enabled: boolean,
+    sourceType?: VideoSourceType,
+    streamConfig?: SimulcastStreamConfig
+  ): number;
+
+  abstract createDataStream(config: DataStreamConfig): number;
+
+  abstract addVideoWatermark(
+    watermarkUrl: string,
+    options: WatermarkOptions
+  ): number;
+
+  abstract joinChannelWithUserAccount(
+    token: string,
+    channelId: string,
+    userAccount: string,
+    options?: ChannelMediaOptions
+  ): number;
 
   abstract getAudioDeviceManager(): IAudioDeviceManager;
 

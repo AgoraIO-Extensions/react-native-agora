@@ -9,7 +9,6 @@ import {
   RtcEngineContext,
   SDKBuildInfo,
   ChannelMediaOptions,
-  LeaveChannelOptions,
   AudioEqualizationBandFrequency,
   AudioReverbType,
   AudioTrackConfig,
@@ -24,29 +23,23 @@ import {
   DirectCdnStreamingMediaOptions,
   CloudProxyType,
   LocalAccessPointConfiguration,
+  LeaveChannelOptions,
   Metadata,
 } from '../IAgoraRtcEngine';
 import {
   ChannelProfileType,
-  ClientRoleType,
-  ClientRoleOptions,
-  VideoSourceType,
   LastmileProbeConfig,
   VideoEncoderConfiguration,
   BeautyOptions,
   VirtualBackgroundSource,
   VideoCanvas,
-  AudioProfileType,
-  AudioScenarioType,
   VideoStreamType,
-  AudioRecordingQualityType,
-  AudioRecordingConfiguration,
   SpatialAudioParams,
   VoiceBeautifierPreset,
   AudioEffectPreset,
   VoiceConversionPreset,
   VideoMirrorModeType,
-  SimulcastStreamConfig,
+  EarMonitoringFilterType,
   AudioSessionOperationRestriction,
   Rectangle,
   ScreenCaptureParameters,
@@ -54,15 +47,21 @@ import {
   VideoContentHint,
   LiveTranscoding,
   LocalTranscoderConfiguration,
+  VideoSourceType,
   VideoOrientation,
   ConnectionStateType,
   EncryptionConfig,
-  DataStreamConfig,
-  RtcImage,
-  WatermarkOptions,
   UserInfo,
   ChannelMediaRelayConfiguration,
+  AudioProfileType,
   FishCorrectionParams,
+  ClientRoleType,
+  ClientRoleOptions,
+  AudioScenarioType,
+  AudioRecordingConfiguration,
+  SimulcastStreamConfig,
+  DataStreamConfig,
+  WatermarkOptions,
 } from '../AgoraBase';
 import {
   MediaSourceType,
@@ -73,7 +72,7 @@ import {
   AdvancedAudioOptions,
 } from '../AgoraMediaBase';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
-import { LogLevel } from '../IAgoraLog';
+import { LogFilterType, LogLevel } from '../IAgoraLog';
 import { AgoraRhythmPlayerConfig } from '../IAgoraRhythmPlayer';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
 
@@ -1019,77 +1018,8 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  joinChannel(
-    token: string,
-    channelId: string,
-    info: string,
-    uid: number
-  ): number {
-    const apiType = 'RtcEngine_joinChannel';
-    const jsonParams = {
-      token,
-      channelId,
-      info,
-      uid,
-      toJSON: () => {
-        return {
-          token,
-          channelId,
-          info,
-          uid,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  joinChannel2(
-    token: string,
-    channelId: string,
-    uid: number,
-    options: ChannelMediaOptions
-  ): number {
-    const apiType = 'RtcEngine_joinChannel2';
-    const jsonParams = {
-      token,
-      channelId,
-      uid,
-      options,
-      toJSON: () => {
-        return {
-          token,
-          channelId,
-          uid,
-          options,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
   updateChannelMediaOptions(options: ChannelMediaOptions): number {
     const apiType = 'RtcEngine_updateChannelMediaOptions';
-    const jsonParams = {
-      options,
-      toJSON: () => {
-        return { options };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  leaveChannel(): number {
-    const apiType = 'RtcEngine_leaveChannel';
-    const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  leaveChannel2(options: LeaveChannelOptions): number {
-    const apiType = 'RtcEngine_leaveChannel2';
     const jsonParams = {
       options,
       toJSON: () => {
@@ -1124,53 +1054,6 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  setClientRole(role: ClientRoleType): number {
-    const apiType = 'RtcEngine_setClientRole';
-    const jsonParams = {
-      role,
-      toJSON: () => {
-        return { role };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  setClientRole2(role: ClientRoleType, options: ClientRoleOptions): number {
-    const apiType = 'RtcEngine_setClientRole2';
-    const jsonParams = {
-      role,
-      options,
-      toJSON: () => {
-        return {
-          role,
-          options,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startEchoTest(): number {
-    const apiType = 'RtcEngine_startEchoTest';
-    const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startEchoTest2(intervalInSeconds: number): number {
-    const apiType = 'RtcEngine_startEchoTest2';
-    const jsonParams = {
-      intervalInSeconds,
-      toJSON: () => {
-        return { intervalInSeconds };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
   stopEchoTest(): number {
     const apiType = 'RtcEngine_stopEchoTest';
     const jsonParams = {};
@@ -1188,44 +1071,6 @@ export class IRtcEngineImpl implements IRtcEngine {
   disableVideo(): number {
     const apiType = 'RtcEngine_disableVideo';
     const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startPreview(): number {
-    const apiType = 'RtcEngine_startPreview';
-    const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startPreview2(sourceType: VideoSourceType): number {
-    const apiType = 'RtcEngine_startPreview2';
-    const jsonParams = {
-      sourceType,
-      toJSON: () => {
-        return { sourceType };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  stopPreview(): number {
-    const apiType = 'RtcEngine_stopPreview';
-    const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  stopPreview2(sourceType: VideoSourceType): number {
-    const apiType = 'RtcEngine_stopPreview2';
-    const jsonParams = {
-      sourceType,
-      toJSON: () => {
-        return { sourceType };
-      },
-    };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
@@ -1352,37 +1197,6 @@ export class IRtcEngineImpl implements IRtcEngine {
   disableAudio(): number {
     const apiType = 'RtcEngine_disableAudio';
     const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  setAudioProfile(
-    profile: AudioProfileType,
-    scenario: AudioScenarioType
-  ): number {
-    const apiType = 'RtcEngine_setAudioProfile';
-    const jsonParams = {
-      profile,
-      scenario,
-      toJSON: () => {
-        return {
-          profile,
-          scenario,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  setAudioProfile2(profile: AudioProfileType): number {
-    const apiType = 'RtcEngine_setAudioProfile2';
-    const jsonParams = {
-      profile,
-      toJSON: () => {
-        return { profile };
-      },
-    };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
@@ -1565,59 +1379,6 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  startAudioRecording(
-    filePath: string,
-    quality: AudioRecordingQualityType
-  ): number {
-    const apiType = 'RtcEngine_startAudioRecording';
-    const jsonParams = {
-      filePath,
-      quality,
-      toJSON: () => {
-        return {
-          filePath,
-          quality,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startAudioRecording2(
-    filePath: string,
-    sampleRate: number,
-    quality: AudioRecordingQualityType
-  ): number {
-    const apiType = 'RtcEngine_startAudioRecording2';
-    const jsonParams = {
-      filePath,
-      sampleRate,
-      quality,
-      toJSON: () => {
-        return {
-          filePath,
-          sampleRate,
-          quality,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startAudioRecording3(config: AudioRecordingConfiguration): number {
-    const apiType = 'RtcEngine_startAudioRecording3';
-    const jsonParams = {
-      config,
-      toJSON: () => {
-        return { config };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
   stopAudioRecording(): number {
     const apiType = 'RtcEngine_stopAudioRecording';
     const jsonParams = {};
@@ -1638,59 +1399,6 @@ export class IRtcEngineImpl implements IRtcEngine {
       media_player: mediaPlayer,
       toJSON: () => {
         return {};
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startAudioMixing(
-    filePath: string,
-    loopback: boolean,
-    replace: boolean,
-    cycle: number
-  ): number {
-    const apiType = 'RtcEngine_startAudioMixing';
-    const jsonParams = {
-      filePath,
-      loopback,
-      replace,
-      cycle,
-      toJSON: () => {
-        return {
-          filePath,
-          loopback,
-          replace,
-          cycle,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  startAudioMixing2(
-    filePath: string,
-    loopback: boolean,
-    replace: boolean,
-    cycle: number,
-    startPos: number
-  ): number {
-    const apiType = 'RtcEngine_startAudioMixing2';
-    const jsonParams = {
-      filePath,
-      loopback,
-      replace,
-      cycle,
-      startPos,
-      toJSON: () => {
-        return {
-          filePath,
-          loopback,
-          replace,
-          cycle,
-          startPos,
-        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
@@ -2234,7 +1942,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  setLogFilter(filter: number): number {
+  setLogFilter(filter: LogFilterType): number {
     const apiType = 'RtcEngine_setLogFilter';
     const jsonParams = {
       filter,
@@ -2282,25 +1990,6 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  setLocalRenderMode(
-    renderMode: RenderModeType,
-    mirrorMode: VideoMirrorModeType
-  ): number {
-    const apiType = 'RtcEngine_setLocalRenderMode';
-    const jsonParams = {
-      renderMode,
-      mirrorMode,
-      toJSON: () => {
-        return {
-          renderMode,
-          mirrorMode,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
   setRemoteRenderMode(
     uid: number,
     renderMode: RenderModeType,
@@ -2323,74 +2012,12 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  setLocalRenderMode2(renderMode: RenderModeType): number {
-    const apiType = 'RtcEngine_setLocalRenderMode2';
-    const jsonParams = {
-      renderMode,
-      toJSON: () => {
-        return { renderMode };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
   setLocalVideoMirrorMode(mirrorMode: VideoMirrorModeType): number {
     const apiType = 'RtcEngine_setLocalVideoMirrorMode';
     const jsonParams = {
       mirrorMode,
       toJSON: () => {
         return { mirrorMode };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  enableDualStreamMode(enabled: boolean): number {
-    const apiType = 'RtcEngine_enableDualStreamMode';
-    const jsonParams = {
-      enabled,
-      toJSON: () => {
-        return { enabled };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  enableDualStreamMode2(sourceType: VideoSourceType, enabled: boolean): number {
-    const apiType = 'RtcEngine_enableDualStreamMode2';
-    const jsonParams = {
-      sourceType,
-      enabled,
-      toJSON: () => {
-        return {
-          sourceType,
-          enabled,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  enableDualStreamMode3(
-    sourceType: VideoSourceType,
-    enabled: boolean,
-    streamConfig: SimulcastStreamConfig
-  ): number {
-    const apiType = 'RtcEngine_enableDualStreamMode3';
-    const jsonParams = {
-      sourceType,
-      enabled,
-      streamConfig,
-      toJSON: () => {
-        return {
-          sourceType,
-          enabled,
-          streamConfig,
-        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
@@ -2691,7 +2318,10 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  enableInEarMonitoring(enabled: boolean, includeAudioFilters: number): number {
+  enableInEarMonitoring(
+    enabled: boolean,
+    includeAudioFilters: EarMonitoringFilterType
+  ): number {
     const apiType = 'RtcEngine_enableInEarMonitoring';
     const jsonParams = {
       enabled,
@@ -3565,36 +3195,6 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  createDataStream(reliable: boolean, ordered: boolean): number {
-    const apiType = 'RtcEngine_createDataStream';
-    const jsonParams = {
-      reliable,
-      ordered,
-      toJSON: () => {
-        return {
-          reliable,
-          ordered,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    const streamId = jsonResults.streamId;
-    return streamId;
-  }
-
-  createDataStream2(config: DataStreamConfig): number {
-    const apiType = 'RtcEngine_createDataStream2';
-    const jsonParams = {
-      config,
-      toJSON: () => {
-        return { config };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    const streamId = jsonResults.streamId;
-    return streamId;
-  }
-
   sendStreamMessage(
     streamId: number,
     data: Uint8Array,
@@ -3609,34 +3209,6 @@ export class IRtcEngineImpl implements IRtcEngine {
         return {
           streamId,
           length,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  addVideoWatermark(watermark: RtcImage): number {
-    const apiType = 'RtcEngine_addVideoWatermark';
-    const jsonParams = {
-      watermark,
-      toJSON: () => {
-        return { watermark };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  addVideoWatermark2(watermarkUrl: string, options: WatermarkOptions): number {
-    const apiType = 'RtcEngine_addVideoWatermark2';
-    const jsonParams = {
-      watermarkUrl,
-      options,
-      toJSON: () => {
-        return {
-          watermarkUrl,
-          options,
         };
       },
     };
@@ -3837,53 +3409,6 @@ export class IRtcEngineImpl implements IRtcEngine {
         return {
           appId,
           userAccount,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  joinChannelWithUserAccount(
-    token: string,
-    channelId: string,
-    userAccount: string
-  ): number {
-    const apiType = 'RtcEngine_joinChannelWithUserAccount';
-    const jsonParams = {
-      token,
-      channelId,
-      userAccount,
-      toJSON: () => {
-        return {
-          token,
-          channelId,
-          userAccount,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  joinChannelWithUserAccount2(
-    token: string,
-    channelId: string,
-    userAccount: string,
-    options: ChannelMediaOptions
-  ): number {
-    const apiType = 'RtcEngine_joinChannelWithUserAccount2';
-    const jsonParams = {
-      token,
-      channelId,
-      userAccount,
-      options,
-      toJSON: () => {
-        return {
-          token,
-          channelId,
-          userAccount,
-          options,
         };
       },
     };
@@ -4233,6 +3758,278 @@ export class IRtcEngineImpl implements IRtcEngine {
         return {
           channelId,
           uid,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  joinChannel(
+    token: string,
+    channelId: string,
+    info: string,
+    uid: number
+  ): number {
+    const apiType = 'RtcEngine_joinChannel';
+    const jsonParams = {
+      token,
+      channelId,
+      info,
+      uid,
+      toJSON: () => {
+        return {
+          token,
+          channelId,
+          info,
+          uid,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  joinChannelWithOptions(
+    token: string,
+    channelId: string,
+    uid: number,
+    options: ChannelMediaOptions
+  ): number {
+    const apiType = 'RtcEngine_joinChannelWithOptions';
+    const jsonParams = {
+      token,
+      channelId,
+      uid,
+      options,
+      toJSON: () => {
+        return {
+          token,
+          channelId,
+          uid,
+          options,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  leaveChannel(options?: LeaveChannelOptions): number {
+    const apiType = 'RtcEngine_leaveChannel';
+    const jsonParams = {
+      options,
+      toJSON: () => {
+        return { options };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  setClientRole(role: ClientRoleType, options?: ClientRoleOptions): number {
+    const apiType = 'RtcEngine_setClientRole';
+    const jsonParams = {
+      role,
+      options,
+      toJSON: () => {
+        return {
+          role,
+          options,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  startEchoTest(intervalInSeconds = 10): number {
+    const apiType = 'RtcEngine_startEchoTest';
+    const jsonParams = {
+      intervalInSeconds,
+      toJSON: () => {
+        return { intervalInSeconds };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  startPreview(
+    sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary
+  ): number {
+    const apiType = 'RtcEngine_startPreview';
+    const jsonParams = {
+      sourceType,
+      toJSON: () => {
+        return { sourceType };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  stopPreview(
+    sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary
+  ): number {
+    const apiType = 'RtcEngine_stopPreview';
+    const jsonParams = {
+      sourceType,
+      toJSON: () => {
+        return { sourceType };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  setAudioProfile(
+    profile: AudioProfileType,
+    scenario: AudioScenarioType = AudioScenarioType.AudioScenarioDefault
+  ): number {
+    const apiType = 'RtcEngine_setAudioProfile';
+    const jsonParams = {
+      profile,
+      scenario,
+      toJSON: () => {
+        return {
+          profile,
+          scenario,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  startAudioRecording(config: AudioRecordingConfiguration): number {
+    const apiType = 'RtcEngine_startAudioRecording';
+    const jsonParams = {
+      config,
+      toJSON: () => {
+        return { config };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  startAudioMixing(
+    filePath: string,
+    loopback: boolean,
+    replace: boolean,
+    cycle: number,
+    startPos = 0
+  ): number {
+    const apiType = 'RtcEngine_startAudioMixing';
+    const jsonParams = {
+      filePath,
+      loopback,
+      replace,
+      cycle,
+      startPos,
+      toJSON: () => {
+        return {
+          filePath,
+          loopback,
+          replace,
+          cycle,
+          startPos,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  setLocalRenderMode(
+    renderMode: RenderModeType,
+    mirrorMode: VideoMirrorModeType = VideoMirrorModeType.VideoMirrorModeAuto
+  ): number {
+    const apiType = 'RtcEngine_setLocalRenderMode';
+    const jsonParams = {
+      renderMode,
+      mirrorMode,
+      toJSON: () => {
+        return {
+          renderMode,
+          mirrorMode,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  enableDualStreamMode(
+    enabled: boolean,
+    sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary,
+    streamConfig?: SimulcastStreamConfig
+  ): number {
+    const apiType = 'RtcEngine_enableDualStreamMode';
+    const jsonParams = {
+      enabled,
+      sourceType,
+      streamConfig,
+      toJSON: () => {
+        return {
+          enabled,
+          sourceType,
+          streamConfig,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  createDataStream(config: DataStreamConfig): number {
+    const apiType = 'RtcEngine_createDataStream';
+    const jsonParams = {
+      config,
+      toJSON: () => {
+        return { config };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const streamId = jsonResults.streamId;
+    return streamId;
+  }
+
+  addVideoWatermark(watermarkUrl: string, options: WatermarkOptions): number {
+    const apiType = 'RtcEngine_addVideoWatermark';
+    const jsonParams = {
+      watermarkUrl,
+      options,
+      toJSON: () => {
+        return {
+          watermarkUrl,
+          options,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  joinChannelWithUserAccount(
+    token: string,
+    channelId: string,
+    userAccount: string,
+    options?: ChannelMediaOptions
+  ): number {
+    const apiType = 'RtcEngine_joinChannelWithUserAccount';
+    const jsonParams = {
+      token,
+      channelId,
+      userAccount,
+      options,
+      toJSON: () => {
+        return {
+          token,
+          channelId,
+          userAccount,
+          options,
         };
       },
     };

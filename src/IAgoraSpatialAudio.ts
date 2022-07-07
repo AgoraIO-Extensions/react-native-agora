@@ -118,7 +118,7 @@ export abstract class ICloudSpatialAudioEngine extends IBaseSpatialAudioEngine {
 
   abstract exitRoom(): number;
 
-  abstract getTeammates(uids: number[]): number;
+  abstract getTeammates(): number[];
 }
 
 export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {

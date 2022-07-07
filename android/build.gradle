@@ -56,6 +56,6 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    implementation project(':iris')
-//    api "io.agora.rtc:agora-full-beta:4.0.0-beta.1"
+    api 'io.agora.rtc:agora-special-full:3.8.201.2.2'
+    implementation 'io.agora.rtc:iris-rtc:3.8.201'
 }

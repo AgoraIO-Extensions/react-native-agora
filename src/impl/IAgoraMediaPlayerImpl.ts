@@ -191,38 +191,6 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result;
   }
 
-  setPlayerOption(key: string, value: number): number {
-    const apiType = 'MediaPlayer_setPlayerOption';
-    const jsonParams = {
-      key,
-      value,
-      toJSON: () => {
-        return {
-          key,
-          value,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  setPlayerOption2(key: string, value: string): number {
-    const apiType = 'MediaPlayer_setPlayerOption2';
-    const jsonParams = {
-      key,
-      value,
-      toJSON: () => {
-        return {
-          key,
-          value,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
   takeScreenshot(filename: string): number {
     const apiType = 'MediaPlayer_takeScreenshot';
     const jsonParams = {
@@ -548,6 +516,38 @@ export class IMediaPlayerImpl implements IMediaPlayer {
       params,
       toJSON: () => {
         return { params };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  setPlayerOptionInInt(key: string, value: number): number {
+    const apiType = 'MediaPlayer_setPlayerOptionInInt';
+    const jsonParams = {
+      key,
+      value,
+      toJSON: () => {
+        return {
+          key,
+          value,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  setPlayerOptionInString(key: string, value: string): number {
+    const apiType = 'MediaPlayer_setPlayerOptionInString';
+    const jsonParams = {
+      key,
+      value,
+      toJSON: () => {
+        return {
+          key,
+          value,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
