@@ -299,32 +299,33 @@ export enum AudioReverbType {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export enum StreamFallbackOptions {
   /*
-   * 0: No fallback behavior for the local/remote video stream when the uplink/downlink network conditions are poor. The quality of the stream is not guaranteed.
+   * @ignore
    */
   StreamFallbackOptionDisabled = 0,
   /*
-   * 1: Under poor downlink network conditions, the remote video stream, to which you subscribe, falls back to the low-quality (low resolution and low bitrate) video stream.
-   * This option is only valid for setRemoteSubscribeFallbackOption .
+   * @ignore
    */
   StreamFallbackOptionVideoStreamLow = 1,
   /*
-   * 2: Under poor uplink network conditions, the published video stream falls back to audio-only. Under poor downlink network conditions, the remote video stream, to which you subscribe, first falls back to the low-quality (low resolution and low bitrate) video stream; and then to an audio-only stream if the network conditions worsen.
+   * @ignore
    */
   StreamFallbackOptionAudioOnly = 2,
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export enum PriorityType {
   /*
-   * The user's priority is high.
+   * @ignore
    */
   PriorityHigh = 50,
   /*
-   * (Default) The user's priority is normal.
+   * @ignore
    */
   PriorityNormal = 100,
 }
@@ -789,14 +790,15 @@ export class AudioOptionsExternal {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export class SIZE {
   /*
-   * The target width (px) for the thumbnail or icon. The default value is 0.
+   * @ignore
    */
   width?: number;
   /*
-   * The target height (px) for the thumbnail or icon. The default value is 0.
+   * @ignore
    */
   height?: number;
 }
@@ -1976,11 +1978,13 @@ export abstract class IRtcEngineEventHandler {
   onActiveSpeaker?(connection: RtcConnection, uid: number): void;
 
   /*
-@ignore   */
+   * @ignore
+   */
   onContentInspectResult?(result: ContentInspectResult): void;
 
   /*
-@ignore   */
+   * @ignore
+   */
   onSnapshotTaken?(
     connection: RtcConnection,
     filePath: string,
@@ -2138,7 +2142,8 @@ export abstract class IRtcEngineEventHandler {
   onLocalPublishFallbackToAudioOnly?(isFallbackOrRecover: boolean): void;
 
   /*
-@ignore   */
+   * @ignore
+   */
   onRemoteSubscribeFallbackToAudioOnly?(
     uid: number,
     isFallbackOrRecover: boolean
@@ -3648,11 +3653,13 @@ export abstract class IRtcEngine {
   ): number;
 
   /*
-@ignore */
+   * @ignore
+   */
   abstract enableSpatialAudio(enabled: boolean): number;
 
   /*
-@ignore */
+   * @ignore
+   */
   abstract setRemoteUserSpatialAudioParams(
     uid: number,
     params: SpatialAudioParams
@@ -3968,7 +3975,8 @@ export abstract class IRtcEngine {
   abstract setLocalVideoMirrorMode(mirrorMode: VideoMirrorModeType): number;
 
   /*
-@ignore */
+   * @ignore
+   */
   abstract enableEchoCancellationExternal(
     enabled: boolean,
     audioSourceDelay: number
@@ -4080,7 +4088,8 @@ export abstract class IRtcEngine {
   abstract setLocalPublishFallbackOption(option: StreamFallbackOptions): number;
 
   /*
-@ignore */
+   * @ignore
+   */
   abstract setRemoteSubscribeFallbackOption(
     option: StreamFallbackOptions
   ): number;
@@ -5179,7 +5188,8 @@ export abstract class IRtcEngine {
   ): number;
 
   /*
-@ignore */
+   * @ignore
+   */
   abstract takeSnapshot(config: SnapShotConfig): number;
 
   /* api_irtcengine_setcontentinspect */
@@ -5692,14 +5702,15 @@ export abstract class IRtcEngine {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export enum QualityReportFormatType {
   /*
-   * 0: The quality report in JSON format.
+   * @ignore
    */
   QualityReportJson = 0,
   /*
-   * 1: The quality report in HTML format.
+   * @ignore
    */
   QualityReportHtml = 1,
 }
@@ -6041,29 +6052,29 @@ export class SDKBuildInfo {
 }
 
 /*
- * The VideoDeviceInfo class that contains the ID and device name of the video devices.
+ * @ignore
  */
 export class VideoDeviceInfo {
   /*
-   * The device ID.
+   * @ignore
    */
   deviceId?: string;
   /*
-   * The device name.
+   * @ignore
    */
   deviceName?: string;
 }
 
 /*
- * The AudioDeviceInfo class that contains the ID and device name of the audio devices.
+ * @ignore
  */
 export class AudioDeviceInfo {
   /*
-   * The device ID.
+   * @ignore
    */
   deviceId?: string;
   /*
-   * The device name.
+   * @ignore
    */
   deviceName?: string;
 }

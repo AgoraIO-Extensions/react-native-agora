@@ -4372,44 +4372,31 @@ export enum ThreadPriorityType {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export class SpatialAudioParams {
   /*
-   * The azimuth angle of the remote user or media player relative to the local user. The value range is [0,360], and the unit is degrees, as defined by the following main directions:
-   * 0: (Default) 0 degrees, which means directly to the front on the horizontal plane.
-   * 90: 90 degrees, which means directly to the left on the horizontal plane.
-   * 180: 180 degrees, which means directly to the back on the horizontal plane.
-   * 270: 270 degrees, which means directly to the right on the horizontal plane.
-   * 360: 360 degrees, which means directly to the front on the horizontal plane.
+   * @ignore
    */
   speaker_azimuth?: number;
   /*
-   * The elevation angle of the remote user or media player relative to the local user. The value range is [-90,90], and the unit is degrees, as defined by the following main directions:
-   * 0: (Default) 0 degrees, which means that the horizontal plane is not rotated.
-   * -90: -90 degrees, which means that the horizontal plane is rotated 90 degrees downwards.
-   * 90: 90 degrees, which means that the horizontal plane is rotated 90 degrees upwards.
+   * @ignore
    */
   speaker_elevation?: number;
   /*
-   * The distance of the remote user or media player relative to the local user. The value range is [1,50], and the unit is meters. The default value is 1 meter.
+   * @ignore
    */
   speaker_distance?: number;
   /*
-   * The orientation of the remote user or media player relative to the local user. The value range is [0,180], and the unit is degrees, as defined by the following main directions:
-   * 0: (Default) 0 degrees, which means that the sound source and listener face the same direction.
-   * 180: 180 degrees, which means that the sound source and listener face each other.
+   * @ignore
    */
   speaker_orientation?: number;
   /*
-   * Whether to enable audio blurring:
-   * true: Enable blurring.
-   * false: (Default) Disable blurring.
+   * @ignore
    */
   enable_blur?: boolean;
   /*
-   * Whether to enable air absorption. This function simulates the energy attenuation of audio when the audio transmits in the air:
-   * true: (Default) Enable air absorption.
-   * false: Disable air absorption.
+   * @ignore
    */
   enable_air_absorb?: boolean;
 }

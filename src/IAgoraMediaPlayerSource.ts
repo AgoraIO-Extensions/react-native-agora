@@ -104,6 +104,7 @@ export abstract class IMediaPlayerSourceObserver {
   onPlayerInfoUpdated?(info: PlayerUpdatedInfo): void;
 
   /*
-@ignore   */
+   * @ignore
+   */
   onAudioVolumeIndication?(volume: number): void;
 }
