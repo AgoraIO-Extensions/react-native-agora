@@ -16,45 +16,46 @@ import {
 import { RenderModeType } from './AgoraMediaBase';
 
 /*
- * 包含连接信息的类。
+ * Contains connection information.
  */
 export class RtcConnection {
   /*
-   * 频道名。
+   * The channel name.
    */
   channelId?: string;
   /*
-   * 本地用户 ID。
+   * The ID of the local user.
    */
   localUid?: number;
 }
 
 /*
- * 提供多频道方法的接口类。
- * 继承自 IRtcEngine 。
+ * This interface class contains multi-channel methods.
+ * Inherited from IRtcEngine .
  */
 export abstract class IRtcEngineEx extends IRtcEngine {
   /*
-   * 使用连接 ID 加入频道。
-   * 调用该方法，你可以同时加入多个频道。 如果你已经在一个频道内，你不能用相同的用户 UID 再次加入该频道。
-   * 如果你想在不同的设备上加入相同的频道，请确保你在不同设备上使用的用户 UID 都不同。
-   * 请确保生成 Token 时传入的 app ID 和创建 IRtcEngine 实例时传入的 app ID 一致。
+   * Joins a channel with the connection ID.
+   * You can call this method multiple times to join more than one channels. If you are already in a channel, you cannot rejoin it with the same user ID.
+   * If you want to join the same channel from different devices, ensure that the user IDs in all devices are different.
+   * Ensure that the app ID you use to generate the token is the same with the app ID used when creating the IRtcEngine instance.
    *
-   * @param options 频道媒体设置选项。详见 ChannelMediaOptions 。
+   * @param options The channel media options. See ChannelMediaOptions .
    *
-   * @param token 在服务端生成的用于鉴权的动态密钥。详见
+   * @param token The token generated on your server for authentication. See
    *
    * @param connection
    *
    * @returns
-   * 0：方法调用成功。
-   * < 0：方法调用失败。 -2：传入的参数无效。例如，使用了不合法的 Token，uid 参数未设置为整型， ChannelMediaOptions 结构体成员值不合法。你需要填入有效的参数，重新加入频道。
-   * -3： IRtcEngine 对象初始化失败。你需要重新初始化 IRtcEngine 对象。
-   * -7：IRtcEngine 对象尚未初始化。你需要在调用该方法前成功初始化 IRtcEngine 对象。
-   * -8：IRtcEngine 对象内部状态错误。可能的原因是：调用 startEchoTest 开始通话回路测试后，未调用 stopEchoTest 停止测试就调用该方法加入频道。你需要在该方法前调用 stopEchoTest。
-   * -17：加入频道被拒绝。可能的原因是用户已经在频道中。Agora 推荐通过 onConnectionStateChanged 回调判断用户是否在频道中。除收到 ConnectionStateDisconnected(1) 状态外，不要再次调用该方法加入频道。
-   * -102：频道名无效。你需要在 channelId 中填入有效的频道名，重新加入频道。
-   * -121：用户 ID 无效。你需要在 uid 中填入有效的用户 ID，重新加入频道。
+   * 0: Success.
+   * < 0: Failure.
+   * -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in the ChannelMediaOptions structure is invalid. You need to pass in a valid parameter and join the channel again.
+   * -3: Failes to initialize the IRtcEngine object. You need to reinitialize the IRtcEngine object.
+   * -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
+   * -8: IRtcEngineThe internal state of the object is wrong. The typical cause is that you call this method to join the channel without calling stopEchoTest to stop the test after calling startEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
+   * -17: The request to join the channel is rejected. The typical cause is that the user is in the channel. Agora recommends using the onConnectionStateChanged callback to get whether the user is in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected(1) state.
+   * -102: The channel name is invalid. You need to pass in a valid channel name inchannelId to rejoin the channel.
+   * -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
    */
   abstract joinChannelEx(
     token: string,
@@ -63,28 +64,29 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 离开频道。
+   * Leaves a channel.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: 方法调用成功。
-   * < 0: 方法调用失败。
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract leaveChannelEx(connection: RtcConnection): number;
 
   /*
-   * 加入频道后更新频道媒体选项 。
+   * Updates the channel media options after joining the channel.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param options 频道媒体选项，详见 ChannelMediaOptions 。
+   * @param options The channel media options. See ChannelMediaOptions .
    *
    * @returns
-   * 0: 方法调用成功。
-   * < 0: 方法调用失败。 -2： ChannelMediaOptions 结构体成员值设置无效。例如，使用了不合法的 Token，设置了无效的用户角色。你需要填入有效的参数。
-   * -7：IRtcEngine 对象尚未初始化。你需要在调用该方法前成功初始化 IRtcEngine 对象。
-   * -8：IRtcEngine 对象内部状态错误。可能的原因是用户不在频道中。Agora 推荐通过 onConnectionStateChanged 回调判断用户是否在频道中。如果收到 ConnectionStateDisconnected(1) 或 ConnectionStateFailed(5)，则表示用户不在频道中。你需要在调用该方法前调用 joinChannelWithOptions 加入频道。
+   * 0: Success.
+   * < 0: Failure.
+   * -2: The value of a member in the ChannelMediaOptions structure is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.
+   * -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
+   * -8: IRtcEngineThe internal state of the object is wrong. The possible reason is that the user is not in the channel. Agora recommends using the onConnectionStateChanged callback to get whether the user is in the channel. If you receive the ConnectionStateDisconnected (1) or ConnectionStateFailed (5) state, the user is not in the channel. You need to call joinChannelWithOptions to join a channel before calling this method.
    */
   abstract updateChannelMediaOptionsEx(
     options: ChannelMediaOptions,
@@ -92,18 +94,18 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 设置本地视频编码属性。
-   * 每一种视频编码属性对应一系列视频相关参数设置，包含分辨率、帧率和码率。
-   * 该方法的 config 参数设置是在理想网络状态下能达到的最大值。如果网络状态不好，视频引擎便不能使用该
-   * config 渲染本地视频， 它会自动降低到一个合适的视频参数设置。
+   * Sets the encoder configuration for the local video.
+   * Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.
+   * The config specified in this method is the maximum values under ideal network conditions. If the network condition is not good, the video engine cannot use the
+   * config renders local video, which automatically reduces to an appropriate video parameter setting.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param config 视频编码参数配置。详见 VideoEncoderConfiguration 。
+   * @param config Video profile. See VideoEncoderConfiguration .
    *
    * @returns
-   * 0: 方法调用成功。
-   * < 0: 方法调用失败。
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract setVideoEncoderConfigurationEx(
     config: VideoEncoderConfiguration,
@@ -111,20 +113,20 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 初始化远端用户视图。
-   * 该方法绑定远端用户和显示视图，并设置远端用户视图在本地显示时的渲染模式和镜像模式，只影响本地用户看到的视频画面。
-   * 调用该方法时需要在 VideoCanvas 中指定远端视频的用户 ID，一般可以在进频道前提前设置好。
-   * 如果无法在加入频道前得到远端用户的 uid，可以在收到 onUserJoined 回调时调用该方法。如果启用了视频录制功能，视频录制服务会做为一个哑客户端加入频道，因此其他客户端也会收到它的 onUserJoined 事件， App 不应给它绑定视图（因为它不会发送视频流）。
-   * 如需解除某个远端用户的绑定视图，可以调用该方法并将 view 设置为空。
-   * 离开频道后，SDK 会清除远端用户视图的绑定关系。
+   * Initializes the video view of a remote user.
+   * This method initializes the video view of a remote stream on the local device. It affects only the video view that the local user sees. Call this method to bind the remote video stream to a video view and to set the rendering and mirror modes of the video view.
+   * The application specifies the uid of the remote video in the VideoCanvas method before the remote user joins the channel.
+   * If the remote uid is unknown to the application, set it after the application receives the onUserJoined callback. If the Video Recording function is enabled, the Video Recording Service joins the channel as a dummy client, causing other clients to also receive the onUserJoined callback. Do not bind the dummy client to the application view because the dummy client does not send any video streams.
+   * To unbind the remote user from the view, set the view parameter to NULL.
+   * Once the remote user leaves the channel, the SDK unbinds the remote user.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param canvas 视频画布信息。详见 VideoCanvas 。
+   * @param canvas The remote video view settings. See VideoCanvas .
    *
    * @returns
-   * 0：方法调用成功。
-   * < 0：方法调用失败。
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract setupRemoteVideoEx(
     canvas: VideoCanvas,
@@ -132,19 +134,19 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 停止/恢复接收指定的音频流。
-   * 该方法停止/恢复接收某一个指定远端用户的音频流。在加入频道前或后都可以调用。该方法的设置在离开频道后失效。
+   * Stops or resumes receiving the audio stream of a specified user.
+   * This method is used to stops or resumes receiving the audio stream of a specified user. You can call this method before or after joining a channel. If a user leaves a channel, the settings in this method become invalid.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param uid 指定用户的 ID。
+   * @param uid The ID of the specified user.
    *
-   * @param mute 是否停止接收指定音频流： true: 停止接收指定音频流。
-   *  false:（默认）继续接收指定音频流。
+   * @param mute Whether to stop receiving the audio stream of the specified user: true: Stop receiving the audio stream of the specified user.
+   *  false: (Default) Resume receiving the audio stream of the specified user.
    *
    * @returns
-   * 0: 方法调用成功
-   * < 0: 方法调用失败
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract muteRemoteAudioStreamEx(
     uid: number,
@@ -153,19 +155,20 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 停止/恢复接收指定的视频流。
-   * 该方法停止/恢复接收某一个指定远端用户的视频流。在加入频道前或后都可以调用。该方法的设置在离开频道后失效。
+   * Stops or resumes receiving the video stream of a specified user.
+   * This method is used to stops or resumes receiving the video stream of a specified user. You can call this method before or after joining a channel. If a user leaves a channel, the settings in this method become invalid.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param uid 远端用户的 ID。
+   * @param uid The user ID of the remote user.
    *
-   * @param mute 是否停止接收某个远端用户的视频： true: 停止接收。
-   *  false: （默认）恢复接收。
+   * @param mute Whether to stop receiving the video stream of the specified user:
+   *  true: Stop receiving the video stream of the specified user.
+   *  false: (Default) Resume receiving the video stream of the specified user.
    *
    * @returns
-   * 0：方法调用成功。
-   * < 0：方法调用失败。
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract muteRemoteVideoStreamEx(
     uid: number,
@@ -173,9 +176,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_setremotevideostreamtypeex */
   abstract setRemoteVideoStreamTypeEx(
     uid: number,
     streamType: VideoStreamType,
@@ -183,24 +184,25 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 设置远端用户声音的 2D 位置，即水平面位置。
-   * 设置远端用户声音的空间位置和音量，方便本地用户听声辨位。
-   * 通过调用该接口设置远端用户声音出现的位置，左右声道的声音差异会产生声音的方位感，从而判断出远端用户的实时位置。在多人在线游戏场景，如吃鸡游戏中，该方法能有效增加游戏角色的方位感，模拟真实场景。 为获得最佳听觉体验，我们建议用户佩戴有线耳机。
-   * 该方法需要在加入频道后调用。
+   * Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
+   * This method sets the voice position and volume of a remote user.
+   * When the local user calls this method to set the voice position of a remote user, the voice difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a sense of space. This method applies to massive multiplayer online games, such as Battle Royale games. For the best voice positioning, Agora recommends using a wired headset.
+   * Call this method after joining a channel.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param uid 远端用户的 ID。
+   * @param uid The user ID of the remote user.
    *
-   * @param pan 设置远端用户声音的空间位置，取值范围为 [-1.0,1.0]: -1.0: 声音出现在左边。
-   *  (默认）0.0: 声音出现在正前方。
-   *  1.0: 声音出现在右边。
+   * @param pan The voice position of the remote user. The value ranges from -1.0 to 1.0:
+   *  -1.0: The remote voice comes from the left.
+   *  0.0: (Default) The remote voice comes from the front.
+   *  1.0: The remote voice comes from the right.
    *
-   * @param gain 设置远端用户声音的音量，取值范围为 [0.0,100.0]，默认值为 100.0，表示该用户的原始音量。取值越小，则音量越低。
+   * @param gain The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
    *
    * @returns
-   * 0: 方法调用成功
-   * < 0: 方法调用失败
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract setRemoteVoicePositionEx(
     uid: number,
@@ -209,18 +211,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_setremoteuserspatialaudioparamsex */
   abstract setRemoteUserSpatialAudioParamsEx(
     uid: number,
     params: SpatialAudioParams,
     connection: RtcConnection
   ): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_setremoterendermodeex */
   abstract setRemoteRenderModeEx(
     uid: number,
     renderMode: RenderModeType,
@@ -228,9 +226,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_enableloopbackrecordingex */
   abstract enableLoopbackRecordingEx(
     connection: RtcConnection,
     enabled: boolean,
@@ -238,19 +234,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   *  获取当前网络连接状态。
-   * 该方法在加入频道前后都能调用。
+   * Gets the current connection state of the SDK.
+   * You can call this method either before or after joining a channel.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 当前网络连接状态。详见 ConnectionStateType 。
+   * The current connection state.  ConnectionStateType
    */
   abstract getConnectionStateEx(connection: RtcConnection): ConnectionStateType;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_enableencryptionex */
   abstract enableEncryptionEx(
     connection: RtcConnection,
     enabled: boolean,
@@ -258,26 +252,26 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 发送数据流。
-   * 调用 createDataStreamEx 后，你可以调用本方法向频道内所有用户发送数据流消息。
-   * SDK 对该方法有如下限制：
-   * 频道内每秒最多能发送 60 个包，且每个包最大为 1 KB。
-   * 每个客户端每秒最多能发送 30 KB 数据。
-   * 频道内每人最多能同时有 5 个数据通道。 成功调用该方法后，远端会触发 onStreamMessage 回调，远端用户可以在该回调中获取接收到的流消息；
-   * 若调用失败，远端会触发 onStreamMessageError 回调。 请确保在调用该方法前，已调用 createDataStreamEx 创建了数据通道。
-   * 该方法仅适用于通信场景以及直播场景下的主播用户，如果直播场景下的观众调用此方法可能会造成观众变主播。
+   * Sends data stream messages.
+   * After calling createDataStreamEx , you can call this method to send data stream messages to all users in the channel.
+   * The SDK has the following restrictions on this method:
+   * Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 kB.
+   * Each client can send up to 6 KB of data per second.
+   * Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
+   * A failed method call triggers the onStreamMessageError callback on the remote client. Ensure that you call createDataStreamEx to create a data channel before calling this method.
+   * This method applies only to the `COMMUNICATION` profile or to the hosts in the `LIVE_BROADCASTING` profile. If an audience in the `LIVE_BROADCASTING` profile calls this method, the audience may be switched to a host.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param streamId 数据流 ID。可以通过 createDataStreamEx 获取。
+   * @param streamId The data stream ID. You can get the data stream ID by calling createDataStreamEx.
    *
-   * @param data 待发送的数据。
+   * @param data The data to be sent.
    *
-   * @param length 数据长度。
+   * @param length The length of the data.
    *
    * @returns
-   * 0: 方法调用成功。
-   * < 0: 方法调用失败。
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract sendStreamMessageEx(
     streamId: number,
@@ -287,27 +281,27 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 添加本地视频水印。
-   * 该方法将一张 PNG 图片作为水印添加到本地发布的直播视频流上，同一直播频道中的用户、旁路直播观众和采集设备都能看到或采集到该水印图片。
-   * Agora 当前只支持在直播视频流中添加一个水印，后添加的水印会替换掉之前添加的水印。
-   * 水印坐标和 setVideoEncoderConfigurationEx 方法中的设置有依赖关系： 如果视频编码方向（ OrientationMode ）固定为横屏或自适应模式下的横屏，那么水印使用横屏坐标。
-   * 如果视频编码方向（OrientationMode）固定为竖屏或自适应模式下的竖屏，那么水印使用竖屏坐标。
-   * 设置水印坐标时，水印的图像区域不能超出 setVideoEncoderConfigurationEx 方法中设置的视频尺寸，否则超出部分将被裁剪。
-   * 你需要在调用 enableVideo 方法之后再调用本方法。
-   * 待添加水印图片必须是 PNG 格式。本方法支持所有像素格式的 PNG 图片：RGBA、RGB、Palette、Gray 和 Alpha_gray。
-   * 如果待添加的 PNG 图片的尺寸与你在本方法中设置的尺寸不一致，SDK 会对 PNG 图片进行缩放或裁剪，以与设置相符。
-   * 如果你已经使用 startPreview 方法开启本地视频预览，那么本方法的 visibleInPreview 可设置水印在预览时是否可见。
-   * 如果你已设置本地视频为镜像模式，那么此处的本地水印也为镜像。为避免本地用户看本地视频时的水印也被镜像，Agora 建议你不要对本地视频同时使用镜像和水印功能，请在应用层实现本地水印功能。
+   * Adds a watermark image to the local video.
+   * This method adds a PNG watermark image to the local video in the live streaming. Once the watermark image is added, all the audience in the channel (CDN audience included), and the capturing device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.
+   * The watermark coordinatesare dependent on the settings in the setVideoEncoderConfigurationEx method:
+   * If the orientation mode of the encoding video ( OrientationMode ) is fixed landscape mode or the adaptive landscape mode, the watermark uses the landscape orientation.
+   * If the orientation mode of the encoding video (OrientationMode) is fixed portrait mode or the adaptive portrait mode, the watermark uses the portrait orientation.
+   * When setting the watermark position, the region must be less than thesetVideoEncoderConfigurationEx dimensions set in the method; otherwise, the watermark image will be cropped.
+   * Ensure that you have called enableVideo before calling this method.
+   * This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.
+   * If the dimensions of the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.
+   * If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member to set whether or not the watermark is visible in the preview.
+   * If you have enabled the mirror mode for the local video, the watermark on the local video is also mirrored. To avoid mirroring the watermark, Agora recommends that you do not use the mirror and watermark functions for the local video at the same time. You can implement the watermark function in your application layer.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param options 待添加的水印图片的设置选项，详见 WatermarkOptions 。
+   * @param options The options of the watermark image to be added.
    *
-   * @param watermarkUrl 待添加的水印图片的本地路径。该方法支持从本地绝对/相对路径添加水印图片。
+   * @param watermarkUrl The local file path of the watermark image to be added. This method supports adding a watermark image from the local absolute or relative file path.
    *
    * @returns
-   * 0: 方法调用成功
-   * < 0: 方法调用失败
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract addVideoWatermarkEx(
     watermarkUrl: string,
@@ -316,19 +310,19 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 删除已添加的视频水印。
+   * Removes the watermark image from the video stream.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: 方法调用成功
-   * < 0: 方法调用失败
+   * 0: Success.
+   * < 0: Failure.
    */
   abstract clearVideoWatermarkEx(connection: RtcConnection): number;
 
   /*
-   * 自定义数据上报和分析服务。
-   * 声网提供自定义数据上报和分析服务。该服务当前处于免费内测期。内测期提供的能力为 6 秒内最多上报 10 条数据，每条自定义数据不能超过 256 字节，每个字符串不能超过 100 字节。如需试用该服务，请联系 开通并商定自定义数据格式。
+   * Agora supports reporting and analyzing customized messages.
+   * Agora supports reporting and analyzing customized messages. This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact and discuss the format of customized messages with us.
    */
   abstract sendCustomReportMessageEx(
     id: string,
@@ -339,9 +333,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_enableaudiovolumeindicationex */
   abstract enableAudioVolumeIndicationEx(
     interval: number,
     smooth: number,
@@ -349,22 +341,16 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_getuserinfobyuseraccountex */
   abstract getUserInfoByUserAccountEx(
     userAccount: string,
     connection: RtcConnection
   ): UserInfo;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_getuserinfobyuidex */
   abstract getUserInfoByUidEx(uid: number, connection: RtcConnection): UserInfo;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_setvideoprofileex */
   abstract setVideoProfileEx(
     width: number,
     height: number,
@@ -372,9 +358,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     bitrate: number
   ): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_irtcengineex_enabledualstreammodeex */
   abstract enableDualStreamModeEx(
     sourceType: VideoSourceType,
     enabled: boolean,
@@ -383,24 +367,25 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 增加旁路推流地址。
-   * 调用该方法后，你可以根据 RtcConnection 选择向 CDN 推送任意一路 RTMP 或 RTMPS 协议的媒体流。SDK 会在本地触发 onRtmpStreamingStateChanged 回调，报告增加旁路推流地址的状态。 该方法需要在加入频道后调用。
-   * 请确保已开通旁路推流的功能。
-   * 只有直播场景中角色为主播的用户才能调用该方法。
-   * 该方法每次只能增加一路旁路推流地址。若需推送多路流，则需多次调用该方法。
+   * Publishes the local stream to a specified CDN live streaming URL.
+   * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN according to RtcConnection . The SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of adding a local stream to the CDN. Call this method after joining a channel.
+   * Ensure that the Media Push function is enabled.
+   * This method takes effect only when you are a host in live interactive streaming.
+   * This method adds only one streaming URL to the CDN each time it is called. To push multiple URLs, call this method multiple times.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param transcodingEnabled 是否转码。转码是指在旁路推流时对音视频流进行转码处理后再推送到其他 CDN 服务器。多适用于频道内有多个主播，需要进行混流、合图的场景。 true: 转码。
-   *  false: 不转码。 如果该参数设为 true，需先调用 setLiveTranscoding 方法。
+   * @param transcodingEnabled Whether to enable transcoding. Transcoding in a CDN live streaming converts the audio and video streams before pushing them to the CDN server. It applies to scenarios where a channel has multiple broadcasters and composite layout is needed.
+   *  true: Enable transcoding.
+   *  false: Disable transcoding. If you set this parameter as true, ensurethat you call the setLiveTranscoding method before calling this method.
    *
-   * @param url 旁路推流地址，格式为 RTMP 或 RTMPS。该字符长度不能超过 1024 字节，不支持中文字符等特殊字符。
+   * @param url The Media Push URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
    *
    * @returns
-   * 0: 方法调用成功。
-   * < 0: 方法调用失败。
-   * -2: 参数无效，一般是 URL 为空或是长度为 0 的字符串。
-   * -7: 推流时未初始化引擎。
+   * 0: Success.
+   * < 0: Failure.
+   * -2: Invalid parameter, usually an empty URL or a string with a length of 0.
+   * -7: The engine is not initialized when streaming.
    */
   abstract addPublishStreamUrlEx(
     url: string,
@@ -409,17 +394,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /*
-   * 创建数据流。
-   * 创建数据流。每个用户在每个频道中最多只能创建 5 个数据流。
-   * 相比 createDataStreamEx ，本方法不支持数据可靠。接收方会丢弃超出发送时间 5 秒后的数据包。
+   * Creates a data stream.
+   * Creates a data stream. Each user can create up to five data streams in a single channel.
+   * Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
    *
-   * @param connection Connection 信息。详见 RtcConnection 。
+   * @param connection The connection information. See RtcConnection .
    *
-   * @param config 数据流设置。详见 DataStreamConfig 。
+   * @param config The configurations for the data stream. See DataStreamConfig .
    *
    * @returns
-   * 创建的数据流的 ID：方法调用成功。
-   * < 0：方法调用失败。
+   * ID of the created data stream, if the method call succeeds.
+   * < 0: Failure.
    */
   abstract createDataStreamEx(
     config: DataStreamConfig,

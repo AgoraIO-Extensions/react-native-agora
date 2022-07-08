@@ -16,11 +16,11 @@ export * from './AgoraRtcRenderView';
 const instance = new RtcEngineInternal();
 
 /*
- * 创建 IRtcEngine 对象。
- * 目前 Agora RTC SDK v4.0.0 只支持每个 app 创建一个 IRtcEngine 对象。
+ * Creates the IRtcEngine object.
+ * Currently, the Agora RTC SDK v4.0.0 supports creating only one IRtcEngine object for an app.
  *
  * @returns
- * IRtcEngine 对象。
+ * IRtcEngine object.
  */
 export function createAgoraRtcEngine(): IRtcEngine {
   return instance;

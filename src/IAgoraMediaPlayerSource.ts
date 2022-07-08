@@ -8,16 +8,16 @@ import {
 } from './AgoraMediaPlayerTypes';
 
 /*
- * 提供媒体播放器的回调。
+ * Provides callbacks for media players.
  */
 export abstract class IMediaPlayerSourceObserver {
   /*
-   * 报告播放器状态改变。
-   * 当播放器状态改变时，SDK 会触发该回调，报告新的播放状态。
+   * Reports the playback state change.
+   * When the state of the media player changes, the SDK triggers this callback to report the current playback state.
    *
-   * @param state 新的播放状态，详见 MediaPlayerState 。
+   * @param state The playback state, see MediaPlayerState .
    *
-   * @param ec 播放器错误码，详见 MediaPlayerError 。
+   * @param ec The error code. See MediaPlayerError .
    */
   onPlayerSourceStateChanged?(
     state: MediaPlayerState,
@@ -25,22 +25,22 @@ export abstract class IMediaPlayerSourceObserver {
   ): void;
 
   /*
-   * 报告当前播放进度。
-   * 播放媒体文件时，SDK 每隔 1 秒会自动触发该回调，报告当前播放进度。
+   * Reports the current playback progress.
+   * When playing media files, the SDK triggers this callback every one second to report current playback progress.
    *
-   * @param position 当前播放进度，单位为 ms。
+   * @param position The playback position (ms) of media files.
    */
   onPositionChanged?(position: number): void;
 
   /*
-   * 报告播放器的事件。
-   * 调用 seek 定位播放后，SDK 会触发该回调，报告定位播放的结果。
+   * Reports the playback event.
+   * After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
    *
-   * @param eventCode 播放器事件，详见 MediaPlayerEvent 。
+   * @param eventCode The playback event. See MediaPlayerEvent .
    *
-   * @param elapsedTime 发生事件的时间 (毫秒)。
+   * @param elapsedTime The time (ms) when the event occurs.
    *
-   * @param message 事件的信息。
+   * @param message Information about the event.
    */
   onPlayerEvent?(
     eventCode: MediaPlayerEvent,
@@ -49,64 +49,61 @@ export abstract class IMediaPlayerSourceObserver {
   ): void;
 
   /*
-   * 报告已获取媒体附属信息。
-   * 解析媒体附属信息后时，SDK 会触发该回调，报告媒体附属信息的数据类型和具体数据。
+   * Occurs when the media metadata is received.
+   * The callback occurs when the player receives the media metadata and reports the detailed information of the media metadata.
    *
-   * @param data 具体数据，用户自定义格式的数据。
+   * @param data The detailed data of the media metadata.
    *
-   * @param length 数据长度，单位为 byte。
+   * @param length The data length (bytes).
    */
   onMetaData?(data: Uint8Array, length: number): void;
 
   /*
-   *  报告当前缓冲数据能播放的时间。
-   * 播放在线媒体资源的过程中，SDK 会每隔 1 秒触发一次该回调，报告当前缓冲的数据能支持的播放时间。 当缓冲数据支持的播放时间小于阈值（默认为 0）时，返回 PlayerEventBufferLow。
-   * 当缓冲数据支持的播放时间大于阈值（默认为 0）时，返回 PlayerEventBufferRecover。
+   * Reports the playback duration that the buffered data can support.
+   * When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support.
+   * When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns PlayerEventBufferLow.
+   * When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns PlayerEventBufferRecover.
    *
-   * @param playCachedBuffer 当前缓冲的数据能支持的播放时间 (毫秒)。
+   * @param playCachedBuffer The playback duration (ms) that the buffered data can support.
    */
   onPlayBufferUpdated?(playCachedBuffer: number): void;
 
   /*
-   * 报告预加载媒体资源的事件。
+   * Reports the events of preloaded media resources.
    *
-   * @param event 预加载媒体资源时发生的事件。详见 PlayerPreloadEvent 。
+   * @param event Events that occur when media resources are preloaded. See PlayerPreloadEvent .
    */
   onPreloadEvent?(src: string, event: PlayerPreloadEvent): void;
 
   /*
-   * TODO(doc)
+   * @ignore
    */
   onCompleted?(): void;
 
   /*
-   * 提示鉴权信息即将过期。
-   * 当你调用 switchAgoraCDNLineByIndex 切换媒体资源的时候，如果 ts 过期，该回调会被触发，提示你更新鉴权信息。你需要调用 renewAgoraCDNSrcToken 传入新的鉴权信息，以更新该媒体资源网络路径的鉴权信息。更新鉴权信息后，你还需要调用 switchAgoraCDNLineByIndex 才能完成线路切换。
+   * Occurs when the token is about to expire.
+   * If the ts is about to expire when you call the switchAgoraCDNLineByIndex method to switch the CDN route for playing the media resource, the SDK triggers this callback to remind you to renew the authentication information. You need to call the renewAgoraCDNSrcToken method to pass in the updated authentication information to update the authentication information of the media resource URL. After updating the authentication information, you need to call switchAgoraCDNLineByIndex to complete the route switching.
    */
   onAgoraCDNTokenWillExpire?(): void;
 
   /*
-   * 媒体资源视频码率变化回调。
+   * Occurs when the video bitrate of the media resource changes.
    *
-   * @param from 变化前，媒体资源播放时的视频码率相关信息。详见 SrcInfo 。
+   * @param from Information about the video bitrate of the media resource being played. See SrcInfo .
    *
-   * @param to 变化后，媒体资源播放时的视频码率相关信息。详见 SrcInfo 。
+   * @param to Information about the changed video bitrate of media resource being played. See SrcInfo .
    */
   onPlayerSrcInfoChanged?(from: SrcInfo, to: SrcInfo): void;
 
   /*
-   * 媒体播放器相关信息发生改变回调。
-   * 当媒体播放器相关信息发生改变时，SDK 会触发该回调。你可用其进行问题定位和排查。
+   * Occurs when information related to the media player changes.
+   * When the information about the media player changes, the SDK triggers this callback. You can use this callback for troubleshooting.
    *
-   * @param info 媒体播放器相关信息。详见 PlayerUpdatedInfo 。
+   * @param info Information related to the media player. See PlayerUpdatedInfo .
    */
   onPlayerInfoUpdated?(info: PlayerUpdatedInfo): void;
 
   /*
-   * 媒体播放器音量提示回调。
-   * SDK 每 200 毫秒触发一次该回调，报告媒体播放器当前的音量。
-   *
-   * @param volume 播放器的当前音量，取值范围为 [0,255]。
-   */
+@ignore   */
   onAudioVolumeIndication?(volume: number): void;
 }

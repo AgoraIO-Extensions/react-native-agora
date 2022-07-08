@@ -1,65 +1,65 @@
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum RhythmPlayerStateType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerStateIdle = 810,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerStateOpening = 811,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerStateDecoding = 812,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerStatePlaying = 813,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerStateFailed = 814,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum RhythmPlayerErrorType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerErrorOk = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerErrorFailed = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerErrorCanNotOpen = 801,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerErrorCanNotPlay = 802,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RhythmPlayerErrorFileOverDurationLimit = 803,
 }
 
 /*
- *  虚拟节拍器配置。
+ * The metronome configuration.
  */
 export class AgoraRhythmPlayerConfig {
   /*
-   * 每小节的拍数，取值范围为 [1,9]。默认值为 4，即每小节包含 1 个强拍和 3 个弱拍。
+   * The number of beats per measure, which ranges from 1 to 9. The default value is 4, which means that each measure contains one downbeat and three upbeats.
    */
   beatsPerMeasure?: number;
   /*
-   * 节拍速度（拍/分钟），取值范围为 [60,360]。默认值为 60，即 1 分钟有 60 拍。
+   * The beat speed (beats/minute), which ranges from 60 to 360. The default value is 60, which means that the metronome plays 60 beats in one minute.
    */
   beatsPerMinute?: number;
 }

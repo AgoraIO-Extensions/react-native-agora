@@ -1,202 +1,201 @@
 /*
- * 音频路由的类型。
+ * The type of the audio route.
  */
 export enum AudioRoute {
   /*
-   * -1: 使用默认的音频路由。
+   * -1: Default audio route.
    */
   RouteDefault = -1,
   /*
-   * 0: 音频路由为带麦克风的耳机。
+   * Audio output routing is a headset with microphone.
    */
   RouteHeadset = 0,
   /*
-   * 1: 音频路由为听筒。
+   * 1: The audio route is an earpiece.
    */
   RouteEarpiece = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RouteHeadsetnomic = 2,
   /*
-   * 3: 音频路由为设备自带的扬声器。
+   * 3: The audio route is the speaker that comes with the device.
    */
   RouteSpeakerphone = 3,
   /*
-   * 4: 音频路由为外接的扬声器。（仅适用于 iOS）
+   * 4: The audio route is an external speaker. (iOS only)
    */
   RouteLoudspeaker = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RouteHeadsetbluetooth = 5,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RouteHdmi = 6,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RouteUsb = 7,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum NlpAggressiveness {
   /*
-   * TODO(doc)
+   * @ignore
    */
   NlpNotSpecified = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   NlpMild = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   NlpNormal = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   NlpAggressive = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   NlpSuperAggressive = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   NlpExtreme = 5,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum BytesPerSample {
   /*
-   * TODO(doc)
+   * @ignore
    */
   TwoBytesPerSample = 2,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class AudioParameters {
   /*
-   * TODO(doc)
+   * @ignore
    */
   sample_rate?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   channels?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   frames_per_buffer?: number;
 }
 
 /*
- * 音频数据的使用模式。
+ * The use mode of the audio data.
  */
 export enum RawAudioFrameOpModeType {
   /*
-   * 0: 只读模式，
+   * 0: Read-only mode:
    */
   RawAudioFrameOpModeReadOnly = 0,
   /*
-   * 2: 读写模式,
+   * 2: Read and write mode:
    */
   RawAudioFrameOpModeReadWrite = 2,
 }
 
 /*
- * 媒体源类型。
+ * Media source type.
  */
 export enum MediaSourceType {
   /*
-   * 0: 音频播放设备。
+   * 0: Audio playback device.
    */
   AudioPlayoutSource = 0,
   /*
-   * 1: 音频采集设备。
+   * 1: Audio capturing device.
    */
   AudioRecordingSource = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   PrimaryCameraSource = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   SecondaryCameraSource = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   PrimaryScreenSource = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   SecondaryScreenSource = 5,
   /*
-   * TODO(doc)
+   * @ignore
    */
   CustomVideoSource = 6,
   /*
-   * TODO(doc)
+   * @ignore
    */
   MediaPlayerSource = 7,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RtcImagePngSource = 8,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RtcImageJpegSource = 9,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RtcImageGifSource = 10,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoSource = 11,
   /*
-   * TODO(doc)
+   * @ignore
    */
   TranscodedVideoSource = 12,
   /*
-   * TODO(doc)
+   * @ignore
    */
   UnknownMediaSource = 100,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class PacketOptions {
   /*
-   * TODO(doc)
+   * @ignore
    */
   timestamp?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   audioLevelIndication?: number;
 }
 
 /*
- * 音频前处理的声道数。
- * 在演唱会等需要增强真实感的场景中，本地用户可能需要采集立体声并发送立体声信号给远端用户。
- * 例如，在演唱会的舞台上，主唱、吉他手、鼓手分别站在不同的位置，现场设备采集到了三者的立体声，并把立体声信号发送给远端用户，远端用户可以像亲临舞台一样听到来自不同方向的歌声、吉他声和鼓声。
- * 通过该类，你可以设置双声道处理，实现立体声。Agora 推荐按如下步骤设置：
- * 前处理：调用 setAdvancedAudioOptions 并在 AdvancedAudioOptions 中设置 audioProcessingChannels 为 AudioProcessingStereo (2)。
- * 后处理：调用 setAudioProfile 并将 profile 设为 AudioProfileMusicStandardStereo (3) 或 AudioProfileMusicHighQualityStereo (5)。
- * 立体声设置仅在媒体音量下生效。
- * 在 iOS 上，立体声对设备性能要求较高。仅支持在 iOS 14.0 及以上版本的如下设备中实现立体声：
+ * The number of channels for audio preprocessing.
+ * In scenarios that require enhanced realism, such as concerts, local users might need to capture stereo audio and send stereo signals to remote users. For example, the singer, guitarist, and drummer are standing in different positions on the stage. The audio capture device captures their stereo audio and sends stereo signals to remote users. Remote users can hear the song, guitar, and drum from different directions as if they were at the auditorium.
+ * You can set the dual-channel processing to implement stereo audio in this class. Agora recommends the following settings:
+ * Preprocessing: call setAdvancedAudioOptions and set audioProcessingChannels to AdvancedAudioOptions (2) in AudioProcessingStereo.
+ * Post-processing: call setAudioProfile and set profile to AudioProfileMusicStandardStereo (3) or AudioProfileMusicHighQualityStereo (5).
+ * The stereo setting only takes effect when the SDK uses the media volume.
+ * On iOS, stereo audio requires high device performance. Stereo audio is only supported on the following devices using iOS 14.0 and later:
  * iPhone XS
  * iPhone XS Max
  * iPhone XR
@@ -204,230 +203,230 @@ export class PacketOptions {
  * iPhone 11 Pro
  * iPhone 11 Pro Max
  * iPhone SE (2020)
- * 11 英寸 或 12.9 英寸 iPad Pro（第三代）
- * 11 英寸 或 12.9 英寸 iPad Pro（第四代）
+ * iPad Pro 11" and 12.9" (3rd generation)
+ * iPad Pro 11" and 12.9" (4th generation)
  */
 export enum AudioProcessingChannels {
   /*
-   * 1: （默认）单声道。
+   * 1: (Default) Mono.
    */
   AudioProcessingMono = 1,
   /*
-   * 2: 双声道。
+   * 2: Stereo (two channels).
    */
   AudioProcessingStereo = 2,
 }
 
 /*
- *  音频的高级选项。
+ * The advanced options for audio.
  */
 export class AdvancedAudioOptions {
   /*
-   * 音频前处理的声道数。详见 AudioProcessingChannels 。
+   * The number of channels for audio preprocessing. See AudioProcessingChannels .
    */
   audioProcessingChannels?: AudioProcessingChannels;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class AudioEncodedFrameInfo {
   /*
-   * TODO(doc)
+   * @ignore
    */
   sendTs?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   codec?: number;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class AudioPcmFrame {
   /*
-   * TODO(doc)
+   * @ignore
    */
   capture_timestamp?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   samples_per_channel_?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   sample_rate_hz_?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   num_channels_?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   bytes_per_sample?: BytesPerSample;
   /*
-   * TODO(doc)
+   * @ignore
    */
   data_?: number[];
 }
 
 /*
- * 声道模式。
+ * The channel mode.
  */
 export enum AudioDualMonoMode {
   /*
-   * 0: 原始模式。
+   * 0: Original mode.
    */
   AudioDualMonoStereo = 0,
   /*
-   * 1: 左声道模式。该模式用左声道的音频替换右声道的音频，即用户只能听到左声道的音频。
+   * 1: Left channel mode. This mode replaces the audio of the right channel with the audio of the left channel, which means the user can only hear the audio of the left channel.
    */
   AudioDualMonoL = 1,
   /*
-   * 2: 右声道模式。该模式用右声道的音频替换左声道的音频，即用户只能听到右声道的音频。
+   * 2: Right channel mode. This mode replaces the audio of the left channel with the audio of the right channel, which means the user can only hear the audio of the right channel.
    */
   AudioDualMonoR = 2,
   /*
-   * 3: 混合模式。该模式将左右声道的数据叠加，即用户能同时听到左声道和右声道的音频。
+   * 3: Mixed channel mode. This mode mixes the audio of the left channel and the right channel, which means the user can hear the audio of the left channel and the right channel at the same time.
    */
   AudioDualMonoMix = 3,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum VideoPixelFormat {
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoPixelUnknown = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoPixelI420 = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoPixelBgra = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoPixelNv21 = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoPixelRgba = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoPixelNv12 = 8,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoTexture2d = 10,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoTextureOes = 11,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoPixelI422 = 16,
 }
 
 /*
- * 视频显示模式。
+ * Video display modes.
  */
 export enum RenderModeType {
   /*
-   * 1: 视频尺寸等比缩放。优先保证视窗被填满。因视频尺寸与显示视窗尺寸不一致而多出的视频将被截掉。
+   * 1: Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). The window is filled. One dimension of the video might have clipped contents.
    */
   RenderModeHidden = 1,
   /*
-   * 2: 视频尺寸等比缩放。优先保证视频内容全部显示。因视频尺寸与显示视窗尺寸不一致造成的视窗未被填满的区域填充黑色。
+   * 2: Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Priority is to ensuring that all video content is displayed. Areas that are not filled due to disparity in the aspect ratio are filled with black.
    */
   RenderModeFit = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RenderModeAdaptive = 3,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum EglContextType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   EglContext10 = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   EglContext14 = 1,
 }
 
 /*
- * 视频 buffer 类型。
+ * The video buffer type.
  */
 export enum VideoBufferType {
   /*
-   * 1: 类型为原始数据。
+   * 1: The video buffer in the format of raw data.
    */
   VideoBufferRawData = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoBufferArray = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoBufferTexture = 3,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum MediaPlayerSourceType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   MediaPlayerSourceDefault = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   MediaPlayerSourceFullFeatured = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   MediaPlayerSourceSimple = 2,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum VideoModulePosition {
   /*
-   * TODO(doc)
+   * @ignore
    */
   PositionPostCapturer = 1 << 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   PositionPreRenderer = 1 << 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   PositionPreEncoder = 1 << 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   PositionPostFilters = 1 << 3,
 }
 
 /*
- * 音频帧类型。
+ * Audio frame type.
  */
 export enum AudioFrameType {
   /*
@@ -437,21 +436,21 @@ export enum AudioFrameType {
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class AudioSpectrumData {
   /*
-   * TODO(doc)
+   * @ignore
    */
   audioSpectrumData?: number[];
   /*
-   * TODO(doc)
+   * @ignore
    */
   dataLength?: number;
 }
 
 /*
- * 远端用户的音频频谱信息。
+ * Audio spectrum information of the remote user.
  */
 export class UserAudioSpectrumInfo {
   /*
@@ -459,28 +458,27 @@ export class UserAudioSpectrumInfo {
    */
   uid?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   spectrumData?: AudioSpectrumData;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum VideoFrameProcessMode {
   /*
-   * TODO(doc)
+   * @ignore
    */
   ProcessModeReadOnly = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ProcessModeReadWrite = 1,
 }
 
 /*
- * 鉴黄结果。
- */
+@ignore */
 export enum ContentInspectResult {
   /*
    * 1：正常图片。
@@ -497,103 +495,99 @@ export enum ContentInspectResult {
 }
 
 /*
- * 在设备端进行内容审核的类型。
- */
+@ignore */
 export enum ContentInspectDeviceType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   ContentInspectDeviceInvalid = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ContentInspectDeviceAgora = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ContentInspectDeviceHive = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ContentInspectDeviceTupu = 3,
 }
 
 /*
- * 内容审核类型。
- */
+@ignore */
 export enum ContentInspectType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   ContentInspectInvalide = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ContentInspectModeration = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ContentInspectSupervise = 2,
 }
 
 /*
- *  ContentInspectModule 结构体，用于配置内容审核模块的类型和频率。
- */
+@ignore */
 export class ContentInspectModule {
   /*
    *
    */
   type?: ContentInspectType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   frequency?: number;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class ContentInspectConfig {
   /*
-   * TODO(doc)
+   * @ignore
    */
   enable?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   DeviceWork?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   CloudWork?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   DeviceworkType?: ContentInspectDeviceType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   extraInfo?: string;
   /*
-   * TODO(doc)
+   * @ignore
    */
   modules?: ContentInspectModule[];
   /*
-   * TODO(doc)
+   * @ignore
    */
   moduleCount?: number;
 }
 
 /*
- * 视频截图设置。
- */
+@ignore */
 export class SnapShotConfig {
   /*
-   * 频道名。
+   * The channel name.
    */
   channel?: string;
   /*
-   * 用户 ID。如果要对本地用户的视频截图，uid 设为 0。
+   * The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
    */
   uid?: number;
   /*
@@ -602,21 +596,21 @@ export class SnapShotConfig {
    * iOS: /App Sandbox/Library/Caches/example.jpg
    * macOS: ～/Library/Logs/example.jpg
    * Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg
-   * 请确保目录存在且可写。
+   * Ensure that the path you specify exists and is writable.
    */
   filePath?: string;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum ExternalVideoSourceType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoFrame = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   EncodedVideoFrame = 1,
 }

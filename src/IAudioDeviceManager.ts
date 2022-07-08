@@ -1,137 +1,85 @@
 import { AudioDeviceInfo } from './IAgoraRtcEngine';
 
 /*
- * 设备 ID 的最大长度。
+ * The maximum length of the device ID.
  */
 export enum MaxDeviceIdLengthType {
   /*
-   * 设备 ID 的最大长度为 512 个字符。
+   * The maximum length of the device ID is 512 bytes.
    */
   MaxDeviceIdLength = 512,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export abstract class IAudioDeviceManager {
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_enumerateplaybackdevices */
   abstract enumeratePlaybackDevices(): AudioDeviceInfo[];
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_enumeraterecordingdevices */
   abstract enumerateRecordingDevices(): AudioDeviceInfo[];
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_setplaybackdevice */
   abstract setPlaybackDevice(deviceId: string): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getplaybackdevice */
   abstract getPlaybackDevice(): string;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getplaybackdeviceinfo */
   abstract getPlaybackDeviceInfo(): AudioDeviceInfo;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_setplaybackdevicevolume */
   abstract setPlaybackDeviceVolume(volume: number): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getplaybackdevicevolume */
   abstract getPlaybackDeviceVolume(): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_setrecordingdevice */
   abstract setRecordingDevice(deviceId: string): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getrecordingdevice */
   abstract getRecordingDevice(): string;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getrecordingdeviceinfo */
   abstract getRecordingDeviceInfo(): AudioDeviceInfo;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_setrecordingdevicevolume */
   abstract setRecordingDeviceVolume(volume: number): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getrecordingdevicevolume */
   abstract getRecordingDeviceVolume(): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_setplaybackdevicemute */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getplaybackdevicemute */
   abstract getPlaybackDeviceMute(): boolean;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_setrecordingdevicemute */
   abstract setRecordingDeviceMute(mute: boolean): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_getrecordingdevicemute */
   abstract getRecordingDeviceMute(): boolean;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_startplaybackdevicetest */
   abstract startPlaybackDeviceTest(testAudioFilePath: string): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_stopplaybackdevicetest */
   abstract stopPlaybackDeviceTest(): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_startrecordingdevicetest */
   abstract startRecordingDeviceTest(indicationInterval: number): number;
 
-  /*
-   * 停止音频采集设备测试。
-   * 该方法停止音频采集设备测试。调用 后，必须调用该方法停止测试。
-   * 该方法需要在加入频道前调用。
-   *
-   * @returns
-   * 0: 方法调用成功。
-   * < 0: 方法调用失败。
-   */
+  /* api_iaudiodevicemanager_stoprecordingdevicetest */
   abstract stopRecordingDeviceTest(): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_startaudiodeviceloopbacktest */
   abstract startAudioDeviceLoopbackTest(indicationInterval: number): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_stopaudiodeviceloopbacktest */
   abstract stopAudioDeviceLoopbackTest(): number;
 
-  /*
-   * TODO(doc)
-   */
+  /* api_iaudiodevicemanager_release */
   abstract release(): void;
 }
