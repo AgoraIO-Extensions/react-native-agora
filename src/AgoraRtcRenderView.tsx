@@ -9,9 +9,20 @@ const AgoraRtcTextureView = requireNativeComponent<{ callApi: object }>(
   'AgoraRtcTextureView'
 );
 
+/*
+ * Properties of the RtcSurfaceView.
+ */
 export interface RtcSurfaceViewProps {
+  /*
+   * Controls whether to place the surface of the RtcSurfaceView on top of the window: true: Place it on top of the window.
+   * false: Do not place it on top of another RtcSurfaceView in the window.
+   */
   zOrderOnTop?: boolean;
 
+  /*
+   * Controls whether to place the surface of the RtcSurfaceView on top of another RtcSurfaceView in the window (but still behind the window): true: Place it on top of another RtcSurfaceView in the window.
+   * false: Do not place it on top of another RtcSurfaceView in the window.
+   */
   zOrderMediaOverlay?: boolean;
 }
 
