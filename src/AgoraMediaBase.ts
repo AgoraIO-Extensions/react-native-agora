@@ -15,7 +15,7 @@ export enum AudioRoute {
    */
   RouteEarpiece = 1,
   /*
-   * @ignore
+   * 2: The audio route is a headset without a microphone.
    */
   RouteHeadsetnomic = 2,
   /*

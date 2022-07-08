@@ -201,7 +201,9 @@ export abstract class IBaseSpatialAudioEngine {
     axisUp: number[]
   ): number;
 
-  /* api_ibasespatialaudioengine_updateselfpositionex */
+  /*
+   * @ignore
+   */
   abstract updateSelfPositionEx(
     position: number[],
     axisForward: number[],
@@ -218,7 +220,9 @@ export abstract class IBaseSpatialAudioEngine {
     positionInfo: RemoteVoicePositionInfo
   ): number;
 
-  /* api_ibasespatialaudioengine_setparameters */
+  /*
+   * @ignore
+   */
   abstract setParameters(params: string): number;
 
   /*
@@ -308,7 +312,9 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
     posInfo: RemoteVoicePositionInfo
   ): number;
 
-  /* api_ilocalspatialaudioengine_updateremotepositionex */
+  /*
+   * @ignore
+   */
   abstract updateRemotePositionEx(
     uid: number,
     posInfo: RemoteVoicePositionInfo,
@@ -320,7 +326,9 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
    */
   abstract removeRemotePosition(uid: number): number;
 
-  /* api_ilocalspatialaudioengine_removeremotepositionex */
+  /*
+   * @ignore
+   */
   abstract removeRemotePositionEx(
     uid: number,
     connection: RtcConnection
@@ -331,6 +339,8 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
    */
   abstract clearRemotePositions(): number;
 
-  /* api_ilocalspatialaudioengine_clearremotepositionsex */
+  /*
+   * @ignore
+   */
   abstract clearRemotePositionsEx(connection: RtcConnection): number;
 }

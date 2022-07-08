@@ -176,7 +176,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /* api_irtcengineex_setremotevideostreamtypeex */
+  /*
+   * @ignore
+   */
   abstract setRemoteVideoStreamTypeEx(
     uid: number,
     streamType: VideoStreamType,
@@ -211,14 +213,18 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /* api_irtcengineex_setremoteuserspatialaudioparamsex */
+  /*
+   * @ignore
+   */
   abstract setRemoteUserSpatialAudioParamsEx(
     uid: number,
     params: SpatialAudioParams,
     connection: RtcConnection
   ): number;
 
-  /* api_irtcengineex_setremoterendermodeex */
+  /*
+   * @ignore
+   */
   abstract setRemoteRenderModeEx(
     uid: number,
     renderMode: RenderModeType,
@@ -226,7 +232,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /* api_irtcengineex_enableloopbackrecordingex */
+  /*
+   * @ignore
+   */
   abstract enableLoopbackRecordingEx(
     connection: RtcConnection,
     enabled: boolean,
@@ -244,7 +252,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    */
   abstract getConnectionStateEx(connection: RtcConnection): ConnectionStateType;
 
-  /* api_irtcengineex_enableencryptionex */
+  /*
+   * @ignore
+   */
   abstract enableEncryptionEx(
     connection: RtcConnection,
     enabled: boolean,
@@ -333,7 +343,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /* api_irtcengineex_enableaudiovolumeindicationex */
+  /*
+   * @ignore
+   */
   abstract enableAudioVolumeIndicationEx(
     interval: number,
     smooth: number,
@@ -341,16 +353,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection
   ): number;
 
-  /* api_irtcengineex_getuserinfobyuseraccountex */
+  /*
+   * @ignore
+   */
   abstract getUserInfoByUserAccountEx(
     userAccount: string,
     connection: RtcConnection
   ): UserInfo;
 
-  /* api_irtcengineex_getuserinfobyuidex */
+  /*
+   * @ignore
+   */
   abstract getUserInfoByUidEx(uid: number, connection: RtcConnection): UserInfo;
 
-  /* api_irtcengineex_setvideoprofileex */
+  /*
+   * @ignore
+   */
   abstract setVideoProfileEx(
     width: number,
     height: number,
@@ -358,7 +376,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     bitrate: number
   ): number;
 
-  /* api_irtcengineex_enabledualstreammodeex */
+  /*
+   * @ignore
+   */
   abstract enableDualStreamModeEx(
     sourceType: VideoSourceType,
     enabled: boolean,
