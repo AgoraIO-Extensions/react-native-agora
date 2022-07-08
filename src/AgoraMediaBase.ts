@@ -478,24 +478,26 @@ export enum VideoFrameProcessMode {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export enum ContentInspectResult {
   /*
-   * 1：正常图片。
+   * @ignore
    */
   ContentInspectNeutral = 1,
   /*
-   * 2：性感图片。
+   * @ignore
    */
   ContentInspectSexy = 2,
   /*
-   * 3：色情图片。
+   * @ignore
    */
   ContentInspectPorn = 3,
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export enum ContentInspectDeviceType {
   /*
    * @ignore
@@ -516,7 +518,8 @@ export enum ContentInspectDeviceType {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export enum ContentInspectType {
   /*
    * @ignore
@@ -533,10 +536,11 @@ export enum ContentInspectType {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export class ContentInspectModule {
   /*
-   *
+   * @ignore
    */
   type?: ContentInspectType;
   /*
@@ -580,23 +584,19 @@ export class ContentInspectConfig {
 }
 
 /*
-@ignore */
+ * @ignore
+ */
 export class SnapShotConfig {
   /*
-   * The channel name.
+   * @ignore
    */
   channel?: string;
   /*
-   * The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+   * @ignore
    */
   uid?: number;
   /*
-   * 截图的本地保存路径，需精确到文件名及格式， 例如：
-   * Windows: C:\Users\<user_name>\AppData\Local\Agora\<process_name>\example.jpg
-   * iOS: /App Sandbox/Library/Caches/example.jpg
-   * macOS: ～/Library/Logs/example.jpg
-   * Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg
-   * Ensure that the path you specify exists and is writable.
+   * @ignore
    */
   filePath?: string;
 }

@@ -157,7 +157,8 @@ export abstract class IMediaPlayer {
   abstract setPlaybackSpeed(speed: number): number;
 
   /*
-@ignore */
+   * @ignore
+   */
   abstract selectAudioTrack(index: number): number;
 
   /* api_imediaplayer_takescreenshot */
@@ -447,7 +448,8 @@ export abstract class IMediaPlayer {
   abstract unloadSrc(src: string): number;
 
   /*
-@ignore */
+   * @ignore
+   */
   abstract setSpatialAudioParams(params: SpatialAudioParams): number;
 
   /* api_imediaplayer_setplayeroptioninint */
