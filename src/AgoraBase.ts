@@ -1,1106 +1,1106 @@
 import { MediaSourceType, RenderModeType } from './AgoraMediaBase';
 
 /*
- * 频道场景。
+ * The channel profile.
  */
 export enum ChannelProfileType {
   /*
-   * 0: 通信场景。当频道中只有两个用户时，建议使用该场景。
+   * 0: Communication. Use this profile when there are only two users in the channel.
    */
   ChannelProfileCommunication = 0,
   /*
-   * 1: 直播场景。直播场景。当频道中超过两个用户时，建议使用该场景。
+   * 1: Live streaming. Live streaming. Use this profile when there are more than two users in the channel.
    */
   ChannelProfileLiveBroadcasting = 1,
   /*
-   * 2: （已废弃）游戏场景。
+   * 2: Gaming. This profile is deprecated.
    */
   ChannelProfileGame = 2,
   /*
-   * 3: 互动场景。该场景对延时进行了优化。如果你的场景中有用户需要频道互动， 建议使用该场景。
+   * Cloud gaming. The scenario is optimized for latency. Use this profile if the use case requires frequent interactions between users.
    */
   ChannelProfileCloudGaming = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ChannelProfileCommunication1v1 = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ChannelProfileLiveBroadcasting2 = 5,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum WarnCodeType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnInvalidView = 8,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnInitVideo = 16,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnPending = 20,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnNoAvailableChannel = 103,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnLookupChannelTimeout = 104,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnLookupChannelRejected = 105,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnOpenChannelTimeout = 106,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnOpenChannelRejected = 107,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnSwitchLiveVideoTimeout = 111,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnSetClientRoleTimeout = 118,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnOpenChannelInvalidTicket = 121,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnOpenChannelTryNextVos = 122,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnChannelConnectionUnrecoverable = 131,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnChannelConnectionIpChanged = 132,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnChannelConnectionPortChanged = 133,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnChannelSocketError = 134,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAudioMixingOpenError = 701,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmRuntimePlayoutWarning = 1014,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmRuntimeRecordingWarning = 1016,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmRecordAudioSilence = 1019,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmPlayoutMalfunction = 1020,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmRecordMalfunction = 1021,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmIosCategoryNotPlayandrecord = 1029,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmIosSamplerateChange = 1030,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmRecordAudioLowlevel = 1031,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmPlayoutAudioLowlevel = 1032,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmWindowsNoDataReadyEvent = 1040,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnApmHowling = 1051,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmGlitchState = 1052,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmImproperSettings = 1053,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmWinCoreNoRecordingDevice = 1322,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmWinCoreNoPlayoutDevice = 1323,
   /*
-   * TODO(doc)
+   * @ignore
    */
   WarnAdmWinCoreImproperCaptureRelease = 1324,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum ErrorCodeType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrOk = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrFailed = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvalidArgument = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNotReady = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNotSupported = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrRefused = 5,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrBufferTooSmall = 6,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNotInitialized = 7,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvalidState = 8,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNoPermission = 9,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrTimedout = 10,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCanceled = 11,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrTooOften = 12,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrBindSocket = 13,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNetDown = 14,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNetNobufs = 15,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrJoinChannelRejected = 17,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLeaveChannelRejected = 18,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAlreadyInUse = 19,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAborted = 20,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInitNetEngine = 21,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrResourceLimited = 22,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvalidAppId = 101,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvalidChannelName = 102,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNoServerResources = 103,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrTokenExpired = 109,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvalidToken = 110,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrConnectionInterrupted = 111,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrConnectionLost = 112,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrNotInChannel = 113,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrSizeTooLarge = 114,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrBitrateLimit = 115,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrTooManyDataStreams = 116,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrStreamMessageTimeout = 117,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrSetClientRoleNotAuthorized = 119,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrDecryptionFailed = 120,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvalidUserId = 121,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrClientIsBannedByServer = 123,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrWatermarkParam = 124,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrWatermarkPath = 125,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrWatermarkPng = 126,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrWatermarkrInfo = 127,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrWatermarkArgb = 128,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrWatermarkRead = 129,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrEncryptedStreamNotAllowedPublish = 130,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLicenseCredentialInvalid = 131,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvalidUserAccount = 134,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertRaw = 157,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertJsonPart = 158,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertJsonInval = 159,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertJsonNomem = 160,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertCustom = 161,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertCredential = 162,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertSign = 163,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertFail = 164,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertBuf = 165,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertNull = 166,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertDuedate = 167,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrCertRequest = 168,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrPcmsendFormat = 200,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrPcmsendBufferoverflow = 201,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutOther = 400,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutUser = 401,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutNet = 402,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutKicked = 403,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutPacket = 404,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutTokenExpired = 405,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutOldversion = 406,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutTokenWrong = 407,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLogoutAlreadyLogout = 408,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginOther = 420,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginNet = 421,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginFailed = 422,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginCanceled = 423,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginTokenExpired = 424,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginOldVersion = 425,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginTokenWrong = 426,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginTokenKicked = 427,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoginAlreadyLogin = 428,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrJoinChannelOther = 440,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrSendMessageOther = 440,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrSendMessageTimeout = 441,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrQueryUsernumOther = 450,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrQueryUsernumTimeout = 451,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrQueryUsernumByuser = 452,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLeaveChannelOther = 460,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLeaveChannelKicked = 461,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLeaveChannelByuser = 462,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLeaveChannelLogout = 463,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLeaveChannelDisconnected = 464,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInviteOther = 470,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInviteReinvite = 471,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInviteNet = 472,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInvitePeerOffline = 473,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInviteTimeout = 474,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrInviteCantRecv = 475,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrLoadMediaEngine = 1001,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrStartCall = 1002,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrStartCamera = 1003,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrStartVideoRender = 1004,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmGeneralError = 1005,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmJavaResource = 1006,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmSampleRate = 1007,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmInitPlayout = 1008,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmStartPlayout = 1009,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmStopPlayout = 1010,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmInitRecording = 1011,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmStartRecording = 1012,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmStopRecording = 1013,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmRuntimePlayoutError = 1015,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmRuntimeRecordingError = 1017,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmRecordAudioFailed = 1018,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmInitLoopback = 1022,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmStartLoopback = 1023,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmNoPermission = 1027,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmRecordAudioIsActive = 1033,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidJniJavaResource = 1101,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidJniNoRecordFrequency = 1108,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidJniNoPlaybackFrequency = 1109,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidJniJavaStartRecord = 1111,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidJniJavaStartPlayback = 1112,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidJniJavaRecordError = 1115,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidOpenslCreateEngine = 1151,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidOpenslCreateAudioRecorder = 1153,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidOpenslStartRecorderThread = 1156,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidOpenslCreateAudioPlayer = 1157,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmAndroidOpenslStartPlayerThread = 1160,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmIosInputNotAvailable = 1201,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmIosActivateSessionFail = 1206,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmIosVpioInitFail = 1210,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmIosVpioReinitFail = 1213,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmIosVpioRestartFail = 1214,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmIosSetRenderCallbackFail = 1219,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmIosSessionSampleratrZero = 1221,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreInit = 1301,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreInitRecording = 1303,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreInitPlayout = 1306,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreInitPlayoutNull = 1307,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreStartRecording = 1309,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreCreateRecThread = 1311,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreCaptureNotStartup = 1314,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreCreateRenderThread = 1319,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreRenderNotStartup = 1320,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreNoRecordingDevice = 1322,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinCoreNoPlayoutDevice = 1323,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinWaveInit = 1351,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinWaveInitRecording = 1353,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinWaveInitMicrophone = 1354,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinWaveInitPlayout = 1355,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinWaveInitSpeaker = 1356,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinWaveStartRecording = 1357,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmWinWaveStartPlayout = 1358,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmNoRecordingDevice = 1359,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrAdmNoPlayoutDevice = 1360,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrVdmCameraNotAuthorized = 1501,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrVdmWinDeviceInUse = 1502,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrVcmUnknownError = 1600,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrVcmEncoderInitError = 1601,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrVcmEncoderEncodeError = 1602,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ErrVcmEncoderSetError = 1603,
 }
 
 /*
- * SDK 对 Audio Session 的操作权限。
+ * The operation permissions of the SDK on the audio session.
  */
 export enum AudioSessionOperationRestriction {
   /*
-   * 没有限制，SDK 可以对 Audio Session 进行更改。
+   * No restriction, the SDK can change the audio session.
    */
   AudioSessionOperationRestrictionNone = 0,
   /*
-   * SDK 不能更改 Audio Session 的 category。
+   * The SDK cannot change the audio session category.
    */
   AudioSessionOperationRestrictionSetCategory = 1,
   /*
-   * SDK 不能更改 Audio Session 的 category、mode 或 categoryOptions。
+   * The SDK cannot change the audio session category, mode, or categoryOptions.
    */
   AudioSessionOperationRestrictionConfigureSession = 1 << 1,
   /*
-   * 离开频道时，SDK 会保持 Audio Session 处于活动状态，例如在后台播放音频。
+   * The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
    */
   AudioSessionOperationRestrictionDeactivateSession = 1 << 2,
   /*
-   * 完全限制 SDK 对 Audio Session 的操作权限，SDK 不能再对 Audio Session 进行任何更改。
+   * Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
    */
   AudioSessionOperationRestrictionAll = 1 << 7,
 }
 
 /*
- * 用户离线原因。
+ * Reasons for a user being offline.
  */
 export enum UserOfflineReasonType {
   /*
-   * 0: 用户主动离开。
+   * 0: The user quits the call.
    */
   UserOfflineQuit = 0,
   /*
-   * 1: 因过长时间收不到对方数据包，超时掉线。
-   * 由于 SDK 使用的是不可靠通道，也有可能对方主动离开频道，但是本地没收到对方离开消息而误判为超时掉线。
+   * 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time. If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
    */
   UserOfflineDropped = 1,
   /*
-   * 2: 用户身份从主播切换为观众。
+   * 2: The user switches the client role from the host to the audience.
    */
   UserOfflineBecomeAudience = 2,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum InterfaceIdType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidAudioDeviceManager = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidVideoDeviceManager = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidParameterEngine = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidMediaEngine = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidAudioEngine = 5,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidVideoEngine = 6,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidRtcConnection = 7,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidSignalingEngine = 8,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidMediaEngineRegulator = 9,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidCloudSpatialAudio = 10,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AgoraIidLocalSpatialAudio = 11,
 }
 
 /*
- * 网络质量。
+ * Network quality types.
  */
 export enum QualityType {
   /*
-   * 0: 网络质量未知。
+   * 0: The network quality is unknown.
    */
   QualityUnknown = 0,
   /*
-   * 1: 网络质量极好。
+   * 1: The network quality is excellent.
    */
   QualityExcellent = 1,
   /*
-   * 2: 用户主观感觉和 excellent 差不多，但码率可能略低于 excellent。
+   * 2: The network quality is quite good, but the bitrate may be slightly lower than excellent.
    */
   QualityGood = 2,
   /*
-   * 3: 用户主观感受有瑕疵但不影响沟通。
+   * 3: Users can feel the communication is slightly impaired.
    */
   QualityPoor = 3,
   /*
-   * 4: 勉强能沟通但不顺畅。
+   * 4: Users cannot communicate smoothly.
    */
   QualityBad = 4,
   /*
-   * 5: 网络质量非常差，基本不能沟通。
+   * 5: The quality is so bad that users can barely communicate.
    */
   QualityVbad = 5,
   /*
-   * 6: 完全无法沟通。
+   * 6: The network is down and users cannot communicate at all.
    */
   QualityDown = 6,
   /*
-   * 7: 暂时无法检测网络质量（未使用）。
+   * 7: Users cannot detect the network quality. (Not in use.)
    */
   QualityUnsupported = 7,
   /*
-   * 8: 网络质量检测已开始还没完成。
+   * 8: Detecting the network quality.
    */
   QualityDetecting = 8,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum FitModeType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   ModeCover = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ModeContain = 2,
 }
 
 /*
- * 视频顺时针旋转信息。
+ * The clockwise rotation of the video.
  */
 export enum VideoOrientation {
   /*
-   * 0:（默认）顺时针旋转 0 度。
+   * 0: (Default) No rotation.
    */
   VideoOrientation0 = 0,
   /*
-   * 90: 顺时针旋转 90 度。
+   * 90: 90 degrees.
    */
   VideoOrientation90 = 90,
   /*
-   * 180: 顺时针旋转 180 度。
+   * 180: 180 degrees.
    */
   VideoOrientation180 = 180,
   /*
-   * 270: 顺时针旋转 270 度。
+   * 270: 270 degrees.
    */
   VideoOrientation270 = 270,
 }
 
 /*
- * 视频帧率。
+ * Video frame rate.
  */
 export enum FrameRate {
   /*
-   * 1: 1 fps
+   * 1:1 fps
    */
   FrameRateFps1 = 1,
   /*
-   * 7: 7 fps
+   * 7:7fps
    */
   FrameRateFps7 = 7,
   /*
-   * 10: 10 fps
+   * 10: 10fps
    */
   FrameRateFps10 = 10,
   /*
-   * 15: 15 fps
+   * 15: 15fps
    */
   FrameRateFps15 = 15,
   /*
-   * 24: 24 fps
+   * 24: 24fps
    */
   FrameRateFps24 = 24,
   /*
-   * 30: 30 fps
+   * 30: 30fps
    */
   FrameRateFps30 = 30,
   /*
-   * TODO(doc)
+   * @ignore
    */
   FrameRateFps60 = 60,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum FrameWidth {
   /*
-   * TODO(doc)
+   * @ignore
    */
   FrameWidth640 = 640,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum FrameHeight {
   /*
-   * TODO(doc)
+   * @ignore
    */
   FrameHeight360 = 360,
 }
 
 /*
- * 视频帧类型。
+ * The video frame type.
  */
 export enum VideoFrameType {
   /*
-   * 0: 黑帧。
+   * 0: A black frame.
    */
   VideoFrameTypeBlankFrame = 0,
   /*
-   * 3: 关键帧。
+   * 3: Keyframe.
    */
   VideoFrameTypeKeyFrame = 3,
   /*
-   * 4: Delta 帧。
+   * 4: Delta frame.
    */
   VideoFrameTypeDeltaFrame = 4,
   /*
-   * 5: B 帧。
+   * 5:The B frame.
    */
   VideoFrameTypeBFrame = 5,
   /*
-   * 6: 丢弃帧。
+   * 6: A discarded frame.
    */
   VideoFrameTypeDroppableFrame = 6,
   /*
-   * 未知帧。
+   * Unknown frame.
    */
   VideoFrameTypeUnknow = 7,
 }
 
 /*
- * 视频编码的方向模式。
+ * Video output orientation mode.
  */
 export enum OrientationMode {
   /*
-   * 0: （默认）该模式下 SDK 输出的视频方向与采集到的视频方向一致。接收端会根据收到的视频旋转信息对视频进行旋转。该模式适用于接收端可以调整视频方向的场景。 如果采集的视频是横屏模式，则输出的视频也是横屏模式。
-   * 如果采集的视频是竖屏模式，则输出的视频也是竖屏模式。
+   * 0: (Default) The output video always follows the orientation of the captured video.
+   * The receiver takes the rotational information passed on from the video encoder. This mode applies to scenarios where video orientation can be adjusted on the receiver. If the captured video is in landscape mode, the output video is in landscape mode.
+   * If the captured video is in portrait mode, the output video is in portrait mode.
    */
   OrientationModeAdaptive = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   OrientationModeFixedLandscape = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   OrientationModeFixedPortrait = 2,
 }
 
 /*
- * 带宽受限时的视频编码降级偏好。
+ * Video degradation preferences when the bandwidth is a constraint.
  */
 export enum DegradationPreference {
   /*
-   * 0：（默认）带宽受限时，视频编码时优先降低视频帧率，维持视频质量不变。该降级偏好适用于画质优先的场景。
-   * 通信（COMMUNICATION）场景下，本地发送的视频分辨率可能改变，远端用户需能处理这种情况， 详见 onVideoSizeChanged 。
+   * 0: (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+   * In the COMMUNICATION channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged .
    */
   MaintainQuality = 0,
   /*
-   * 1：带宽受限时，视频编码时优先降低视频质量，维持视频帧率不变。该降级偏好适用于流畅性优先且允许画质降低的场景。
+   * 1: Prefers to reduce the video quality while maintaining the video frame rate during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
    */
   MaintainFramerate = 1,
   /*
@@ -1108,899 +1108,900 @@ export enum DegradationPreference {
    */
   MaintainBalanced = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   MaintainResolution = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   DISABLED = 100,
 }
 
 /*
- * 视频尺寸。
+ * The video dimension.
  */
 export class VideoDimensions {
   /*
-   * 视频宽度，单位为像素。
+   * The width (pixels) of the video.
    */
   width?: number;
   /*
-   * 视频高度，单位为像素。
+   * The height (pixels) of the video.
    */
   height?: number;
 }
 
 /*
- * 视频编码格式。
+ * Video codec types.
  */
 export enum VideoCodecType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoCodecNone = 0,
   /*
-   * 1：标准 VP8。
+   * 1: Standard VP8.
    */
   VideoCodecVp8 = 1,
   /*
-   * 2：标准 H.264。
+   * 2: Standard H.264.
    */
   VideoCodecH264 = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoCodecH265 = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoCodecVp9 = 5,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoCodecGeneric = 6,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoCodecGenericH264 = 7,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoCodecAv1 = 12,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoCodecGenericJpeg = 20,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum TCcMode {
   /*
-   * TODO(doc)
+   * @ignore
    */
   CcEnabled = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   CcDisabled = 1,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class SenderOptions {
   /*
-   * TODO(doc)
+   * @ignore
    */
   ccMode?: TCcMode;
   /*
-   * TODO(doc)
+   * @ignore
    */
   codecType?: VideoCodecType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   targetBitrate?: number;
 }
 
 /*
- * 音频编解码格式。
+ * The codec type of audio.
  */
 export enum AudioCodecType {
   /*
-   * 1: OPUS。
+   * 1: OPUS.
    */
   AudioCodecOpus = 1,
   /*
-   * 3: PCMA。
+   * 3: PCMA.
    */
   AudioCodecPcma = 3,
   /*
-   * 4: PCMU。
+   * 4: PCMU.
    */
   AudioCodecPcmu = 4,
   /*
-   * 5: G722。
+   * 5: G722.
    */
   AudioCodecG722 = 5,
   /*
-   * 8: LC-AAC。
+   * 8: LC-AAC.
    */
   AudioCodecAaclc = 8,
   /*
-   * 9: HE-AAC。
+   * 9: HE-AAC.
    */
   AudioCodecHeaac = 9,
   /*
-   * 10: JC1。
+   * 10: JC1.
    */
   AudioCodecJc1 = 10,
   /*
-   * 11: HE-AAC v2。
+   * 11: HE-AAC v2.
    */
   AudioCodecHeaac2 = 11,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioCodecLpcnet = 12,
 }
 
 /*
- * 音频编码类型。
+ * Audio encoding type.
  */
 export enum AudioEncodingType {
   /*
-   * AAC 编码格式，16000 Hz 采样率，低音质。音频时长为 10 分钟的文件编码后大小约为 1.2 MB。
+   * AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
    */
   AudioEncodingTypeAac16000Low = 0x010101,
   /*
-   * AAC 编码格式，16000 Hz 采样率，中音质。音频时长为 10 分钟的文件编码后大小约为 2 MB。
+   * AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeAac16000Medium = 0x010102,
   /*
-   * AAC 编码格式，32000 Hz 采样率，低音质。音频时长为 10 分钟的文件编码后大小约为 1.2 MB。
+   * AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
    */
   AudioEncodingTypeAac32000Low = 0x010201,
   /*
-   * AAC 编码格式，32000 Hz 采样率，中音质。音频时长为 10 分钟的文件编码后大小约为 2 MB。
+   * AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeAac32000Medium = 0x010202,
   /*
-   * AAC 编码格式，32000 Hz 采样率，高音质。音频时长为 10 分钟的文件编码后大小约为 3.5 MB。
+   * AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
    */
   AudioEncodingTypeAac32000High = 0x010203,
   /*
-   * AAC 编码格式，48000 Hz 采样率，中音质。音频时长为 10 分钟的文件编码后大小约为 2 MB。
+   * AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeAac48000Medium = 0x010302,
   /*
-   * AAC 编码格式，48000 Hz 采样率，高音质。音频时长为 10 分钟的文件编码后大小约为 3.5 MB。
+   * AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
    */
   AudioEncodingTypeAac48000High = 0x010303,
   /*
-   * OPUS 编码格式，16000 Hz 采样率，低音质。音频时长为 10 分钟的文件编码后大小约为 2 MB。
+   * OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeOpus16000Low = 0x020101,
   /*
-   * OPUS 编码格式，16000 Hz 采样率，中音质。音频时长为 10 分钟的文件编码后大小约为 2 MB。
+   * OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeOpus16000Medium = 0x020102,
   /*
-   * OPUS 编码格式，48000 Hz 采样率，中音质。音频时长为 10 分钟的文件编码后大小约为 2 MB。
+   * OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeOpus48000Medium = 0x020302,
   /*
-   * OPUS 编码格式，48000 Hz 采样率，高音质。音频时长为 10 分钟的文件编码后大小约为 3.5 MB。
+   * OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
    */
   AudioEncodingTypeOpus48000High = 0x020303,
 }
 
 /*
- * 水印的适配模式。
+ * The adaptation mode of the watermark.
  */
 export enum WatermarkFitMode {
   /*
-   * TODO(doc)
+   * @ignore
    */
   FitModeCoverPosition = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   FitModeUseImageRatio = 1,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class EncodedAudioFrameAdvancedSettings {
   /*
-   * TODO(doc)
+   * @ignore
    */
   speech?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   sendEvenIfEmpty?: boolean;
 }
 
 /*
- * 编码后音频的信息。
+ * Audio information after encoding.
  */
 export class EncodedAudioFrameInfo {
   /*
-   * 音频编码规格: AudioCodecType 。
+   * Audio Codec type: AudioCodecType .
    */
   codec?: AudioCodecType;
   /*
-   * 音频采样率 (Hz)。
+   * Audio sample rate (Hz).
    */
   sampleRateHz?: number;
   /*
-   * 每个声道的音频采样数。
+   * The number of audio samples per channel.
    */
   samplesPerChannel?: number;
   /*
-   * 声道数。
+   * The number of audio channels.
    */
   numberOfChannels?: number;
   /*
-   * 该功能暂不支持。
+   * This function is not currently supported.
    */
   advancedSettings?: EncodedAudioFrameAdvancedSettings;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class AudioPcmDataInfo {
   /*
-   * TODO(doc)
+   * @ignore
    */
   samplesPerChannel?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   channelNum?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   samplesOut?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   elapsedTimeMs?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   ntpTimeMs?: number;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum H264PacketizeMode {
   /*
-   * TODO(doc)
+   * @ignore
    */
   NonInterleaved = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   SingleNalUnit = 1,
 }
 
 /*
- * TODO(doc)
+ * The type of video streams.
  */
 export enum VideoStreamType {
   /*
-   * TODO(doc)
+   * 0: High-quality video stream.
    */
   VideoStreamHigh = 0,
   /*
-   * TODO(doc)
+   * 1: Low-quality video stream.
    */
   VideoStreamLow = 1,
 }
 
 /*
- * 外部编码视频帧的信息。
+ * The information about the external encoded video frame.
  */
 export class EncodedVideoFrameInfo {
   /*
-   * 视频编码类型，详见 VideoCodecType 。默认值为 VideoCodecH264(2)。
+   * The codec type of the local video stream. See VideoCodecType . The default value is VideoCodecH264(2).
    */
   codecType?: VideoCodecType;
   /*
-   * 视频帧的宽度 (px)。
+   * The width (pixel) of the video frame.
    */
   width?: number;
   /*
-   * 视频帧的高度 (px)。
+   * The height (pixel) of the video frame.
    */
   height?: number;
   /*
-   * 每秒的视频帧数。
-   * 当该参数不为 0 时，你可以用它计算外部编码视频帧的 Unix 时间戳。
+   * The number of video frames per second.
+   * When this parameter is not 0, you can use it to calculate the Unix timestamp of the external encoded video frames.
    */
   framesPerSecond?: number;
   /*
-   * 视频帧的类型，详见 VideoFrameType 。
+   * The video frame type, see VideoFrameType .
    */
   frameType?: VideoFrameType;
   /*
-   * 视频帧的旋转信息，详见 VideoOrientation 。
+   * The rotation information of the video frame, see VideoOrientation .
    */
   rotation?: VideoOrientation;
   /*
-   * 预留参数。
+   * Reserved for future use.
    */
   trackId?: number;
   /*
-   * 视频帧被渲染时的 Unix 时间戳（毫秒）。该时间戳可用于指导渲染视频帧。该参数为必填。
+   * The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. It is required.
    */
   renderTimeMs?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   internalSendTs?: number;
   /*
-   * 推送外部编码视频帧的用户 ID。
+   * The user ID to push the the external encoded video frame.
    */
   uid?: number;
   /*
-   * 视频流类型。
+   * The type of video streams.
    */
   streamType?: VideoStreamType;
 }
 
 /*
- * 镜像模式类型。
+ * Video mirror mode.
  */
 export enum VideoMirrorModeType {
   /*
-   * 0:（默认）由 SDK 决定镜像模式。
+   * 0: (Default) The SDK determines the mirror mode.
    */
   VideoMirrorModeAuto = 0,
   /*
-   * 1: 启用镜像模式。
+   * 1: Enable mirror mode.
    */
   VideoMirrorModeEnabled = 1,
   /*
-   * 2: 关闭镜像模式。
+   * 2: Disable mirror mode.
    */
   VideoMirrorModeDisabled = 2,
 }
 
 /*
- * 视频编码器的配置。
+ * Video encoder configurations.
  */
 export class VideoEncoderConfiguration {
   /*
-   * 视频编码类型，详见 VideoCodecType 。
+   * The codec type of the local video stream. See VideoCodecType .
    */
   codecType?: VideoCodecType;
   /*
-   * 视频编码的分辨率（px），详见 VideoDimensions 。该参数用于衡量编码质量，以长 × 宽表示，默认值为 640 × 360。用户可以自行设置分辨率。
+   * The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
    */
   dimensions?: VideoDimensions;
   /*
-   * 视频编码的帧率(fps)，默认值为 15。详见 FrameRate 。
+   * The frame rate (fps) of the encoding video frame. The default value is 15. See FrameRate .
    */
   frameRate?: number;
   /*
-   * 视频编码码率，单位为 Kbps。
+   * The encoding bitrate (Kbps) of the video.
    */
   bitrate?: number;
   /*
-   * 最低编码码率，单位为 Kbps。
-   * SDK 会根据网络状况自动调整视频编码码率。将参数设为高于默认值可强制视频编码器输出高质量图片，但在网络状况不佳情况下可能导致网络丢包并影响视频播放的流畅度造成卡顿。因此如非对画质有特殊需求，声网建议不要修改该参数的值。
-   * 该参数仅适用于直播场景。
+   * The minimum encoding bitrate (Kbps) of the video.
+   * The SDK automatically adjusts the encoding bitrate to adapt to the network conditions. Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and sacrifice the smoothness of the video transmission. Unless you have special requirements for image quality, Agora does not recommend changing this value.
+   * This parameter only applies to the interactive streaming profile.
    */
   minBitrate?: number;
   /*
-   * 视频编码的方向模式，详见 OrientationMode 。
+   * The orientation mode of the encoded video. See OrientationMode .
    */
   orientationMode?: OrientationMode;
   /*
-   * 带宽受限时，视频编码降级偏好。详见 DegradationPreference 。
+   * Video degradation preference under limited bandwidth.
    */
   degradationPreference?: DegradationPreference;
   /*
-   * 发送编码视频时是否开启镜像模式，只影响远端用户看到的视频画面。详见 VideoMirrorModeType 。
-   * 默认关闭镜像模式。
+   * Whether to enable mirroring mode when sending encoded video, only affects the video images seen by remote users. See VideoMirrorModeType .
+   * By default, the video is not mirrored.
    */
   mirrorMode?: VideoMirrorModeType;
 }
 
 /*
- * 数据流设置。
- * 下表展示不同的参数设置下，SDK 的行为：
+ * The configurations for the data stream.
+ * The following table shows the SDK behaviors under different parameter settings:
  */
 export class DataStreamConfig {
   /*
-   * 是否与本地发送的音频流同步。 true: 数据流与音频流同步。
-   * false: 数据流与音频流不同步。
-   * 设置为与音频同步后，如果数据包的延迟在音频延迟的范围内，SDK 会在播放音频的同时触发与该音频包同步的 onStreamMessage 回调。 当需要数据包立刻到达接收端时，不能将该参数设置为 true。Agora 建议你仅在需要实现特殊场景，例如歌词同步时，设置为与音频同步。
+   * Whether to synchronize the data packet with the published audio packet.
+   * true: Synchronize the data packet with the audio packet.
+   * false: Do not synchronize the data packet with the audio packet.
+   * When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay, the SDK triggers the onStreamMessage callback when the synchronized audio packet is played out. Do not set this parameter as true if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to `true` only when you need to implement specific functions, for example, lyric synchronization.
    */
   syncWithAudio?: boolean;
   /*
-   * 是否保证接收到的数据按发送的顺序排列。 true: 保证 SDK 按照发送方发送的顺序输出数据包。
-   * false: 不保证 SDK 按照发送方发送的顺序输出数据包。
-   * 当需要数据包立刻到达接收端时，不能将该参数设置为 true。
+   * Whether the SDK guarantees that the receiver receives the data in the sent order.
+   * true: Guarantee that the receiver receives the data in the sent order.
+   * false: Do not guarantee that the receiver receives the data in the sent order.
+   * Do not set this parameter as true if you need the receiver to receive the data packet immediately.
    */
   ordered?: boolean;
 }
 
 /*
- * 视频小流的配置。
+ * The configuration of the low-quality video stream.
  */
 export class SimulcastStreamConfig {
   /*
-   * 视频尺寸。详见 VideoDimensions 。默认值为 160 × 120。
+   * The video dimension.  The default value is 160 × 120. VideoDimensions
    */
   dimensions?: VideoDimensions;
   /*
-   * 视频码率 (Kbps)。默认值为 65。
+   * Video receive bitrate (Kbps). The default value is 65.
    */
   bitrate?: number;
   /*
-   * 视频帧率 (fps)。默认值为 5。
+   * The capture frame rate (fps) of the local video. The default value is 5.
    */
   framerate?: number;
 }
 
 /*
- * 目标区域相对于整个屏幕或窗口的位置，如不填，则表示整个屏幕或窗口。
+ * The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
  */
 export class Rectangle {
   /*
-   * 左上角的横向偏移。
+   * x: The horizontal offset from the top-left corner.
    */
   x?: number;
   /*
-   * 左上角的纵向偏移。
+   * y: The vertical offset from the top-left corner.
    */
   y?: number;
   /*
-   * 目标区域的宽度。
+   * The width of the target area.
    */
   width?: number;
   /*
-   * 目标区域的高度。
+   * The height of the target area.
    */
   height?: number;
 }
 
 /*
- * 水印在屏幕中的位置和大小。
- * 水印在屏幕中的位置和大小由 xRatio、yRatio 和 widthRatio 共同决定： (xRatio, yRatio) 指水印左上角的坐标，决定水印左上角到屏幕左上角的距离。
- * widthRatio 决定水印的宽度。
+ * The position and size of the watermark on the screen.
+ * The position and size of the watermark on the screen are determined by xRatio, yRatio, and widthRatio:
+ * (xRatio, yRatio) refers to the coordinates of the upper left corner of the watermark, which determines the distance from the upper left corner of the watermark to the upper left corner of the screen.
+ * The widthRatio determines the width of the watermark.
  */
 export class WatermarkRatio {
   /*
-   * 水印左上角的 x 坐标。以屏幕左上角为原点，x 坐标为水印左上角相对于原点的横向位移。取值范围为 [0.0,1.0]，默认值为 0。
+   * The x-coordinate of the upper left corner of the watermark. The x-coordinate of the upper left corner of the watermark. The horizontal position relative to the origin, where the upper left corner of the screen is the origin, and the x-coordinate is the upper left corner of the watermark. The value range is [0.0,1.0], and the default value is 0.
    */
   xRatio?: number;
   /*
-   * 水印左上角的 y 坐标。以屏幕左上角为原点，y 坐标为水印左上角相对于原点的纵向位移。取值范围为 [0.0,1.0]，默认值为 0。
+   * The y-coordinate of the upper left corner of the watermark. The vertical position relative to the origin, where the upper left corner of the screen is the origin, and the y-coordinate is the upper left corner of the screen. The value range is [0.0,1.0], and the default value is 0.
    */
   yRatio?: number;
   /*
-   * 水印的宽度。SDK 会根据该参数值计算出等比例的水印高度，确保放大或缩小后的水印图片不失真。取值范围为 [0.0,1.0]，默认值为 0，代表不显示水印。
+   * The width of the watermark. The SDK calculates the height of the watermark proportionally according to this parameter value to ensure that the enlarged or reduced watermark image is not distorted. The value range is [0,1], and the default value is 0, which means no watermark is displayed.
    */
   widthRatio?: number;
 }
 
 /*
- * 水印图片的设置。
+ * Configurations of the watermark image.
  */
 export class WatermarkOptions {
   /*
-   * 预留参数。
+   * Reserved for future use.
    */
   visibleInPreview?: boolean;
   /*
-   * 水印的适配模式为 FIT_MODE_COVER_POSITION 时，用于设置横屏模式下水印图片的区域。详见 Rectangle 。
+   * When the adaptation mode of the watermark isFIT_MODE_COVER_POSITION, it is used to set the area of the watermark image in landscape mode. See Rectangle .
    */
   positionInLandscapeMode?: Rectangle;
   /*
-   * 水印的适配模式为 FIT_MODE_COVER_POSITION 时，用于设置竖屏模式下水印图片的区域。详见 Rectangle 。
+   * When the adaptation mode of the watermark isFIT_MODE_COVER_POSITION , it is used to set the area of the watermark image in portrait mode. See Rectangle .
    */
   positionInPortraitMode?: Rectangle;
   /*
-   * 水印的适配模式为 FIT_MODE_USE_IMAGE_RATIO 时，该参数可设置缩放模式下的水印坐标。详见 WatermarkRatio 。
+   * When the watermark adaptation mode is FIT_MODE_USE_IMAGE_RATIO, this parameter is used to set the watermark coordinates. See WatermarkRatio .
    */
   watermarkRatio?: WatermarkRatio;
   /*
-   * 水印的适配模式。详见 WATERMARK_FIT_MODE 。
+   * The adaptation mode of the watermark. See WATERMARK_FIT_MODE .
    */
   mode?: WatermarkFitMode;
 }
 
 /*
- * 通话相关的统计信息。
+ * Statistics of the channel.
  */
 export class RtcStats {
   /*
-   * 本地用户通话时长（秒），累计值。
+   * Call duration of the local user in seconds, represented by an aggregate value.
    */
   duration?: number;
   /*
-   * 发送字节数（bytes）。
+   * Total number of bytes transmitted, represented by an aggregate value.
    */
   txBytes?: number;
   /*
-   * 接收字节数（bytes）。
+   * Total number of bytes received, represented by an aggregate value.
    */
   rxBytes?: number;
   /*
-   * 发送音频字节数（bytes），累计值。
+   * Total number of audio bytes sent, represented by an aggregate value.
    */
   txAudioBytes?: number;
   /*
-   * 发送视频字节数（bytes），累计值。
+   * The total number of video bytes sent, represented by an aggregate value.
    */
   txVideoBytes?: number;
   /*
-   * 接收音频字节数（bytes），累计值。
+   * The total number of audio bytes received, represented by an aggregate value.
    */
   rxAudioBytes?: number;
   /*
-   * 接收视频字节数（bytes），累计值。
+   * The total number of video bytes received, represented by an aggregate value.
    */
   rxVideoBytes?: number;
   /*
-   * 发送码率（Kbps）。
+   * Video transmission bitrate (Kbps), represented by an instantaneous value.
    */
   txKBitRate?: number;
   /*
-   * 接收码率（Kbps）。
+   * The receiving bitrate (Kbps), represented by an instantaneous value.
    */
   rxKBitRate?: number;
   /*
-   * 音频接收码率 (Kbps）。
+   * Audio receive bitrate (Kbps), represented by an instantaneous value.
    */
   rxAudioKBitRate?: number;
   /*
-   * 音频包的发送码率 (Kbps）。
+   * The bitrate (Kbps) of sending the audio packet.
    */
   txAudioKBitRate?: number;
   /*
-   * 视频接收码率 (Kbps）。
+   * Video receive bitrate (Kbps), represented by an instantaneous value.
    */
   rxVideoKBitRate?: number;
   /*
-   * 视频发送码率 (Kbps）。
+   * The bitrate (Kbps) of sending the video.
    */
   txVideoKBitRate?: number;
   /*
-   * 客户端-接入服务器延时 (毫秒)。
+   * The client-to-server delay (ms).
    */
   lastmileDelay?: number;
   /*
-   * 当前频道内的用户人数。
+   * The number of users in the channel.
    */
   userCount?: number;
   /*
-   * 当前 App 的 CPU 使用率 (%)。
-   * onLeaveChannel 回调中报告的 cpuAppUsage 恒为 0。
+   * Application CPU usage (%). The value of cpuTotalUsage is always reported as 0 in the onLeaveChannel callback.
    */
   cpuAppUsage?: number;
   /*
-   * 当前系统的 CPU 使用率 (%)。 onLeaveChannel 回调中报告的 cpuTotalUsage 恒为 0。
-   * 自 Android 8.1 起，因系统限制，你无法通过该属性获取 CPU 使用率。
+   * The system CPU usage (%). The value of cpuTotalUsage is always reported as 0 in the onLeaveChannel callback.
+   * As of Android 8.1, you cannot get the CPU usage from this attribute due to system limitations.
    */
   cpuTotalUsage?: number;
   /*
-   * 客户端到本地路由器的往返时延 (ms)。 该属性默认在 iOS 14 之前的设备上开启，在 iOS 14 及之后的设备上关闭。
-   * 如需在 iOS 14 及之后的设备上启用该属性，请。 在 Android 平台上，如需获取 gatewayRtt，请确保已在项目 AndroidManifest.xml 文件的 </application> 后面添加 android.permission.ACCESS_WIFI_STATE 权限。
+   * The round-trip time delay (ms) from the client to the local router.
+   * This property is disabled on devices running iOS 14 or later, and enabled on devices running versions earlier than iOS 14 by default.
+   * To enable this property on devices running iOS 14 or later, . On Android, to get gatewayRtt, ensure that you add the android.permission.ACCESS_WIFI_STATE permission after </application> in the AndroidManifest.xml file in your project.
    */
   gatewayRtt?: number;
   /*
-   * 当前 App 的内存占比 (%)。
-   * 该值仅作参考。受系统限制可能无法获取。
+   * The memory ratio occupied by the app (%).
+   * This value is for reference only. Due to system limitations, you may not get this value.
    */
   memoryAppUsageRatio?: number;
   /*
-   * 当前系统的内存占比 (%)。
-   * 该值仅作参考。受系统限制可能无法获取。
+   * The memory occupied by the system (%).
+   * This value is for reference only. Due to system limitations, you may not get this value.
    */
   memoryTotalUsageRatio?: number;
   /*
-   * 当前 App 的内存大小 (KB)。
-   * 该值仅作参考。受系统限制可能无法获取。
+   * The memory size occupied by the app (KB).
+   * This value is for reference only. Due to system limitations, you may not get this value.
    */
   memoryAppUsageInKbytes?: number;
   /*
-   * 从开始建立连接到成功连接的时间（毫秒）。如报告 0，则表示无效。
+   * The duration (ms) between the SDK starts connecting and the connection is established. If the value reported is 0, it means invalid.
    */
   connectTimeMs?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstAudioPacketDuration?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstVideoPacketDuration?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstVideoKeyFramePacketDuration?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   packetsBeforeFirstKeyFramePacket?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstAudioPacketDurationAfterUnmute?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstVideoPacketDurationAfterUnmute?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstVideoKeyFramePacketDurationAfterUnmute?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstVideoKeyFrameDecodedDurationAfterUnmute?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   firstVideoKeyFrameRenderedDurationAfterUnmute?: number;
   /*
-   * 使用抗丢包技术前，客户端上行发送到服务器丢包率 (%)。
+   * The packet loss rate (%) from the client to the Agora server before applying the anti-packet-loss algorithm.
    */
   txPacketLossRate?: number;
   /*
-   * 使用抗丢包技术前，服务器下行发送到客户端丢包率 (%)。
+   * The packet loss rate (%) from the Agora server to the client before using the anti-packet-loss method.
    */
   rxPacketLossRate?: number;
 }
 
 /*
- * 视频源的类型。
+ * The capture type of the custom video source.
  */
 export enum VideoSourceType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoSourceCameraPrimary = 0,
   /*
-   * 摄像头。
+   * The camera.
    */
   VideoSourceCamera = 0,
   /*
-   * 第二个摄像头。
+   * The secondary camera.
    */
   VideoSourceCameraSecondary = 1,
   /*
-   * 第一个屏幕。
+   * The primary screen.
    */
   VideoSourceScreenPrimary = 2,
   /*
-   * 屏幕。
+   * The screen.
    */
   VideoSourceScreen = 2,
   /*
-   * 第二个屏幕。
+   * The secondary screen.
    */
   VideoSourceScreenSecondary = 3,
   /*
-   * 自定义的视频源。
+   * The custom video source.
    */
   VideoSourceCustom = 4,
   /*
-   * 媒体播放器共享的视频源。
+   * The video source from the media player.
    */
   VideoSourceMediaPlayer = 5,
   /*
-   * 视频源为 PNG 图片。
+   * The video source is a PNG image.
    */
   VideoSourceRtcImagePng = 6,
   /*
-   * 视频源为 JPEG 图片。
+   * The video source is a JPEG image.
    */
   VideoSourceRtcImageJpeg = 7,
   /*
-   * 视频源为 GIF 图片。
+   * The video source is a GIF image.
    */
   VideoSourceRtcImageGif = 8,
   /*
-   * 视频源为网络获取的远端视频。
+   * The video source is remote video acquired by the network.
    */
   VideoSourceRemote = 9,
   /*
-   * 转码后的视频源。
+   * A transcoded video source.
    */
   VideoSourceTranscoded = 10,
   /*
-   * 未知的视频源。
+   * An unknown video source.
    */
   VideoSourceUnknown = 100,
 }
 
 /*
- * 直播场景里的用户角色。
+ * The user role in the interactive live streaming.
  */
 export enum ClientRoleType {
   /*
-   * 1: 主播。主播可以发流也可以收流。
+   * 1: Host. A host can both send and receive streams.
    */
   ClientRoleBroadcaster = 1,
   /*
-   * 2:（默认）观众。观众只能收流不能发流。
+   * 2: (Default) Audience. An audience member can only receive streams.
    */
   ClientRoleAudience = 2,
 }
 
 /*
- * 自上次统计后本地视频质量的自适应情况（基于目标帧率和目标码率）。
+ * Quality change of the local video in terms of target frame rate and target bit rate since last count.
  */
 export enum QualityAdaptIndication {
   /*
-   * 0：本地视频质量不变。
+   * 0: The local video quality stays the same.
    */
   AdaptNone = 0,
   /*
-   * 1：因网络带宽增加，本地视频质量改善。
+   * 1: The local video quality improves because the network bandwidth increases.
    */
   AdaptUpBandwidth = 1,
   /*
-   * 2：因网络带宽减少，本地视频质量变差。
+   * 2: The local video quality deteriorates because the network bandwidth decreases.
    */
   AdaptDownBandwidth = 2,
 }
 
 /*
- * 直播频道中观众的延时级别。该枚举仅在用户角色设为 ClientRoleAudience 时才生效。
+ * The latency level of an audience member in interactive live streaming. This enum takes effect only when the user role is set to ClientRoleAudience .
  */
 export enum AudienceLatencyLevelType {
   /*
-   * 1: 低延时。
+   * 1: Low latency.
    */
   AudienceLatencyLevelLowLatency = 1,
   /*
-   * 2:（默认）超低延时。
+   * 2: (Default) Ultra low latency.
    */
   AudienceLatencyLevelUltraLowLatency = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudienceLatencyLevelHighLatency = 3,
 }
 
 /*
- *  用户角色具体设置。
+ * The detailed options of a user.
  */
 export class ClientRoleOptions {
   /*
-   *  观众端延时级别。 详见 AudienceLatencyLevelType 。
+   * The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType .
    */
   audienceLatencyLevel?: AudienceLatencyLevelType;
 }
 
 /*
- * 接收远端音频时，本地用户的主观体验质量。
+ * The Quality of Experience (QoE) of the local user when receiving a remote audio stream.
  */
 export enum ExperienceQualityType {
   /*
-   * 0: 主观体验质量较好。
+   * 0: The QoE of the local user is good.
    */
   ExperienceQualityGood = 0,
   /*
-   * 1: 主观体验质量较差。
+   * 1: The QoE of the local user is poor
    */
   ExperienceQualityBad = 1,
 }
 
 /*
- * 远端用户的音频统计数据。
+ * Audio statistics of the remote user.
  */
 export class RemoteAudioStats {
   /*
-   * 远端用户的用户 ID。
+   * The user ID of the remote user.
    */
   uid?: number;
   /*
-   * 远端用户发送的音频流质量。详见 QualityType 。
+   * The quality of the audio stream sent by the user.  QualityType
    */
   quality?: number;
   /*
-   * 音频发送端到接收端的网络延迟（毫秒）。
+   * The network delay (ms) from the sender to the receiver.
    */
   networkTransportDelay?: number;
   /*
-   * 音频接收端到网络抖动缓冲的网络延迟（毫秒）。 当接收端为观众且 ClientRoleOptions 的 audienceLatencyLevel 为 1 时，该参数不生效。
+   * The network delay (ms) from the audio receiver to the jitter buffer. When the receiving end is an audience member andaudienceLatencyLevel of ClientRoleOptions is 1, this parameter does not take effect.
    */
   jitterBufferDelay?: number;
   /*
-   * 统计周期内的远端音频流的丢帧率 (%)。
+   * The frame loss rate (%) of the remote audio stream in the reported interval.
    */
   audioLossRate?: number;
   /*
-   * 声道数。
+   * The number of audio channels.
    */
   numChannels?: number;
   /*
-   * 统计周期内接收到的远端音频流的采样率。
+   * The sampling rate of the received audio stream in the reported interval.
    */
   receivedSampleRate?: number;
   /*
-   * 接收到的远端音频流在统计周期内的平均码率（Kbps）。
+   * The average bitrate (Kbps) of the received audio stream in the reported interval.
    */
   receivedBitrate?: number;
   /*
-   * 远端用户在加入频道后发生音频卡顿的累计时长（毫秒）。通话过程中，音频丢帧率达到 4% 即记为一次音频卡顿。
+   * The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
    */
   totalFrozenTime?: number;
   /*
-   * 音频卡顿的累计时长占音频总有效时长的百分比 (%)。音频有效时长是指远端用户加入频道后音频未被停止发送或禁用的时长。
+   * The total audio freeze time as a percentage (%) of the total time when the audio is available. The audio is considered available when the remote user neither stops sending the audio stream nor disables the audio module after joining the channel.
    */
   frozenRate?: number;
   /*
-   * 统计周期内，Agora 实时音频 MOS（平均主观意见分）评估方法对接收到的远端音频流的质量评分。返回值范围为 [0,500]。返回值除以 100 即可得到 MOS 分数，范围为 [0,5] 分，分数越高，音频质量越好。
-   * Agora 实时音频 MOS 评分对应的主观音质感受如下： MOS 分数
-   * 音质感受 大于 4 分
-   * 音频质量佳，清晰流畅。 3.5 - 4 分
-   * 音频质量较好，偶有音质损伤，但依然清晰。 3 - 3.5 分
-   * 音频质量一般，偶有卡顿，不是非常流畅，需要一点注意力才能听清。 2.5 - 3 分
-   * 音频质量较差，卡顿频繁，需要集中精力才能听清。 2 - 2.5 分
-   * 音频质量很差，偶有杂音，部分语义丢失，难以交流。 小于 2 分
-   * 音频质量非常差，杂音频现，大量语义丢失，完全无法交流。
+   * The quality of the remote audio stream in the reported interval. The quality is determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method. The return value range is [0, 500]. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.
+   * The subjective perception of audio quality corresponding to the Agora real-time audio MOS scores is as follows: MOS score
+   * Perception of audio quality Greater than 4
+   * Excellent. The audio sounds clear and smooth. From 3.5 to 4
+   * Good. The audio has some perceptible impairment but still sounds clear. From 3 to 3.5
+   * Fair. The audio freezes occasionally and requires attentive listening. From 2.5 to 3
+   * Poor. The audio sounds choppy and requires considerable effort to understand. From 2 to 2.5
+   * Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty. Less than 2
+   * Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible.
    */
   mosValue?: number;
   /*
-   * 远端用户在音频通话开始到本次回调之间的有效时长（毫秒）。
-   * 有效时长是指去除了远端用户进入静音状态的总时长。
+   * The total active time (ms) between the start of the audio call and the callback of the remote user.
+   * The active time refers to the total duration of the remote user without the mute state.
    */
   totalActiveTime?: number;
   /*
-   * 远端音频流的累计发布时长（毫秒）。
+   * The total duration (ms) of the remote audio stream.
    */
   publishDuration?: number;
   /*
-   * 接收远端音频时，本地用户的主观体验质量。详见 ExperienceQualityType 。
+   * The Quality of Experience (QoE) of the local user when receiving a remote audio stream. See ExperienceQualityType .
    */
   qoeQuality?: number;
 }
 
 /*
- * 音频编码属性。
+ * The audio profile.
  */
 export enum AudioProfileType {
   /*
-   * 0: 默认值。
-   * 直播场景下：48 kHz 采样率，音乐编码，单声道，编码码率最大值为 64 Kbps。
-   * 通信场景下：32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
+   * 0: The default audio profile.
+   * For the interactive streaming profile: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
+   * For the communication profile: A sample rate of 32 kHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
    */
   AudioProfileDefault = 0,
   /*
-   * 1: 指定 32 kHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
+   * 1: A sample rate of 32 kHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
    */
   AudioProfileSpeechStandard = 1,
   /*
-   * 2: 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 64 Kbps。
+   * 2: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
    */
   AudioProfileMusicStandard = 2,
   /*
-   * 3: 指定 48 kHz 采样率，音乐编码，双声道，编码码率最大值为 80 Kbps。
-   * 如需实现立体声，你还需要调用 setAdvancedAudioOptions 并在 AdvancedAudioOptions 中设置 audioProcessingChannels 为 AudioProcessingStereo。
+   * 3: A sample rate of 48 kHz, music encoding, stereo, and a bitrate of up to 80 Kbps.To implement stereo audio, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to AdvancedAudioOptions in AudioProcessingStereo.
    */
   AudioProfileMusicStandardStereo = 3,
   /*
-   * 4: 指定 48 kHz 采样率，音乐编码，单声道，编码码率最大值为 96 Kbps。
+   * 4: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 96 Kbps.
    */
   AudioProfileMusicHighQuality = 4,
   /*
-   * 5: 指定 48 kHz 采样率，音乐编码，双声道，编码码率最大值为 128 Kbps。
-   * 如需实现立体声，你还需要调用 setAdvancedAudioOptions 并在 AdvancedAudioOptions 中设置 audioProcessingChannels 为 AudioProcessingStereo。
+   * 5: A sample rate of 48 kHz, music encoding, stereo, and a bitrate of up to 128 Kbps.To implement stereo audio, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to AdvancedAudioOptions in AudioProcessingStereo.
    */
   AudioProfileMusicHighQualityStereo = 5,
   /*
@@ -2008,507 +2009,508 @@ export enum AudioProfileType {
    */
   AudioProfileIot = 6,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioProfileNum = 7,
 }
 
 /*
- * 音频场景。
+ * The audio scenario.
  */
 export enum AudioScenarioType {
   /*
-   * 0: （默认）自动场景，根据用户角色和音频路由自动匹配合适的音质。
+   * 0: (Default) Automatic scenario, where the SDK chooses the appropriate audio quality according to the user role and audio route.
    */
   AudioScenarioDefault = 0,
   /*
-   * 3: 高音质场景，适用于音乐为主的场景。
+   * 3: High-quality audio scenario, where users mainly play music.
    */
   AudioScenarioGameStreaming = 3,
   /*
-   * 5: 聊天室场景，适用于用户需要频繁上下麦的场景。该场景下，观众会收到申请麦克风权限的弹窗提示。
+   * 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. In this scenario, audience members receive a pop-up window to request permission of using microphones.
    */
   AudioScenarioChatroom = 5,
   /*
-   * 6: 高音质场景，适用于音乐为主的场景。
+   * 6: High-quality audio scenario, where users mainly play music.
    */
   AudioScenarioHighDefinition = 6,
   /*
-   * 7: 合唱场景。适用于网络条件良好，要求极低延时的实时合唱场景。
+   * 7: Real-time chorus scenario, where users have good network conditions and require ultra-low latency.
    */
   AudioScenarioChorus = 7,
   /*
-   * 枚举的数量。
+   * The number of enumerations.
    */
   AudioScenarioNum = 8,
 }
 
 /*
- * 视频帧格式。
+ * The format of the video frame.
  */
 export class VideoFormat {
   /*
-   * 视频帧的宽度（px）。
+   * The width (px) of the video frame.
    */
   width?: number;
   /*
-   * 视频帧的高度（px）。
+   * The height (px) of the video frame.
    */
   height?: number;
   /*
-   * 视频帧的帧率。
+   * The video frame rate (fps).
    */
   fps?: number;
 }
 
 /*
- * 屏幕共享的内容类型。
+ * The content hint for screen sharing.
  */
 export enum VideoContentHint {
   /*
-   * （默认）无指定的内容类型。
+   * (Default) No content hint.
    */
   ContentHintNone = 0,
   /*
-   * 内容类型为动画。当共享的内容是视频、电影或视频游戏时，推荐选择该内容类型。
+   * Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
    */
   ContentHintMotion = 1,
   /*
-   * 内容类型为细节。当共享的内容是图片或文字时，推荐选择该内容类型。
+   * Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slides, or texts.
    */
   ContentHintDetails = 2,
 }
 
 /*
- * 本地音频状态。
+ * The state of the local audio.
  */
 export enum LocalAudioStreamState {
   /*
-   * 0: 本地音频默认初始状态。
+   * 0: The local audo is in the initial state.
    */
   LocalAudioStreamStateStopped = 0,
   /*
-   * 1: 本地音频采集设备启动成功。
+   * 1: The local audo capturing device starts successfully.
    */
   LocalAudioStreamStateRecording = 1,
   /*
-   * 2: 本地音频首帧编码成功。
+   * 2: The first audo frame encodes successfully.
    */
   LocalAudioStreamStateEncoding = 2,
   /*
-   * 3: 本地音频启动失败。
+   * 3: The local audio fails to start.
    */
   LocalAudioStreamStateFailed = 3,
 }
 
 /*
- *  本地音频出错原因。
+ * Local audio state error codes.
  */
 export enum LocalAudioStreamError {
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalAudioStreamErrorOk = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalAudioStreamErrorFailure = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalAudioStreamErrorDeviceNoPermission = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalAudioStreamErrorDeviceBusy = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalAudioStreamErrorRecordFailure = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalAudioStreamErrorEncodeFailure = 5,
 }
 
 /*
- * 本地视频状态。
+ * Local video state types.
  */
 export enum LocalVideoStreamState {
   /*
-   * 0: 本地视频默认初始状态。
+   * 0: The local video is in the initial state.
    */
   LocalVideoStreamStateStopped = 0,
   /*
-   * 1: 本地视频采集设备启动成功。
+   * 1: The local video capturing device starts successfully.
    */
   LocalVideoStreamStateCapturing = 1,
   /*
-   * 2: 本地视频首帧编码成功。
+   * 2: The first video frame is successfully encoded.
    */
   LocalVideoStreamStateEncoding = 2,
   /*
-   * 3: 本地视频启动失败。
+   * 3: Fails to start the local video.
    */
   LocalVideoStreamStateFailed = 3,
 }
 
 /*
- * 本地视频出错原因。
+ * Local video state error code.
  */
 export enum LocalVideoStreamError {
   /*
-   * 0: 本地视频状态正常。
+   * 0: The local video is normal.
    */
   LocalVideoStreamErrorOk = 0,
   /*
-   * 1: 出错原因不明确。
+   * 1: No specified reason for the local video failure.
    */
   LocalVideoStreamErrorFailure = 1,
   /*
-   * 2: 没有权限启动本地视频采集设备。
+   * 2: No permission to use the local video capturing device.
    */
   LocalVideoStreamErrorDeviceNoPermission = 2,
   /*
-   * 3: 本地视频采集设备正在使用中。
+   * 3: The local video capturing device is in use.
    */
   LocalVideoStreamErrorDeviceBusy = 3,
   /*
-   * 4: 本地视频采集失败，建议检查采集设备是否正常工作。
+   * 4: The local video capture fails. Check whether the capturing device is working properly.
    */
   LocalVideoStreamErrorCaptureFailure = 4,
   /*
-   * 5: 本地视频编码失败。
+   * 5: The local video encoding fails.
    */
   LocalVideoStreamErrorEncodeFailure = 5,
   /*
-   * 6: 应用处于后台。
+   * 6: The local video capturing device not available due to app did enter background.
    */
   LocalVideoStreamErrorCaptureInbackground = 6,
   /*
-   * 7: 应用窗口处于侧拉、分屏、画中画模式。
+   * 7: The local video capturing device not available because the app is running in a multi-app layout (generally on the pad).
    */
   LocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
   /*
-   * 8: 找不到本地视频采集设备。
+   * 8: Fails to find a local video capture device.
    */
   LocalVideoStreamErrorDeviceNotFound = 8,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalVideoStreamErrorDeviceDisconnected = 9,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalVideoStreamErrorDeviceInvalidId = 10,
   /*
-   * 8: 系统压力。
+   * 8: The local video capturing device temporarily being made unavailable due to system pressure.
    */
   LocalVideoStreamErrorDeviceSystemPressure = 101,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalVideoStreamErrorScreenCaptureWindowMinimized = 11,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalVideoStreamErrorScreenCaptureWindowClosed = 12,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalVideoStreamErrorScreenCaptureWindowOccluded = 13,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LocalVideoStreamErrorScreenCaptureWindowNotSupported = 20,
 }
 
 /*
- * 远端音频流状态。
+ * Remote audio states.
  */
 export enum RemoteAudioState {
   /*
-   * 0: 远端音频默认初始状态。在 RemoteAudioStateReasonLocalMuted、RemoteAudioStateReasonRemoteMuted 或 RemoteAudioStateReasonRemoteOffline的情况下，会报告该状态。
+   * 0: The remote audo is in the initial state. The SDK reports this state in the case of RemoteAudioStateReasonLocalMuted, RemoteAudioStateReasonRemoteMuted, or RemoteAudioStateReasonRemoteOffline.
    */
   RemoteAudioStateStopped = 0,
   /*
-   * 1: 本地用户已接收远端音频首包。
+   * 1: The first remote audio packet is received.
    */
   RemoteAudioStateStarting = 1,
   /*
-   * 2: 远端音频流正在解码，正常播放。在 RemoteAudioStateReasonNetworkRecovery、RemoteAudioStateReasonLocalUnmuted 或 RemoteAudioStateReasonRemoteUnmuted 的情况下， 会报告该状态。
+   * 2: The remote audio stream is decoded and plays normally. The SDK reports this state in the case of RemoteAudioStateReasonNetworkRecovery, RemoteAudioStateReasonLocalUnmuted, or RemoteAudioStateReasonRemoteUnmuted.
    */
   RemoteAudioStateDecoding = 2,
   /*
-   * 3: 远端音频流卡顿。在 RemoteAudioStateReasonNetworkCongestion 的情况下，会报告该状态。
+   * 3: The remote audio is frozen. The SDK reports this state in the case of RemoteAudioStateReasonNetworkCongestion.
    */
   RemoteAudioStateFrozen = 3,
   /*
-   * 4: 远端音频流播放失败。在 RemoteAudioStateReasonInternal 的情况下，会报告该状态。
+   * 4: The remote audio fails to start. The SDK reports this state in the case of RemoteAudioStateReasonInternal.
    */
   RemoteAudioStateFailed = 4,
 }
 
 /*
- * 远端音频流状态切换原因。
+ * The reason for the remote audio state change.
  */
 export enum RemoteAudioStateReason {
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonInternal = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonNetworkCongestion = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonNetworkRecovery = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonLocalMuted = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonLocalUnmuted = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonRemoteMuted = 5,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonRemoteUnmuted = 6,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteAudioReasonRemoteOffline = 7,
 }
 
 /*
- * 远端视频流状态。
+ * The state of the remote video.
  */
 export enum RemoteVideoState {
   /*
-   * 0: 远端视频默认初始状态。在 RemoteVideoStateReasonLocalMuted、RemoteVideoStateReasonRemoteMuted 或 RemoteVideoStateReasonRemoteOffline 的情况下，会报告该状态。
+   * 0: The remote audo is in the initial state. The SDK reports this state in the case of RemoteVideoStateReasonLocalMuted, RemoteVideoStateReasonRemoteMuted, or RemoteVideoStateReasonRemoteOffline.
    */
   RemoteVideoStateStopped = 0,
   /*
-   * 1: 本地用户已接收远端视频首包。
+   * 1: The first remote audio packet is received.
    */
   RemoteVideoStateStarting = 1,
   /*
-   * 2: 远端视频流正在解码，正常播放。在 RemoteVideoStateReasonNetworkRecovery、RemoteVideoStateReasonLocalUnmuted、RemoteVideoStateReasonRemoteUnmuted 的情况下，会报告该状态。
+   * 2: The remote audio stream is decoded and plays normally. The SDK reports this state in the case of RemoteVideoStateReasonNetworkRecovery, RemoteVideoStateReasonLocalUnmuted, or RemoteVideoStateReasonRemoteUnmuted.
    */
   RemoteVideoStateDecoding = 2,
   /*
-   * 3: 远端视频流卡顿。在 RemoteVideoStateReasonNetworkCongestion 的情况下，会报告该状态。
+   * 3: The remote video is frozen. The SDK reports this state in the case of RemoteVideoStateReasonNetworkCongestion.
    */
   RemoteVideoStateFrozen = 3,
   /*
-   * 4: 远端视频流播放失败。在 RemoteVideoStateReasonInternal 的情况下，会报告该状态。
+   * 4: The remote video fails to start. The SDK reports this state in the case of RemoteVideoStateReasonInternal.
    */
   RemoteVideoStateFailed = 4,
 }
 
 /*
- * 远端视频流状态切换原因。
+ * The reason for the remote audio state change.
  */
 export enum RemoteVideoStateReason {
   /*
-   * 0: 视频状态发生改变时，会报告该原因。
+   * 0: The SDK reports this reason when the audio state changes.
    */
   RemoteVideoStateReasonInternal = 0,
   /*
-   * 1: 网络阻塞。
+   * 1: Network congestion.
    */
   RemoteVideoStateReasonNetworkCongestion = 1,
   /*
-   * 2: 网络恢复正常。
+   * 2: Network recovery.
    */
   RemoteVideoStateReasonNetworkRecovery = 2,
   /*
-   * 3: 本地用户停止接收远端视频流或本地用户禁用视频模块。
+   * 3: The local user stops receiving the remote video stream or disables the video module.
    */
   RemoteVideoStateReasonLocalMuted = 3,
   /*
-   * 4: 本地用户恢复接收远端视频流或本地用户启动视频模块。
+   * 4: The local user resumes receiving the remote video stream or enables the video module.
    */
   RemoteVideoStateReasonLocalUnmuted = 4,
   /*
-   * 5: 远端用户停止发送视频流或远端用户禁用视频模块。
+   * 5: The remote user stops sending the video stream or disables the video module.
    */
   RemoteVideoStateReasonRemoteMuted = 5,
   /*
-   * 6: 远端用户恢复发送视频流或远端用户启用视频模块。
+   * 6: The remote user resumes sending the video stream or enables the video module.
    */
   RemoteVideoStateReasonRemoteUnmuted = 6,
   /*
-   * 7: 远端用户离开频道。
+   * 7: The remote user leaves the channel.
    */
   RemoteVideoStateReasonRemoteOffline = 7,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoStateReasonAudioFallback = 8,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoStateReasonAudioFallbackRecovery = 9,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoStateReasonVideoStreamTypeChangeToLow = 10,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoStateReasonVideoStreamTypeChangeToHigh = 11,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum RemoteUserState {
   /*
-   * TODO(doc)
+   * @ignore
    */
   UserStateMuteAudio = 1 << 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   UserStateMuteVideo = 1 << 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   UserStateEnableVideo = 1 << 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   UserStateEnableLocalVideo = 1 << 8,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class VideoTrackInfo {
   /*
-   * TODO(doc)
+   * @ignore
    */
   isLocal?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   ownerUid?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   trackId?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   channelId?: string;
   /*
-   * TODO(doc)
+   * @ignore
    */
   streamType?: VideoStreamType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   codecType?: VideoCodecType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   encodedFrameOnly?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   sourceType?: VideoSourceType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   observationPosition?: number;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum RemoteVideoDownscaleLevel {
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoDownscaleLevelNone = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoDownscaleLevel1 = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoDownscaleLevel2 = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoDownscaleLevel3 = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   RemoteVideoDownscaleLevel4 = 4,
 }
 
 /*
- * 用户音量信息。
+ * The volume information of users.
  */
 export class AudioVolumeInfo {
   /*
-   * 用户 ID。 在本地用户的回调中，uid 为 0。
-   * 在远端用户的回调中，uid 为瞬时音量最高的远端用户（最多 3 位）的 ID。
+   * The user ID. In the local user's callback, uid = 0.
+   * In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is one of the three highest.
    */
   uid?: number;
   /*
-   * 用户的音量，取值范围为 [0,255]。
+   * The volume of the user. The value ranges between 0 (the lowest volume) and 255 (the highest volume).
    */
   volume?: number;
   /*
-   * 本地用户的人声状态。 0：本地无人声。
-   * 1：本地有人声。
-   * vad 无法报告远端用户的人声状态。对于远端用户，vad 的值始终为 1。
-   * 如需使用此参数，请在调用 enableAudioVolumeIndication 时设置 reportVad 为 true。
+   * Voice activity status of the local user. 0: The local user is not speaking.
+   * 1: The local user is speaking.
+   * The vad parameter does not report the voice activity status of remote users. In a remote user's callback, the value of vad is always 1.
+   * To use this parameter, you must set reportVad to true when calling enableAudioVolumeIndication .
    */
   vad?: number;
   /*
-   * 本地用户的人声音调（Hz）。取值范围为 [0.0,4000.0]。 voicePitch 无法报告远端用户的人声音调。对于远端用户，voicePitch 的值始终为 0.0。
+   * The voice pitch (Hz) of the local user. The value ranges between 0.0 and 4000.0.
+   * The voicePitch parameter does not report the voice pitch of remote users. In the remote users' callback, the value of voicePitch is always 0.0.
    */
   voicePitch?: number;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class DeviceInfo {
   /*
-   * TODO(doc)
+   * @ignore
    */
   isLowLatencyAudioSupported?: boolean;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class Packet {
   /*
-   * TODO(doc)
+   * @ignore
    */
   buffer?: Uint8Array;
   /*
-   * TODO(doc)
+   * @ignore
    */
   size?: number;
 }
 
 /*
- * 推流输出音频的采样率。
+ * The audio sampling rate of the stream to be pushed to the CDN.
  */
 export enum AudioSampleRateType {
   /*
@@ -2520,1021 +2522,1039 @@ export enum AudioSampleRateType {
    */
   AudioSampleRate44100 = 44100,
   /*
-   * 48000: （默认）48 kHz
+   * 48000: (Default) 48 kHz
    */
   AudioSampleRate48000 = 48000,
 }
 
 /*
- * 转码输出视频流的编解码类型。
+ * The codec type of the output video.
  */
 export enum VideoCodecTypeForStream {
   /*
-   * 1：（默认）H.264。
+   * 1: (Default) H.264.
    */
   VideoCodecH264ForStream = 1,
   /*
-   * 2：H.265。
+   * 2: H.265.
    */
   VideoCodecH265ForStream = 2,
 }
 
 /*
- * 旁路推流输出视频的编解码规格。
+ * Video codec profile types.
  */
 export enum VideoCodecProfileType {
   /*
-   * 66: Baseline 级别的视频编码规格，一般用于低阶或需要额外容错的应用，比如视频通话、手机视频等。
+   * 66: Baseline video codec profile. Generally used for video calls on mobile phones.
    */
   VideoCodecProfileBaseline = 66,
   /*
-   * 77: Main 级别的视频编码规格，一般用于主流消费类电子产品，如 MP4、便携的视频播放器、PSP、iPad 等。
+   * 77: Main video codec profile. Generally used in mainstream electronics such as MP4 players, portable video players, PSP, and iPads.
    */
   VideoCodecProfileMain = 77,
   /*
-   * 100: （默认）High 级别的视频编码规格，一般用于广播、视频碟片存储、高清电视。
+   * 100: (Default) High video codec profile. Generally used in high-resolution live streaming or television.
    */
   VideoCodecProfileHigh = 100,
 }
 
 /*
- *  推流输出音频的编解码规格，默认为 LC-AAC。
+ * Self-defined audio codec profile.
  */
 export enum AudioCodecProfileType {
   /*
-   * 0: （默认）LC-AAC 规格。
+   * 0: (Default) LC-AAC.
    */
   AudioCodecProfileLcAac = 0,
   /*
-   * 1: HE-AAC 规格。
+   * 1: HE-AAC.
    */
   AudioCodecProfileHeAac = 1,
   /*
-   * 2: HE-AAC v2 规格。
+   * 2: HE-AAC v2.
    */
   AudioCodecProfileHeAacV2 = 2,
 }
 
 /*
- * 本地音频统计数据。
+ * Local audio statistics.
  */
 export class LocalAudioStats {
   /*
-   * 声道数。
+   * The number of audio channels.
    */
   numChannels?: number;
   /*
-   * 发送本地音频的采样率，单位为 Hz。
+   * The sampling rate (Hz) of sending the local user's audio stream.
    */
   sentSampleRate?: number;
   /*
-   * 发送本地音频的码率平均值，单位为 Kbps。
+   * The average bitrate (Kbps) of sending the local user's audio stream.
    */
   sentBitrate?: number;
   /*
-   * 内部的 payload 类型。
+   * The internal payload codec.
    */
   internalCodec?: number;
   /*
-   * 弱网对抗前本端到 Agora 边缘服务器的丢包率 (%)。
+   * The packet loss rate (%) from the local client to the Agora server before applying the anti-packet loss strategies.
    */
   txPacketLossRate?: number;
 }
 
 /*
- * 推流状态。
+ * States of the Media Push.
  */
 export enum RtmpStreamPublishState {
   /*
-   * 0：推流未开始或已结束。成功调用 removePublishStreamUrl 方法删除推流地址后，也会返回该状态。
+   * 0: The Media Push has not started or has ended.
+   * This state is also triggered after you remove a RTMP or RTMPS stream from the CDN by calling removePublishStreamUrl .
    */
   RtmpStreamPublishStateIdle = 0,
   /*
-   * 1：正在连接 Agora 推流服务器和 CDN 服务器。调用 addPublishStreamUrl 方法后，会返回该状态。
+   * 1: The SDK is connecting to Agora's streaming server and the CDN server.
+   * This state is triggered after you call the addPublishStreamUrl method.
    */
   RtmpStreamPublishStateConnecting = 1,
   /*
-   * 2：推流正在进行。成功推流后，会返回该状态。
+   * 2: The RTMP or RTMPS streaming publishes. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
    */
   RtmpStreamPublishStateRunning = 2,
   /*
-   * 3：正在恢复推流。当 CDN 出现异常，或推流短暂中断时，SDK 会自动尝试恢复推流，并返回该状态。 如成功恢复推流，则进入状态 RtmpStreamPublishStateRunning(2)。
-   * 如服务器出错或 60 秒内未成功恢复，则进入状态 RtmpStreamPublishStateFailure(4)。如果觉得 60 秒太长，也可以主动调用 removePublishStreamUrl 和 addPublishStreamUrl 方法尝试重连。
+   * 3: The RTMP or RTMPS streaming is recovering.
+   * When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state. If the SDK successfully resumes the streaming, RtmpStreamPublishStateRunning(2) returns. If the streaming does not resume within 60 seconds or server errors occur, RtmpStreamPublishStateFailure(4) returns.
+   * You can also reconnect to the server by calling the removePublishStreamUrl and addPublishStreamUrl methods.
    */
   RtmpStreamPublishStateRecovering = 3,
   /*
-   * 4：推流失败。失败后，你可以通过返回的错误码排查错误原因，也可以再次调用 addPublishStreamUrl 重新尝试推流。
+   * 3: Fails to push streams to the CDN.
+   * See the errCode parameter for the detailed error information.You can also call the addPublishStreamUrl method to publish the RTMP or RTMPS streaming again.
    */
   RtmpStreamPublishStateFailure = 4,
   /*
-   * 5：SDK 正在与 Agora 推流服务器和 CDN 服务器断开连接。 当你调用 removePublishStreamUrl 或 stopRtmpStream 方法正常结束推流时，SDK 会依次报告推流状态为 RtmpStreamPublishStateDisconnecting、RtmpStreamPublishStateIdle。
+   * 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call removePublishStreamUrl or stopRtmpStream to stop the streaming normally, the SDK reports the streaming state as RtmpStreamPublishStateDisconnecting and RtmpStreamPublishStateIdle in sequence.
    */
   RtmpStreamPublishStateDisconnecting = 5,
 }
 
 /*
- * 推流错误信息。
+ * Error codes of the RTMP or RTMPS streaming.
  */
 export enum RtmpStreamPublishErrorType {
   /*
-   * 0：推流成功。
+   * 0: The RTMP or RTMPS streaming publishes successfully.
    */
   RtmpStreamPublishErrorOk = 0,
   /*
-   * 1：参数无效。请检查输入参数是否正确。如果你在调用 addPublishStreamUrl 前没有调用 setLiveTranscoding 设置转码参数，SDK 会返回该错误。
+   * 1: Invalid argument used. Check the parameter setting. For example, if you do not call setLiveTranscoding to set the transcoding parameters before calling addPublishStreamUrl , the SDK returns this error.
    */
   RtmpStreamPublishErrorInvalidArgument = 1,
   /*
-   * 2：推流已加密，不能推流。
+   * 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
    */
   RtmpStreamPublishErrorEncryptedStreamNotAllowed = 2,
   /*
-   * 3：推流超时未成功。可调用 addPublishStreamUrl 重新推流。
+   * 3: Timeout for the RTMP or RTMPS streaming. Call the addPublishStreamUrl method to publish the streaming again.
    */
   RtmpStreamPublishErrorConnectionTimeout = 3,
   /*
-   * 4：推流服务器出现错误。请调用 addPublishStreamUrl 重新推流。
+   * 4: An error occurs in Agora's streaming server. Call the addPublishStreamUrl method to publish the streaming again.
    */
   RtmpStreamPublishErrorInternalServerError = 4,
   /*
-   * 5：CDN 服务器出现错误。
+   * 5: An error occurs in the CDN server.
    */
   RtmpStreamPublishErrorRtmpServerError = 5,
   /*
-   * 6：推流请求过于频繁。
+   * 6: Reserved parameter
    */
   RtmpStreamPublishErrorTooOften = 6,
   /*
-   * 7：单个主播的推流地址数目达到上限 10。请删掉一些不用的推流地址再增加推流地址。
+   * 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
    */
   RtmpStreamPublishErrorReachLimit = 7,
   /*
-   * 8：主播操作不属于自己的流。例如更新其他主播的流参数、停止其他主播的流。请检查 App 逻辑。
+   * 8: The host manipulates other hosts' URLs. For example, the host updates or stops other hosts' streams. Check your app logic.
    */
   RtmpStreamPublishErrorNotAuthorized = 8,
   /*
-   * 9：服务器未找到这个流。
+   * 9: Agora's server fails to find the RTMP or RTMPS streaming.
    */
   RtmpStreamPublishErrorStreamNotFound = 9,
   /*
-   * 10：推流地址格式有错误。请检查推流地址格式是否正确。
+   * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
    */
   RtmpStreamPublishErrorFormatNotSupported = 10,
   /*
-   * 11：用户角色不是主播，该用户无法使用推流功能。请检查你的应用代码逻辑。
+   * 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your app code logic.
    */
   RtmpStreamPublishErrorNotBroadcaster = 11,
   /*
-   * 13：非转码推流情况下，调用了 updateRtmpTranscoding 或 setLiveTranscoding 方法更新转码属性。请检查你的应用代码逻辑。
+   * 13: The updateRtmpTranscoding or setLiveTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your app code logic.
    */
   RtmpStreamPublishErrorTranscodingNoMixStream = 13,
   /*
-   * 14：主播的网络出错。
+   * 14: Errors occurred in the host's network.
    */
   RtmpStreamPublishErrorNetDown = 14,
   /*
-   * 15：你的 App ID 没有使用 Agora 推流服务的权限。
+   * 15: Your App ID does not have permission to use the CDN live streaming function.
    */
   RtmpStreamPublishErrorInvalidAppid = 15,
   /*
-   * 100：推流已正常结束。当你调用 removePublishStreamUrl 结束推流后，SDK 会返回该值。
+   * 100: The streaming has been stopped normally. After you call removePublishStreamUrl to stop streaming, the SDK returns this value.
    */
   RtmpStreamUnpublishErrorOk = 100,
 }
 
 /*
- *  旁路推流时发生的事件。
+ * Events during the media push.
  */
 export enum RtmpStreamingEvent {
   /*
-   * 1: 旁路推流时，添加背景图或水印出错。
+   * 1: An error occurs when you add a background image or a watermark image in the media push.
    */
   RtmpStreamingEventFailedLoadImage = 1,
   /*
-   * 2: 该推流 URL 已用于推流。如果你想开始新的推流，请使用新的推流 URL。
+   * 2: The streaming URL is already being used for CDN live streaming.
+   * If you want to start new streaming, use a new streaming URL.
    */
   RtmpStreamingEventUrlAlreadyInUse = 2,
   /*
-   * 3: 功能不支持。
+   * 3: The feature is not supported.
    */
   RtmpStreamingEventAdvancedFeatureNotSupport = 3,
   /*
-   * 4: 预留参数。
+   * 4: Reserved.
    */
   RtmpStreamingEventRequestTooOften = 4,
 }
 
 /*
- * 图像属性。
- * 用于设置直播视频的水印和背景图片的属性。
+ * Image properties.
+ * This class sets the properties of the watermark and background images in the live video.
  */
 export class RtcImage {
   /*
-   * 直播视频上图片的 HTTP/HTTPS 地址。字符长度不得超过 1024 字节。
+   * The HTTP/HTTPS URL address of the image in the live video. The maximum length of this parameter is 1024 bytes.
    */
   url?: string;
   /*
-   * 图片在视频画面上的 x 坐标 (pixel)，以输出视频画面的左上角为原点。
+   * The x coordinate (pixel) of the image on the video frame (taking the upper left corner of the video frame as the origin).
    */
   x?: number;
   /*
-   * 图片在视频画面上的 y 坐标 (pixel)，以输出视频画面的左上角为原点。
+   * The y coordinate (pixel) of the image on the video frame (taking the upper left corner of the video frame as the origin).
    */
   y?: number;
   /*
-   * 图片在视频画面上的宽度 (pixel)。
+   * The width (pixel) of the image on the video frame.
    */
   width?: number;
   /*
-   * 图片在视频画面上的高度 (pixel)。
+   * The height (pixel) of the image on the video frame.
    */
   height?: number;
   /*
-   * 水印或背景图的图层编号。使用水印数组添加单张或多张水印时，必须向 zOrder 传值，取值范围为 [1,255]，否则 SDK 会报错。其余情况，zOrder 可选传值，取值范围为 [0,255]，0 为默认值。0 代表图层的最下层，255 代表图层的最上层。
+   * The layer index of the watermark or background image. When you use the watermark array to add a watermark or multiple watermarks, you must pass a value to zOrder in the range [1,255]; otherwise, the SDK reports an error. In other cases, zOrder can optionally be passed in the range [0,255], with 0 being the default value. 0 means the bottom layer and 255 means the top layer.
    */
   zOrder?: number;
   /*
-   * 水印或背景图片的透明度。取值范围为 [0.0,1.0]： 0.0: 完全透明。
-   * 1.0:（默认）完全不透明。
+   * The transparency of the watermark or background image. The value ranges between 0.0 and 1.0:
+   * 0.0: Completely transparent.
+   * 1.0: (Default) Opaque.
    */
   alpha?: number;
 }
 
 /*
- * 转码推流的高级功能配置。
- * 如需使用转码推流高级功能，请联系 。
+ * The configuration for advanced features of the RTMP or RTMPS streaming with transcoding.
+ * If you want to enable the advanced features of streaming with transcoding, contact .
  */
 export class LiveStreamAdvancedFeature {
   /*
-   * 转码推流高级功能的名称，包含 LBHQ（低码率的高清视频功能） 和 VEO（优化的视频编码器功能）。
+   * The feature names, including LBHQ (high-quality video with a lower bitrate) and VEO (optimized video encoder).
    */
   featureName?: string;
   /*
-   * 是否启用转码推流的高级功能：
-   * true：开启转码推流的高级功能。
-   * false：（默认）关闭转码推流的高级功能。
+   * Whether to enable the advanced features of streaming with transcoding:
+   * true: Enable the advanced features.
+   * false: (Default) Do not enable the advanced features.
    */
   opened?: boolean;
 }
 
 /*
- * 网络连接状态。
+ * Connection states.
  */
 export enum ConnectionStateType {
   /*
-   * 1: 网络连接断开。该状态表示 SDK 处于:
-   * 调用 joinChannelWithOptions 加入频道前的初始化阶段。
-   * 或调用 leaveChannel 后的离开频道阶段。
+   * 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases:
+   * Theinitial state before calling the joinChannelWithOptions method.
+   * The app calls the leaveChannel method.
    */
   ConnectionStateDisconnected = 1,
   /*
-   * 2: 建立网络连接中。该状态表示 SDK 在调用 joinChannelWithOptions 后正在与指定的频道建立连接。
-   * 如果成功加入频道，app 会收到 onConnectionStateChanged 回调，通知当前网络状态变成 ConnectionStateConnected。
-   * 建立连接后，SDK 还会初始化媒体，一切就绪后会回调 onJoinChannelSuccess 。
+   * 2: The SDK is connecting to the Agora edge server. This state indicates that the SDK is establishing a connection with the specified channel after the app calls joinChannelWithOptions.
+   * If the SDK successfully joins the channel, it triggers the onConnectionStateChanged callback and the connection state switches to ConnectionStateConnected.
+   * After the connection is established, the SDK also initializes the media and triggers onJoinChannelSuccess when everything is ready.
    */
   ConnectionStateConnecting = 2,
   /*
-   * 3: 网络已连接。该状态表示用户已经加入频道，可以在频道内发布或订阅媒体流。如果因网络断开或切换而导致 SDK 与频道的连接中断，SDK 会自动重连，此时 app 会收到
-   * onConnectionStateChanged 回调，通知当前网络状态变成 ConnectionStateReconnecting。
+   * 3: The SDK is connected to the Agora edge server. This state also indicates that the user has joined a channel and can now publish or subscribe to a media stream in the channel. If the connection to the channel is lost because, for example, if the network is down or switched, the SDK automatically tries to reconnect and triggers:
+   * onConnectionStateChanged callback, notifying that the current network state becomes ConnectionStateReconnecting.
    */
   ConnectionStateConnected = 3,
   /*
-   * 4: 重新建立网络连接中。该状态表示 SDK 之前曾加入过频道，但因网络等原因连接中断了，此时 SDK 会自动尝试重新接入频道。 如果 SDK 无法在 10 秒内重新加入频道，则 onConnectionLost 会被触发，SDK 会一直保持在 ConnectionStateReconnecting 的状态，并不断尝试重新加入频道。
-   * 如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，则应用程序会收到 onConnectionStateChanged 回调，通知 app 的网络状态进入 ConnectionStateFailed，SDK 停止尝试重连。
+   * 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
+   * If the SDK cannot rejoin the channel within 10 seconds, it triggers onConnectionLost , stays in the ConnectionStateReconnecting state, and keeps rejoining the channel.
+   * If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the onConnectionStateChanged callback, switches to the ConnectionStateFailed state, and stops rejoining the channel.
    */
   ConnectionStateReconnecting = 4,
   /*
-   * 5: 网络连接失败。该状态表示 SDK 已不再尝试重新加入频道，需要调用 leaveChannel 离开频道。 如果用户还想重新加入频道，则需要再次调用 joinChannelWithOptions。
-   * 如果 SDK 因服务器端使用 RESTful API 禁止加入频道，则 app 会收到 onConnectionStateChanged 。
+   * 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel.
+   * You can call joinChannelWithOptions to rejoin the channel.
+   * If the SDK is banned from joining the channel by the Agora edge server through the RESTful API, the SDK triggers the onConnectionStateChanged callback.
    */
   ConnectionStateFailed = 5,
 }
 
 /*
- * 参与转码合流的每个主播的设置。
+ * Transcoding configurations of each host.
  */
 export class TranscodingUser {
   /*
-   * 主播的用户 ID。
+   * The user ID of the host.
    */
   uid?: number;
   /*
-   * 主播视频画面在输出视频画面的 x 坐标 (pixel)，以输出视频画面的左上角为原点。取值范围为[0,width]，width 为 LiveTranscoding 中设置的 width。
+   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is thewidth set in LiveTranscoding .
    */
   x?: number;
   /*
-   * 主播视频画面在输出视频画面的 y 坐标 (pixel)，以输出视频画面的左上角为原点。取值范围为[0,height]，height 为 LiveTranscoding 中设置的 height。
+   * The y coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, height], where height is the height set in LiveTranscoding .
    */
   y?: number;
   /*
-   * 主播视频画面的宽 (pixel)。
+   * The width (pixel) of the host's video.
    */
   width?: number;
   /*
-   * 主播视频画面的高 (pixel)。
+   * The height (pixel) of the host's video.
    */
   height?: number;
   /*
-   * 主播视频画面的图层编号。取值范围为 [0,100]。 0:（默认）视频画面位于图层的最下层。
-   * 100: 视频画面位于图层的最上层。
-   * 如果取值小于 0 或大于 100，会返回错误 ERR_INVALID_ARGUMENT。
-   * 从 v2.3 开始，支持将 zOrder 设置为 0。
+   * The number of the layer to which the video for the video mixing on the local client belongs. The value range is [0,100].
+   * 0: (Default) The layer is at the bottom.
+   * 100: The layer is at the top.
+   * If the value is less than 0 or greater than 100, the error ERR_INVALID_ARGUMENT is returned.
+   * Starting from v2.3, setting zOrder to 0 is supported.
    */
   zOrder?: number;
   /*
-   * 主播视频画面的透明度。取值范围为 [0.0,1.0]。 0.0: 完全透明。
-   * 1.0:（默认）完全不透明。
+   * The transparency of the video for the video mixing on the local client. The value range is [0.0,1.0].
+   * 0.0: Completely transparent.
+   * 1.0: (Default) Opaque.
    */
   alpha?: number;
   /*
-   * 主播音频在输出音频中占用的声道。默认值为 0，取值范围为 [0,5]： 0: （推荐）默认混音设置，最多支持双声道，与主播上行音频相关。
-   * 1: 主播音频在输出音频的 FL 声道。如果主播上行音频是多声道，Agora 服务器会先把多声道混音成单声道。
-   * 2: 主播音频在输出音频的 FC 声道。如果主播上行音频是多声道，Agora 服务器会先把多声道混音成单声道。
-   * 3: 主播音频在输出音频的 FR 声道。如果主播上行音频是多声道，Agora 服务器会先把多声道混音成单声道。
-   * 4: 主播音频在输出音频的 BL 声道。如果主播上行音频是多声道，Agora 服务器会先把多声道混音成单声道。
-   * 5: 主播音频在输出音频的 BR 声道。如果主播上行音频是多声道，Agora 服务器会先把多声道混音成单声道。
-   * 0xFF 或取值大于 5: 该主播音频静音，Agora 服务器移除该主播的音频。 取值不为 0 时，需要使用特殊的播放器。
+   * The audio channel used by the host's audio in the output audio. The default value is 0, and the value range is [0, 5].
+   * 0: (Recommended) The defaut setting, which supports dual channels at most and depends on the upstream of the host.
+   * 1: The host's audio uses the FL audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.
+   * 2: The host's audio uses the FC audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.
+   * 3: The host's audio uses the FR audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.
+   * 4: The host's audio uses the BL audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.
+   * 5: The host's audio uses the BR audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.
+   * 0xFF or a value greater than 5: The host's audio is muted, and the Agora server removes the host's audio. If the value is not 0, a special player is required.
    */
   audioChannel?: number;
 }
 
 /*
- *  旁路推流的转码属性。
+ * Transcoding configurations for Media Push.
  */
 export class LiveTranscoding {
   /*
-   * 推流视频的总宽度，默认值 360，单位为像素。 如果推视频流，width 取值范围为 [64,1920]。如果取值低于 64，Agora 服务器会自动调整为 64； 如果取值高于 1920，Agora 服务器会自动调整为 1920。
-   * 如果推音频流，请将 width 和 height 设为 0。
+   * The width of the video in pixels. The default value is 360. When pushing video streams to the CDN, the value range of width is [64,1920]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1920, Agora server automatically adjusts it to 1920.
+   * When pushing audio streams to the CDN, set width and height as 0.
    */
   width?: number;
   /*
-   * 推流视频的总高度，默认值 640，单位为像素。 如果推视频流，height 取值范围为 [64,1080]。如果取值低于 64，Agora 服务器会自动调整为 64； 如果取值高于 1080，Agora 服务器会自动调整为 1080。
-   * 如果推音频流，请将 width 和 height 设为 0。
+   * The height of the video in pixels. The default value is 640. When pushing video streams to the CDN, the value range of height is [64,1080]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1080, Agora server automatically adjusts it to 1080.
+   * When pushing audio streams to the CDN, set width and height as 0.
    */
   height?: number;
   /*
-   * 用于旁路直播的输出视频的码率。单位为 Kbps。400 Kbps 为默认值。
+   * Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps.
    */
   videoBitrate?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   videoFramerate?: number;
   /*
-   *  弃用
-   * Agora 不推荐使用。 低延时模式 true: 低延时，不保证画质。
-   * false:（默认值）高延时，保证画质。
+   *  Deprecated
+   * This parameter is deprecated. Latency mode: true: Low latency with unassured quality.
+   * false: (Default) High latency with assured quality.
    */
   lowLatency?: boolean;
   /*
-   * 用于旁路直播的输出视频的 GOP（Group of Pictures)。单位为帧。默认值为 30。
+   * GOP (Group of Pictures) in fps of the video frames for Media Push. The default value is 30.
    */
   videoGop?: number;
   /*
-   * 用于旁路直播的输出视频的编码规格。可以设置为 66、77 或 100，详见 VideoCodecProfileType 。
-   * 如果你把这个参数设为其他值，Agora 服务器会将其调整为默认值。
+   * Video codec profile type for Media Push. Set it as 66, 77, or 100 (default). See VideoCodecProfileType for details.
+   * If you set this parameter to any other value, Agora adjusts it to the default value.
    */
   videoCodecProfile?: VideoCodecProfileType;
   /*
-   * 用于旁路直播的输出视频的背景色，格式为 RGB 定义下的十六进制整数，不要带 # 号，如 0xFFB6C1 表示浅粉色。默认0x000000，黑色。
+   * The background color in RGB hex value. Value only. Do not include a preceeding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
    */
   backgroundColor?: number;
   /*
-   * 用于旁路直播的输出视频的编解码类型。详见 VideoCodecTypeForStream 。
+   * Video codec profile types for Media Push. See VideoCodecTypeForStream .
    */
   videoCodecType?: VideoCodecTypeForStream;
   /*
-   * 参与合图的用户数量，默认 0。取值范围为 [0,17]。
+   * The number of users in the video mixing. The value range is [0,17].
    */
   userCount?: number;
   /*
-   * 用于管理参与旁路直播的视频转码合图的用户。最多支持 17 人同时参与转码合图。详见 TranscodingUser 。
+   * Manages the user layout configuration in the Media Push. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser .
    */
   transcodingUsers?: TranscodingUser[];
   /*
-   * 预留参数：用户自定义的发送到旁路推流客户端的信息，用于填充 H264/H265 视频中 SEI 帧内容。长度限制：4096 字节。关于 SEI 的详细信息，详见 SEI 帧相关问题。
+   * Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN client. Maximum length: 4096 bytes. For more information on SEI, see SEI-related questions.
    */
   transcodingExtraInfo?: string;
   /*
-   *  弃用
-   * 已废弃，Agora 不推荐使用。 发送给 CDN 客户端的 metadata。
+   *  Deprecated
+   * This parameter is deprecated. The metadata sent to the CDN client.
    */
   metadata?: string;
   /*
-   * 直播视频上的水印。图片格式需为 PNG。详见 RtcImage 。
-   * 你可以添加一个水印，或使用数组的方式添加多个水印。该参数与 watermarkCount搭配使用。
+   * The watermark on the live video. The image format needs to be PNG. See RtcImage .
+   * You can add one watermark, or add multiple watermarks using an array. This parameter is used with watermarkCount.
    */
   watermark?: RtcImage[];
   /*
-   * 直播视频上的水印的数量。水印和背景图的总数量需大于等于 0 且小于等于 10。该参数与 watermark 搭配使用。
+   * The number of watermarks on the live video. The total number of watermarks and background images can range from 0 to 10. This parameter is used with watermark.
    */
   watermarkCount?: number;
   /*
-   * 直播视频上的背景图。图片格式需为 PNG。详见 RtcImage 。
-   * 你可以添加一张背景图，或使用数组的方式添加多张背景图。该参数与 backgroundImageCount 搭配使用。
+   * The number of background images on the live video. The image format needs to be PNG. See RtcImage .
+   * You can add a background image or use an array to add multiple background images. This parameter is used with backgroundImageCount.
    */
   backgroundImage?: RtcImage[];
   /*
-   * 直播视频上的背景图的数量。水印和背景图的总数量需大于等于 0 且小于等于 10。该参数与 backgroundImage 搭配使用。
+   * The number of background images on the live video. The total number of watermarks and background images can range from 0 to 10. This parameter is used with backgroundImage.
    */
   backgroundImageCount?: number;
   /*
-   * 用于旁路推流的输出媒体流的音频采样率 (Hz)，详见 AudioSampleRateType 。
+   * The audio sampling rate (Hz) of the output media stream. See AudioSampleRateType .
    */
   audioSampleRate?: AudioSampleRateType;
   /*
-   * 用于旁路直播的输出音频的码率。单位为 Kbps，默认值为 48，最大值为 128。
+   * Bitrate (Kbps) of the audio output stream for Media Push. The default value is 48, and the highest value is 128.
    */
   audioBitrate?: number;
   /*
-   * 用于旁路直播的输出音频的声道数，默认值为 1。取值范围为 [1,5] 中的整型，建议取 1 或 2。3、4、5 需要特殊播放器支持： 1: （默认）单声道
-   * 2: 双声道
-   * 3: 三声道
-   * 4: 四声道
-   * 5: 五声道
+   * The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5. 1: (Default) Mono.
+   * 2: Stereo.
+   * 3: Three audio channels.
+   * 4: Four audio channels.
+   * 5: Five audio channels.
    */
   audioChannels?: number;
   /*
-   * 用于旁路直播输出音频的编码规格。详见 AudioCodecProfileType 。
+   * Audio codec profile type for Media Push. See AudioCodecProfileType .
    */
   audioCodecProfile?: AudioCodecProfileType;
   /*
-   * 转码推流的高级功能。详见 LiveStreamAdvancedFeature 。
+   * Advanced features of the Media Push with transcoding. See LiveStreamAdvancedFeature .
    */
   advancedFeatures?: LiveStreamAdvancedFeature[];
   /*
-   * 开启的高级功能数量。默认值为 0。
+   * The number of enabled advanced features. The default value is 0.
    */
   advancedFeatureCount?: number;
 }
 
 /*
- * 参与本地合图的视频流。
+ * The video streams for the video mixing on the local client.
  */
 export class TranscodingVideoStream {
   /*
-   * 参与本地合图的视频源类型。详见 VideoSourceType 。
+   * The source type of video for the video mixing on the local client. See VideoSourceType .
    */
   sourceType?: MediaSourceType;
   /*
-   * 远端用户 ID。 请仅在参与本地合图的视频源类型为 VideoSourceRemote 时，使用该参数。
+   * The ID of the remote user.Use this parameter only when the source type of the video for the video mixingonthe local client is VideoSourceRemote.
    */
   remoteUserUid?: number;
   /*
-   * 图像的 URL。 请仅在参与本地合图的视频源类型为
+   * The URL of the image.Use this parameter only when the source type of the video for the video mixing on the local client is
    */
   imageUrl?: string;
   /*
-   * 参与本地合图的视频的左上角相对于合图画布左上角（原点）的横向位移。
+   * The horizontal displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
    */
   x?: number;
   /*
-   * 参与本地合图的视频的左上角相对于合图画布左上角（原点）的纵向位移。
+   * The vertical displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
    */
   y?: number;
   /*
-   * 参与本地合图的视频的宽度 (px)。
+   * The width (px) of the video for the video mixing on the local client.
    */
   width?: number;
   /*
-   * 参与本地合图的视频的高度 (px)。
+   * The height (px) of the video for the video mixing on the local client.
    */
   height?: number;
   /*
-   * 参与本地合图的视频所属的图层的编号。取值范围为 [0,100]。 0:（默认值）图层在最下层。
-   * 100: 图层在最上层。
+   * The number of the layer to which the video for the video mixing on the local client belongs. The value range is [0,100].
+   * 0: (Default) The layer is at the bottom.
+   * 100: The layer is at the top.
    */
   zOrder?: number;
   /*
-   * 参与本地合图的视频的透明度。取值范围为 [0.0,1.0]。 0.0 表示透明度为完全透明，1.0 表示透明度为完全不透明。
+   * The transparency of the video for the video mixing on the local client. The value range is [0.0,1.0]. 0.0 means the transparency is completely transparent. 1.0 means the transparency is opaque.
    */
   alpha?: number;
   /*
-   * 是否对参与本地合图的的视频进行镜像：
-   * true: 镜像。
-   * false: （默认值）不镜像。 该参数仅对视频源类型为
+   * Whether to mirror the video for the video mixing on the local client.
+   * true: Mirror the captured video.
+   * false: (Default) Do not mirror the captured video. The paramter only works for videos with the source type
    */
   mirror?: boolean;
 }
 
 /*
- * 本地合图的配置。
+ * The configuration of the video mixing on the local client.
  */
 export class LocalTranscoderConfiguration {
   /*
-   * 参与本地合图的视频流的数量。
+   * The number of the video streams for the video mixing on the local client.
    */
   streamCount?: number;
   /*
-   * 参与本地合图的视频流。详见 TranscodingVideoStream 。
+   * The video streams for the video mixing on the local client. See TranscodingVideoStream .
    */
   VideoInputStreams?: TranscodingVideoStream[];
   /*
-   * 本地合图后，合图视频的编码配置。详见 VideoEncoderConfiguration 。
+   * The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration .
    */
   videoOutputConfiguration?: VideoEncoderConfiguration;
 }
 
 /*
- * Last mile 网络探测配置。
+ * Configurations of the last-mile network test.
  */
 export class LastmileProbeConfig {
   /*
-   * 是否探测上行网络。有些用户，如直播频道中的普通观众，不需要进行网络探测: true: 探测。
-   * false: 不探测。
+   * Sets whether to test the uplink network. Some users, for example, the audience members in a LIVE_BROADCASTING channel, do not need such a test.
+   * true: Test.
+   * false: Not test.
    */
   probeUplink?: boolean;
   /*
-   * 是否探测下行网络。 true: 探测。
-   * false: 不探测。
+   * Sets whether to test the downlink network:
+   * true: Test.
+   * false: Not test.
    */
   probeDownlink?: boolean;
   /*
-   * 用户期望的最高发送码率，单位为 bps，范围为 [100000,5000000]。Agora 推荐参考 setVideoEncoderConfiguration 中的码率值设置该参数的值。
+   * The expected maximum uplink bitrate (bps) of the local user. The value range is [100000, 5000000]. Agora recommends setVideoEncoderConfiguration referring to to set the value.
    */
   expectedUplinkBitrate?: number;
   /*
-   * 用户期望的最高接收码率，单位为 bps，范围为 [100000,5000000]。
+   * The expected maximum downlink bitrate (bps) of the local user. The value range is [100000,5000000].
    */
   expectedDownlinkBitrate?: number;
 }
 
 /*
- * Last mile 质量探测结果的状态。
+ * The status of the last-mile probe test.
  */
 export enum LastmileProbeResultState {
   /*
-   * 1: 表示本次 last mile 质量探测的结果是完整的。
+   * 1: The last-mile network probe test is complete.
    */
   LastmileProbeResultComplete = 1,
   /*
-   * 2: 表示本次 last mile 质量探测未进行带宽预测，因此结果不完整。一个可能的原因是测试资源暂时受限。
+   * 2: The last-mile network probe test is incomplete because the bandwidth estimation is not available due to limited test resources. One possible reason is that testing resources are temporarily limited.
    */
   LastmileProbeResultIncompleteNoBwe = 2,
   /*
-   * 3: 未进行 last mile 质量探测。一个可能的原因是网络连接中断。
+   * 3: The last-mile network probe test is not carried out. Probably due to poor network conditions.
    */
   LastmileProbeResultUnavailable = 3,
 }
 
 /*
- * 上行或下行 Last mile 网络质量探测结果。
+ * Results of the uplink or downlink last-mile network test.
  */
 export class LastmileProbeOneWayResult {
   /*
-   * 丢包率。
+   * The packet loss rate (%).
    */
   packetLossRate?: number;
   /*
-   * 网络抖动 (ms)。
+   * The network jitter (ms).
    */
   jitter?: number;
   /*
-   * 可用网络带宽预估 (bps)。
+   * The estimated available bandwidth (bps).
    */
   availableBandwidth?: number;
 }
 
 /*
- * 上下行 Last mile 网络质量探测结果。
+ * Results of the uplink and downlink last-mile network tests.
  */
 export class LastmileProbeResult {
   /*
-   * Last mile 质量探测结果的状态。详见: LastmileProbeResultState 。
+   * The status of the last-mile probe test. See LastmileProbeResultState .
    */
   state?: LastmileProbeResultState;
   /*
-   * 上行网络质量报告。详见 LastmileProbeOneWayResult 。
+   * Results of the uplink last-mile network test. See LastmileProbeOneWayResult .
    */
   uplinkReport?: LastmileProbeOneWayResult;
   /*
-   * 下行网络质量报告。详见 LastmileProbeOneWayResult 。
+   * Results of the downlink last-mile network test. See LastmileProbeOneWayResult .
    */
   downlinkReport?: LastmileProbeOneWayResult;
   /*
-   * 往返时延 (ms)。
+   * The round-trip time (ms).
    */
   rtt?: number;
 }
 
 /*
- * 网络连接状态发生变化的原因。
+ * Reasons causing the change of the connection state.
  */
 export enum ConnectionChangedReasonType {
   /*
-   * 0: 建立网络连接中。
+   * 0: The SDK is connecting to the Agora edge server.
    */
   ConnectionChangedConnecting = 0,
   /*
-   * 1: 成功加入频道。
+   * 1: The SDK has joined the channel successfully.
    */
   ConnectionChangedJoinSuccess = 1,
   /*
-   * 2: 网络连接中断。
+   * 2: The connection between the SDK and the Agora edge server is interrupted.
    */
   ConnectionChangedInterrupted = 2,
   /*
-   * 3: 网络连接被服务器禁止。服务端踢人场景时会报这个错。
+   * 3: The connection between the SDK and the Agora edge server is banned by the Agora edge server. This error occurs when the user is kicked out of the channel by the server.
    */
   ConnectionChangedBannedByServer = 3,
   /*
-   * 4: 加入频道失败。SDK 在尝试加入频道 20 分钟后还是没能加入频道，会返回该状态，并停止尝试重连。
+   * 4: The SDK fails to join the channel. When the SDK fails to join the channel for more than 20 minutes, this error occurs and the SDK stops reconnecting to the channel.
    */
   ConnectionChangedJoinFailed = 4,
   /*
-   * 5: 离开频道。
+   * 5: The SDK has left the channel.
    */
   ConnectionChangedLeaveChannel = 5,
   /*
-   * 6: 不是有效的 APP ID。请更换有效的 APP ID 重新加入频道。
+   * 6: The connection failed because the App ID is not valid. Please rejoin the channel with a valid App ID.
    */
   ConnectionChangedInvalidAppId = 6,
   /*
-   * 7: 不是有效的频道名。请更换有效的频道名重新加入频道。
+   * 7: The connection failed since channel name is not valid. Please rejoin the channel with a valid channel name.
    */
   ConnectionChangedInvalidChannelName = 7,
   /*
-   * 8: 生成的 Token 无效。一般有以下原因： 在控制台上启用了 App Certificate，但加入频道未使用 Token。当启用了 App Certificate，必须使用 Token。
-   * 在调用 joinChannelWithOptions 加入频道时指定的用户 ID 与生成 Token 时传入的用户 ID 不一致。
+   * 8: The connection failed because the token is not valid. Typical reasons include:
+   * The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
+   * Theuid specified when calling joinChannelWithOptions to join the channel is inconsistent with the uid passed in when generating the token.
    */
   ConnectionChangedInvalidToken = 8,
   /*
-   * 9: 当前使用的 Token 过期，不再有效，需要重新在你的服务端申请生成 Token。
+   * 9: The connection failed since token is expired.
    */
   ConnectionChangedTokenExpired = 9,
   /*
-   * 10: 此用户被服务器禁止。一般有以下原因： 用户已进入频道，再次调用加入频道的 API，例如 joinChannelWithOptions，会返回此状态。停止调用该方法即可。
-   * 用户在进行通话测试时尝试加入频道。等待通话测试结束后再加入频道即可。
+   * 10: The connection is rejected by server. Typical reasons include:
+   * The user is already in the channel and still calls a method, for example,joinChannelWithOptions, to join the channel. Stop calling this method to clear this error.
+   * The user tries to join the channel when calling for a call test. The user needs to call the channel after the call test ends.
    */
   ConnectionChangedRejectedByServer = 10,
   /*
-   * 11: 由于设置了代理服务器，SDK 尝试重连。
+   * 11: The connection state changed to reconnecting because the SDK has set a proxy server.
    */
   ConnectionChangedSettingProxyServer = 11,
   /*
-   * 12: 更新 Token 引起网络连接状态改变。
+   * 12: The connection state changed because the token is renewed.
    */
   ConnectionChangedRenewToken = 12,
   /*
-   * 13: 客户端 IP 地址变更，可能是由于网络类型，或网络运营商的 IP 或端口发生改变引起。
+   * 13: The IP address of the client has changed, possibly because the network type, IP address, or port has been changed.
    */
   ConnectionChangedClientIpAddressChanged = 13,
   /*
-   * 14: SDK 和服务器连接保活超时，进入自动重连状态。
+   * 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The connection state changes to .
    */
   ConnectionChangedKeepAliveTimeout = 14,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ConnectionChangedRejoinSuccess = 15,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ConnectionChangedLost = 16,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ConnectionChangedEchoTest = 17,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ConnectionChangedClientIpAddressChangedByUser = 18,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ConnectionChangedSameUidLogin = 19,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ConnectionChangedTooManyBroadcasters = 20,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum ClientRoleChangeFailedReason {
   /*
-   * TODO(doc)
+   * @ignore
    */
   ClientRoleChangeFailedTooManyBroadcasters = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ClientRoleChangeFailedNotAuthorized = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ClientRoleChangeFailedRequestTimeOut = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   ClientRoleChangeFailedConnectionFailed = 4,
 }
 
 /*
- * 网络连接类型。
+ * Network types.
  */
 export enum NetworkType {
   /*
-   * -1: 网络连接类型未知。
+   * -1: The network type is unknown.</pd>
    */
   NetworkTypeUnknown = -1,
   /*
-   * 0: 网络连接已断开。
+   * 0: The SDK disconnects from the network.
    */
   NetworkTypeDisconnected = 0,
   /*
-   * 1: 网络类型为 LAN。
+   * 1: The network type is LAN.
    */
   NetworkTypeLan = 1,
   /*
-   * 2: 网络类型为 Wi-Fi (包含热点）。
+   * 2: The network type is Wi-Fi (including hotspots).
    */
   NetworkTypeWifi = 2,
   /*
-   * 3: 网络类型为 2G 移动网络。
+   * 3: The network type is mobile 2G.
    */
   NetworkTypeMobile2g = 3,
   /*
-   * 4: 网络类型为 3G 移动网络。
+   * 4: The network type is mobile 3G.
    */
   NetworkTypeMobile3g = 4,
   /*
-   * 5: 网络类型为 4G 移动网络。
+   * 5: The network type is mobile 4G.
    */
   NetworkTypeMobile4g = 5,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum VideoViewSetupMode {
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoViewSetupReplace = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoViewSetupAdd = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   VideoViewSetupRemove = 2,
 }
 
 /*
- * 视频画布对象的属性。
+ * Attributes of video canvas object.
  */
 export class VideoCanvas {
   /*
-   * 视频显示窗口。
+   * Video display window.
    */
   view?: any;
   /*
-   * 视频渲染模式，详见 RenderModeType 。
+   * The rendering mode of the video. See RenderModeType .
    */
   renderMode?: RenderModeType;
   /*
-   * 视图镜像模式，详见 VideoMirrorModeType 。 本地视图镜像模式：如果你使用前置摄像头，默认启动本地视图镜像模式；如果你使用后置摄像头，默认关闭本地视图镜像模式。
-   * 远端用户视图镜像模式：默认关闭远端用户的镜像模式。
+   * The mirror mode of the view. See VideoMirrorModeType . For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
+   * For the remote user: The mirror mode is disabled by default.
    */
   mirrorMode?: VideoMirrorModeType;
   /*
-   * 用户 ID。
+   * The user ID.
    */
   uid?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   isScreenView?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   priv?: number[];
   /*
-   * TODO(doc)
+   * @ignore
    */
   priv_size?: number;
   /*
-   * 视频源的类型，详见 VideoSourceType 。
+   * The type of the video source, see VideoSourceType .
    */
   sourceType?: VideoSourceType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   cropArea?: Rectangle;
   /*
-   * TODO(doc)
+   * @ignore
    */
   setupMode?: VideoViewSetupMode;
 }
 
 /*
- * 亮度明暗对比度。
+ * The contrast level.
  */
 export enum LighteningContrastLevel {
   /*
-   * TODO(doc)
+   * @ignore
    */
   LighteningContrastLow = 0,
   /*
-   * 正常对比度。
+   * Normal contrast level.
    */
   LighteningContrastNormal = 1,
   /*
-   * 高对比度。
+   * High contrast level.
    */
   LighteningContrastHigh = 2,
 }
 
 /*
- *  美颜选项。
+ * Image enhancement options.
  */
 export class BeautyOptions {
   /*
-   * 对比度，常与 lighteningLevel 搭配使用。取值越大，明暗对比程度越大。详见 LighteningContrastLevel 。
+   * The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark. See LighteningContrastLevel .
    */
   lighteningContrastLevel?: LighteningContrastLevel;
   /*
-   * 美白程度，取值范围为 [0.0,1.0]，其中 0.0 表示原始亮度，默认值为 0.0。取值越大，美白程度越大。
+   * The brightness level. The value ranges from 0.0 (original) to 1.0. The default value is 0.0. The greater the value, the greater the degree of whitening.
    */
   lighteningLevel?: number;
   /*
-   * 磨皮程度，取值范围为 [0.0,1.0]，其中 0.0 表示原始磨皮程度，默认值为 0.0。取值越大，磨皮程度越大。
+   * The value ranges from 0.0 (original) to 1.0. The default value is 0.0. The greater the value, the greater the degree of skin grinding.
    */
   smoothnessLevel?: number;
   /*
-   * 红润度，取值范围为 [0.0,1.0]，其中 0.0 表示原始红润度，默认值为 0.0。取值越大，红润程度越大。
+   * The redness level. The value ranges from 0.0 (original) to 1.0. The default value is 0.0. The larger the value, the greater the rosy degree.
    */
   rednessLevel?: number;
   /*
-   * 锐化程度，取值范围为 [0.0,1.0]，其中 0.0 表示原始锐度，默认值为 0.0。取值越大，锐化程度越大。
+   * The sharpness level. The value ranges from 0.0 (original) to 1.0. The default value is 0.0. The larger the value, the greater the sharpening degree.
    */
   sharpnessLevel?: number;
 }
 
 /*
- * 自定义的背景图类型。
+ * The type of the custom background image.
  */
 export enum BackgroundSourceType {
   /*
-   * 1:（默认）背景图为纯色。
+   * 1: (Default) The background image is a solid color.
    */
   BackgroundColor = 1,
   /*
-   * 背景图为 PNG、JPG 格式的图片。
+   * The background image is a file in PNG or JPG format.
    */
   BackgroundImg = 2,
   /*
-   * 将虚化处理后的背景作为背景图。
+   * The background image is the blurred background.
    */
   BackgroundBlur = 3,
 }
 
 /*
- * 自定义背景图的虚化程度。
+ * The degree of blurring applied to the custom background image.
  */
 export enum BackgroundBlurDegree {
   /*
-   * 1: 自定义背景图的虚化程度为低。用户差不多能看清背景。
+   * 1: The degree of blurring applied to the custom background image is low. The user can almost see the background clearly.
    */
   BlurDegreeLow = 1,
   /*
-   * 自定义背景图的虚化程度为中。用户较难看清背景。
+   * The degree of blurring applied to the custom background image is medium. It is difficult for the user to recognize details in the background.
    */
   BlurDegreeMedium = 2,
   /*
-   * （默认）自定义背景图的虚化程度为高。用户很难看清背景。
+   * (Default) The degree of blurring applied to the custom background image is high. The user can barely see any distinguishing features in the background.
    */
   BlurDegreeHigh = 3,
 }
 
 /*
- * 自定义的背景。
+ * The custom background image.
  */
 export class VirtualBackgroundSource {
   /*
-   * TODO(doc)
+   * @ignore
    */
   background_source_type?: BackgroundSourceType;
   /*
-   * 自定义的背景图颜色。格式为 RGB 定义下的十六进制整数，不要带 # 号，如 0xFFB6C1 表示浅粉色。 默认值为 0xFFFFFF，表示白色。 取值范围为 [0x000000，0xffffff]。如果取值非法，SDK 会用白色背景图替换原背景图。 该参数仅在自定义背景图类型为 BackgroundColor 时生效。
+   * The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BackgroundColor.
    */
   color?: number;
   /*
-   * 自定义背景图的本地绝对路径。支持 PNG 和 JPG 格式。如果路径无效，SDK 会用白色背景图替换原背景图。 该参数仅在自定义背景图类型为 BackgroundImg 时生效。
+   * The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BackgroundImg.
    */
   source?: string;
   /*
-   * 自定义背景图的模糊程度。该参数仅在自定义背景图类型为 BackgroundBlur 时生效。
+   * The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is BackgroundBlur.
    */
   blur_degree?: BackgroundBlurDegree;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class FishCorrectionParams {
   /*
-   * TODO(doc)
+   * @ignore
    */
   _x_center?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   _y_center?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   _scale_factor?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   _focal_length?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   _pol_focal_length?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   _split_height?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   _ss?: number[];
 }
 
 /*
- * 预设的美声效果选项。
+ * The options for SDK preset voice beautifier effects.
  */
 export enum VoiceBeautifierPreset {
   /*
-   * 原声，即关闭美声效果。
+   * Turn off voice beautifier effects and use the original voice.
    */
   VoiceBeautifierOff = 0x00000000,
   /*
-   * 磁性（男）。
-   * 该设置仅对男声有效，请勿用于设置女声，否则音频会失真。
+   * A more magnetic voice.
+   * Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may experience vocal distortion.
    */
   ChatBeautifierMagnetic = 0x01010100,
   /*
-   * 清新（女）。
-   * 该设置仅对女声有效，请勿用于设置男声，否则音频会失真。
+   * A fresher voice.
+   * Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
    */
   ChatBeautifierFresh = 0x01010200,
   /*
-   * 活力（女）。
-   * 该设置仅对女声有效，请勿用于设置男声，否则音频会失真。
+   * A more vital voice.
+   * Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
    */
   ChatBeautifierVitality = 0x01010300,
   /*
-   * 歌唱美声。 如果调用 setVoiceBeautifierPreset (SingingBeautifier)，你可以美化男声并添加歌声在小房间的混响效果。请勿用于设置女声，否则音频会失真。
-   * 如果调用 setVoiceBeautifierParameters (SingingBeautifier, param1, param2)，你可以美化男声或女声并添加混响效果。
+   * Singing beautifier effect. If you call setVoiceBeautifierPreset (SingingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.
+   * If you call setVoiceBeautifierParameters (SingingBeautifier, param1, param2), you can beautify a male- or female-sounding voice and add a reverberation effect.
    */
   SingingBeautifier = 0x01020100,
   /*
-   * 浑厚。
+   * A more vigorous voice.
    */
   TimbreTransformationVigorous = 0x01030100,
   /*
-   * 低沉。
+   * A deep voice.
    */
   TimbreTransformationDeep = 0x01030200,
   /*
-   * 圆润。
+   * A mellower voice.
    */
   TimbreTransformationMellow = 0x01030300,
   /*
-   * 假音。
+   * Falsetto.
    */
   TimbreTransformationFalsetto = 0x01030400,
   /*
-   * 饱满。
+   * A fuller voice.
    */
   TimbreTransformationFull = 0x01030500,
   /*
-   * 清澈。
+   * A clearer voice.
    */
   TimbreTransformationClear = 0x01030600,
   /*
-   * 高亢。
+   * A more resounding voice.
    */
   TimbreTransformationResounding = 0x01030700,
   /*
-   * 嘹亮。
+   * A more ringing voice.
    */
   TimbreTransformationRinging = 0x01030800,
   /*
-   * TODO(doc)
+   * A ultra-high quality voice, which makes the audio clearer and restores more details.
+   * To achieve better audio effect quality, Agora recommends that you set the profile of setAudioProfile to AudioProfileMusicHighQuality (4) or AudioProfileMusicHighQualityStereo (5) and scenario to AudioScenarioHighDefinition(6) before calling setVoiceBeautifierPreset .
+   * If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
    */
   UltraHighQualityVoice = 0x01040100,
 }
 
 /*
- * 预设的音效选项。
- * 为获取更好的人声效果，Agora 建议在使用以下预设音效前将 setAudioProfile 的 profile 参数设置为 AudioProfileMusicHighQuality 或 AudioProfileMusicHighQualityStereo： RoomAcousticsKtv
+ * Preset voice effects.
+ * For better voice effects, Agora recommends settingthe profile parameter of setAudioProfile to AudioProfileMusicHighQuality or AudioProfileMusicHighQualityStereo before using the following presets: RoomAcousticsKtv
  * RoomAcousticsVocalConcert
  * RoomAcousticsStudio
  * RoomAcousticsPhonograph
@@ -3551,228 +3571,226 @@ export enum VoiceBeautifierPreset {
  */
 export enum AudioEffectPreset {
   /*
-   * 原声，即关闭人声音效。
+   * Turn off voice effects, that is, use the original voice.
    */
   AudioEffectOff = 0x00000000,
   /*
-   * KTV。
+   * The voice effect typical of a KTV venue.
    */
   RoomAcousticsKtv = 0x02010100,
   /*
-   * 演唱会。
+   * The voice effect typical of a concert hall.
    */
   RoomAcousticsVocalConcert = 0x02010200,
   /*
-   * 录音棚。
+   * The voice effect typical of a recording studio.
    */
   RoomAcousticsStudio = 0x02010300,
   /*
-   * 留声机。
+   * The voice effect typical of a vintage phonograph.
    */
   RoomAcousticsPhonograph = 0x02010400,
   /*
-   * 虚拟立体声，即 SDK 将单声道的音频渲染出双声道的音效。
-   * 使用该预设音效前，你需要将 setAudioProfile 的 profile 参数设置为 AudioProfileMusicHighQuality 或 AudioProfileMusicHighQualityStereo，否则该预设音效的设置无效。
+   * The virtual stereo effect, which renders monophonic audio as stereo audio.
+   * Before using this preset, set the profile parameter of setAudioProfile to AudioProfileMusicHighQuality or AudioProfileMusicHighQualityStereo; otherwise, the preset setting is invalid.
    */
   RoomAcousticsVirtualStereo = 0x02010500,
   /*
-   * 空旷。
+   * A more spatial voice effect.
    */
   RoomAcousticsSpacial = 0x02010600,
   /*
-   * 空灵。
+   * A more ethereal voice effect.
    */
   RoomAcousticsEthereal = 0x02010700,
   /*
-   * 3D 人声，即 SDK 将音频渲染出在用户周围环绕的效果。环绕周期默认为 10 秒。设置该音效后，你还可以调用 setAudioEffectParameters 修改环绕周期。 使用该预设音效前，你需要将 setAudioProfile 的 profile 参数设置为 AudioProfileMusicStandardStereo 或 AudioProfileMusicHighQualityStereo，否则该预设音效的设置无效。
-   * 启用 3D 人声后，用户需要使用支持双声道的音频播放设备才能听到预期效果。
+   * A 3D voice effect that makes the voice appear to be moving around the user. The default movement cycle is 10 seconds. After setting this effect, you can call to setAudioEffectParameters modify the movement period. Before using this preset, set the profile parameter of setAudioProfile to AudioProfileMusicStandardStereo or AudioProfileMusicHighQualityStereo; otherwise, the preset setting is invalid.
+   * If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
    */
   RoomAcoustics3dVoice = 0x02010800,
   /*
-   * 大叔。
-   * 建议用于处理男声，否则无法达到预期效果。
+   * A middle-aged man's voice.
+   * Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
    */
   VoiceChangerEffectUncle = 0x02020100,
   /*
-   * 老年男性。
-   * 建议用于处理男声，否则无法达到预期效果。
+   * A senior man's voice.
+   * Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
    */
   VoiceChangerEffectOldman = 0x02020200,
   /*
-   * 男孩。
-   * 建议用于处理男声，否则无法达到预期效果。
+   * A boy's voice.
+   * Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
    */
   VoiceChangerEffectBoy = 0x02020300,
   /*
-   * 少女。
-   * 建议用于处理女声，否则无法达到预期效果。
+   * A young woman's voice.
+   * Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
    */
   VoiceChangerEffectSister = 0x02020400,
   /*
-   * 女孩。
-   * 建议用于处理女声，否则无法达到预期效果。
+   * A girl's voice.
+   * Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
    */
   VoiceChangerEffectGirl = 0x02020500,
   /*
-   * 猪八戒。
+   * The voice of Pig King, a character in Journey to the West who has a voice like a growling bear.
    */
   VoiceChangerEffectPigking = 0x02020600,
   /*
-   * 绿巨人。
+   * The Hulk's voice.
    */
   VoiceChangerEffectHulk = 0x02020700,
   /*
-   * R&B。
-   * 使用该预设音效前，你需要将 setAudioProfile 的 profile 参数设置为 AudioProfileMusicHighQuality 或 AudioProfileMusicHighQualityStereo，否则该预设音效的设置无效。
+   * The voice effect typical of R&B music.
+   * Before using this preset, set the profile parameter of setAudioProfile to AudioProfileMusicHighQuality or AudioProfileMusicHighQualityStereo; otherwise, the preset setting is invalid.
    */
   StyleTransformationRnb = 0x02030100,
   /*
-   * 流行。
-   * 使用该预设音效前，你需要将 setAudioProfile 的 profile 参数设置为 AudioProfileMusicHighQuality 或 AudioProfileMusicHighQualityStereo，否则该预设音效的设置无效。
+   * The voice effect typical of popular music.
+   * Before using this preset, set the profile parameter of setAudioProfile to AudioProfileMusicHighQuality or AudioProfileMusicHighQualityStereo; otherwise, the preset setting is invalid.
    */
   StyleTransformationPopular = 0x02030200,
   /*
-   * 电音，即 SDK 以主音音高为 C 的自然大调为基础修正音频的实际音高。设置该音效后，你还可以调用 setAudioEffectParameters 调整修音的基础调式和主音音高。
+   * A pitch correction effect that corrects the user's pitch based on the pitch of the natural C major scale. After setting this voice effect, you can call setAudioEffectParameters to adjust the basic mode of tuning and the pitch of the main tone.
    */
   PitchCorrection = 0x02040100,
 }
 
 /*
- * 预设的变声效果选项。
+ * The options for SDK preset voice conversion effects.
  */
 export enum VoiceConversionPreset {
   /*
-   * 原声，即关闭变声效果。
+   * Turn off voice conversion effects and use the original voice.
    */
   VoiceConversionOff = 0x00000000,
   /*
-   * 中性。为避免音频失真，请确保仅对女声设置该效果。
+   * A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
    */
   VoiceChangerNeutral = 0x03010100,
   /*
-   * 甜美。为避免音频失真，请确保仅对女声设置该效果。
+   * A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
    */
   VoiceChangerSweet = 0x03010200,
   /*
-   * 稳重。为避免音频失真，请确保仅对男声设置该效果。
+   * A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
   VoiceChangerSolid = 0x03010300,
   /*
-   * 低沉。为避免音频失真，请确保仅对男声设置该效果。
+   * A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
   VoiceChangerBass = 0x03010400,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class ScreenCaptureParameters {
   /*
-   * TODO(doc)
+   * @ignore
    */
   dimensions?: VideoDimensions;
   /*
-   * TODO(doc)
+   * @ignore
    */
   frameRate?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   bitrate?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   captureMouseCursor?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   windowFocus?: boolean;
   /*
-   * TODO(doc)
+   * @ignore
    */
   excludeWindowList?: any[];
   /*
-   * TODO(doc)
+   * @ignore
    */
   excludeWindowCount?: number;
 }
 
 /*
- *  录音音质。
+ * @ignore
  */
 export enum AudioRecordingQualityType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioRecordingQualityLow = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioRecordingQualityMedium = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioRecordingQualityHigh = 2,
 }
 
 /*
- * TODO(doc)
+ * Recording quality.
  */
 export enum AudioFileRecordingType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioFileRecordingMic = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioFileRecordingPlayback = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioFileRecordingMixed = 3,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum AudioEncodedFrameObserverPosition {
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioEncodedFrameObserverPositionRecord = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioEncodedFrameObserverPositionPlayback = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AudioEncodedFrameObserverPositionMixed = 3,
 }
 
 /*
- *  录音配置。
+ * Recording configuration.
  */
 export class AudioRecordingConfiguration {
   /*
-   * 录音文件在本地保存的绝对路径，需精确到文件名及格式。例如：C:\music\audio.mp4。 请确保你指定的路径存在并且可写。
+   * The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4. Ensure that the path for the recording file exists and is writable.
    */
   filePath?: string;
   /*
-   * 设置是否编码音频数据：
-   * true
-   * : 将音频数据用 AAC 编码。 false
-   * :（默认）不编码音频数据，直接保存录制的音频数据。
+   * Whether to encode the audio data: true
+   * : Encode audio data in AAC.
+   * false
+   * : (Default) Do not encode audio data, but save the recorded audio data directly.
    */
   encode?: boolean;
   /*
-   * 录音采样率（Hz）。
-   * 16000
-   * 32000 （默认）
+   * Recording sample rate (Hz). 16000
+   * (Default) 32000
    * 44100
-   * 48000 如果把该参数设为 44100 或 48000，为保证录音效果，Agora 推荐录制 WAV 文件或 quality 为
-   * AudioRecordingQualityMedium 或 AudioRecordingQualityHigh 的 AAC 文件。
+   * 48000 If you set this parameter to 44100 or 48000, Agora recommends recording WAV files, or AAC files with quality to be AgoraAudioRecordingQualityMedium or AgoraAudioRecordingQualityHigh for better recording quality.
    */
   sampleRate?: number;
   /*
@@ -3780,592 +3798,618 @@ export class AudioRecordingConfiguration {
    */
   fileRecordingType?: AudioFileRecordingType;
   /*
-   * 录音音质。详见 AudioRecordingQualityType 。 该参数仅适用于 AAC 文件。
+   * Recording quality. See AudioRecordingQualityType . This parameter applies to AAC files only.
    */
   quality?: AudioRecordingQualityType;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class AudioEncodedFrameObserverConfig {
   /*
-   * TODO(doc)
+   * @ignore
    */
   postionType?: AudioEncodedFrameObserverPosition;
   /*
-   * TODO(doc)
+   * @ignore
    */
   encodingType?: AudioEncodingType;
 }
 
 /*
- * 访问区域，即 SDK 连接的服务器所在的区域。
+ * The region for connection, i.e., the region where the server the SDK connects to is located.
  */
 export enum AreaCode {
   /*
-   * 中国大陆。
+   * Mainland China.
    */
   AreaCodeCn = 0x00000001,
   /*
-   * 北美区域。
+   * North America.
    */
   AreaCodeNa = 0x00000002,
   /*
-   * 欧洲区域。
+   * Europe.
    */
   AreaCodeEu = 0x00000004,
   /*
-   * 除中国以外的亚洲区域。
+   * Asia, excluding Mainland China.
    */
   AreaCodeAs = 0x00000008,
   /*
-   * 日本。
+   * Japan.
    */
   AreaCodeJp = 0x00000010,
   /*
-   * 印度。
+   * India.
    */
   AreaCodeIn = 0x00000020,
   /*
-   * 全球。
+   * Global.
    */
   AreaCodeGlob = 0xffffffff,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum AreaCodeEx {
   /*
-   * TODO(doc)
+   * @ignore
    */
   AreaCodeOc = 0x00000040,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AreaCodeSa = 0x00000080,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AreaCodeAf = 0x00000100,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AreaCodeKr = 0x00000200,
   /*
-   * TODO(doc)
+   * @ignore
    */
   AreaCodeOvs = 0xfffffffe,
 }
 
 /*
- * 跨频道媒体流转发出错的错误码。
+ * The error code of the channel media relay.
  */
 export enum ChannelMediaRelayError {
   /*
-   * 0: 一切正常。
+   * 0: No error.
    */
   RelayOk = 0,
   /*
-   * 1: 服务器回应出错。
+   * 1: An error occurs in the server response.
    */
   RelayErrorServerErrorResponse = 1,
   /*
-   * 2: 服务器无回应。
-   * 你可以调用 leaveChannel 方法离开频道。
-   * 该错误也可能是由于当前的 App ID 未开启跨频道连麦导致的。你可以申请开通跨频道连麦。
+   * 2: No server response.
+   * You can call leaveChannel to leave the channel.
+   * This error can also occur if your project has not enabled co-host token authentication. You can to enable the service for cohosting across channels before starting a channel media relay.
    */
   RelayErrorServerNoResponse = 2,
   /*
-   * 3: SDK 无法获取服务，可能是因为服务器资源有限导致。
+   * 3: The SDK fails to access the service, probably due to limited resources of the server.
    */
   RelayErrorNoResourceAvailable = 3,
   /*
-   * 4: 发起跨频道转发媒体流请求失败。
+   * 4: Fails to send the relay request.
    */
   RelayErrorFailedJoinSrc = 4,
   /*
-   * 5: 接受跨频道转发媒体流请求失败。
+   * 5: Fails to accept the relay request.
    */
   RelayErrorFailedJoinDest = 5,
   /*
-   * 6: 服务器接收跨频道转发媒体流失败。
+   * 6: The server fails to receive the media stream.
    */
   RelayErrorFailedPacketReceivedFromSrc = 6,
   /*
-   * 7: 服务器发送跨频道转发媒体流失败。
+   * 7: The server fails to send the media stream.
    */
   RelayErrorFailedPacketSentToDest = 7,
   /*
-   * 8: SDK 因网络质量不佳与服务器断开。你可以调用 leaveChannel 方法离开当前频道。
+   * 8: The SDK disconnects from the server due to poor network connections. You can call leaveChannel method to leave the channel.
    */
   RelayErrorServerConnectionLost = 8,
   /*
-   * 9: 服务器内部出错。
+   * 9: An internal error occurs in the server.
    */
   RelayErrorInternalError = 9,
   /*
-   * 10: 源频道的 Token 已过期。
+   * 10: The token of the source channel has expired.
    */
   RelayErrorSrcTokenExpired = 10,
   /*
-   * 11: 目标频道的 Token 已过期。
+   * 11: The token of the destination channel has expired.
    */
   RelayErrorDestTokenExpired = 11,
 }
 
 /*
- * 跨频道媒体流转发事件码。
+ * The event code of channel media relay.
  */
 export enum ChannelMediaRelayEvent {
   /*
-   * 0: 网络中断导致用户与服务器连接断开。
+   * 0: The user disconnects from the server due to a poor network connection.
    */
   RelayEventNetworkDisconnected = 0,
   /*
-   * 1: 用户与服务器建立连接。
+   * 1: The user is connected to the server.
    */
   RelayEventNetworkConnected = 1,
   /*
-   * 2: 用户已加入源频道。
+   * 2: The user joins the source channel.
    */
   RelayEventPacketJoinedSrcChannel = 2,
   /*
-   * 3: 用户已加入目标频道。
+   * 3: The user joins the destination channel.
    */
   RelayEventPacketJoinedDestChannel = 3,
   /*
-   * 4: SDK 开始向目标频道发送数据包。
+   * 4: The SDK starts relaying the media stream to the destination channel.
    */
   RelayEventPacketSentToDestChannel = 4,
   /*
-   * 5: 服务器收到了频道发送的视频流。
+   * 5: The server receives the audio stream from the source channel.
    */
   RelayEventPacketReceivedVideoFromSrc = 5,
   /*
-   * 6: 服务器收到了频道发送的音频流。
+   * 6: The server receives the audio stream from the source channel.
    */
   RelayEventPacketReceivedAudioFromSrc = 6,
   /*
-   * 7: 目标频道已更新。
+   * 7: The destination channel is updated.
    */
   RelayEventPacketUpdateDestChannel = 7,
   /*
-   * 8: 内部原因导致目标频道更新失败。
+   * 8: The destination channel update fails due to internal reasons.
    */
   RelayEventPacketUpdateDestChannelRefused = 8,
   /*
-   * 9: 目标频道未发生改变，即目标频道更新失败。
+   * 9: The destination channel does not change, which means that the destination channel fails to be updated.
    */
   RelayEventPacketUpdateDestChannelNotChange = 9,
   /*
-   * 10: 目标频道名为 NULL。
+   * 10: The destination channel name is NULL.
    */
   RelayEventPacketUpdateDestChannelIsNull = 10,
   /*
-   * 11: 视频属性已发送至服务器。
+   * 11: The video profile is sent to the server.
    */
   RelayEventVideoProfileUpdate = 11,
   /*
-   * 12: 暂停向目标频道转发媒体流成功。
+   * 12: The SDK successfully pauses relaying the media stream to destination channels.
    */
   RelayEventPauseSendPacketToDestChannelSuccess = 12,
   /*
-   * 13: 暂停向目标频道转发媒体流失败。
+   * 13: The SDK fails to pause relaying the media stream to destination channels.
    */
   RelayEventPauseSendPacketToDestChannelFailed = 13,
   /*
-   * 14: 恢复向目标频道转发媒体流成功。
+   * 14: The SDK successfully resumes relaying the media stream to destination channels.
    */
   RelayEventResumeSendPacketToDestChannelSuccess = 14,
   /*
-   * 15: 恢复向目标频道转发媒体流失败。
+   * 15: The SDK fails to resume relaying the media stream to destination channels.
    */
   RelayEventResumeSendPacketToDestChannelFailed = 15,
 }
 
 /*
- * 跨频道媒体流转发状态码。
+ * The state code of the channel media relay.
  */
 export enum ChannelMediaRelayState {
   /*
-   * 0: 初始状态。在成功调用 stopChannelMediaRelay 停止跨频道媒体流转发后， onChannelMediaRelayStateChanged 会回调该状态。
+   * 0: The initial state. After you successfullystop the channel media relay by calling stopChannelMediaRelay , the onChannelMediaRelayStateChanged callback returns this state.
    */
   RelayStateIdle = 0,
   /*
-   * 1: SDK 尝试跨频道。
+   * 1: The SDK tries to relay the media stream to the destination channel.
    */
   RelayStateConnecting = 1,
   /*
-   * 2: 源频道主播成功加入目标频道。
+   * 2: The SDK successfully relays the media stream to the destination channel.
    */
   RelayStateRunning = 2,
   /*
-   * 3: 发生异常，详见 onChannelMediaRelayStateChanged 的 code 参数提示的错误信息。
+   * 3: An error occurs. See code in onChannelMediaRelayStateChanged for the error code.
    */
   RelayStateFailure = 3,
 }
 
 /*
- *  ChannelMediaInfo 类定义。
+ * The definition of ChannelMediaInfo.
  */
 export class ChannelMediaInfo {
   /*
-   * 频道名。
+   * The channel name.
    */
   channelName?: string;
   /*
-   * 能加入频道的 Token。
+   * The token that enables the user to join the channel.
    */
   token?: string;
   /*
-   * 用户 ID。
+   * The user ID.
    */
   uid?: number;
 }
 
 /*
- *  ChannelMediaRelayConfiguration 类定义。
+ * The definition of ChannelMediaRelayConfiguration.
  */
 export class ChannelMediaRelayConfiguration {
   /*
-   * 源频道信息 ChannelMediaInfo ，包含如下成员： channelName：源频道名。默认值为 NULL，表示 SDK 填充当前的频道名。 uid：标识源频道中的转发媒体流的 UID。默认值为 0，表示 SDK 随机分配一个 uid。请确保设为 0。 token：能加入源频道的 token。由你在 srcInfo 中设置的 channelName 和 uid 生成。
-   * 如未启用 App Certificate，可直接将该参数设为默认值 NULL，表示 SDK 填充 App ID。
-   * 如已启用 App Certificate，则务必填入使用 channelName 和 uid 生成的 token，且其中的 uid 必须为 0。
+   * The information of the source channel ChannelMediaInfo . It contains the following members:
+   * channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.
+   * uid: The unique ID to identify the relay stream in the source channel. The default value is 0, which means the SDK generates a random uid. You must set it as 0.
+   * token: The token for joining the source channel. It is generated with the channelName and uid you set in srcInfo.
+   * If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
+   * If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.
    */
   srcInfo?: ChannelMediaInfo;
   /*
-   * 目标频道信息 ChannelMediaInfo，包含如下成员： channelName ：目标频道的频道名。 uid：标识目标频道中的转发媒体流的 UID。取值范围为 0 到（2 32-1），请确保与目标频道中的所有 UID 不同。默认值为 0，表示 SDK 随机分配一个 UID。请确保不要将该参数设为目标频道的主播的 UID，并与目标频道中的所有 UID 都不同。 token：能加入目标频道的 token。由你在 destInfos 中设置的 channelName 和 uid 生成。 如未启用 App Certificate，可直接将该参数设为默认值 NULL，表示 SDK 填充 App ID。
-   * 如已启用 App Certificate，则务必填入使用 channelName 和 uid 生成的 token。
+   * The information of the destination channel ChannelMediaInfo. It contains the following members:
+   * channelName : The name of the destination channel.
+   * uid: The unique ID to identify the relay stream in the destination channel. The value ranges from 0 to (232-1). To avoid UID conflicts, this UID must be different from any other UID in the destination channel. The default value is 0, which means the SDK generates a random UID. Do not set this parameter as the UID of the host in the destination channel, and ensure that this UID is different from any other UID in the channel.
+   * token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos.
+   * If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.
+   * If you have enabled the App Certificate, you must use the token generated with the channelName and uid.
    */
   destInfos?: ChannelMediaInfo[];
   /*
-   * 目标频道数量，默认值为 0，取值范围为 [0,4]。该参数应与你在 destInfo 中定义的 ChannelMediaInfo 数组的数目一致。
+   * The number of destination channels. The default value is 0, and the value range is from 0 to 4. Ensure that the value of this parameter corresponds to the number of ChannelMediaInfo structs you define in destInfo.
    */
   destCount?: number;
 }
 
 /*
- * 上行网络信息。
+ * The uplink network information.
  */
 export class UplinkNetworkInfo {
   /*
-   * 目标视频编码器的码率 (bps)。
+   * The target video encoder bitrate (bps).
    */
   video_encoder_target_bitrate_bps?: number;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class PeerDownlinkInfo {
   /*
-   * TODO(doc)
+   * @ignore
    */
   uid?: string;
   /*
-   * TODO(doc)
+   * @ignore
    */
   stream_type?: VideoStreamType;
   /*
-   * TODO(doc)
+   * @ignore
    */
   current_downscale_level?: RemoteVideoDownscaleLevel;
   /*
-   * TODO(doc)
+   * @ignore
    */
   expected_bitrate_bps?: number;
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export class DownlinkNetworkInfo {
   /*
-   * TODO(doc)
+   * @ignore
    */
   lastmile_buffer_delay_time_ms?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   bandwidth_estimation_bps?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   total_downscale_level_count?: number;
   /*
-   * TODO(doc)
+   * @ignore
    */
   peer_downlink_info?: PeerDownlinkInfo[];
   /*
-   * TODO(doc)
+   * @ignore
    */
   total_received_video_count?: number;
 }
 
 /*
- * 内置加密模式。
- * Agora 推荐使用 Aes128Gcm2 或 Aes256Gcm2 加密模式。这两种模式支持使用盐，安全性更高。
+ * The built-in encryption mode.
+ * Agora recommends using Aes128Gcm2 or Aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
  */
 export enum EncryptionMode {
   /*
-   * 1: 128 位 AES 加密，XTS 模式。
+   * 1: 128-bit AES encryption, XTS mode.
    */
   Aes128Xts = 1,
   /*
-   * 2: 128 位 AES 加密，ECB 模式。
+   * 2: 128-bit AES encryption, ECB mode.
    */
   Aes128Ecb = 2,
   /*
-   * 3: 256 位 AES 加密，XTS 模式。
+   * 3: 256-bit AES encryption, XTS mode.
    */
   Aes256Xts = 3,
   /*
-   * 4: 128 位 SM4 加密，ECB 模式。
+   * 4: 128-bit SM4 encryption, ECB mode.
    */
   Sm4128Ecb = 4,
   /*
-   * 5: 128 位 AES 加密，GCM 模式。
+   * 5: 128-bit AES encryption, GCM mode.
    */
   Aes128Gcm = 5,
   /*
-   * 6: 256 位 AES 加密，GCM 模式。
+   * 6: 256-bit AES encryption, GCM mode.
    */
   Aes256Gcm = 6,
   /*
-   * 7:（默认）128 位 AES 加密，GCM 模式。该加密模式需要设置盐（encryptionKdfSalt）。
+   * 7: (Default) 128-bit AES encryption, GCM mode. This encryption mode requires the setting of salt (encryptionKdfSalt).
    */
   Aes128Gcm2 = 7,
   /*
-   * 8: 256 位 AES 加密，GCM 模式。该加密模式需要设置盐（encryptionKdfSalt）。
+   * 8: 256-bit AES encryption, GCM mode. This encryption mode requires the setting of salt (encryptionKdfSalt).
    */
   Aes256Gcm2 = 8,
   /*
-   * 枚举值边界。
+   * Enumeration boundary.
    */
   ModeEnd = 9,
 }
 
 /*
- * 配置内置加密模式和密钥。
+ * Built-in encryption configurations.
  */
 export class EncryptionConfig {
   /*
-   * 内置加密模式。详见 EncryptionMode 。Agora 推荐使用 Aes128Gcm2 或 Aes256Gcm2 加密模式。这两种模式支持使用盐，安全性更高。
+   * The built-in encryption mode. See EncryptionMode . Agora recommends using Aes128Gcm2 or Aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
    */
   encryptionMode?: EncryptionMode;
   /*
-   * 内置加密密钥，字符串类型，长度无限制。Agora 推荐使用 32 字节的密钥。
-   * 如果未指定该参数或将该参数设置为 NULL，则无法启用内置加密，且 SDK 会返回错误码 -2。
+   * Encryption key in string type with unlimited length. Agora recommends using a 32-byte key.
+   * If you do not set an encryption key or set it as NULL, you cannot use the built-in encryption, and the SDK returns -2.
    */
   encryptionKey?: string;
   /*
-   * 盐，长度为 32 字节。Agora 推荐你在服务端使用 OpenSSL 生成盐。
-   * 只有在 Aes128Gcm2 或 Aes256Gcm2 加密模式下，该参数才生效。此时，需确保填入该参数的值不全为 0。
+   * Salt, 32 bytes in length. Agora recommends that you use OpenSSL to generate salt on the server side. See Media Stream Encryption for details.
+   * This parameter takes effect only in Aes128Gcm2 or Aes256Gcm2 encrypted mode. In this case, ensure that this parameter is not 0.
    */
   encryptionKdfSalt?: number[];
 }
 
 /*
- * 内置加密的错误类型。
+ * Encryption error type.
  */
 export enum EncryptionErrorType {
   /*
-   * 0: 内部原因。
+   * 0: Internal reason.
    */
   EncryptionErrorInternalFailure = 0,
   /*
-   * 1: 解密错误。请确保接收端和发送端使用的加密模式或密钥一致。
+   * 1: Decryption errors.
+   * Ensure that the receiver and the sender use the same encryption mode and key.
    */
   EncryptionErrorDecryptionFailure = 1,
   /*
-   * 2: 加密错误。
+   * 2: Encryption errors.
    */
   EncryptionErrorEncryptionFailure = 2,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum UploadErrorReason {
   /*
-   * TODO(doc)
+   * @ignore
    */
   UploadSuccess = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   UploadNetError = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   UploadServerError = 2,
 }
 
 /*
- * 设备权限类型。
+ * The type of the device permission.
  */
 export enum PermissionType {
   /*
-   * 0: 音频采集设备的权限。
+   * 0: Permission for the audio capture device.
    */
   RecordAudio = 0,
   /*
-   * 1: 摄像头权限。
+   * 1: Permission for the camera.
    */
   CAMERA = 1,
 }
 
 /*
- * 用户 User Account 的最大长度。
+ * The maximum length of the user account.
  */
 export enum MaxUserAccountLengthType {
   /*
-   * 用户 User Account 的最大长度为 255 个字符。
+   * The maximum length of the user account is 256 bytes.
    */
   MaxUserAccountLength = 256,
 }
 
 /*
- * 订阅状态。
+ * The subscribing state.
  */
 export enum StreamSubscribeState {
   /*
-   * 0: 加入频道后的初始订阅状态。
+   * 0: The initial publishing state after joining the channel.
    */
   SubStateIdle = 0,
   /*
-   * 1: 订阅失败。可能是因为： 远端用户： 调用 muteLocalAudioStream (true) 或 muteLocalVideoStream (true) 停止发送本地媒体流。
-   * 调用 disableAudio 或 disableVideo 关闭本地音频或视频模块。
-   * 调用 enableLocalAudio (false) 或 enableLocalVideo (false) 关闭本地音频或视频采集。
-   * 用户角色为观众。 本地用户调用以下方法停止接收远端媒体流： 调用 muteRemoteAudioStream (true)、 muteAllRemoteAudioStreams (true) 或 setDefaultMuteAllRemoteAudioStreams (true) 停止接收远端音频流。
-   * 调用 muteRemoteVideoStream (true)、 muteAllRemoteVideoStreams (true) 或 setDefaultMuteAllRemoteVideoStreams (true) 停止接收远端视频流。
+   * 1: Fails to subscribe to the remote stream. Possible reasons:
+   * Remote users:
+   * Calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.
+   * Calls disableAudio or disableVideo to disable the local audio or video module.
+   * Calls enableLocalAudio (false) or enableLocalVideo (false) to disable local audio or video capture.
+   * The role of the local user is audience. The local user calls the following method to stop receiving the remote media stream:
+   * Call muteRemoteAudioStream (true), muteAllRemoteAudioStreams (true) or setDefaultMuteAllRemoteAudioStreams (true) to stop receiving the remote audio stream.
+   * Call muteRemoteVideoStream (true), muteAllRemoteVideoStreams (true) or setDefaultMuteAllRemoteVideoStreams (true) to stop receiving the remote video stream.
    */
   SubStateNoSubscribed = 1,
   /*
-   * 2: 正在订阅。
+   * 2: Publishing.
    */
   SubStateSubscribing = 2,
   /*
-   * 3: 收到了远端流，订阅成功。
+   * 3: The remote stream is received, and the subscription is successful.
    */
   SubStateSubscribed = 3,
 }
 
 /*
- * 发布状态。
+ * The publishing state.
  */
 export enum StreamPublishState {
   /*
-   * 0: 加入频道后的初始发布状态。
+   * 0: The initial publishing state after joining the channel.
    */
   PubStateIdle = 0,
   /*
-   * 1: 发布失败。可能是因为： 本地用户调用 muteLocalAudioStream (true) 或 muteLocalVideoStream (true) 停止发送本地媒体流。
-   * 本地用户调用 disableAudio 或 disableVideo 关闭本地音频或视频模块。
-   * 本地用户调用 enableLocalAudio (false) 或 enableLocalVideo (false) 关闭本地音频或视频采集。
-   * 本地用户角色为观众。
+   * 1: Fails to publish the local stream. Possible reasons:
+   * Local user calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.
+   * The local user calls disableAudio or disableVideo to disable the local audio or video module.
+   * The local user calls enableLocalAudio (false) or enableLocalVideo (false) to disable the local audio or video capture.
+   * The role of the local user is audience.
    */
   PubStateNoPublished = 1,
   /*
-   * 2: 正在发布。
+   * 2: Publishing.
    */
   PubStatePublishing = 2,
   /*
-   * 3: 发布成功。
+   * 3: Publishes successfully.
    */
   PubStatePublished = 3,
 }
 
 /*
- * 用户的信息。
+ * The information of the user.
  */
 export class UserInfo {
   /*
-   * 用户 ID。
+   * The user ID.
    */
   uid?: number;
   /*
-   * 用户 Account。长度限制为 MaxUserAccountLengthType 。
+   * User account. The maximum data length is MaxUserAccountLengthType .
    */
   userAccount?: string;
 }
 
 /*
- * 耳返 audio filter。
+ * The audio filter of in-ear monitoring.
  */
 export enum EarMonitoringFilterType {
   /*
-   * 1: 不在耳返中添加 audio filter。
+   * 1: Do not add an audio filter to the in-ear monitor.
    */
   EarMonitoringFilterNone = 1 << 0,
   /*
-   * 2: 在耳返中添加人声效果 audio filter。如果你实现了美声、音效等功能，用户可以在耳返中听到添加效果后的声音。
+   * 2: Add an audio filter to the in-ear monitor.
+   * If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
    */
   EarMonitoringFilterBuiltInAudioFilters = 1 << 1,
   /*
-   * 4: 在耳返中添加降噪 audio filter。
+   * 4: Enable noise suppression to the in-ear monitor.
    */
   EarMonitoringFilterNoiseSuppression = 1 << 2,
 }
 
 /*
- * TODO(doc)
+ * @ignore
  */
 export enum ThreadPriorityType {
   /*
-   * TODO(doc)
+   * @ignore
    */
   LOWEST = 0,
   /*
-   * TODO(doc)
+   * @ignore
    */
   LOW = 1,
   /*
-   * TODO(doc)
+   * @ignore
    */
   NORMAL = 2,
   /*
-   * TODO(doc)
+   * @ignore
    */
   HIGH = 3,
   /*
-   * TODO(doc)
+   * @ignore
    */
   HIGHEST = 4,
   /*
-   * TODO(doc)
+   * @ignore
    */
   CRITICAL = 5,
 }
 
 /*
- * 空间音效参数。
- */
+@ignore */
 export class SpatialAudioParams {
   /*
-   * TODO(doc)
+   * The azimuth angle of the remote user or media player relative to the local user. The value range is [0,360], and the unit is degrees, as defined by the following main directions:
+   * 0: (Default) 0 degrees, which means directly to the front on the horizontal plane.
+   * 90: 90 degrees, which means directly to the left on the horizontal plane.
+   * 180: 180 degrees, which means directly to the back on the horizontal plane.
+   * 270: 270 degrees, which means directly to the right on the horizontal plane.
+   * 360: 360 degrees, which means directly to the front on the horizontal plane.
    */
   speaker_azimuth?: number;
   /*
-   * TODO(doc)
+   * The elevation angle of the remote user or media player relative to the local user. The value range is [-90,90], and the unit is degrees, as defined by the following main directions:
+   * 0: (Default) 0 degrees, which means that the horizontal plane is not rotated.
+   * -90: -90 degrees, which means that the horizontal plane is rotated 90 degrees downwards.
+   * 90: 90 degrees, which means that the horizontal plane is rotated 90 degrees upwards.
    */
   speaker_elevation?: number;
   /*
-   * TODO(doc)
+   * The distance of the remote user or media player relative to the local user. The value range is [1,50], and the unit is meters. The default value is 1 meter.
    */
   speaker_distance?: number;
   /*
-   * TODO(doc)
+   * The orientation of the remote user or media player relative to the local user. The value range is [0,180], and the unit is degrees, as defined by the following main directions:
+   * 0: (Default) 0 degrees, which means that the sound source and listener face the same direction.
+   * 180: 180 degrees, which means that the sound source and listener face each other.
    */
   speaker_orientation?: number;
   /*
-   * TODO(doc)
+   * Whether to enable audio blurring:
+   * true: Enable blurring.
+   * false: (Default) Disable blurring.
    */
   enable_blur?: boolean;
   /*
-   * TODO(doc)
+   * Whether to enable air absorption. This function simulates the energy attenuation of audio when the audio transmits in the air:
+   * true: (Default) Enable air absorption.
+   * false: Disable air absorption.
    */
   enable_air_absorb?: boolean;
 }
