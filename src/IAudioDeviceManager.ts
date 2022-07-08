@@ -14,72 +14,118 @@ export enum MaxDeviceIdLengthType {
  * @ignore
  */
 export abstract class IAudioDeviceManager {
-  /* api_iaudiodevicemanager_enumerateplaybackdevices */
+  /*
+   * @ignore
+   */
   abstract enumeratePlaybackDevices(): AudioDeviceInfo[];
 
-  /* api_iaudiodevicemanager_enumeraterecordingdevices */
+  /*
+   * @ignore
+   */
   abstract enumerateRecordingDevices(): AudioDeviceInfo[];
 
-  /* api_iaudiodevicemanager_setplaybackdevice */
+  /*
+   * @ignore
+   */
   abstract setPlaybackDevice(deviceId: string): number;
 
-  /* api_iaudiodevicemanager_getplaybackdevice */
+  /*
+   * @ignore
+   */
   abstract getPlaybackDevice(): string;
 
-  /* api_iaudiodevicemanager_getplaybackdeviceinfo */
+  /*
+   * @ignore
+   */
   abstract getPlaybackDeviceInfo(): AudioDeviceInfo;
 
-  /* api_iaudiodevicemanager_setplaybackdevicevolume */
+  /*
+   * @ignore
+   */
   abstract setPlaybackDeviceVolume(volume: number): number;
 
-  /* api_iaudiodevicemanager_getplaybackdevicevolume */
+  /*
+   * @ignore
+   */
   abstract getPlaybackDeviceVolume(): number;
 
-  /* api_iaudiodevicemanager_setrecordingdevice */
+  /*
+   * @ignore
+   */
   abstract setRecordingDevice(deviceId: string): number;
 
-  /* api_iaudiodevicemanager_getrecordingdevice */
+  /*
+   * @ignore
+   */
   abstract getRecordingDevice(): string;
 
-  /* api_iaudiodevicemanager_getrecordingdeviceinfo */
+  /*
+   * @ignore
+   */
   abstract getRecordingDeviceInfo(): AudioDeviceInfo;
 
-  /* api_iaudiodevicemanager_setrecordingdevicevolume */
+  /*
+   * @ignore
+   */
   abstract setRecordingDeviceVolume(volume: number): number;
 
-  /* api_iaudiodevicemanager_getrecordingdevicevolume */
+  /*
+   * @ignore
+   */
   abstract getRecordingDeviceVolume(): number;
 
-  /* api_iaudiodevicemanager_setplaybackdevicemute */
+  /*
+   * @ignore
+   */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
-  /* api_iaudiodevicemanager_getplaybackdevicemute */
+  /*
+   * @ignore
+   */
   abstract getPlaybackDeviceMute(): boolean;
 
-  /* api_iaudiodevicemanager_setrecordingdevicemute */
+  /*
+   * @ignore
+   */
   abstract setRecordingDeviceMute(mute: boolean): number;
 
-  /* api_iaudiodevicemanager_getrecordingdevicemute */
+  /*
+   * @ignore
+   */
   abstract getRecordingDeviceMute(): boolean;
 
-  /* api_iaudiodevicemanager_startplaybackdevicetest */
+  /*
+   * @ignore
+   */
   abstract startPlaybackDeviceTest(testAudioFilePath: string): number;
 
-  /* api_iaudiodevicemanager_stopplaybackdevicetest */
+  /*
+   * @ignore
+   */
   abstract stopPlaybackDeviceTest(): number;
 
-  /* api_iaudiodevicemanager_startrecordingdevicetest */
+  /*
+   * @ignore
+   */
   abstract startRecordingDeviceTest(indicationInterval: number): number;
 
-  /* api_iaudiodevicemanager_stoprecordingdevicetest */
+  /*
+   * @ignore
+   */
   abstract stopRecordingDeviceTest(): number;
 
-  /* api_iaudiodevicemanager_startaudiodeviceloopbacktest */
+  /*
+   * @ignore
+   */
   abstract startAudioDeviceLoopbackTest(indicationInterval: number): number;
 
-  /* api_iaudiodevicemanager_stopaudiodeviceloopbacktest */
+  /*
+   * @ignore
+   */
   abstract stopAudioDeviceLoopbackTest(): number;
 
-  /* api_iaudiodevicemanager_release */
+  /*
+   * @ignore
+   */
   abstract release(): void;
 }

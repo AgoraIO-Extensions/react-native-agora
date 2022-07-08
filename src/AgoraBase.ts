@@ -2890,7 +2890,8 @@ export class LiveTranscoding {
    */
   videoBitrate?: number;
   /*
-   * @ignore
+   * Frame rate (in fps) of the output video stream set for Media Push. The default value is 15 , and the value range is (0,30].
+   * The Agora server adjusts any value over 30 to 30.
    */
   videoFramerate?: number;
   /*
