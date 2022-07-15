@@ -397,7 +397,7 @@ export type VideoFrameWithUidCallback =
    * @param uid User ID of the remote user sending the video streams.
    * @param width Width (pixels) of the video stream.
    * @param height Height (pixels) of the video stream.
-   * @param elapsed Time elapsed (ms) from the local user calling [`joinChannel`]{@link RtcEngine.joinChannel} until this
+   * @param elapsed Time elapsed (ms) from the local user calling `joinChannel` until this
    * callback is triggered.
    */
   (uid: number, width: number, height: number, elapsed: number) => void;
@@ -569,7 +569,8 @@ export type ProxyConnectedCallback =
   ) => void;
 export type ClientRoleChangeCallback =
   /**
-   * @ignore For future use
+   * @param reason The reason for the user role switch failure. See [`ClientRoleChangeFailedReason`]{@link ClientRoleChangeFailedReason}.
+   * @param currentRole The current user role. See [`ClientRole`]{@link ClientRole}.
    */
   (reason: ClientRoleChangeFailedReason, currentRole: ClientRole) => void;
 export type RecorderStateChangedCallback =
@@ -609,7 +610,7 @@ export type WlAccStatsCallback =
   (currentStats: WlAccStats, averageStats: WlAccStats) => void;
 export type LocalVoicePitchInHzCallback =
   /**
-   * @ignore For future use
+   * @param pitchInHz The voice pitch (Hz) of the local user.
    */
   (pitchInHz: number) => void;
 
@@ -701,9 +702,11 @@ export interface RtcEngineEvents {
   UserInfoUpdated: UserInfoCallback;
 
   /**
-   * Occurs when the user role switches in live interactive streaming. For example, from a host to an audience or vice versa.
+   * Occurs when the user role switches successfully in the interactive live streaming.
    *
-   * The SDK triggers this callback when the local user switches the user role by calling [`setClientRole`]{@link RtcEngine.setClientRole} after joining the channel.
+   * In the `LiveBroadcasting` channel profile, when the local user successfully calls [`setClientRole`]{@link RtcEngine.setClientRole} to
+   * switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers
+   * this callback to report the user role before and after the switch.
    *
    * @event ClientRoleChanged
    */
@@ -1179,11 +1182,8 @@ export interface RtcEngineEvents {
   /**
    * Occurs when the first remote video frame is rendered.
    *
-   * @deprecated
-   *
-   * Use [`Starting`]{@link VideoRemoteState.Starting} or [`Decoding`]{@link VideoRemoteState.Decoding} in the [`RemoteVideoStateChanged`]{@link RemoteVideoStateChanged} callback instead.
-   *
-   * This callback is triggered after the first frame of the remote video is rendered on the video window. The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
+   * This callback is triggered after the first frame of the remote video is rendered on the video window.
+   * The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
    *
    * @event FirstRemoteVideoFrame
    */
@@ -1534,7 +1534,7 @@ export interface RtcEngineEvents {
   AirPlayIsConnected: EmptyCallback;
 
   /**
-   * Reports whether the virtual background is successfully enabled. (beta function)
+   * Reports whether the virtual background is successfully enabled.
    *
    * **since** v3.5.0.3
    *
@@ -1625,10 +1625,31 @@ export interface RtcEngineEvents {
   WlAccStats: WlAccStatsCallback;
 
   /**
-   * @ignore For future use
+   * Occurs when the user role switch fails in the interactive live streaming.
+   *
+   * @since v3.7.0
+   *
+   * In the `LiveBroadcasting` channel profile, when the local user calls [`setClientRole`]{@link RtcEngine.setClientRole} to
+   * switch their user role after joining the channel but the switch fails, the SDK triggers this callback to
+   * report the reason for the failure and the current user role.
+   *
+   * @event ClientRoleChangeCallback
    */
   ClientRoleChangeFailed: ClientRoleChangeCallback;
 
+  /**
+   * Reports the voice pitch of the local user.
+   *
+   * @since v3.7.0
+   *
+   * After the local audio capture is enabled and you call [`enableLocalVoicePitchCallback`]{@link enableLocalVoicePitchCallback},
+   * the SDK triggers the `LocalVoicePitchInHz` callback at the time interval set in `enableLocalVoicePitchCallback`.
+   *
+   * **Note**
+   * After this callback is enabled, if the user disables the local audio capture, for example,
+   * by calling [`enableLocalAudio(false)`]{@link RtcEngine.enableLocalAudio}, the SDK immediately stops sending
+   * the `LocalVoicePitchInHz` callback.
+   */
   LocalVoicePitchInHz: LocalVoicePitchInHzCallback;
 }
 
@@ -1682,9 +1703,11 @@ export interface RtcChannelEvents {
   LeaveChannel: RtcStatsCallback;
 
   /**
-   * Occurs when the user role switches in a live interactive streaming channel. For example, from a host to an audience member or vice versa.
+   * Occurs when the user role switches successfully in the interactive live streaming.
    *
-   * The SDK triggers this callback when the local user switches the user role by calling the [`setClientRole`]{@link RtcChannel.setClientRole} method after joining the channel.
+   * In the `LiveBroadcasting` channel profile, when the local user successfully calls [`setClientRole`]{@link RtcChannel.setClientRole} to
+   * switch their user role after joining the channel, for example, from a host to an audience member or vice versa, the SDK triggers
+   * this callback to report the user role before and after the switch.
    *
    * @event ClientRoleChanged
    */
@@ -2020,9 +2043,27 @@ export interface RtcChannelEvents {
   ProxyConnected: ProxyConnectedCallback;
 
   /**
-   * @ignore For future use
+   * Occurs when the user role switch fails in the interactive live streaming.
+   *
+   * @since v3.7.0
+   *
+   * In the `LiveBroadcasting` channel profile, when the local user calls [`setClientRole`]{@link RtcChannel.setClientRole} to
+   * switch their user role after joining the channel but the switch fails, the SDK triggers this callback to
+   * report the reason for the failure and the current user role.
+   *
+   * @event ClientRoleChangeCallback
    */
   ClientRoleChangeFailed: ClientRoleChangeCallback;
 
+  /**
+   * Occurs when the first remote video frame is rendered.
+   *
+   * @since v3.7.0
+   *
+   * This callback is triggered after the first frame of the remote video is rendered on the video window.
+   * The application can retrieve the data of the time elapsed from the user joining the channel until the first video frame is displayed.
+   *
+   * @event FirstRemoteVideoFrame
+   */
   FirstRemoteVideoFrame: VideoFrameWithUidCallback;
 }
