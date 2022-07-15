@@ -62,6 +62,10 @@ export default class VoiceChanger extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
+    }
+
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
@@ -107,12 +111,6 @@ export default class VoiceChanger extends Component<{}, State, any> {
   };
 
   _joinChannel = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      ]);
-    }
-
     // start joining channel
     // 1. Users can only see each other after they join the
     // same channel successfully using the same app id.

@@ -27,6 +27,7 @@ interface State {
   isJoined1: boolean;
   remoteUid0: number[];
   remoteUid1: number[];
+  startPreview: boolean;
 }
 
 const channelId0 = 'channel0';
@@ -45,6 +46,7 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
       isJoined1: false,
       remoteUid0: [],
       remoteUid1: [],
+      startPreview: false,
     };
   }
 
@@ -57,24 +59,25 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
+
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
 
     await this._engine.enableVideo();
-    await this._engine.startPreview();
     await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await this._engine.setClientRole(ClientRole.Broadcaster);
+    await this._engine.startPreview();
+    this.setState({ startPreview: true });
   };
 
   _joinChannel0 = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-    }
-
     if (this._channel0 === undefined) {
       this._channel0 = await RtcChannel.create(channelId0);
       this._addListener(this._channel0);
@@ -93,13 +96,6 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
   };
 
   _joinChannel1 = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-    }
-
     if (this._channel1 === undefined) {
       this._channel1 = await RtcChannel.create(channelId1);
       this._addListener(this._channel1);
@@ -237,7 +233,8 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
   }
 
   _renderVideo = () => {
-    const { renderChannelId, remoteUid0, remoteUid1 } = this.state;
+    const { renderChannelId, remoteUid0, remoteUid1, startPreview } =
+      this.state;
     let remoteUid: number[] | undefined;
     if (renderChannelId === channelId0) {
       remoteUid = remoteUid0;
@@ -246,10 +243,9 @@ export default class JoinMultipleChannel extends Component<{}, State, any> {
     }
     return (
       <View style={styles.container}>
-        <RtcLocalView.SurfaceView
-          style={styles.local}
-          channelId={renderChannelId}
-        />
+        {startPreview ? (
+          <RtcLocalView.SurfaceView style={styles.local} />
+        ) : undefined}
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
             {remoteUid.map((value, index) => (

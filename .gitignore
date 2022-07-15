@@ -31,15 +31,21 @@ project.xcworkspace
 
 # Android/IJ
 #
-.idea
+.classpath
+.cxx
 .gradle
+.idea
+.project
+.settings
 local.properties
 android.iml
 
 # Cocoapods
 #
 example/ios/Pods
-example/ios/Podfile.lock
+
+# Ruby
+example/vendor/
 
 # node.js
 #
@@ -47,17 +53,12 @@ node_modules/
 npm-debug.log
 yarn-debug.log
 yarn-error.log
-package-lock.json
-yarn.lock
 
 # BUCK
 buck-out/
 \.buckd/
 android/app/libs
 android/keystores/debug.keystore
-docs/api/
-gitpull.sh
-gitpush.sh
 
 # Expo
 .expo/*
