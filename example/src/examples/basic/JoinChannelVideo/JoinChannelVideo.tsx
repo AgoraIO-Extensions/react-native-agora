@@ -25,6 +25,7 @@ interface State {
   channelId: string;
   isJoined: boolean;
   remoteUid: number[];
+  startPreview: boolean;
   switchCamera: boolean;
   switchRender: boolean;
   isRenderTextureView: boolean;
@@ -39,6 +40,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       channelId: config.channelId,
       isJoined: false,
       remoteUid: [],
+      startPreview: false,
       switchCamera: true,
       switchRender: true,
       isRenderTextureView: false,
@@ -54,15 +56,23 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
+
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
     this._addListeners();
 
     await this._engine.enableVideo();
-    await this._engine.startPreview();
     await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await this._engine.setClientRole(ClientRole.Broadcaster);
+    await this._engine.startPreview();
+    this.setState({ startPreview: true });
   };
 
   _addListeners = () => {
@@ -93,12 +103,6 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   };
 
   _joinChannel = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-    }
     await this._engine?.joinChannel(
       config.token,
       this.state.channelId,
@@ -172,14 +176,18 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   }
 
   _renderVideo = () => {
-    const { isRenderTextureView, remoteUid } = this.state;
+    const { startPreview, isRenderTextureView, remoteUid } = this.state;
     return (
       <View style={styles.container}>
-        {isRenderTextureView ? (
-          <RtcLocalView.TextureView style={styles.local} />
-        ) : (
-          <RtcLocalView.SurfaceView style={styles.local} />
-        )}
+        {startPreview ? (
+          <>
+            {isRenderTextureView ? (
+              <RtcLocalView.TextureView style={styles.local} />
+            ) : (
+              <RtcLocalView.SurfaceView style={styles.local} />
+            )}
+          </>
+        ) : undefined}
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
             {remoteUid.map((value, index) => (

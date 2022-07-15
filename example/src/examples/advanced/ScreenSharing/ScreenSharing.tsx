@@ -25,6 +25,7 @@ interface State {
   channelId: string;
   isJoined: boolean;
   remoteUid: number[];
+  startPreview: boolean;
   isScreenSharing: boolean;
 }
 
@@ -37,6 +38,7 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
       channelId: config.channelId,
       isJoined: false,
       remoteUid: [],
+      startPreview: false,
       isScreenSharing: false,
     };
   }
@@ -50,15 +52,23 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
+
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
     this._addListeners();
 
     await this._engine.enableVideo();
-    await this._engine.startPreview();
     await this._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await this._engine.setClientRole(ClientRole.Broadcaster);
+    await this._engine.startPreview();
+    this.setState({ startPreview: true });
   };
 
   _addListeners = () => {
@@ -107,12 +117,6 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   };
 
   _joinChannel = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-    }
     await this._engine?.joinChannel(
       config.token,
       this.state.channelId,
@@ -166,13 +170,15 @@ export default class JoinChannelVideo extends Component<{}, State, any> {
   }
 
   _renderVideo = () => {
-    const { remoteUid } = this.state;
+    const { remoteUid, startPreview } = this.state;
     return (
       <View style={styles.container}>
-        <RtcLocalView.SurfaceView
-          style={styles.local}
-          renderMode={VideoRenderMode.Fit}
-        />
+        {startPreview ? (
+          <RtcLocalView.SurfaceView
+            style={styles.local}
+            renderMode={VideoRenderMode.Fit}
+          />
+        ) : undefined}
         {remoteUid !== undefined && (
           <ScrollView horizontal={true} style={styles.remoteContainer}>
             {remoteUid.map((value, index) => (

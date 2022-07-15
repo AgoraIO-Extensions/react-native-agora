@@ -50,6 +50,13 @@ export default class StreamMessage extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
+
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
@@ -118,13 +125,6 @@ export default class StreamMessage extends Component<{}, State, any> {
   };
 
   _joinChannel = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      ]);
-    }
-
     // start joining channel
     // 1. Users can only see each other after they join the
     // same channel successfully using the same app id.
@@ -176,7 +176,7 @@ export default class StreamMessage extends Component<{}, State, any> {
         {remoteUid.length > 0 && (
           <RtcRemoteView.SurfaceView
             style={styles.remote}
-            uid={remoteUid[remoteUid.length - 1]}
+            uid={remoteUid[remoteUid.length - 1]!}
           />
         )}
       </View>
