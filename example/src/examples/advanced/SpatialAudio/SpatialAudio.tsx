@@ -45,6 +45,10 @@ export default class SpatialAudio extends Component<{}, State, any> {
   }
 
   _initEngine = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
+    }
+
     this._engine = await RtcEngine.createWithContext(
       new RtcEngineContext(config.appId)
     );
@@ -94,11 +98,6 @@ export default class SpatialAudio extends Component<{}, State, any> {
   };
 
   _joinChannel = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-      );
-    }
     await this._engine?.joinChannel(
       config.token,
       this.state.channelId,

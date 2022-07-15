@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "react-native-agora": ["./src/index"]
     },
@@ -17,6 +17,7 @@
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
+//    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
