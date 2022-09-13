@@ -1,3 +1,10 @@
+# 4.0.0-rc.1 (2022-09-13)
+
+
+### Features
+
+* support native 4.0.0-rc.1 ([7e074d2](https://github.com/AgoraIO-Community/react-native-agora/commit/7e074d2a44f670c6128c453250394725bb4a467a))
+
 # 4.0.0-beta.1 (2022-07-08)
 
 ## [3.7.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.7.0...v3.7.1) (2022-07-15)
