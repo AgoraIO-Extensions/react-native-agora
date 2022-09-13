@@ -1,13 +1,10 @@
 import React, { Component, ReactNode, useState } from 'react';
 import {
   Alert,
-  Button,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
-  View,
 } from 'react-native';
 import {
   ErrorCodeType,
@@ -17,22 +14,18 @@ import {
   RtcStats,
   RtcSurfaceView,
   UserOfflineReasonType,
-  WarnCodeType,
-} from 'react-native-agora-rtc-ng';
-import {
-  copyFileAssets,
-  exists,
-  ExternalCachesDirectoryPath,
-  MainBundlePath,
-} from 'react-native-fs';
-import * as RNEUI from '@rneui/base';
+} from 'react-native-agora';
 import { StackScreenProps } from '@react-navigation/stack/src/types';
 
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraStyle,
+  AgoraText,
+  AgoraTextInput,
+  AgoraView,
+} from './ui';
 import { LogSink } from './LogSink';
-
-export const Divider = () => {
-  return <RNEUI.Divider width={1} color={'grey'} />;
-};
 
 const Header = ({ getData }: { getData: () => Array<string> }) => {
   const [visible, setVisible] = useState(false);
@@ -43,7 +36,7 @@ const Header = ({ getData }: { getData: () => Array<string> }) => {
 
   return (
     <>
-      <Button title="Logs" onPress={toggleOverlay} />
+      <AgoraButton title="Logs" onPress={toggleOverlay} />
       <LogSink
         visible={visible}
         data={getData()}
@@ -112,12 +105,8 @@ export abstract class BaseComponent<
 
   protected abstract releaseRtcEngine(): void;
 
-  onWarning(warn: WarnCodeType, msg: string) {
-    this.warn('onWarning', 'warn', warn, 'msg', msg);
-  }
-
   onError(err: ErrorCodeType, msg: string) {
-    this.error('onError', 'err', err, 'msg', msg);
+    this.info('onError', 'err', err, 'msg', msg);
   }
 
   onJoinChannelSuccess(connection: RtcConnection, elapsed: number) {
@@ -175,39 +164,48 @@ export abstract class BaseComponent<
   }
 
   render() {
-    const { route } = this.props;
     const { enableVideo } = this.state;
-    const bottom = this.renderBottom();
+    const configuration = this.renderConfiguration();
     return (
-      <>
-        <View style={STYLES.top}>{this.renderTop()}</View>
+      <KeyboardAvoidingView
+        style={AgoraStyle.fullSize}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <AgoraView style={AgoraStyle.fullWidth}>
+          {this.renderChannel()}
+        </AgoraView>
         {enableVideo ? (
-          <View style={STYLES.video}>{this.renderVideo()}</View>
+          <AgoraView style={AgoraStyle.videoLarge}>
+            {this.renderUsers()}
+          </AgoraView>
         ) : undefined}
-        {bottom ? (
+        {configuration ? (
           <>
-            <Divider />
-            <Text style={STYLES.title}>The Configuration of {route.name}</Text>
-            <Divider />
-            <ScrollView style={STYLES.bottom}>{bottom}</ScrollView>
+            <AgoraDivider />
+            <AgoraText style={styles.title}>
+              The Configuration of {this.constructor.name}
+            </AgoraText>
+            <AgoraDivider />
+            <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
           </>
         ) : undefined}
-        <View style={STYLES.float}>{this.renderFloat()}</View>
-      </>
+        <AgoraView style={AgoraStyle.float}>{this.renderAction()}</AgoraView>
+      </KeyboardAvoidingView>
     );
   }
 
-  protected renderTop(): ReactNode {
+  protected renderChannel(): ReactNode {
     const { channelId, joinChannelSuccess } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
-          onChangeText={(text) => this.setState({ channelId: text })}
+        <AgoraTextInput
+          onChangeText={(text) => {
+            this.setState({ channelId: text });
+          }}
           placeholder={`channelId`}
           value={channelId}
         />
-        <Button
+        <AgoraButton
           title={`${joinChannelSuccess ? 'leave' : 'join'} Channel`}
           onPress={() => {
             joinChannelSuccess ? this.leaveChannel() : this.joinChannel();
@@ -217,22 +215,17 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderVideo(): ReactNode {
+  protected renderUsers(): ReactNode {
     const { startPreview, joinChannelSuccess, remoteUsers } = this.state;
     return (
       <>
-        {startPreview || joinChannelSuccess ? (
-          <RtcSurfaceView style={STYLES.video} canvas={{ uid: 0 }} />
-        ) : undefined}
+        {startPreview || joinChannelSuccess ? this.renderVideo(0) : undefined}
         {remoteUsers !== undefined && remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={STYLES.videoContainer}>
+          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
             {remoteUsers.map((value, index) => (
-              <RtcSurfaceView
-                key={`${value}-${index}`}
-                style={STYLES.videoSmall}
-                zOrderMediaOverlay={true}
-                canvas={{ uid: value }}
-              />
+              <AgoraView key={`${value}-${index}`}>
+                {this.renderVideo(value)}
+              </AgoraView>
             ))}
           </ScrollView>
         ) : undefined}
@@ -240,11 +233,21 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderBottom(): ReactNode {
+  protected renderVideo(uid: number): ReactNode {
+    return (
+      <RtcSurfaceView
+        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={uid !== 0}
+        canvas={{ uid }}
+      />
+    );
+  }
+
+  protected renderConfiguration(): ReactNode {
     return undefined;
   }
 
-  protected renderFloat(): ReactNode {
+  protected renderAction(): ReactNode {
     return undefined;
   }
 
@@ -253,14 +256,18 @@ export abstract class BaseComponent<
     message?: any,
     ...optionalParams: any[]
   ): string {
-    console[level](message, optionalParams);
+    if (level === 'error' && !__DEV__) {
+      this.alert(message);
+    } else {
+      console[level](message, ...optionalParams);
+    }
     const content = `${optionalParams.map((v) => JSON.stringify(v))}`;
     this._data.splice(0, 0, `[${level}] ${message} ${content}`);
     return content;
   }
 
   protected debug(message?: any, ...optionalParams: any[]): void {
-    Alert.alert(message, this._logSink('debug', message, optionalParams));
+    this.alert(message, this._logSink('debug', message, optionalParams));
   }
 
   protected log(message?: any, ...optionalParams: any[]): void {
@@ -279,62 +286,14 @@ export abstract class BaseComponent<
     this._logSink('error', message, optionalParams);
   }
 
-  protected getAssetPath(fileName: string): string {
-    if (Platform.OS === 'android') {
-      return `/assets/${fileName}`;
-    }
-    return `${MainBundlePath}/${fileName}`;
-  }
-
-  protected async getAbsolutePath(filePath: string): Promise<string> {
-    if (Platform.OS === 'android') {
-      if (filePath.startsWith('/assets/')) {
-        // const fileName = filePath;
-        const fileName = filePath.replace('/assets/', '');
-        const destPath = `${ExternalCachesDirectoryPath}/${fileName}`;
-        if (!(await exists(destPath))) {
-          await copyFileAssets(fileName, destPath);
-        }
-        return destPath;
-      }
-    }
-    return filePath;
+  protected alert(title: string, message?: string): void {
+    Alert.alert(title, message);
   }
 }
 
-export const STYLES = StyleSheet.create({
-  top: {
-    width: '100%',
-  },
-  input: {
-    height: 50,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 1,
-    color: 'black',
-  },
-  video: {
-    flex: 1,
-  },
-  videoContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-  videoSmall: {
-    width: 120,
-    height: 120,
-  },
-  bottom: {
-    flex: 1,
-  },
+const styles = StyleSheet.create({
   title: {
     marginVertical: 10,
     fontWeight: 'bold',
-  },
-  float: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    alignItems: 'flex-end',
   },
 });

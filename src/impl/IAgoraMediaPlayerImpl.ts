@@ -1,26 +1,43 @@
 import { callIrisApi } from '../internal/IrisApiEngine';
-import { IMediaPlayer } from '../IAgoraMediaPlayer';
-import { PlayerStreamInfo, MediaPlayerState } from '../AgoraMediaPlayerTypes';
-import { RenderModeType, AudioDualMonoMode } from '../AgoraMediaBase';
+import {
+  IMediaPlayer,
+  IMediaPlayerAudioFrameObserver,
+  IMediaPlayerVideoFrameObserver,
+  IMediaPlayerCacheManager,
+} from '../IAgoraMediaPlayer';
+import {
+  MediaSource,
+  PlayerStreamInfo,
+  MediaPlayerState,
+} from '../AgoraMediaPlayerTypes';
+import {
+  RenderModeType,
+  IAudioSpectrumObserver,
+  AudioDualMonoMode,
+} from '../AgoraMediaBase';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import { SpatialAudioParams } from '../AgoraBase';
 export class IMediaPlayerImpl implements IMediaPlayer {
   getMediaPlayerId(): number {
-    const apiType = 'MediaPlayer_getMediaPlayerId';
+    const apiType = this.getApiTypeFromGetMediaPlayerId();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
+  protected getApiTypeFromGetMediaPlayerId(): string {
+    return 'MediaPlayer_getMediaPlayerId';
+  }
+
   open(url: string, startPos: number): number {
-    const apiType = 'MediaPlayer_open';
+    const apiType = this.getApiTypeFromOpen(url, startPos);
     const jsonParams = {
-      url,
-      startPos,
+      url: url,
+      startPos: startPos,
       toJSON: () => {
         return {
-          url,
-          startPos,
+          url: url,
+          startPos: startPos,
         };
       },
     };
@@ -28,88 +45,152 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result;
   }
 
+  protected getApiTypeFromOpen(url: string, startPos: number): string {
+    return 'MediaPlayer_open';
+  }
+
+  openWithMediaSource(source: MediaSource): number {
+    const apiType = this.getApiTypeFromOpenWithMediaSource(source);
+    const jsonParams = {
+      source: source,
+      toJSON: () => {
+        return {
+          source: source,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromOpenWithMediaSource(source: MediaSource): string {
+    return 'MediaPlayer_openWithMediaSource';
+  }
+
   play(): number {
-    const apiType = 'MediaPlayer_play';
+    const apiType = this.getApiTypeFromPlay();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromPlay(): string {
+    return 'MediaPlayer_play';
   }
 
   pause(): number {
-    const apiType = 'MediaPlayer_pause';
+    const apiType = this.getApiTypeFromPause();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromPause(): string {
+    return 'MediaPlayer_pause';
   }
 
   stop(): number {
-    const apiType = 'MediaPlayer_stop';
+    const apiType = this.getApiTypeFromStop();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromStop(): string {
+    return 'MediaPlayer_stop';
   }
 
   resume(): number {
-    const apiType = 'MediaPlayer_resume';
+    const apiType = this.getApiTypeFromResume();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
+  protected getApiTypeFromResume(): string {
+    return 'MediaPlayer_resume';
+  }
+
   seek(newPos: number): number {
-    const apiType = 'MediaPlayer_seek';
+    const apiType = this.getApiTypeFromSeek(newPos);
     const jsonParams = {
-      newPos,
+      newPos: newPos,
       toJSON: () => {
-        return { newPos };
+        return {
+          newPos: newPos,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSeek(newPos: number): string {
+    return 'MediaPlayer_seek';
   }
 
   setAudioPitch(pitch: number): number {
-    const apiType = 'MediaPlayer_setAudioPitch';
+    const apiType = this.getApiTypeFromSetAudioPitch(pitch);
     const jsonParams = {
-      pitch,
+      pitch: pitch,
       toJSON: () => {
-        return { pitch };
+        return {
+          pitch: pitch,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
+  protected getApiTypeFromSetAudioPitch(pitch: number): string {
+    return 'MediaPlayer_setAudioPitch';
+  }
+
   getDuration(): number {
-    const apiType = 'MediaPlayer_getDuration';
+    const apiType = this.getApiTypeFromGetDuration();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const duration = jsonResults.duration;
     return duration;
   }
 
+  protected getApiTypeFromGetDuration(): string {
+    return 'MediaPlayer_getDuration';
+  }
+
   getPlayPosition(): number {
-    const apiType = 'MediaPlayer_getPlayPosition';
+    const apiType = this.getApiTypeFromGetPlayPosition();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const pos = jsonResults.pos;
     return pos;
   }
 
+  protected getApiTypeFromGetPlayPosition(): string {
+    return 'MediaPlayer_getPlayPosition';
+  }
+
   getStreamCount(): number {
-    const apiType = 'MediaPlayer_getStreamCount';
+    const apiType = this.getApiTypeFromGetStreamCount();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const count = jsonResults.count;
     return count;
   }
 
+  protected getApiTypeFromGetStreamCount(): string {
+    return 'MediaPlayer_getStreamCount';
+  }
+
   getStreamInfo(index: number): PlayerStreamInfo {
-    const apiType = 'MediaPlayer_getStreamInfo';
+    const apiType = this.getApiTypeFromGetStreamInfo(index);
     const jsonParams = {
-      index,
+      index: index,
       toJSON: () => {
-        return { index };
+        return {
+          index: index,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
@@ -117,223 +198,277 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return info;
   }
 
+  protected getApiTypeFromGetStreamInfo(index: number): string {
+    return 'MediaPlayer_getStreamInfo';
+  }
+
   setLoopCount(loopCount: number): number {
-    const apiType = 'MediaPlayer_setLoopCount';
+    const apiType = this.getApiTypeFromSetLoopCount(loopCount);
     const jsonParams = {
-      loopCount,
+      loopCount: loopCount,
       toJSON: () => {
-        return { loopCount };
+        return {
+          loopCount: loopCount,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
-  muteAudio(audioMute: boolean): number {
-    const apiType = 'MediaPlayer_muteAudio';
-    const jsonParams = {
-      audio_mute: audioMute,
-      toJSON: () => {
-        return { audio_mute: audioMute };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  isAudioMuted(): boolean {
-    const apiType = 'MediaPlayer_isAudioMuted';
-    const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  muteVideo(videoMute: boolean): number {
-    const apiType = 'MediaPlayer_muteVideo';
-    const jsonParams = {
-      video_mute: videoMute,
-      toJSON: () => {
-        return { video_mute: videoMute };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  isVideoMuted(): boolean {
-    const apiType = 'MediaPlayer_isVideoMuted';
-    const jsonParams = {};
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+  protected getApiTypeFromSetLoopCount(loopCount: number): string {
+    return 'MediaPlayer_setLoopCount';
   }
 
   setPlaybackSpeed(speed: number): number {
-    const apiType = 'MediaPlayer_setPlaybackSpeed';
+    const apiType = this.getApiTypeFromSetPlaybackSpeed(speed);
     const jsonParams = {
-      speed,
+      speed: speed,
       toJSON: () => {
-        return { speed };
+        return {
+          speed: speed,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetPlaybackSpeed(speed: number): string {
+    return 'MediaPlayer_setPlaybackSpeed';
   }
 
   selectAudioTrack(index: number): number {
-    const apiType = 'MediaPlayer_selectAudioTrack';
+    const apiType = this.getApiTypeFromSelectAudioTrack(index);
     const jsonParams = {
-      index,
+      index: index,
       toJSON: () => {
-        return { index };
+        return {
+          index: index,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSelectAudioTrack(index: number): string {
+    return 'MediaPlayer_selectAudioTrack';
   }
 
   takeScreenshot(filename: string): number {
-    const apiType = 'MediaPlayer_takeScreenshot';
+    const apiType = this.getApiTypeFromTakeScreenshot(filename);
     const jsonParams = {
-      filename,
+      filename: filename,
       toJSON: () => {
-        return { filename };
+        return {
+          filename: filename,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromTakeScreenshot(filename: string): string {
+    return 'MediaPlayer_takeScreenshot';
   }
 
   selectInternalSubtitle(index: number): number {
-    const apiType = 'MediaPlayer_selectInternalSubtitle';
+    const apiType = this.getApiTypeFromSelectInternalSubtitle(index);
     const jsonParams = {
-      index,
+      index: index,
       toJSON: () => {
-        return { index };
+        return {
+          index: index,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSelectInternalSubtitle(index: number): string {
+    return 'MediaPlayer_selectInternalSubtitle';
   }
 
   setExternalSubtitle(url: string): number {
-    const apiType = 'MediaPlayer_setExternalSubtitle';
+    const apiType = this.getApiTypeFromSetExternalSubtitle(url);
     const jsonParams = {
-      url,
+      url: url,
       toJSON: () => {
-        return { url };
+        return {
+          url: url,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetExternalSubtitle(url: string): string {
+    return 'MediaPlayer_setExternalSubtitle';
   }
 
   getState(): MediaPlayerState {
-    const apiType = 'MediaPlayer_getState';
+    const apiType = this.getApiTypeFromGetState();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
-  mute(mute: boolean): number {
-    const apiType = 'MediaPlayer_mute';
+  protected getApiTypeFromGetState(): string {
+    return 'MediaPlayer_getState';
+  }
+
+  mute(muted: boolean): number {
+    const apiType = this.getApiTypeFromMute(muted);
     const jsonParams = {
-      mute,
+      muted: muted,
       toJSON: () => {
-        return { mute };
+        return {
+          muted: muted,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromMute(muted: boolean): string {
+    return 'MediaPlayer_mute';
   }
 
   getMute(): boolean {
-    const apiType = 'MediaPlayer_getMute';
+    const apiType = this.getApiTypeFromGetMute();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    const mute = jsonResults.mute;
-    return mute;
+    const muted = jsonResults.muted;
+    return muted;
+  }
+
+  protected getApiTypeFromGetMute(): string {
+    return 'MediaPlayer_getMute';
   }
 
   adjustPlayoutVolume(volume: number): number {
-    const apiType = 'MediaPlayer_adjustPlayoutVolume';
+    const apiType = this.getApiTypeFromAdjustPlayoutVolume(volume);
     const jsonParams = {
-      volume,
+      volume: volume,
       toJSON: () => {
-        return { volume };
+        return {
+          volume: volume,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromAdjustPlayoutVolume(volume: number): string {
+    return 'MediaPlayer_adjustPlayoutVolume';
   }
 
   getPlayoutVolume(): number {
-    const apiType = 'MediaPlayer_getPlayoutVolume';
+    const apiType = this.getApiTypeFromGetPlayoutVolume();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const volume = jsonResults.volume;
     return volume;
+  }
+
+  protected getApiTypeFromGetPlayoutVolume(): string {
+    return 'MediaPlayer_getPlayoutVolume';
   }
 
   adjustPublishSignalVolume(volume: number): number {
-    const apiType = 'MediaPlayer_adjustPublishSignalVolume';
+    const apiType = this.getApiTypeFromAdjustPublishSignalVolume(volume);
     const jsonParams = {
-      volume,
+      volume: volume,
       toJSON: () => {
-        return { volume };
+        return {
+          volume: volume,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
+  protected getApiTypeFromAdjustPublishSignalVolume(volume: number): string {
+    return 'MediaPlayer_adjustPublishSignalVolume';
+  }
+
   getPublishSignalVolume(): number {
-    const apiType = 'MediaPlayer_getPublishSignalVolume';
+    const apiType = this.getApiTypeFromGetPublishSignalVolume();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const volume = jsonResults.volume;
     return volume;
   }
 
+  protected getApiTypeFromGetPublishSignalVolume(): string {
+    return 'MediaPlayer_getPublishSignalVolume';
+  }
+
   setView(view: any): number {
-    const apiType = 'MediaPlayer_setView';
+    const apiType = this.getApiTypeFromSetView(view);
     const jsonParams = {
-      view,
+      view: view,
       toJSON: () => {
-        return { view };
+        return {
+          view: view,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetView(view: any): string {
+    return 'MediaPlayer_setView';
   }
 
   setRenderMode(renderMode: RenderModeType): number {
-    const apiType = 'MediaPlayer_setRenderMode';
+    const apiType = this.getApiTypeFromSetRenderMode(renderMode);
     const jsonParams = {
-      renderMode,
+      renderMode: renderMode,
       toJSON: () => {
-        return { renderMode };
+        return {
+          renderMode: renderMode,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetRenderMode(renderMode: RenderModeType): string {
+    return 'MediaPlayer_setRenderMode';
   }
 
   registerPlayerSourceObserver(observer: IMediaPlayerSourceObserver): number {
-    const apiType = 'MediaPlayer_registerPlayerSourceObserver';
+    const apiType = this.getApiTypeFromRegisterPlayerSourceObserver(observer);
     const jsonParams = {
-      observer,
+      observer: observer,
       toJSON: () => {
         return {};
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterPlayerSourceObserver(
+    observer: IMediaPlayerSourceObserver
+  ): string {
+    return 'MediaPlayer_registerPlayerSourceObserver';
   }
 
   unregisterPlayerSourceObserver(observer: IMediaPlayerSourceObserver): number {
-    const apiType = 'MediaPlayer_unregisterPlayerSourceObserver';
+    const apiType = this.getApiTypeFromUnregisterPlayerSourceObserver(observer);
     const jsonParams = {
-      observer,
+      observer: observer,
       toJSON: () => {
         return {};
       },
@@ -342,195 +477,434 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result;
   }
 
-  setAudioDualMonoMode(mode: AudioDualMonoMode): number {
-    const apiType = 'MediaPlayer_setAudioDualMonoMode';
+  protected getApiTypeFromUnregisterPlayerSourceObserver(
+    observer: IMediaPlayerSourceObserver
+  ): string {
+    return 'MediaPlayer_unregisterPlayerSourceObserver';
+  }
+
+  registerMediaPlayerAudioSpectrumObserver(
+    observer: IAudioSpectrumObserver,
+    intervalInMS: number
+  ): number {
+    const apiType = this.getApiTypeFromRegisterMediaPlayerAudioSpectrumObserver(
+      observer,
+      intervalInMS
+    );
     const jsonParams = {
-      mode,
+      observer: observer,
+      intervalInMS: intervalInMS,
       toJSON: () => {
-        return { mode };
+        return {
+          intervalInMS: intervalInMS,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterMediaPlayerAudioSpectrumObserver(
+    observer: IAudioSpectrumObserver,
+    intervalInMS: number
+  ): string {
+    return 'MediaPlayer_registerMediaPlayerAudioSpectrumObserver';
+  }
+
+  unregisterMediaPlayerAudioSpectrumObserver(
+    observer: IAudioSpectrumObserver
+  ): number {
+    const apiType =
+      this.getApiTypeFromUnregisterMediaPlayerAudioSpectrumObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromUnregisterMediaPlayerAudioSpectrumObserver(
+    observer: IAudioSpectrumObserver
+  ): string {
+    return 'MediaPlayer_unregisterMediaPlayerAudioSpectrumObserver';
+  }
+
+  setAudioDualMonoMode(mode: AudioDualMonoMode): number {
+    const apiType = this.getApiTypeFromSetAudioDualMonoMode(mode);
+    const jsonParams = {
+      mode: mode,
+      toJSON: () => {
+        return {
+          mode: mode,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetAudioDualMonoMode(
+    mode: AudioDualMonoMode
+  ): string {
+    return 'MediaPlayer_setAudioDualMonoMode';
   }
 
   getPlayerSdkVersion(): string {
-    const apiType = 'MediaPlayer_getPlayerSdkVersion';
+    const apiType = this.getApiTypeFromGetPlayerSdkVersion();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetPlayerSdkVersion(): string {
+    return 'MediaPlayer_getPlayerSdkVersion';
   }
 
   getPlaySrc(): string {
-    const apiType = 'MediaPlayer_getPlaySrc';
+    const apiType = this.getApiTypeFromGetPlaySrc();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetPlaySrc(): string {
+    return 'MediaPlayer_getPlaySrc';
   }
 
   openWithAgoraCDNSrc(src: string, startPos: number): number {
-    const apiType = 'MediaPlayer_openWithAgoraCDNSrc';
+    const apiType = this.getApiTypeFromOpenWithAgoraCDNSrc(src, startPos);
     const jsonParams = {
-      src,
-      startPos,
+      src: src,
+      startPos: startPos,
       toJSON: () => {
         return {
-          src,
-          startPos,
+          src: src,
+          startPos: startPos,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromOpenWithAgoraCDNSrc(
+    src: string,
+    startPos: number
+  ): string {
+    return 'MediaPlayer_openWithAgoraCDNSrc';
   }
 
   getAgoraCDNLineCount(): number {
-    const apiType = 'MediaPlayer_getAgoraCDNLineCount';
+    const apiType = this.getApiTypeFromGetAgoraCDNLineCount();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetAgoraCDNLineCount(): string {
+    return 'MediaPlayer_getAgoraCDNLineCount';
   }
 
   switchAgoraCDNLineByIndex(index: number): number {
-    const apiType = 'MediaPlayer_switchAgoraCDNLineByIndex';
+    const apiType = this.getApiTypeFromSwitchAgoraCDNLineByIndex(index);
     const jsonParams = {
-      index,
+      index: index,
       toJSON: () => {
-        return { index };
+        return {
+          index: index,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
+  protected getApiTypeFromSwitchAgoraCDNLineByIndex(index: number): string {
+    return 'MediaPlayer_switchAgoraCDNLineByIndex';
+  }
+
   getCurrentAgoraCDNIndex(): number {
-    const apiType = 'MediaPlayer_getCurrentAgoraCDNIndex';
+    const apiType = this.getApiTypeFromGetCurrentAgoraCDNIndex();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
+  protected getApiTypeFromGetCurrentAgoraCDNIndex(): string {
+    return 'MediaPlayer_getCurrentAgoraCDNIndex';
+  }
+
   enableAutoSwitchAgoraCDN(enable: boolean): number {
-    const apiType = 'MediaPlayer_enableAutoSwitchAgoraCDN';
+    const apiType = this.getApiTypeFromEnableAutoSwitchAgoraCDN(enable);
     const jsonParams = {
-      enable,
+      enable: enable,
       toJSON: () => {
-        return { enable };
+        return {
+          enable: enable,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromEnableAutoSwitchAgoraCDN(enable: boolean): string {
+    return 'MediaPlayer_enableAutoSwitchAgoraCDN';
   }
 
   renewAgoraCDNSrcToken(token: string, ts: number): number {
-    const apiType = 'MediaPlayer_renewAgoraCDNSrcToken';
+    const apiType = this.getApiTypeFromRenewAgoraCDNSrcToken(token, ts);
     const jsonParams = {
-      token,
-      ts,
+      token: token,
+      ts: ts,
       toJSON: () => {
         return {
-          token,
-          ts,
+          token: token,
+          ts: ts,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromRenewAgoraCDNSrcToken(
+    token: string,
+    ts: number
+  ): string {
+    return 'MediaPlayer_renewAgoraCDNSrcToken';
   }
 
   switchAgoraCDNSrc(src: string, syncPts = false): number {
-    const apiType = 'MediaPlayer_switchAgoraCDNSrc';
+    const apiType = this.getApiTypeFromSwitchAgoraCDNSrc(src, syncPts);
     const jsonParams = {
-      src,
-      syncPts,
+      src: src,
+      syncPts: syncPts,
       toJSON: () => {
         return {
-          src,
-          syncPts,
+          src: src,
+          syncPts: syncPts,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSwitchAgoraCDNSrc(
+    src: string,
+    syncPts = false
+  ): string {
+    return 'MediaPlayer_switchAgoraCDNSrc';
   }
 
   switchSrc(src: string, syncPts = true): number {
-    const apiType = 'MediaPlayer_switchSrc';
+    const apiType = this.getApiTypeFromSwitchSrc(src, syncPts);
     const jsonParams = {
-      src,
-      syncPts,
+      src: src,
+      syncPts: syncPts,
       toJSON: () => {
         return {
-          src,
-          syncPts,
+          src: src,
+          syncPts: syncPts,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSwitchSrc(src: string, syncPts = true): string {
+    return 'MediaPlayer_switchSrc';
   }
 
   preloadSrc(src: string, startPos: number): number {
-    const apiType = 'MediaPlayer_preloadSrc';
+    const apiType = this.getApiTypeFromPreloadSrc(src, startPos);
     const jsonParams = {
-      src,
-      startPos,
+      src: src,
+      startPos: startPos,
       toJSON: () => {
         return {
-          src,
-          startPos,
+          src: src,
+          startPos: startPos,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromPreloadSrc(src: string, startPos: number): string {
+    return 'MediaPlayer_preloadSrc';
   }
 
   playPreloadedSrc(src: string): number {
-    const apiType = 'MediaPlayer_playPreloadedSrc';
+    const apiType = this.getApiTypeFromPlayPreloadedSrc(src);
     const jsonParams = {
-      src,
+      src: src,
       toJSON: () => {
-        return { src };
+        return {
+          src: src,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromPlayPreloadedSrc(src: string): string {
+    return 'MediaPlayer_playPreloadedSrc';
   }
 
   unloadSrc(src: string): number {
-    const apiType = 'MediaPlayer_unloadSrc';
+    const apiType = this.getApiTypeFromUnloadSrc(src);
     const jsonParams = {
-      src,
+      src: src,
       toJSON: () => {
-        return { src };
+        return {
+          src: src,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromUnloadSrc(src: string): string {
+    return 'MediaPlayer_unloadSrc';
   }
 
   setSpatialAudioParams(params: SpatialAudioParams): number {
-    const apiType = 'MediaPlayer_setSpatialAudioParams';
+    const apiType = this.getApiTypeFromSetSpatialAudioParams(params);
     const jsonParams = {
-      params,
+      params: params,
       toJSON: () => {
-        return { params };
+        return {
+          params: params,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetSpatialAudioParams(
+    params: SpatialAudioParams
+  ): string {
+    return 'MediaPlayer_setSpatialAudioParams';
+  }
+
+  setSoundPositionParams(pan: number, gain: number): number {
+    const apiType = this.getApiTypeFromSetSoundPositionParams(pan, gain);
+    const jsonParams = {
+      pan: pan,
+      gain: gain,
+      toJSON: () => {
+        return {
+          pan: pan,
+          gain: gain,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetSoundPositionParams(
+    pan: number,
+    gain: number
+  ): string {
+    return 'MediaPlayer_setSoundPositionParams';
+  }
+
+  registerAudioFrameObserver(observer: IMediaPlayerAudioFrameObserver): number {
+    const apiType = this.getApiTypeFromRegisterAudioFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterAudioFrameObserver(
+    observer: IMediaPlayerAudioFrameObserver
+  ): string {
+    return 'MediaPlayer_registerAudioFrameObserver';
+  }
+
+  unregisterAudioFrameObserver(
+    observer: IMediaPlayerAudioFrameObserver
+  ): number {
+    const apiType = this.getApiTypeFromUnregisterAudioFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromUnregisterAudioFrameObserver(
+    observer: IMediaPlayerAudioFrameObserver
+  ): string {
+    return 'MediaPlayer_unregisterAudioFrameObserver';
+  }
+
+  registerVideoFrameObserver(observer: IMediaPlayerVideoFrameObserver): number {
+    const apiType = this.getApiTypeFromRegisterVideoFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): string {
+    return 'MediaPlayer_registerVideoFrameObserver';
+  }
+
+  unregisterVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): number {
+    const apiType = this.getApiTypeFromUnregisterVideoFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromUnregisterVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): string {
+    return 'MediaPlayer_unregisterVideoFrameObserver';
   }
 
   setPlayerOptionInInt(key: string, value: number): number {
-    const apiType = 'MediaPlayer_setPlayerOptionInInt';
+    const apiType = this.getApiTypeFromSetPlayerOptionInInt(key, value);
     const jsonParams = {
-      key,
-      value,
+      key: key,
+      value: value,
       toJSON: () => {
         return {
-          key,
-          value,
+          key: key,
+          value: value,
         };
       },
     };
@@ -538,19 +912,227 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result;
   }
 
+  protected getApiTypeFromSetPlayerOptionInInt(
+    key: string,
+    value: number
+  ): string {
+    return 'MediaPlayer_setPlayerOptionInInt';
+  }
+
   setPlayerOptionInString(key: string, value: string): number {
-    const apiType = 'MediaPlayer_setPlayerOptionInString';
+    const apiType = this.getApiTypeFromSetPlayerOptionInString(key, value);
     const jsonParams = {
-      key,
-      value,
+      key: key,
+      value: value,
       toJSON: () => {
         return {
-          key,
-          value,
+          key: key,
+          value: value,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetPlayerOptionInString(
+    key: string,
+    value: string
+  ): string {
+    return 'MediaPlayer_setPlayerOptionInString';
+  }
+}
+
+export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
+  removeAllCaches(): number {
+    const apiType = this.getApiTypeFromRemoveAllCaches();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRemoveAllCaches(): string {
+    return 'MediaPlayerCacheManager_removeAllCaches';
+  }
+
+  removeOldCache(): number {
+    const apiType = this.getApiTypeFromRemoveOldCache();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRemoveOldCache(): string {
+    return 'MediaPlayerCacheManager_removeOldCache';
+  }
+
+  removeCacheByUri(uri: string): number {
+    const apiType = this.getApiTypeFromRemoveCacheByUri(uri);
+    const jsonParams = {
+      uri: uri,
+      toJSON: () => {
+        return {
+          uri: uri,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRemoveCacheByUri(uri: string): string {
+    return 'MediaPlayerCacheManager_removeCacheByUri';
+  }
+
+  setCacheDir(path: string): number {
+    const apiType = this.getApiTypeFromSetCacheDir(path);
+    const jsonParams = {
+      path: path,
+      toJSON: () => {
+        return {
+          path: path,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetCacheDir(path: string): string {
+    return 'MediaPlayerCacheManager_setCacheDir';
+  }
+
+  setMaxCacheFileCount(count: number): number {
+    const apiType = this.getApiTypeFromSetMaxCacheFileCount(count);
+    const jsonParams = {
+      count: count,
+      toJSON: () => {
+        return {
+          count: count,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetMaxCacheFileCount(count: number): string {
+    return 'MediaPlayerCacheManager_setMaxCacheFileCount';
+  }
+
+  setMaxCacheFileSize(cacheSize: number): number {
+    const apiType = this.getApiTypeFromSetMaxCacheFileSize(cacheSize);
+    const jsonParams = {
+      cacheSize: cacheSize,
+      toJSON: () => {
+        return {
+          cacheSize: cacheSize,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetMaxCacheFileSize(cacheSize: number): string {
+    return 'MediaPlayerCacheManager_setMaxCacheFileSize';
+  }
+
+  enableAutoRemoveCache(enable: boolean): number {
+    const apiType = this.getApiTypeFromEnableAutoRemoveCache(enable);
+    const jsonParams = {
+      enable: enable,
+      toJSON: () => {
+        return {
+          enable: enable,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromEnableAutoRemoveCache(enable: boolean): string {
+    return 'MediaPlayerCacheManager_enableAutoRemoveCache';
+  }
+
+  getCacheDir(length: number): string {
+    const apiType = this.getApiTypeFromGetCacheDir(length);
+    const jsonParams = {
+      length: length,
+      toJSON: () => {
+        return {
+          length: length,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const path = jsonResults.path;
+    return path;
+  }
+
+  protected getApiTypeFromGetCacheDir(length: number): string {
+    return 'MediaPlayerCacheManager_getCacheDir';
+  }
+
+  getMaxCacheFileCount(): number {
+    const apiType = this.getApiTypeFromGetMaxCacheFileCount();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetMaxCacheFileCount(): string {
+    return 'MediaPlayerCacheManager_getMaxCacheFileCount';
+  }
+
+  getMaxCacheFileSize(): number {
+    const apiType = this.getApiTypeFromGetMaxCacheFileSize();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetMaxCacheFileSize(): string {
+    return 'MediaPlayerCacheManager_getMaxCacheFileSize';
+  }
+
+  getCacheFileCount(): number {
+    const apiType = this.getApiTypeFromGetCacheFileCount();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetCacheFileCount(): string {
+    return 'MediaPlayerCacheManager_getCacheFileCount';
+  }
+}
+
+export function processIMediaPlayerAudioFrameObserver(
+  handler: IMediaPlayerAudioFrameObserver,
+  event: string,
+  jsonParams: any
+) {
+  switch (event) {
+    case 'onFrame':
+      if (handler.onFrame !== undefined) {
+        handler.onFrame(jsonParams.frame);
+      }
+      break;
+  }
+}
+
+export function processIMediaPlayerVideoFrameObserver(
+  handler: IMediaPlayerVideoFrameObserver,
+  event: string,
+  jsonParams: any
+) {
+  switch (event) {
+    case 'onFrame':
+      if (handler.onFrame !== undefined) {
+        handler.onFrame(jsonParams.frame);
+      }
+      break;
   }
 }

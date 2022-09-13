@@ -12,7 +12,8 @@ target 'ReactNativeAgoraRtcNgExample' do
     :hermes_enabled => false
   )
 
-  pod 'react-native-agora-rtc-ng', :path => '../..'
+  pod 'react-native-agora', :path => '../..'
+#   pod 'AgoraRtcWrapper', :path => '../../ios'
 
   # Enables Flipper.
   #
@@ -23,4 +24,8 @@ target 'ReactNativeAgoraRtcNgExample' do
   post_install do |installer|
     react_native_post_install(installer)
   end
+end
+
+target 'ScreenShare' do
+  pod 'AgoraIrisRTC_iOS', '4.0.0-rc.1'
 end

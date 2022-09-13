@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
 import { HostComponent, ViewProps } from 'react-native';
 
-import { VideoCanvas, VideoSourceType } from '../AgoraBase';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
+import { VideoSourceType } from '../AgoraBase';
+import { RtcRendererViewProps } from '../AgoraRtcRenderView';
 
-export interface RtcRendererViewProps {
-  canvas: VideoCanvas;
-
-  connection?: RtcConnection;
-}
-
-export default abstract class IAgoraRtcRenderView<T> extends Component<
-  ViewProps & RtcRendererViewProps & T,
-  object
-> {
+export default abstract class IAgoraRtcRenderView<
+  T extends RtcRendererViewProps
+> extends Component<ViewProps & T, object> {
   abstract get view(): HostComponent<{ callApi: object }>;
 
   get funcName(): string {
-    let funcName: string = '';
+    let funcName: string;
 
     const { canvas, connection } = this.props;
     if (canvas.sourceType === undefined) {

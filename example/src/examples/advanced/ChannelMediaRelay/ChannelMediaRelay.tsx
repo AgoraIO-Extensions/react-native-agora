@@ -1,5 +1,5 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, Text, TextInput } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelMediaRelayError,
   ChannelMediaRelayEvent,
@@ -8,16 +8,20 @@ import {
   ClientRoleType,
   createAgoraRtcEngine,
   IRtcEngineEventHandler,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
-  Divider,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { ActionItem } from '../../../components/ActionItem';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraText,
+  AgoraTextInput,
+} from '../../../components/ui';
 
 interface State extends BaseVideoComponentState {
   destChannelNames: string[];
@@ -51,7 +55,7 @@ export default class ChannelMediaRelay
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -81,11 +85,11 @@ export default class ChannelMediaRelay
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -95,7 +99,7 @@ export default class ChannelMediaRelay
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -107,7 +111,7 @@ export default class ChannelMediaRelay
   startChannelMediaRelay = () => {
     const { channelId, token, uid, destChannelNames } = this.state;
     if (destChannelNames.length <= 0) {
-      console.error('destChannelNames is invalid');
+      this.error('destChannelNames is invalid');
       return;
     }
 
@@ -129,7 +133,34 @@ export default class ChannelMediaRelay
   };
 
   /**
-   * Step 3-2 (Optional): pauseAllChannelMediaRelay
+   * Step 3-2 (Optional): updateChannelMediaRelay
+   */
+  updateChannelMediaRelay = () => {
+    const { channelId, token, uid, destChannelNames } = this.state;
+    if (destChannelNames.length <= 0) {
+      this.error('destChannelNames is invalid');
+      return;
+    }
+
+    this.engine?.updateChannelMediaRelay({
+      // Configure src info
+      // Set channel name defaults to current
+      // Set uid defaults to local
+      srcInfo: { channelName: channelId, uid, token },
+      // Configure dest infos
+      destInfos: destChannelNames.map((value) => {
+        return {
+          channelName: value,
+          uid: 0,
+          token: '',
+        };
+      }),
+      destCount: destChannelNames.length,
+    });
+  };
+
+  /**
+   * Step 3-3 (Optional): pauseAllChannelMediaRelay
    */
   pauseAllChannelMediaRelay = () => {
     this.engine?.pauseAllChannelMediaRelay();
@@ -137,7 +168,7 @@ export default class ChannelMediaRelay
   };
 
   /**
-   * Step 3-3 (Optional): resumeAllChannelMediaRelay
+   * Step 3-4 (Optional): resumeAllChannelMediaRelay
    */
   resumeAllChannelMediaRelay = () => {
     this.engine?.resumeAllChannelMediaRelay();
@@ -145,7 +176,7 @@ export default class ChannelMediaRelay
   };
 
   /**
-   * Step 3-4: stopChannelMediaRelay
+   * Step 3-5: stopChannelMediaRelay
    */
   stopChannelMediaRelay = () => {
     this.engine?.stopChannelMediaRelay();
@@ -192,26 +223,24 @@ export default class ChannelMediaRelay
     this.info('onChannelMediaRelayEvent', 'code', code);
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const { destChannelNames } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ destChannelNames: text.split(' ') });
           }}
           placeholder={'destChannelNames (split by blank)'}
-          placeholderTextColor={'gray'}
           value={destChannelNames.join(' ')}
         />
-        <Text>{`destCount: ${destChannelNames.length}`}</Text>
-        <Divider />
+        <AgoraText>{`destCount: ${destChannelNames.length}`}</AgoraText>
+        <AgoraDivider />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const {
       joinChannelSuccess,
       startChannelMediaRelay,
@@ -219,7 +248,7 @@ export default class ChannelMediaRelay
     } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           disabled={!joinChannelSuccess}
           title={`${
             startChannelMediaRelay ? 'stop' : 'start'
@@ -230,7 +259,12 @@ export default class ChannelMediaRelay
               : this.startChannelMediaRelay
           }
         />
-        <ActionItem
+        <AgoraButton
+          disabled={!startChannelMediaRelay}
+          title={`updateChannelMediaRelay`}
+          onPress={this.updateChannelMediaRelay}
+        />
+        <AgoraButton
           disabled={!startChannelMediaRelay}
           title={`${
             pauseAllChannelMediaRelay ? 'resume' : 'pause'

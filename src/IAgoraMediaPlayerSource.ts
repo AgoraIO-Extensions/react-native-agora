@@ -1,3 +1,4 @@
+import './extension/IAgoraMediaPlayerSourceExtension';
 import {
   MediaPlayerState,
   MediaPlayerError,
@@ -6,12 +7,11 @@ import {
   SrcInfo,
   PlayerUpdatedInfo,
 } from './AgoraMediaPlayerTypes';
-
-/*
+/**
  * Provides callbacks for media players.
  */
-export abstract class IMediaPlayerSourceObserver {
-  /*
+export interface IMediaPlayerSourceObserver {
+  /**
    * Reports the playback state change.
    * When the state of the media player changes, the SDK triggers this callback to report the current playback state.
    *
@@ -24,15 +24,15 @@ export abstract class IMediaPlayerSourceObserver {
     ec: MediaPlayerError
   ): void;
 
-  /*
-   * Reports the current playback progress.
+  /**
+   * Reports current playback progress.
    * When playing media files, the SDK triggers this callback every one second to report current playback progress.
    *
    * @param position The playback position (ms) of media files.
    */
-  onPositionChanged?(position: number): void;
+  onPositionChanged?(positionMs: number): void;
 
-  /*
+  /**
    * Reports the playback event.
    * After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
    *
@@ -48,7 +48,7 @@ export abstract class IMediaPlayerSourceObserver {
     message: string
   ): void;
 
-  /*
+  /**
    * Occurs when the media metadata is received.
    * The callback occurs when the player receives the media metadata and reports the detailed information of the media metadata.
    *
@@ -58,35 +58,35 @@ export abstract class IMediaPlayerSourceObserver {
    */
   onMetaData?(data: Uint8Array, length: number): void;
 
-  /*
+  /**
    * Reports the playback duration that the buffered data can support.
-   * When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support.
-   * When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns PlayerEventBufferLow.
-   * When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns PlayerEventBufferRecover.
+   * When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support.When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns PlayerEventBufferLow.When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns PlayerEventBufferRecover.
    *
    * @param playCachedBuffer The playback duration (ms) that the buffered data can support.
    */
   onPlayBufferUpdated?(playCachedBuffer: number): void;
 
-  /*
+  /**
    * Reports the events of preloaded media resources.
+   *
+   * @param src The URL of the media resource.
    *
    * @param event Events that occur when media resources are preloaded. See PlayerPreloadEvent .
    */
   onPreloadEvent?(src: string, event: PlayerPreloadEvent): void;
 
-  /*
+  /**
    * @ignore
    */
   onCompleted?(): void;
 
-  /*
+  /**
    * Occurs when the token is about to expire.
    * If the ts is about to expire when you call the switchAgoraCDNLineByIndex method to switch the CDN route for playing the media resource, the SDK triggers this callback to remind you to renew the authentication information. You need to call the renewAgoraCDNSrcToken method to pass in the updated authentication information to update the authentication information of the media resource URL. After updating the authentication information, you need to call switchAgoraCDNLineByIndex to complete the route switching.
    */
   onAgoraCDNTokenWillExpire?(): void;
 
-  /*
+  /**
    * Occurs when the video bitrate of the media resource changes.
    *
    * @param from Information about the video bitrate of the media resource being played. See SrcInfo .
@@ -95,7 +95,7 @@ export abstract class IMediaPlayerSourceObserver {
    */
   onPlayerSrcInfoChanged?(from: SrcInfo, to: SrcInfo): void;
 
-  /*
+  /**
    * Occurs when information related to the media player changes.
    * When the information about the media player changes, the SDK triggers this callback. You can use this callback for troubleshooting.
    *
@@ -103,8 +103,11 @@ export abstract class IMediaPlayerSourceObserver {
    */
   onPlayerInfoUpdated?(info: PlayerUpdatedInfo): void;
 
-  /*
-   * @ignore
+  /**
+   * Reports the volume of the media player.
+   * The SDK triggers this callback every 200 milliseconds to report the current volume of the media player.
+   *
+   * @param volume The volume of the media player. The value ranges from 0 to 255.
    */
   onAudioVolumeIndication?(volume: number): void;
 }

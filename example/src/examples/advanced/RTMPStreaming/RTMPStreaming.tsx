@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   AudioCodecProfileType,
   AudioSampleRateType,
@@ -21,18 +14,27 @@ import {
   TranscodingUser,
   VideoCodecProfileType,
   VideoCodecTypeForStream,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
-  Divider,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { ActionItem } from '../../../components/ActionItem';
-import { PickerView } from '../../../components/PickerView';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraDropdown,
+  AgoraSlider,
+  AgoraStyle,
+  AgoraSwitch,
+  AgoraText,
+  AgoraTextInput,
+  AgoraView,
+} from '../../../components/ui';
+import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
   url: string;
@@ -106,7 +108,7 @@ export default class RTMPStreaming
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -136,11 +138,11 @@ export default class RTMPStreaming
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -150,7 +152,7 @@ export default class RTMPStreaming
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -162,7 +164,7 @@ export default class RTMPStreaming
   startRtmpStream = () => {
     const { url, startRtmpStreamWithTranscoding } = this.state;
     if (!url) {
-      console.error('url is invalid');
+      this.error('url is invalid');
       return;
     }
 
@@ -264,7 +266,7 @@ export default class RTMPStreaming
   stopRtmpStream = () => {
     const { url } = this.state;
     if (!url) {
-      console.error('url is invalid');
+      this.error('url is invalid');
       return;
     }
 
@@ -324,71 +326,42 @@ export default class RTMPStreaming
     this.debug('onTranscodingUpdated');
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const {
       url,
       startRtmpStreamWithTranscoding,
-      width,
-      height,
-      videoBitrate,
-      videoFramerate,
-      videoGop,
       videoCodecProfile,
       backgroundColor,
       videoCodecType,
       watermarkUrl,
       backgroundImageUrl,
       audioSampleRate,
-      audioBitrate,
       audioChannels,
       audioCodecProfile,
+      startRtmpStream,
     } = this.state;
-
-    const renderSlider = (
-      key: string,
-      value: number,
-      min: number,
-      max: number
-    ) => {
-      return (
-        <ActionItem
-          title={`${key} ${value}`}
-          isShowSlider={true}
-          sliderValue={(value - min) / (max - min)}
-          onSliderValueChange={(value) => {
-            // @ts-ignore
-            this.setState({
-              [key]: +((max - min) * value + min).toFixed(0),
-            });
-          }}
-        />
-      );
-    };
-
     return (
       <>
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ url: text });
           }}
           placeholder={`url`}
-          placeholderTextColor={'gray'}
           value={url}
         />
-        <ActionItem
+        <AgoraSwitch
+          disabled={startRtmpStream}
           title={'startRtmpStreamWithTranscoding'}
-          isShowSwitch={true}
-          switchValue={startRtmpStreamWithTranscoding}
-          onSwitchValueChange={(value) => {
+          value={startRtmpStreamWithTranscoding}
+          onValueChange={(value) => {
             this.setState({ startRtmpStreamWithTranscoding: value });
           }}
         />
         {startRtmpStreamWithTranscoding ? (
           <>
-            <Divider />
+            <AgoraDivider />
             <>
-              <Text>backgroundColor</Text>
+              <AgoraText>backgroundColor</AgoraText>
               <ColorPicker
                 style={styles.picker}
                 onColorChange={(selectedColor) => {
@@ -399,160 +372,174 @@ export default class RTMPStreaming
                 color={`#${backgroundColor?.toString(16)}`}
               />
             </>
-            <Divider />
-            <View style={styles.container}>
-              <TextInput
-                style={STYLES.input}
+            <AgoraDivider />
+            <AgoraView style={styles.container}>
+              <AgoraTextInput
+                style={AgoraStyle.fullSize}
                 onChangeText={(text) => {
-                  this.setState({ width: +text });
+                  if (isNaN(+text)) return;
+                  this.setState({
+                    width: text === '' ? this.createState().width : +text,
+                  });
                 }}
-                keyboardType={'numeric'}
-                placeholder={`width (defaults: ${width})`}
-                placeholderTextColor={'gray'}
-                value={
-                  width === this.createState().width ? '' : width.toString()
+                keyboardType={
+                  Platform.OS === 'android'
+                    ? 'numeric'
+                    : 'numbers-and-punctuation'
                 }
+                placeholder={`width (defaults: ${this.createState().width})`}
               />
-              <TextInput
-                style={STYLES.input}
+              <AgoraTextInput
+                style={AgoraStyle.fullSize}
                 onChangeText={(text) => {
-                  this.setState({ height: +text });
+                  if (isNaN(+text)) return;
+                  this.setState({
+                    height: text === '' ? this.createState().height : +text,
+                  });
                 }}
-                keyboardType={'numeric'}
-                placeholder={`height (defaults: ${height})`}
-                placeholderTextColor={'gray'}
-                value={
-                  height === this.createState().height ? '' : height.toString()
+                keyboardType={
+                  Platform.OS === 'android'
+                    ? 'numeric'
+                    : 'numbers-and-punctuation'
                 }
+                placeholder={`height (defaults: ${this.createState().height})`}
               />
-            </View>
-            <TextInput
-              style={STYLES.input}
+            </AgoraView>
+            <AgoraTextInput
               onChangeText={(text) => {
-                this.setState({ videoBitrate: +text });
+                if (isNaN(+text)) return;
+                this.setState({
+                  videoBitrate:
+                    text === '' ? this.createState().videoBitrate : +text,
+                });
               }}
-              keyboardType={'numeric'}
-              placeholder={`videoBitrate (defaults: ${videoBitrate})`}
-              placeholderTextColor={'gray'}
-              value={
-                videoBitrate === this.createState().videoBitrate
-                  ? ''
-                  : videoBitrate.toString()
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
               }
+              placeholder={`videoBitrate (defaults: ${
+                this.createState().videoBitrate
+              })`}
             />
-            <TextInput
-              style={STYLES.input}
+            <AgoraTextInput
               onChangeText={(text) => {
-                this.setState({ videoFramerate: +text });
+                if (isNaN(+text)) return;
+                this.setState({
+                  videoFramerate:
+                    text === '' ? this.createState().videoFramerate : +text,
+                });
               }}
-              keyboardType={'numeric'}
-              placeholder={`videoFramerate (defaults: ${videoFramerate})`}
-              placeholderTextColor={'gray'}
-              value={
-                videoFramerate === this.createState().videoFramerate
-                  ? ''
-                  : videoFramerate.toString()
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
               }
+              placeholder={`videoFramerate (defaults: ${
+                this.createState().videoFramerate
+              })`}
             />
-            <TextInput
-              style={STYLES.input}
+            <AgoraTextInput
               onChangeText={(text) => {
-                this.setState({ videoGop: +text });
+                if (isNaN(+text)) return;
+                this.setState({
+                  videoGop: text === '' ? this.createState().videoGop : +text,
+                });
               }}
-              keyboardType={'numeric'}
-              placeholder={`videoGop (defaults: ${videoGop})`}
-              placeholderTextColor={'gray'}
-              value={
-                videoGop === this.createState().videoGop
-                  ? ''
-                  : videoGop.toString()
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
               }
+              placeholder={`videoGop (defaults: ${
+                this.createState().videoGop
+              })`}
             />
-            <View style={styles.container}>
-              <PickerView
-                title={'videoCodecProfile'}
-                type={VideoCodecProfileType}
-                selectedValue={videoCodecProfile}
-                onValueChange={(value) => {
-                  this.setState({ videoCodecProfile: value });
-                }}
-              />
-            </View>
-            <Divider />
-            <View style={styles.container}>
-              <PickerView
-                title={'videoCodecType'}
-                type={VideoCodecTypeForStream}
-                selectedValue={videoCodecType}
-                onValueChange={(value) => {
-                  this.setState({ videoCodecType: value });
-                }}
-              />
-            </View>
-            <Divider />
-            <TextInput
-              style={STYLES.input}
+            <AgoraDropdown
+              title={'videoCodecProfile'}
+              items={enumToItems(VideoCodecProfileType)}
+              value={videoCodecProfile}
+              onValueChange={(value) => {
+                this.setState({ videoCodecProfile: value });
+              }}
+            />
+            <AgoraDivider />
+            <AgoraDropdown
+              title={'videoCodecType'}
+              items={enumToItems(VideoCodecTypeForStream)}
+              value={videoCodecType}
+              onValueChange={(value) => {
+                this.setState({ videoCodecType: value });
+              }}
+            />
+            <AgoraDivider />
+            <AgoraTextInput
               onChangeText={(text) => {
                 this.setState({ watermarkUrl: text });
               }}
               placeholder={'watermarkUrl'}
-              placeholderTextColor={'gray'}
               value={watermarkUrl}
             />
-            <TextInput
-              style={STYLES.input}
+            <AgoraTextInput
               onChangeText={(text) => {
                 this.setState({ backgroundImageUrl: text });
               }}
               placeholder={'backgroundImageUrl'}
-              placeholderTextColor={'gray'}
               value={backgroundImageUrl}
             />
-            <View style={styles.container}>
-              <PickerView
-                title={'audioSampleRate'}
-                type={AudioSampleRateType}
-                selectedValue={audioSampleRate}
-                onValueChange={(value) => {
-                  this.setState({ audioSampleRate: value });
-                }}
-              />
-            </View>
-            <Divider />
-            <TextInput
-              style={STYLES.input}
-              onChangeText={(text) => {
-                this.setState({ audioBitrate: +text });
+            <AgoraDropdown
+              title={'audioSampleRate'}
+              items={enumToItems(AudioSampleRateType)}
+              value={audioSampleRate}
+              onValueChange={(value) => {
+                this.setState({ audioSampleRate: value });
               }}
-              keyboardType={'numeric'}
-              placeholder={`audioBitrate (defaults: ${audioBitrate})`}
-              placeholderTextColor={'gray'}
-              value={
-                audioBitrate === this.createState().audioBitrate
-                  ? ''
-                  : audioBitrate.toString()
-              }
             />
-            {renderSlider('audioChannels', audioChannels, 1, 5)}
-            <Divider />
-            <View style={styles.container}>
-              <PickerView
-                title={'audioCodecProfile'}
-                type={AudioCodecProfileType}
-                selectedValue={audioCodecProfile}
-                onValueChange={(value) => {
-                  this.setState({ audioCodecProfile: value });
-                }}
-              />
-            </View>
+            <AgoraDivider />
+            <AgoraTextInput
+              onChangeText={(text) => {
+                if (isNaN(+text)) return;
+                this.setState({
+                  audioBitrate:
+                    text === '' ? this.createState().audioBitrate : +text,
+                });
+              }}
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
+              }
+              placeholder={`audioBitrate (defaults: ${
+                this.createState().audioBitrate
+              })`}
+            />
+            <AgoraSlider
+              title={`audioChannels ${audioChannels}`}
+              minimumValue={1}
+              maximumValue={5}
+              step={1}
+              value={audioChannels}
+              onSlidingComplete={(value) => {
+                this.setState({ audioChannels: value });
+              }}
+            />
+            <AgoraDivider />
+            <AgoraDropdown
+              title={'audioCodecProfile'}
+              items={enumToItems(AudioCodecProfileType)}
+              value={audioCodecProfile}
+              onValueChange={(value) => {
+                this.setState({ audioCodecProfile: value });
+              }}
+            />
           </>
         ) : undefined}
-        <Divider />
+        <AgoraDivider />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const {
       joinChannelSuccess,
       startRtmpStreamWithTranscoding,
@@ -560,12 +547,12 @@ export default class RTMPStreaming
     } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           disabled={!joinChannelSuccess}
           title={`${startRtmpStream ? 'stop' : 'start'} Rtmp Stream`}
           onPress={startRtmpStream ? this.stopRtmpStream : this.startRtmpStream}
         />
-        <ActionItem
+        <AgoraButton
           disabled={!startRtmpStreamWithTranscoding || !startRtmpStream}
           title={`update Rtmp Transcoding`}
           onPress={this.updateRtmpTranscoding}

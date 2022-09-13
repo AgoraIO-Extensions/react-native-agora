@@ -1,5 +1,5 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, TextInput } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -10,17 +10,23 @@ import {
   IRtcEngineEx,
   MediaPlayerError,
   MediaPlayerState,
+  RtcConnection,
   RtcSurfaceView,
+  UserOfflineReasonType,
   VideoSourceType,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { ActionItem } from '../../../components/ActionItem';
+import {
+  AgoraButton,
+  AgoraStyle,
+  AgoraTextInput,
+} from '../../../components/ui';
 
 interface State extends BaseVideoComponentState {
   token2: string;
@@ -60,7 +66,7 @@ export default class SendMultiVideoStream
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine() as IRtcEngineEx;
@@ -90,11 +96,11 @@ export default class SendMultiVideoStream
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -104,7 +110,7 @@ export default class SendMultiVideoStream
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -116,7 +122,7 @@ export default class SendMultiVideoStream
   createMediaPlayer = () => {
     const { url } = this.state;
     if (!url) {
-      console.error('url is invalid');
+      this.error('url is invalid');
     }
 
     this.player = this.engine?.createMediaPlayer();
@@ -130,11 +136,11 @@ export default class SendMultiVideoStream
   publishMediaPlayerTrack = () => {
     const { channelId, token2, uid2 } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid2 <= 0) {
-      console.error('uid2 is invalid');
+      this.error('uid2 is invalid');
       return;
     }
 
@@ -143,6 +149,10 @@ export default class SendMultiVideoStream
       token2,
       { channelId, localUid: uid2 },
       {
+        autoSubscribeAudio: false,
+        autoSubscribeVideo: false,
+        publishMicrophoneTrack: false,
+        publishCameraTrack: false,
         clientRoleType: ClientRoleType.ClientRoleBroadcaster,
         publishMediaPlayerAudioTrack: true,
         publishMediaPlayerVideoTrack: true,
@@ -156,7 +166,6 @@ export default class SendMultiVideoStream
    */
   destroyMediaPlayer = () => {
     if (!this.player) {
-      console.error('player is invalid');
       return;
     }
 
@@ -177,6 +186,28 @@ export default class SendMultiVideoStream
    */
   protected releaseRtcEngine() {
     this.engine?.release();
+  }
+
+  onJoinChannelSuccess(connection: RtcConnection, elapsed: number) {
+    const { uid2 } = this.state;
+    if (connection.localUid === uid2) return;
+    super.onJoinChannelSuccess(connection, elapsed);
+  }
+
+  onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
+    const { uid2 } = this.state;
+    if (connection.localUid === uid2 || remoteUid === uid2) return;
+    super.onUserJoined(connection, remoteUid, elapsed);
+  }
+
+  onUserOffline(
+    connection: RtcConnection,
+    remoteUid: number,
+    reason: UserOfflineReasonType
+  ) {
+    const { uid2 } = this.state;
+    if (connection.localUid === uid2 || remoteUid === uid2) return;
+    super.onUserOffline(connection, remoteUid, reason);
   }
 
   onPlayerSourceStateChanged(state: MediaPlayerState, ec: MediaPlayerError) {
@@ -227,41 +258,42 @@ export default class SendMultiVideoStream
     this.player?.play();
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const { uid2, url } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
-            this.setState({ uid2: +text });
+            if (isNaN(+text)) return;
+            this.setState({
+              uid2: text === '' ? this.createState().uid2 : +text,
+            });
           }}
-          keyboardType={'numeric'}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`uid2 (must > 0)`}
-          placeholderTextColor={'gray'}
           value={uid2 > 0 ? uid2.toString() : ''}
         />
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ url: text });
           }}
           placeholder={`url`}
-          placeholderTextColor={'gray'}
           value={url}
         />
       </>
     );
   }
 
-  protected renderVideo(): React.ReactNode {
+  protected renderUsers(): React.ReactNode {
     const { open } = this.state;
     return (
       <>
-        {super.renderVideo()}
+        {super.renderUsers()}
         {open ? (
           <RtcSurfaceView
-            style={STYLES.video}
+            style={AgoraStyle.videoLarge}
             canvas={{
               uid: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,
@@ -272,15 +304,15 @@ export default class SendMultiVideoStream
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { open } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           title={`${open ? 'destroy' : 'create'} Media Player`}
           onPress={open ? this.destroyMediaPlayer : this.createMediaPlayer}
         />
-        <ActionItem
+        <AgoraButton
           disabled={!open}
           title={`publish Media Player Track`}
           onPress={this.publishMediaPlayerTrack}

@@ -21,7 +21,7 @@ android {
     compileSdkVersion safeExtGet('ReactNativeAgoraRtcNg_compileSdkVersion', 29)
     buildToolsVersion safeExtGet('ReactNativeAgoraRtcNg_buildToolsVersion', '29.0.2')
     defaultConfig {
-        minSdkVersion safeExtGet('ReactNativeAgoraRtcNg_minSdkVersion', 16)
+        minSdkVersion safeExtGet('ReactNativeAgoraRtcNg_minSdkVersion', 21)
         targetSdkVersion safeExtGet('ReactNativeAgoraRtcNg_targetSdkVersion', 29)
         versionCode 1
         versionName "1.0"
@@ -56,6 +56,8 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    api 'io.agora.rtc:agora-special-full:3.8.201.2.2'
-    implementation 'io.agora.rtc:iris-rtc:3.8.201'
+    api 'io.agora.rtc:agora-special-full:4.0.0.5'
+    implementation 'io.agora.rtc:full-screen-sharing:4.0.0.5'
+    implementation 'io.agora.rtc:iris-rtc:4.0.0-rc.1'
+//    implementation project(':iris')
 }

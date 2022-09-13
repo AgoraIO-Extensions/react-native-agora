@@ -1,8 +1,8 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { Overlay } from '@rneui/themed';
 
-import { Divider } from './BaseComponent';
+import { AgoraDivider, AgoraText } from './ui';
 
 export interface Props {
   visible: boolean;
@@ -17,13 +17,13 @@ export const LogSink = ({ visible, data, onBackdropPress }: Props) => {
       onBackdropPress={onBackdropPress}
       overlayStyle={styles.overlay}
     >
-      <Text style={styles.title}>Logs</Text>
-      <Divider />
+      <AgoraText style={styles.title}>Logs</AgoraText>
+      <AgoraDivider />
       <FlatList
         data={data}
         inverted={true}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => <Text>{item}</Text>}
+        renderItem={({ item }) => <AgoraText>{item}</AgoraText>}
       />
     </Overlay>
   );

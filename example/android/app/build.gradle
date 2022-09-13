@@ -212,7 +212,7 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation project(':react-native-agora-rtc-ng')
+    implementation project(':react-native-agora')
 }
 
 // Run this once to be able to run the application with BUCK

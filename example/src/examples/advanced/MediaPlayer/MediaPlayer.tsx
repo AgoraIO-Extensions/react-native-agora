@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TextInput } from 'react-native';
+import { Platform } from 'react-native';
 import {
   createAgoraRtcEngine,
   IMediaPlayer,
@@ -10,16 +10,21 @@ import {
   MediaPlayerState,
   RtcSurfaceView,
   VideoSourceType,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseComponentState,
-  Divider,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { ActionItem } from '../../../components/ActionItem';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraSlider,
+  AgoraStyle,
+  AgoraTextInput,
+} from '../../../components/ui';
 
 interface State extends BaseComponentState {
   url: string;
@@ -61,7 +66,7 @@ export default class MediaPlayer
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -87,7 +92,7 @@ export default class MediaPlayer
   open = () => {
     const { url } = this.state;
     if (!url) {
-      console.error('url is invalid');
+      this.error('url is invalid');
     }
 
     this.player?.open(url, 0);
@@ -108,19 +113,20 @@ export default class MediaPlayer
   /**
    * Step 3-3 (Optional): seek
    */
-  seek = (percent: number) => {
-    if (percent < 0 || percent > 1) {
-      console.error(`percent is invalid`);
-      return;
-    }
-
+  seek = (position: number) => {
     const { duration } = this.state;
+
     if (duration <= 0) {
-      console.error(`duration is invalid`);
+      this.error(`duration is invalid`);
       return;
     }
 
-    this.player?.seek(duration * percent);
+    if (position < 0 || position > duration) {
+      this.error(`percent is invalid`);
+      return;
+    }
+
+    this.player?.seek(position);
   };
 
   /**
@@ -175,7 +181,7 @@ export default class MediaPlayer
   getStreamInfo = () => {
     const streamCount = this.player?.getStreamCount();
     if (streamCount === undefined || streamCount <= 0) {
-      console.error(`streamCount is invalid`);
+      this.error(`streamCount is invalid`);
     }
 
     const streamInfo = this.player?.getStreamInfo(0);
@@ -231,7 +237,7 @@ export default class MediaPlayer
         this.setState({ play: false });
         break;
       case MediaPlayerState.PlayerStateStopped:
-        this.setState({ open: false, play: false, pause: false });
+        this.setState({ open: false, play: false, pause: false, mute: false });
         break;
       case MediaPlayerState.PlayerStatePausingInternal:
         break;
@@ -273,93 +279,78 @@ export default class MediaPlayer
     );
   }
 
-  protected renderTop(): React.ReactNode {
+  protected renderChannel(): React.ReactNode {
     return undefined;
   }
 
-  protected renderBottom(): React.ReactNode {
-    const { url, open, position, duration, playoutVolume, loopCount } =
-      this.state;
-
-    const renderSlider = (
-      key: string,
-      value: number,
-      min: number,
-      max: number
-    ) => {
-      return (
-        <ActionItem
-          title={`${key} ${value}`}
-          isShowSlider={true}
-          sliderValue={(value - min) / (max - min)}
-          onSliderValueChange={(value) => {
-            // @ts-ignore
-            this.setState({
-              [key]: +((max - min) * value + min).toFixed(0),
-            });
-          }}
-        />
-      );
-    };
-
+  protected renderConfiguration(): React.ReactNode {
+    const { url, open, position, duration, playoutVolume } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ url: text });
           }}
           placeholder={'url'}
           value={url}
         />
-        <ActionItem
+        <AgoraSlider
           disabled={!open}
           title={`${position} ms : ${duration} ms`}
-          isShowSlider={true}
-          sliderValue={duration === 0 ? 0 : position / duration}
-          onSliderValueChange={(value) => {
+          minimumValue={0}
+          maximumValue={duration}
+          step={1000}
+          value={position}
+          onSlidingComplete={(value) => {
             this.seek(value);
           }}
         />
-        <Divider />
-        {renderSlider('playoutVolume', playoutVolume, 0, 400)}
-        <Button
+        <AgoraDivider />
+        <AgoraSlider
+          title={`playoutVolume ${playoutVolume}`}
+          minimumValue={0}
+          maximumValue={400}
+          step={1}
+          value={playoutVolume}
+          onSlidingComplete={(value) => {
+            this.setState({ playoutVolume: value });
+          }}
+        />
+        <AgoraButton
           disabled={!open}
           title={'adjust Playout Volume'}
           onPress={this.adjustPlayoutVolume}
         />
-        <Divider />
-        <TextInput
-          style={STYLES.input}
+        <AgoraDivider />
+        <AgoraTextInput
           onChangeText={(text) => {
-            this.setState({ loopCount: +text });
+            if (isNaN(+text)) return;
+            this.setState({
+              loopCount: text === '' ? this.createState().loopCount : +text,
+            });
           }}
-          keyboardType={'numeric'}
-          placeholder={`loopCount (defaults: ${loopCount})`}
-          placeholderTextColor={'gray'}
-          value={
-            loopCount === this.createState().loopCount
-              ? ''
-              : loopCount.toString()
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
           }
+          placeholder={`loopCount (defaults: ${this.createState().loopCount})`}
         />
-        <Button
+        <AgoraButton
           disabled={!open}
           title={'set Loop Count'}
           onPress={this.setLoopCount}
         />
-        <Divider />
+        <AgoraDivider />
       </>
     );
   }
 
-  protected renderVideo(): React.ReactNode {
+  protected renderUsers(): React.ReactNode {
     const { open } = this.state;
     return (
       <>
         {open ? (
           <RtcSurfaceView
-            style={STYLES.video}
+            style={AgoraStyle.videoLarge}
             canvas={{
               uid: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,
@@ -370,27 +361,27 @@ export default class MediaPlayer
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { open, play, pause, mute } = this.state;
     return (
       <>
-        <ActionItem disabled={open} title={`open`} onPress={this.open} />
-        <ActionItem
+        <AgoraButton disabled={open} title={`open`} onPress={this.open} />
+        <AgoraButton
           disabled={!open}
           title={`${play ? 'stop' : 'play'} Media Player`}
           onPress={play ? this.stop : this.play}
         />
-        <ActionItem
+        <AgoraButton
           disabled={!play}
           title={`${pause ? 'resume' : 'pause'} Media Player`}
           onPress={pause ? this.resume : this.pause}
         />
-        <ActionItem
-          disabled={!play}
+        <AgoraButton
+          disabled={!open}
           title={`${mute ? 'un' : ''}mute`}
           onPress={mute ? this.unmute : this.mute}
         />
-        <ActionItem
+        <AgoraButton
           disabled={!open}
           title={`get Stream Info`}
           onPress={this.getStreamInfo}

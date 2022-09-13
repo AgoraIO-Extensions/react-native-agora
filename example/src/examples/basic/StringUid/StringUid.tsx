@@ -1,5 +1,5 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, TextInput } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -9,17 +9,15 @@ import {
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
-  WarnCodeType,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
   BaseComponent,
-  STYLES,
 } from '../../../components/BaseComponent';
-import { ActionItem } from '../../../components/ActionItem';
-
-const Config = require('../../../config/agora.config.json');
+import { AgoraButton, AgoraTextInput } from '../../../components/ui';
 
 interface State extends BaseAudioComponentState {
   userAccount: string;
@@ -48,7 +46,7 @@ export default class StringUid
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -76,11 +74,11 @@ export default class StringUid
   protected joinChannel() {
     const { channelId, token, userAccount } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (!userAccount) {
-      console.error('userAccount is invalid');
+      this.error('userAccount is invalid');
       return;
     }
 
@@ -123,10 +121,6 @@ export default class StringUid
     this.engine?.release();
   }
 
-  onWarning(warn: WarnCodeType, msg: string) {
-    super.onWarning(warn, msg);
-  }
-
   onError(err: ErrorCodeType, msg: string) {
     super.onError(err, msg);
   }
@@ -155,13 +149,15 @@ export default class StringUid
     this.info('LocalUserRegistered', uid, userAccount);
   }
 
-  protected renderBottom(): React.ReactNode {
-    const { userAccount } = this.state;
+  protected renderConfiguration(): React.ReactNode {
+    const { userAccount, joinChannelSuccess } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
-          onChangeText={(text) => this.setState({ userAccount: text })}
+        <AgoraTextInput
+          editable={!joinChannelSuccess}
+          onChangeText={(text) => {
+            this.setState({ userAccount: text });
+          }}
           placeholder={`userAccount`}
           value={userAccount}
         />
@@ -169,11 +165,11 @@ export default class StringUid
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { joinChannelSuccess } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           disabled={!joinChannelSuccess}
           title={`get User Info By User Account`}
           onPress={this.getUserInfoByUserAccount}

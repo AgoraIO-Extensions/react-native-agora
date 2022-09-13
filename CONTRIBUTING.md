@@ -51,7 +51,7 @@ Remember to add tests for your change if possible. Run the unit tests by:
 yarn test
 ```
 
-To edit the Objective-C files, open `example/ios/ReactNativeAgoraRtcNgExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > react-native-agora-rtc-ng`.
+To edit the Objective-C files, open `example/ios/ReactNativeAgoraRtcNgExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > react-native-agora`.
 
 To edit the Kotlin files, open `example/android` in Android studio and find the source files at `io/agora/rtc/ng/react` under `Android`.
 
