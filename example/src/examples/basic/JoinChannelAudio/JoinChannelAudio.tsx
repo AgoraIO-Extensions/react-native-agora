@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -19,17 +13,21 @@ import {
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
-  WarnCodeType,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
   BaseComponent,
-  Divider,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { ActionItem } from '../../../components/ActionItem';
-import { PickerView } from '../../../components/PickerView';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraDropdown,
+  AgoraSlider,
+} from '../../../components/ui';
+import { enumToItems } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   enableLocalAudio: boolean;
@@ -72,7 +70,7 @@ export default class JoinChannelAudio
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -100,11 +98,11 @@ export default class JoinChannelAudio
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -114,55 +112,79 @@ export default class JoinChannelAudio
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
   }
 
   /**
-   * Step 3-1: startAudioMixing
+   * Step 3-1-1 (Optional): enableLocalAudio
    */
   enableLocalAudio = () => {
     this.engine?.enableLocalAudio(true);
     this.setState({ enableLocalAudio: true });
   };
 
+  /**
+   * Step 3-1-2 (Optional): disableLocalAudio
+   */
   disableLocalAudio = () => {
     this.engine?.enableLocalAudio(false);
     this.setState({ enableLocalAudio: false });
   };
 
+  /**
+   * Step 3-2-1 (Optional): muteLocalAudioStream
+   */
   muteLocalAudioStream = () => {
     this.engine?.muteLocalAudioStream(true);
     this.setState({ muteLocalAudioStream: true });
   };
 
+  /**
+   * Step 3-2-2 (Optional): unmuteLocalAudioStream
+   */
   unmuteLocalAudioStream = () => {
     this.engine?.muteLocalAudioStream(false);
     this.setState({ muteLocalAudioStream: false });
   };
 
+  /**
+   * Step 3-3-1 (Optional): enableSpeakerphone
+   */
   enableSpeakerphone = () => {
     this.engine?.setEnableSpeakerphone(true);
     this.setState({ enableSpeakerphone: true });
   };
 
+  /**
+   * Step 3-3-2 (Optional): disableSpeakerphone
+   */
   disableSpeakerphone = () => {
     this.engine?.setEnableSpeakerphone(false);
     this.setState({ enableSpeakerphone: false });
   };
 
+  /**
+   * Step 3-4 (Optional): adjustRecordingSignalVolume
+   */
   adjustRecordingSignalVolume = () => {
     const { recordingSignalVolume } = this.state;
     this.engine?.adjustRecordingSignalVolume(recordingSignalVolume);
   };
 
+  /**
+   * Step 3-5 (Optional): adjustPlaybackSignalVolume
+   */
   adjustPlaybackSignalVolume = () => {
     const { playbackSignalVolume } = this.state;
     this.engine?.adjustPlaybackSignalVolume(playbackSignalVolume);
   };
 
+  /**
+   * Step 3-6-1 (Optional): enableInEarMonitoring
+   */
   enableInEarMonitoring = () => {
     const { includeAudioFilters } = this.state;
     if (
@@ -173,11 +195,17 @@ export default class JoinChannelAudio
     }
   };
 
+  /**
+   * Step 3-6-2 (Optional): setInEarMonitoringVolume
+   */
   setInEarMonitoringVolume = () => {
     const { inEarMonitoringVolume } = this.state;
     this.engine?.setInEarMonitoringVolume(inEarMonitoringVolume);
   };
 
+  /**
+   * Step 3-6-3 (Optional): disableInEarMonitoring
+   */
   disableInEarMonitoring = () => {
     const { includeAudioFilters } = this.state;
     if (
@@ -200,10 +228,6 @@ export default class JoinChannelAudio
    */
   protected releaseRtcEngine() {
     this.engine?.release();
-  }
-
-  onWarning(warn: WarnCodeType, msg: string) {
-    super.onWarning(warn, msg);
   }
 
   onError(err: ErrorCodeType, msg: string) {
@@ -282,7 +306,7 @@ export default class JoinChannelAudio
     this.info('onAudioRoutingChanged', 'routing', routing);
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const {
       recordingSignalVolume,
       playbackSignalVolume,
@@ -290,65 +314,68 @@ export default class JoinChannelAudio
       enableInEarMonitoring,
       inEarMonitoringVolume,
     } = this.state;
-
-    const renderSlider = (
-      key: string,
-      value: number,
-      min: number,
-      max: number
-    ) => {
-      return (
-        <ActionItem
-          title={`${key} ${value}`}
-          isShowSlider={true}
-          sliderValue={(value - min) / (max - min)}
-          onSliderValueChange={(value) => {
-            // @ts-ignore
-            this.setState({
-              [key]: +((max - min) * value + min).toFixed(0),
-            });
-          }}
-        />
-      );
-    };
-
     return (
       <>
-        {renderSlider('recordingSignalVolume', recordingSignalVolume, 0, 400)}
-        <Button
+        <AgoraSlider
+          title={`recordingSignalVolume ${recordingSignalVolume}`}
+          minimumValue={0}
+          maximumValue={400}
+          step={1}
+          value={recordingSignalVolume}
+          onSlidingComplete={(value) => {
+            this.setState({ recordingSignalVolume: value });
+          }}
+        />
+        <AgoraButton
           title={'adjust Recording Signal Volume'}
           onPress={this.adjustRecordingSignalVolume}
         />
-        <Divider />
-        {renderSlider('playbackSignalVolume', playbackSignalVolume, 0, 400)}
-        <Button
+        <AgoraDivider />
+        <AgoraSlider
+          title={`playbackSignalVolume ${playbackSignalVolume}`}
+          minimumValue={0}
+          maximumValue={400}
+          step={1}
+          value={playbackSignalVolume}
+          onSlidingComplete={(value) => {
+            this.setState({ playbackSignalVolume: value });
+          }}
+        />
+        <AgoraButton
           title={'adjust Playback Signal Volume'}
           onPress={this.adjustPlaybackSignalVolume}
         />
-        <Divider />
-        <View style={styles.container}>
-          <PickerView
-            title={'includeAudioFilters'}
-            type={EarMonitoringFilterType}
-            selectedValue={includeAudioFilters}
-            onValueChange={(value: EarMonitoringFilterType) => {
-              this.setState({ includeAudioFilters: value });
-            }}
-          />
-        </View>
-        <Divider />
-        {renderSlider('inEarMonitoringVolume', inEarMonitoringVolume, 0, 100)}
-        <Button
+        <AgoraDivider />
+        <AgoraDropdown
+          title={'includeAudioFilters'}
+          items={enumToItems(EarMonitoringFilterType)}
+          value={includeAudioFilters}
+          onValueChange={(value) => {
+            this.setState({ includeAudioFilters: value });
+          }}
+        />
+        <AgoraDivider />
+        <AgoraSlider
+          title={`inEarMonitoringVolume ${inEarMonitoringVolume}`}
+          minimumValue={0}
+          maximumValue={100}
+          step={1}
+          value={inEarMonitoringVolume}
+          onSlidingComplete={(value) => {
+            this.setState({ inEarMonitoringVolume: value });
+          }}
+        />
+        <AgoraButton
           disabled={!enableInEarMonitoring}
           title={`set In Ear Monitoring Volume`}
           onPress={this.setInEarMonitoringVolume}
         />
-        <Divider />
+        <AgoraDivider />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const {
       enableLocalAudio,
       muteLocalAudioStream,
@@ -357,13 +384,13 @@ export default class JoinChannelAudio
     } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           title={`${enableLocalAudio ? 'disable' : 'enable'} Local Audio`}
           onPress={
             enableLocalAudio ? this.disableLocalAudio : this.enableLocalAudio
           }
         />
-        <ActionItem
+        <AgoraButton
           title={`${
             muteLocalAudioStream ? 'unmute' : 'mute'
           } Local Audio Stream`}
@@ -373,7 +400,7 @@ export default class JoinChannelAudio
               : this.muteLocalAudioStream
           }
         />
-        <ActionItem
+        <AgoraButton
           title={`${enableSpeakerphone ? 'disable' : 'enable'} Speakerphone`}
           onPress={
             enableSpeakerphone
@@ -381,7 +408,7 @@ export default class JoinChannelAudio
               : this.enableSpeakerphone
           }
         />
-        <ActionItem
+        <AgoraButton
           title={`${
             enableInEarMonitoring ? 'disable' : 'enable'
           } In Ear Monitoring`}
@@ -395,11 +422,3 @@ export default class JoinChannelAudio
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});

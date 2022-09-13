@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, PermissionsAndroid, Platform, TextInput } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -9,16 +9,16 @@ import {
   Metadata,
   MetadataType,
   VideoSourceType,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
 import { Buffer } from 'buffer';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { ActionItem } from '../../../components/ActionItem';
+import { AgoraButton, AgoraTextInput } from '../../../components/ui';
 
 interface State extends BaseVideoComponentState {
   metadataBuffer: string;
@@ -48,7 +48,7 @@ export default class SendMetadata
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -80,11 +80,11 @@ export default class SendMetadata
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -94,7 +94,7 @@ export default class SendMetadata
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -116,7 +116,7 @@ export default class SendMetadata
   sendMetaData = () => {
     const { metadataBuffer } = this.state;
     if (!metadataBuffer) {
-      console.error('metadataBuffer is invalid');
+      this.error('metadataBuffer is invalid');
       return;
     }
 
@@ -147,40 +147,32 @@ export default class SendMetadata
 
   onMetadataReceived(metadata: Metadata) {
     this.info('onMetadataReceived', 'metadata', metadata);
-    Alert.alert(
+    this.alert(
       `Receive from uid:${metadata.uid}`,
-      `${metadata.buffer?.toString()}`,
-      [
-        {
-          text: 'Ok',
-          onPress: () => {},
-        },
-      ]
+      `${metadata.buffer?.toString()}`
     );
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const { metadataBuffer } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ metadataBuffer: text });
           }}
           placeholder={`metadataBuffer`}
-          placeholderTextColor={'gray'}
           value={metadataBuffer}
         />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { joinChannelSuccess } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           disabled={!joinChannelSuccess}
           title={`send Metadata`}
           onPress={this.sendMetaData}

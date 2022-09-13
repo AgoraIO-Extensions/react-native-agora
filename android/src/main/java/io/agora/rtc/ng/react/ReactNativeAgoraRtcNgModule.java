@@ -15,6 +15,9 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,7 @@ public class ReactNativeAgoraRtcNgModule
   @ReactMethod(isBlockingSynchronousMethod = true)
   public void newIrisApiEngine() {
     if (irisApiEngine == null) {
+      IrisApiEngine.enableUseJsonArray(true);
       irisApiEngine = new IrisApiEngine(getReactApplicationContext());
       irisApiEngine.setEventHandler(this);
     }
@@ -55,7 +59,7 @@ public class ReactNativeAgoraRtcNgModule
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public String callApi(ReadableMap arguments) {
+  public String callApi(ReadableMap arguments) throws JSONException {
     String funcName = arguments.getString("funcName");
     String params = arguments.getString("params");
     List<byte[]> buffers = null;
@@ -72,13 +76,8 @@ public class ReactNativeAgoraRtcNgModule
       return irisApiEngine.callIrisApi(funcName, params, buffers);
     } catch (Exception e) {
       e.printStackTrace();
-      return null;
+      return new JSONObject().put("result", e.getMessage()).toString();
     }
-  }
-
-  @ReactMethod(isBlockingSynchronousMethod = true)
-  public void loadExtensionProvider(String path) {
-    System.loadLibrary(path);
   }
 
   @ReactMethod
@@ -99,7 +98,8 @@ public class ReactNativeAgoraRtcNgModule
     if (buffers != null) {
       WritableArray array = Arguments.createArray();
       for (byte[] buffer : buffers) {
-        array.pushString(Base64.encodeToString(buffer, 0, buffer.length, Base64.NO_WRAP));
+        String base64 = Base64.encodeToString(buffer, Base64.DEFAULT);
+        array.pushString(base64);
       }
       map.putArray("buffers", array);
     }

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  PermissionsAndroid,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { PermissionsAndroid, Platform, ScrollView } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -19,19 +13,24 @@ import {
   RtcSurfaceView,
   RtcTextureView,
   UserOfflineReasonType,
+  VideoSourceType,
   VideoViewSetupMode,
-  WarnCodeType,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
-  Divider,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { PickerView } from '../../../components/PickerView';
-import { ActionItem } from '../../../components/ActionItem';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraDropdown,
+  AgoraStyle,
+  AgoraSwitch,
+} from '../../../components/ui';
+import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
   switchCamera: boolean;
@@ -65,7 +64,7 @@ export default class JoinChannelVideo
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -99,11 +98,11 @@ export default class JoinChannelVideo
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -113,7 +112,7 @@ export default class JoinChannelVideo
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -141,10 +140,6 @@ export default class JoinChannelVideo
   protected releaseRtcEngine() {
     this.engine?.unregisterEventHandler(this);
     this.engine?.release();
-  }
-
-  onWarning(warn: WarnCodeType, msg: string) {
-    super.onWarning(warn, msg);
   }
 
   onError(err: ErrorCodeType, msg: string) {
@@ -188,22 +183,22 @@ export default class JoinChannelVideo
   }
 
   onLocalVideoStateChanged(
-    connection: RtcConnection,
+    source: VideoSourceType,
     state: LocalVideoStreamState,
-    errorCode: LocalVideoStreamError
+    error: LocalVideoStreamError
   ) {
     this.info(
       'onLocalVideoStateChanged',
-      'connection',
-      connection,
+      'source',
+      source,
       'state',
       state,
-      'errorCode',
-      errorCode
+      'error',
+      error
     );
   }
 
-  protected renderVideo(): React.ReactNode {
+  protected renderUsers(): React.ReactNode {
     const {
       startPreview,
       joinChannelSuccess,
@@ -217,29 +212,29 @@ export default class JoinChannelVideo
         {startPreview || joinChannelSuccess ? (
           renderByTextureView ? (
             <RtcTextureView
-              style={STYLES.video}
+              style={AgoraStyle.videoLarge}
               canvas={{ uid: 0, setupMode }}
             />
           ) : (
             <RtcSurfaceView
-              style={STYLES.video}
+              style={AgoraStyle.videoLarge}
               canvas={{ uid: 0, setupMode }}
             />
           )
         ) : undefined}
         {remoteUsers !== undefined && remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={STYLES.videoContainer}>
+          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
             {remoteUsers.map((value, index) =>
               renderByTextureView ? (
                 <RtcTextureView
                   key={`${value}-${index}`}
-                  style={STYLES.videoSmall}
+                  style={AgoraStyle.videoSmall}
                   canvas={{ uid: value, setupMode }}
                 />
               ) : (
                 <RtcSurfaceView
                   key={`${value}-${index}`}
-                  style={STYLES.videoSmall}
+                  style={AgoraStyle.videoSmall}
                   zOrderMediaOverlay={true}
                   canvas={{ uid: value, setupMode }}
                 />
@@ -251,59 +246,56 @@ export default class JoinChannelVideo
     );
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const { startPreview, joinChannelSuccess, renderByTextureView, setupMode } =
       this.state;
     return (
       <>
-        <ActionItem
+        <AgoraSwitch
           disabled={
             (!startPreview && !joinChannelSuccess) || Platform.OS !== 'android'
           }
           title={`renderByTextureView`}
-          isShowSwitch={true}
-          switchValue={renderByTextureView}
-          onSwitchValueChange={(value) => {
+          value={renderByTextureView}
+          onValueChange={(value) => {
             this.setState({ renderByTextureView: value });
           }}
         />
-        <Divider />
-        <View style={styles.container}>
-          <PickerView
-            title={'setupMode'}
-            type={VideoViewSetupMode}
-            selectedValue={setupMode}
-            onValueChange={(value: VideoViewSetupMode) => {
-              this.setState({ setupMode: value });
-            }}
-          />
-        </View>
+        <AgoraDivider />
+        <AgoraDropdown
+          title={'setupMode'}
+          items={enumToItems(VideoViewSetupMode)}
+          value={setupMode}
+          onValueChange={(value) => {
+            this.setState({ setupMode: value });
+          }}
+        />
         {setupMode === VideoViewSetupMode.VideoViewSetupAdd ? (
           <>
-            <Divider />
+            <AgoraDivider />
             {renderByTextureView ? (
               <RtcTextureView
-                style={STYLES.videoSmall}
+                style={AgoraStyle.videoSmall}
                 canvas={{ uid: 0, setupMode }}
               />
             ) : (
               <RtcSurfaceView
-                style={STYLES.videoSmall}
+                style={AgoraStyle.videoSmall}
                 canvas={{ uid: 0, setupMode }}
               />
             )}
           </>
         ) : undefined}
-        <Divider />
+        <AgoraDivider />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { startPreview, joinChannelSuccess } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           disabled={!startPreview && !joinChannelSuccess}
           title={`switchCamera`}
           onPress={this.switchCamera}
@@ -312,11 +304,3 @@ export default class JoinChannelVideo
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});

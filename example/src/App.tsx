@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   SectionList,
@@ -21,15 +21,31 @@ import {
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createAgoraRtcEngine,
+  SDKBuildInfo,
+  isDebuggable,
+  setDebuggable,
+} from 'react-native-agora';
 
 import Basic from './examples/basic';
 import Advanced from './examples/advanced';
+import Config from './config/agora.config';
 
 const Stack = createStackNavigator();
 
 const DATA = [Basic, Advanced];
 
 const App = () => {
+  const [version, setVersion] = useState<SDKBuildInfo>({});
+
+  useEffect(() => {
+    const engine = createAgoraRtcEngine();
+    engine.initialize({ appId: Config.appId });
+    setVersion(engine.getVersion());
+    engine.release();
+  }, []);
+
   return (
     <NavigationContainer>
       <SafeAreaView
@@ -39,7 +55,7 @@ const App = () => {
           return false;
         }}
       >
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ gestureEnabled: false }}>
           <Stack.Screen name={'APIExample'} component={Home} />
           {DATA.map((value) =>
             value.data.map(({ name, component }) =>
@@ -50,6 +66,15 @@ const App = () => {
             )
           )}
         </Stack.Navigator>
+        <TouchableOpacity
+          onPress={() => {
+            setDebuggable(!isDebuggable());
+          }}
+        >
+          <Text style={styles.version}>
+            Powered by Agora RTC SDK {version.version} build {version.build}
+          </Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </NavigationContainer>
   );
@@ -95,6 +120,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: 'black',
+  },
+  version: {
+    backgroundColor: '#ffffffdd',
+    textAlign: 'center',
   },
 });
 

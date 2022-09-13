@@ -1,20 +1,26 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, TextInput } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
   createAgoraRtcEngine,
   IRtcEngineEventHandler,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
 
-import { ActionItem } from '../../../components/ActionItem';
+import Config from '../../../config/agora.config';
+
 import {
   BaseAudioComponentState,
   BaseComponent,
-  Divider,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraSlider,
+  AgoraSwitch,
+  AgoraTextInput,
+} from '../../../components/ui';
+import { getAbsolutePath, getAssetPath } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   soundId: number;
@@ -43,7 +49,7 @@ export default class PlayEffect
       joinChannelSuccess: false,
       remoteUsers: [],
       soundId: 0,
-      filePath: this.getAssetPath('Sound_Horizon.mp3'),
+      filePath: getAssetPath('Sound_Horizon.mp3'),
       loopCount: 1,
       pitch: 1.0,
       pan: 0,
@@ -61,7 +67,7 @@ export default class PlayEffect
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -89,11 +95,11 @@ export default class PlayEffect
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -103,7 +109,7 @@ export default class PlayEffect
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -124,17 +130,17 @@ export default class PlayEffect
       startPos,
     } = this.state;
     if (!filePath) {
-      console.error('filePath is invalid');
+      this.error('filePath is invalid');
       return;
     }
     if (startPos < 0) {
-      console.error('startPos is invalid');
+      this.error('startPos is invalid');
       return;
     }
 
     this.engine?.playEffect(
       soundId,
-      await this.getAbsolutePath(filePath),
+      await getAbsolutePath(filePath),
       loopCount,
       pitch,
       pan,
@@ -191,116 +197,107 @@ export default class PlayEffect
     this.setState({ playEffect: false });
   }
 
-  protected renderBottom(): React.ReactNode {
-    const {
-      soundId,
-      filePath,
-      loopCount,
-      pitch,
-      pan,
-      gain,
-      publish,
-      startPos,
-    } = this.state;
-
-    const renderSlider = (
-      key: string,
-      value: number,
-      min: number,
-      max: number
-    ) => {
-      return (
-        <ActionItem
-          title={`${key} ${value}`}
-          isShowSlider={true}
-          sliderValue={(value - min) / (max - min)}
-          onSliderValueChange={(value) => {
-            // @ts-ignore
-            this.setState({
-              [key]: Number.parseFloat(((max - min) * value + min).toFixed(2)),
-            });
-          }}
-        />
-      );
-    };
-
+  protected renderConfiguration(): React.ReactNode {
+    const { filePath, pitch, pan, gain, publish } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
-            this.setState({ soundId: +text });
+            if (isNaN(+text)) return;
+            this.setState({
+              soundId: text === '' ? this.createState().soundId : +text,
+            });
           }}
-          keyboardType={'numeric'}
-          placeholder={`soundId (defaults: ${soundId})`}
-          placeholderTextColor={'gray'}
-          value={
-            soundId === this.createState().soundId ? '' : soundId.toString()
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
           }
+          placeholder={`soundId (defaults: ${this.createState().soundId})`}
         />
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ filePath: text });
           }}
           placeholder={'filePath'}
-          placeholderTextColor={'gray'}
           value={filePath}
         />
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
-            this.setState({ loopCount: +text });
+            if (isNaN(+text)) return;
+            this.setState({
+              loopCount: text === '' ? this.createState().loopCount : +text,
+            });
           }}
-          keyboardType={'numeric'}
-          placeholder={`loopCount (defaults: ${loopCount})`}
-          placeholderTextColor={'gray'}
-          value={
-            loopCount === this.createState().loopCount
-              ? ''
-              : loopCount.toString()
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
           }
+          placeholder={`loopCount (defaults: ${this.createState().loopCount})`}
         />
-        {renderSlider('pitch', pitch, 0.5, 2.0)}
-        <Divider />
-        {renderSlider('pan', pan, -1.0, 1.0)}
-        <Divider />
-        {renderSlider('gain', gain, 0.0, 100.0)}
-        <Divider />
-        <ActionItem
+        <AgoraSlider
+          title={`pitch ${pitch}`}
+          minimumValue={0.5}
+          maximumValue={2.0}
+          step={0.1}
+          value={pitch}
+          onSlidingComplete={(value) => {
+            this.setState({ pitch: value });
+          }}
+        />
+        <AgoraDivider />
+        <AgoraSlider
+          title={`pan ${pan}`}
+          minimumValue={-1.0}
+          maximumValue={1.0}
+          step={0.1}
+          value={pan}
+          onSlidingComplete={(value) => {
+            this.setState({ pan: value });
+          }}
+        />
+        <AgoraDivider />
+        <AgoraSlider
+          title={`gain ${gain}`}
+          minimumValue={0}
+          maximumValue={100}
+          step={0.1}
+          value={gain}
+          onSlidingComplete={(value) => {
+            this.setState({ gain: value });
+          }}
+        />
+        <AgoraDivider />
+        <AgoraSwitch
           title={'publish'}
-          isShowSwitch={true}
-          switchValue={publish}
-          onSwitchValueChange={(value) => {
+          value={publish}
+          onValueChange={(value) => {
             this.setState({ publish: value });
           }}
         />
-        <Divider />
-        <TextInput
-          style={STYLES.input}
+        <AgoraDivider />
+        <AgoraTextInput
           onChangeText={(text) => {
-            this.setState({ startPos: +text });
+            if (isNaN(+text)) return;
+            this.setState({
+              startPos: text === '' ? this.createState().startPos : +text,
+            });
           }}
-          keyboardType={'numeric'}
-          placeholder={`startPos (defaults: ${startPos})`}
-          placeholderTextColor={'gray'}
-          value={
-            startPos === this.createState().startPos ? '' : startPos.toString()
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
           }
+          placeholder={`startPos (defaults: ${this.createState().startPos})`}
         />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { playEffect, pauseEffect } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           title={`${playEffect ? 'stop' : 'play'} Effect`}
           onPress={playEffect ? this.stopEffect : this.playEffect}
         />
-        <ActionItem
+        <AgoraButton
           disabled={!playEffect}
           title={`${pauseEffect ? 'resume' : 'pause'} Effect`}
           onPress={pauseEffect ? this.resumeEffect : this.pauseEffect}

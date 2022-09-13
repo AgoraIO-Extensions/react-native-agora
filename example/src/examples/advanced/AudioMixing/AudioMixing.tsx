@@ -1,27 +1,31 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, TextInput } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
-  AudioMixingErrorType,
+  AudioMixingReasonType,
   AudioMixingStateType,
   ChannelProfileType,
   ClientRoleType,
   createAgoraRtcEngine,
   IRtcEngineEventHandler,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
 
-import { ActionItem } from '../../../components/ActionItem';
+import Config from '../../../config/agora.config';
+
 import {
-  BaseComponent,
+  AgoraButton,
+  AgoraDivider,
+  AgoraSwitch,
+  AgoraTextInput,
+} from '../../../components/ui';
+import {
   BaseAudioComponentState,
-  Divider,
-  STYLES,
+  BaseComponent,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
+import { getAssetPath } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   filePath: string;
   loopback: boolean;
-  replace: boolean;
   cycle: number;
   startPos: number;
   startAudioMixing: boolean;
@@ -41,9 +45,8 @@ export default class AudioMixing
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      filePath: this.getAssetPath('Sound_Horizon.mp3'),
+      filePath: getAssetPath('Sound_Horizon.mp3'),
       loopback: false,
-      replace: false,
       cycle: -1,
       startPos: 0,
       startAudioMixing: false,
@@ -57,7 +60,7 @@ export default class AudioMixing
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -85,11 +88,11 @@ export default class AudioMixing
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -99,7 +102,7 @@ export default class AudioMixing
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -109,21 +112,21 @@ export default class AudioMixing
    * Step 3-1: startAudioMixing
    */
   startAudioMixing = () => {
-    const { filePath, loopback, replace, cycle, startPos } = this.state;
+    const { filePath, loopback, cycle, startPos } = this.state;
     if (!filePath) {
-      console.error('filePath is invalid');
+      this.error('filePath is invalid');
       return;
     }
     if (cycle < -1) {
-      console.error('cycle is invalid');
+      this.error('cycle is invalid');
       return;
     }
     if (startPos < 0) {
-      console.error('startPos is invalid');
+      this.error('startPos is invalid');
       return;
     }
 
-    this.engine?.startAudioMixing(filePath, loopback, replace, cycle, startPos);
+    this.engine?.startAudioMixing(filePath, loopback, cycle, startPos);
   };
 
   /**
@@ -178,15 +181,9 @@ export default class AudioMixing
 
   onAudioMixingStateChanged(
     state: AudioMixingStateType,
-    errorCode: AudioMixingErrorType
+    reason: AudioMixingReasonType
   ) {
-    this.info(
-      'onAudioMixingStateChanged',
-      'state',
-      state,
-      'errorCode',
-      errorCode
-    );
+    this.info('onAudioMixingStateChanged', 'state', state, 'reason', reason);
     switch (state) {
       case AudioMixingStateType.AudioMixingStatePlaying:
         this.setState({ startAudioMixing: true, pauseAudioMixing: false });
@@ -196,8 +193,6 @@ export default class AudioMixing
         break;
       case AudioMixingStateType.AudioMixingStateStopped:
       case AudioMixingStateType.AudioMixingStateFailed:
-      case AudioMixingStateType.AudioMixingStateCompleted:
-      case AudioMixingStateType.AudioMixingStateAllLoopsCompleted:
         this.setState({ startAudioMixing: false });
         break;
     }
@@ -207,81 +202,71 @@ export default class AudioMixing
     this.info('AudioMixingFinished');
   }
 
-  protected renderBottom(): React.ReactNode {
-    const { filePath, loopback, replace, cycle, startPos } = this.state;
+  protected renderConfiguration(): React.ReactNode {
+    const { filePath, loopback } = this.state;
     return (
       <>
-        <TextInput
-          style={STYLES.input}
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ filePath: text });
           }}
           placeholder={'filePath'}
-          placeholderTextColor={'gray'}
           value={filePath}
         />
-        <ActionItem
+        <AgoraSwitch
           title={'loopback'}
-          isShowSwitch={true}
-          switchValue={loopback}
-          onSwitchValueChange={(value) => {
+          value={loopback}
+          onValueChange={(value) => {
             this.setState({ loopback: value });
           }}
         />
-        <Divider />
-        <ActionItem
-          title={'replace'}
-          isShowSwitch={true}
-          switchValue={replace}
-          onSwitchValueChange={(value) => {
-            this.setState({ replace: value });
-          }}
-        />
-        <Divider />
-        <TextInput
-          style={STYLES.input}
+        <AgoraDivider />
+        <AgoraTextInput
           onChangeText={(text) => {
-            this.setState({ cycle: +text });
+            if (isNaN(+text)) return;
+            this.setState({
+              cycle: text === '' ? this.createState().cycle : +text,
+            });
           }}
-          keyboardType={'numeric'}
-          placeholder={`cycle (defaults: ${cycle})`}
-          placeholderTextColor={'gray'}
-          value={cycle === this.createState().cycle ? '' : cycle.toString()}
-        />
-        <TextInput
-          style={STYLES.input}
-          onChangeText={(text) => {
-            this.setState({ startPos: +text });
-          }}
-          keyboardType={'numeric'}
-          placeholder={`startPos (defaults: ${startPos})`}
-          placeholderTextColor={'gray'}
-          value={
-            startPos === this.createState().startPos ? '' : startPos.toString()
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
           }
+          placeholder={`cycle (defaults: ${this.createState().cycle})`}
+        />
+        <AgoraTextInput
+          onChangeText={(text) => {
+            if (isNaN(+text)) return;
+            this.setState({
+              startPos: text === '' ? this.createState().startPos : +text,
+            });
+          }}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
+          placeholder={`startPos (defaults: ${this.createState().startPos})`}
         />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { startAudioMixing, pauseAudioMixing } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           title={`${startAudioMixing ? 'stop' : 'start'} Audio Mixing`}
           onPress={
             startAudioMixing ? this.stopAudioMixing : this.startAudioMixing
           }
         />
-        <ActionItem
+        <AgoraButton
           disabled={!startAudioMixing}
           title={`${pauseAudioMixing ? 'resume' : 'pause'} Audio Mixing`}
           onPress={
             pauseAudioMixing ? this.resumeAudioMixing : this.pauseAudioMixing
           }
         />
-        <ActionItem
+        <AgoraButton
           disabled={!startAudioMixing}
           title={`get Audio Mixing Current Position`}
           onPress={this.getAudioMixingCurrentPosition}

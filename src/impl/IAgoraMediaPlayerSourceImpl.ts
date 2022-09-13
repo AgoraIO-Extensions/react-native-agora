@@ -1,5 +1,5 @@
-import { callIrisApi } from '../internal/IrisApiEngine';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
+
 export function processIMediaPlayerSourceObserver(
   handler: IMediaPlayerSourceObserver,
   event: string,
@@ -14,7 +14,7 @@ export function processIMediaPlayerSourceObserver(
 
     case 'onPositionChanged':
       if (handler.onPositionChanged !== undefined) {
-        handler.onPositionChanged(jsonParams.position);
+        handler.onPositionChanged(jsonParams.position_ms);
       }
       break;
 

@@ -1,28 +1,27 @@
 import React from 'react';
-import {
-  Alert,
-  PermissionsAndroid,
-  Platform,
-  Text,
-  TextInput,
-} from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
   createAgoraRtcEngine,
   IRtcEngineEventHandler,
   RtcConnection,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
 import { Buffer } from 'buffer';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
   BaseComponent,
-  Divider,
-  STYLES,
 } from '../../../components/BaseComponent';
-import Config from '../../../config/agora.config.json';
-import { ActionItem } from '../../../components/ActionItem';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraSwitch,
+  AgoraText,
+  AgoraTextInput,
+} from '../../../components/ui';
 
 interface State extends BaseAudioComponentState {
   syncWithAudio: boolean;
@@ -57,7 +56,7 @@ export default class StreamMessage
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -85,11 +84,11 @@ export default class StreamMessage
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -99,7 +98,7 @@ export default class StreamMessage
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -126,7 +125,7 @@ export default class StreamMessage
   sendStreamMessage = () => {
     const { streamId, data } = this.state;
     if (!data) {
-      console.error('data is invalid');
+      this.error('data is invalid');
       return;
     }
 
@@ -172,15 +171,9 @@ export default class StreamMessage
       'sentTs',
       sentTs
     );
-    Alert.alert(
+    this.alert(
       `Receive from uid:${remoteUid}`,
-      `StreamId ${streamId}: ${data.toString()}`,
-      [
-        {
-          text: 'Ok',
-          onPress: () => {},
-        },
-      ]
+      `StreamId ${streamId}: ${data.toString()}`
     );
   }
 
@@ -209,55 +202,51 @@ export default class StreamMessage
     );
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const { syncWithAudio, ordered, streamId, data } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraSwitch
           disabled={streamId !== undefined}
           title={`syncWithAudio`}
-          isShowSwitch={true}
-          switchValue={syncWithAudio}
-          onSwitchValueChange={(value) => {
+          value={syncWithAudio}
+          onValueChange={(value) => {
             this.setState({ syncWithAudio: value });
           }}
         />
-        <Divider />
-        <ActionItem
+        <AgoraDivider />
+        <AgoraSwitch
           disabled={streamId !== undefined}
           title={`ordered`}
-          isShowSwitch={true}
-          switchValue={ordered}
-          onSwitchValueChange={(value) => {
+          value={ordered}
+          onValueChange={(value) => {
             this.setState({ ordered: value });
           }}
         />
-        <Divider />
-        <Text>{`streamId: ${streamId}`}</Text>
-        <Divider />
-        <TextInput
-          style={STYLES.input}
+        <AgoraDivider />
+        <AgoraText>{`streamId: ${streamId}`}</AgoraText>
+        <AgoraDivider />
+        <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ data: text });
           }}
           placeholder={`data`}
-          placeholderTextColor={'gray'}
           value={data}
         />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { joinChannelSuccess, streamId } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           disabled={!joinChannelSuccess}
           title={`create Data Stream`}
           onPress={this.createDataStream}
         />
-        <ActionItem
+        <AgoraButton
           disabled={streamId === undefined}
           title={`send Stream Message`}
           onPress={this.sendStreamMessage}

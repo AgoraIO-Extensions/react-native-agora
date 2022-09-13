@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   AudioEffectPreset,
   AudioEqualizationBandFrequency,
@@ -16,16 +10,14 @@ import {
   IRtcEngineEventHandler,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
 
-import { ActionItem } from '../../../components/ActionItem';
+import Config from '../../../config/agora.config';
+
 import {
   BaseAudioComponentState,
   BaseComponent,
-  Divider,
 } from '../../../components/BaseComponent';
-import { PickerView } from '../../../components/PickerView';
-import Config from '../../../config/agora.config.json';
 import {
   AudioEffectPresetParam1Limit,
   AudioEffectPresetParam2Limit,
@@ -33,6 +25,13 @@ import {
   VoiceBeautifierPresetParam1Limit,
   VoiceBeautifierPresetParam2Limit,
 } from './VoiceChangerConfig';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraDropdown,
+  AgoraSlider,
+} from '../../../components/ui';
+import { enumToItems } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   voiceBeautifierPreset: VoiceBeautifierPreset;
@@ -79,7 +78,7 @@ export default class VoiceChanger
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -97,6 +96,11 @@ export default class VoiceChanger
       );
     }
 
+    // Must call after initialize and before joinChannel
+    if (Platform.OS === 'android') {
+      this.engine?.loadExtensionProvider('agora_audio_beauty_extension');
+    }
+
     // Only need to enable audio on this case
     this.engine.enableAudio();
   }
@@ -107,11 +111,11 @@ export default class VoiceChanger
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -121,7 +125,7 @@ export default class VoiceChanger
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -209,21 +213,21 @@ export default class VoiceChanger
     this.engine?.release();
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     return (
       <>
         {this._renderVoiceBeautifierPreset()}
-        <Divider />
+        <AgoraDivider />
         {this._renderAudioEffectPreset()}
-        <Divider />
+        <AgoraDivider />
         {this._renderAudioReverbType()}
-        <Divider />
+        <AgoraDivider />
         {this._renderAudioEqualizationBandFrequency()}
-        <Divider />
+        <AgoraDivider />
         {this._renderLocalVoicePitch()}
-        <Divider />
+        <AgoraDivider />
         {this._renderVoiceConversionPreset()}
-        <Divider />
+        <AgoraDivider />
       </>
     );
   }
@@ -234,52 +238,44 @@ export default class VoiceChanger
     const limit2 = VoiceBeautifierPresetParam2Limit.get(voiceBeautifierPreset);
     return (
       <>
-        <View style={styles.container}>
-          <PickerView
-            title={'voiceBeautifierPreset'}
-            type={VoiceBeautifierPreset}
-            selectedValue={voiceBeautifierPreset}
-            onValueChange={(value: VoiceBeautifierPreset) => {
-              this.setState({ voiceBeautifierPreset: value });
-            }}
-          />
-        </View>
-        <Button
+        <AgoraDropdown
+          title={'voiceBeautifierPreset'}
+          items={enumToItems(VoiceBeautifierPreset)}
+          value={voiceBeautifierPreset}
+          onValueChange={(value) => {
+            this.setState({ voiceBeautifierPreset: value });
+          }}
+        />
+        <AgoraButton
           title={'set Voice Beautifier Preset'}
           onPress={this.setVoiceBeautifierPreset}
         />
         {limit1 !== undefined ? (
-          <ActionItem
+          <AgoraSlider
             title={`param1 ${param1}`}
-            isShowSlider={true}
-            sliderValue={(param1 - limit1.min) / (limit1.max - limit1.min)}
-            onSliderValueChange={(value) => {
-              this.setState({
-                param1: +(
-                  (limit1.max - limit1.min) * value +
-                  limit1.min
-                ).toFixed(0),
-              });
+            minimumValue={limit1.min}
+            maximumValue={limit1.max}
+            step={1}
+            value={param1}
+            onSlidingComplete={(value) => {
+              this.setState({ param1: value });
             }}
           />
         ) : undefined}
         {limit2 !== undefined ? (
-          <ActionItem
+          <AgoraSlider
             title={`param2 ${param2}`}
-            isShowSlider={true}
-            sliderValue={(param2 - limit2.min) / (limit2.max - limit2.min)}
-            onSliderValueChange={(value) => {
-              this.setState({
-                param2: +(
-                  (limit2.max - limit2.min) * value +
-                  limit2.min
-                ).toFixed(0),
-              });
+            minimumValue={limit2.min}
+            maximumValue={limit2.max}
+            step={1}
+            value={param2}
+            onSlidingComplete={(value) => {
+              this.setState({ param2: value });
             }}
           />
         ) : undefined}
         {limit1 !== undefined && limit2 !== undefined ? (
-          <Button
+          <AgoraButton
             title={'set Voice Beautifier Parameters'}
             onPress={this.setVoiceBeautifierParameters}
           />
@@ -294,52 +290,44 @@ export default class VoiceChanger
     const limit2 = AudioEffectPresetParam2Limit.get(audioEffectPreset);
     return (
       <>
-        <View style={styles.container}>
-          <PickerView
-            title={'audioEffectPreset'}
-            type={AudioEffectPreset}
-            selectedValue={audioEffectPreset}
-            onValueChange={(value: AudioEffectPreset) => {
-              this.setState({ audioEffectPreset: value });
-            }}
-          />
-        </View>
-        <Button
+        <AgoraDropdown
+          title={'audioEffectPreset'}
+          items={enumToItems(AudioEffectPreset)}
+          value={audioEffectPreset}
+          onValueChange={(value) => {
+            this.setState({ audioEffectPreset: value });
+          }}
+        />
+        <AgoraButton
           title={'set Audio Effect Preset'}
           onPress={this.setAudioEffectPreset}
         />
         {limit1 !== undefined ? (
-          <ActionItem
+          <AgoraSlider
             title={`param1 ${param1}`}
-            isShowSlider={true}
-            sliderValue={(param1 - limit1.min) / (limit1.max - limit1.min)}
-            onSliderValueChange={(value) => {
-              this.setState({
-                param1: +(
-                  (limit1.max - limit1.min) * value +
-                  limit1.min
-                ).toFixed(0),
-              });
+            minimumValue={limit1.min}
+            maximumValue={limit1.max}
+            step={1}
+            value={param1}
+            onSlidingComplete={(value) => {
+              this.setState({ param1: value });
             }}
           />
         ) : undefined}
         {limit2 !== undefined ? (
-          <ActionItem
+          <AgoraSlider
             title={`param2 ${param2}`}
-            isShowSlider={true}
-            sliderValue={(param2 - limit2.min) / (limit2.max - limit2.min)}
-            onSliderValueChange={(value) => {
-              this.setState({
-                param2: +(
-                  (limit2.max - limit2.min) * value +
-                  limit2.min
-                ).toFixed(0),
-              });
+            minimumValue={limit2.min}
+            maximumValue={limit2.max}
+            step={1}
+            value={param2}
+            onSlidingComplete={(value) => {
+              this.setState({ param2: value });
             }}
           />
         ) : undefined}
         {limit1 !== undefined && limit2 !== undefined ? (
-          <Button
+          <AgoraButton
             title={'set Audio Effect Parameters'}
             onPress={this.setAudioEffectParameters}
           />
@@ -353,32 +341,28 @@ export default class VoiceChanger
     const limit = AudioReverbTypeValueLimit.get(reverbKey);
     return (
       <>
-        <View style={styles.container}>
-          <PickerView
-            title={'reverbKey'}
-            type={AudioReverbType}
-            selectedValue={reverbKey}
-            onValueChange={(value: AudioReverbType) => {
-              this.setState({ reverbKey: value });
-            }}
-          />
-        </View>
+        <AgoraDropdown
+          title={'reverbKey'}
+          items={enumToItems(AudioReverbType)}
+          value={reverbKey}
+          onValueChange={(v) => {
+            this.setState({ reverbKey: v });
+          }}
+        />
         {limit !== undefined ? (
-          <ActionItem
+          <AgoraSlider
             title={`value ${value}`}
-            isShowSlider={true}
-            sliderValue={(value - limit.min) / (limit.max - limit.min)}
-            onSliderValueChange={(value) => {
-              this.setState({
-                value: +((limit.max - limit.min) * value + limit.min).toFixed(
-                  0
-                ),
-              });
+            minimumValue={limit.min}
+            maximumValue={limit.max}
+            step={1}
+            value={value}
+            onSlidingComplete={(v) => {
+              this.setState({ value: v });
             }}
           />
         ) : undefined}
         {limit !== undefined ? (
-          <Button
+          <AgoraButton
             title={'set Local Voice Reverb'}
             onPress={this.setLocalVoiceReverb}
           />
@@ -393,27 +377,25 @@ export default class VoiceChanger
     const max = 15;
     return (
       <>
-        <View style={styles.container}>
-          <PickerView
-            title={'bandFrequency'}
-            type={AudioEqualizationBandFrequency}
-            selectedValue={bandFrequency}
-            onValueChange={(value: AudioEqualizationBandFrequency) => {
-              this.setState({ bandFrequency: value });
-            }}
-          />
-        </View>
-        <ActionItem
-          title={`bandGain ${bandGain}`}
-          isShowSlider={true}
-          sliderValue={(bandGain - min) / (max - min)}
-          onSliderValueChange={(value) => {
-            this.setState({
-              bandGain: +((max - min) * value + min).toFixed(0),
-            });
+        <AgoraDropdown
+          title={'bandFrequency'}
+          items={enumToItems(AudioEqualizationBandFrequency)}
+          value={bandFrequency}
+          onValueChange={(value) => {
+            this.setState({ bandFrequency: value });
           }}
         />
-        <Button
+        <AgoraSlider
+          title={`bandGain ${bandGain}`}
+          minimumValue={min}
+          maximumValue={max}
+          step={1}
+          value={bandGain}
+          onSlidingComplete={(value) => {
+            this.setState({ bandGain: value });
+          }}
+        />
+        <AgoraButton
           title={'set Local Voice Equalization'}
           onPress={this.setLocalVoiceEqualization}
         />
@@ -427,17 +409,17 @@ export default class VoiceChanger
     const max = 2.0;
     return (
       <>
-        <ActionItem
+        <AgoraSlider
           title={`pitch ${pitch}`}
-          isShowSlider={true}
-          sliderValue={(pitch - min) / (max - min)}
-          onSliderValueChange={(value) => {
-            this.setState({
-              pitch: +((max - min) * value + min).toFixed(0),
-            });
+          minimumValue={min}
+          maximumValue={max}
+          step={0.1}
+          value={pitch}
+          onSlidingComplete={(value) => {
+            this.setState({ pitch: value });
           }}
         />
-        <Button
+        <AgoraButton
           title={'set Local Voice Pitch'}
           onPress={this.setLocalVoicePitch}
         />
@@ -449,17 +431,15 @@ export default class VoiceChanger
     const { voiceConversionPreset } = this.state;
     return (
       <>
-        <View style={styles.container}>
-          <PickerView
-            title={'voiceConversionPreset'}
-            type={VoiceConversionPreset}
-            selectedValue={voiceConversionPreset}
-            onValueChange={(value: VoiceConversionPreset) => {
-              this.setState({ voiceConversionPreset: value });
-            }}
-          />
-        </View>
-        <Button
+        <AgoraDropdown
+          title={'voiceConversionPreset'}
+          items={enumToItems(VoiceConversionPreset)}
+          value={voiceConversionPreset}
+          onValueChange={(value) => {
+            this.setState({ voiceConversionPreset: value });
+          }}
+        />
+        <AgoraButton
           title={'set Voice Conversion Preset'}
           onPress={this.setVoiceConversionPreset}
         />
@@ -467,11 +447,3 @@ export default class VoiceChanger
     );
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});

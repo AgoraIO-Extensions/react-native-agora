@@ -1,4 +1,5 @@
 import React from 'react';
+import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -6,24 +7,22 @@ import {
   ErrorCodeType,
   IRtcEngineEventHandler,
   RtcConnection,
-} from 'react-native-agora-rtc-ng';
+} from 'react-native-agora';
 import RNFS from 'react-native-fs';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
-  Divider,
 } from '../../../components/BaseComponent';
-import { ActionItem } from '../../../components/ActionItem';
-import Config from '../../../config/agora.config.json';
 import {
-  Image,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
-import { PickerView } from '../../../components/PickerView';
+  AgoraButton,
+  AgoraDivider,
+  AgoraDropdown,
+  AgoraImage,
+} from '../../../components/ui';
+import { arrayToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
   targetUid: number;
@@ -61,7 +60,7 @@ export default class TakeSnapshot
   protected async initRtcEngine() {
     const { appId } = this.state;
     if (!appId) {
-      console.error(`appId is invalid`);
+      this.error(`appId is invalid`);
     }
 
     this.engine = createAgoraRtcEngine();
@@ -91,11 +90,11 @@ export default class TakeSnapshot
   protected joinChannel() {
     const { channelId, token, uid } = this.state;
     if (!channelId) {
-      console.error('channelId is invalid');
+      this.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      this.error('uid is invalid');
       return;
     }
 
@@ -105,7 +104,7 @@ export default class TakeSnapshot
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    this.engine?.joinChannelWithOptions(token, channelId, uid, {
+    this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -115,17 +114,13 @@ export default class TakeSnapshot
    * Step 3: takeSnapshot
    */
   takeSnapshot = () => {
-    const { channelId, targetUid, filePath } = this.state;
+    const { targetUid, filePath } = this.state;
     if (!filePath) {
-      console.error('filePath is invalid');
+      this.error('filePath is invalid');
       return;
     }
 
-    this.engine?.takeSnapshot({
-      channel: channelId,
-      uid: targetUid,
-      filePath: `${filePath}/${targetUid}.jpg`,
-    });
+    this.engine?.takeSnapshot(targetUid, `${filePath}/${targetUid}.jpg`);
   };
 
   /**
@@ -144,6 +139,7 @@ export default class TakeSnapshot
 
   onSnapshotTaken(
     connection: RtcConnection,
+    uid: number,
     filePath: string,
     width: number,
     height: number,
@@ -153,6 +149,8 @@ export default class TakeSnapshot
       'onSnapshotTaken',
       'connection',
       connection,
+      'uid',
+      uid,
       'filePath',
       filePath,
       'width',
@@ -168,29 +166,22 @@ export default class TakeSnapshot
     }
   }
 
-  protected renderBottom(): React.ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     const { remoteUsers, targetUid, filePath, takeSnapshot } = this.state;
     return (
       <>
-        <View style={styles.container}>
-          <PickerView
-            title={'targetUid'}
-            type={[
-              '0',
-              0,
-              ...remoteUsers.map((value) => value.toString()),
-              ...remoteUsers,
-            ]}
-            selectedValue={targetUid}
-            onValueChange={(value) => {
-              this.setState({ targetUid: value });
-            }}
-          />
-        </View>
+        <AgoraDropdown
+          title={'targetUid'}
+          items={arrayToItems([0, ...remoteUsers])}
+          value={targetUid}
+          onValueChange={(value) => {
+            this.setState({ targetUid: value });
+          }}
+        />
         {takeSnapshot ? (
           <>
-            <Divider />
-            <Image
+            <AgoraDivider />
+            <AgoraImage
               style={styles.image}
               source={{
                 uri: `${
@@ -200,16 +191,16 @@ export default class TakeSnapshot
             />
           </>
         ) : undefined}
-        <Divider />
+        <AgoraDivider />
       </>
     );
   }
 
-  protected renderFloat(): React.ReactNode {
+  protected renderAction(): React.ReactNode {
     const { joinChannelSuccess } = this.state;
     return (
       <>
-        <ActionItem
+        <AgoraButton
           disabled={!joinChannelSuccess}
           title={`take Snapshot`}
           onPress={this.takeSnapshot}
@@ -220,11 +211,6 @@ export default class TakeSnapshot
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   image: {
     width: 120,
     height: 120,
