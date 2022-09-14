@@ -30,11 +30,12 @@ import {
 
 import Basic from './examples/basic';
 import Advanced from './examples/advanced';
+import Hooks from './examples/hooks';
 import Config from './config/agora.config';
 
 const Stack = createStackNavigator();
 
-const DATA = [Basic, Advanced];
+const DATA = [Basic, Hooks, Advanced];
 
 const App = () => {
   const [version, setVersion] = useState<SDKBuildInfo>({});
