@@ -1,3 +1,6 @@
+> NOTE: These sdk and samples only for the Agora Video 4.x APIs. For examples using previous releases please see the following branches:
+>  - [3.x](https://github.com/AgoraIO-Extensions/react-native-agora/tree/3.x)
+
 # react-native-agora
 
 [![npm](https://img.shields.io/npm/v/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
@@ -116,16 +119,16 @@ Source: https://github.com/facebook/react-native/issues/25154
 
 ## API
 
-* [React Native API](https://agoraio-community.github.io/react-native-agora/globals.html)
-* [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
-* [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
+* [React Native API](https://docs.agora.io/en/video-call-4.x/API%20Reference/rn_ng/API/rtc_api_overview_ng.html)
+* [Android API](https://docs.agora.io/en/video-call-4.x/API%20Reference/java_ng/API/rtc_api_overview_ng.html)
+* [iOS API](https://docs.agora.io/en/video-call-4.x/API%20Reference/ios_ng/API/rtc_api_overview_ng.html)
 
 ## Resources
 
 * Complete [API Doc](https://docs.agora.io/en/) at the Developer Center
 * [Changelog](CHANGELOG.md)
-* [Release Notes](https://docs.agora.io/en/video-call-4.x/release_electron_ng?platform=ReactNative)
-* [File bugs about this sample](https://github.com/AgoraIO-Community/react-native-agora/issues)
+* [Release Notes](https://docs.agora.io/en/video-call-4.x/release_rn_ng?platform=ReactNative)
+* [File bugs about this sample](https://github.com/AgoraIO-Extensions/react-native-agora/issues)
 * [React Native Getting Started](https://facebook.github.io/react-native/docs/getting-started.html)
 
 ## Contributing
