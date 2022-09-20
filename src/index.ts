@@ -1,5 +1,8 @@
 import { NativeModules } from 'react-native';
 
+  /*
+   * @ignore
+   */
 const { ReactNativeAgoraRtcNg } = NativeModules;
 export const showRPSystemBroadcastPickerView: () => Promise<void> =
   ReactNativeAgoraRtcNg.showRPSystemBroadcastPickerView;
@@ -23,18 +26,18 @@ export * from './IAgoraRtcEngineEx';
 export * from './IAgoraSpatialAudio';
 export * from './IAudioDeviceManager';
 export * from './AgoraRtcRenderView';
-/**
- * @internal
- */
 export {
   isDebuggable,
   setDebuggable,
   callIrisApi,
 } from './internal/IrisApiEngine';
 
+  /*
+   * @ignore
+   */
 const instance = new RtcEngineExInternal();
 
-/**
+/*
  * Creates the IRtcEngine object.
  * Currently, the Agora RTC SDK v4.0.0 supports creating only one IRtcEngine object for an app.
  *
@@ -45,7 +48,7 @@ export function createAgoraRtcEngine(): IRtcEngine {
   return instance;
 }
 
-/**
+/*
  * Gets an IMediaPlayerCacheManager instance.
  * Make sure the IRtcEngine is initialized before you call this method.
  *
