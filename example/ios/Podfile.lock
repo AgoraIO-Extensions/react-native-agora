@@ -265,7 +265,7 @@ PODS:
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
-  - react-native-agora (4.0.0-beta.1):
+  - react-native-agora (4.0.0-rc.1):
     - AgoraIrisRTC_iOS (= 4.0.0-rc.1)
     - AgoraRtcEngine_Special_iOS (= 4.0.0.5)
     - React-Core
@@ -519,7 +519,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: 3607d9b7b3c102aaff79ae76d5e98b10f0316ec0
+  FBReactNativeSpec: 2a73a9d36d61cfa94a493aff7e8d7bde0c737e4e
   Flipper: 1bd2db48dcc31e4b167b9a33ec1df01c2ded4893
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -541,7 +541,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-agora: ddb4ed0c8fad0e435f815ffff1b1eb57feaa31f8
+  react-native-agora: 483d7c1ce82e9470b0ee5725bc9e165f1cf5c45d
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168

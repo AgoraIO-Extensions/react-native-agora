@@ -5,6 +5,7 @@ import {
   IMediaRecorderObserver,
   MediaRecorderConfiguration,
 } from '../AgoraMediaBase';
+// @ts-ignore
 export class IMediaRecorderImpl implements IMediaRecorder {
   setMediaRecorderObserver(
     connection: RtcConnection,

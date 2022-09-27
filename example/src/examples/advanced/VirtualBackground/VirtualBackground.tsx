@@ -63,12 +63,12 @@ export default class VirtualBackground
     }
 
     this.engine = createAgoraRtcEngine();
-    this.engine.registerEventHandler(this);
     this.engine.initialize({
       appId,
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
+    this.engine.registerEventHandler(this);
 
     if (Platform.OS === 'android') {
       // Need granted the microphone and camera permission
@@ -168,6 +168,7 @@ export default class VirtualBackground
    * Step 5: releaseRtcEngine
    */
   protected releaseRtcEngine() {
+    this.engine?.unregisterEventHandler(this);
     this.engine?.release();
   }
 

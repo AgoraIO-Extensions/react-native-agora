@@ -19,6 +19,7 @@ import {
   DataStreamConfig,
 } from '../AgoraBase';
 import { RenderModeType } from '../AgoraMediaBase';
+// @ts-ignore
 export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   joinChannelEx(
     token: string,
