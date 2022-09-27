@@ -520,6 +520,10 @@ export enum InterfaceIdType {
    * The IMediaRecorder interface class.
    */
   AgoraIidMediaRecorder = 12,
+  /**
+   * @ignore
+   */
+  AgoraIidMusicContentCenter = 13,
 }
 
 /**
@@ -1162,7 +1166,7 @@ export enum SimulcastStreamMode {
   /**
    * @ignore
    */
-  DisableSimulcastStrem = 0,
+  DisableSimulcastStream = 0,
   /**
    * @ignore
    */
@@ -2721,15 +2725,15 @@ export class LocalTranscoderConfiguration {
  */
 export class LastmileProbeConfig {
   /**
-   * Sets whether to test the uplink network. Some users, for example, the audience members in a LIVE_BROADCASTING channel, do not need such a test.true: Test.false: Not test.
+   * Sets whether to test the uplink network. Some users, for example, the audience members in a LIVE_BROADCASTING channel, do not need such a test.true: Test the uplink network.false: Do not test the uplink network.
    */
   probeUplink?: boolean;
   /**
-   * Sets whether to test the downlink network:true: Test.false: Not test.
+   * Sets whether to test the downlink network:true: Test the downlink network.false: Do not test the downlink network.
    */
   probeDownlink?: boolean;
   /**
-   * The expected maximum uplink bitrate (bps) of the local user. The value range is [100000, 5000000]. Agora recommends setVideoEncoderConfiguration referring to to set the value.
+   * The expected maximum uplink bitrate (bps) of the local user. The value range is [100000, 5000000]. Agora recommends referring to setVideoEncoderConfiguration to set the value.
    */
   expectedUplinkBitrate?: number;
   /**
@@ -3169,11 +3173,11 @@ export enum VideoDenoiserLevel {
    */
   VideoDenoiserLevelHighQuality = 0,
   /**
-   * 1: Promotes reducing performance consumption during video noise reduction. It prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use FAST when the camera is fixed.
+   * 1: Promotes reducing performance consumption during video noise reduction. prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this settinging when the camera is fixed.
    */
   VideoDenoiserLevelFast = 1,
   /**
-   * 2: Enhanced video noise reduction. It prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If is not enough for your video noise reduction needs, you can use this enumerator.VideoDenoiserLevelHighQuality
+   * 2: Enhanced video noise reduction. prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If VideoDenoiserLevelHighQuality is not enough for your video noise reduction needs, you can use this enumerator.
    */
   VideoDenoiserLevelStrength = 2,
 }
@@ -3586,8 +3590,7 @@ export class AudioRecordingConfiguration {
    */
   encode?: boolean;
   /**
-   * Recording sample rate (Hz).
-   * 16000(Default) 320004410048000If you set this parameter to 44100 or 48000, Agora recommends recording WAV files, or AAC files with quality to be AgoraAudioRecordingQualityMedium or AgoraAudioRecordingQualityHigh for better recording quality.
+   * Recording sample rate (Hz).16000(Default) 320004410048000If you set this parameter to 44100 or 48000, Agora recommends recording WAV files, or AAC files with quality set as AudioRecordingQualityMedium or AudioRecordingQualityHigh for better recording quality.
    */
   sampleRate?: number;
   /**
@@ -3626,7 +3629,9 @@ export interface IAudioEncodedFrameObserver {
    * Gets the encoded audio data of the local user.
    * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
    *
-   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+   * @param channels The number of channels.
+   *  1: Mono.
+   *  2: Stereo. If the channel uses stereo, the data is interleaved.
    *
    * @param frameBuffer The audio buffer.
    *
@@ -3670,7 +3675,9 @@ export interface IAudioEncodedFrameObserver {
    *
    * @param samplesPerSec Recording sample rate (Hz).
    *
-   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+   * @param channels The number of channels.
+   *  1: Mono.
+   *  2: Stereo. If the channel uses stereo, the data is interleaved.
    *
    * @param samplesPerChannel The number of samples per channel in the audio frame.
    *
@@ -4181,7 +4188,7 @@ export class EchoTestConfiguration {
    */
   enableVideo?: boolean;
   /**
-   * The token used to secure the audio and video call loop test. If you do not enable App Certificate in Agora Console, you do not need to pass a value in this parameter; if you have enabled App Certificate in Agora Console, you must pass a token in this parameter; the uid used when you generate the token must be 0xFFFFFFFF, and the channel name used must be the channel name that identifies each audio and video call loop tested. For server-side token generation, see Authenticate Your Users with Tokens.
+   * @ignore
    */
   token?: string;
   /**
@@ -4209,15 +4216,15 @@ export class UserInfo {
  */
 export enum EarMonitoringFilterType {
   /**
-   * 1: Do not add an audio filter to the in-ear monitor.
+   * 1<<0: Do not add an audio filter to the in-ear monitor.
    */
   EarMonitoringFilterNone = 1 << 0,
   /**
-   * 2: Add an audio filter to the in-ear monitor. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
+   * 1<<1: Add an audio filter to the in-ear monitor. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
    */
   EarMonitoringFilterBuiltInAudioFilters = 1 << 1,
   /**
-   * 4: Enable noise suppression to the in-ear monitor.
+   * 1<<2: Enable noise suppression to the in-ear monitor.
    */
   EarMonitoringFilterNoiseSuppression = 1 << 2,
 }

@@ -5,6 +5,7 @@ import {
   ILocalSpatialAudioEngine,
 } from '../IAgoraSpatialAudio';
 import { RtcConnection } from '../IAgoraRtcEngineEx';
+// @ts-ignore
 export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
   release(): void {
     const apiType = this.getApiTypeFromRelease();
@@ -237,6 +238,7 @@ export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
   }
 }
 
+// @ts-ignore
 export class ILocalSpatialAudioEngineImpl
   extends IBaseSpatialAudioEngineImpl
   implements ILocalSpatialAudioEngine

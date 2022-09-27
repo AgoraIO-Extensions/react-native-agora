@@ -900,6 +900,7 @@ export function processIRtcEngineEventHandler(
   }
 }
 
+// @ts-ignore
 export class IVideoDeviceManagerImpl implements IVideoDeviceManager {
   enumerateVideoDevices(): VideoDeviceInfo[] {
     const apiType = this.getApiTypeFromEnumerateVideoDevices();

@@ -125,6 +125,7 @@ export abstract class IBaseSpatialAudioEngine {
 
 /**
  * This class calculates user positions through the SDK to implement the spatial audio effect.
+ * This class inherits from IBaseSpatialAudioEngine . Before calling other APIs in this class, you need to call the initialize method to initialize this class.
  */
 export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
   /**

@@ -27,7 +27,7 @@ export abstract class IMediaPlayer {
 
   /**
    * Opens the media resource.
-   * This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting PlayerStateOpenCompleted before calling the play method to play the file.
+   * If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting PlayerStateOpenCompleted before calling the play method to play the file.
    *
    * @param url The path of the media file. Both local path and online path are supported.On the Android platform, if you need to open a file in URI format, use open .
    *
@@ -332,7 +332,8 @@ export abstract class IMediaPlayer {
 
   /**
    * Opens a media resource and requests all the CDN routes of the media resources through the self-developed scheduling center.
-   * This method is called asynchronously. If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting PlayerStateOpenCompleted before calling the play method to play the file.After you call this method, Agora opens the media resources and tries to obtain all the CDN routes for playing the media resource. By default, Agora uses the first CDN route for playing, and you can call the switchAgoraCDNLineByIndex method to switch routes.If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:The URL of the media file to be opened: rtmp://$domain/$appName/$streamNameThe URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$signAuthentication information:sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s.
+   * If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting PlayerStateOpenCompleted before calling the play method to play the file.
+   * After you call this method, Agora opens the media resources and tries to obtain all the CDN routes for playing the media resource. By default, Agora uses the first CDN route for playing, and you can call the switchAgoraCDNLineByIndex method to switch routes.If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:The URL of the media file to be opened: rtmp://$domain/$appName/$streamNameThe URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$signAuthentication information:sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s.
    *
    * @param src The URL of the media resource.
    *
@@ -477,7 +478,7 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
-   * Unregisters an audio frame observer.
+   * Unregisters an audio observer.
    *
    * @param observer The audio observer. See IMediaPlayerAudioFrameObserver .
    *
@@ -502,7 +503,7 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
-   * Unregisters a video frame observer.
+   * Unregisters the video frame observer.
    *
    * @param observer The video observer, reporting the reception of each video frame. See IMediaPlayerVideoFrameObserver .
    *
@@ -562,8 +563,7 @@ export abstract class IMediaPlayerCacheManager {
    * @param uri The URI (Uniform Resource Identifier) of the media file to be deleted.
    *
    * @returns
-   * 0: Success.
-   * < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract removeCacheByUri(uri: string): number;
 
@@ -574,7 +574,8 @@ export abstract class IMediaPlayerCacheManager {
    * @param path The absolute path of the media files to be cached. Ensure that the directory for the media files exists and is writable.
    *
    * @returns
-   * 0: Success.< 0: Failure. See MediaPlayerError .
+   * 0: Success.
+   * < 0: Failure. See MediaPlayerError .
    */
   abstract setCacheDir(path: string): number;
 
@@ -584,8 +585,7 @@ export abstract class IMediaPlayerCacheManager {
    * @param count The maximum number of media files that can be cached. The default value is 1,000.
    *
    * @returns
-   * 0: Success.
-   * < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract setMaxCacheFileCount(count: number): number;
 
@@ -595,8 +595,7 @@ export abstract class IMediaPlayerCacheManager {
    * @param cacheSize The maximum size (bytes) of the aggregate storage space for cached media files. The default value is 1 GB.
    *
    * @returns
-   * 0: Success.
-   * < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract setMaxCacheFileSize(cacheSize: number): number;
 
@@ -607,7 +606,8 @@ export abstract class IMediaPlayerCacheManager {
    * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
    *
    * @returns
-   * 0: Success.< 0: Failure. See MediaPlayerError .
+   * 0: Success.
+   * < 0: Failure. See MediaPlayerError .
    */
   abstract enableAutoRemoveCache(enable: boolean): number;
 
