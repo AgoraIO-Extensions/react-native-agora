@@ -1067,6 +1067,7 @@ export function processIDirectCdnStreamingEventHandler(
   }
 }
 
+// @ts-ignore
 export class IRtcEngineImpl implements IRtcEngine {
   release(sync = false): void {
     const apiType = this.getApiTypeFromRelease(sync);

@@ -12,17 +12,17 @@ export type IMediaEngineEvent = IAudioFrameObserver &
 
 declare module '../IAgoraMediaEngine' {
   interface IMediaEngine {
-    addListener?<EventType extends keyof IMediaEngineEvent>(
+    addListener<EventType extends keyof IMediaEngineEvent>(
       eventType: EventType,
       listener: IMediaEngineEvent[EventType]
     ): EventSubscription;
 
-    removeListener?<EventType extends keyof IMediaEngineEvent>(
+    removeListener<EventType extends keyof IMediaEngineEvent>(
       eventType: EventType,
       listener: IMediaEngineEvent[EventType]
     ): void;
 
-    removeAllListeners?<EventType extends keyof IMediaEngineEvent>(
+    removeAllListeners<EventType extends keyof IMediaEngineEvent>(
       eventType?: EventType
     ): void;
   }

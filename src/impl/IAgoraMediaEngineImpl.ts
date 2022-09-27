@@ -10,6 +10,7 @@ import {
   ExternalVideoFrame,
 } from '../AgoraMediaBase';
 import { SenderOptions, EncodedVideoFrameInfo } from '../AgoraBase';
+// @ts-ignore
 export class IMediaEngineImpl implements IMediaEngine {
   registerAudioFrameObserver(observer: IAudioFrameObserver): number {
     const apiType = this.getApiTypeFromRegisterAudioFrameObserver(observer);

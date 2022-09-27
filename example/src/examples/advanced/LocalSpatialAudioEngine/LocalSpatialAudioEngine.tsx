@@ -65,7 +65,6 @@ export default class LocalSpatialAudioEngine
     }
 
     this.engine = createAgoraRtcEngine();
-    this.engine.registerEventHandler(this);
     this.engine.initialize({
       appId,
       // Should use ChannelProfileLiveBroadcasting on most of cases
@@ -73,6 +72,7 @@ export default class LocalSpatialAudioEngine
       // ⚠️ Must use AudioScenarioGameStreaming on this case
       audioScenario: AudioScenarioType.AudioScenarioGameStreaming,
     });
+    this.engine.registerEventHandler(this);
 
     if (Platform.OS === 'android') {
       // Need granted the microphone permission
@@ -177,6 +177,7 @@ export default class LocalSpatialAudioEngine
    */
   protected releaseRtcEngine() {
     this.releaseLocalSpatialAudioEngine();
+    this.engine?.unregisterEventHandler(this);
     this.engine?.release();
   }
 
