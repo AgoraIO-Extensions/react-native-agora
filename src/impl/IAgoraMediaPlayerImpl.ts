@@ -944,6 +944,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 }
 
+// @ts-ignore
 export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   removeAllCaches(): number {
     const apiType = this.getApiTypeFromRemoveAllCaches();
