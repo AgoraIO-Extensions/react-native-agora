@@ -1,3 +1,10 @@
+# [4.0.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v4.0.0-rc.1...v4.0.0) (2022-09-28)
+
+
+### Bug Fixes
+
+* some AudioFrameObserver & VideoFrameObserver issue ([c6acbeb](https://github.com/AgoraIO-Community/react-native-agora/commit/c6acbebe8cac1ee3a5379b5a1fe68c1fe7272f82))
+
 # 4.0.0-rc.1 (2022-09-13)
 
 
