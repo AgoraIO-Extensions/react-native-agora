@@ -27,5 +27,5 @@ target 'ReactNativeAgoraRtcNgExample' do
 end
 
 target 'ScreenShare' do
-  pod 'AgoraIrisRTC_iOS', '4.0.0-rc.1'
+  pod 'AgoraRtcEngine_Special_iOS', '4.0.0.5'
 end
