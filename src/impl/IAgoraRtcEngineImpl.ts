@@ -72,6 +72,7 @@ import {
   ClientRoleOptions,
   AudioRecordingConfiguration,
   SimulcastStreamConfig,
+  SimulcastStreamMode,
   DataStreamConfig,
   WatermarkOptions,
 } from '../AgoraBase';
@@ -6240,6 +6241,40 @@ export class IRtcEngineImpl implements IRtcEngine {
     streamConfig?: SimulcastStreamConfig
   ): string {
     return 'RtcEngine_enableDualStreamMode';
+  }
+
+  setDualStreamMode(
+    mode: SimulcastStreamMode,
+    sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary,
+    streamConfig?: SimulcastStreamConfig
+  ): number {
+    const apiType = this.getApiTypeFromSetDualStreamMode(
+      mode,
+      sourceType,
+      streamConfig
+    );
+    const jsonParams = {
+      mode: mode,
+      sourceType: sourceType,
+      streamConfig: streamConfig,
+      toJSON: () => {
+        return {
+          mode: mode,
+          sourceType: sourceType,
+          streamConfig: streamConfig,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetDualStreamMode(
+    mode: SimulcastStreamMode,
+    sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary,
+    streamConfig?: SimulcastStreamConfig
+  ): string {
+    return 'RtcEngine_setDualStreamMode';
   }
 
   createDataStream(config: DataStreamConfig): number {
