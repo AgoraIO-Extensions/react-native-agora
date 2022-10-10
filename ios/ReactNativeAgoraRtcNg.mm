@@ -1,7 +1,9 @@
 #import "ReactNativeAgoraRtcNg.h"
+#import <AgoraRtcWrapper/iris_module.h>
 #import <ReplayKit/ReplayKit.h>
 #include <vector>
 #include <string>
+#include <regex>
 
 #define EVENT_NAME @"onEvent"
 
@@ -18,16 +20,16 @@ public:
     EventHandler(void *plugin) {
         plugin_ = (__bridge ReactNativeAgoraRtcNg *)plugin;
     }
-    
-    void OnEvent(const char *event, const char *data, const void **buffer,
-                 unsigned int *length, unsigned int buffer_count) override {
+
+    void OnEvent(const char *event, const char *data, void **buffer,
+                 unsigned int *length, unsigned int buffer_count) {
         @autoreleasepool {
             NSMutableArray *array = [NSMutableArray new];
             for (int i=0; i<buffer_count; ++i) {
                 NSString *base64Buffer = [[[NSData alloc] initWithBytes:buffer[i] length:length[i]] base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
                 [array addObject:base64Buffer];
             }
-            
+
             if (plugin_.hasListeners) {
                 [plugin_ sendEventWithName:EVENT_NAME
                                       body:@{
@@ -39,11 +41,11 @@ public:
             }
         }
     }
-    
-    void OnEvent(const char *event, const char *data, char *result, const void **buffer, unsigned int *length, unsigned int buffer_count) override {
-        OnEvent(event, data, buffer, length, buffer_count);
+
+    void OnEvent(EventParam *param) override {
+        OnEvent(param->event, param->data, param->buffer, param->length, param->buffer_count);
     }
-    
+
 private:
     ReactNativeAgoraRtcNg *plugin_;
 };
@@ -97,18 +99,12 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(newIrisApiEngine) {
     if (self.irisApiEngine == nullptr) {
         enableUseJsonArray(true);
         self.irisApiEngine = new IrisApiEngine;
-        self.irisApiEngine->SetIrisRtcEngineEventHandler(self.eventHandler);
-        self.irisApiEngine->SetIrisMediaPlayerEventHandler(self.eventHandler);
-        self.irisApiEngine->SetIrisMediaRecorderEventHandler(self.eventHandler);
     }
     return [NSNull null];
 }
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(destroyIrisApiEngine) {
     if (self.irisApiEngine != nullptr) {
-        self.irisApiEngine->UnsetIrisRtcEngineEventHandler(self.eventHandler);
-        self.irisApiEngine->UnsetIrisMediaPlayerEventHandler(self.eventHandler);
-        self.irisApiEngine->UnsetIrisMediaRecorderEventHandler(self.eventHandler);
         delete self.irisApiEngine;
         self.irisApiEngine = nullptr;
     }
@@ -118,7 +114,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(destroyIrisApiEngine) {
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)arguments) {
     NSString *funcName = arguments[@"funcName"];
     NSString *params = arguments[@"params"];
-    
+
     NSMutableArray<NSData *> *bufferArray = [NSMutableArray new];
     if ([arguments[@"buffers"] isKindOfClass:NSArray.class]) {
         NSArray *array = arguments[@"buffers"];
@@ -127,34 +123,40 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)argument
             [bufferArray addObject:data];
         }
     }
-    
+
     void *buffers[bufferArray.count];
+    unsigned int length[bufferArray.count];
     for (int i = 0; i < bufferArray.count; ++i) {
         buffers[i] = const_cast<void *>(bufferArray[i].bytes);
+        length[i] = static_cast<unsigned int>(bufferArray[i].length);
     }
-    
+
     char result[kBasicResultLength] = "";
     int error_code;
-    
-    if ([funcName containsString:@"_register"]) {// 判断是注册observer相关的API
-        // 创建对应的observer
-        void *handle = self.irisApiEngine->CreateObserver(funcName.UTF8String, self.eventHandler, params.UTF8String, params.length);
-        void *observers[1] = {handle};
-        error_code = self.irisApiEngine->CallIrisApi(funcName.UTF8String, params.UTF8String, params.length,
-                                                     observers, 1, result);
-    } else if ([funcName containsString:@"_unregister"]) {// 判断是取消注册observer相关的API
-        void *handle = self.irisApiEngine->GetObserver(funcName.UTF8String);
-        void *observers[1] = {handle};
-        error_code = self.irisApiEngine->CallIrisApi(funcName.UTF8String, params.UTF8String, params.length,
-                                                     observers, 1, result);
-        // 释放对应的observer
-        self.irisApiEngine->DestroyObserver(funcName.UTF8String, handle);
-    } else {
-        error_code =
-        self.irisApiEngine->CallIrisApi(funcName.UTF8String, params.UTF8String, params.length,
-                                        buffers, bufferArray.count, result);
+
+    ApiParam param = {
+        .event = funcName.UTF8String,
+        .data = params.UTF8String,
+        .data_size = static_cast<unsigned int>(params.length),
+        .result = result,
+        .buffer = buffers,
+        .length = length,
+        .buffer_count = static_cast<unsigned int>(bufferArray.count),
+    };
+
+    if (bufferArray.count == 0) {
+        std::smatch output;
+        std::regex pattern = std::regex("^.*(Observer|Handler|Callback|Receiver)$");
+        std::string name = funcName.UTF8String;
+        if (std::regex_match(name, output, pattern)) {
+            void *handler[1] = {self.eventHandler};
+            param.buffer = handler;
+            param.buffer_count = 1;
+        }
     }
-    
+
+    error_code = self.irisApiEngine->CallIrisApi(&param);
+
     if (error_code != 0) {
         NSError *error;
         NSData *data = [NSJSONSerialization

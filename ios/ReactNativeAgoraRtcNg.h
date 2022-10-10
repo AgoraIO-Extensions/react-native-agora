@@ -1,4 +1,4 @@
-#import <AgoraRtcWrapper/iris_rtc_cxx_api.h>
+#import <AgoraRtcWrapper/iris_cxx_api.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
