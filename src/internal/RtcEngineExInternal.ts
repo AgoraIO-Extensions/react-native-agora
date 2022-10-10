@@ -156,14 +156,14 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     ) {
       RtcEngineExInternal._handlers.push(eventHandler);
     }
-    return true;
+    return super.registerEventHandler(eventHandler);
   }
 
   unregisterEventHandler(eventHandler: IRtcEngineEventHandler): boolean {
     RtcEngineExInternal._handlers = RtcEngineExInternal._handlers.filter(
       (value) => value !== eventHandler
     );
-    return true;
+    return super.unregisterEventHandler(eventHandler);
   }
 
   createMediaPlayer(): IMediaPlayer {

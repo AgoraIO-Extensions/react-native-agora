@@ -19,7 +19,16 @@ RCT_CUSTOM_VIEW_PROPERTY(callApi, NSDictionary, UIView) {
     if (module) {
         void *buffers[1];
         buffers[0] = (__bridge void*)view;
-        module.irisApiEngine->CallIrisApi(funcName.UTF8String, params.UTF8String, params.length, buffers, 1, result);
+        ApiParam param = {
+            .event = funcName.UTF8String,
+            .data = params.UTF8String,
+            .data_size = static_cast<unsigned int>(params.length),
+            .result = result,
+            .buffer = buffers,
+            .length = nullptr,
+            .buffer_count = 1,
+        };
+        module.irisApiEngine->CallIrisApi(&param);
     }
 }
 
