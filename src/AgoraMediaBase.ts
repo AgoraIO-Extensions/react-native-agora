@@ -663,6 +663,10 @@ export enum AudioFramePosition {
    * @ignore
    */
   AudioFramePositionBeforeMixing = 0x0008,
+  /**
+   * @ignore
+   */
+  AudioFramePositionEarMonitoring = 0x0010,
 }
 
 /**
@@ -729,6 +733,11 @@ export interface IAudioFrameObserverBase {
    * Reserved for future use.
    */
   onMixedAudioFrame?(channelId: string, audioFrame: AudioFrame): boolean;
+
+  /**
+   * @ignore
+   */
+  onEarMonitoringAudioFrame?(audioFrame: AudioFrame): boolean;
 }
 
 /**

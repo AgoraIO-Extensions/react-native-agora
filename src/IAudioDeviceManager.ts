@@ -77,6 +77,16 @@ export abstract class IAudioDeviceManager {
   /**
    * @ignore
    */
+  abstract setLoopbackDevice(deviceId: string): number;
+
+  /**
+   * @ignore
+   */
+  abstract getLoopbackDevice(): string;
+
+  /**
+   * @ignore
+   */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
   /**
@@ -133,6 +143,11 @@ export abstract class IAudioDeviceManager {
    * @ignore
    */
   abstract followSystemRecordingDevice(enable: boolean): number;
+
+  /**
+   * @ignore
+   */
+  abstract followSystemLoopbackDevice(enable: boolean): number;
 
   /**
    * @ignore

@@ -1,5 +1,9 @@
 import './extension/IAgoraRtcEngineExExtension';
-import { IRtcEngine, ChannelMediaOptions } from './IAgoraRtcEngine';
+import {
+  IRtcEngine,
+  ChannelMediaOptions,
+  LeaveChannelOptions,
+} from './IAgoraRtcEngine';
 import {
   VideoEncoderConfiguration,
   VideoCanvas,
@@ -9,12 +13,13 @@ import {
   VideoMirrorModeType,
   ConnectionStateType,
   EncryptionConfig,
+  DataStreamConfig,
   WatermarkOptions,
+  LiveTranscoding,
+  ChannelMediaRelayConfiguration,
   UserInfo,
-  VideoSourceType,
   SimulcastStreamConfig,
   SimulcastStreamMode,
-  DataStreamConfig,
 } from './AgoraBase';
 import { RenderModeType } from './AgoraMediaBase';
 /**
@@ -63,7 +68,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @returns
    * 0: Success.< 0: Failure.
    */
-  abstract leaveChannelEx(connection: RtcConnection): number;
+  abstract leaveChannelEx(
+    connection: RtcConnection,
+    options?: LeaveChannelOptions
+  ): number;
 
   /**
    * Updates the channel media options after joining the channel.
@@ -164,85 +172,68 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the blocklist of subscriptions for audio streams.
-   * You can call this method to specify the audio streams of a user that you do not want to subscribe to. You can call this method either before or after joining a channel.
-   * The blocklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .
-   * Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   * If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @param uidList The user ID list of users that you do not want to subscribe to.
-   *  If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
-  abstract setSubscribeAudioBlacklistEx(
+  abstract muteLocalAudioStreamEx(
+    mute: boolean,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract muteLocalVideoStreamEx(
+    mute: boolean,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract muteAllRemoteAudioStreamsEx(
+    mute: boolean,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract muteAllRemoteVideoStreamsEx(
+    mute: boolean,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract setSubscribeAudioBlocklistEx(
     uidList: number[],
     uidNumber: number,
     connection: RtcConnection
   ): number;
 
   /**
-   * Sets the allowlist of subscriptions for audio streams.
-   * You can call this method to specify the audio streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
-  abstract setSubscribeAudioWhitelistEx(
+  abstract setSubscribeAudioAllowlistEx(
     uidList: number[],
     uidNumber: number,
     connection: RtcConnection
   ): number;
 
   /**
-   * Set the bocklist of subscriptions for video streams.
-   * You can call this method to specify the video streams of a user that you do not want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
-   *
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @param uidList The user ID list of users that you do not want to subscribe to.
-   *  If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlacklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
-  abstract setSubscribeVideoBlacklistEx(
+  abstract setSubscribeVideoBlocklistEx(
     uidList: number[],
     uidNumber: number,
     connection: RtcConnection
   ): number;
 
   /**
-   * Set the allowlist of subscriptions for video streams.
-   * You can call this method to specify the video streams of a user that you want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   * Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   * You can call this method either before or after joining a channel.
-   * The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
-   *
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @param uidList The user ID list of users that you want to subscribe to.
-   *  If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoWhitelist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
-  abstract setSubscribeVideoWhitelistEx(
+  abstract setSubscribeVideoAllowlistEx(
     uidList: number[],
     uidNumber: number,
     connection: RtcConnection
@@ -308,6 +299,15 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
+   * @ignore
+   */
+  abstract adjustUserPlaybackSignalVolumeEx(
+    uid: number,
+    volume: number,
+    connection: RtcConnection
+  ): number;
+
+  /**
    * Gets the current connection state of the SDK.
    * You can call this method either before or after joining a channel.
    *
@@ -325,6 +325,22 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection,
     enabled: boolean,
     config: EncryptionConfig
+  ): number;
+
+  /**
+   * Creates a data stream.
+   * Creates a data stream. Each user can create up to five data streams in a single channel.Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
+   *
+   * @param connection The connection information. See RtcConnection .
+   *
+   * @param config The configurations for the data stream. See DataStreamConfig .
+   *
+   * @returns
+   * ID of the created data stream, if the method call succeeds.< 0: Failure.
+   */
+  abstract createDataStreamEx(
+    config: DataStreamConfig,
+    connection: RtcConnection
   ): number;
 
   /**
@@ -406,6 +422,67 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * @ignore
    */
+  abstract startRtmpStreamWithoutTranscodingEx(
+    url: string,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract startRtmpStreamWithTranscodingEx(
+    url: string,
+    transcoding: LiveTranscoding,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract updateRtmpTranscodingEx(
+    transcoding: LiveTranscoding,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract stopRtmpStreamEx(url: string, connection: RtcConnection): number;
+
+  /**
+   * @ignore
+   */
+  abstract startChannelMediaRelayEx(
+    configuration: ChannelMediaRelayConfiguration,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract updateChannelMediaRelayEx(
+    configuration: ChannelMediaRelayConfiguration,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract stopChannelMediaRelayEx(connection: RtcConnection): number;
+
+  /**
+   * @ignore
+   */
+  abstract pauseAllChannelMediaRelayEx(connection: RtcConnection): number;
+
+  /**
+   * @ignore
+   */
+  abstract resumeAllChannelMediaRelayEx(connection: RtcConnection): number;
+
+  /**
+   * @ignore
+   */
   abstract getUserInfoByUserAccountEx(
     userAccount: string,
     connection: RtcConnection
@@ -430,7 +507,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @ignore
    */
   abstract enableDualStreamModeEx(
-    sourceType: VideoSourceType,
     enabled: boolean,
     streamConfig: SimulcastStreamConfig,
     connection: RtcConnection
@@ -440,7 +516,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @ignore
    */
   abstract setDualStreamModeEx(
-    sourceType: VideoSourceType,
     mode: SimulcastStreamMode,
     streamConfig: SimulcastStreamConfig,
     connection: RtcConnection
@@ -468,21 +543,5 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection,
     uid: number,
     filePath: string
-  ): number;
-
-  /**
-   * Creates a data stream.
-   * Creates a data stream. Each user can create up to five data streams in a single channel.Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
-   *
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @param config The configurations for the data stream. See DataStreamConfig .
-   *
-   * @returns
-   * ID of the created data stream, if the method call succeeds.< 0: Failure.
-   */
-  abstract createDataStreamEx(
-    config: DataStreamConfig,
-    connection: RtcConnection
   ): number;
 }
