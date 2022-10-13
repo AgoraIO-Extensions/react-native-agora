@@ -175,6 +175,24 @@ export abstract class IMediaPlayer {
   abstract selectAudioTrack(index: number): number;
 
   /**
+   * Sets the private options for the media player.
+   * The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.Ensure that you call this method before open .If you need to push streams with SEI into the CDN, callsetPlayerOptionInInt ("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
+   *
+   * @param key The key of the option.
+   *
+   * @param value The value of the key.
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
+   */
+  abstract setPlayerOptionInInt(key: string, value: number): number;
+
+  /**
+   * @ignore
+   */
+  abstract setPlayerOptionInString(key: string, value: string): number;
+
+  /**
    * @ignore
    */
   abstract takeScreenshot(filename: string): number;
@@ -513,24 +531,6 @@ export abstract class IMediaPlayer {
   abstract unregisterVideoFrameObserver(
     observer: IMediaPlayerVideoFrameObserver
   ): number;
-
-  /**
-   * Sets the private options for the media player.
-   * The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.Ensure that you call this method before open .If you need to push streams with SEI into the CDN, callsetPlayerOptionInInt ("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
-   *
-   * @param key The key of the option.
-   *
-   * @param value The value of the key.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
-  abstract setPlayerOptionInInt(key: string, value: number): number;
-
-  /**
-   * @ignore
-   */
-  abstract setPlayerOptionInString(key: string, value: string): number;
 }
 
 /**

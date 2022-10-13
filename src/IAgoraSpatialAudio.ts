@@ -15,6 +15,48 @@ export class RemoteVoicePositionInfo {
 }
 
 /**
+ * @ignore
+ */
+export class SpatialAudioZone {
+  /**
+   * @ignore
+   */
+  zoneSetId?: number;
+  /**
+   * @ignore
+   */
+  position?: number[];
+  /**
+   * @ignore
+   */
+  forward?: number[];
+  /**
+   * @ignore
+   */
+  right?: number[];
+  /**
+   * @ignore
+   */
+  up?: number[];
+  /**
+   * @ignore
+   */
+  forwardLength?: number;
+  /**
+   * @ignore
+   */
+  rightLength?: number;
+  /**
+   * @ignore
+   */
+  upLength?: number;
+  /**
+   * @ignore
+   */
+  audioAttenuation?: number;
+}
+
+/**
  * This class contains some of the APIs in the ILocalSpatialAudioEngine class.
  * The ILocalSpatialAudioEngine class inherits from IBaseSpatialAudioEngine.
  */
@@ -121,6 +163,25 @@ export abstract class IBaseSpatialAudioEngine {
    * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
    */
   abstract muteAllRemoteAudioStreams(mute: boolean): number;
+
+  /**
+   * @ignore
+   */
+  abstract setZones(zones: SpatialAudioZone, zoneCount: number): number;
+
+  /**
+   * @ignore
+   */
+  abstract setPlayerAttenuation(
+    playerId: number,
+    attenuation: number,
+    forceSet: boolean
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract muteRemoteAudioStream(uid: number, mute: boolean): number;
 }
 
 /**
@@ -185,4 +246,13 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
    * @ignore
    */
   abstract clearRemotePositionsEx(connection: RtcConnection): number;
+
+  /**
+   * @ignore
+   */
+  abstract setRemoteAudioAttenuation(
+    uid: number,
+    attenuation: number,
+    forceSet: boolean
+  ): number;
 }
