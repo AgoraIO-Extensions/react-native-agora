@@ -6,6 +6,7 @@ import { callIrisApi, EVENT_TYPE } from './IrisApiEngine';
 import {
   ChannelMediaOptions,
   DirectCdnStreamingMediaOptions,
+  ExtensionInfo,
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
   IRtcEngineEventHandler,
@@ -270,22 +271,20 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   protected getApiTypeFromEnableDualStreamMode(
     enabled: boolean,
-    sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary,
     streamConfig?: SimulcastStreamConfig
   ): string {
     return streamConfig === undefined
-      ? 'RtcEngine_enableDualStreamMode2'
-      : 'RtcEngine_enableDualStreamMode3';
+      ? 'RtcEngine_enableDualStreamMode'
+      : 'RtcEngine_enableDualStreamMode2';
   }
 
   protected getApiTypeFromSetDualStreamMode(
     mode: SimulcastStreamMode,
-    sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary,
     streamConfig?: SimulcastStreamConfig
   ): string {
     return streamConfig === undefined
-      ? 'RtcEngine_setDualStreamMode2'
-      : 'RtcEngine_setDualStreamMode3';
+      ? 'RtcEngine_setDualStreamMode'
+      : 'RtcEngine_setDualStreamMode2';
   }
 
   protected getApiTypeFromCreateDataStream(config: DataStreamConfig): string {
@@ -315,6 +314,42 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     connection: RtcConnection
   ): string {
     return 'RtcEngineEx_createDataStreamEx2';
+  }
+
+  protected getApiTypeFromEnableExtension(
+    provider: string,
+    extension: string,
+    extensionInfo: ExtensionInfo,
+    enable: boolean = true
+  ): string {
+    return 'RtcEngine_enableExtension2';
+  }
+
+  protected getApiTypeFromSetExtensionProperty(
+    provider: string,
+    extension: string,
+    extensionInfo: ExtensionInfo,
+    key: string,
+    value: string
+  ): string {
+    return 'RtcEngine_setExtensionProperty2';
+  }
+
+  protected getApiTypeFromGetExtensionProperty(
+    provider: string,
+    extension: string,
+    extensionInfo: ExtensionInfo,
+    key: string,
+    bufLen: number
+  ): string {
+    return 'RtcEngine_getExtensionProperty2';
+  }
+
+  protected getApiTypeFromLeaveChannelEx(
+    connection: RtcConnection,
+    options?: LeaveChannelOptions
+  ): string {
+    return 'RtcEngineEx_leaveChannelEx2';
   }
 
   getAudioDeviceManager(): IAudioDeviceManager {
