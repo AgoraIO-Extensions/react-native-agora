@@ -89,6 +89,7 @@ import { AudioMixingDualMonoMode, IMediaEngine } from '../IAgoraMediaEngine';
 import { LogFilterType, LogLevel } from '../IAgoraLog';
 import { AgoraRhythmPlayerConfig } from '../IAgoraRhythmPlayer';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
+import { IMusicContentCenter } from '../IAgoraMusicContentCenter';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 export function processIRtcEngineEventHandler(
@@ -6472,6 +6473,17 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromGetVideoDeviceManager(): string {
     return 'RtcEngine_getVideoDeviceManager';
+  }
+
+  getMusicContentCenter(): IMusicContentCenter {
+    const apiType = this.getApiTypeFromGetMusicContentCenter();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetMusicContentCenter(): string {
+    return 'RtcEngine_getMusicContentCenter';
   }
 
   getMediaEngine(): IMediaEngine {
