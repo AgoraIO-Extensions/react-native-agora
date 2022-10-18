@@ -46,6 +46,8 @@ import {
 import { IRtcEngineEvent } from '../extension/IAgoraRtcEngineExtension';
 import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
 import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
+import { IMusicContentCenter } from '../IAgoraMusicContentCenter';
+import { IMusicContentCenterImpl } from '../impl/IAgoraMusicContentCenterImpl';
 
 export class RtcEngineExInternal extends IRtcEngineExImpl {
   static _handlers: (
@@ -55,6 +57,8 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   )[] = [];
   static _audio_encoded_frame_observers: IAudioEncodedFrameObserver[] = [];
   static _audio_spectrum_observers: IAudioSpectrumObserver[] = [];
+  private _music_content_center: IMusicContentCenter =
+    new IMusicContentCenterImpl();
   private _media_engine: IMediaEngine = new MediaEngineInternal();
   private _media_recorder: IMediaRecorder = new MediaRecorderInternal();
   private _local_spatial_audio_engine: ILocalSpatialAudioEngine =
@@ -358,6 +362,10 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   getVideoDeviceManager(): IVideoDeviceManager {
     throw 'Not support';
+  }
+
+  getMusicContentCenter(): IMusicContentCenter {
+    return this._music_content_center;
   }
 
   getMediaEngine(): IMediaEngine {
