@@ -1,8 +1,4 @@
-import {
-  DeviceEventEmitter,
-  NativeEventEmitter,
-  NativeModules,
-} from 'react-native';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 import base64 from 'base64-js';
 import { Buffer } from 'buffer';
 
@@ -52,6 +48,8 @@ import {
 } from '../AgoraMediaBase';
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
+
+export const DeviceEventEmitter = new NativeEventEmitter();
 
 const { ReactNativeAgoraRtcNg } = NativeModules;
 const EventEmitter = new NativeEventEmitter(ReactNativeAgoraRtcNg);

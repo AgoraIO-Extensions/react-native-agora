@@ -1,8 +1,8 @@
-import { DeviceEventEmitter, EventSubscription } from 'react-native';
+import { EmitterSubscription } from 'react-native';
 
 import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
-import { callIrisApi, EVENT_TYPE } from './IrisApiEngine';
+import { callIrisApi, EVENT_TYPE, DeviceEventEmitter } from './IrisApiEngine';
 import {
   ChannelMediaOptions,
   DirectCdnStreamingMediaOptions,
@@ -65,8 +65,17 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     new LocalSpatialAudioEngineInternal();
   private _events: Map<
     any,
-    { eventType: string; listener: (...args: any[]) => any }
-  > = new Map<any, { eventType: string; listener: (...args: any[]) => any }>();
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  > = new Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  >();
 
   initialize(context: RtcEngineContext): number {
     const ret = super.initialize(context);
@@ -87,17 +96,14 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     MediaPlayerInternal._audio_frame_observers.clear();
     MediaPlayerInternal._video_frame_observers.clear();
     MediaPlayerInternal._audio_spectrum_observers.clear();
-    this._events.forEach((value) => {
-      DeviceEventEmitter.removeListener(value.eventType, value.listener);
-    });
-    this._events.clear();
+    this.removeAllListeners();
     super.release(sync);
   }
 
   addListener<EventType extends keyof IRtcEngineEvent>(
     eventType: EventType,
     listener: IRtcEngineEvent[EventType]
-  ): EventSubscription {
+  ): EmitterSubscription {
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IRtcEngine) {
         return;
@@ -124,8 +130,9 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
         data[1]
       );
     };
-    this._events.set(listener, { eventType, listener: callback });
-    return DeviceEventEmitter.addListener(eventType, callback);
+    const subscription = DeviceEventEmitter.addListener(eventType, callback);
+    this._events.set(listener, { eventType, subscription });
+    return subscription;
   }
 
   removeListener<EventType extends keyof IRtcEngineEvent>(
@@ -133,16 +140,28 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     listener: IRtcEngineEvent[EventType]
   ) {
     if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeListener(
-      eventType,
-      this._events.get(listener)!.listener
+    DeviceEventEmitter.removeSubscription(
+      this._events.get(listener)!.subscription
     );
+    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IRtcEngineEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    if (eventType === undefined) {
+      this._events.forEach((value) => {
+        DeviceEventEmitter.removeAllListeners(value.eventType);
+      });
+      this._events.clear();
+    } else {
+      DeviceEventEmitter.removeAllListeners(eventType);
+      this._events.forEach((value, key) => {
+        if (value.eventType === eventType) {
+          this._events.delete(key);
+        }
+      });
+    }
   }
 
   getVersion(): SDKBuildInfo {
