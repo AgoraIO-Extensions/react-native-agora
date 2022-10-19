@@ -1,4 +1,4 @@
-import { DeviceEventEmitter, EventSubscription } from 'react-native';
+import { EmitterSubscription } from 'react-native';
 
 import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';
 import {
@@ -12,7 +12,7 @@ import {
   processIVideoEncodedFrameObserver,
   processIVideoFrameObserver,
 } from '../impl/AgoraMediaBaseImpl';
-import { EVENT_TYPE } from './IrisApiEngine';
+import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 
 export class MediaEngineInternal extends IMediaEngineImpl {
   static _audio_frame_observers: IAudioFrameObserver[] = [];
@@ -20,8 +20,17 @@ export class MediaEngineInternal extends IMediaEngineImpl {
   static _video_encoded_frame_observers: IVideoEncodedFrameObserver[] = [];
   private _events: Map<
     any,
-    { eventType: string; listener: (...args: any[]) => any }
-  > = new Map<any, { eventType: string; listener: (...args: any[]) => any }>();
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  > = new Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  >();
 
   registerAudioFrameObserver(observer: IAudioFrameObserver): number {
     if (
@@ -88,17 +97,14 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     MediaEngineInternal._audio_frame_observers = [];
     MediaEngineInternal._video_frame_observers = [];
     MediaEngineInternal._video_encoded_frame_observers = [];
-    this._events.forEach((value) => {
-      DeviceEventEmitter.removeListener(value.eventType, value.listener);
-    });
-    this._events.clear();
+    this.removeAllListeners();
     super.release();
   }
 
   addListener<EventType extends keyof IMediaEngineEvent>(
     eventType: EventType,
     listener: IMediaEngineEvent[EventType]
-  ): EventSubscription {
+  ): EmitterSubscription {
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IMediaEngine) {
         return;
@@ -111,8 +117,9 @@ export class MediaEngineInternal extends IMediaEngineImpl {
         data[1]
       );
     };
-    this._events.set(listener, { eventType, listener: callback });
-    return DeviceEventEmitter.addListener(eventType, callback);
+    const subscription = DeviceEventEmitter.addListener(eventType, callback);
+    this._events.set(listener, { eventType, subscription });
+    return subscription;
   }
 
   removeListener<EventType extends keyof IMediaEngineEvent>(
@@ -120,15 +127,27 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     listener: IMediaEngineEvent[EventType]
   ) {
     if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeListener(
-      eventType,
-      this._events.get(listener)!.listener
+    DeviceEventEmitter.removeSubscription(
+      this._events.get(listener)!.subscription
     );
+    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IMediaEngineEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    if (eventType === undefined) {
+      this._events.forEach((value) => {
+        DeviceEventEmitter.removeAllListeners(value.eventType);
+      });
+      this._events.clear();
+    } else {
+      DeviceEventEmitter.removeAllListeners(eventType);
+      this._events.forEach((value, key) => {
+        if (value.eventType === eventType) {
+          this._events.delete(key);
+        }
+      });
+    }
   }
 }
