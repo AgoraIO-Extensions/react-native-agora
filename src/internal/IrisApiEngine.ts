@@ -1,6 +1,7 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 import base64 from 'base64-js';
 import { Buffer } from 'buffer';
+import EventEmitter from './emitter/EventEmitter';
 
 import {
   IDirectCdnStreamingEventHandler,
@@ -49,9 +50,12 @@ import {
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 
+// @ts-ignore
+export const DeviceEventEmitter = new EventEmitter();
+
 const { ReactNativeAgoraRtcNg } = NativeModules;
-export const DeviceEventEmitter = new NativeEventEmitter(ReactNativeAgoraRtcNg);
-DeviceEventEmitter.addListener('onEvent', handleEvent);
+const AgoraEventEmitter = new NativeEventEmitter(ReactNativeAgoraRtcNg);
+AgoraEventEmitter.addListener('onEvent', handleEvent);
 
 let debuggable = false;
 
