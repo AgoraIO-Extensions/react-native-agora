@@ -49,11 +49,9 @@ import {
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 
-export const DeviceEventEmitter = new NativeEventEmitter();
-
 const { ReactNativeAgoraRtcNg } = NativeModules;
-const EventEmitter = new NativeEventEmitter(ReactNativeAgoraRtcNg);
-EventEmitter.addListener('onEvent', handleEvent);
+export const DeviceEventEmitter = new NativeEventEmitter(ReactNativeAgoraRtcNg);
+DeviceEventEmitter.addListener('onEvent', handleEvent);
 
 let debuggable = false;
 
