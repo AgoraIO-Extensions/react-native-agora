@@ -416,4 +416,26 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   protected getApiTypeFromRelease(): string {
     return 'AudioDeviceManager_release';
   }
+
+  getPlaybackDefaultDevice(): AudioDeviceInfo {
+    const apiType = this.getApiTypeFromGetPlaybackDefaultDevice();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetPlaybackDefaultDevice(): string {
+    return 'AudioDeviceManager_getPlaybackDefaultDevice';
+  }
+
+  getRecordingDefaultDevice(): AudioDeviceInfo {
+    const apiType = this.getApiTypeFromGetRecordingDefaultDevice();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetRecordingDefaultDevice(): string {
+    return 'AudioDeviceManager_getRecordingDefaultDevice';
+  }
 }

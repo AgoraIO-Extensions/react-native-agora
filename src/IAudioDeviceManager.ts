@@ -153,4 +153,14 @@ export abstract class IAudioDeviceManager {
    * @ignore
    */
   abstract release(): void;
+
+  /**
+   * @ignore
+   */
+  abstract getPlaybackDefaultDevice(): AudioDeviceInfo;
+
+  /**
+   * @ignore
+   */
+  abstract getRecordingDefaultDevice(): AudioDeviceInfo;
 }
