@@ -1,9 +1,9 @@
-#import <AgoraRtcWrapper/iris_cxx_api.h>
+#import <AgoraRtcWrapper/iris_engine_base.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
 @interface ReactNativeAgoraRtcNg : RCTEventEmitter
 
-@property(nonatomic) IrisApiEngine *irisApiEngine;
+@property(nonatomic) IApiEngineBase *irisApiEngine;
 
 @end

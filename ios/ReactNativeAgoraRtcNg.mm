@@ -98,7 +98,7 @@ RCT_EXPORT_METHOD(showRPSystemBroadcastPickerView) {
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(newIrisApiEngine) {
     if (self.irisApiEngine == nullptr) {
         enableUseJsonArray(true);
-        self.irisApiEngine = new IrisApiEngine;
+        self.irisApiEngine = createIrisRtcEngine(nullptr);
     }
     return [NSNull null];
 }
