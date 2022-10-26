@@ -17,6 +17,7 @@ export * from './IAgoraMediaEngine';
 export * from './IAgoraMediaPlayer';
 export * from './IAgoraMediaPlayerSource';
 export * from './IAgoraMediaRecorder';
+export * from './IAgoraMusicContentCenter';
 export * from './IAgoraRhythmPlayer';
 export * from './IAgoraRtcEngine';
 export * from './IAgoraRtcEngineEx';

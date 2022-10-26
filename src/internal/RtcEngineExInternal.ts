@@ -1,22 +1,3 @@
-import { EmitterSubscription } from 'react-native';
-
-import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
-import { MediaPlayerInternal } from './MediaPlayerInternal';
-import { callIrisApi, EVENT_TYPE, DeviceEventEmitter } from './IrisApiEngine';
-import {
-  ChannelMediaOptions,
-  DirectCdnStreamingMediaOptions,
-  ExtensionInfo,
-  IDirectCdnStreamingEventHandler,
-  IMetadataObserver,
-  IRtcEngineEventHandler,
-  IVideoDeviceManager,
-  LeaveChannelOptions,
-  MetadataType,
-  RtcEngineContext,
-  SDKBuildInfo,
-} from '../IAgoraRtcEngine';
-import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import {
   AudioEncodedFrameObserverConfig,
   AudioRecordingConfiguration,
@@ -30,24 +11,46 @@ import {
   WatermarkOptions,
 } from '../AgoraBase';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
-import { IAudioDeviceManager } from '../IAudioDeviceManager';
 import { IMediaEngine } from '../IAgoraMediaEngine';
+import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
+import { IMusicContentCenter } from '../IAgoraMusicContentCenter';
+import { RtcConnection } from '../IAgoraRtcEngineEx';
+import {
+  ChannelMediaOptions,
+  DirectCdnStreamingMediaOptions,
+  ExtensionInfo,
+  IDirectCdnStreamingEventHandler,
+  IMetadataObserver,
+  IRtcEngineEventHandler,
+  IVideoDeviceManager,
+  LeaveChannelOptions,
+  MetadataType,
+  RtcEngineContext,
+  SDKBuildInfo,
+} from '../IAgoraRtcEngine';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
-import { MediaEngineInternal } from './MediaEngineInternal';
-import { MediaRecorderInternal } from './MediaRecorderInternal';
-import { LocalSpatialAudioEngineInternal } from './LocalSpatialAudioEngineInternal';
+import { IAudioDeviceManager } from '../IAudioDeviceManager';
+
+import { IRtcEngineEvent } from '../extension/IAgoraRtcEngineExtension';
+
+import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
+import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
+import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
 import {
   processIDirectCdnStreamingEventHandler,
   processIMetadataObserver,
   processIRtcEngineEventHandler,
 } from '../impl/IAgoraRtcEngineImpl';
-import { IRtcEngineEvent } from '../extension/IAgoraRtcEngineExtension';
-import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
-import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
-import { IMusicContentCenter } from '../IAgoraMusicContentCenter';
-import { IMusicContentCenterImpl } from '../impl/IAgoraMusicContentCenterImpl';
+
+import { LocalSpatialAudioEngineInternal } from './LocalSpatialAudioEngineInternal';
+import { MediaEngineInternal } from './MediaEngineInternal';
+import { MediaPlayerInternal } from './MediaPlayerInternal';
+import { MediaRecorderInternal } from './MediaRecorderInternal';
+import { MusicContentCenterInternal } from './MusicContentCenterInternal';
+
+import { callIrisApi, DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class RtcEngineExInternal extends IRtcEngineExImpl {
   static _handlers: (
@@ -57,10 +60,10 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   )[] = [];
   static _audio_encoded_frame_observers: IAudioEncodedFrameObserver[] = [];
   static _audio_spectrum_observers: IAudioSpectrumObserver[] = [];
-  private _music_content_center: IMusicContentCenter =
-    new IMusicContentCenterImpl();
   private _media_engine: IMediaEngine = new MediaEngineInternal();
   private _media_recorder: IMediaRecorder = new MediaRecorderInternal();
+  private _music_content_center: IMusicContentCenter =
+    new MusicContentCenterInternal();
   private _local_spatial_audio_engine: ILocalSpatialAudioEngine =
     new LocalSpatialAudioEngineInternal();
   private _events: Map<
@@ -310,6 +313,42 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
       : 'RtcEngine_setDualStreamMode2';
   }
 
+  protected getApiTypeFromLeaveChannelEx(
+    connection: RtcConnection,
+    options?: LeaveChannelOptions
+  ): string {
+    return 'RtcEngineEx_leaveChannelEx2';
+  }
+
+  protected getApiTypeFromGetExtensionProperty(
+    provider: string,
+    extension: string,
+    extensionInfo: ExtensionInfo,
+    key: string,
+    bufLen: number
+  ): string {
+    return 'RtcEngine_getExtensionProperty2';
+  }
+
+  protected getApiTypeFromEnableExtension(
+    provider: string,
+    extension: string,
+    extensionInfo: ExtensionInfo,
+    enable = true
+  ): string {
+    return 'RtcEngine_enableExtension2';
+  }
+
+  protected getApiTypeFromSetExtensionProperty(
+    provider: string,
+    extension: string,
+    extensionInfo: ExtensionInfo,
+    key: string,
+    value: string
+  ): string {
+    return 'RtcEngine_setExtensionProperty2';
+  }
+
   protected getApiTypeFromCreateDataStream(config: DataStreamConfig): string {
     return 'RtcEngine_createDataStream2';
   }
@@ -339,42 +378,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     return 'RtcEngineEx_createDataStreamEx2';
   }
 
-  protected getApiTypeFromEnableExtension(
-    provider: string,
-    extension: string,
-    extensionInfo: ExtensionInfo,
-    enable: boolean = true
-  ): string {
-    return 'RtcEngine_enableExtension2';
-  }
-
-  protected getApiTypeFromSetExtensionProperty(
-    provider: string,
-    extension: string,
-    extensionInfo: ExtensionInfo,
-    key: string,
-    value: string
-  ): string {
-    return 'RtcEngine_setExtensionProperty2';
-  }
-
-  protected getApiTypeFromGetExtensionProperty(
-    provider: string,
-    extension: string,
-    extensionInfo: ExtensionInfo,
-    key: string,
-    bufLen: number
-  ): string {
-    return 'RtcEngine_getExtensionProperty2';
-  }
-
-  protected getApiTypeFromLeaveChannelEx(
-    connection: RtcConnection,
-    options?: LeaveChannelOptions
-  ): string {
-    return 'RtcEngineEx_leaveChannelEx2';
-  }
-
   getAudioDeviceManager(): IAudioDeviceManager {
     throw 'Not support';
   }
@@ -383,16 +386,16 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     throw 'Not support';
   }
 
-  getMusicContentCenter(): IMusicContentCenter {
-    return this._music_content_center;
-  }
-
   getMediaEngine(): IMediaEngine {
     return this._media_engine;
   }
 
   getMediaRecorder(): IMediaRecorder {
     return this._media_recorder;
+  }
+
+  getMusicContentCenter(): IMusicContentCenter {
+    return this._music_content_center;
   }
 
   getLocalSpatialAudioEngine(): ILocalSpatialAudioEngine {

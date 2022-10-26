@@ -24,6 +24,7 @@ import Extension from './Extension/Extension';
 import BeautyEffect from './BeautyEffect/BeautyEffect';
 import EncodedVideoFrame from './EncodedVideoFrame/EncodedVideoFrame';
 import PushVideoFrame from './PushVideoFrame/PushVideoFrame';
+import MusicContentCenter from './MusicContentCenter/MusicContentCenter';
 
 const Advanced = {
   title: 'Advanced',
@@ -79,6 +80,10 @@ const Advanced = {
     {
       name: 'MediaRecorder',
       component: MediaRecorder,
+    },
+    {
+      name: 'MusicContentCenter',
+      component: MusicContentCenter,
     },
     {
       name: 'PlayEffect',

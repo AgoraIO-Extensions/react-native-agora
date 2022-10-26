@@ -161,6 +161,7 @@ export const AgoraDropdown = (
         // @ts-ignore
         textInputProps={{ style: AgoraStyle.input, chevronUp: true }}
         onValueChange={(v, index) => {
+          if (v === null || v === undefined) return;
           setValue(v);
           props.onValueChange?.call(this, v, index);
         }}

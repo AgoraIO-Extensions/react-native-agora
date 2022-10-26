@@ -1,21 +1,23 @@
-import { EmitterSubscription } from 'react-native';
-
-import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import { ErrorCodeType } from '../AgoraBase';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import {
+  IMediaPlayerAudioFrameObserver,
+  IMediaPlayerVideoFrameObserver,
+} from '../IAgoraMediaPlayer';
+import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
+
+import { IMediaPlayerEvent } from '../extension/IAgoraMediaPlayerExtension';
+
+import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
 import {
   IMediaPlayerImpl,
   processIMediaPlayerAudioFrameObserver,
   processIMediaPlayerVideoFrameObserver,
 } from '../impl/IAgoraMediaPlayerImpl';
-import {
-  IMediaPlayerAudioFrameObserver,
-  IMediaPlayerVideoFrameObserver,
-} from '../IAgoraMediaPlayer';
 import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
-import { IMediaPlayerEvent } from '../extension/IAgoraMediaPlayerExtension';
-import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
+
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaPlayerInternal extends IMediaPlayerImpl {
   static _source_observers: Map<number, IMediaPlayerSourceObserver[]> = new Map<

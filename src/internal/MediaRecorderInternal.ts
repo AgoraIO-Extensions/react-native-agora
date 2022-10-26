@@ -1,12 +1,14 @@
-import { EmitterSubscription } from 'react-native';
-
-import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { ErrorCodeType } from '../AgoraBase';
 import { IMediaRecorderObserver } from '../AgoraMediaBase';
+import { RtcConnection } from '../IAgoraRtcEngineEx';
+
 import { IMediaRecorderEvent } from '../extension/IAgoraMediaRecorderExtension';
+
 import { processIMediaRecorderObserver } from '../impl/AgoraMediaBaseImpl';
+import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
+
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaRecorderInternal extends IMediaRecorderImpl {
   static _observers: Map<string, IMediaRecorderObserver> = new Map<
