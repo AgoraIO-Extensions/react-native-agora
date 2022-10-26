@@ -5756,6 +5756,11 @@ export abstract class IRtcEngine {
    * 0: Success.< 0: Failure.
    */
   abstract setParameters(parameters: string): number;
+
+  /**
+   * @ignore
+   */
+  abstract getNativeHandle(): number;
 }
 
 /**

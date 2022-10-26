@@ -286,7 +286,7 @@ export const EVENT_PROCESSORS = {
   },
   IMusicContentCenterEventHandler: {
     suffix: 'MusicContentCenterEventHandler_',
-    type: EVENT_TYPE.IRtcEngine,
+    type: EVENT_TYPE.IMusicContentCenter,
     func: [processIMusicContentCenterEventHandler],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
       switch (event) {
