@@ -197,7 +197,7 @@ export const EVENT_PROCESSORS = {
     func: [processIVideoEncodedFrameObserver],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
       switch (event) {
-        case 'OnEncodedVideoFrameReceived':
+        case 'onEncodedVideoFrameReceived':
           (data.imageBuffer as Uint8Array) = buffers[0];
           break;
       }
