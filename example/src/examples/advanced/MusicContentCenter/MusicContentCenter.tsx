@@ -23,6 +23,7 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
+  AgoraDivider,
   AgoraDropdown,
   AgoraImage,
   AgoraSlider,
@@ -58,9 +59,8 @@ export default class MusicContentCenter
     return {
       appId: Config.appId,
       enableVideo: false,
-      rtmToken:
-        '006695752b975654e44bea00137d084c71cIADtJB4Sa88UTgj83RxgrkQBfkQY3NWI8RSaOwYZCh4OVNJjSIgAAAAAEACOpu9sgkdaYwEA6AOCR1pj',
-      mccUid: 123,
+      rtmToken: '',
+      mccUid: 0,
       musicChartInfos: [],
       musicChartId: -1,
       page: 0,
@@ -383,10 +383,20 @@ export default class MusicContentCenter
           placeholder={`rtmToken`}
           value={rtmToken}
         />
+        <AgoraTextInput
+          onChangeText={(text) => {
+            if (isNaN(+text)) return;
+            this.setState({
+              mccUid: text === '' ? this.createState().mccUid : +text,
+            });
+          }}
+          placeholder={`mccUid (defaults: ${this.createState().mccUid})`}
+        />
         <AgoraButton
           title={`init Music Content Center`}
           onPress={this.initMusicContentCenter}
         />
+        <AgoraDivider />
         <AgoraDropdown
           title={'musicChartInfos:'}
           items={musicChartInfos?.map((value) => {
@@ -400,6 +410,7 @@ export default class MusicContentCenter
             this.setState({ musicChartId: value });
           }}
         />
+        <AgoraDivider />
         {musicChartId >= 0 ? (
           <>
             <AgoraTextInput
@@ -426,6 +437,7 @@ export default class MusicContentCenter
               title={`get Music Collection`}
               onPress={this.getMusicCollectionByMusicChartId}
             />
+            <AgoraDivider />
             <AgoraDropdown
               title={'musics:'}
               items={musics?.map((value) => {
@@ -444,27 +456,34 @@ export default class MusicContentCenter
                 });
               }}
             />
+            <AgoraDivider />
           </>
         ) : undefined}
         {songCode >= 0 ? (
-          <AgoraButton
-            disabled={open}
-            title={`openWithSongCode`}
-            onPress={this.openWithSongCode}
-          />
+          <>
+            <AgoraButton
+              disabled={open}
+              title={`openWithSongCode`}
+              onPress={this.openWithSongCode}
+            />
+            <AgoraDivider />
+          </>
         ) : undefined}
         {preload ? (
-          <AgoraSlider
-            disabled={!open}
-            title={`${position} ms : ${duration} ms`}
-            minimumValue={0}
-            maximumValue={duration}
-            step={1000}
-            value={position}
-            onSlidingComplete={(value) => {
-              this.seek(value);
-            }}
-          />
+          <>
+            <AgoraSlider
+              disabled={!open}
+              title={`${position} ms : ${duration} ms`}
+              minimumValue={0}
+              maximumValue={duration}
+              step={1000}
+              value={position}
+              onSlidingComplete={(value) => {
+                this.seek(value);
+              }}
+            />
+            <AgoraDivider />
+          </>
         ) : undefined}
       </>
     );
