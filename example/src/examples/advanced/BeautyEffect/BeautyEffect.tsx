@@ -86,6 +86,7 @@ export default class BeautyEffect
     this.engine?.enableExtension(
       'agora_video_filters_clear_vision',
       'clear_vision',
+      {},
       true
     );
 

@@ -1,11 +1,10 @@
-import { EventSubscription } from 'react-native';
-
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import {
   IMediaPlayerAudioFrameObserver,
   IMediaPlayerVideoFrameObserver,
 } from '../IAgoraMediaPlayer';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaPlayerEvent = IMediaPlayerSourceObserver &
   IMediaPlayerAudioFrameObserver &
@@ -31,7 +30,7 @@ declare module '../IAgoraMediaPlayer' {
     addListener<EventType extends keyof IMediaPlayerEvent>(
       eventType: EventType,
       listener: IMediaPlayerEvent[EventType]
-    ): EventSubscription;
+    ): EmitterSubscription;
 
     /**
      * Removes the specified IMediaPlayerEvent listener.

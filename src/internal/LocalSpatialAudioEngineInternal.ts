@@ -1,6 +1,7 @@
-import { ILocalSpatialAudioEngineImpl } from '../impl/IAgoraSpatialAudioImpl';
 import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { RemoteVoicePositionInfo } from '../IAgoraSpatialAudio';
+
+import { ILocalSpatialAudioEngineImpl } from '../impl/IAgoraSpatialAudioImpl';
 
 export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImpl {
   protected getApiTypeFromRelease(): string {

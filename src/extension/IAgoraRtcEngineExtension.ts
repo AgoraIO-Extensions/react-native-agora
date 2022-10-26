@@ -1,5 +1,3 @@
-import { EventSubscription } from 'react-native';
-
 import {
   IRtcEngineEventHandler,
   IDirectCdnStreamingEventHandler,
@@ -7,6 +5,7 @@ import {
 } from '../IAgoraRtcEngine';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
+import { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IRtcEngineEvent = IRtcEngineEventHandler &
   IDirectCdnStreamingEventHandler &
@@ -33,7 +32,7 @@ declare module '../IAgoraRtcEngine' {
     addListener<EventType extends keyof IRtcEngineEvent>(
       eventType: EventType,
       listener: IRtcEngineEvent[EventType]
-    ): EventSubscription;
+    ): EmitterSubscription;
 
     /**
      * Removes the specified IRtcEngineEvent listener.

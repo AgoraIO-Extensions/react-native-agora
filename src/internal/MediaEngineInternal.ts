@@ -1,18 +1,20 @@
-import { EmitterSubscription } from 'react-native';
-
-import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';
 import {
   IAudioFrameObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
+
 import { IMediaEngineEvent } from '../extension/IAgoraMediaEngineExtension';
+
 import {
   processIAudioFrameObserver,
   processIVideoEncodedFrameObserver,
   processIVideoFrameObserver,
 } from '../impl/AgoraMediaBaseImpl';
+import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';
+
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaEngineInternal extends IMediaEngineImpl {
   static _audio_frame_observers: IAudioFrameObserver[] = [];
