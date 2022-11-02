@@ -119,6 +119,8 @@ export default class LocalSpatialAudioEngine
     this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+      // ⚠️ Must set autoSubscribeAudio to false
+      autoSubscribeAudio: false,
     });
   }
 

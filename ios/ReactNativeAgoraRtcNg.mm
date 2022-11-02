@@ -144,12 +144,12 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)argument
         .buffer_count = static_cast<unsigned int>(bufferArray.count),
     };
 
+    void *handler[1] = {self.eventHandler};
     if (bufferArray.count == 0) {
         std::smatch output;
-        std::regex pattern = std::regex("^.*(Observer|Handler|Callback|Receiver)$");
+        std::regex pattern = std::regex("^.*(Observer|Handler|Callback|Receiver|DirectCdnStreaming)$");
         std::string name = funcName.UTF8String;
         if (std::regex_match(name, output, pattern)) {
-            void *handler[1] = {self.eventHandler};
             param.buffer = handler;
             param.buffer_count = 1;
         }

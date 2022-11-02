@@ -1,5 +1,8 @@
 import { RtcConnection } from '../IAgoraRtcEngineEx';
-import { RemoteVoicePositionInfo } from '../IAgoraSpatialAudio';
+import {
+  RemoteVoicePositionInfo,
+  SpatialAudioZone,
+} from '../IAgoraSpatialAudio';
 
 import { ILocalSpatialAudioEngineImpl } from '../impl/IAgoraSpatialAudioImpl';
 
@@ -56,5 +59,27 @@ export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImp
 
   protected getApiTypeFromMuteAllRemoteAudioStreams(mute: boolean): string {
     return 'LocalSpatialAudioEngine_muteAllRemoteAudioStreams';
+  }
+
+  protected getApiTypeFromSetZones(
+    zones: SpatialAudioZone,
+    zoneCount: number
+  ): string {
+    return 'LocalSpatialAudioEngine_setZones';
+  }
+
+  protected getApiTypeFromSetPlayerAttenuation(
+    playerId: number,
+    attenuation: number,
+    forceSet: boolean
+  ): string {
+    return 'LocalSpatialAudioEngine_setPlayerAttenuation';
+  }
+
+  protected getApiTypeFromMuteRemoteAudioStream(
+    uid: number,
+    mute: boolean
+  ): string {
+    return 'LocalSpatialAudioEngine_muteRemoteAudioStream';
   }
 }

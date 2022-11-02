@@ -89,7 +89,7 @@ export default class SendMultiVideoStream
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
-    this.engine.getMediaEngine().registerAudioFrameObserver(this);
+    // this.engine.getMediaEngine().registerAudioFrameObserver(this);
     // this.engine.getMediaEngine().registerVideoFrameObserver(this);
 
     if (Platform.OS === 'android') {

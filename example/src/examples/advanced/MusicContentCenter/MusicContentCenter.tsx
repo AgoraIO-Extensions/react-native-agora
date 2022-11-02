@@ -31,6 +31,7 @@ import {
 } from '../../../components/ui';
 
 interface State extends BaseComponentState {
+  rtmAppId: string;
   rtmToken: string; // generate for test https://webdemo.agora.io/token-builder/
   mccUid: number;
   musicChartInfos: MusicChartInfo[];
@@ -59,6 +60,7 @@ export default class MusicContentCenter
     return {
       appId: Config.appId,
       enableVideo: false,
+      rtmAppId: '',
       rtmToken: '',
       mccUid: 0,
       musicChartInfos: [],
@@ -96,8 +98,8 @@ export default class MusicContentCenter
    * Step 2: initMusicContentCenter
    */
   initMusicContentCenter = () => {
-    const { appId, rtmToken, mccUid } = this.state;
-    if (!appId) {
+    const { rtmAppId, rtmToken, mccUid } = this.state;
+    if (!rtmAppId) {
       this.error(`appId is invalid`);
     }
     if (!rtmToken) {
@@ -111,7 +113,7 @@ export default class MusicContentCenter
     this.musicContentCenter?.registerEventHandler(this);
 
     this.musicContentCenter?.initialize({
-      appId,
+      appId: rtmAppId,
       rtmToken,
       mccUid,
     });
@@ -364,6 +366,7 @@ export default class MusicContentCenter
 
   protected renderConfiguration(): React.ReactNode {
     const {
+      rtmAppId,
       rtmToken,
       musicChartInfos,
       musicChartId,
@@ -376,6 +379,13 @@ export default class MusicContentCenter
     } = this.state;
     return (
       <>
+        <AgoraTextInput
+          onChangeText={(text) => {
+            this.setState({ rtmAppId: text });
+          }}
+          placeholder={`rtmAppId`}
+          value={rtmAppId}
+        />
         <AgoraTextInput
           onChangeText={(text) => {
             this.setState({ rtmToken: text });
