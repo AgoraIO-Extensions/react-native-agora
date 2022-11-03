@@ -33,6 +33,7 @@ import {
   ChannelProfileType,
   ClientRoleType,
   ClientRoleOptions,
+  EchoTestConfiguration,
   VideoSourceType,
   LastmileProbeConfig,
   VideoEncoderConfiguration,
@@ -207,12 +208,6 @@ export function processIRtcEngineEventHandler(
           jsonParams.deviceType,
           jsonParams.deviceState
         );
-      }
-      break;
-
-    case 'onMediaDeviceChanged':
-      if (handler.onMediaDeviceChanged !== undefined) {
-        handler.onMediaDeviceChanged(jsonParams.deviceType);
       }
       break;
 
@@ -1291,13 +1286,13 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setClientRole';
   }
 
-  startEchoTest(intervalInSeconds = 10): number {
-    const apiType = this.getApiTypeFromStartEchoTest(intervalInSeconds);
+  startEchoTest(config: EchoTestConfiguration): number {
+    const apiType = this.getApiTypeFromStartEchoTest(config);
     const jsonParams = {
-      intervalInSeconds: intervalInSeconds,
+      config: config,
       toJSON: () => {
         return {
-          intervalInSeconds: intervalInSeconds,
+          config: config,
         };
       },
     };
@@ -1305,7 +1300,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromStartEchoTest(intervalInSeconds = 10): string {
+  protected getApiTypeFromStartEchoTest(config: EchoTestConfiguration): string {
     return 'RtcEngine_startEchoTest';
   }
 
@@ -4148,6 +4143,40 @@ export class IRtcEngineImpl implements IRtcEngine {
     value: string
   ): string {
     return 'RtcEngine_setExtensionProviderProperty';
+  }
+
+  registerExtension(
+    provider: string,
+    extension: string,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
+  ): number {
+    const apiType = this.getApiTypeFromRegisterExtension(
+      provider,
+      extension,
+      type
+    );
+    const jsonParams = {
+      provider: provider,
+      extension: extension,
+      type: type,
+      toJSON: () => {
+        return {
+          provider: provider,
+          extension: extension,
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterExtension(
+    provider: string,
+    extension: string,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
+  ): string {
+    return 'RtcEngine_registerExtension';
   }
 
   enableExtension(

@@ -201,6 +201,24 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     return 'MusicContentCenter_initialize';
   }
 
+  renewToken(token: string): number {
+    const apiType = this.getApiTypeFromRenewToken(token);
+    const jsonParams = {
+      token: token,
+      toJSON: () => {
+        return {
+          token: token,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRenewToken(token: string): string {
+    return 'MusicContentCenter_renewToken';
+  }
+
   release(): void {
     const apiType = this.getApiTypeFromRelease();
     const jsonParams = {};

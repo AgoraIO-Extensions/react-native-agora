@@ -4,6 +4,7 @@ import {
   ClientRoleOptions,
   ClientRoleType,
   DataStreamConfig,
+  EchoTestConfiguration,
   IAudioEncodedFrameObserver,
   SimulcastStreamConfig,
   SimulcastStreamMode,
@@ -262,10 +263,8 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
       : 'RtcEngine_setClientRole2';
   }
 
-  protected getApiTypeFromStartEchoTest(
-    intervalInSeconds: number = 10
-  ): string {
-    return 'RtcEngine_startEchoTest2';
+  protected getApiTypeFromStartEchoTest(config: EchoTestConfiguration): string {
+    return 'RtcEngine_startEchoTest3';
   }
 
   protected getApiTypeFromStartPreview(

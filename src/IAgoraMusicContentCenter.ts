@@ -250,6 +250,11 @@ export abstract class IMusicContentCenter {
   /**
    * @ignore
    */
+  abstract renewToken(token: string): number;
+
+  /**
+   * @ignore
+   */
   abstract release(): void;
 
   /**

@@ -585,10 +585,6 @@ export enum VideoModulePosition {
    * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
    */
   PositionPreEncoder = 1 << 2,
-  /**
-   * @ignore
-   */
-  PositionPostFilters = 1 << 3,
 }
 
 /**

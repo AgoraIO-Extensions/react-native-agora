@@ -121,6 +121,7 @@ export default class TakeSnapshot
     }
 
     this.engine?.takeSnapshot(targetUid, `${filePath}/${targetUid}.jpg`);
+    this.setState({ takeSnapshot: false });
   };
 
   /**
