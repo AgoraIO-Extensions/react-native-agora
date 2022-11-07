@@ -1166,6 +1166,10 @@ export class AdvanceOptions {
    * @ignore
    */
   encodingPreference?: EncodingPreference;
+  /**
+   * @ignore
+   */
+  compressionPreference?: CompressionPreference;
 }
 
 /**
@@ -1222,10 +1226,6 @@ export class VideoEncoderConfiguration {
    * Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
    */
   mirrorMode?: VideoMirrorModeType;
-  /**
-   * @ignore
-   */
-  compressionPreference?: CompressionPreference;
   /**
    * @ignore
    */

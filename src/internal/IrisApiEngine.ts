@@ -1,6 +1,7 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 import base64 from 'base64-js';
 import { Buffer } from 'buffer';
+const JSON = require('json-bigint');
 
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import {
