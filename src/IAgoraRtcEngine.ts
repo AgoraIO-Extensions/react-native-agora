@@ -54,7 +54,6 @@ import {
   StreamPublishState,
   AudioScenarioType,
   ThreadPriorityType,
-  EchoTestConfiguration,
   LastmileProbeConfig,
   VideoEncoderConfiguration,
   BeautyOptions,
@@ -2913,7 +2912,7 @@ export abstract class IRtcEngine {
    * @returns
    * 0: Success.< 0: Failure.
    */
-  abstract startEchoTest(config: EchoTestConfiguration): number;
+  abstract startEchoTest(intervalInSeconds?: number): number;
 
   /**
    * Stops the audio call test.

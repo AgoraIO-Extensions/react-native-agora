@@ -221,7 +221,7 @@ export class MusicContentCenterConfiguration {
   /**
    * @ignore
    */
-  rtmToken?: string;
+  token?: string;
   /**
    * @ignore
    */
