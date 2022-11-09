@@ -63,9 +63,7 @@ export default class AudioSpectrum
 
     if (Platform.OS === 'android') {
       // Need granted the microphone permission
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-      );
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
     }
 
     // Only need to enable audio on this case

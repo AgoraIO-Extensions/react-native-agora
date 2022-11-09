@@ -114,7 +114,7 @@ export default class MusicContentCenter
 
     this.musicContentCenter?.initialize({
       appId: rtmAppId,
-      rtmToken,
+      token: rtmToken,
       mccUid,
     });
 

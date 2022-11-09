@@ -76,9 +76,7 @@ export default class LocalSpatialAudioEngine
 
     if (Platform.OS === 'android') {
       // Need granted the microphone permission
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-      );
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
     }
 
     // ⚠️ Must call after initialize and before joinChannel

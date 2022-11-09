@@ -15,7 +15,7 @@ import {
   RtcSurfaceView,
   UserOfflineReasonType,
 } from 'react-native-agora';
-import { StackScreenProps } from '@react-navigation/stack/src/types';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import {
   AgoraButton,

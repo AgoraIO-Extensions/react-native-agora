@@ -168,7 +168,7 @@ export class MusicCollectionInternal extends MusicCollectionImpl {
   }
 
   getMusic(index: number): Music {
-    return this._musicCollection.music[index];
+    return this._musicCollection.music[index] ?? {};
   }
 
   getPage(): number {

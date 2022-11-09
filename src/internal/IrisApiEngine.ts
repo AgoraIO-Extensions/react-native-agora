@@ -63,7 +63,7 @@ import EventEmitter from './emitter/EventEmitter';
 // @ts-ignore
 export const DeviceEventEmitter = new EventEmitter();
 
-const AgoraRtcNg = NativeModules.ReactNativeAgoraRtcNg;
+const { AgoraRtcNg } = NativeModules;
 const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);
 AgoraEventEmitter.addListener('onEvent', handleEvent);
 
@@ -186,7 +186,7 @@ export const EVENT_PROCESSORS = {
         case 'OnRecordAudioEncodedFrame':
         case 'OnPlaybackAudioEncodedFrame':
         case 'OnMixedAudioEncodedFrame':
-          (data.frameBuffer as Uint8Array) = buffers[0];
+          data.frameBuffer = buffers[0];
           break;
       }
     },
@@ -199,7 +199,7 @@ export const EVENT_PROCESSORS = {
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
       switch (event) {
         case 'onEncodedVideoFrameReceived':
-          (data.imageBuffer as Uint8Array) = buffers[0];
+          data.imageBuffer = buffers[0];
           break;
       }
     },
@@ -218,7 +218,7 @@ export const EVENT_PROCESSORS = {
     func: [processIMediaPlayerAudioFrameObserver],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
       if (data.frame) {
-        (data.frame as AudioPcmFrame).data_ = Array.from(buffers[0]);
+        (data.frame as AudioPcmFrame).data_ = Array.from(buffers[0] ?? []);
       }
     },
     handlers: (data: any) =>

@@ -4,7 +4,6 @@ import {
   ClientRoleOptions,
   ClientRoleType,
   DataStreamConfig,
-  EchoTestConfiguration,
   IAudioEncodedFrameObserver,
   SimulcastStreamConfig,
   SimulcastStreamMode,
