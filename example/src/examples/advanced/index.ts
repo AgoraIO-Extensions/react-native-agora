@@ -25,6 +25,7 @@ import BeautyEffect from './BeautyEffect/BeautyEffect';
 import EncodedVideoFrame from './EncodedVideoFrame/EncodedVideoFrame';
 import PushVideoFrame from './PushVideoFrame/PushVideoFrame';
 import MusicContentCenter from './MusicContentCenter/MusicContentCenter';
+import ProcessVideoRawData from './ProcessVideoRawData/ProcessVideoRawData';
 
 const Advanced = {
   title: 'Advanced',
@@ -88,6 +89,10 @@ const Advanced = {
     {
       name: 'PlayEffect',
       component: PlayEffect,
+    },
+    {
+      name: 'ProcessVideoRawData',
+      component: ProcessVideoRawData,
     },
     {
       name: 'PushVideoFrame',

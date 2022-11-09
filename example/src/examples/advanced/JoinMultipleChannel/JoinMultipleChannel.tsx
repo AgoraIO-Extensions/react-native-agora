@@ -84,8 +84,8 @@ export default class JoinMultipleChannel
     if (Platform.OS === 'android') {
       // Need granted the microphone and camera permission
       await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
       ]);
     }
 

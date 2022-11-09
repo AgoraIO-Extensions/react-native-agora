@@ -10,16 +10,17 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 public class AgoraRtcTextureViewManager extends SimpleViewManager<TextureView> {
+  public static final String REACT_CLASS = "AgoraRtcTextureView";
   private ThemedReactContext reactContext;
 
-  @NonNull
   @Override
+  @NonNull
   public String getName() {
-    return "AgoraRtcTextureView";
+    return REACT_CLASS;
   }
 
-  @NonNull
   @Override
+  @NonNull
   protected TextureView
   createViewInstance(@NonNull ThemedReactContext reactContext) {
     this.reactContext = reactContext;
@@ -30,8 +31,7 @@ public class AgoraRtcTextureViewManager extends SimpleViewManager<TextureView> {
   public void callApi(TextureView view, ReadableMap arguments) {
     String funcName = arguments.getString("funcName");
     String params = arguments.getString("params");
-    ReactNativeAgoraRtcNgModule module =
-      reactContext.getNativeModule(ReactNativeAgoraRtcNgModule.class);
+    AgoraRtcNgModule module = reactContext.getNativeModule(AgoraRtcNgModule.class);
     if (module != null) {
       try {
         module.irisApiEngine.callIrisApi(funcName, params, view);
