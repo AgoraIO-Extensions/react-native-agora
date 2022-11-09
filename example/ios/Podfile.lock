@@ -583,7 +583,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraRtcWrapper: 6db935279221e06b85ce4a12d7caf506aaba1abc
+  AgoraRtcWrapper: 8971fe99870757778ee7a1365540945fcb743bfd
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
