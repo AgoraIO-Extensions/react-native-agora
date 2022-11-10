@@ -445,8 +445,8 @@ export function callIrisApi<T>(funcName: string, params: any): any {
     } else {
       console.warn('callApi', funcName, JSON.stringify(params), e);
     }
-    return {};
   }
+  return {};
 }
 
 /**
