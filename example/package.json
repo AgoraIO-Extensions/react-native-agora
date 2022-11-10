@@ -17,7 +17,7 @@
     "@rneui/themed": "^4.0.0-rc.4",
     "react": "18.1.0",
     "react-native": "0.70.5",
-    "react-native-agora-rawdata": "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#1c7d9558ad8d6f1fbc75bbb78144bfed172f895d",
+    "react-native-agora-rawdata": "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#main",
     "react-native-chart-kit": "^6.12.0",
     "react-native-color-picker": "^0.6.0",
     "react-native-fs": "^2.16.6",

@@ -3674,9 +3674,9 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-"react-native-agora-rawdata@git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#1c7d9558ad8d6f1fbc75bbb78144bfed172f895d":
+"react-native-agora-rawdata@git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#main":
   version "0.1.0"
-  resolved "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#1c7d9558ad8d6f1fbc75bbb78144bfed172f895d"
+  resolved "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#57ce1b08cad2a976cf4c7b3e3cdafe1710120744"
 
 react-native-chart-kit@^6.12.0:
   version "6.12.0"
@@ -3731,7 +3731,7 @@ react-native-gradle-plugin@^0.70.3:
 
 "react-native-image-tool@git+https://github.com/LichKing-2234/react-native-image-tools.git#master":
   version "0.8.1"
-  resolved "git+https://github.com/LichKing-2234/react-native-image-tools.git#53bd0013e71cf0bbe00f604132188a4a8877f591"
+  resolved "git+https://github.com/LichKing-2234/react-native-image-tools.git#19651184b93494fa74574790a38458c299744f38"
 
 react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
