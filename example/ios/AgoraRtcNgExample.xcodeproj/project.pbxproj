@@ -601,7 +601,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgoraRtcNgExample.app/AgoraRtcNgExample";
@@ -628,7 +628,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgoraRtcNgExample.app/AgoraRtcNgExample";
@@ -656,7 +656,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -685,7 +685,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_VERSION = 5.0;
