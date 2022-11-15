@@ -1081,7 +1081,7 @@ export class VideoSubscriptionOptions {
  */
 export class EncodedVideoFrameInfo {
   /**
-   * The codec type of the local video stream. See VideoCodecType . The default value is VideoCodecH264(2).
+   * The codec type of the local video stream. See VideoCodecType . The default value is VideoCodecH264 (2).
    */
   codecType?: VideoCodecType;
   /**
@@ -1199,7 +1199,7 @@ export class VideoEncoderConfiguration {
    */
   codecType?: VideoCodecType;
   /**
-   * The dimensions of the encoded video (px). This parameter measures the video encoding quality in the format of length × width.
+   * The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
    */
   dimensions?: VideoDimensions;
   /**
@@ -1987,7 +1987,7 @@ export enum LocalVideoStreamError {
    */
   LocalVideoStreamErrorCaptureInbackground = 6,
   /**
-   * 7:The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+   * 7: The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
    */
   LocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
   /**
@@ -2627,7 +2627,7 @@ export class TranscodingUser {
    */
   uid?: number;
   /**
-   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is thewidth set in LiveTranscoding .
+   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding .
    */
   x?: number;
   /**
@@ -2643,13 +2643,11 @@ export class TranscodingUser {
    */
   height?: number;
   /**
-   * The layer index number of the host's video. The value range is [0,100].
-   * 0: (Default) The host's video is the bottom layer.100: The host's video is the top layer.If the value is less than 0 or greater than 100, the error ERR_INVALID_ARGUMENT is returned.Starting from v2.3, setting zOrder to 0 is supported.
+   * The layer index number of the host's video. The value range is [0, 100].0: (Default) The host's video is the bottom layer.100: The host's video is the top layer.If the value is less than 0 or greater than 100, ErrInvalidArgument error is returned.Setting zOrder to 0 is supported.
    */
   zOrder?: number;
   /**
-   * The transparency of the host's video. The value range is [0.0,1.0].
-   * 0.0: Completely transparent.1.0: (Default) Opaque.
+   * The transparency of the host's video. The value range is [0.0,1.0].0.0: Completely transparent.1.0: (Default) Opaque.
    */
   alpha?: number;
   /**
@@ -3769,9 +3767,7 @@ export interface IAudioEncodedFrameObserver {
    *
    * @param samplesPerSec Recording sample rate (Hz).
    *
-   * @param channels The number of channels.
-   *  1: Mono.
-   *  2: Stereo. If the channel uses stereo, the data is interleaved.
+   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
    *
    * @param samplesPerChannel The number of samples per channel in the audio frame.
    *
@@ -3793,9 +3789,7 @@ export interface IAudioEncodedFrameObserver {
    *
    * @param samplesPerSec Recording sample rate (Hz).
    *
-   * @param channels The number of channels.
-   *  1: Mono.
-   *  2: Stereo. If the channel uses stereo, the data is interleaved.
+   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
    *
    * @param samplesPerChannel The number of samples per channel in the audio frame.
    *

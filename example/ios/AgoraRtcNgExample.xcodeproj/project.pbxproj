@@ -22,8 +22,6 @@
 		F5652813291BE33F00793068 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5652812291BE33F00793068 /* ReplayKit.framework */; };
 		F5652817291BE33F00793068 /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F5652816291BE33F00793068 /* SampleHandler.m */; };
 		F565281B291BE33F00793068 /* ScreenShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F5652811291BE33F00793068 /* ScreenShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		F5652821291C0EE700793068 /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5652820291C0EE700793068 /* hermes.xcframework */; };
-		F5652822291C0EE700793068 /* hermes.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F5652820291C0EE700793068 /* hermes.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,17 +51,6 @@
 				F565281B291BE33F00793068 /* ScreenShare.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F5652823291C0EE700793068 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				F5652822291C0EE700793068 /* hermes.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -115,7 +102,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-AgoraRtcNgExample.a in Frameworks */,
-				F5652821291C0EE700793068 /* hermes.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,7 +265,6 @@
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				F565281F291BE33F00793068 /* Embed Foundation Extensions */,
-				F5652823291C0EE700793068 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

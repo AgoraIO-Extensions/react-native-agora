@@ -415,7 +415,11 @@ export abstract class IMediaPlayer {
 
   /**
    * Switches the media resource being played.
-   * If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:The URL of the media file to be opened: rtmp://$domain/$appName/$streamNameThe URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$signAuthentication information:sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s.If you want to customize the CDN routes for playing the media resource, call this method to switch media resources. Agora changes the CDN route through the self-developed scheduling center to improve the viewing experience. If you do not need to customize CDN routes for playing the media resource, call the switchSrc method to switch media resources.
+   * If you want to ensure the security of the connection and media files, to determine the sign and the ts fields for authentication. Once the fields are determined, use them as the query parameter of the URL to update the URL of the media resource. For example:
+   * The URL of the media file to be opened: rtmp://$domain/$appName/$streamName
+   * The URL updated by the authentication of the media file to be opened: rtmp://$domain/$appName/$streamName?ts=$ts&sign=$sign Authentication information:
+   * sign: An encrypted string calculated according to the MD5 algorithm based on authKey, appName, streamName, and ts. You need to for your authKey.
+   * ts: The timestamp when the authentication information expires. You can set the validity period of the authentication information according to your scenarios. For example, 24h or 1h30m20s. If you want to customize the CDN routes for playing the media resource, call this method to switch media resources. Agora changes the CDN route through the self-developed scheduling center to improve the viewing experience. If you do not need to customize CDN routes for playing the media resource, call the switchSrc method to switch media resources.
    * Call this method after calling openWithAgoraCDNSrc .You can call this method either before or after play . If you call this method before play, the SDK waits for you to call play before completing the route switch.
    *
    * @param src The URL of the media resource.
@@ -551,8 +555,7 @@ export abstract class IMediaPlayerCacheManager {
    * You can call this method to delete a cached media file when the storage space for the cached files is about to reach its limit. After you call this method, the SDK deletes the cached media file that is least used.The cached media file currently being played will not be deleted.
    *
    * @returns
-   * 0: Success.
-   * < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract removeOldCache(): number;
 
@@ -574,8 +577,7 @@ export abstract class IMediaPlayerCacheManager {
    * @param path The absolute path of the media files to be cached. Ensure that the directory for the media files exists and is writable.
    *
    * @returns
-   * 0: Success.
-   * < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract setCacheDir(path: string): number;
 
@@ -606,8 +608,7 @@ export abstract class IMediaPlayerCacheManager {
    * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
    *
    * @returns
-   * 0: Success.
-   * < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract enableAutoRemoveCache(enable: boolean): number;
 

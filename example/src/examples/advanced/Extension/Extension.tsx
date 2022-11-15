@@ -94,7 +94,7 @@ export default class Extension
     if (Platform.OS === 'android') {
       this.engine?.loadExtensionProvider(path);
     }
-    this.engine?.enableExtension(provider, extension, {}, true);
+    this.engine?.enableExtension(provider, extension, true);
     this.setState({ enableExtension: true });
   };
 
@@ -103,7 +103,7 @@ export default class Extension
    */
   disableExtension = () => {
     const { provider, extension } = this.state;
-    this.engine?.enableExtension(provider, extension, {}, false);
+    this.engine?.enableExtension(provider, extension, false);
     this.setState({ enableExtension: false });
   };
 
