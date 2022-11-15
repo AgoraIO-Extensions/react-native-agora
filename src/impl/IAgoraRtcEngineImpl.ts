@@ -15,7 +15,6 @@ import {
   AudioReverbType,
   AudioTrackConfig,
   StreamFallbackOptions,
-  ExtensionInfo,
   Size,
   ScreenCaptureSourceInfo,
   ScreenCaptureConfiguration,
@@ -4181,26 +4180,26 @@ export class IRtcEngineImpl implements IRtcEngine {
   enableExtension(
     provider: string,
     extension: string,
-    extensionInfo: ExtensionInfo,
-    enable = true
+    enable = true,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): number {
     const apiType = this.getApiTypeFromEnableExtension(
       provider,
       extension,
-      extensionInfo,
-      enable
+      enable,
+      type
     );
     const jsonParams = {
       provider: provider,
       extension: extension,
-      extensionInfo: extensionInfo,
       enable: enable,
+      type: type,
       toJSON: () => {
         return {
           provider: provider,
           extension: extension,
-          extensionInfo: extensionInfo,
           enable: enable,
+          type: type,
         };
       },
     };
@@ -4211,8 +4210,8 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromEnableExtension(
     provider: string,
     extension: string,
-    extensionInfo: ExtensionInfo,
-    enable = true
+    enable = true,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): string {
     return 'RtcEngine_enableExtension';
   }
@@ -4220,30 +4219,30 @@ export class IRtcEngineImpl implements IRtcEngine {
   setExtensionProperty(
     provider: string,
     extension: string,
-    extensionInfo: ExtensionInfo,
     key: string,
-    value: string
+    value: string,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): number {
     const apiType = this.getApiTypeFromSetExtensionProperty(
       provider,
       extension,
-      extensionInfo,
       key,
-      value
+      value,
+      type
     );
     const jsonParams = {
       provider: provider,
       extension: extension,
-      extensionInfo: extensionInfo,
       key: key,
       value: value,
+      type: type,
       toJSON: () => {
         return {
           provider: provider,
           extension: extension,
-          extensionInfo: extensionInfo,
           key: key,
           value: value,
+          type: type,
         };
       },
     };
@@ -4254,9 +4253,9 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromSetExtensionProperty(
     provider: string,
     extension: string,
-    extensionInfo: ExtensionInfo,
     key: string,
-    value: string
+    value: string,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): string {
     return 'RtcEngine_setExtensionProperty';
   }
@@ -4264,30 +4263,30 @@ export class IRtcEngineImpl implements IRtcEngine {
   getExtensionProperty(
     provider: string,
     extension: string,
-    extensionInfo: ExtensionInfo,
     key: string,
-    bufLen: number
+    bufLen: number,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): string {
     const apiType = this.getApiTypeFromGetExtensionProperty(
       provider,
       extension,
-      extensionInfo,
       key,
-      bufLen
+      bufLen,
+      type
     );
     const jsonParams = {
       provider: provider,
       extension: extension,
-      extensionInfo: extensionInfo,
       key: key,
       buf_len: bufLen,
+      type: type,
       toJSON: () => {
         return {
           provider: provider,
           extension: extension,
-          extensionInfo: extensionInfo,
           key: key,
           buf_len: bufLen,
+          type: type,
         };
       },
     };
@@ -4299,9 +4298,9 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromGetExtensionProperty(
     provider: string,
     extension: string,
-    extensionInfo: ExtensionInfo,
     key: string,
-    bufLen: number
+    bufLen: number,
+    type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): string {
     return 'RtcEngine_getExtensionProperty';
   }

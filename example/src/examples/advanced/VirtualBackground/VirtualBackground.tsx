@@ -85,7 +85,6 @@ export default class VirtualBackground
     this.engine?.enableExtension(
       'agora_video_filters_segmentation',
       'portrait_segmentation',
-      {},
       true
     );
 
