@@ -53,6 +53,7 @@ export enum RhythmPlayerErrorType {
 
 /**
  * The metronome configuration.
+ *
  */
 export class AgoraRhythmPlayerConfig {
   /**

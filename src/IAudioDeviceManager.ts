@@ -2,6 +2,7 @@ import './extension/IAudioDeviceManagerExtension';
 import { AudioDeviceInfo } from './IAgoraRtcEngine';
 /**
  * The maximum length of the device ID.
+ *
  */
 export enum MaxDeviceIdLengthType {
   /**
@@ -12,6 +13,7 @@ export enum MaxDeviceIdLengthType {
 
 /**
  * Audio device management methods.
+ *
  */
 export abstract class IAudioDeviceManager {
   /**

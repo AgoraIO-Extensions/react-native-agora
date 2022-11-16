@@ -1,5 +1,8 @@
 import { NativeModules } from 'react-native';
 
+/**
+ * @ignore
+ */
 const { AgoraRtcNg } = NativeModules;
 export const showRPSystemBroadcastPickerView: () => Promise<void> =
   AgoraRtcNg.showRPSystemBroadcastPickerView;
@@ -24,15 +27,15 @@ export * from './IAgoraRtcEngineEx';
 export * from './IAgoraSpatialAudio';
 export * from './IAudioDeviceManager';
 export * from './AgoraRtcRenderView';
-/**
- * @internal
- */
 export {
   isDebuggable,
   setDebuggable,
   callIrisApi,
 } from './internal/IrisApiEngine';
 
+/**
+ * @ignore
+ */
 const instance = new RtcEngineExInternal();
 
 /**

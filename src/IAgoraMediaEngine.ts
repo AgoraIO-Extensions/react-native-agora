@@ -11,6 +11,7 @@ import {
 import { SenderOptions, EncodedVideoFrameInfo } from './AgoraBase';
 /**
  * The channel mode.
+ *
  */
 export enum AudioMixingDualMonoMode {
   /**
@@ -33,6 +34,7 @@ export enum AudioMixingDualMonoMode {
 
 /**
  * The IMediaEngine class.
+ *
  */
 export abstract class IMediaEngine {
   /**
@@ -70,12 +72,10 @@ export abstract class IMediaEngine {
   /**
    * Pushes the external audio frame.
    *
+   *
    * @param type The type of the audio recording device. See MediaSourceType .
-   *
    * @param frame The external audio frame. See AudioFrame .
-   *
    * @param wrap Whether to use the placeholder. Agora recommends using the default value.true: Use the placeholder.false: (Default) Do not use the placeholder.
-   *
    * @param sourceId The ID of external audio source. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
    *
    * @returns
@@ -114,11 +114,8 @@ export abstract class IMediaEngine {
    * Call this method before joining a channel.
    *
    * @param enabled Whether to use the external video source:true: Use the external video source. The SDK prepares to accept the external video frame.false: (Default) Do not use the external video source.
-   *
    * @param useTexture Whether to use the external video frame in the Texture format.true: Use the external video frame in the Texture format.false: (Default) Do not use the external video frame in the Texture format.
-   *
    * @param sourceType Whether to encode the external video frame, see ExternalVideoSourceType .
-   *
    * @param encodedVideoOption Video encoding options. This parameter needs to be set if sourceType is EncodedVideoFrame. To set this parameter, contact .
    *
    * @returns
@@ -136,15 +133,10 @@ export abstract class IMediaEngine {
    * Call this method before joining a channel.
    *
    * @param enabled Whether to enable the external audio source:true: Enable the external audio source.false: (Default) Disable the external audio source.
-   *
    * @param sampleRate The sample rate (Hz) of the external audio source, which can be set as 8000, 16000, 32000, 44100, or 48000.
-   *
    * @param channels The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
-   *
    * @param sourceNumber The number of external audio sources. The value of this parameter should be larger than 0. The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions , you can set publishCustomAudioSourceId to the ID of the audio track you want to publish.
-   *
    * @param localPlayback Whether to play the external audio source:true: Play the external audio source.false: (Default) Do not play the external source.
-   *
    * @param publish Whether to publish audio to the remote users:true: (Default) Publish audio to the remote users.false: Do not publish audio to the remote users
    *
    * @returns
@@ -164,9 +156,7 @@ export abstract class IMediaEngine {
    * This method applies to scenarios where you want to use external audio data for playback. After you set the external audio sink, you can call pullAudioFrame to pull remote audio frames. The app can process the remote audio and play it with the audio effects that you want.
    *
    * @param enabled Whether to enable or disable the external audio sink:true: Enables the external audio sink.false: (Default) Disables the external audio sink.
-   *
    * @param sampleRate The sample rate (Hz) of the external audio sink, which can be set as 16000, 32000, 44100, or 48000.
-   *
    * @param channels The number of audio channels of the external audio sink:1: Mono.2: Stereo.
    *
    * @returns
@@ -199,7 +189,6 @@ export abstract class IMediaEngine {
    * To push the unencoded external raw video frame to the SDK, call createCustomVideoTrack to get the video track ID, set customVideoTrackId as the video track ID you want to publish in the ChannelMediaOptions of each channel, and set publishCustomVideoTrack as true.
    *
    * @param frame The external raw video frame to be pushed. See ExternalVideoFrame .
-   *
    * @param videoTrackId The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
    *
    * @returns
@@ -228,6 +217,7 @@ export abstract class IMediaEngine {
   /**
    * Unregisters an audio frame observer.
    *
+   *
    * @param observer The audio frame observer, reporting the reception of each audio frame. See IAudioFrameObserver .
    *
    * @returns
@@ -238,6 +228,7 @@ export abstract class IMediaEngine {
   /**
    * Unregisters the video frame observer.
    *
+   *
    * @param observer The video observer, reporting the reception of each video frame. See IVideoFrameObserver .
    *
    * @returns
@@ -247,6 +238,7 @@ export abstract class IMediaEngine {
 
   /**
    * Unregisters a receiver object for the encoded video image.
+   *
    *
    * @param observer The video observer, reporting the reception of each video frame. See IVideoEncodedFrameObserver .
    *

@@ -2,6 +2,7 @@ import './extension/AgoraBaseExtension';
 import { MediaSourceType, RenderModeType } from './AgoraMediaBase';
 /**
  * The channel profile.
+ *
  */
 export enum ChannelProfileType {
   /**
@@ -455,6 +456,7 @@ export enum LicenseErrorType {
 
 /**
  * The operation permissions of the SDK on the audio session.
+ *
  */
 export enum AudioSessionOperationRestriction {
   /**
@@ -481,6 +483,7 @@ export enum AudioSessionOperationRestriction {
 
 /**
  * Reasons for a user being offline.
+ *
  */
 export enum UserOfflineReasonType {
   /**
@@ -490,6 +493,7 @@ export enum UserOfflineReasonType {
   /**
    * 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time.
    * If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
+   *
    */
   UserOfflineDropped = 1,
   /**
@@ -500,6 +504,7 @@ export enum UserOfflineReasonType {
 
 /**
  * The interface class.
+ *
  */
 export enum InterfaceIdType {
   /**
@@ -566,6 +571,7 @@ export enum InterfaceIdType {
 
 /**
  * Network quality types.
+ *
  */
 export enum QualityType {
   /**
@@ -622,6 +628,7 @@ export enum FitModeType {
 
 /**
  * The clockwise rotation of the video.
+ *
  */
 export enum VideoOrientation {
   /**
@@ -644,6 +651,7 @@ export enum VideoOrientation {
 
 /**
  * Video frame rate.
+ *
  */
 export enum FrameRate {
   /**
@@ -698,6 +706,7 @@ export enum FrameHeight {
 
 /**
  * The video frame type.
+ *
  */
 export enum VideoFrameType {
   /**
@@ -728,6 +737,7 @@ export enum VideoFrameType {
 
 /**
  * Video output orientation mode.
+ *
  */
 export enum OrientationMode {
   /**
@@ -746,6 +756,7 @@ export enum OrientationMode {
 
 /**
  * Video degradation preferences when the bandwidth is a constraint.
+ *
  */
 export enum DegradationPreference {
   /**
@@ -772,6 +783,7 @@ export enum DegradationPreference {
 
 /**
  * The video dimension.
+ *
  */
 export class VideoDimensions {
   /**
@@ -786,6 +798,7 @@ export class VideoDimensions {
 
 /**
  * Video codec types.
+ *
  */
 export enum VideoCodecType {
   /**
@@ -860,6 +873,7 @@ export class SenderOptions {
 
 /**
  * The codec type of audio.
+ *
  */
 export enum AudioCodecType {
   /**
@@ -902,6 +916,7 @@ export enum AudioCodecType {
 
 /**
  * Audio encoding type.
+ *
  */
 export enum AudioEncodingType {
   /**
@@ -952,6 +967,7 @@ export enum AudioEncodingType {
 
 /**
  * The adaptation mode of the watermark.
+ *
  */
 export enum WatermarkFitMode {
   /**
@@ -980,6 +996,7 @@ export class EncodedAudioFrameAdvancedSettings {
 
 /**
  * Audio information after encoding.
+ *
  */
 export class EncodedAudioFrameInfo {
   /**
@@ -1050,6 +1067,7 @@ export enum H264PacketizeMode {
 
 /**
  * The type of video streams.
+ *
  */
 export enum VideoStreamType {
   /**
@@ -1064,6 +1082,7 @@ export enum VideoStreamType {
 
 /**
  * Video subscription options.
+ *
  */
 export class VideoSubscriptionOptions {
   /**
@@ -1078,6 +1097,7 @@ export class VideoSubscriptionOptions {
 
 /**
  * Information about externally encoded video frames.
+ *
  */
 export class EncodedVideoFrameInfo {
   /**
@@ -1174,6 +1194,7 @@ export class AdvanceOptions {
 
 /**
  * Video mirror mode.
+ *
  */
 export enum VideoMirrorModeType {
   /**
@@ -1192,6 +1213,7 @@ export enum VideoMirrorModeType {
 
 /**
  * Video encoder configurations.
+ *
  */
 export class VideoEncoderConfiguration {
   /**
@@ -1267,6 +1289,7 @@ export enum SimulcastStreamMode {
 
 /**
  * The configuration of the low-quality video stream.
+ *
  */
 export class SimulcastStreamConfig {
   /**
@@ -1285,6 +1308,7 @@ export class SimulcastStreamConfig {
 
 /**
  * The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
+ *
  */
 export class Rectangle {
   /**
@@ -1326,6 +1350,7 @@ export class WatermarkRatio {
 
 /**
  * Configurations of the watermark image.
+ *
  */
 export class WatermarkOptions {
   /**
@@ -1352,6 +1377,7 @@ export class WatermarkOptions {
 
 /**
  * Statistics of the channel.
+ *
  */
 export class RtcStats {
   /**
@@ -1490,6 +1516,7 @@ export class RtcStats {
 
 /**
  * The capture type of the custom video source.
+ *
  */
 export enum VideoSourceType {
   /**
@@ -1552,6 +1579,7 @@ export enum VideoSourceType {
 
 /**
  * The user role in the interactive live streaming.
+ *
  */
 export enum ClientRoleType {
   /**
@@ -1566,6 +1594,7 @@ export enum ClientRoleType {
 
 /**
  * Quality change of the local video in terms of target frame rate and target bit rate since last count.
+ *
  */
 export enum QualityAdaptIndication {
   /**
@@ -1584,6 +1613,7 @@ export enum QualityAdaptIndication {
 
 /**
  * The latency level of an audience member in interactive live streaming. This enum takes effect only when the user role is set to ClientRoleAudience .
+ *
  */
 export enum AudienceLatencyLevelType {
   /**
@@ -1598,6 +1628,7 @@ export enum AudienceLatencyLevelType {
 
 /**
  * The detailed options of a user.
+ *
  */
 export class ClientRoleOptions {
   /**
@@ -1608,6 +1639,7 @@ export class ClientRoleOptions {
 
 /**
  * The Quality of Experience (QoE) of the local user when receiving a remote audio stream.
+ *
  */
 export enum ExperienceQualityType {
   /**
@@ -1622,6 +1654,7 @@ export enum ExperienceQualityType {
 
 /**
  * Reasons why the QoE of the local user when receiving a remote audio stream is poor.
+ *
  */
 export enum ExperiencePoorReason {
   /**
@@ -1648,6 +1681,7 @@ export enum ExperiencePoorReason {
 
 /**
  * Audio statistics of the remote user.
+ *
  */
 export class RemoteAudioStats {
   /**
@@ -1714,6 +1748,7 @@ export class RemoteAudioStats {
 
 /**
  * The audio profile.
+ *
  */
 export enum AudioProfileType {
   /**
@@ -1752,6 +1787,7 @@ export enum AudioProfileType {
 
 /**
  * The audio scenarios.
+ *
  */
 export enum AudioScenarioType {
   /**
@@ -1782,6 +1818,7 @@ export enum AudioScenarioType {
 
 /**
  * The format of the video frame.
+ *
  */
 export class VideoFormat {
   /**
@@ -1800,6 +1837,7 @@ export class VideoFormat {
 
 /**
  * The content hint for screen sharing.
+ *
  */
 export enum VideoContentHint {
   /**
@@ -1818,6 +1856,7 @@ export enum VideoContentHint {
 
 /**
  * The screen sharing scenario.
+ *
  */
 export enum ScreenScenarioType {
   /**
@@ -1840,6 +1879,7 @@ export enum ScreenScenarioType {
 
 /**
  * The brightness level of the video image captured by the local camera.
+ *
  */
 export enum CaptureBrightnessLevelType {
   /**
@@ -1862,6 +1902,7 @@ export enum CaptureBrightnessLevelType {
 
 /**
  * The state of the local audio.
+ *
  */
 export enum LocalAudioStreamState {
   /**
@@ -1884,6 +1925,7 @@ export enum LocalAudioStreamState {
 
 /**
  * Local audio state error codes.
+ *
  */
 export enum LocalAudioStreamError {
   /**
@@ -1934,6 +1976,7 @@ export enum LocalAudioStreamError {
 
 /**
  * Local video state types.
+ *
  */
 export enum LocalVideoStreamState {
   /**
@@ -1956,6 +1999,7 @@ export enum LocalVideoStreamState {
 
 /**
  * Local video state error codes.
+ *
  */
 export enum LocalVideoStreamError {
   /**
@@ -2034,6 +2078,7 @@ export enum LocalVideoStreamError {
 
 /**
  * Remote audio states.
+ *
  */
 export enum RemoteAudioState {
   /**
@@ -2060,6 +2105,7 @@ export enum RemoteAudioState {
 
 /**
  * The reason for the remote audio state change.
+ *
  */
 export enum RemoteAudioStateReason {
   /**
@@ -2098,6 +2144,7 @@ export enum RemoteAudioStateReason {
 
 /**
  * The state of the remote video.
+ *
  */
 export enum RemoteVideoState {
   /**
@@ -2124,6 +2171,7 @@ export enum RemoteVideoState {
 
 /**
  * The reason for the remote video state change.
+ *
  */
 export enum RemoteVideoStateReason {
   /**
@@ -2272,6 +2320,7 @@ export enum RemoteVideoDownscaleLevel {
 
 /**
  * The volume information of users.
+ *
  */
 export class AudioVolumeInfo {
   /**
@@ -2319,6 +2368,7 @@ export class Packet {
 
 /**
  * The audio sampling rate of the stream to be pushed to the CDN.
+ *
  */
 export enum AudioSampleRateType {
   /**
@@ -2337,6 +2387,7 @@ export enum AudioSampleRateType {
 
 /**
  * The codec type of the output video.
+ *
  */
 export enum VideoCodecTypeForStream {
   /**
@@ -2351,6 +2402,7 @@ export enum VideoCodecTypeForStream {
 
 /**
  * Video codec profile types.
+ *
  */
 export enum VideoCodecProfileType {
   /**
@@ -2369,6 +2421,7 @@ export enum VideoCodecProfileType {
 
 /**
  * Self-defined audio codec profile.
+ *
  */
 export enum AudioCodecProfileType {
   /**
@@ -2387,6 +2440,7 @@ export enum AudioCodecProfileType {
 
 /**
  * Local audio statistics.
+ *
  */
 export class LocalAudioStats {
   /**
@@ -2417,6 +2471,7 @@ export class LocalAudioStats {
 
 /**
  * States of the Media Push.
+ *
  */
 export enum RtmpStreamPublishState {
   /**
@@ -2448,6 +2503,7 @@ export enum RtmpStreamPublishState {
 
 /**
  * Error codes of the RTMP or RTMPS streaming.
+ *
  */
 export enum RtmpStreamPublishErrorType {
   /**
@@ -2522,6 +2578,7 @@ export enum RtmpStreamPublishErrorType {
 
 /**
  * Events during the media push.
+ *
  */
 export enum RtmpStreamingEvent {
   /**
@@ -2594,6 +2651,7 @@ export class LiveStreamAdvancedFeature {
 
 /**
  * Connection states.
+ *
  */
 export enum ConnectionStateType {
   /**
@@ -2620,6 +2678,7 @@ export enum ConnectionStateType {
 
 /**
  * Transcoding configurations of each host.
+ *
  */
 export class TranscodingUser {
   /**
@@ -2658,6 +2717,7 @@ export class TranscodingUser {
 
 /**
  * Transcoding configurations for Media Push.
+ *
  */
 export class LiveTranscoding {
   /**
@@ -2756,6 +2816,7 @@ export class LiveTranscoding {
 
 /**
  * The video streams for the video mixing on the local client.
+ *
  */
 export class TranscodingVideoStream {
   /**
@@ -2802,6 +2863,7 @@ export class TranscodingVideoStream {
 
 /**
  * The configuration of the video mixing on the local client.
+ *
  */
 export class LocalTranscoderConfiguration {
   /**
@@ -2824,6 +2886,7 @@ export class LocalTranscoderConfiguration {
 
 /**
  * Configurations of the last-mile network test.
+ *
  */
 export class LastmileProbeConfig {
   /**
@@ -2846,6 +2909,7 @@ export class LastmileProbeConfig {
 
 /**
  * The status of the last-mile probe test.
+ *
  */
 export enum LastmileProbeResultState {
   /**
@@ -2864,6 +2928,7 @@ export enum LastmileProbeResultState {
 
 /**
  * Results of the uplink or downlink last-mile network test.
+ *
  */
 export class LastmileProbeOneWayResult {
   /**
@@ -2882,6 +2947,7 @@ export class LastmileProbeOneWayResult {
 
 /**
  * Results of the uplink and downlink last-mile network tests.
+ *
  */
 export class LastmileProbeResult {
   /**
@@ -2904,6 +2970,7 @@ export class LastmileProbeResult {
 
 /**
  * Reasons causing the change of the connection state.
+ *
  */
 export enum ConnectionChangedReasonType {
   /**
@@ -2998,6 +3065,7 @@ export enum ConnectionChangedReasonType {
 
 /**
  * The reason for a user role switch failure.
+ *
  */
 export enum ClientRoleChangeFailedReason {
   /**
@@ -3074,6 +3142,7 @@ export class WlAccStats {
 
 /**
  * Network type.
+ *
  */
 export enum NetworkType {
   /**
@@ -3126,6 +3195,7 @@ export enum VideoViewSetupMode {
 
 /**
  * Attributes of video canvas object.
+ *
  */
 export class VideoCanvas {
   /**
@@ -3164,6 +3234,7 @@ export class VideoCanvas {
 
 /**
  * The contrast level.
+ *
  */
 export enum LighteningContrastLevel {
   /**
@@ -3182,6 +3253,7 @@ export enum LighteningContrastLevel {
 
 /**
  * Image enhancement options.
+ *
  */
 export class BeautyOptions {
   /**
@@ -3208,6 +3280,7 @@ export class BeautyOptions {
 
 /**
  * The low-light enhancement mode.
+ *
  */
 export enum LowLightEnhanceMode {
   /**
@@ -3222,6 +3295,7 @@ export enum LowLightEnhanceMode {
 
 /**
  * The low-light enhancement level.
+ *
  */
 export enum LowLightEnhanceLevel {
   /**
@@ -3236,6 +3310,7 @@ export enum LowLightEnhanceLevel {
 
 /**
  * The low-light enhancement options.
+ *
  */
 export class LowlightEnhanceOptions {
   /**
@@ -3250,6 +3325,7 @@ export class LowlightEnhanceOptions {
 
 /**
  * Video noise reduction mode.
+ *
  */
 export enum VideoDenoiserMode {
   /**
@@ -3264,6 +3340,7 @@ export enum VideoDenoiserMode {
 
 /**
  * The video noise reduction level.
+ *
  */
 export enum VideoDenoiserLevel {
   /**
@@ -3282,6 +3359,7 @@ export enum VideoDenoiserLevel {
 
 /**
  * Video noise reduction options.
+ *
  */
 export class VideoDenoiserOptions {
   /**
@@ -3296,6 +3374,7 @@ export class VideoDenoiserOptions {
 
 /**
  * The color enhancement options.
+ *
  */
 export class ColorEnhanceOptions {
   /**
@@ -3310,6 +3389,7 @@ export class ColorEnhanceOptions {
 
 /**
  * The type of the custom background image.
+ *
  */
 export enum BackgroundSourceType {
   /**
@@ -3328,6 +3408,7 @@ export enum BackgroundSourceType {
 
 /**
  * The degree of blurring applied to the custom background image.
+ *
  */
 export enum BackgroundBlurDegree {
   /**
@@ -3346,6 +3427,7 @@ export enum BackgroundBlurDegree {
 
 /**
  * The custom background image.
+ *
  */
 export class VirtualBackgroundSource {
   /**
@@ -3368,6 +3450,7 @@ export class VirtualBackgroundSource {
 
 /**
  * The type of algorithms to user for background processing.
+ *
  */
 export enum SegModelType {
   /**
@@ -3382,6 +3465,7 @@ export enum SegModelType {
 
 /**
  * Processing properties for background images.
+ *
  */
 export class SegmentationProperty {
   /**
@@ -3396,6 +3480,7 @@ export class SegmentationProperty {
 
 /**
  * The options for SDK preset voice beautifier effects.
+ *
  */
 export enum VoiceBeautifierPreset {
   /**
@@ -3545,6 +3630,7 @@ export enum AudioEffectPreset {
 
 /**
  * The options for SDK preset voice conversion effects.
+ *
  */
 export enum VoiceConversionPreset {
   /**
@@ -3589,6 +3675,7 @@ export enum HeadphoneEqualizerPreset {
 
 /**
  * Screen sharing configurations.
+ *
  */
 export class ScreenCaptureParameters {
   /**
@@ -3635,6 +3722,7 @@ export class ScreenCaptureParameters {
 
 /**
  * Recording quality.
+ *
  */
 export enum AudioRecordingQualityType {
   /**
@@ -3657,6 +3745,7 @@ export enum AudioRecordingQualityType {
 
 /**
  * Recording content. Set in startAudioRecording .
+ *
  */
 export enum AudioFileRecordingType {
   /**
@@ -3675,6 +3764,7 @@ export enum AudioFileRecordingType {
 
 /**
  * Audio profile.
+ *
  */
 export enum AudioEncodedFrameObserverPosition {
   /**
@@ -3693,16 +3783,17 @@ export enum AudioEncodedFrameObserverPosition {
 
 /**
  * Recording configuration.
+ *
  */
 export class AudioRecordingConfiguration {
   /**
    * The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4.
-   * Ensure that the path for the recording file exists and is writable.
+   *  Ensure that the path for the recording file exists and is writable.
    */
   filePath?: string;
   /**
    * Whether to encode the audio data:
-   * true: Encode audio data in AAC.false: (Default) Do not encode audio data, but save the recorded audio data directly.
+   *  true: Encode audio data in AAC.false: (Default) Do not encode audio data, but save the recorded audio data directly.
    */
   encode?: boolean;
   /**
@@ -3725,6 +3816,7 @@ export class AudioRecordingConfiguration {
 
 /**
  * Observer settings for encoded audio.
+ *
  */
 export class AudioEncodedFrameObserverConfig {
   /**
@@ -3739,6 +3831,7 @@ export class AudioEncodedFrameObserverConfig {
 
 /**
  * The encoded audio observer.
+ *
  */
 export interface IAudioEncodedFrameObserver {
   /**
@@ -3748,11 +3841,8 @@ export interface IAudioEncodedFrameObserver {
    * @param channels The number of channels.
    *  1: Mono.
    *  2: Stereo. If the channel uses stereo, the data is interleaved.
-   *
    * @param frameBuffer The audio buffer.
-   *
    * @param length The data length (byte).
-   *
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
    */
   onRecordAudioEncodedFrame?(
@@ -3766,15 +3856,10 @@ export interface IAudioEncodedFrameObserver {
    * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
    *
    * @param samplesPerSec Recording sample rate (Hz).
-   *
    * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
-   *
    * @param samplesPerChannel The number of samples per channel in the audio frame.
-   *
    * @param frameBuffer The audio buffer.
-   *
    * @param length The data length (byte).
-   *
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
    */
   onPlaybackAudioEncodedFrame?(
@@ -3788,15 +3873,10 @@ export interface IAudioEncodedFrameObserver {
    * After calling registerAudioEncodedFrameObserver and setting the audio profile as AudioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
    *
    * @param samplesPerSec Recording sample rate (Hz).
-   *
    * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
-   *
    * @param samplesPerChannel The number of samples per channel in the audio frame.
-   *
    * @param frameBuffer The audio buffer.
-   *
    * @param length The data length (byte).
-   *
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
    */
   onMixedAudioEncodedFrame?(
@@ -3808,6 +3888,7 @@ export interface IAudioEncodedFrameObserver {
 
 /**
  * The region for connection, which is the region where the server the SDK connects to is located.
+ *
  */
 export enum AreaCode {
   /**
@@ -3876,6 +3957,7 @@ export enum AreaCodeEx {
 
 /**
  * The error code of the channel media relay.
+ *
  */
 export enum ChannelMediaRelayError {
   /**
@@ -3930,6 +4012,7 @@ export enum ChannelMediaRelayError {
 
 /**
  * The event code of channel media relay.
+ *
  */
 export enum ChannelMediaRelayEvent {
   /**
@@ -4000,6 +4083,7 @@ export enum ChannelMediaRelayEvent {
 
 /**
  * The state code of the channel media relay.
+ *
  */
 export enum ChannelMediaRelayState {
   /**
@@ -4022,6 +4106,7 @@ export enum ChannelMediaRelayState {
 
 /**
  * The definition of ChannelMediaInfo.
+ *
  */
 export class ChannelMediaInfo {
   /**
@@ -4040,6 +4125,7 @@ export class ChannelMediaInfo {
 
 /**
  * The definition of ChannelMediaRelayConfiguration.
+ *
  */
 export class ChannelMediaRelayConfiguration {
   /**
@@ -4058,6 +4144,7 @@ export class ChannelMediaRelayConfiguration {
 
 /**
  * The uplink network information.
+ *
  */
 export class UplinkNetworkInfo {
   /**
@@ -4159,6 +4246,7 @@ export enum EncryptionMode {
 
 /**
  * Built-in encryption configurations.
+ *
  */
 export class EncryptionConfig {
   /**
@@ -4177,6 +4265,7 @@ export class EncryptionConfig {
 
 /**
  * Encryption error type.
+ *
  */
 export enum EncryptionErrorType {
   /**
@@ -4213,6 +4302,7 @@ export enum UploadErrorReason {
 
 /**
  * The type of the device permission.
+ *
  */
 export enum PermissionType {
   /**
@@ -4231,6 +4321,7 @@ export enum PermissionType {
 
 /**
  * The maximum length of the user account.
+ *
  */
 export enum MaxUserAccountLengthType {
   /**
@@ -4241,6 +4332,7 @@ export enum MaxUserAccountLengthType {
 
 /**
  * The subscribing state.
+ *
  */
 export enum StreamSubscribeState {
   /**
@@ -4263,6 +4355,7 @@ export enum StreamSubscribeState {
 
 /**
  * The publishing state.
+ *
  */
 export enum StreamPublishState {
   /**
@@ -4285,6 +4378,7 @@ export enum StreamPublishState {
 
 /**
  * The configuration of the audio and video call loop test.
+ *
  */
 export class EchoTestConfiguration {
   /**
@@ -4311,6 +4405,7 @@ export class EchoTestConfiguration {
 
 /**
  * The information of the user.
+ *
  */
 export class UserInfo {
   /**
@@ -4325,6 +4420,7 @@ export class UserInfo {
 
 /**
  * The audio filter of in-ear monitoring.
+ *
  */
 export enum EarMonitoringFilterType {
   /**
@@ -4373,6 +4469,7 @@ export enum ThreadPriorityType {
 
 /**
  * The video configuration for the shared screen stream.
+ *
  */
 export class ScreenVideoParameters {
   /**
@@ -4414,6 +4511,7 @@ export class ScreenAudioParameters {
 
 /**
  * Screen sharing configurations.
+ *
  */
 export class ScreenCaptureParameters2 {
   /**

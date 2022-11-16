@@ -4,11 +4,17 @@ import { IMediaPlayer } from './IAgoraMediaPlayer';
  * @ignore
  */
 export enum PreloadStatusCode {
-  /* enum__KPreloadStatusCompleted */
+  /**
+   * @ignore
+   */
   KPreloadStatusCompleted = 0,
-  /* enum__KPreloadStatusFailed */
+  /**
+   * @ignore
+   */
   KPreloadStatusFailed = 1,
-  /* enum__KPreloadStatusPreloading */
+  /**
+   * @ignore
+   */
   KPreloadStatusPreloading = 2,
 }
 
@@ -16,9 +22,13 @@ export enum PreloadStatusCode {
  * @ignore
  */
 export enum MusicContentCenterStatusCode {
-  /* enum__KMusicContentCenterStatusOk */
+  /**
+   * @ignore
+   */
   KMusicContentCenterStatusOk = 0,
-  /* enum__KMusicContentCenterStatusErr */
+  /**
+   * @ignore
+   */
   KMusicContentCenterStatusErr = 1,
 }
 

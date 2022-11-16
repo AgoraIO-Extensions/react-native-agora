@@ -1,6 +1,7 @@
 import './extension/AgoraMediaPlayerTypesExtension';
 /**
  * The playback state.
+ *
  */
 export enum MediaPlayerState {
   /**
@@ -71,6 +72,7 @@ export enum MediaPlayerState {
 
 /**
  * Error codes of the media player.
+ *
  */
 export enum MediaPlayerError {
   /**
@@ -149,6 +151,7 @@ export enum MediaPlayerError {
 
 /**
  * The type of the media stream.
+ *
  */
 export enum MediaStreamType {
   /**
@@ -171,6 +174,7 @@ export enum MediaStreamType {
 
 /**
  * Media player events.
+ *
  */
 export enum MediaPlayerEvent {
   /**
@@ -245,6 +249,7 @@ export enum MediaPlayerEvent {
 
 /**
  * Events that occur when media resources are preloaded.
+ *
  */
 export enum PlayerPreloadEvent {
   /**
@@ -263,6 +268,7 @@ export enum PlayerPreloadEvent {
 
 /**
  * The detailed information of the media stream.
+ *
  */
 export class PlayerStreamInfo {
   /**
@@ -321,6 +327,7 @@ export class PlayerStreamInfo {
 
 /**
  * Information about the video bitrate of the media resource being played.
+ *
  */
 export class SrcInfo {
   /**
@@ -335,6 +342,7 @@ export class SrcInfo {
 
 /**
  * The type of media metadata.
+ *
  */
 export enum MediaPlayerMetadataType {
   /**
@@ -349,6 +357,7 @@ export enum MediaPlayerMetadataType {
 
 /**
  * Statistics about the media files being cached.
+ *
  */
 export class CacheStatistics {
   /**
@@ -367,6 +376,7 @@ export class CacheStatistics {
 
 /**
  * Information related to the media player.
+ *
  */
 export class PlayerUpdatedInfo {
   /**
@@ -385,6 +395,7 @@ export class PlayerUpdatedInfo {
 
 /**
  * Information related to the media file to be played and the playback scenario configurations.
+ *
  */
 export class MediaSource {
   /**

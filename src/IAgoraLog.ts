@@ -1,6 +1,7 @@
 import './extension/IAgoraLogExtension';
 /**
  * The output log level of the SDK.
+ *
  */
 export enum LogLevel {
   /**
@@ -31,6 +32,7 @@ export enum LogLevel {
 
 /**
  * The output log level of the SDK.
+ *
  */
 export enum LogFilterType {
   /**
@@ -65,6 +67,7 @@ export enum LogFilterType {
 
 /**
  * Configuration of Agora SDK log files.
+ *
  */
 export class LogConfig {
   /**

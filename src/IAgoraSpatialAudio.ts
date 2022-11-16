@@ -2,6 +2,7 @@ import './extension/IAgoraSpatialAudioExtension';
 import { RtcConnection } from './IAgoraRtcEngineEx';
 /**
  * The spatial position of the remote user or the media player.
+ *
  */
 export class RemoteVoicePositionInfo {
   /**
@@ -102,11 +103,8 @@ export abstract class IBaseSpatialAudioEngine {
    * Under the ILocalSpatialAudioEngine class, this method needs to be used with updateRemotePosition . The SDK calculates the relative position between the local and remote users according to this method and the parameter settings in updateRemotePosition, and then calculates the user's spatial audio effect parameters.
    *
    * @param position The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
-   *
    * @param axisForward The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
-   *
    * @param axisRight The unit vector of the y axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
-   *
    * @param axisUp The unit vector of the z axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
    */
   abstract updateSelfPosition(
@@ -132,7 +130,6 @@ export abstract class IBaseSpatialAudioEngine {
    * After a successful update, the local user can hear the change in the spatial position of the media player.
    *
    * @param playerId The ID of the media player.
-   *
    * @param positionInfo The spatial position of the media player. See RemoteVoicePositionInfo .
    *
    * @returns
@@ -203,7 +200,6 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
    * After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user.Call this method after the joinChannel [2/2] method.
    *
    * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   *
    * @param posInfo The spatial position of the remote user. See RemoteVoicePositionInfo .
    *
    * @returns
