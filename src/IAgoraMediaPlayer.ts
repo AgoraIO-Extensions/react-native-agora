@@ -166,8 +166,7 @@ export abstract class IMediaPlayer {
    * Selects the audio track used during playback.
    * After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.You need to call this method after calling getStreamInfo to get the audio stream index value.
    *
-   * @param index
- The index of the audio track.
+   * @param index The index of the audio track.
    *
    * @returns
    * 0: Success.< 0: Failure.
