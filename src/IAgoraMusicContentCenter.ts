@@ -1,30 +1,40 @@
 import './extension/IAgoraMusicContentCenterExtension';
 import { IMediaPlayer } from './IAgoraMediaPlayer';
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export enum PreloadStatusCode {
-  /* enum__KPreloadStatusCompleted */
+  /**
+   * @ignore
+   */
   KPreloadStatusCompleted = 0,
-  /* enum__KPreloadStatusFailed */
+  /**
+   * @ignore
+   */
   KPreloadStatusFailed = 1,
-  /* enum__KPreloadStatusPreloading */
+  /**
+   * @ignore
+   */
   KPreloadStatusPreloading = 2,
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export enum MusicContentCenterStatusCode {
-  /* enum__KMusicContentCenterStatusOk */
+  /**
+   * @ignore
+   */
   KMusicContentCenterStatusOk = 0,
-  /* enum__KMusicContentCenterStatusErr */
+  /**
+   * @ignore
+   */
   KMusicContentCenterStatusErr = 1,
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export class MusicChartInfo {
   /**
    * @ignore
@@ -36,9 +46,9 @@ export class MusicChartInfo {
   id?: number;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export abstract class MusicChartCollection {
   /**
    * @ignore
@@ -51,9 +61,9 @@ export abstract class MusicChartCollection {
   abstract get(index: number): MusicChartInfo;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export class MvProperty {
   /**
    * @ignore
@@ -65,9 +75,9 @@ export class MvProperty {
   bandwidth?: string;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export class ClimaxSegment {
   /**
    * @ignore
@@ -79,9 +89,9 @@ export class ClimaxSegment {
   endTimeMs?: number;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export class Music {
   /**
    * @ignore
@@ -141,9 +151,9 @@ export class Music {
   mvPropertyList?: MvProperty[];
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export abstract class MusicCollection {
   /**
    * @ignore
@@ -171,9 +181,9 @@ export abstract class MusicCollection {
   abstract getMusic(index: number): Music;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export interface IMusicContentCenterEventHandler {
   /**
    * @ignore
@@ -210,9 +220,9 @@ export interface IMusicContentCenterEventHandler {
   ): void;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export class MusicContentCenterConfiguration {
   /**
    * @ignore
@@ -228,9 +238,9 @@ export class MusicContentCenterConfiguration {
   mccUid?: number;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export abstract class IMusicPlayer extends IMediaPlayer {
   /**
    * @ignore
@@ -238,9 +248,9 @@ export abstract class IMusicPlayer extends IMediaPlayer {
   abstract openWithSongCode(songCode: number, startPos?: number): number;
 }
 
-/**
- * @ignore
- */
+  /**
+   * @ignore
+   */
 export abstract class IMusicContentCenter {
   /**
    * @ignore

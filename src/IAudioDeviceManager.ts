@@ -2,16 +2,18 @@ import './extension/IAudioDeviceManagerExtension';
 import { AudioDeviceInfo } from './IAgoraRtcEngine';
 /**
  * The maximum length of the device ID.
+ *
  */
 export enum MaxDeviceIdLengthType {
-  /**
-   * The maximum length of the device ID is 512 bytes.
-   */
+/**
+ * The maximum length of the device ID is 512 bytes.
+ */
   MaxDeviceIdLength = 512,
 }
 
 /**
  * Audio device management methods.
+ *
  */
 export abstract class IAudioDeviceManager {
   /**
