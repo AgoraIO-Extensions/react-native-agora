@@ -3474,8 +3474,7 @@ export abstract class IRtcEngine {
    * Selects the audio track used during playback.
    * After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.For the supported formats of audio files, see .You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
    *
-   * @param index
- The audio track you want to specify. The value range is [0, getAudioTrackCount ()].
+   * @param index The audio track you want to specify. The value range is [0, getAudioTrackCount ()].
    *
    * @returns
    * 0: Success.< 0: Failure.
