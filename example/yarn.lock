@@ -3676,7 +3676,7 @@ react-is@^17.0.1:
 
 "react-native-agora-rawdata@git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#main":
   version "0.1.0"
-  resolved "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#57ce1b08cad2a976cf4c7b3e3cdafe1710120744"
+  resolved "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#85645659b82f524f452457231bcda5150bbce11d"
 
 react-native-chart-kit@^6.12.0:
   version "6.12.0"
