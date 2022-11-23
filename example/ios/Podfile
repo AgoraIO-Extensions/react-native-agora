@@ -26,7 +26,7 @@ target 'AgoraRtcNgExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'AgoraRtcWrapper', :path => '../../ios'
+#   pod 'AgoraRtcWrapper', :path => '../../ios'
 
   target 'AgoraRtcNgExampleTests' do
     inherit! :complete
@@ -45,6 +45,7 @@ target 'AgoraRtcNgExample' do
 end
 
 target 'ScreenShare' do
-#  pod 'AgoraRtcEngine_Special_iOS', '4.0.0.5'
-  pod 'AgoraRtcWrapper', :path => '../../ios'
+#   pod 'AgoraRtcEngine_Special_iOS', '4.0.0.5'
+  pod 'AgoraIrisRTC_iOS', '4.1.0-test.2'
+#   pod 'AgoraRtcWrapper', :path => '../../ios'
 end

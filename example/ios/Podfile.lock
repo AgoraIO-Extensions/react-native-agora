@@ -1,5 +1,5 @@
 PODS:
-  - AgoraRtcWrapper (4.0.0)
+  - AgoraIrisRTC_iOS (4.1.0-test.2)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -304,7 +304,7 @@ PODS:
   - React-logger (0.70.5):
     - glog
   - react-native-agora (4.0.0):
-    - AgoraRtcWrapper
+    - AgoraIrisRTC_iOS (= 4.1.0-test.2)
     - React-Core
   - react-native-agora-rawdata (0.1.0):
     - React-Core
@@ -398,7 +398,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AgoraRtcWrapper (from `../../ios`)
+  - AgoraIrisRTC_iOS (= 4.1.0-test.2)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -472,6 +472,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AgoraIrisRTC_iOS
     - CocoaAsyncSocket
     - Flipper
     - Flipper-Boost-iOSX
@@ -489,8 +490,6 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
-  AgoraRtcWrapper:
-    :path: "../../ios"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -583,7 +582,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraRtcWrapper: 8971fe99870757778ee7a1365540945fcb743bfd
+  AgoraIrisRTC_iOS: ba05c4091d97776d761912fb03d15093388a7ff6
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -618,7 +617,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 31564fa6912459921568e8b0e49024285a4d584b
   React-jsinspector: badd81696361249893a80477983e697aab3c1a34
   React-logger: fdda34dd285bdb0232e059b19d9606fa0ec3bb9c
-  react-native-agora: 85269ce3b2ed84a7e4ecae9c7a2fccc85cf47d29
+  react-native-agora: 51580810e5280b9950705cc2c1914e4122f10d85
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
@@ -645,6 +644,6 @@ SPEC CHECKSUMS:
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 0c8576312f1e2e5b2b15f996b6173b1cdade4c9c
+PODFILE CHECKSUM: ceb1eea3c233c5e341ab5175d87a57617b071438
 
 COCOAPODS: 1.11.3
