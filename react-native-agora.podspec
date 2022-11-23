@@ -17,9 +17,9 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm}"
 
   s.dependency "React-Core"
-  s.dependency "AgoraRtcWrapper"
-#  s.dependency 'AgoraRtcEngine_Special_iOS', '4.0.0.5'
-#  s.dependency 'AgoraIrisRTC_iOS', '4.0.0-rc.1'
+#   s.dependency "AgoraRtcWrapper"
+#   s.dependency 'AgoraRtcEngine_Special_iOS', '4.0.0.5'
+  s.dependency 'AgoraIrisRTC_iOS', '4.1.0-test.2'
   s.libraries = 'stdc++'
   s.framework = 'ReplayKit'
 
