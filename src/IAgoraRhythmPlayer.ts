@@ -1,52 +1,52 @@
 import './extension/IAgoraRhythmPlayerExtension';
 /**
- * @ignore
+ * Virtual metronome state.
  */
 export enum RhythmPlayerStateType {
   /**
-   * @ignore
+   * (810): The virtual metronome is not enabled or disabled already.
    */
   RhythmPlayerStateIdle = 810,
   /**
-   * @ignore
+   * 811: Opening the beat files.
    */
   RhythmPlayerStateOpening = 811,
   /**
-   * @ignore
+   * 812: Decoding the beat files.
    */
   RhythmPlayerStateDecoding = 812,
   /**
-   * @ignore
+   * 813: The beat files are playing.
    */
   RhythmPlayerStatePlaying = 813,
   /**
-   * @ignore
+   * 814: Failed to start virtual metronome. You can use the reported errorcode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
    */
   RhythmPlayerStateFailed = 814,
 }
 
 /**
- * @ignore
+ * Virtual Metronome error message.
  */
 export enum RhythmPlayerErrorType {
   /**
-   * @ignore
+   * (0): The beat files are played normally without errors.
    */
   RhythmPlayerErrorOk = 0,
   /**
-   * @ignore
+   * 1: General error; no clear reason.
    */
   RhythmPlayerErrorFailed = 1,
   /**
-   * @ignore
+   * 801: There is an error when opening the beat files.
    */
   RhythmPlayerErrorCanNotOpen = 801,
   /**
-   * @ignore
+   * 802: There is an error when playing the beat files.
    */
   RhythmPlayerErrorCanNotPlay = 802,
   /**
-   * @ignore
+   * (803): The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
    */
   RhythmPlayerErrorFileOverDurationLimit = 803,
 }

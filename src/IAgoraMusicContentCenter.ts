@@ -4,11 +4,17 @@ import { IMediaPlayer } from './IAgoraMediaPlayer';
  * @ignore
  */
 export enum PreloadStatusCode {
-  /* enum__KPreloadStatusCompleted */
+  /**
+   * @ignore
+   */
   KPreloadStatusCompleted = 0,
-  /* enum__KPreloadStatusFailed */
+  /**
+   * @ignore
+   */
   KPreloadStatusFailed = 1,
-  /* enum__KPreloadStatusPreloading */
+  /**
+   * @ignore
+   */
   KPreloadStatusPreloading = 2,
 }
 
@@ -16,9 +22,13 @@ export enum PreloadStatusCode {
  * @ignore
  */
 export enum MusicContentCenterStatusCode {
-  /* enum__KMusicContentCenterStatusOk */
+  /**
+   * @ignore
+   */
   KMusicContentCenterStatusOk = 0,
-  /* enum__KMusicContentCenterStatusErr */
+  /**
+   * @ignore
+   */
   KMusicContentCenterStatusErr = 1,
 }
 
@@ -66,15 +76,15 @@ export class MvProperty {
 }
 
 /**
- * @ignore
+ * The climax parts of the music.
  */
 export class ClimaxSegment {
   /**
-   * @ignore
+   * The time (ms) when the climax part begins.
    */
   startTimeMs?: number;
   /**
-   * @ignore
+   * The time (ms) when the climax part ends.
    */
   endTimeMs?: number;
 }
