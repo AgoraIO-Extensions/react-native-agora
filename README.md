@@ -119,15 +119,15 @@ Source: https://github.com/facebook/react-native/issues/25154
 
 ## API
 
-* [React Native API](https://docs.agora.io/en/video-call-4.x/API%20Reference/rn_ng/API/rtc_api_overview_ng.html)
-* [Android API](https://docs.agora.io/en/video-call-4.x/API%20Reference/java_ng/API/rtc_api_overview_ng.html)
-* [iOS API](https://docs.agora.io/en/video-call-4.x/API%20Reference/ios_ng/API/rtc_api_overview_ng.html)
+* [React Native API](https://api-ref.agora.io/en/video-sdk/react-native/4.x/API/rtc_api_overview_ng.html)
+* [Android API](https://api-ref.agora.io/en/video-sdk/android/4.x/API/rtc_api_overview_ng.html)
+* [iOS API](https://api-ref.agora.io/en/video-sdk/ios/4.x/API/rtc_api_overview_ng.html)
 
 ## Resources
 
 * Complete [API Doc](https://docs.agora.io/en/) at the Developer Center
 * [Changelog](CHANGELOG.md)
-* [Release Notes](https://docs.agora.io/en/video-call-4.x/release_rn_ng?platform=ReactNative)
+* [Release Notes](https://docs.agora.io/en/video-calling/reference/release-notes?platform=react-native)
 * [File bugs about this sample](https://github.com/AgoraIO-Extensions/react-native-agora/issues)
 * [React Native Getting Started](https://facebook.github.io/react-native/docs/getting-started.html)
 
