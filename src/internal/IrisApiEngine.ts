@@ -65,7 +65,7 @@ export const DeviceEventEmitter = new EventEmitter();
 
 const { AgoraRtcNg } = NativeModules;
 const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);
-AgoraEventEmitter.addListener('onEvent', handleEvent);
+AgoraEventEmitter.addListener('AgoraRtcNg:onEvent', handleEvent);
 
 let debuggable = false;
 
