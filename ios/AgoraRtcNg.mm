@@ -5,7 +5,7 @@
 #include <string>
 #include <regex>
 
-#define EVENT_NAME @"onEvent"
+#define EVENT_NAME @"AgoraRtcNg:onEvent"
 
 @interface AgoraRtcNg ()
 

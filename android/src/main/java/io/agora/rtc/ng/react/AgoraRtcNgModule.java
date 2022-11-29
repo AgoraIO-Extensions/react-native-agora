@@ -104,6 +104,6 @@ public class AgoraRtcNgModule extends ReactContextBaseJavaModule implements Iris
     }
     getReactApplicationContext()
       .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-      .emit("onEvent", map);
+      .emit("AgoraRtcNg:onEvent", map);
   }
 }
