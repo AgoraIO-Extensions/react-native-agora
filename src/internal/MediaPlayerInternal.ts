@@ -1,3 +1,5 @@
+import { createCheckers } from 'ts-interface-checker';
+
 import { ErrorCodeType } from '../AgoraBase';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
 import {
@@ -15,6 +17,15 @@ import {
   processIMediaPlayerVideoFrameObserver,
 } from '../impl/IAgoraMediaPlayerImpl';
 import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
+
+import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
+import IAgoraMediaPlayerTI from '../ti/IAgoraMediaPlayer-ti';
+import IAgoraMediaPlayerSourceTI from '../ti/IAgoraMediaPlayerSource-ti';
+const checkers = createCheckers(
+  AgoraMediaBaseTI,
+  IAgoraMediaPlayerTI,
+  IAgoraMediaPlayerSourceTI
+);
 
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 import { EmitterSubscription } from './emitter/EventEmitter';
@@ -58,10 +69,68 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     this.removeAllListeners();
   }
 
+  _addListenerPreCheck<EventType extends keyof IMediaPlayerEvent>(
+    eventType: EventType
+  ): boolean {
+    if (
+      checkers.IMediaPlayerSourceObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._source_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        this.registerPlayerSourceObserver({});
+      }
+    }
+    if (
+      checkers.IMediaPlayerAudioFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._audio_frame_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        this.registerAudioFrameObserver({});
+      }
+    }
+    if (
+      checkers.IMediaPlayerVideoFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._video_frame_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        this.registerVideoFrameObserver({});
+      }
+    }
+    if (
+      checkers.IAudioSpectrumObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._audio_spectrum_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        console.error(
+          'Please call `registerMediaPlayerAudioSpectrumObserver` before you want to receive event by `addListener`'
+        );
+        return false;
+      }
+    }
+    return true;
+  }
+
   addListener<EventType extends keyof IMediaPlayerEvent>(
     eventType: EventType,
     listener: IMediaPlayerEvent[EventType]
   ): EmitterSubscription {
+    this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IMediaPlayer) {
         return;

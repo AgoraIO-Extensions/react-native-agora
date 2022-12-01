@@ -1,3 +1,5 @@
+import { createCheckers } from 'ts-interface-checker';
+
 import {
   AudioEncodedFrameObserverConfig,
   AudioRecordingConfiguration,
@@ -42,6 +44,15 @@ import {
   processIRtcEngineEventHandler,
 } from '../impl/IAgoraRtcEngineImpl';
 
+import AgoraBaseTI from '../ti/AgoraBase-ti';
+import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
+import IAgoraRtcEngineTI from '../ti/IAgoraRtcEngine-ti';
+const checkers = createCheckers(
+  AgoraBaseTI,
+  AgoraMediaBaseTI,
+  IAgoraRtcEngineTI
+);
+
 import { LocalSpatialAudioEngineInternal } from './LocalSpatialAudioEngineInternal';
 import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
@@ -52,11 +63,10 @@ import { callIrisApi, DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class RtcEngineExInternal extends IRtcEngineExImpl {
-  static _handlers: (
-    | IRtcEngineEventHandler
-    | IDirectCdnStreamingEventHandler
-    | IMetadataObserver
-  )[] = [];
+  static _event_handlers: IRtcEngineEventHandler[] = [];
+  static _direct_cdn_streaming_event_handler: IDirectCdnStreamingEventHandler[] =
+    [];
+  static _metadata_observer: IMetadataObserver[] = [];
   static _audio_encoded_frame_observers: IAudioEncodedFrameObserver[] = [];
   static _audio_spectrum_observers: IAudioSpectrumObserver[] = [];
   private _media_engine: IMediaEngine = new MediaEngineInternal();
@@ -91,7 +101,9 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     this._media_engine.release();
     this._media_recorder.release();
     this._local_spatial_audio_engine.release();
-    RtcEngineExInternal._handlers = [];
+    RtcEngineExInternal._event_handlers = [];
+    RtcEngineExInternal._direct_cdn_streaming_event_handler = [];
+    RtcEngineExInternal._metadata_observer = [];
     RtcEngineExInternal._audio_encoded_frame_observers = [];
     RtcEngineExInternal._audio_spectrum_observers = [];
     MediaPlayerInternal._source_observers.clear();
@@ -102,10 +114,71 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     super.release(sync);
   }
 
+  _addListenerPreCheck<EventType extends keyof IRtcEngineEvent>(
+    eventType: EventType
+  ): boolean {
+    if (
+      checkers.IRtcEngineEventHandler?.strictTest({ [eventType]: undefined })
+    ) {
+      if (RtcEngineExInternal._event_handlers.length === 0) {
+        this.registerEventHandler({});
+      }
+    }
+    if (
+      checkers.IDirectCdnStreamingEventHandler?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        RtcEngineExInternal._direct_cdn_streaming_event_handler.length === 0
+      ) {
+        console.error(
+          'Please call `startDirectCdnStreaming` before you want to receive event by `addListener`'
+        );
+        return false;
+      }
+    }
+    if (
+      checkers.IMetadataObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (RtcEngineExInternal._metadata_observer.length === 0) {
+        console.error(
+          'Please call `registerMediaMetadataObserver` before you want to receive event by `addListener`'
+        );
+        return false;
+      }
+    }
+    if (
+      checkers.IAudioEncodedFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (RtcEngineExInternal._audio_encoded_frame_observers.length === 0) {
+        console.error(
+          'Please call `registerAudioEncodedFrameObserver` before you want to receive event by `addListener`'
+        );
+        return false;
+      }
+    }
+    if (
+      checkers.IAudioSpectrumObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (RtcEngineExInternal._audio_spectrum_observers.length === 0) {
+        this.registerAudioSpectrumObserver({});
+      }
+    }
+    return true;
+  }
+
   addListener<EventType extends keyof IRtcEngineEvent>(
     eventType: EventType,
     listener: IRtcEngineEvent[EventType]
   ): EmitterSubscription {
+    this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IRtcEngine) {
         return;
@@ -178,17 +251,20 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   registerEventHandler(eventHandler: IRtcEngineEventHandler): boolean {
     if (
-      !RtcEngineExInternal._handlers.find((value) => value === eventHandler)
+      !RtcEngineExInternal._event_handlers.find(
+        (value) => value === eventHandler
+      )
     ) {
-      RtcEngineExInternal._handlers.push(eventHandler);
+      RtcEngineExInternal._event_handlers.push(eventHandler);
     }
     return super.registerEventHandler(eventHandler);
   }
 
   unregisterEventHandler(eventHandler: IRtcEngineEventHandler): boolean {
-    RtcEngineExInternal._handlers = RtcEngineExInternal._handlers.filter(
-      (value) => value !== eventHandler
-    );
+    RtcEngineExInternal._event_handlers =
+      RtcEngineExInternal._event_handlers.filter(
+        (value) => value !== eventHandler
+      );
     return super.unregisterEventHandler(eventHandler);
   }
 
@@ -210,9 +286,13 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     options: DirectCdnStreamingMediaOptions
   ): number {
     if (
-      !RtcEngineExInternal._handlers.find((value) => value === eventHandler)
+      !RtcEngineExInternal._direct_cdn_streaming_event_handler.find(
+        (value) => value === eventHandler
+      )
     ) {
-      RtcEngineExInternal._handlers.push(eventHandler);
+      RtcEngineExInternal._direct_cdn_streaming_event_handler.push(
+        eventHandler
+      );
     }
     return super.startDirectCdnStreaming(eventHandler, publishUrl, options);
   }
@@ -221,8 +301,12 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     observer: IMetadataObserver,
     type: MetadataType
   ): number {
-    if (!RtcEngineExInternal._handlers.find((value) => value === observer)) {
-      RtcEngineExInternal._handlers.push(observer);
+    if (
+      !RtcEngineExInternal._metadata_observer.find(
+        (value) => value === observer
+      )
+    ) {
+      RtcEngineExInternal._metadata_observer.push(observer);
     }
     return super.registerMediaMetadataObserver(observer, type);
   }
@@ -231,9 +315,10 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     observer: IMetadataObserver,
     type: MetadataType
   ): number {
-    RtcEngineExInternal._handlers = RtcEngineExInternal._handlers.filter(
-      (value) => value !== observer
-    );
+    RtcEngineExInternal._metadata_observer =
+      RtcEngineExInternal._metadata_observer.filter(
+        (value) => value !== observer
+      );
     return super.unregisterMediaMetadataObserver(observer, type);
   }
 

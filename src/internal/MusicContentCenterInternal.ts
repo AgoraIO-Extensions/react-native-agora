@@ -1,3 +1,5 @@
+import { createCheckers } from 'ts-interface-checker';
+
 import {
   IMusicContentCenterEventHandler,
   IMusicPlayer,
@@ -13,13 +15,16 @@ import {
   processIMusicContentCenterEventHandler,
 } from '../impl/IAgoraMusicContentCenterImpl';
 
+import IAgoraMusicContentCenterTI from '../ti/IAgoraMusicContentCenter-ti';
+const checkers = createCheckers(IAgoraMusicContentCenterTI);
+
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 
 import { EmitterSubscription } from './emitter/EventEmitter';
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
-  static _handlers: IMusicContentCenterEventHandler[] = [];
+  static _event_handlers: IMusicContentCenterEventHandler[] = [];
   private _events: Map<
     any,
     {
@@ -34,10 +39,26 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     }
   >();
 
+  _addListenerPreCheck<EventType extends keyof IMusicContentCenterEvent>(
+    eventType: EventType
+  ): boolean {
+    if (
+      checkers.IMusicContentCenterEventHandler?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (MusicContentCenterInternal._event_handlers.length === 0) {
+        this.registerEventHandler({});
+      }
+    }
+    return true;
+  }
+
   addListener<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType,
     listener: IMusicContentCenterEvent[EventType]
   ): EmitterSubscription {
+    this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IMusicContentCenter) {
         return;
@@ -84,22 +105,22 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
 
   registerEventHandler(eventHandler: IMusicContentCenterEventHandler): number {
     if (
-      !MusicContentCenterInternal._handlers.find(
+      !MusicContentCenterInternal._event_handlers.find(
         (value) => value === eventHandler
       )
     ) {
-      MusicContentCenterInternal._handlers.push(eventHandler);
+      MusicContentCenterInternal._event_handlers.push(eventHandler);
     }
     return super.registerEventHandler(eventHandler);
   }
 
   unregisterEventHandler(): number {
-    MusicContentCenterInternal._handlers = [];
+    MusicContentCenterInternal._event_handlers = [];
     return super.unregisterEventHandler();
   }
 
   release() {
-    MusicContentCenterInternal._handlers = [];
+    MusicContentCenterInternal._event_handlers = [];
     super.release();
   }
 

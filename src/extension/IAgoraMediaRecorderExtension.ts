@@ -5,6 +5,10 @@ export type IMediaRecorderEvent = IMediaRecorderObserver;
 
 declare module '../IAgoraMediaRecorder' {
   interface IMediaRecorder {
+    _addListenerPreCheck<EventType extends keyof IMediaRecorderEvent>(
+      eventType: EventType
+    ): boolean;
+
     /**
      * Adds one IMediaRecorderEvent listener.
      * After calling this method, you can listen for the corresponding events in the IMediaRecorder object and obtain data through IMediaRecorderEvent. Depending on your project needs, you can add multiple listeners for the same event.

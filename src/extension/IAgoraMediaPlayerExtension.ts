@@ -13,6 +13,10 @@ export type IMediaPlayerEvent = IMediaPlayerSourceObserver &
 
 declare module '../IAgoraMediaPlayer' {
   interface IMediaPlayer {
+    _addListenerPreCheck<EventType extends keyof IMediaPlayerEvent>(
+      eventType: EventType
+    ): boolean;
+
     /**
      * Adds one IMediaPlayerEvent listener.
      * After calling this method, you can listen for the corresponding events in the IMediaPlayer object and obtain data through IMediaPlayerEvent. Depending on your project needs, you can add multiple listeners for the same event.

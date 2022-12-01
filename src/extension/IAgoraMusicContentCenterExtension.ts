@@ -5,6 +5,10 @@ export type IMusicContentCenterEvent = IMusicContentCenterEventHandler;
 
 declare module '../IAgoraMusicContentCenter' {
   interface IMusicContentCenter {
+    _addListenerPreCheck<EventType extends keyof IMusicContentCenterEvent>(
+      eventType: EventType
+    ): boolean;
+
     /**
      * @ignore
      */

@@ -263,13 +263,13 @@ export const EVENT_PROCESSORS = {
           break;
       }
     },
-    handlers: () => RtcEngineExInternal._handlers,
+    handlers: () => RtcEngineExInternal._metadata_observer,
   },
   IDirectCdnStreamingEventHandler: {
     suffix: 'DirectCdnStreamingEventHandler_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIDirectCdnStreamingEventHandler],
-    handlers: () => RtcEngineExInternal._handlers,
+    handlers: () => RtcEngineExInternal._direct_cdn_streaming_event_handler,
   },
   IRtcEngineEventHandler: {
     suffix: 'RtcEngineEventHandler_',
@@ -283,7 +283,7 @@ export const EVENT_PROCESSORS = {
           break;
       }
     },
-    handlers: () => RtcEngineExInternal._handlers,
+    handlers: () => RtcEngineExInternal._event_handlers,
   },
   IMusicContentCenterEventHandler: {
     suffix: 'MusicContentCenterEventHandler_',
@@ -298,7 +298,7 @@ export const EVENT_PROCESSORS = {
         }
       }
     },
-    handlers: () => MusicContentCenterInternal._handlers,
+    handlers: () => MusicContentCenterInternal._event_handlers,
   },
 };
 

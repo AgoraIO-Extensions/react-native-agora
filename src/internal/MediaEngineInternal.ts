@@ -1,3 +1,5 @@
+import { createCheckers } from 'ts-interface-checker';
+
 import {
   IAudioFrameObserver,
   IVideoEncodedFrameObserver,
@@ -12,6 +14,9 @@ import {
   processIVideoFrameObserver,
 } from '../impl/AgoraMediaBaseImpl';
 import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';
+
+import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
+const checkers = createCheckers(AgoraMediaBaseTI);
 
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 import { EmitterSubscription } from './emitter/EventEmitter';
@@ -103,10 +108,44 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     super.release();
   }
 
+  _addListenerPreCheck<EventType extends keyof IMediaEngineEvent>(
+    eventType: EventType
+  ): boolean {
+    if (
+      checkers.IAudioFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (MediaEngineInternal._audio_frame_observers.length === 0) {
+        this.registerAudioFrameObserver({});
+      }
+    }
+    if (
+      checkers.IVideoFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (MediaEngineInternal._video_frame_observers.length === 0) {
+        this.registerVideoFrameObserver({});
+      }
+    }
+    if (
+      checkers.IVideoEncodedFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (MediaEngineInternal._video_encoded_frame_observers.length === 0) {
+        this.registerVideoEncodedFrameObserver({});
+      }
+    }
+    return true;
+  }
+
   addListener<EventType extends keyof IMediaEngineEvent>(
     eventType: EventType,
     listener: IMediaEngineEvent[EventType]
   ): EmitterSubscription {
+    this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IMediaEngine) {
         return;

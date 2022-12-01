@@ -133,11 +133,6 @@ export default function JoinChannelVideo() {
 
   useEffect(() => {
     initRtcEngine().then(() => {
-      /**
-       * ⚠️ must call before `addListener` if you want to receive the events from {@link IRtcEngineEventHandler}
-       */
-      engine.current.registerEventHandler({});
-
       engine.current.addListener(
         'onError',
         (err: ErrorCodeType, msg: string) => {

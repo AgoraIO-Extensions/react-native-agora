@@ -130,7 +130,7 @@ dependencies {
   implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 //   api 'io.agora.rtc:agora-special-full:4.0.0.5'
   implementation 'io.agora.rtc:full-screen-sharing:4.0.0.5'
-  implementation 'io.agora.rtc:iris-rtc:4.1.0-test.2'
+  implementation 'io.agora.rtc:iris-rtc:4.1.0-test.3'
 //  implementation project(':iris')
 }
 
