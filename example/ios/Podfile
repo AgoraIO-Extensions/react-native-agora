@@ -46,6 +46,6 @@ end
 
 target 'ScreenShare' do
 #   pod 'AgoraRtcEngine_Special_iOS', '4.0.0.5'
-  pod 'AgoraIrisRTC_iOS', '4.1.0-test.2'
+  pod 'AgoraIrisRTC_iOS', '4.1.0-test.3'
 #   pod 'AgoraRtcWrapper', :path => '../../ios'
 end
