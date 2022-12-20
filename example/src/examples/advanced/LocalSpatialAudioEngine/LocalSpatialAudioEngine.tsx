@@ -76,9 +76,7 @@ export default class LocalSpatialAudioEngine
 
     if (Platform.OS === 'android') {
       // Need granted the microphone permission
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-      );
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
     }
 
     // ⚠️ Must call after initialize and before joinChannel
@@ -119,6 +117,8 @@ export default class LocalSpatialAudioEngine
     this.engine?.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+      // ⚠️ Must set autoSubscribeAudio to false
+      autoSubscribeAudio: false,
     });
   }
 

@@ -1,11 +1,10 @@
-import { EventSubscription } from 'react-native';
-
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import {
   IMediaPlayerAudioFrameObserver,
   IMediaPlayerVideoFrameObserver,
 } from '../IAgoraMediaPlayer';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaPlayerEvent = IMediaPlayerSourceObserver &
   IMediaPlayerAudioFrameObserver &
@@ -14,6 +13,10 @@ export type IMediaPlayerEvent = IMediaPlayerSourceObserver &
 
 declare module '../IAgoraMediaPlayer' {
   interface IMediaPlayer {
+    _addListenerPreCheck<EventType extends keyof IMediaPlayerEvent>(
+      eventType: EventType
+    ): boolean;
+
     /**
      * Adds one IMediaPlayerEvent listener.
      * After calling this method, you can listen for the corresponding events in the IMediaPlayer object and obtain data through IMediaPlayerEvent. Depending on your project needs, you can add multiple listeners for the same event.
@@ -31,7 +34,7 @@ declare module '../IAgoraMediaPlayer' {
     addListener<EventType extends keyof IMediaPlayerEvent>(
       eventType: EventType,
       listener: IMediaPlayerEvent[EventType]
-    ): EventSubscription;
+    ): EmitterSubscription;
 
     /**
      * Removes the specified IMediaPlayerEvent listener.

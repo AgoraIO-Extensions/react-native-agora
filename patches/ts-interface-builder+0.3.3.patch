@@ -1,0 +1,21 @@
+diff --git a/node_modules/ts-interface-builder/dist/index.js b/node_modules/ts-interface-builder/dist/index.js
+index 7d82df1..a839205 100644
+--- a/node_modules/ts-interface-builder/dist/index.js
++++ b/node_modules/ts-interface-builder/dist/index.js
+@@ -116,7 +116,7 @@ class Compiler {
+         const name = this.getName(node.name);
+         const params = node.parameters.map(this.compileNode, this);
+         const items = [this.compileOptType(node.type)].concat(params);
+-        return `"${name}": t.func(${items.join(", ")})`;
++        return `"${name}": t.opt(t.func(${items.join(", ")}))`;
+     }
+     _compileTypeReferenceNode(node) {
+         if (!node.typeArguments) {
+@@ -182,6 +182,7 @@ class Compiler {
+         return `t.opt(${this.compileNode(node.type)})`;
+     }
+     _compileEnumDeclaration(node) {
++        return ''
+         const name = this.getName(node.name);
+         const members = node.members.map(m => `  "${this.getName(m.name)}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
+         this.exportedNames.push(name);

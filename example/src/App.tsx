@@ -35,7 +35,7 @@ import Config from './config/agora.config';
 
 const Stack = createStackNavigator();
 
-const DATA = [Basic, Hooks, Advanced];
+const DATA = [Basic, Advanced, Hooks];
 
 const App = () => {
   const [version, setVersion] = useState<SDKBuildInfo>({});

@@ -1,3 +1,22 @@
+
+
+# [4.1.0-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.0.0...v4.1.0-rc.1) (2022-11-29)
+
+
+### Bug Fixes
+
+* `onEvent` conflict [#554](https://github.com/AgoraIO-Extensions/react-native-agora/issues/554) ([8686c55](https://github.com/AgoraIO-Extensions/react-native-agora/commit/8686c55f52271ff8cc87f0a55ce5e977d80aefde))
+* add `setDualStreamMode` method ([40faff6](https://github.com/AgoraIO-Extensions/react-native-agora/commit/40faff60a3844f11407682295da50f2996e333ed))
+* release throw exception & use `NativeEventEmitter` instead of `DeviceEventEmitter` [#538](https://github.com/AgoraIO-Extensions/react-native-agora/issues/538) [#539](https://github.com/AgoraIO-Extensions/react-native-agora/issues/539) ([52f1471](https://github.com/AgoraIO-Extensions/react-native-agora/commit/52f1471209edba939480a44cf7eefa699ee66710))
+* the event which named contains `Ex` not triggered issue (such as `onTokenPrivilegeWillExpire`) ([ad372a6](https://github.com/AgoraIO-Extensions/react-native-agora/commit/ad372a690e5ce8fd989d2e8977a58715f27b745d))
+
+
+### Features
+
+* add `getPlaybackDefaultDevice` and `getRecordingDefaultDevice` ([22ea54e](https://github.com/AgoraIO-Extensions/react-native-agora/commit/22ea54e33d905b2a40a2a4f10428b1f3ae617fbf))
+* support 4.1.0 iris ([aac5174](https://github.com/AgoraIO-Extensions/react-native-agora/commit/aac51740c7f243f9652e177d367bce3b7dc18116))
+* support 4.1.0 native ([7498ff9](https://github.com/AgoraIO-Extensions/react-native-agora/commit/7498ff949ba494a044def44cec3a6b9d3f4b7775))
+
 # [4.0.0](https://github.com/AgoraIO-Community/react-native-agora/compare/v4.0.0-rc.1...v4.0.0) (2022-09-28)
 
 

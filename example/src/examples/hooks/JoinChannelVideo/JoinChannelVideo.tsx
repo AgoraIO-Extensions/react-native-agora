@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
   PermissionsAndroid,
   Platform,
   ScrollView,
-  Text,
   StyleSheet,
 } from 'react-native';
 import {
@@ -12,7 +11,6 @@ import {
   ClientRoleType,
   createAgoraRtcEngine,
   ErrorCodeType,
-  IRtcEngineEventHandler,
   LocalVideoStreamError,
   LocalVideoStreamState,
   RtcConnection,
@@ -22,7 +20,6 @@ import {
   UserOfflineReasonType,
   VideoSourceType,
   VideoViewSetupMode,
-  IRtcEngine,
 } from 'react-native-agora';
 
 import Config from '../../../config/agora.config';
@@ -38,8 +35,6 @@ import {
   AgoraView,
 } from '../../../components/ui';
 import { enumToItems } from '../../../utils';
-import { LogSink } from '../../../components/LogSink';
-import { StackScreenProps } from '@react-navigation/stack/src/types';
 
 const styles = StyleSheet.create({
   title: {
@@ -48,33 +43,32 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
+export default function JoinChannelVideo() {
   const [appId] = useState(Config.appId);
+  const [enableVideo] = useState(true);
+  const [channelId, setChannelId] = useState(Config.channelId);
   const [token] = useState(Config.token);
   const [uid] = useState(Config.uid);
-  const [engine] = useState(createAgoraRtcEngine());
-
-  const [enableVideo, setEnableVideo] = useState(true);
-  const [channelId, setChannelId] = useState(Config.channelId);
   const [joinChannelSuccess, setJoinChannelSuccess] = useState(false);
   const [remoteUsers, setRemoteUsers] = useState<number[]>([]);
   const [startPreview, setStartPreview] = useState(false);
   const [switchCamera, setSwitchCamera] = useState(false);
-  const [renderByTextureView, setSrenderByTextureView] = useState(false);
-
+  const [renderByTextureView, setRenderByTextureView] = useState(false);
   const [setupMode, setSetupMode] = useState(
     VideoViewSetupMode.VideoViewSetupReplace
   );
 
+  const engine = useRef(createAgoraRtcEngine());
+
   /**
    * Step 1: initRtcEngine
    */
-  const initRtcEngine = async () => {
+  const initRtcEngine = useCallback(async () => {
     if (!appId) {
-      console.log(`appId is invalid`);
+      console.error(`appId is invalid`);
     }
 
-    engine.initialize({
+    engine.current.initialize({
       appId,
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
@@ -83,18 +77,19 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
     if (Platform.OS === 'android') {
       // Need granted the microphone and camera permission
       await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        PermissionsAndroid.PERMISSIONS.CAMERA,
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
       ]);
     }
+
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
-    engine.enableVideo();
+    engine.current.enableVideo();
 
     // Start preview before joinChannel
-    engine.startPreview();
+    engine.current.startPreview();
     setStartPreview(true);
-  };
+  }, [appId]);
 
   /**
    * Step 2: joinChannel
@@ -115,7 +110,7 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
     // 2. If app certificate is turned on at dashboard, token is needed
     // when joining channel. The channel name and uid used to calculate
     // the token has to match the ones used for channel join
-    engine.joinChannel(token, channelId, uid, {
+    engine.current.joinChannel(token, channelId, uid, {
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
@@ -125,7 +120,7 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
    * Step 3 (Optional): switchCamera
    */
   const updateSwitchCamera = () => {
-    engine?.switchCamera();
+    engine.current.switchCamera();
     setSwitchCamera(!switchCamera);
   };
 
@@ -133,121 +128,129 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
    * Step 4: leaveChannel
    */
   const leaveChannel = () => {
-    engine.leaveChannel();
+    engine.current.leaveChannel();
   };
 
   useEffect(() => {
-    initRtcEngine();
+    initRtcEngine().then(() => {
+      engine.current.addListener(
+        'onError',
+        (err: ErrorCodeType, msg: string) => {
+          console.info('onError', 'err', err, 'msg', msg);
+        }
+      );
 
-    engine.addListener?.('onError', (err: ErrorCodeType, msg: string) => {
-      console.log('onError', 'err', err, 'msg', msg);
+      engine.current.addListener(
+        'onJoinChannelSuccess',
+        (connection: RtcConnection, elapsed: number) => {
+          console.info(
+            'onJoinChannelSuccess',
+            'connection',
+            connection,
+            'elapsed',
+            elapsed
+          );
+          setJoinChannelSuccess(true);
+        }
+      );
+
+      engine.current.addListener(
+        'onLeaveChannel',
+        (connection: RtcConnection, stats: RtcStats) => {
+          console.info(
+            'onLeaveChannel',
+            'connection',
+            connection,
+            'stats',
+            stats
+          );
+          setJoinChannelSuccess(false);
+          setRemoteUsers([]);
+        }
+      );
+
+      engine.current.addListener(
+        'onUserJoined',
+        (connection: RtcConnection, remoteUid: number, elapsed: number) => {
+          console.info(
+            'onUserJoined',
+            'connection',
+            connection,
+            'remoteUid',
+            remoteUid,
+            'elapsed',
+            elapsed
+          );
+          setRemoteUsers((r) => {
+            if (r === undefined) return [];
+            return [...r, remoteUid];
+          });
+        }
+      );
+
+      engine.current.addListener(
+        'onUserOffline',
+        (
+          connection: RtcConnection,
+          remoteUid: number,
+          reason: UserOfflineReasonType
+        ) => {
+          console.info(
+            'onUserOffline',
+            'connection',
+            connection,
+            'remoteUid',
+            remoteUid,
+            'reason',
+            reason
+          );
+          setRemoteUsers((r) => {
+            if (r === undefined) return [];
+            return r.filter((value) => value !== remoteUid);
+          });
+        }
+      );
+
+      engine.current.addListener(
+        'onVideoDeviceStateChanged',
+        (deviceId: string, deviceType: number, deviceState: number) => {
+          console.info(
+            'onVideoDeviceStateChanged',
+            'deviceId',
+            deviceId,
+            'deviceType',
+            deviceType,
+            'deviceState',
+            deviceState
+          );
+        }
+      );
+
+      engine.current.addListener(
+        'onLocalVideoStateChanged',
+        (
+          source: VideoSourceType,
+          state: LocalVideoStreamState,
+          error: LocalVideoStreamError
+        ) => {
+          console.info(
+            'onLocalVideoStateChanged',
+            'source',
+            source,
+            'state',
+            state,
+            'error',
+            error
+          );
+        }
+      );
     });
 
-    engine.addListener?.(
-      'onJoinChannelSuccess',
-      (connection: RtcConnection, elapsed: number) => {
-        setJoinChannelSuccess(true);
-        console.log('addListener:onJoinChannelSuccess', {
-          connection,
-          elapsed,
-        });
-      }
-    );
-
-    engine.addListener?.(
-      'onLeaveChannel',
-      (connection: RtcConnection, stats: RtcStats) => {
-        setJoinChannelSuccess(false);
-        console.log(
-          'addListener:onLeaveChannel==>',
-          'connection',
-          connection,
-          'stats',
-          stats
-        );
-      }
-    );
-
-    engine.addListener?.(
-      'onUserJoined',
-      (connection: RtcConnection, remoteUid: number, elapsed: number) => {
-        console.log(
-          'onUserJoined',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'elapsed',
-          elapsed
-        );
-
-        if (remoteUsers === undefined) return;
-        setRemoteUsers([...remoteUsers!, remoteUid]);
-      }
-    );
-
-    engine.addListener?.(
-      'onUserOffline',
-      (
-        connection: RtcConnection,
-        remoteUid: number,
-        reason: UserOfflineReasonType
-      ) => {
-        console.log(
-          'onUserOffline',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'reason',
-          reason
-        );
-        if (remoteUsers === undefined) return;
-        setRemoteUsers([...remoteUsers!, remoteUid]);
-      }
-    );
-    engine.addListener?.(
-      'onVideoDeviceStateChanged',
-      (deviceId: string, deviceType: number, deviceState: number) => {
-        console.log(
-          'onVideoDeviceStateChanged',
-          'deviceId',
-          deviceId,
-          'deviceType',
-          deviceType,
-          'deviceState',
-          deviceState
-        );
-      }
-    );
-    engine.addListener?.(
-      'onLocalVideoStateChanged',
-      (
-        source: VideoSourceType,
-        state: LocalVideoStreamState,
-        error: LocalVideoStreamError
-      ) => {
-        console.log(
-          'onLocalVideoStateChanged',
-          'source',
-          source,
-          'state',
-          state,
-          'error',
-          error
-        );
-      }
-    );
-
+    const engineCopy = engine.current;
     return () => {
-      engine.removeAllListeners?.('onError');
-      engine.removeAllListeners?.('onJoinChannelSuccess');
-      engine.removeAllListeners?.('onLeaveChannel');
-      engine.removeAllListeners?.('onUserJoined');
-      engine.removeAllListeners?.('onUserOffline');
-      engine.release();
+      engineCopy.release();
     };
-  }, []);
+  }, [initRtcEngine]);
 
   const configuration = renderConfiguration();
   return (
@@ -259,7 +262,6 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
       {enableVideo ? (
         <AgoraView style={AgoraStyle.videoLarge}>{renderUsers()}</AgoraView>
       ) : undefined}
-
       {configuration ? (
         <>
           <AgoraDivider />
@@ -284,7 +286,6 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
           placeholder={`channelId`}
           value={channelId}
         />
-
         <AgoraButton
           title={`${joinChannelSuccess ? 'leave' : 'join'} Channel`}
           onPress={() => {
@@ -295,7 +296,7 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
     );
   }
 
-  function renderUsers() {
+  function renderUsers(): React.ReactNode {
     return (
       <>
         {startPreview || joinChannelSuccess ? renderVideo(0) : undefined}
@@ -312,17 +313,22 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
     );
   }
 
-  function renderVideo(uid: number) {
-    return (
+  function renderVideo(uid: number): React.ReactNode {
+    return renderByTextureView ? (
+      <RtcTextureView
+        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        canvas={{ uid, setupMode }}
+      />
+    ) : (
       <RtcSurfaceView
         style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
         zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid }}
+        canvas={{ uid, setupMode }}
       />
     );
   }
 
-  function renderConfiguration() {
+  function renderConfiguration(): React.ReactNode {
     return (
       <>
         <AgoraSwitch
@@ -332,7 +338,7 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
           title={`renderByTextureView`}
           value={renderByTextureView}
           onValueChange={(value) => {
-            setSrenderByTextureView(value);
+            setRenderByTextureView(value);
           }}
         />
         <AgoraDivider />
@@ -365,15 +371,13 @@ export default function JoinChannelVideo(props: {} & StackScreenProps<{}>) {
     );
   }
 
-  function renderAction() {
+  function renderAction(): React.ReactNode {
     return (
       <>
         <AgoraButton
           disabled={!startPreview && !joinChannelSuccess}
           title={`switchCamera`}
-          onPress={() => {
-            updateSwitchCamera();
-          }}
+          onPress={updateSwitchCamera}
         />
       </>
     );

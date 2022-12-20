@@ -1,8 +1,8 @@
 import { NativeModules } from 'react-native';
 
-const { ReactNativeAgoraRtcNg } = NativeModules;
+const { AgoraRtcNg } = NativeModules;
 export const showRPSystemBroadcastPickerView: () => Promise<void> =
-  ReactNativeAgoraRtcNg.showRPSystemBroadcastPickerView;
+  AgoraRtcNg.showRPSystemBroadcastPickerView;
 
 import { IRtcEngine } from './IAgoraRtcEngine';
 import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
@@ -17,15 +17,13 @@ export * from './IAgoraMediaEngine';
 export * from './IAgoraMediaPlayer';
 export * from './IAgoraMediaPlayerSource';
 export * from './IAgoraMediaRecorder';
+export * from './IAgoraMusicContentCenter';
 export * from './IAgoraRhythmPlayer';
 export * from './IAgoraRtcEngine';
 export * from './IAgoraRtcEngineEx';
 export * from './IAgoraSpatialAudio';
 export * from './IAudioDeviceManager';
 export * from './AgoraRtcRenderView';
-/**
- * @internal
- */
 export {
   isDebuggable,
   setDebuggable,

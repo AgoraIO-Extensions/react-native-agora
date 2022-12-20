@@ -37,7 +37,7 @@ export enum AudioMixingDualMonoMode {
 export abstract class IMediaEngine {
   /**
    * Registers an audio frame observer object.
-   * Ensure that you call this method before joining a channel.
+   * Call this method to register an audio frame observer object (register a callback). When you need the SDK to trigger the onMixedAudioFrame , onRecordAudioFrame , onPlaybackAudioFrame or onEarMonitoringAudioFrame callback, you need to use this method to register the callbacks.Ensure that you call this method before joining a channel.
    *
    * @param observer The observer object instance. See IAudioFrameObserver . Agora recommends calling after receiving onLeaveChannel to release the audio observer object.
    *
@@ -48,7 +48,13 @@ export abstract class IMediaEngine {
 
   /**
    * Registers a video frame observer object.
-   * You need to implement the IVideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.When handling the video data returned in the callbacks, pay attention to the changes in the width and height parameters, which may be adapted under the following circumstances:When the network condition deteriorates, the video resolution decreases incrementally.If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.Ensure that you call this method before joining a channel.
+   * If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:
+   *  Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.
+   *  Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.
+   *  After joining the channel, get the user IDs of group B users through onUserJoined , and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.
+   *  Call muteAllRemoteVideoStreams to start receiving the video streams of all remote users. Then:
+   *  The raw video data of group A users can be obtained through the callback in IVideoFrameObserver , and the SDK renders the data by default.
+   *  The encoded video data of group B users can be obtained through the callback in IVideoEncodedFrameObserver . If you want to observe raw video frames (such as YUV or RGBA format), Agora recommends that you implement one IVideoFrameObserver class with this method.After registering the class, you need to register the callbacks in the class as required. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.Ensure that you call this method before joining a channel.When handling the video data returned in the callbacks, pay attention to the changes in the width and height parameters, which may be adapted under the following circumstances:When network conditions deteriorate, the video resolution decreases incrementally.If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.
    *
    * @param observer The observer object instance. See IVideoFrameObserver .
    */
@@ -56,7 +62,7 @@ export abstract class IMediaEngine {
 
   /**
    * Registers a receiver object for the encoded video image.
-   * Call this method after joining a channel.If you register an IVideoEncodedFrameObserver object, you cannot register an IVideoFrameObserver object.
+   * If you only want to observe encoded video frames (such as h.264 format) without decoding and rendering the video, Agora recommends that you implement one IVideoEncodedFrameObserver class through this method.If you want to obtain the original video data of some remote users (referred to as group A) and the encoded video data of other remote users (referred to as group B), you can refer to the following steps:Call registerVideoFrameObserver to register the raw video frame observer before joining the channel.Call registerVideoEncodedFrameObserver to register the encoded video frame observer before joining the channel.After joining the channel, get the user IDs of group B users through onUserJoined , and then call setRemoteVideoSubscriptionOptions to set the encodedFrameOnly of this group of users to true.Call muteAllRemoteVideoStreams to start receiving the video streams of all remote users. Then:The raw video data of group A users can be obtained through the callback in IVideoFrameObserver , and the SDK renders the data by default.The encoded video data of group B users can be obtained through the callback in IVideoEncodedFrameObserver .Call this method before joining a channel.
    *
    * @param observer The video frame observer object. See IVideoEncodedFrameObserver .
    *
@@ -71,11 +77,8 @@ export abstract class IMediaEngine {
    * Pushes the external audio frame.
    *
    * @param type The type of the audio recording device. See MediaSourceType .
-   *
    * @param frame The external audio frame. See AudioFrame .
-   *
    * @param wrap Whether to use the placeholder. Agora recommends using the default value.true: Use the placeholder.false: (Default) Do not use the placeholder.
-   *
    * @param sourceId The ID of external audio source. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
    *
    * @returns
@@ -89,17 +92,26 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * @ignore
+   * Occurs each time the player receives an audio frame.
+   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
+   *
+   * @param frame Audio frame information. See AudioPcmFrame .
    */
   abstract pushCaptureAudioFrame(frame: AudioFrame): number;
 
   /**
-   * @ignore
+   * Occurs each time the player receives an audio frame.
+   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
+   *
+   * @param frame Audio frame information. See AudioPcmFrame .
    */
   abstract pushReverseAudioFrame(frame: AudioFrame): number;
 
   /**
-   * @ignore
+   * Occurs each time the player receives an audio frame.
+   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
+   *
+   * @param frame Audio frame information. See AudioPcmFrame .
    */
   abstract pushDirectAudioFrame(frame: AudioFrame): number;
 
@@ -114,11 +126,8 @@ export abstract class IMediaEngine {
    * Call this method before joining a channel.
    *
    * @param enabled Whether to use the external video source:true: Use the external video source. The SDK prepares to accept the external video frame.false: (Default) Do not use the external video source.
-   *
    * @param useTexture Whether to use the external video frame in the Texture format.true: Use the external video frame in the Texture format.false: (Default) Do not use the external video frame in the Texture format.
-   *
    * @param sourceType Whether to encode the external video frame, see ExternalVideoSourceType .
-   *
    * @param encodedVideoOption Video encoding options. This parameter needs to be set if sourceType is EncodedVideoFrame. To set this parameter, contact .
    *
    * @returns
@@ -132,20 +141,15 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * Sets the external audio source parameters.
+   * Sets the external captured audio parameters and chooses whether to publish the audio to the remote user.
    * Call this method before joining a channel.
    *
    * @param enabled Whether to enable the external audio source:true: Enable the external audio source.false: (Default) Disable the external audio source.
-   *
    * @param sampleRate The sample rate (Hz) of the external audio source, which can be set as 8000, 16000, 32000, 44100, or 48000.
-   *
    * @param channels The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
-   *
-   * @param sourceNumber The number of external audio sources. The value of this parameter should be larger than 0. The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions , you can set publishCustomAudioSourceId to the ID of the audio track you want to publish.
-   *
+   * @param sourceNumber The number of external audio sources. The value of this parameter should be larger than 0. The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions , you can set publishCustomAudioSourceId to the audio track ID you want to publish.
    * @param localPlayback Whether to play the external audio source:true: Play the external audio source.false: (Default) Do not play the external source.
-   *
-   * @param publish Whether to publish audio to the remote users:true: (Default) Publish audio to the remote users.false: Do not publish audio to the remote users
+   * @param publish Whether to publish audio to the remote users:true: (Default) Publish audio to the remote users.false: Do not publish audio to the remote users.
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -164,9 +168,7 @@ export abstract class IMediaEngine {
    * This method applies to scenarios where you want to use external audio data for playback. After you set the external audio sink, you can call pullAudioFrame to pull remote audio frames. The app can process the remote audio and play it with the audio effects that you want.
    *
    * @param enabled Whether to enable or disable the external audio sink:true: Enables the external audio sink.false: (Default) Disables the external audio sink.
-   *
    * @param sampleRate The sample rate (Hz) of the external audio sink, which can be set as 16000, 32000, 44100, or 48000.
-   *
    * @param channels The number of audio channels of the external audio sink:1: Mono.2: Stereo.
    *
    * @returns
@@ -199,7 +201,6 @@ export abstract class IMediaEngine {
    * To push the unencoded external raw video frame to the SDK, call createCustomVideoTrack to get the video track ID, set customVideoTrackId as the video track ID you want to publish in the ChannelMediaOptions of each channel, and set publishCustomVideoTrack as true.
    *
    * @param frame The external raw video frame to be pushed. See ExternalVideoFrame .
-   *
    * @param videoTrackId The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
    *
    * @returns

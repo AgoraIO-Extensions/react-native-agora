@@ -1,11 +1,19 @@
-import {
-  DeviceEventEmitter,
-  NativeEventEmitter,
-  NativeModules,
-} from 'react-native';
+import { NativeEventEmitter, NativeModules } from 'react-native';
 import base64 from 'base64-js';
 import { Buffer } from 'buffer';
+const JSON = require('json-bigint');
 
+import { IAudioEncodedFrameObserver } from '../AgoraBase';
+import {
+  AudioFrame,
+  AudioPcmFrame,
+  IAudioFrameObserver,
+  IAudioSpectrumObserver,
+  IMediaRecorderObserver,
+  IVideoEncodedFrameObserver,
+  IVideoFrameObserver,
+  VideoFrame,
+} from '../AgoraMediaBase';
 import {
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
@@ -17,15 +25,10 @@ import {
   IMediaPlayerAudioFrameObserver,
   IMediaPlayerVideoFrameObserver,
 } from '../IAgoraMediaPlayer';
-import { RtcEngineExInternal } from './RtcEngineExInternal';
-import {
-  processIDirectCdnStreamingEventHandler,
-  processIMetadataObserver,
-  processIRtcEngineEventHandler,
-} from '../impl/IAgoraRtcEngineImpl';
-import { MediaPlayerInternal } from './MediaPlayerInternal';
-import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
-import { MediaEngineInternal } from './MediaEngineInternal';
+import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
+import { IMusicContentCenterEventHandler } from '../IAgoraMusicContentCenter';
+
+import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
 import {
   processIAudioFrameObserver,
   processIAudioFrameObserverBase,
@@ -34,28 +37,35 @@ import {
   processIVideoEncodedFrameObserver,
   processIVideoFrameObserver,
 } from '../impl/AgoraMediaBaseImpl';
-import { MediaRecorderInternal } from './MediaRecorderInternal';
-import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
+import {
+  processIDirectCdnStreamingEventHandler,
+  processIMetadataObserver,
+  processIRtcEngineEventHandler,
+} from '../impl/IAgoraRtcEngineImpl';
 import {
   processIMediaPlayerAudioFrameObserver,
   processIMediaPlayerVideoFrameObserver,
 } from '../impl/IAgoraMediaPlayerImpl';
-import {
-  AudioFrame,
-  AudioPcmFrame,
-  IAudioFrameObserver,
-  IAudioSpectrumObserver,
-  IMediaRecorderObserver,
-  IVideoEncodedFrameObserver,
-  IVideoFrameObserver,
-  VideoFrame,
-} from '../AgoraMediaBase';
-import { IAudioEncodedFrameObserver } from '../AgoraBase';
-import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
+import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
+import { processIMusicContentCenterEventHandler } from '../impl/IAgoraMusicContentCenterImpl';
 
-const { ReactNativeAgoraRtcNg } = NativeModules;
-const EventEmitter = new NativeEventEmitter(ReactNativeAgoraRtcNg);
-EventEmitter.addListener('onEvent', handleEvent);
+import { MediaEngineInternal } from './MediaEngineInternal';
+import { MediaPlayerInternal } from './MediaPlayerInternal';
+import { MediaRecorderInternal } from './MediaRecorderInternal';
+import {
+  MusicCollectionInternal,
+  MusicContentCenterInternal,
+} from './MusicContentCenterInternal';
+import { RtcEngineExInternal } from './RtcEngineExInternal';
+
+import EventEmitter from './emitter/EventEmitter';
+
+// @ts-ignore
+export const DeviceEventEmitter = new EventEmitter();
+
+const { AgoraRtcNg } = NativeModules;
+const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);
+AgoraEventEmitter.addListener('AgoraRtcNg:onEvent', handleEvent);
 
 let debuggable = false;
 
@@ -97,6 +107,7 @@ export type EventProcessor = {
         | IMetadataObserver
         | IDirectCdnStreamingEventHandler
         | IRtcEngineEventHandler
+        | IMusicContentCenterEventHandler
       )[];
 };
 
@@ -105,6 +116,7 @@ export enum EVENT_TYPE {
   IMediaPlayer,
   IMediaRecorder,
   IRtcEngine,
+  IMusicContentCenter,
 }
 
 /**
@@ -138,7 +150,7 @@ export const EVENT_PROCESSORS = {
     handlers: () => MediaEngineInternal._video_frame_observers,
   },
   IAudioSpectrumObserver: {
-    suffix: 'RtcEngine_AudioSpectrumObserver_',
+    suffix: 'AudioSpectrumObserver_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIAudioSpectrumObserver],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
@@ -146,10 +158,13 @@ export const EVENT_PROCESSORS = {
       //   (data.data as AudioSpectrumData).audioSpectrumData = buffers[0];
       // }
     },
-    handlers: () => RtcEngineExInternal._audio_spectrum_observers,
+    handlers: (data: any) =>
+      data.playerId === 0
+        ? RtcEngineExInternal._audio_spectrum_observers
+        : undefined,
   },
   IMediaPlayerAudioSpectrumObserver: {
-    suffix: 'MediaPlayer_AudioSpectrumObserver_',
+    suffix: 'AudioSpectrumObserver_',
     type: EVENT_TYPE.IMediaPlayer,
     func: [processIAudioSpectrumObserver],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
@@ -158,7 +173,9 @@ export const EVENT_PROCESSORS = {
       // }
     },
     handlers: (data: any) =>
-      MediaPlayerInternal._audio_spectrum_observers.get(data.playerId),
+      data.playerId !== 0
+        ? MediaPlayerInternal._audio_spectrum_observers.get(data.playerId)
+        : undefined,
   },
   IAudioEncodedFrameObserver: {
     suffix: 'AudioEncodedFrameObserver_',
@@ -169,7 +186,7 @@ export const EVENT_PROCESSORS = {
         case 'OnRecordAudioEncodedFrame':
         case 'OnPlaybackAudioEncodedFrame':
         case 'OnMixedAudioEncodedFrame':
-          (data.frameBuffer as Uint8Array) = buffers[0];
+          data.frameBuffer = buffers[0];
           break;
       }
     },
@@ -181,8 +198,8 @@ export const EVENT_PROCESSORS = {
     func: [processIVideoEncodedFrameObserver],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
       switch (event) {
-        case 'OnEncodedVideoFrameReceived':
-          (data.imageBuffer as Uint8Array) = buffers[0];
+        case 'onEncodedVideoFrameReceived':
+          data.imageBuffer = buffers[0];
           break;
       }
     },
@@ -201,7 +218,7 @@ export const EVENT_PROCESSORS = {
     func: [processIMediaPlayerAudioFrameObserver],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
       if (data.frame) {
-        (data.frame as AudioPcmFrame).data_ = Array.from(buffers[0]);
+        (data.frame as AudioPcmFrame).data_ = Array.from(buffers[0] ?? []);
       }
     },
     handlers: (data: any) =>
@@ -246,16 +263,16 @@ export const EVENT_PROCESSORS = {
           break;
       }
     },
-    handlers: () => RtcEngineExInternal._handlers,
+    handlers: () => RtcEngineExInternal._metadata_observer,
   },
   IDirectCdnStreamingEventHandler: {
     suffix: 'DirectCdnStreamingEventHandler_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIDirectCdnStreamingEventHandler],
-    handlers: () => RtcEngineExInternal._handlers,
+    handlers: () => RtcEngineExInternal._direct_cdn_streaming_event_handler,
   },
   IRtcEngineEventHandler: {
-    suffix: '',
+    suffix: 'RtcEngineEventHandler_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIRtcEngineEventHandler],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
@@ -266,20 +283,47 @@ export const EVENT_PROCESSORS = {
           break;
       }
     },
-    handlers: () => RtcEngineExInternal._handlers,
+    handlers: () => RtcEngineExInternal._event_handlers,
+  },
+  IMusicContentCenterEventHandler: {
+    suffix: 'MusicContentCenterEventHandler_',
+    type: EVENT_TYPE.IMusicContentCenter,
+    func: [processIMusicContentCenterEventHandler],
+    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+      switch (event) {
+        case 'onMusicCollectionResult': {
+          const result = data.result;
+          data.result = new MusicCollectionInternal(result);
+          break;
+        }
+      }
+    },
+    handlers: () => MusicContentCenterInternal._event_handlers,
   },
 };
 
-function handleEvent(args: any) {
+function handleEvent({ event, data, buffers }: any) {
   if (debuggable) {
-    console.info('onEvent', args);
+    console.info('onEvent', event, data, buffers);
   }
-  let _event: string = args.event;
+
+  let _data: any;
+  try {
+    _data = JSON.parse(data) ?? {};
+  } catch (e) {
+    _data = {};
+  }
+
+  let _event: string = event;
   let processor: EventProcessor = EVENT_PROCESSORS.IRtcEngineEventHandler;
+
   Object.values(EVENT_PROCESSORS).some((it) => {
     // @ts-ignore
     const p = it as EventProcessor;
-    if (_event.startsWith(p.suffix)) {
+    if (
+      _event.startsWith(p.suffix) &&
+      processor.handlers(_data) !== undefined
+    ) {
       processor = p;
       const reg = new RegExp(`^${processor.suffix}`, 'g');
       _event = _event.replace(reg, '');
@@ -287,21 +331,15 @@ function handleEvent(args: any) {
     }
     return false;
   });
-  let _data: any;
-  try {
-    _data = JSON.parse(args.data) ?? {};
-  } catch (e) {
-    _data = {};
-  }
-  const buffers: Uint8Array[] = (args.buffers as string[])?.map((value) => {
-    return Buffer.from(value, 'base64');
-  });
 
   if (_event.endsWith('Ex')) {
     _event = _event.replace(/Ex$/g, '');
   }
 
-  if (processor.preprocess) processor.preprocess!(_event, _data, buffers);
+  const _buffers: Uint8Array[] = (buffers as string[])?.map((value) => {
+    return Buffer.from(value, 'base64');
+  });
+  if (processor.preprocess) processor.preprocess!(_event, _data, _buffers);
 
   processor.handlers(_data)?.map((value) => {
     if (value) {
@@ -343,7 +381,10 @@ export function callIrisApi<T>(funcName: string, params: any): any {
           buffers.push(base64.fromByteArray(params.imageBuffer));
           break;
       }
-    } else if (funcName.startsWith('MediaPlayer_')) {
+    } else if (
+      funcName.startsWith('MediaPlayer_') ||
+      funcName.startsWith('MusicPlayer_')
+    ) {
       // @ts-ignore
       params.mediaPlayerId = (this as IMediaPlayer).getMediaPlayerId();
       const json = params.toJSON?.call();
@@ -353,15 +394,15 @@ export function callIrisApi<T>(funcName: string, params: any): any {
     } else if (funcName.startsWith('RtcEngine_')) {
       switch (funcName) {
         case 'RtcEngine_initialize':
-          ReactNativeAgoraRtcNg.newIrisApiEngine();
+          AgoraRtcNg.newIrisApiEngine();
           break;
         case 'RtcEngine_release':
-          ReactNativeAgoraRtcNg.callApi({
+          AgoraRtcNg.callApi({
             funcName,
             params: JSON.stringify(params),
             buffers,
           });
-          ReactNativeAgoraRtcNg.destroyIrisApiEngine();
+          AgoraRtcNg.destroyIrisApiEngine();
           return;
         case 'RtcEngine_sendMetaData':
           // metadata.buffer
@@ -382,7 +423,7 @@ export function callIrisApi<T>(funcName: string, params: any): any {
       }
     }
 
-    let ret = ReactNativeAgoraRtcNg.callApi({
+    let ret = AgoraRtcNg.callApi({
       funcName,
       params: JSON.stringify(params),
       buffers,
@@ -404,8 +445,8 @@ export function callIrisApi<T>(funcName: string, params: any): any {
     } else {
       console.warn('callApi', funcName, JSON.stringify(params), e);
     }
-    return {};
   }
+  return {};
 }
 
 /**
