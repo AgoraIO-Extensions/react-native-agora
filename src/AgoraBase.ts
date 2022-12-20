@@ -424,6 +424,36 @@ export enum ErrorCodeType {
 }
 
 /**
+ * @ignore
+ */
+export enum LicenseErrorType {
+  /**
+   * @ignore
+   */
+  LicenseErrInvalid = 1,
+  /**
+   * @ignore
+   */
+  LicenseErrExpire = 2,
+  /**
+   * @ignore
+   */
+  LicenseErrMinutesExceed = 3,
+  /**
+   * @ignore
+   */
+  LicenseErrLimitedPeriod = 4,
+  /**
+   * @ignore
+   */
+  LicenseErrDiffDevices = 5,
+  /**
+   * @ignore
+   */
+  LicenseErrInternal = 99,
+}
+
+/**
  * The operation permissions of the SDK on the audio session.
  */
 export enum AudioSessionOperationRestriction {
@@ -458,8 +488,7 @@ export enum UserOfflineReasonType {
    */
   UserOfflineQuit = 0,
   /**
-   * 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time.
-   * If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
+   * 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time.If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
    */
   UserOfflineDropped = 1,
   /**
@@ -523,7 +552,15 @@ export enum InterfaceIdType {
   /**
    * @ignore
    */
-  AgoraIidMusicContentCenter = 13,
+  AgoraIidStateSync = 13,
+  /**
+   * @ignore
+   */
+  AgoraIidMetachatService = 14,
+  /**
+   * @ignore
+   */
+  AgoraIidMusicContentCenter = 15,
 }
 
 /**
@@ -711,19 +748,19 @@ export enum OrientationMode {
  */
 export enum DegradationPreference {
   /**
-   * 0: (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.In the COMMUNICATION channel profile, the resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged .
+   * 0: (Default) Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
    */
   MaintainQuality = 0,
   /**
-   * 1: Prefers to reduce the video quality while maintaining the video frame rate during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
+   * 1: Reduces the video resolution while maintaining the video frame rate during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
    */
   MaintainFramerate = 1,
   /**
-   * 2: Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth. The MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged .
+   * 2: Reduces the video frame rate and video resolution simultaneously during video encoding under limited bandwidth. The MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged .
    */
   MaintainBalanced = 2,
   /**
-   * 3: When the bandwidth is limited, the video frame rate is preferentially reduced during video encoding.
+   * 3: Reduces the video frame rate while maintaining the video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
    */
   MaintainResolution = 3,
   /**
@@ -1029,11 +1066,11 @@ export enum VideoStreamType {
  */
 export class VideoSubscriptionOptions {
   /**
-   * The video stream type that you want to subscribe to. The default value is VideoStreamHigh, meaning the high-quality video streams. See VideoStreamType .
+   * The video stream type that you want to subscribe to. The default value is VideoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType .
    */
   type?: VideoStreamType;
   /**
-   * Whether to subscribe to encoded video frames only:true: Subscribe to encoded video frames only (structured data).false: (Default) Subscribe to raw video frames.
+   * Whether to subscribe to encoded video frames only:true: Subscribe to the encoded video data (structured data) only; the SDK does not decode or render raw video data.false: (Default) Subscribe to both raw video data and encoded video data.
    */
   encodedFrameOnly?: boolean;
 }
@@ -1043,7 +1080,7 @@ export class VideoSubscriptionOptions {
  */
 export class EncodedVideoFrameInfo {
   /**
-   * The codec type of the local video stream. See VideoCodecType . The default value is VideoCodecH264(2).
+   * The codec type of the local video stream. See VideoCodecType . The default value is VideoCodecH264 (2).
    */
   codecType?: VideoCodecType;
   /**
@@ -1075,6 +1112,10 @@ export class EncodedVideoFrameInfo {
    */
   captureTimeMs?: number;
   /**
+   * @ignore
+   */
+  decodeTimeMs?: number;
+  /**
    * The user ID to push the externally encoded video frame.
    */
   uid?: number;
@@ -1082,6 +1123,52 @@ export class EncodedVideoFrameInfo {
    * The type of video streams. See VideoStreamType .
    */
   streamType?: VideoStreamType;
+}
+
+/**
+ * Compression preference for video encoding.
+ */
+export enum CompressionPreference {
+  /**
+   * 0: Low latency preference. The SDK compresses video frames to reduce latency. This preference is suitable for scenarios where smoothness is prioritized and reduced video quality is acceptable.
+   */
+  PreferLowLatency = 0,
+  /**
+   * 1: (Default) High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
+   */
+  PreferQuality = 1,
+}
+
+/**
+ * Video encoder preference.
+ */
+export enum EncodingPreference {
+  /**
+   * -1: Adaptive preference. The SDK automatically selects the optimal encoding type for encoding based on factors such as platform and device type.
+   */
+  PreferAuto = -1,
+  /**
+   * 0: Software coding preference. The SDK prefers software encoders for video encoding.
+   */
+  PreferSoftware = 0,
+  /**
+   * 1: Hardware encoding preference. The SDK prefers a hardware encoder for video encoding. When the device does not support hardware encoding, the SDK automatically uses software encoding and reports the currently used video encoder type through hwEncoderAccelerating in the onLocalVideoStats callback.
+   */
+  PreferHardware = 1,
+}
+
+/**
+ * Advanced options for video encoding.
+ */
+export class AdvanceOptions {
+  /**
+   * Video encoder preference. See EncodingPreference .
+   */
+  encodingPreference?: EncodingPreference;
+  /**
+   * Compression preference for video encoding. See CompressionPreference .
+   */
+  compressionPreference?: CompressionPreference;
 }
 
 /**
@@ -1111,7 +1198,7 @@ export class VideoEncoderConfiguration {
    */
   codecType?: VideoCodecType;
   /**
-   * The dimensions of the encoded video (px). This parameter measures the video encoding quality in the format of length × width.
+   * The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
    */
   dimensions?: VideoDimensions;
   /**
@@ -1138,6 +1225,10 @@ export class VideoEncoderConfiguration {
    * Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
    */
   mirrorMode?: VideoMirrorModeType;
+  /**
+   * Advanced options for video encoding. See AdvanceOptions .
+   */
+  advanceOptions?: AdvanceOptions;
 }
 
 /**
@@ -1156,19 +1247,19 @@ export class DataStreamConfig {
 }
 
 /**
- * @ignore
+ * The mode in which the video stream is sent.
  */
 export enum SimulcastStreamMode {
   /**
-   * @ignore
+   * -1: By default, the low-quality video steam is not sent; the SDK automatically switches to low-quality video stream mode after it receives a request to subscribe to a low-quality video stream.
    */
   AutoSimulcastStream = -1,
   /**
-   * @ignore
+   * 0: Never send low-quality video stream.
    */
   DisableSimulcastStream = 0,
   /**
-   * @ignore
+   * 1: Always send low-quality video stream.
    */
   EnableSimulcastStream = 1,
 }
@@ -1182,9 +1273,9 @@ export class SimulcastStreamConfig {
    */
   dimensions?: VideoDimensions;
   /**
-   * Video receive bitrate (Kbps). The default value is 65.
+   * @ignore
    */
-  bitrate?: number;
+  kBitrate?: number;
   /**
    * The capture frame rate (fps) of the local video. The default value is 5.
    */
@@ -1895,7 +1986,7 @@ export enum LocalVideoStreamError {
    */
   LocalVideoStreamErrorCaptureInbackground = 6,
   /**
-   * 7:The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+   * 7: The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
    */
   LocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
   /**
@@ -1930,6 +2021,14 @@ export enum LocalVideoStreamError {
    * @ignore
    */
   LocalVideoStreamErrorScreenCaptureWindowNotSupported = 20,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureFailure = 21,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureNoPermission = 22,
 }
 
 /**
@@ -2527,7 +2626,7 @@ export class TranscodingUser {
    */
   uid?: number;
   /**
-   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is thewidth set in LiveTranscoding .
+   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding .
    */
   x?: number;
   /**
@@ -2543,13 +2642,11 @@ export class TranscodingUser {
    */
   height?: number;
   /**
-   * The layer index number of the host's video. The value range is [0,100].
-   * 0: (Default) The host's video is the bottom layer.100: The host's video is the top layer.If the value is less than 0 or greater than 100, the error ERR_INVALID_ARGUMENT is returned.Starting from v2.3, setting zOrder to 0 is supported.
+   * The layer index number of the host's video. The value range is [0, 100].0: (Default) The host's video is the bottom layer.100: The host's video is the top layer.If the value is less than 0 or greater than 100, ErrInvalidArgument error is returned.Setting zOrder to 0 is supported.
    */
   zOrder?: number;
   /**
-   * The transparency of the host's video. The value range is [0.0,1.0].
-   * 0.0: Completely transparent.1.0: (Default) Opaque.
+   * The transparency of the host's video. The value range is [0.0,1.0].0.0: Completely transparent.1.0: (Default) Opaque.
    */
   alpha?: number;
   /**
@@ -2575,7 +2672,7 @@ export class LiveTranscoding {
    */
   videoBitrate?: number;
   /**
-   * Frame rate (in fps) of the output video stream set for Media Push. The default value is 15 , and the value range is (0,30].The Agora server adjusts any value over 30 to 30.
+   * Frame rate (fps) of the output video stream set for Media Push. The default value is 15. The value range is (0,30].The Agora server adjusts any value over 30 to 30.
    */
   videoFramerate?: number;
   /**
@@ -2599,7 +2696,7 @@ export class LiveTranscoding {
    */
   videoCodecType?: VideoCodecTypeForStream;
   /**
-   * The number of users in the video mixing. The value range is [0,17].
+   * The number of users in the Media Push. The value range is [0,17].
    */
   userCount?: number;
   /**
@@ -2607,7 +2704,7 @@ export class LiveTranscoding {
    */
   transcodingUsers?: TranscodingUser[];
   /**
-   * Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN client. Maximum length: 4096 bytes. For more information on SEI, see SEI-related questions.
+   * Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 bytes. For more information on SEI, see SEI-related questions.
    */
   transcodingExtraInfo?: string;
   /**
@@ -2639,7 +2736,7 @@ export class LiveTranscoding {
    */
   audioBitrate?: number;
   /**
-   * The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.1: (Default) Mono.2: Stereo.3: Three audio channels.4: Four audio channels.5: Five audio channels.
+   * The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.1: (Default) Mono2: Stereo.3: Three audio channels.4: Four audio channels.5: Five audio channels.
    */
   audioChannels?: number;
   /**
@@ -2718,6 +2815,10 @@ export class LocalTranscoderConfiguration {
    * The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration .
    */
   videoOutputConfiguration?: VideoEncoderConfiguration;
+  /**
+   * @ignore
+   */
+  syncWithPrimaryCamera?: boolean;
 }
 
 /**
@@ -2888,6 +2989,10 @@ export enum ConnectionChangedReasonType {
    * @ignore
    */
   ConnectionChangedTooManyBroadcasters = 20,
+  /**
+   * @ignore
+   */
+  ConnectionChangedLicenseVerifyFailed = 21,
 }
 
 /**
@@ -3001,19 +3106,19 @@ export enum NetworkType {
 }
 
 /**
- * @ignore
+ * Setting mode of the view.
  */
 export enum VideoViewSetupMode {
   /**
-   * @ignore
+   * 0: (Default) Replaces a view.
    */
   VideoViewSetupReplace = 0,
   /**
-   * @ignore
+   * 1: Adds a view.
    */
   VideoViewSetupAdd = 1,
   /**
-   * @ignore
+   * 2: Deletes a view.
    */
   VideoViewSetupRemove = 2,
 }
@@ -3027,6 +3132,10 @@ export class VideoCanvas {
    */
   view?: any;
   /**
+   * The user ID.
+   */
+  uid?: number;
+  /**
    * The rendering mode of the video. See RenderModeType .
    */
   renderMode?: RenderModeType;
@@ -3035,33 +3144,21 @@ export class VideoCanvas {
    */
   mirrorMode?: VideoMirrorModeType;
   /**
-   * The user ID.
+   * Setting mode of the view. See VideoViewSetupMode .
    */
-  uid?: number;
+  setupMode?: VideoViewSetupMode;
   /**
-   * @ignore
-   */
-  isScreenView?: boolean;
-  /**
-   * @ignore
-   */
-  priv?: number[];
-  /**
-   * @ignore
-   */
-  priv_size?: number;
-  /**
-   * The type of the video source, see VideoSourceType .
+   * The type of the video frame, see VideoSourceType .
    */
   sourceType?: VideoSourceType;
   /**
-   * @ignore
+   * The ID of the media player. You can get the media player ID by calling getMediaPlayerId .
+   */
+  mediaPlayerId?: number;
+  /**
+   * (Android and iOS only) (Optional) The display area for the video frame. See Rectangle . width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
    */
   cropArea?: Rectangle;
-  /**
-   * @ignore
-   */
-  setupMode?: VideoViewSetupMode;
 }
 
 /**
@@ -3472,35 +3569,53 @@ export enum VoiceConversionPreset {
 }
 
 /**
- * Screen sharing configurations.
+ * Preset headphone equalizer types.
+ */
+export enum HeadphoneEqualizerPreset {
+  /**
+   * The headphone equalizer is disabled, and the original audio is heard.
+   */
+  HeadphoneEqualizerOff = 0x00000000,
+  /**
+   * An equalizer is used for headphones.
+   */
+  HeadphoneEqualizerOverear = 0x04000001,
+  /**
+   * An equalizer is used for in-ear headphones.
+   */
+  HeadphoneEqualizerInear = 0x04000002,
+}
+
+/**
+ * @ignore
  */
 export class ScreenCaptureParameters {
   /**
-   * If the screen dimensions are different from the value of this parameter, Agora applies the following strategies for encoding. Suppose If the value of the screen dimensions is lower than that of If the value of the screen dimensions is higher than that of
+   * @ignore
    */
   dimensions?: VideoDimensions;
   /**
-   * The frame rate (fps) of the shared region. The default value is 5. We do not recommend setting this to a value greater than 15.
+   * @ignore
    */
   frameRate?: number;
   /**
-   * The bitrate (Kbps) of the shared region. The default value is 0 (the SDK works out a bitrate according to the dimensions of the current screen).
+   * @ignore
    */
   bitrate?: number;
   /**
-   * Whether to capture the mouse in screen sharing:true: (Default) Capture the mouse.false: Do not capture the mouse.
+   * @ignore
    */
   captureMouseCursor?: boolean;
   /**
-   * Whether to bring the window to the front when calling the startScreenCaptureByWindowId method to share it:true:Bring the window to the front.false: (Default) Do not bring the window to the front.
+   * @ignore
    */
   windowFocus?: boolean;
   /**
-   * The ID list of the windows to be blocked. When calling startScreenCaptureByDisplayId to start screen sharing, you can use this parameter to block a specified window. When calling updateScreenCaptureParameters to update screen sharing configurations, you can use this parameter to dynamically block a specified window.
+   * @ignore
    */
   excludeWindowList?: any[];
   /**
-   * The number of windows to be blocked.
+   * @ignore
    */
   excludeWindowCount?: number;
   /**
@@ -3581,12 +3696,12 @@ export enum AudioEncodedFrameObserverPosition {
 export class AudioRecordingConfiguration {
   /**
    * The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4.
-   * Ensure that the path for the recording file exists and is writable.
+   *  Ensure that the path for the recording file exists and is writable.
    */
   filePath?: string;
   /**
    * Whether to encode the audio data:
-   * true: Encode audio data in AAC.false: (Default) Do not encode audio data, but save the recorded audio data directly.
+   *  true: Encode audio data in AAC.false: (Default) Do not encode audio data, but save the recorded audio data directly.
    */
   encode?: boolean;
   /**
@@ -3632,11 +3747,8 @@ export interface IAudioEncodedFrameObserver {
    * @param channels The number of channels.
    *  1: Mono.
    *  2: Stereo. If the channel uses stereo, the data is interleaved.
-   *
    * @param frameBuffer The audio buffer.
-   *
    * @param length The data length (byte).
-   *
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
    */
   onRecordAudioEncodedFrame?(
@@ -3650,17 +3762,12 @@ export interface IAudioEncodedFrameObserver {
    * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
    *
    * @param samplesPerSec Recording sample rate (Hz).
-   *
    * @param channels The number of channels.
    *  1: Mono.
    *  2: Stereo. If the channel uses stereo, the data is interleaved.
-   *
    * @param samplesPerChannel The number of samples per channel in the audio frame.
-   *
    * @param frameBuffer The audio buffer.
-   *
    * @param length The data length (byte).
-   *
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
    */
   onPlaybackAudioEncodedFrame?(
@@ -3674,17 +3781,10 @@ export interface IAudioEncodedFrameObserver {
    * After calling registerAudioEncodedFrameObserver and setting the audio profile as AudioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
    *
    * @param samplesPerSec Recording sample rate (Hz).
-   *
-   * @param channels The number of channels.
-   *  1: Mono.
-   *  2: Stereo. If the channel uses stereo, the data is interleaved.
-   *
+   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
    * @param samplesPerChannel The number of samples per channel in the audio frame.
-   *
    * @param frameBuffer The audio buffer.
-   *
    * @param length The data length (byte).
-   *
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
    */
   onMixedAudioEncodedFrame?(
@@ -3853,7 +3953,7 @@ export enum ChannelMediaRelayEvent {
    */
   RelayEventPacketUpdateDestChannel = 7,
   /**
-   * 8: The destination channel update fails due to internal reasons.
+   * @ignore
    */
   RelayEventPacketUpdateDestChannelRefused = 8,
   /**
@@ -3909,7 +4009,7 @@ export enum ChannelMediaRelayState {
 }
 
 /**
- * The definition of ChannelMediaInfo.
+ * Channel media information.
  */
 export class ChannelMediaInfo {
   /**
@@ -3927,15 +4027,15 @@ export class ChannelMediaInfo {
 }
 
 /**
- * The definition of ChannelMediaRelayConfiguration.
+ * Configuration information of relaying media streams across channels.
  */
 export class ChannelMediaRelayConfiguration {
   /**
-   * The information of the source channel ChannelMediaInfo . It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.uid: The unique ID to identify the relay stream in the source channel. The default value is 0, which means the SDK generates a random uid. You must set it as 0.token: The token for joining the source channel. It is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.
+   * The information of the source channel ChannelMediaInfo . It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.uid: The unique user ID to identify the relay stream in the source channel. The default value is 0, which means the SDK generates a random uid. You must set it as 0.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.
    */
   srcInfo?: ChannelMediaInfo;
   /**
-   * The information of the destination channel ChannelMediaInfo. It contains the following members:channelName: The name of the destination channel.uid: The unique ID to identify the relay stream in the destination channel. The value ranges from 0 to (232-1). To avoid UID conflicts, this UID must be different from any other UID in the destination channel. The default value is 0, which means the SDK generates a random UID. Do not set this parameter as the UID of the host in the destination channel, and ensure that this UID is different from any other UID in the channel.token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid.
+   * The information of the destination channel ChannelMediaInfo. It contains the following members:channelName: The name of the destination channel.uid: The unique user ID to identify the relay stream in the destination channel. The value ranges from 0 to (2 32-1). To avoid user ID conflicts, this user ID must be different from any other user ID in the destination channel. The default value is 0, which means the SDK generates a random user ID. Do not set this parameter as the user ID of the host in the destination channel, and ensure that this user ID is different from any other user ID in the channel.token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid.
    */
   destInfos?: ChannelMediaInfo[];
   /**
@@ -4112,7 +4212,7 @@ export enum PermissionType {
    */
   Camera = 1,
   /**
-   * @ignore
+   * (For Android only) 2: Permission for screen sharing.
    */
   ScreenCapture = 2,
 }
@@ -4323,35 +4423,39 @@ export class ScreenCaptureParameters2 {
 }
 
 /**
- * @ignore
+ * The spatial audio parameters.
  */
 export class SpatialAudioParams {
   /**
-   * @ignore
+   * The azimuth angle of the remote user or media player relative to the local user. The value range is [0,360], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means directly in front on the horizontal plane.90: 90 degrees, which means directly to the left on the horizontal plane.180: 180 degrees, which means directly behind on the horizontal plane.270: 270 degrees, which means directly to the right on the horizontal plane.360: 360 degrees, which means directly in front on the horizontal plane.
    */
   speaker_azimuth?: number;
   /**
-   * @ignore
+   * The elevation angle of the remote user or media player relative to the local user. The value range is [-90,90], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the horizontal plane is not rotated.-90: -90 degrees, which means that the horizontal plane is rotated 90 degrees downwards.90: 90 degrees, which means that the horizontal plane is rotated 90 degrees upwards.
    */
   speaker_elevation?: number;
   /**
-   * @ignore
+   * The distance of the remote user or media player relative to the local user. The value range is [1,50], and the unit is meters. The default value is 1 meter.
    */
   speaker_distance?: number;
   /**
-   * @ignore
+   * The orientation of the remote user or media player relative to the local user. The value range is [0,180], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the sound source and listener face the same direction.180: 180 degrees, which means that the sound source and listener face each other.
    */
   speaker_orientation?: number;
   /**
-   * @ignore
+   * Whether to enable audio blurring:true: Enable audio blurring.false: (Default) Disable audio blurring.
    */
   enable_blur?: boolean;
   /**
-   * @ignore
+   * Whether to enable air absorption, that is, to simulate the sound attenuation effect of sound transmitting in the air; under a certain transmission distance, the attenuation speed of high-frequency sound is fast, and the attenuation speed of low-frequency sound is slow.true: (Default) Enable air absorption. Make sure that the value of speaker_attenuation is not 0; otherwise, this setting does not take effect.false: Disable air absorption.
    */
   enable_air_absorb?: boolean;
   /**
-   * @ignore
+   * The sound attenuation coefficient of the remote user or media player. The value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, where the volume and timbre only have a weak attenuation during the propagation, and the sound can travel farther than that in a real environment. enable_air_absorb needs to be enabled at the same time. 0.5: (Default) Simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, where volume and timbre attenuate rapidly during the propagation. enable_air_absorb needs to be enabled at the same time.
    */
   speaker_attenuation?: number;
+  /**
+   * Whether to enable the Doppler effect: When there is a relative displacement between the sound source and the receiver of the sound source, the tone heard by the receiver changes.true: Enable the Doppler effect.false: (Default) Disable the Doppler effect.This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, cohosting, or online KTV).When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo , updateSelfPosition , and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
+   */
+  enable_doppler?: boolean;
 }

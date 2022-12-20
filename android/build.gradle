@@ -1,63 +1,143 @@
 buildscript {
-    if (project == rootProject) {
-        repositories {
-            google()
-            jcenter()
-        }
+  repositories {
+      google()
+      mavenCentral()
+  }
 
-        dependencies {
-            classpath 'com.android.tools.build:gradle:3.5.3'
-        }
-    }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:3.5.3'
+  }
+}
+
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") &&  rootProject.getProperty("newArchEnabled") == "true"
 }
 
 apply plugin: 'com.android.library'
 
-def safeExtGet(prop, fallback) {
-    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+if (isNewArchitectureEnabled()) {
+  apply plugin: 'com.facebook.react'
+}
+
+def getExtOrDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['AgoraRtcNg_' + name]
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['AgoraRtcNg_' + name]).toInteger()
 }
 
 android {
-    compileSdkVersion safeExtGet('ReactNativeAgoraRtcNg_compileSdkVersion', 29)
-    buildToolsVersion safeExtGet('ReactNativeAgoraRtcNg_buildToolsVersion', '29.0.2')
-    defaultConfig {
-        minSdkVersion safeExtGet('ReactNativeAgoraRtcNg_minSdkVersion', 21)
-        targetSdkVersion safeExtGet('ReactNativeAgoraRtcNg_targetSdkVersion', 29)
-        versionCode 1
-        versionName "1.0"
+  compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
 
+  defaultConfig {
+    minSdkVersion getExtOrIntegerDefault('minSdkVersion')
+    targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
+    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
     }
+  }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-    }
-    lintOptions {
-        disable 'GradleCompatible'
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+  lintOptions {
+    disable 'GradleCompatible'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
 }
 
 repositories {
-    mavenLocal()
+  mavenCentral()
+  google()
+
+  def found = false
+  def defaultDir = null
+  def androidSourcesName = 'React Native sources'
+
+  if (rootProject.ext.has('reactNativeAndroidRoot')) {
+    defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
+  } else {
+    defaultDir = new File(
+      projectDir,
+      '/../../../node_modules/react-native/android'
+    )
+  }
+
+  if (defaultDir.exists()) {
     maven {
-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-        url("$rootDir/../node_modules/react-native/android")
+      url defaultDir.toString()
+      name androidSourcesName
     }
-    google()
-    jcenter()
+
+    logger.info(":${project.name}:reactNativeAndroidRoot ${defaultDir.canonicalPath}")
+    found = true
+  } else {
+    def parentDir = rootProject.projectDir
+
+    1.upto(5, {
+      if (found) return true
+      parentDir = parentDir.parentFile
+
+      def androidSourcesDir = new File(
+        parentDir,
+        'node_modules/react-native'
+      )
+
+      def androidPrebuiltBinaryDir = new File(
+        parentDir,
+        'node_modules/react-native/android'
+      )
+
+      if (androidPrebuiltBinaryDir.exists()) {
+        maven {
+          url androidPrebuiltBinaryDir.toString()
+          name androidSourcesName
+        }
+
+        logger.info(":${project.name}:reactNativeAndroidRoot ${androidPrebuiltBinaryDir.canonicalPath}")
+        found = true
+      } else if (androidSourcesDir.exists()) {
+        maven {
+          url androidSourcesDir.toString()
+          name androidSourcesName
+        }
+
+        logger.info(":${project.name}:reactNativeAndroidRoot ${androidSourcesDir.canonicalPath}")
+        found = true
+      }
+    })
+  }
+
+  if (!found) {
+    throw new GradleException(
+      "${project.name}: unable to locate React Native android sources. " +
+      "Ensure you have you installed React Native as a dependency in your project and try again."
+    )
+  }
 }
+
 
 dependencies {
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    api 'io.agora.rtc:agora-special-full:4.0.0.5'
-    implementation 'io.agora.rtc:full-screen-sharing:4.0.0.5'
-    implementation 'io.agora.rtc:iris-rtc:4.0.0-rc.1'
-//    implementation project(':iris')
+  implementation "com.facebook.react:react-native:+"
+// From node_modules
+  implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+  api 'io.agora.rtc:full-sdk:4.1.0-1'
+  implementation 'io.agora.rtc:full-screen-sharing:4.1.0-1'
+  implementation 'io.agora.rtc:iris-rtc:4.1.0-rc.2'
+//  implementation project(':iris')
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "AgoraRtcNgView"
+    codegenJavaPackageName = "com.agorartcng"
+  }
 }

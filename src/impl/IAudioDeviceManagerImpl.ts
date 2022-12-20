@@ -167,6 +167,36 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return 'AudioDeviceManager_getRecordingDeviceVolume';
   }
 
+  setLoopbackDevice(deviceId: string): number {
+    const apiType = this.getApiTypeFromSetLoopbackDevice(deviceId);
+    const jsonParams = {
+      deviceId: deviceId,
+      toJSON: () => {
+        return {
+          deviceId: deviceId,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetLoopbackDevice(deviceId: string): string {
+    return 'AudioDeviceManager_setLoopbackDevice';
+  }
+
+  getLoopbackDevice(): string {
+    const apiType = this.getApiTypeFromGetLoopbackDevice();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const deviceId = jsonResults.deviceId;
+    return deviceId;
+  }
+
+  protected getApiTypeFromGetLoopbackDevice(): string {
+    return 'AudioDeviceManager_getLoopbackDevice';
+  }
+
   setPlaybackDeviceMute(mute: boolean): number {
     const apiType = this.getApiTypeFromSetPlaybackDeviceMute(mute);
     const jsonParams = {
@@ -359,6 +389,24 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return 'AudioDeviceManager_followSystemRecordingDevice';
   }
 
+  followSystemLoopbackDevice(enable: boolean): number {
+    const apiType = this.getApiTypeFromFollowSystemLoopbackDevice(enable);
+    const jsonParams = {
+      enable: enable,
+      toJSON: () => {
+        return {
+          enable: enable,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromFollowSystemLoopbackDevice(enable: boolean): string {
+    return 'AudioDeviceManager_followSystemLoopbackDevice';
+  }
+
   release(): void {
     const apiType = this.getApiTypeFromRelease();
     const jsonParams = {};
@@ -367,5 +415,27 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
 
   protected getApiTypeFromRelease(): string {
     return 'AudioDeviceManager_release';
+  }
+
+  getPlaybackDefaultDevice(): AudioDeviceInfo {
+    const apiType = this.getApiTypeFromGetPlaybackDefaultDevice();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetPlaybackDefaultDevice(): string {
+    return 'AudioDeviceManager_getPlaybackDefaultDevice';
+  }
+
+  getRecordingDefaultDevice(): AudioDeviceInfo {
+    const apiType = this.getApiTypeFromGetRecordingDefaultDevice();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetRecordingDefaultDevice(): string {
+    return 'AudioDeviceManager_getRecordingDefaultDevice';
   }
 }

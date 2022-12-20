@@ -53,9 +53,9 @@ export default class JoinChannelAudio
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      enableLocalAudio: false,
+      enableLocalAudio: true,
       muteLocalAudioStream: false,
-      enableSpeakerphone: false,
+      enableSpeakerphone: true,
       recordingSignalVolume: 100,
       playbackSignalVolume: 100,
       includeAudioFilters: EarMonitoringFilterType.EarMonitoringFilterNone,
@@ -83,9 +83,7 @@ export default class JoinChannelAudio
 
     if (Platform.OS === 'android') {
       // Need granted the microphone permission
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-      );
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
     }
 
     // Only need to enable audio on this case

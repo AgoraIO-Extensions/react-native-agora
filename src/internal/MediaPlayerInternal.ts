@@ -1,21 +1,34 @@
-import { DeviceEventEmitter, EventSubscription } from 'react-native';
+import { createCheckers } from 'ts-interface-checker';
 
-import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import { ErrorCodeType } from '../AgoraBase';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import {
+  IMediaPlayerAudioFrameObserver,
+  IMediaPlayerVideoFrameObserver,
+} from '../IAgoraMediaPlayer';
+import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
+
+import { IMediaPlayerEvent } from '../extension/IAgoraMediaPlayerExtension';
+
+import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
 import {
   IMediaPlayerImpl,
   processIMediaPlayerAudioFrameObserver,
   processIMediaPlayerVideoFrameObserver,
 } from '../impl/IAgoraMediaPlayerImpl';
-import {
-  IMediaPlayerAudioFrameObserver,
-  IMediaPlayerVideoFrameObserver,
-} from '../IAgoraMediaPlayer';
 import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
-import { IMediaPlayerEvent } from '../extension/IAgoraMediaPlayerExtension';
-import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
-import { EVENT_TYPE } from './IrisApiEngine';
+
+import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
+import IAgoraMediaPlayerTI from '../ti/IAgoraMediaPlayer-ti';
+import IAgoraMediaPlayerSourceTI from '../ti/IAgoraMediaPlayerSource-ti';
+const checkers = createCheckers(
+  AgoraMediaBaseTI,
+  IAgoraMediaPlayerTI,
+  IAgoraMediaPlayerSourceTI
+);
+
+import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaPlayerInternal extends IMediaPlayerImpl {
   static _source_observers: Map<number, IMediaPlayerSourceObserver[]> = new Map<
@@ -31,8 +44,17 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
   private readonly _mediaPlayerId: number;
   private _events: Map<
     any,
-    { eventType: string; listener: (...args: any[]) => any }
-  > = new Map<any, { eventType: string; listener: (...args: any[]) => any }>();
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  > = new Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  >();
 
   constructor(mediaPlayerId: number) {
     super();
@@ -44,16 +66,71 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     MediaPlayerInternal._audio_frame_observers.delete(this._mediaPlayerId);
     MediaPlayerInternal._video_frame_observers.delete(this._mediaPlayerId);
     MediaPlayerInternal._audio_spectrum_observers.delete(this._mediaPlayerId);
-    this._events.forEach((value) => {
-      DeviceEventEmitter.removeListener(value.eventType, value.listener);
-    });
-    this._events.clear();
+    this.removeAllListeners();
+  }
+
+  _addListenerPreCheck<EventType extends keyof IMediaPlayerEvent>(
+    eventType: EventType
+  ): boolean {
+    if (
+      checkers.IMediaPlayerSourceObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._source_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        this.registerPlayerSourceObserver({});
+      }
+    }
+    if (
+      checkers.IMediaPlayerAudioFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._audio_frame_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        this.registerAudioFrameObserver({});
+      }
+    }
+    if (
+      checkers.IMediaPlayerVideoFrameObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._video_frame_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        this.registerVideoFrameObserver({});
+      }
+    }
+    if (
+      checkers.IAudioSpectrumObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (
+        MediaPlayerInternal._audio_spectrum_observers.get(this._mediaPlayerId)
+          ?.length === 0
+      ) {
+        console.error(
+          'Please call `registerMediaPlayerAudioSpectrumObserver` before you want to receive event by `addListener`'
+        );
+        return false;
+      }
+    }
+    return true;
   }
 
   addListener<EventType extends keyof IMediaPlayerEvent>(
     eventType: EventType,
     listener: IMediaPlayerEvent[EventType]
-  ): EventSubscription {
+  ): EmitterSubscription {
+    this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IMediaPlayer) {
         return;
@@ -81,8 +158,9 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
         );
       }
     };
-    this._events.set(listener, { eventType, listener: callback });
-    return DeviceEventEmitter.addListener(eventType, callback);
+    const subscription = DeviceEventEmitter.addListener(eventType, callback);
+    this._events.set(listener, { eventType, subscription });
+    return subscription;
   }
 
   removeListener<EventType extends keyof IMediaPlayerEvent>(
@@ -90,16 +168,28 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     listener: IMediaPlayerEvent[EventType]
   ) {
     if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeListener(
-      eventType,
-      this._events.get(listener)!.listener
+    DeviceEventEmitter.removeSubscription(
+      this._events.get(listener)!.subscription
     );
+    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IMediaPlayerEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    if (eventType === undefined) {
+      this._events.forEach((value) => {
+        DeviceEventEmitter.removeAllListeners(value.eventType);
+      });
+      this._events.clear();
+    } else {
+      DeviceEventEmitter.removeAllListeners(eventType);
+      this._events.forEach((value, key) => {
+        if (value.eventType === eventType) {
+          this._events.delete(key);
+        }
+      });
+    }
   }
 
   getMediaPlayerId(): number {

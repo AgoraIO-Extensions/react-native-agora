@@ -1,4 +1,4 @@
-import React, { Component, ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -15,7 +15,7 @@ import {
   RtcSurfaceView,
   UserOfflineReasonType,
 } from 'react-native-agora';
-import { StackScreenProps } from '@react-navigation/stack/src/types';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import {
   AgoraButton,
@@ -73,7 +73,7 @@ export abstract class BaseComponent<
     P = {},
     S extends BaseComponentState = BaseComponentState
   >
-  extends Component<P & StackScreenProps<{}>, S>
+  extends React.Component<P & StackScreenProps<{}>, S>
   implements IRtcEngineEventHandler
 {
   protected engine?: IRtcEngine;
@@ -194,7 +194,7 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderChannel(): ReactNode {
+  protected renderChannel(): React.ReactNode {
     const { channelId, joinChannelSuccess } = this.state;
     return (
       <>
@@ -215,7 +215,7 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderUsers(): ReactNode {
+  protected renderUsers(): React.ReactNode {
     const { startPreview, joinChannelSuccess, remoteUsers } = this.state;
     return (
       <>
@@ -233,7 +233,7 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderVideo(uid: number): ReactNode {
+  protected renderVideo(uid: number): React.ReactNode {
     return (
       <RtcSurfaceView
         style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
@@ -243,11 +243,11 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderConfiguration(): ReactNode {
+  protected renderConfiguration(): React.ReactNode {
     return undefined;
   }
 
-  protected renderAction(): ReactNode {
+  protected renderAction(): React.ReactNode {
     return undefined;
   }
 

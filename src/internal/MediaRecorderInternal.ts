@@ -1,12 +1,19 @@
-import { DeviceEventEmitter, EventSubscription } from 'react-native';
+import { createCheckers } from 'ts-interface-checker';
 
-import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { ErrorCodeType } from '../AgoraBase';
 import { IMediaRecorderObserver } from '../AgoraMediaBase';
+import { RtcConnection } from '../IAgoraRtcEngineEx';
+
 import { IMediaRecorderEvent } from '../extension/IAgoraMediaRecorderExtension';
+
 import { processIMediaRecorderObserver } from '../impl/AgoraMediaBaseImpl';
-import { EVENT_TYPE } from './IrisApiEngine';
+import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
+
+import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
+const checkers = createCheckers(AgoraMediaBaseTI);
+
+import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaRecorderInternal extends IMediaRecorderImpl {
   static _observers: Map<string, IMediaRecorderObserver> = new Map<
@@ -15,8 +22,17 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
   >();
   private _events: Map<
     any,
-    { eventType: string; listener: (...args: any[]) => any }
-  > = new Map<any, { eventType: string; listener: (...args: any[]) => any }>();
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  > = new Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  >();
 
   setMediaRecorderObserver(
     connection: RtcConnection,
@@ -32,17 +48,33 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
 
   release() {
     MediaRecorderInternal._observers.clear();
-    this._events.forEach((value) => {
-      DeviceEventEmitter.removeListener(value.eventType, value.listener);
-    });
-    this._events.clear();
+    this.removeAllListeners();
     super.release();
+  }
+
+  _addListenerPreCheck<EventType extends keyof IMediaRecorderEvent>(
+    eventType: EventType
+  ): boolean {
+    if (
+      checkers.IMediaRecorderObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (MediaRecorderInternal._observers.size === 0) {
+        console.error(
+          'Please call `setMediaRecorderObserver` before you want to receive event by `addListener`'
+        );
+        return false;
+      }
+    }
+    return true;
   }
 
   addListener<EventType extends keyof IMediaRecorderEvent>(
     eventType: EventType,
     listener: IMediaRecorderEvent[EventType]
-  ): EventSubscription {
+  ): EmitterSubscription {
+    this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IMediaRecorder) {
         return;
@@ -53,8 +85,9 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
         data[1]
       );
     };
-    this._events.set(listener, { eventType, listener: callback });
-    return DeviceEventEmitter.addListener(eventType, callback);
+    const subscription = DeviceEventEmitter.addListener(eventType, callback);
+    this._events.set(listener, { eventType, subscription });
+    return subscription;
   }
 
   removeListener<EventType extends keyof IMediaRecorderEvent>(
@@ -62,15 +95,27 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
     listener: IMediaRecorderEvent[EventType]
   ) {
     if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeListener(
-      eventType,
-      this._events.get(listener)!.listener
+    DeviceEventEmitter.removeSubscription(
+      this._events.get(listener)!.subscription
     );
+    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IMediaRecorderEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    if (eventType === undefined) {
+      this._events.forEach((value) => {
+        DeviceEventEmitter.removeAllListeners(value.eventType);
+      });
+      this._events.clear();
+    } else {
+      DeviceEventEmitter.removeAllListeners(eventType);
+      this._events.forEach((value, key) => {
+        if (value.eventType === eventType) {
+          this._events.delete(key);
+        }
+      });
+    }
   }
 }

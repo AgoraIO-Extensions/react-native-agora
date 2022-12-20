@@ -2,6 +2,7 @@ import { callIrisApi } from '../internal/IrisApiEngine';
 import {
   IBaseSpatialAudioEngine,
   RemoteVoicePositionInfo,
+  SpatialAudioZone,
   ILocalSpatialAudioEngine,
 } from '../IAgoraSpatialAudio';
 import { RtcConnection } from '../IAgoraRtcEngineEx';
@@ -236,6 +237,86 @@ export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
   protected getApiTypeFromMuteAllRemoteAudioStreams(mute: boolean): string {
     return 'BaseSpatialAudioEngine_muteAllRemoteAudioStreams';
   }
+
+  setZones(zones: SpatialAudioZone, zoneCount: number): number {
+    const apiType = this.getApiTypeFromSetZones(zones, zoneCount);
+    const jsonParams = {
+      zones: zones,
+      zoneCount: zoneCount,
+      toJSON: () => {
+        return {
+          zones: zones,
+          zoneCount: zoneCount,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetZones(
+    zones: SpatialAudioZone,
+    zoneCount: number
+  ): string {
+    return 'BaseSpatialAudioEngine_setZones';
+  }
+
+  setPlayerAttenuation(
+    playerId: number,
+    attenuation: number,
+    forceSet: boolean
+  ): number {
+    const apiType = this.getApiTypeFromSetPlayerAttenuation(
+      playerId,
+      attenuation,
+      forceSet
+    );
+    const jsonParams = {
+      playerId: playerId,
+      attenuation: attenuation,
+      forceSet: forceSet,
+      toJSON: () => {
+        return {
+          playerId: playerId,
+          attenuation: attenuation,
+          forceSet: forceSet,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetPlayerAttenuation(
+    playerId: number,
+    attenuation: number,
+    forceSet: boolean
+  ): string {
+    return 'BaseSpatialAudioEngine_setPlayerAttenuation';
+  }
+
+  muteRemoteAudioStream(uid: number, mute: boolean): number {
+    const apiType = this.getApiTypeFromMuteRemoteAudioStream(uid, mute);
+    const jsonParams = {
+      uid: uid,
+      mute: mute,
+      toJSON: () => {
+        return {
+          uid: uid,
+          mute: mute,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromMuteRemoteAudioStream(
+    uid: number,
+    mute: boolean
+  ): string {
+    return 'BaseSpatialAudioEngine_muteRemoteAudioStream';
+  }
 }
 
 // @ts-ignore
@@ -381,5 +462,39 @@ export class ILocalSpatialAudioEngineImpl
     connection: RtcConnection
   ): string {
     return 'LocalSpatialAudioEngine_clearRemotePositionsEx';
+  }
+
+  setRemoteAudioAttenuation(
+    uid: number,
+    attenuation: number,
+    forceSet: boolean
+  ): number {
+    const apiType = this.getApiTypeFromSetRemoteAudioAttenuation(
+      uid,
+      attenuation,
+      forceSet
+    );
+    const jsonParams = {
+      uid: uid,
+      attenuation: attenuation,
+      forceSet: forceSet,
+      toJSON: () => {
+        return {
+          uid: uid,
+          attenuation: attenuation,
+          forceSet: forceSet,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetRemoteAudioAttenuation(
+    uid: number,
+    attenuation: number,
+    forceSet: boolean
+  ): string {
+    return 'LocalSpatialAudioEngine_setRemoteAudioAttenuation';
   }
 }
