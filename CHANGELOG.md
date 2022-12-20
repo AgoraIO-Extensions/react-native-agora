@@ -1,3 +1,16 @@
+# [4.1.0](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.0.0...v4.1.0) (2022-12-20)
+
+
+### Bug Fixes
+
+* add `setDualStreamMode` method ([40faff6](https://github.com/AgoraIO-Extensions/react-native-agora/commit/40faff60a3844f11407682295da50f2996e333ed))
+* the event which named contains `Ex` not triggered issue (such as `onTokenPrivilegeWillExpire`) ([ad372a6](https://github.com/AgoraIO-Extensions/react-native-agora/commit/ad372a690e5ce8fd989d2e8977a58715f27b745d))
+
+
+### Features
+
+* support 4.1.0 ([a8c6d64](https://github.com/AgoraIO-Extensions/react-native-agora/commit/a8c6d641c4740d64844d338caea671ce267fc89f)), closes [#538](https://github.com/AgoraIO-Extensions/react-native-agora/issues/538) [#539](https://github.com/AgoraIO-Extensions/react-native-agora/issues/539) [#554](https://github.com/AgoraIO-Extensions/react-native-agora/issues/554) [#559](https://github.com/AgoraIO-Extensions/react-native-agora/issues/559)
+
 
 
 # [4.1.0-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.0.0...v4.1.0-rc.1) (2022-11-29)
