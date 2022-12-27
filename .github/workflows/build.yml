@@ -9,16 +9,18 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - run: brew install fastlane
+      
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
       - run: npm install -g yarn
       - run: yarn
-      
-      - run: brew install fastlane
     
       - name: Build Android
         run: fastlane run gradle task:assembleRelease
+        working-directory: example/android
         
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -51,3 +53,4 @@ jobs:
           
       - name: Build iOS
         run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":true}"
+        working-directory: example/ios
