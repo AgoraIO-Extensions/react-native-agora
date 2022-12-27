@@ -14,17 +14,11 @@ jobs:
           node-version: '16'
       - run: npm install -g yarn
       - run: yarn
-   
-      - uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 11
-        
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+      
+      - run: brew install fastlane
     
-      - name: Execute Gradle build
-        run: example/android/gradlew assembleRelease
+      - name: Build Android
+        run: fastlane run gradle task:assembleRelease
         
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -54,3 +48,6 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          
+      - name: Build iOS
+        run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":true}"
