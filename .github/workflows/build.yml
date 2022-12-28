@@ -21,6 +21,11 @@ jobs:
           
       - run: .\gradlew.bat assembleRelease
         working-directory: example/android
+        
+      - uses: softprops/action-gh-release@v1
+        with:
+          tag_name: AgoraRtcNgExample_${{ steps.date.outputs.date }}
+          files: "example/android/**/*.apk"
     
   build-ios:
     runs-on: macos-latest
@@ -66,3 +71,8 @@ jobs:
           
       - run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
+        
+      - uses: softprops/action-gh-release@v1
+        with:
+          tag_name: AgoraRtcNgExample_${{ steps.date.outputs.date }}
+          files: "example/ios/*.ipa"
