@@ -5,7 +5,26 @@ on:
     inputs:
       build_branch:
 jobs:
-  check-bats-version:
+  build-android:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: npm install -g yarn
+      - run: yarn
+      
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          
+      - run: gradlew assembleRelease
+        working-directory: example/android
+    
+  build-ios:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,15 +36,6 @@ jobs:
       - run: yarn
       
       - run: brew install fastlane
-      
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-    
-      - name: Build Android
-        run: fastlane run gradle task:assembleRelease
-        working-directory: example/android
         
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -56,6 +66,5 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - name: Build iOS
-        run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":true}"
+      - run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":true}"
         working-directory: example/ios
