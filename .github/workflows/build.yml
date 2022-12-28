@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - run: npm install -g yarn
+          cache: 'yarn'
       - run: yarn
       
       - uses: actions/setup-java@v3
@@ -42,7 +42,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - run: npm install -g yarn
+          cache: 'yarn'
       - run: yarn
       
       - run: brew install fastlane
