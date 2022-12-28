@@ -54,8 +54,6 @@ jobs:
           node-version: '16'
           cache: 'yarn'
       - run: yarn
-      
-      - run: brew install fastlane
         
       - name: Install the Apple certificate and provisioning profile
         env:
