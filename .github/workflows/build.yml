@@ -64,5 +64,5 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":true}"
+      - run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
