@@ -22,6 +22,9 @@ jobs:
       - run: .\gradlew.bat assembleRelease
         working-directory: example/android
         
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d')"
       - uses: softprops/action-gh-release@v1
         with:
           tag_name: AgoraRtcNgExample_${{ steps.date.outputs.date }}
@@ -71,7 +74,10 @@ jobs:
           
       - run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
-        
+      
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d')"
       - uses: softprops/action-gh-release@v1
         with:
           tag_name: AgoraRtcNgExample_${{ steps.date.outputs.date }}
