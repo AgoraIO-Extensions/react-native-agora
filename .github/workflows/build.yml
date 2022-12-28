@@ -19,7 +19,7 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
           
-      - run: gradlew.bat assembleRelease
+      - run: call gradlew.bat assembleRelease
         working-directory: example/android
     
   build-ios:
