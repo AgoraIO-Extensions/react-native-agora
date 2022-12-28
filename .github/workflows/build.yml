@@ -11,6 +11,14 @@ jobs:
       - uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 5G
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       
       - uses: actions/setup-node@v3
         with:
@@ -42,6 +50,12 @@ jobs:
       - uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 5G
+      - uses: actions/cache@v3
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
       
       - uses: actions/setup-node@v3
         with:
