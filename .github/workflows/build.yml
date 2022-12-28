@@ -25,12 +25,8 @@ jobs:
           
       - name: Gradle build
         run: |
-          export CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
-          export CCACHE_FILECLONE=true
-          export CCACHE_DEPEND=true
-          export CCACHE_INODECACHE=true
           ccache -s
-          .\gradlew.bat assembleRelease
+          .\gradlew.bat :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
         working-directory: example/android
         
       - uses: actions/upload-artifact@v3
