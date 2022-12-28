@@ -11,14 +11,6 @@ jobs:
       - uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 5G
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       
       - uses: actions/setup-node@v3
         with:
@@ -31,15 +23,19 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
           
-      - run: .\gradlew.bat assembleRelease
+      - name: Gradle build
+        run: |
+          export CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
+          export CCACHE_FILECLONE=true
+          export CCACHE_DEPEND=true
+          export CCACHE_INODECACHE=true
+          ccache -s
+          .\gradlew.bat assembleRelease
         working-directory: example/android
         
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d')"
       - uses: actions/upload-artifact@v3
         with:
-          name: AgoraRtcNgExample_${{ steps.date.outputs.date }}
+          name: AgoraRtcNgExample
           path: "example/android/**/*.apk"
     
   build-ios:
@@ -52,7 +48,7 @@ jobs:
           max-size: 5G
       - uses: actions/cache@v3
         with:
-          path: Pods
+          path: example/ios/Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
@@ -94,7 +90,8 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - run: |
+      - name: Fastlane build
+        run: |
           export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
           export CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
           export CCACHE_FILECLONE=true
@@ -104,10 +101,7 @@ jobs:
           fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
       
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d')"
       - uses: actions/upload-artifact@v3
         with:
-          name: AgoraRtcNgExample_${{ steps.date.outputs.date }}
+          name: AgoraRtcNgExample
           path: "example/ios/*.ipa"
