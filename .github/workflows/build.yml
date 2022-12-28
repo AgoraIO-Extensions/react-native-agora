@@ -1,5 +1,5 @@
 name: Build API Example
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: ${{ github.actor }} triggered this job
 on:
   workflow_dispatch:
 jobs:
@@ -8,10 +8,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 5G
+      
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - run: npm install -g yarn
+          cache: 'yarn'
       - run: yarn
       
       - uses: actions/setup-java@v3
@@ -19,21 +23,37 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
           
-      - run: gradlew.bat assembleRelease
+      - name: Gradle build
+        run: |
+          ccache -s
+          .\gradlew.bat :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
         working-directory: example/android
+        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: AgoraRtcNgExample
+          path: "example/android/**/*.apk"
     
   build-ios:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       
+      - uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 5G
+      - uses: actions/cache@v3
+        with:
+          path: example/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+      
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - run: npm install -g yarn
+          cache: 'yarn'
       - run: yarn
-      
-      - run: brew install fastlane
         
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -64,5 +84,18 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":true}"
+      - name: Fastlane build
+        run: |
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+          export CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
+          export CCACHE_FILECLONE=true
+          export CCACHE_DEPEND=true
+          export CCACHE_INODECACHE=true
+          ccache -s
+          fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: AgoraRtcNgExample
+          path: "example/ios/*.ipa"
