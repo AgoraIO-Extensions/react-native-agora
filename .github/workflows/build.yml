@@ -35,6 +35,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 5G
+      
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -72,7 +76,14 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - run: fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
+      - run: |
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+          export CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
+          export CCACHE_FILECLONE=true
+          export CCACHE_DEPEND=true
+          export CCACHE_INODECACHE=true
+          ccache -s
+          fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
       
       - name: Get current date
