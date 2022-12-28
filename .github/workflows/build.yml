@@ -2,8 +2,6 @@ name: Build API Example
 run-name: ${{ github.actor }} is learning GitHub Actions
 on:
   workflow_dispatch:
-    inputs:
-      build_branch:
 jobs:
   build-android:
     runs-on: windows-latest
