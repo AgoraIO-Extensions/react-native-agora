@@ -23,7 +23,8 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
           
-      - run: |
+      - name: Modify APP ID
+        run: |
           sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
@@ -31,7 +32,7 @@ jobs:
       - name: Gradle build
         run: |
           ccache -s
-          gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
+          ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
         working-directory: example/android
         
       - uses: actions/upload-artifact@v3
@@ -89,7 +90,8 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-      - run: |
+      - name: Modify APP ID
+        run: |
           sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
