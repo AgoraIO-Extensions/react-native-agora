@@ -16,6 +16,8 @@ on:
 jobs:
   release-it:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - uses: actions/checkout@v3
 
