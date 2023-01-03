@@ -24,13 +24,14 @@ jobs:
             node-version: '16'
       - run: yarn
       
-      - run: |
+      - name: Setup NPM auth token
+        run: |
           npm set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_TOKEN }}
       
-      - if: ${{ !inputs.dry-run }}
+      - if: ${{ inputs.dry-run }}
         run: |
           yarn release ${{ inputs.increment }} -d --ci
           
-      - if: ${{ inputs.dry-run }}
+      - if: ${{ !inputs.dry-run }}
         run: |
           yarn release ${{ inputs.increment }} --ci
