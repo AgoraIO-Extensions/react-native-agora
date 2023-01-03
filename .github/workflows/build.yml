@@ -111,3 +111,10 @@ jobs:
         with:
           name: AgoraRtcNgExample
           path: "example/ios/*.ipa"
+          
+  notification:
+    runs-on: ubuntu-latest
+    needs: [build-android, build-ios]
+    steps:
+      - run: |
+          curl -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${{ secrets.WECHAT_KEY }}" -d '{"msgtype":"text","text":{"content":"ReactNative:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'
