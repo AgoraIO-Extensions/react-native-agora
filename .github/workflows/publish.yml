@@ -1,0 +1,33 @@
+name: Publish to NPM
+run-name: ${{ github.actor }} triggered this job
+on:
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: 'Increment "major", "minor", "patch", or "pre*" version; or specify version [default: "patch"]'
+        required: true
+        default: 'patch'
+        type: string
+      dry-run:
+        description: 'Do not touch or write anything, but show the commands'
+        default: true
+        type: boolean
+        
+jobs:
+  release-it:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+            node-version: '16'
+      - run: yarn
+      
+      - if: ${{ !inputs.dry-run }}
+        run: |
+          yarn release ${{ inputs.increment }} -d --ci
+          
+      - if: ${{ inputs.dry-run }}
+        run: |
+          yarn release ${{ inputs.increment }} --ci
