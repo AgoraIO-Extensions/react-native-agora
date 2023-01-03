@@ -24,6 +24,9 @@ jobs:
             node-version: '16'
       - run: yarn
       
+      - run: |
+          npm set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_TOKEN }}
+      
       - if: ${{ !inputs.dry-run }}
         run: |
           yarn release ${{ inputs.increment }} -d --ci
