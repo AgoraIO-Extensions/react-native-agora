@@ -31,7 +31,7 @@ jobs:
       - name: Gradle build
         run: |
           ccache -s
-          .\gradlew.bat :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
+          gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
         working-directory: example/android
         
       - uses: actions/upload-artifact@v3
