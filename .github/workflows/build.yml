@@ -8,10 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          max-size: 5G
-      
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -31,7 +27,6 @@ jobs:
           
       - name: Gradle build
         run: |
-          ccache -s
           ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
         working-directory: example/android
         
