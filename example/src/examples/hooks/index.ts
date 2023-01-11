@@ -1,4 +1,5 @@
 import JoinChannelVideo from './JoinChannelVideo/JoinChannelVideo';
+import JoinChannelAudio from './joinChannelAudio/JoinChannelAudio';
 
 const Hooks = {
   title: 'Hooks',
@@ -6,6 +7,10 @@ const Hooks = {
     {
       name: 'JoinChannelVideoHooks',
       component: JoinChannelVideo,
+    },
+    {
+      name: 'JoinChannelAudioHooks',
+      component: JoinChannelAudio,
     },
   ],
 };
