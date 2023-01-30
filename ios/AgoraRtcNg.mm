@@ -155,6 +155,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)argument
         }
     }
 
+    [self newIrisApiEngine];
     error_code = self.irisApiEngine->CallIrisApi(&param);
 
     if (error_code != 0) {

@@ -31,7 +31,6 @@ import {
 import Basic from './examples/basic';
 import Advanced from './examples/advanced';
 import Hooks from './examples/hooks';
-import Config from './config/agora.config';
 
 const Stack = createStackNavigator();
 
@@ -42,7 +41,6 @@ const App = () => {
 
   useEffect(() => {
     const engine = createAgoraRtcEngine();
-    engine.initialize({ appId: Config.appId });
     setVersion(engine.getVersion());
     engine.release();
   }, []);
