@@ -40,23 +40,13 @@ target 'AgoraRtcNgExample' do
       # necessary for Mac Catalyst builds
       :mac_catalyst_enabled => false
     )
-    
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        # Using the un-qualified names means you can swap in different implementations, for example ccache
-        config.build_settings["CC"] = "clang"
-        config.build_settings["LD"] = "clang"
-        config.build_settings["CXX"] = "clang++"
-        config.build_settings["LDPLUSPLUS"] = "clang++"
-      end
-    end
-    
+
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
 
 target 'ScreenShare' do
   pod 'AgoraRtcEngine_iOS', '4.1.0'
-#   pod 'AgoraIrisRTC_iOS', '4.1.0-test.3'
+#   pod 'AgoraIrisRTC_iOS', '4.1.0-rc.2'
 #   pod 'AgoraRtcWrapper', :path => '../../ios'
 end
