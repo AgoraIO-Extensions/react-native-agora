@@ -36,7 +36,7 @@ jobs:
           path: "example/android/**/*.apk"
     
   build-ios:
-    runs-on: self-hosted
+    runs-on: ADMINdeMacBook-Pro-5
     steps:
       - uses: actions/checkout@v3
       
