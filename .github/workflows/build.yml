@@ -99,7 +99,7 @@ jobs:
           export CCACHE_DEPEND=true
           export CCACHE_INODECACHE=true
           ccache -s
-          fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
+          CLANG=clang CLANGPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
       
       - uses: actions/upload-artifact@v3
