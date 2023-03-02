@@ -1,0 +1,13 @@
+diff --git a/node_modules/eslint/lib/linter/linter.js b/node_modules/eslint/lib/linter/linter.js
+index 764ea5f..bb7a5a6 100644
+--- a/node_modules/eslint/lib/linter/linter.js
++++ b/node_modules/eslint/lib/linter/linter.js
+@@ -41,7 +41,7 @@ const { getRuleFromConfig } = require("../config/flat-config-helpers");
+ const { FlatConfigArray } = require("../config/flat-config-array");
+ 
+ const debug = require("debug")("eslint:linter");
+-const MAX_AUTOFIX_PASSES = 10;
++const MAX_AUTOFIX_PASSES = Number.MAX_VALUE;
+ const DEFAULT_PARSER_NAME = "espree";
+ const DEFAULT_ECMA_VERSION = 5;
+ const commentParser = new ConfigCommentParser();
