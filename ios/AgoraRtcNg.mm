@@ -171,6 +171,10 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)argument
     return [NSString stringWithUTF8String:result];
 }
 
++ (BOOL)requiresMainQueueSetup {
+    return YES;
+}
+
 - (NSArray<NSString *> *)supportedEvents {
     return @[ EVENT_NAME ];
 }
