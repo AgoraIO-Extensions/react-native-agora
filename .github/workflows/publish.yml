@@ -12,7 +12,7 @@ on:
         description: 'Do not touch or write anything, but show the commands'
         default: true
         type: boolean
-        
+
 jobs:
   release-it:
     runs-on: ubuntu-latest
@@ -23,17 +23,18 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-            node-version: '16'
-      - run: yarn
-      
+          node-version: '16'
+          cache: 'npm'
+      - run: npm install
+
       - name: Setup NPM auth token
         run: |
           npm set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_TOKEN }}
-      
+
       - if: ${{ inputs.dry-run }}
         run: |
           yarn release ${{ inputs.increment }} -d --ci
-          
+
       - if: ${{ !inputs.dry-run }}
         run: |
           yarn release ${{ inputs.increment }} --ci

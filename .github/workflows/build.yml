@@ -7,39 +7,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
       - run: yarn
-      
+
       - uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
           java-version: '11'
-          
+
       - name: Modify APP ID
         run: |
           sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
-          
+
       - name: Gradle build
         run: |
           ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
         working-directory: example/android
-        
+
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
           path: "example/android/**/*.apk"
-    
+
   build-ios:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 5G
@@ -49,13 +49,13 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
-      
+
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
       - run: yarn
-        
+
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
@@ -84,13 +84,13 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-          
+
       - name: Modify APP ID
         run: |
           sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
-          
+
       - name: Fastlane build
         run: |
           export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
@@ -104,15 +104,15 @@ jobs:
           export LDPLUSPLUS=clang++
           fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
-      
+
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
           path: "example/ios/*.ipa"
-          
+
   notification:
     runs-on: ubuntu-latest
-    needs: [build-android, build-ios]
+    needs: [ build-android, build-ios ]
     steps:
       - run: |
           curl -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${{ secrets.WECHAT_KEY }}" -d '{"msgtype":"text","text":{"content":"ReactNative:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'
