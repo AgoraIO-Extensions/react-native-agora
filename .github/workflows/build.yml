@@ -92,16 +92,17 @@ jobs:
         working-directory: example/src/config
 
       - name: Fastlane build
+        env:
+          CLANG: clang
+          CLANGPLUSPLUS: clang++
+          LD: clang
+          LDPLUSPLUS: clang++
+          CCACHE_SLOPPINESS: clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
+          CCACHE_FILECLONE: true
+          CCACHE_DEPEND: true
+          CCACHE_INODECACHE: true
         run: |
           export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
-          export CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
-          export CCACHE_FILECLONE=true
-          export CCACHE_DEPEND=true
-          export CCACHE_INODECACHE=true
-          export CLANG=clang
-          export CLANGPLUSPLUS=clang++
-          export LD=clang
-          export LDPLUSPLUS=clang++
           fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
         working-directory: example/ios
 
