@@ -27,7 +27,7 @@ jobs:
 
       - name: Gradle build
         run: |
-          ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a
+          ./gradlew :app:assembleRelease
         working-directory: example/android
 
       - uses: actions/upload-artifact@v3
@@ -109,6 +109,11 @@ jobs:
         with:
           name: AgoraRtcNgExample
           path: "example/ios/*.ipa"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: AgoraRtcNgExampleSymbol
+          path: "example/ios/*.dSYM.zip"
 
   notification:
     runs-on: ubuntu-latest
