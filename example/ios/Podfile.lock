@@ -328,7 +328,7 @@ PODS:
   - React-jsinspector (0.70.5)
   - React-logger (0.70.5):
     - glog
-  - react-native-agora (4.1.0):
+  - react-native-agora (4.1.2):
     - AgoraIrisRTC_iOS (= 4.1.0-rc.2)
     - AgoraRtcEngine_iOS (= 4.1.0)
     - React-Core
@@ -414,7 +414,7 @@ PODS:
     - React-Core
   - RNScreens (2.18.1):
     - React-Core
-  - RNSVG (12.4.4):
+  - RNSVG (12.5.1):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -645,7 +645,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 31564fa6912459921568e8b0e49024285a4d584b
   React-jsinspector: badd81696361249893a80477983e697aab3c1a34
   React-logger: fdda34dd285bdb0232e059b19d9606fa0ec3bb9c
-  react-native-agora: 0859e925a57f28cc971bf9e275a333ec90a97bb5
+  react-native-agora: 23e08e4a386714bb477effb01014966029e84fee
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
@@ -666,7 +666,7 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNSVG: ecd661f380a07ba690c9c5929c475a44f432d674
+  RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7

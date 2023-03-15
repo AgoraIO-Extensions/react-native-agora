@@ -1,6 +1,10 @@
+## [4.1.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.1.0...v4.1.2) (2023-03-14)
 
 
-## 4.1.2 (2023-03-14)
+### Bug Fixes
+
+* add `requiresMainQueueSetup` for iOS [#583](https://github.com/AgoraIO-Extensions/react-native-agora/issues/583) ([#603](https://github.com/AgoraIO-Extensions/react-native-agora/issues/603)) ([64f2911](https://github.com/AgoraIO-Extensions/react-native-agora/commit/64f29110fe5453ad35a97b5041be65227c46026c))
+* crash after release [#579](https://github.com/AgoraIO-Extensions/react-native-agora/issues/579) ([282d4de](https://github.com/AgoraIO-Extensions/react-native-agora/commit/282d4dede4d56329f593bbb65592def1e2e78baf))
 
 # [4.1.0](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.0.0...v4.1.0) (2022-12-20)
 
