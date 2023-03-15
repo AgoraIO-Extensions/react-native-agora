@@ -54,7 +54,9 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
-      - run: yarn
+      - env:
+          NO_FLIPPER: 1
+        run: yarn
 
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -93,6 +95,8 @@ jobs:
 
       - name: Fastlane build
         env:
+          CC: clang
+          CXX: clang++
           CLANG: clang
           CLANGPLUSPLUS: clang++
           LD: clang
