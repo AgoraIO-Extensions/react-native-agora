@@ -1,14 +1,19 @@
-#import "AgoraRtcSurfaceViewManager.h"
+#import <React/RCTViewManager.h>
+#import <React/RCTUIManager.h>
+#import "RCTBridge.h"
 #import "AgoraRtcNg.h"
 #import <AgoraRtcWrapper/iris_rtc_engine.h>
 
+@interface AgoraRtcSurfaceViewManager : RCTViewManager
+@end
+
 @implementation AgoraRtcSurfaceViewManager
+
+RCT_EXPORT_MODULE(AgoraRtcSurfaceView)
 
 - (UIView *)view {
     return [[UIView alloc] init];
 }
-
-RCT_EXPORT_MODULE(AgoraRtcSurfaceView)
 
 RCT_CUSTOM_VIEW_PROPERTY(callApi, NSDictionary, UIView) {
     NSString *funcName = json[@"funcName"];

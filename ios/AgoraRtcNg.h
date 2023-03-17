@@ -2,7 +2,7 @@
 #import <React/RCTEventEmitter.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RNAgoraRtcNgSpec.h"
+#import "AgoraRtcNgSpec.h"
 
 @interface AgoraRtcNg : RCTEventEmitter <NativeAgoraRtcNgSpec>
 #else
@@ -12,5 +12,7 @@
 #endif
 
 @property(nonatomic) IApiEngineBase *irisApiEngine;
+
++ (instancetype)shareInstance;
 
 @end

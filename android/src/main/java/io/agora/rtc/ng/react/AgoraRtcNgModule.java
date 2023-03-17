@@ -5,8 +5,8 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -25,12 +25,12 @@ import io.agora.iris.IrisApiEngine;
 import io.agora.iris.IrisEventHandler;
 
 @ReactModule(name = AgoraRtcNgModule.NAME)
-public class AgoraRtcNgModule extends ReactContextBaseJavaModule implements IrisEventHandler {
+public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler {
   public static final String NAME = "AgoraRtcNg";
   public IrisApiEngine irisApiEngine;
 
-  public AgoraRtcNgModule(ReactApplicationContext reactContext) {
-    super(reactContext);
+  AgoraRtcNgModule(ReactApplicationContext context) {
+    super(context);
   }
 
   @Override
@@ -40,30 +40,34 @@ public class AgoraRtcNgModule extends ReactContextBaseJavaModule implements Iris
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public void newIrisApiEngine() {
+  public boolean newIrisApiEngine() {
     if (irisApiEngine == null) {
       IrisApiEngine.enableUseJsonArray(true);
       irisApiEngine = new IrisApiEngine(getReactApplicationContext());
       irisApiEngine.setEventHandler(this);
+      return true;
     }
+    return false;
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public void destroyIrisApiEngine() {
+  public boolean destroyIrisApiEngine() {
     if (irisApiEngine != null) {
       irisApiEngine.setEventHandler(null);
       irisApiEngine.destroy();
       irisApiEngine = null;
+      return true;
     }
+    return false;
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public String callApi(ReadableMap arguments) throws JSONException {
-    String funcName = arguments.getString("funcName");
-    String params = arguments.getString("params");
+  public String callApi(ReadableMap args) {
+    String funcName = args.getString("funcName");
+    String params = args.getString("params");
     List<byte[]> buffers = null;
 
-    ReadableArray array = arguments.getArray("buffers");
+    ReadableArray array = args.getArray("buffers");
     if (array != null) {
       buffers = new ArrayList<>();
       for (int i = 0; i < array.size(); i++) {
@@ -72,21 +76,31 @@ public class AgoraRtcNgModule extends ReactContextBaseJavaModule implements Iris
     }
 
     try {
+      newIrisApiEngine();
       return irisApiEngine.callIrisApi(funcName, params, buffers);
     } catch (Exception e) {
       e.printStackTrace();
-      return new JSONObject().put("result", e.getMessage()).toString();
+      try {
+        return new JSONObject().put("result", e.getMessage()).toString();
+      } catch (JSONException ex) {
+        throw new RuntimeException(ex);
+      }
     }
   }
 
   @ReactMethod
-  public void addListener(String eventName) {
-    // Keep: Required for RN built in Event Emitter Calls.
+  public void showRPSystemBroadcastPickerView(boolean showsMicrophoneButton, Promise promise) {
+    promise.reject("", "not support");
   }
 
   @ReactMethod
-  public void removeListeners(Integer count) {
-    // Keep: Required for RN built in Event Emitter Calls.
+  public void addListener(String eventName) {
+
+  }
+
+  @ReactMethod
+  public void removeListeners(double count) {
+
   }
 
   @Override
