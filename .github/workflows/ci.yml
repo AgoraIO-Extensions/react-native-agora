@@ -46,8 +46,8 @@ jobs:
           profile: pixel
           avd-name: Tester
           script: |
-            detox build --configuration android.emu.debug
-            detox test --configuration android.emu.debug
+            yarn detox build --configuration android.emu.debug
+            yarn detox test --configuration android.emu.debug
 
   build:
     runs-on: ubuntu-latest
