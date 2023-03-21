@@ -36,6 +36,9 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
+          
+      - name: Run detox build
+        run: yarn detox build -c android.emu.debug
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -46,8 +49,7 @@ jobs:
           profile: pixel
           avd-name: Tester
           script: |
-            yarn detox build --configuration android.emu.debug
-            yarn detox test --configuration android.emu.debug
+            yarn detox test -c android.emu.debug --headless
 
   build:
     runs-on: ubuntu-latest
