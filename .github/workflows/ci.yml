@@ -40,7 +40,9 @@ jobs:
           arch: x86_64
           profile: pixel
           avd-name: Tester
-          script: yarn test --maxWorkers=2 --coverage
+          script: |
+            detox build --configuration android.emu.debug
+            detox test --configuration android.emu.debug
 
   build:
     runs-on: ubuntu-latest
