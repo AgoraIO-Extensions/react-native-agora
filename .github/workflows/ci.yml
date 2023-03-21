@@ -33,7 +33,14 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run unit tests
-        run: yarn test --maxWorkers=2 --coverage
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: default
+          arch: x86_64
+          profile: pixel
+          avd-name: Tester
+          script: yarn test --maxWorkers=2 --coverage
 
   build:
     runs-on: ubuntu-latest

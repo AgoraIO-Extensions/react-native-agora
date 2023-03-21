@@ -47,7 +47,6 @@ export default function JoinChannelAudio() {
   const [token] = useState(Config.token);
   const [uid] = useState(Config.uid);
   const [joinChannelSuccess, setJoinChannelSuccess] = useState(false);
-  const [remoteUsers, setRemoteUsers] = useState<number[]>([]);
   const [enableLocalAudio, setEnableLocalAudio] = useState(false);
   const [enableSpeakerphone, setEnableSpeakerphone] = useState(false);
   const [muteLocalAudioStream, setMuteLocalAudioStream] = useState(false);
@@ -243,7 +242,6 @@ export default function JoinChannelAudio() {
             stats
           );
           setJoinChannelSuccess(false);
-          setRemoteUsers([]);
         }
       );
 
@@ -259,10 +257,6 @@ export default function JoinChannelAudio() {
             'elapsed',
             elapsed
           );
-          setRemoteUsers((r) => {
-            if (r === undefined) return [];
-            return [...r, remoteUid];
-          });
         }
       );
 
@@ -282,10 +276,6 @@ export default function JoinChannelAudio() {
             'reason',
             reason
           );
-          setRemoteUsers((r) => {
-            if (r === undefined) return [];
-            return r.filter((value) => value !== remoteUid);
-          });
         }
       );
 
