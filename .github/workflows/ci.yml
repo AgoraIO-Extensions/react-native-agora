@@ -39,11 +39,9 @@ jobs:
       - uses: nitro-build/github-action-nitro-android@v1
         id: nitro
         with:
-          root-directory: example
           detox-configuration: android.emu.release
-          pre-install-command: |
-            yarn install --cwd .. --frozen-lockfile
-            yarn --cwd .. patch-package
+          entry-file: example/index.js
+          pre-install-command: yarn install --cwd example --frozen-lockfile
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
