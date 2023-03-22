@@ -41,7 +41,6 @@ jobs:
         with:
           root-directory: example
           detox-configuration: android.emu.release
-          build-type: release
           pre-install-command: |
             yarn install --cwd .. --frozen-lockfile
             yarn --cwd .. patch-package
@@ -52,6 +51,7 @@ jobs:
           api-level: 31
           arch: x86_64
           avd-name: emulator
+          working-directory: example
           script: detox test --configuration android.emu.release --cleanup --headless
 
   build:
