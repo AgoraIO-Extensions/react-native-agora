@@ -39,6 +39,7 @@ jobs:
       - uses: nitro-build/github-action-nitro-android@v1
         id: nitro
         with:
+          cache-provider: github
           debug: true
           detox-configuration: android.emu.release
           entry-file: example/index.js
