@@ -41,6 +41,10 @@ jobs:
         with:
           root-directory: example
           detox-configuration: android.emu.release
+          build-type: release
+          pre-install-command: |
+            yarn install --frozen-lockfile
+            yarn patch-package
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
