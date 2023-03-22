@@ -33,7 +33,6 @@ jobs:
 
       - uses: nitro-build/github-action-nitro-android@v1
         with:
-          root-directory: example
           detox-configuration: android.emu.debug
 
       - name: Run e2e tests
