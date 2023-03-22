@@ -31,21 +31,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install Detox dependencies
+        shell: bash
+        run: |
+          yarn global add detox-cli react-native-cli
+
       - uses: nitro-build/github-action-nitro-android@v1
+        id: nitro
         with:
           root-directory: example
-          detox-configuration: android.emu.debug
+          detox-configuration: android.emu.release
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
-          target: default
+          api-level: 31
           arch: x86_64
-          profile: pixel
-          avd-name: Tester
-          script: |
-            yarn detox test -c android.emu.debug --headless
+          avd-name: emulator
+          script: detox test --configuration android.emu.release --cleanup --headless
 
   build:
     runs-on: ubuntu-latest
