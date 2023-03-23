@@ -52,6 +52,9 @@ jobs:
           api-level: 31
           arch: x86_64
           avd-name: emulator
+          ram-size: 2048M
+          heap-size: 4096M
+          disk-size: 8192M
           script: detox test --configuration android.emu.release --cleanup --headless
 
   build:
