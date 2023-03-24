@@ -86,7 +86,7 @@ jobs:
 
       - name: Run e2e tests
         working-directory: example
-        run: detox test -c ios.sim.release
+        run: detox test -c ios.sim.release --cleanup --headless
 
   build:
     runs-on: ubuntu-latest
