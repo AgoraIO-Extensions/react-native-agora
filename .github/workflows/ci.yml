@@ -71,10 +71,9 @@ jobs:
         id: nitro
         with:
           debug: true
-          ruby-version: 2.7.6
           detox-configuration: ios.sim.release
-          entry-file: example/index.js
           pre-install-command: yarn install --cwd example --frozen-lockfile
+          root-directory: example
 
       - name: Run e2e tests
         run: detox test -c ios.sim.release
