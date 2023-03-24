@@ -31,6 +31,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup
+        uses: ./.github/actions/setup
+
       - name: Install Detox dependencies
         shell: bash
         run: |
@@ -42,9 +45,6 @@ jobs:
           debug: true
           detox-configuration: android.emu.release
           root-directory: example
-          pre-install-command: |
-            yarn install --frozen-lockfile
-            yarn patch-package
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -63,6 +63,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup
+        uses: ./.github/actions/setup
+
       - name: Install Detox dependencies
         shell: bash
         run: |
@@ -76,9 +79,6 @@ jobs:
           debug: true
           detox-configuration: ios.sim.release
           root-directory: example
-          pre-install-command: |
-            yarn install --frozen-lockfile
-            yarn patch-package
 
       - name: Run e2e tests
         working-directory: example
