@@ -23,7 +23,7 @@ jobs:
       - name: Typecheck files
         run: yarn typecheck
 
-  test:
+  test-android:
     runs-on: macos-latest
     env:
       NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
@@ -51,6 +51,32 @@ jobs:
           arch: x86_64
           avd-name: emulator
           script: detox test -c android.emu.release
+
+  test-ios:
+    runs-on: macos-latest
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Detox dependencies
+        shell: bash
+        run: |
+          yarn global add detox-cli react-native-cli
+          brew tap wix/brew
+          brew install applesimutils
+
+      - uses: nitro-build/github-action-nitro-ios@v1
+        id: nitro
+        with:
+          debug: true
+          detox-configuration: ios.sim.release
+          entry-file: example/index.js
+          pre-install-command: yarn install --cwd example --frozen-lockfile
+
+      - name: Run e2e tests
+        run: detox test -c ios.sim.release
 
   build:
     runs-on: ubuntu-latest
