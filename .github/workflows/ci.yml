@@ -80,6 +80,10 @@ jobs:
           detox-configuration: ios.sim.release
           root-directory: example
 
+      - uses: futureware-tech/simulator-action@v1
+        with:
+          model: 'iPhone 14'
+
       - name: Run e2e tests
         working-directory: example
         run: detox test -c ios.sim.release
