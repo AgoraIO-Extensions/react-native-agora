@@ -41,8 +41,10 @@ jobs:
         with:
           debug: true
           detox-configuration: android.emu.release
-          entry-file: example/index.js
-          pre-install-command: yarn install --cwd example --frozen-lockfile
+          root-directory: example
+          pre-install-command: |
+            yarn install --frozen-lockfile
+            yarn patch-package
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -50,6 +52,7 @@ jobs:
           api-level: 31
           arch: x86_64
           avd-name: emulator
+          working-directory: example
           script: detox test -c android.emu.release
 
   test-ios:
@@ -72,10 +75,13 @@ jobs:
         with:
           debug: true
           detox-configuration: ios.sim.release
-          pre-install-command: yarn install --cwd example --frozen-lockfile
           root-directory: example
+          pre-install-command: |
+            yarn install --frozen-lockfile
+            yarn patch-package
 
       - name: Run e2e tests
+        working-directory: example
         run: detox test -c ios.sim.release
 
   build:
