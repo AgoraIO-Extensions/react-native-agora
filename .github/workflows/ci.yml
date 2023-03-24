@@ -27,7 +27,6 @@ jobs:
     runs-on: macos-latest
     env:
       NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
-      NODE_OPTIONS: "--max_old_space_size=4096"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -51,7 +50,7 @@ jobs:
           api-level: 31
           arch: x86_64
           avd-name: emulator
-          script: detox test --configuration android.emu.release --cleanup --headless
+          script: detox test -c android.emu.release
 
   build:
     runs-on: ubuntu-latest
