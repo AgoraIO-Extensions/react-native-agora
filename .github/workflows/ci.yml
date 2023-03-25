@@ -43,6 +43,12 @@ jobs:
         run: |
           yarn global add detox-cli react-native-cli
 
+      - name: Modify APP ID
+        run: |
+          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          mv tmp agora.config.ts
+        working-directory: example/src/config
+
       - uses: nitro-build/github-action-nitro-android@v1
         id: nitro
         with:
@@ -82,6 +88,12 @@ jobs:
           brew tap wix/brew
           brew install applesimutils
 
+      - name: Modify APP ID
+        run: |
+          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          mv tmp agora.config.ts
+        working-directory: example/src/config
+
       - uses: nitro-build/github-action-nitro-ios@v1
         id: nitro
         with:
@@ -89,7 +101,6 @@ jobs:
           detox-configuration: ios.sim.release
           root-directory: example
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
-          
 
       - uses: futureware-tech/simulator-action@v1
         with:
