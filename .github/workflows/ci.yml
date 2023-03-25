@@ -49,8 +49,7 @@ jobs:
           debug: true
           detox-configuration: android.emu.release
           root-directory: example
-          pre-build-command: |
-            yarn install --frozen-lockfile
+          cache-env-var-lookup-keys: ORG_GRADLE_PROJECT_*
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -89,9 +88,7 @@ jobs:
           debug: true
           detox-configuration: ios.sim.release
           root-directory: example
-          pre-build-command: |
-            yarn install --frozen-lockfile
-            yarn pods
+          cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
           
 
       - uses: futureware-tech/simulator-action@v1
