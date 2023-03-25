@@ -24,9 +24,13 @@ jobs:
         run: yarn typecheck
 
   test-android:
+    strategy:
+      matrix:
+        newArch: [ true, false ]
     runs-on: macos-latest
     env:
       NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+      ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -56,9 +60,13 @@ jobs:
           script: detox test -c android.emu.release
 
   test-ios:
+    strategy:
+      matrix:
+        newArch: [ 1, 0 ]
     runs-on: macos-latest
     env:
       NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+      RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
