@@ -49,6 +49,8 @@ jobs:
           debug: true
           detox-configuration: android.emu.release
           root-directory: example
+          pre-build-command: |
+            yarn install --frozen-lockfile
 
       - name: Run e2e tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -87,6 +89,10 @@ jobs:
           debug: true
           detox-configuration: ios.sim.release
           root-directory: example
+          pre-build-command: |
+            yarn install --frozen-lockfile
+            yarn pods
+          
 
       - uses: futureware-tech/simulator-action@v1
         with:
