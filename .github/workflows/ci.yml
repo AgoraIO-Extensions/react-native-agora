@@ -58,7 +58,7 @@ jobs:
           cache-env-var-lookup-keys: ORG_GRADLE_PROJECT_*
 
       - name: Run e2e tests
-        if: ${{ matrix.newArch }} == false
+        if: ${{ matrix.newArch == false }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
@@ -109,7 +109,7 @@ jobs:
           model: 'iPhone 14'
 
       - name: Run e2e tests
-        if: ${{ matrix.newArch }} == 0
+        if: ${{ matrix.newArch == 0 }}
         working-directory: example
         run: |
           detox clean-framework-cache
