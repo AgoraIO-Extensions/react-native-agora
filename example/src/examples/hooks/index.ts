@@ -1,5 +1,8 @@
 import JoinChannelVideo from './JoinChannelVideo/JoinChannelVideo';
 import JoinChannelAudio from './joinChannelAudio/JoinChannelAudio';
+import StringUid from './StringUid/StringUid';
+import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
+import VirtualBackground from './VirtualBackground/VirtualBackground';
 
 const Hooks = {
   title: 'Hooks',
@@ -11,6 +14,18 @@ const Hooks = {
     {
       name: 'JoinChannelAudioHooks',
       component: JoinChannelAudio,
+    },
+    {
+      name: 'StringUidHooks',
+      component: StringUid,
+    },
+    {
+      name: 'JoinMultipleChannelHook',
+      component: JoinMultipleChannel,
+    },
+    {
+      name: 'VirtualBackgroundHook',
+      component: VirtualBackground,
     },
   ],
 };
