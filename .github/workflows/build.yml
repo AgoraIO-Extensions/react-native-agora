@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 jobs:
   build-android:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
 
@@ -36,7 +36,7 @@ jobs:
           path: "example/android/**/*.apk"
 
   build-ios:
-    runs-on: macos-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
 
