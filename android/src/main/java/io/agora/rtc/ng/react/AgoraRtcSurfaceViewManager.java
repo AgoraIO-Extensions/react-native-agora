@@ -3,38 +3,38 @@ package io.agora.rtc.ng.react;
 import android.view.SurfaceView;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-public class AgoraRtcSurfaceViewManager extends SimpleViewManager<FrameLayout> {
-  public static final String REACT_CLASS = "AgoraRtcSurfaceView";
-  private ThemedReactContext reactContext;
+@ReactModule(name = AgoraRtcSurfaceViewManager.NAME)
+public class AgoraRtcSurfaceViewManager extends AgoraRtcSurfaceViewManagerSpec<FrameLayout> {
+
+  public static final String NAME = "AgoraRtcSurfaceView";
+  private ThemedReactContext context;
 
   @Override
-  @NonNull
   public String getName() {
-    return REACT_CLASS;
+    return NAME;
   }
 
   @Override
-  @NonNull
-  protected FrameLayout
-  createViewInstance(@NonNull ThemedReactContext reactContext) {
-    this.reactContext = reactContext;
-    FrameLayout layout = new FrameLayout(reactContext.getReactApplicationContext());
-    layout.addView(new SurfaceView(reactContext.getApplicationContext()));
+  public FrameLayout createViewInstance(ThemedReactContext context) {
+    this.context = context;
+    FrameLayout layout = new FrameLayout(context.getReactApplicationContext());
+    layout.addView(new SurfaceView(context.getApplicationContext()));
     return layout;
   }
 
+  @Override
   @ReactProp(name = "callApi")
-  public void callApi(FrameLayout view, ReadableMap arguments) {
+  public void setCallApi(FrameLayout view, @Nullable ReadableMap arguments) {
     String funcName = arguments.getString("funcName");
     String params = arguments.getString("params");
-    AgoraRtcNgModule module = reactContext.getNativeModule(AgoraRtcNgModule.class);
+    AgoraRtcNgModule module = context.getNativeModule(AgoraRtcNgModule.class);
     if (module != null) {
       try {
         module.irisApiEngine.callIrisApi(funcName, params, view.getChildAt(0));
@@ -44,11 +44,13 @@ public class AgoraRtcSurfaceViewManager extends SimpleViewManager<FrameLayout> {
     }
   }
 
+  @Override
   @ReactProp(name = "zOrderOnTop")
   public void setZOrderOnTop(FrameLayout view, boolean onTop) {
     ((SurfaceView) view.getChildAt(0)).setZOrderOnTop(onTop);
   }
 
+  @Override
   @ReactProp(name = "zOrderMediaOverlay")
   public void setZOrderMediaOverlay(FrameLayout view, boolean isMediaOverlay) {
     ((SurfaceView) view.getChildAt(0)).setZOrderMediaOverlay(isMediaOverlay);

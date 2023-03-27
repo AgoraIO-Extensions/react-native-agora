@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { HostComponent, ViewProps } from 'react-native';
+import { HostComponent } from 'react-native';
 
 import { VideoSourceType } from '../AgoraBase';
 import { RtcRendererViewProps } from '../AgoraRtcRenderView';
+import { IrisApiParam } from './IrisApiEngine';
 
 export default abstract class IAgoraRtcRenderView<
   T extends RtcRendererViewProps
-> extends Component<ViewProps & T, object> {
-  abstract get view(): HostComponent<{ callApi: object }>;
+> extends Component<T> {
+  abstract get view(): HostComponent<any>;
 
   get funcName(): string {
     let funcName: string;
@@ -33,7 +34,7 @@ export default abstract class IAgoraRtcRenderView<
     return funcName;
   }
 
-  params(props: RtcRendererViewProps): object {
+  params(props: RtcRendererViewProps): IrisApiParam {
     return {
       funcName: this.funcName,
       params: JSON.stringify({
@@ -48,7 +49,6 @@ export default abstract class IAgoraRtcRenderView<
     const { canvas, connection, ...others } = this.props;
     const AgoraRtcRenderer = this.view;
     return (
-      // @ts-ignore
       <AgoraRtcRenderer
         callApi={this.params({ canvas, connection })}
         {...others}

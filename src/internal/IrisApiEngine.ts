@@ -1,8 +1,9 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import { NativeEventEmitter } from 'react-native';
 import base64 from 'base64-js';
 import { Buffer } from 'buffer';
 const JSON = require('json-bigint');
 
+import AgoraRtcNg from '../specs';
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import {
   AudioFrame,
@@ -60,10 +61,16 @@ import { RtcEngineExInternal } from './RtcEngineExInternal';
 
 import EventEmitter from './emitter/EventEmitter';
 
+export type IrisApiParam = {
+  funcName: string;
+  params: string;
+  buffers?: string[];
+};
+
 // @ts-ignore
 export const DeviceEventEmitter = new EventEmitter();
 
-const { AgoraRtcNg } = NativeModules;
+// @ts-ignore
 const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);
 AgoraEventEmitter.addListener('AgoraRtcNg:onEvent', handleEvent);
 
@@ -355,7 +362,7 @@ function handleEvent({ event, data, buffers }: any) {
 /**
  * @internal
  */
-export function callIrisApi<T>(funcName: string, params: any): any {
+export function callIrisApi(funcName: string, params: any): any {
   try {
     const buffers: string[] = [];
 
@@ -429,9 +436,9 @@ export function callIrisApi<T>(funcName: string, params: any): any {
       buffers,
     });
     if (ret !== undefined && ret !== null && ret !== '') {
-      ret = JSON.parse(ret);
+      const retObj = JSON.parse(ret);
       if (isDebuggable()) {
-        if (typeof ret.result === 'number' && ret.result < 0) {
+        if (typeof retObj.result === 'number' && retObj.result < 0) {
           console.error('callApi', funcName, JSON.stringify(params), ret);
         } else {
           console.debug('callApi', funcName, JSON.stringify(params), ret);

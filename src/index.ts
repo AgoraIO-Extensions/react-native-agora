@@ -1,7 +1,6 @@
-import { NativeModules } from 'react-native';
+import AgoraRtcNg from './specs';
 
-const { AgoraRtcNg } = NativeModules;
-export const showRPSystemBroadcastPickerView: () => Promise<void> =
+export const showRPSystemBroadcastPickerView =
   AgoraRtcNg.showRPSystemBroadcastPickerView;
 
 import { IRtcEngine } from './IAgoraRtcEngine';

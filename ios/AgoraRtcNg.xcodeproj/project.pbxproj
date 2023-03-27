@@ -6,6 +6,11 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F507C44D29C2BD57006E240D /* AgoraRtcSurfaceViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5652824291C130400793068 /* AgoraRtcSurfaceViewManager.mm */; };
+		F507C44E29C2BD57006E240D /* AgoraRtcNg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* AgoraRtcNg.mm */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -23,7 +28,6 @@
 		B3E7B5881CC2AC0600A0062D /* AgoraRtcNg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraRtcNg.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* AgoraRtcNg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraRtcNg.mm; sourceTree = "<group>"; };
 		F5652824291C130400793068 /* AgoraRtcSurfaceViewManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AgoraRtcSurfaceViewManager.mm; sourceTree = "<group>"; };
-		F5652825291C130400793068 /* AgoraRtcSurfaceViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraRtcSurfaceViewManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +52,6 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				F5652825291C130400793068 /* AgoraRtcSurfaceViewManager.h */,
 				F5652824291C130400793068 /* AgoraRtcSurfaceViewManager.mm */,
 				B3E7B5881CC2AC0600A0062D /* AgoraRtcNg.h */,
 				B3E7B5891CC2AC0600A0062D /* AgoraRtcNg.mm */,
@@ -113,6 +116,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F507C44D29C2BD57006E240D /* AgoraRtcSurfaceViewManager.mm in Sources */,
+				F507C44E29C2BD57006E240D /* AgoraRtcNg.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

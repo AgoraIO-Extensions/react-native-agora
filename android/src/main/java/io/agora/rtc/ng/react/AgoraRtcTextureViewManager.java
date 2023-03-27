@@ -2,36 +2,36 @@ package io.agora.rtc.ng.react;
 
 import android.view.TextureView;
 
-import androidx.annotation.NonNull;
-
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-public class AgoraRtcTextureViewManager extends SimpleViewManager<TextureView> {
-  public static final String REACT_CLASS = "AgoraRtcTextureView";
-  private ThemedReactContext reactContext;
+import javax.annotation.Nullable;
+
+@ReactModule(name = AgoraRtcTextureViewManager.NAME)
+public class AgoraRtcTextureViewManager extends AgoraRtcTextureViewManagerSpec<TextureView> {
+
+  public static final String NAME = "AgoraRtcTextureView";
+  private ThemedReactContext context;
 
   @Override
-  @NonNull
   public String getName() {
-    return REACT_CLASS;
+    return NAME;
   }
 
   @Override
-  @NonNull
-  protected TextureView
-  createViewInstance(@NonNull ThemedReactContext reactContext) {
-    this.reactContext = reactContext;
-    return new TextureView(reactContext.getApplicationContext());
+  public TextureView createViewInstance(ThemedReactContext context) {
+    this.context = context;
+    return new TextureView(context.getApplicationContext());
   }
 
+  @Override
   @ReactProp(name = "callApi")
-  public void callApi(TextureView view, ReadableMap arguments) {
+  public void setCallApi(TextureView view, @Nullable ReadableMap arguments) {
     String funcName = arguments.getString("funcName");
     String params = arguments.getString("params");
-    AgoraRtcNgModule module = reactContext.getNativeModule(AgoraRtcNgModule.class);
+    AgoraRtcNgModule module = context.getNativeModule(AgoraRtcNgModule.class);
     if (module != null) {
       try {
         module.irisApiEngine.callIrisApi(funcName, params, view);
