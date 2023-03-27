@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
 jobs:
   build-android:
-    runs-on: self-hosted
+    runs-on:
+      group: Default
     steps:
       - uses: actions/checkout@v3
 
