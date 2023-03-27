@@ -1,0 +1,129 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Lint files
+        run: yarn lint
+
+      - name: Typecheck files
+        run: yarn typecheck
+
+  test-android:
+    strategy:
+      matrix:
+        newArch: [ true, false ]
+    runs-on: macos-latest
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+      ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install Detox dependencies
+        shell: bash
+        run: |
+          yarn global add detox-cli react-native-cli
+
+      - name: Modify APP ID
+        run: |
+          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          mv tmp agora.config.ts
+        working-directory: example/src/config
+
+      - uses: nitro-build/github-action-nitro-android@v1
+        id: nitro
+        with:
+          debug: true
+          detox-configuration: android.emu.release
+          root-directory: example
+          cache-env-var-lookup-keys: ORG_GRADLE_PROJECT_*
+
+      - name: Run e2e tests
+        if: ${{ matrix.newArch == false }}
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          avd-name: emulator
+          working-directory: example
+          script: detox test -c android.emu.release
+
+  test-ios:
+    strategy:
+      matrix:
+        newArch: [ 1, 0 ]
+    runs-on: macos-latest
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+      RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install Detox dependencies
+        shell: bash
+        run: |
+          yarn global add detox-cli react-native-cli
+          brew tap wix/brew
+          brew install applesimutils
+
+      - name: Modify APP ID
+        run: |
+          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          mv tmp agora.config.ts
+        working-directory: example/src/config
+
+      - uses: nitro-build/github-action-nitro-ios@v1
+        id: nitro
+        with:
+          debug: true
+          detox-configuration: ios.sim.release
+          root-directory: example
+          cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
+          pre-install-command: yarn install --frozen-lockfile
+
+      - uses: futureware-tech/simulator-action@v1
+        with:
+          model: 'iPhone 14'
+
+      - name: Run e2e tests
+        if: ${{ matrix.newArch == 0 }}
+        working-directory: example
+        run: |
+          detox clean-framework-cache
+          detox build-framework-cache
+          detox test -c ios.sim.release
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build package
+        run: yarn prepack

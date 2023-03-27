@@ -158,7 +158,7 @@ export default class ScreenShare
   /**
    * Step 3-1: startScreenCapture
    */
-  startScreenCapture = () => {
+  startScreenCapture = async () => {
     const {
       captureAudio,
       sampleRate,
@@ -190,7 +190,7 @@ export default class ScreenShare
 
     if (Platform.OS === 'ios') {
       // Show the picker view for screen share, ⚠️ only support for iOS 12+
-      showRPSystemBroadcastPickerView();
+      await showRPSystemBroadcastPickerView(true);
     }
 
     if (captureAudio && !captureVideo) {

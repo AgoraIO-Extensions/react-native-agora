@@ -1,20 +1,15 @@
-import { HostComponent, requireNativeComponent } from 'react-native';
+import type { ViewProps } from 'react-native';
 
+import AgoraRtcSurfaceViewNativeComponent from './specs/AgoraRtcSurfaceViewNativeComponent';
+import AgoraRtcTextureViewNativeComponent from './specs/AgoraRtcTextureViewNativeComponent';
 import IAgoraRtcRenderView from './internal/IAgoraRtcRenderView';
 import { VideoCanvas } from './AgoraBase';
 import { RtcConnection } from './IAgoraRtcEngineEx';
 
-const AgoraRtcSurfaceView = requireNativeComponent<{ callApi: object }>(
-  'AgoraRtcSurfaceView'
-);
-const AgoraRtcTextureView = requireNativeComponent<{ callApi: object }>(
-  'AgoraRtcTextureView'
-);
-
 /**
  * A common property for RtcSurfaceView and RtcTextureView .
  */
-export interface RtcRendererViewProps {
+export interface RtcRendererViewProps extends ViewProps {
   /**
    * The local video view and settings. See VideoCanvas .
    */
@@ -49,8 +44,8 @@ export class RtcSurfaceView extends IAgoraRtcRenderView<RtcSurfaceViewProps> {
   /**
    * @ignore
    */
-  get view(): HostComponent<{ callApi: object }> {
-    return AgoraRtcSurfaceView;
+  get view() {
+    return AgoraRtcSurfaceViewNativeComponent;
   }
 }
 
@@ -62,7 +57,7 @@ export class RtcTextureView extends IAgoraRtcRenderView<RtcRendererViewProps> {
   /**
    * @ignore
    */
-  get view(): HostComponent<{ callApi: object }> {
-    return AgoraRtcTextureView;
+  get view() {
+    return AgoraRtcTextureViewNativeComponent;
   }
 }
