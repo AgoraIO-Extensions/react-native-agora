@@ -6,6 +6,8 @@ jobs:
   build-android:
     runs-on:
       group: Default
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
