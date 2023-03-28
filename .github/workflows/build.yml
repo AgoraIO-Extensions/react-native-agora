@@ -5,19 +5,13 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-      - run: yarn
-
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '11'
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Modify APP ID
         run: |
@@ -25,38 +19,32 @@ jobs:
           mv tmp agora.config.ts
         working-directory: example/src/config
 
-      - name: Gradle build
-        run: |
-          ./gradlew :app:assembleRelease
-        working-directory: example/android
+      - uses: nitro-build/github-action-nitro-android@v1
+        id: nitro
+        with:
+          debug: true
+          root-directory: example
+          cache-env-var-lookup-keys: ORG_GRADLE_PROJECT_*
 
       - uses: actions/upload-artifact@v3
         with:
-          name: AgoraRtcNgExample
-          path: "example/android/**/*.apk"
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
 
   build-ios:
     runs-on: macos-latest
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
-      - uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          max-size: 5G
-      - uses: actions/cache@v3
-        with:
-          path: example/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
+      - name: Setup
+        uses: ./.github/actions/setup
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-      - env:
-          NO_FLIPPER: 1
-        run: yarn
+      - name: Modify APP ID
+        run: |
+          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          mv tmp agora.config.ts
+        working-directory: example/src/config
 
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -87,38 +75,17 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-      - name: Modify APP ID
-        run: |
-          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
-          mv tmp agora.config.ts
-        working-directory: example/src/config
-
-      - name: Fastlane build
-        env:
-          CC: clang
-          CXX: clang++
-          CLANG: clang
-          CLANGPLUSPLUS: clang++
-          LD: clang
-          LDPLUSPLUS: clang++
-          CCACHE_SLOPPINESS: clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
-          CCACHE_FILECLONE: true
-          CCACHE_DEPEND: true
-          CCACHE_INODECACHE: true
-        run: |
-          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
-          fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
-        working-directory: example/ios
+      - uses: nitro-build/github-action-nitro-ios@v1
+        id: nitro
+        with:
+          debug: true
+          root-directory: example
+          cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
+          export-method: "development"
 
       - uses: actions/upload-artifact@v3
         with:
-          name: AgoraRtcNgExample
-          path: "example/ios/*.ipa"
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: AgoraRtcNgExampleSymbol
-          path: "example/ios/*.dSYM.zip"
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
 
   notification:
     runs-on: ubuntu-latest
