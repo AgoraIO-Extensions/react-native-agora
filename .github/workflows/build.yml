@@ -61,6 +61,7 @@ jobs:
           export-method: "development"
           certificate-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           certificate-passphrase: ${{ secrets.P12_PASSWORD }}
+          codesigning-identity: "Apple Development: xuewen xu (66NMZN987N)"
           provisioning-profiles-base64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
 
       - uses: actions/upload-artifact@v3
