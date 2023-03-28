@@ -23,11 +23,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-      - run: yarn install
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Setup NPM auth token
         run: |
