@@ -32,6 +32,8 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
+    env:
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
