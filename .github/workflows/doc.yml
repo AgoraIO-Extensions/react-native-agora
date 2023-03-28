@@ -7,7 +7,7 @@ jobs:
   update-doc:
     runs-on: ubuntu-latest
     steps:
-      - uses: AgoraIO-Extensions/actions/doc@v1
+      - uses: AgoraIO-Extensions/actions/.github/actions/doc@main
         with:
           target_repo: ${{ github.repository }}
           target_branch: ${{ github.ref_name }}
