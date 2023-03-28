@@ -1,0 +1,18 @@
+name: Update doc
+run-name: ${{ github.actor }} triggered this job
+on:
+  workflow_dispatch:
+
+jobs:
+  update-doc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: AgoraIO-Extensions/actions/doc@v1
+        with:
+          target_repo: ${{ github.repository }}
+          target_branch: ${{ github.ref_name }}
+          config: fmt_config/fmt_ts.yaml
+          language: ts
+          base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/main/rn_ng_json_template_en.json
+          export-file-path: src/index.ts
+          github-token: ${{ secrets.GH_TOKEN }}
