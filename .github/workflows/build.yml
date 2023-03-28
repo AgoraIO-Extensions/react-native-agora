@@ -13,12 +13,9 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
-      - run: yarn
-
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '11'
+      - run: |
+          yarn install --frozen-lockfile
+          yarn patch-package
 
       - name: Modify APP ID
         run: |
@@ -26,15 +23,16 @@ jobs:
           mv tmp agora.config.ts
         working-directory: example/src/config
 
-      - name: Gradle build
-        run: |
-          ./gradlew :app:assembleRelease
-        working-directory: example/android
+      - name: Nitro build
+        uses: nitro-build/github-action-nitro-android@v1
+        id: nitro
+        with:
+          debug: true
+          root-directory: example
 
       - uses: actions/upload-artifact@v3
         with:
-          name: AgoraRtcNgExample
-          path: "example/android/**/*.apk"
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
 
   build-ios:
     runs-on: self-hosted
