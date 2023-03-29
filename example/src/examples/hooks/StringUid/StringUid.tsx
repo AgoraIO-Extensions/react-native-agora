@@ -46,7 +46,6 @@ export default function StringUid() {
   const [userAccount, setUserAccount] = useState<string>('');
   const [channelId, setChannelId] = useState<string>(Config.channelId);
   const [joinChannelSuccess, setJoinChannelSuccess] = useState<boolean>(false);
-  const [remoteUsers, setRemoteUsers] = useState<number[]>([]);
 
   const { token, initRtcEngine } = useInitRtcEngine({
     enableAudio,
@@ -122,7 +121,6 @@ export default function StringUid() {
       (connection: RtcConnection, stats: RtcStats) => {
         log.info('onLeaveChannel', 'connection', connection, 'stats', stats);
         setJoinChannelSuccess(false);
-        setRemoteUsers([]);
       }
     );
 
@@ -138,10 +136,6 @@ export default function StringUid() {
           'elapsed',
           elapsed
         );
-        setRemoteUsers((r) => {
-          if (r === undefined) return [];
-          return [...r, remoteUid];
-        });
       }
     );
 
@@ -161,10 +155,6 @@ export default function StringUid() {
           'reason',
           reason
         );
-        setRemoteUsers((r) => {
-          if (r === undefined) return [];
-          return r.filter((value) => value !== remoteUid);
-        });
       }
     );
 

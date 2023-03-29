@@ -45,7 +45,7 @@ export default function JoinMultipleChannel() {
   const engine = useRef<IRtcEngineEx>(createAgoraRtcEngine() as IRtcEngineEx);
   const [channelId, setChannelId] = useState<string>(Config.channelId);
   const [channelId2, setChannelId2] = useState<string>('');
-  const [token2, setToken2] = useState<string>('');
+  const [token2] = useState<string>('');
   const [uid, setUid] = useState<number>(Config.uid);
   const [uid2, setUid2] = useState<number>(0);
   const [joinChannelSuccess, setJoinChannelSuccess] = useState<boolean>(false);

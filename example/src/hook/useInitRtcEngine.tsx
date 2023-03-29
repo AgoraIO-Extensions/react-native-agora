@@ -1,8 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Config from '../config/agora.config';
-import { ChannelProfileType, IRtcEngine } from 'react-native-agora';
-import * as log from '../utils/log';
+import { useCallback, useEffect, useState } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
+
+import { ChannelProfileType, IRtcEngine } from 'react-native-agora';
+
+import * as log from '../utils/log';
+
+import Config from '../config/agora.config';
 
 export interface InitRtcEngineReturn {
   appId: string;
@@ -67,7 +70,14 @@ export function useInitRtcEngine({
       setStartPreview(true);
     }
     typeof setupOtherExtension === 'function' && setupOtherExtension();
-  }, [appId]);
+  }, [
+    appId,
+    enableAudio,
+    enablePreview,
+    enableVideo,
+    engine,
+    setupOtherExtension,
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -78,7 +88,7 @@ export function useInitRtcEngine({
     return () => {
       engineCopy.release();
     };
-  }, [initRtcEngine]);
+  }, [engine, initRtcEngine]);
 
   return {
     appId,

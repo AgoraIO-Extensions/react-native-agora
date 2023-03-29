@@ -8,7 +8,6 @@ import {
   IRtcEngine,
   RtcConnection,
   RtcStats,
-  RtcSurfaceView,
   UserOfflineReasonType,
 } from 'react-native-agora';
 
