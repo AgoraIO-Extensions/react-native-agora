@@ -13,7 +13,8 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - uses: AgoraIO-Extensions/actions/.github/actions/terra@main
+      - name: Generate codes
+        uses: AgoraIO-Extensions/actions/.github/actions/terra@main
         with:
           target-repo: ${{ github.repository }}
           target-branch: ${{ github.ref_name }}
@@ -36,6 +37,8 @@ jobs:
         with:
           target-repo: ${{ github.repository }}
           target-branch: ${{ github.ref_name }}
-          target-branch-name-surffix: terra-update
-          pull-request-title: [ AUTO ] Generate code by terra
+          target-branch-name-surffix: |
+            terra-update
+          pull-request-title: |
+            [ AUTO ] Generate code by terra
           github-token: ${{ inputs.github-token }}

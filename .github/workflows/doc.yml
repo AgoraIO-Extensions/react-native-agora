@@ -13,7 +13,8 @@ jobs:
   generate-comments:
     runs-on: ubuntu-latest
     steps:
-      - uses: AgoraIO-Extensions/actions/.github/actions/doc@main
+      - name: Generate comments
+        uses: AgoraIO-Extensions/actions/.github/actions/doc@main
         with:
           target-repo: ${{ github.repository }}
           target-branch: ${{ github.ref_name }}
