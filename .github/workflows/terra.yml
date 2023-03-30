@@ -26,8 +26,10 @@ jobs:
         run: |
           yarn lint --fix
 
-      - uses: ./.github/workflows/doc.yml
-        target-path: ${{ github.repository }}
+      - name: Generate comments
+        uses: ./.github/workflows/doc.yml
+        with:
+          target-path: ${{ github.repository }}
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main
