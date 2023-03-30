@@ -1,211 +1,100 @@
 import './extension/IAudioDeviceManagerExtension';
 import { AudioDeviceInfo } from './IAgoraRtcEngine';
-/**
- * The maximum length of the device ID.
- */
+/* enum_maxdeviceidlengthtype */
 export enum MaxDeviceIdLengthType {
-  /**
-   * The maximum length of the device ID is 512 bytes.
-   */
+  /* enum_maxdeviceidlengthtype_MaxDeviceIdLength */
   MaxDeviceIdLength = 512,
 }
 
-/**
- * Audio device management methods.
- */
+/* class_iaudiodevicemanager */
 export abstract class IAudioDeviceManager {
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_enumerateplaybackdevices */
   abstract enumeratePlaybackDevices(): AudioDeviceInfo[];
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_enumeraterecordingdevices */
   abstract enumerateRecordingDevices(): AudioDeviceInfo[];
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_setplaybackdevice */
   abstract setPlaybackDevice(deviceId: string): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getplaybackdevice */
   abstract getPlaybackDevice(): string;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getplaybackdeviceinfo */
   abstract getPlaybackDeviceInfo(): AudioDeviceInfo;
 
-  /**
-   * Sets the volume of the audio effects.
-   * Call this method after the playEffect method.
-   *
-   * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
+  /* api_iaudiodevicemanager_setplaybackdevicevolume */
   abstract setPlaybackDeviceVolume(volume: number): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getplaybackdevicevolume */
   abstract getPlaybackDeviceVolume(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_setrecordingdevice */
   abstract setRecordingDevice(deviceId: string): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getrecordingdevice */
   abstract getRecordingDevice(): string;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getrecordingdeviceinfo */
   abstract getRecordingDeviceInfo(): AudioDeviceInfo;
 
-  /**
-   * Sets the volume of the audio effects.
-   * Call this method after the playEffect method.
-   *
-   * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
+  /* api_iaudiodevicemanager_setrecordingdevicevolume */
   abstract setRecordingDeviceVolume(volume: number): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getrecordingdevicevolume */
   abstract getRecordingDeviceVolume(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_setloopbackdevice */
   abstract setLoopbackDevice(deviceId: string): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getloopbackdevice */
   abstract getLoopbackDevice(): string;
 
-  /**
-   * Stops or resumes publishing the local video stream.
-   * A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.This method does not affect any ongoing video recording, because it does not disable the camera.
-   *
-   * @param mute Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
+  /* api_iaudiodevicemanager_setplaybackdevicemute */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getplaybackdevicemute */
   abstract getPlaybackDeviceMute(): boolean;
 
-  /**
-   * Stops or resumes publishing the local video stream.
-   * A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.This method does not affect any ongoing video recording, because it does not disable the camera.
-   *
-   * @param mute Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
+  /* api_iaudiodevicemanager_setrecordingdevicemute */
   abstract setRecordingDeviceMute(mute: boolean): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getrecordingdevicemute */
   abstract getRecordingDeviceMute(): boolean;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_startplaybackdevicetest */
   abstract startPlaybackDeviceTest(testAudioFilePath: string): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_stopplaybackdevicetest */
   abstract stopPlaybackDeviceTest(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_startrecordingdevicetest */
   abstract startRecordingDeviceTest(indicationInterval: number): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_stoprecordingdevicetest */
   abstract stopRecordingDeviceTest(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_startaudiodeviceloopbacktest */
   abstract startAudioDeviceLoopbackTest(indicationInterval: number): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_stopaudiodeviceloopbacktest */
   abstract stopAudioDeviceLoopbackTest(): number;
 
-  /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
-   */
+  /* api_iaudiodevicemanager_followsystemplaybackdevice */
   abstract followSystemPlaybackDevice(enable: boolean): number;
 
-  /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
-   */
+  /* api_iaudiodevicemanager_followsystemrecordingdevice */
   abstract followSystemRecordingDevice(enable: boolean): number;
 
-  /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
-   */
+  /* api_iaudiodevicemanager_followsystemloopbackdevice */
   abstract followSystemLoopbackDevice(enable: boolean): number;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_release */
   abstract release(): void;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getplaybackdefaultdevice */
   abstract getPlaybackDefaultDevice(): AudioDeviceInfo;
 
-  /**
-   * @ignore
-   */
+  /* api_iaudiodevicemanager_getrecordingdefaultdevice */
   abstract getRecordingDefaultDevice(): AudioDeviceInfo;
 }

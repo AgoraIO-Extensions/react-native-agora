@@ -1,216 +1,126 @@
 import './extension/IAgoraMusicContentCenterExtension';
 import { IMediaPlayer } from './IAgoraMediaPlayer';
-/**
- * @ignore
- */
+/* enum_preloadstatuscode */
 export enum PreloadStatusCode {
-  /**
-   * @ignore
-   */
+  /* enum__KPreloadStatusCompleted */
   KPreloadStatusCompleted = 0,
-  /**
-   * @ignore
-   */
+  /* enum__KPreloadStatusFailed */
   KPreloadStatusFailed = 1,
-  /**
-   * @ignore
-   */
+  /* enum__KPreloadStatusPreloading */
   KPreloadStatusPreloading = 2,
 }
 
-/**
- * @ignore
- */
+/* enum_musiccontentcenterstatuscode */
 export enum MusicContentCenterStatusCode {
-  /**
-   * @ignore
-   */
+  /* enum__KMusicContentCenterStatusOk */
   KMusicContentCenterStatusOk = 0,
-  /**
-   * @ignore
-   */
+  /* enum__KMusicContentCenterStatusErr */
   KMusicContentCenterStatusErr = 1,
 }
 
-/**
- * @ignore
- */
+/* class_musicchartinfo */
 export class MusicChartInfo {
-  /**
-   * @ignore
-   */
+  /* class_musicchartinfo_chartName */
   chartName?: string;
-  /**
-   * @ignore
-   */
+  /* class_musicchartinfo_id */
   id?: number;
 }
 
-/**
- * @ignore
- */
+/* class_musicchartcollection */
 export abstract class MusicChartCollection {
-  /**
-   * @ignore
-   */
+  /* api_musicchartcollection_getcount */
   abstract getCount(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_musicchartcollection_get */
   abstract get(index: number): MusicChartInfo;
 }
 
-/**
- * @ignore
- */
+/* class_mvproperty */
 export class MvProperty {
-  /**
-   * @ignore
-   */
+  /* class_mvproperty_resolution */
   resolution?: string;
-  /**
-   * @ignore
-   */
+  /* class_mvproperty_bandwidth */
   bandwidth?: string;
 }
 
-/**
- * The climax parts of the music.
- */
+/* class_climaxsegment */
 export class ClimaxSegment {
-  /**
-   * The time (ms) when the climax part begins.
-   */
+  /* class_climaxsegment_startTimeMs */
   startTimeMs?: number;
-  /**
-   * The time (ms) when the climax part ends.
-   */
+  /* class_climaxsegment_endTimeMs */
   endTimeMs?: number;
 }
 
-/**
- * @ignore
- */
+/* class_music */
 export class Music {
-  /**
-   * @ignore
-   */
+  /* class_music_songCode */
   songCode?: number;
-  /**
-   * @ignore
-   */
+  /* class_music_name */
   name?: string;
-  /**
-   * @ignore
-   */
+  /* class_music_singer */
   singer?: string;
-  /**
-   * @ignore
-   */
+  /* class_music_poster */
   poster?: string;
-  /**
-   * @ignore
-   */
+  /* class_music_releaseTime */
   releaseTime?: string;
-  /**
-   * @ignore
-   */
+  /* class_music_durationS */
   durationS?: number;
-  /**
-   * @ignore
-   */
+  /* class_music_type */
   type?: number;
-  /**
-   * @ignore
-   */
+  /* class_music_pitchType */
   pitchType?: number;
-  /**
-   * @ignore
-   */
+  /* class_music_lyricCount */
   lyricCount?: number;
-  /**
-   * @ignore
-   */
+  /* class_music_lyricList */
   lyricList?: number[];
-  /**
-   * @ignore
-   */
+  /* class_music_climaxSegmentCount */
   climaxSegmentCount?: number;
-  /**
-   * @ignore
-   */
+  /* class_music_climaxSegmentList */
   climaxSegmentList?: ClimaxSegment[];
-  /**
-   * @ignore
-   */
+  /* class_music_mvPropertyCount */
   mvPropertyCount?: number;
-  /**
-   * @ignore
-   */
+  /* class_music_mvPropertyList */
   mvPropertyList?: MvProperty[];
 }
 
-/**
- * @ignore
- */
+/* class_musiccollection */
 export abstract class MusicCollection {
-  /**
-   * @ignore
-   */
+  /* api_musiccollection_getcount */
   abstract getCount(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_musiccollection_gettotal */
   abstract getTotal(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_musiccollection_getpage */
   abstract getPage(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_musiccollection_getpagesize */
   abstract getPageSize(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_musiccollection_getmusic */
   abstract getMusic(index: number): Music;
 }
 
-/**
- * @ignore
- */
+/* class_imusiccontentcentereventhandler */
 export interface IMusicContentCenterEventHandler {
-  /**
-   * @ignore
-   */
+  /* callback_imusiccontentcentereventhandler_onmusicchartsresult */
   onMusicChartsResult?(
     requestId: string,
     status: MusicContentCenterStatusCode,
     result: MusicChartInfo[]
   ): void;
 
-  /**
-   * @ignore
-   */
+  /* callback_imusiccontentcentereventhandler_onmusiccollectionresult */
   onMusicCollectionResult?(
     requestId: string,
     status: MusicContentCenterStatusCode,
     result: MusicCollection
   ): void;
 
-  /**
-   * @ignore
-   */
+  /* callback_imusiccontentcentereventhandler_onlyricresult */
   onLyricResult?(requestId: string, lyricUrl: string): void;
 
-  /**
-   * @ignore
-   */
+  /* callback_imusiccontentcentereventhandler_onpreloadevent */
   onPreLoadEvent?(
     songCode: number,
     percent: number,
@@ -220,78 +130,48 @@ export interface IMusicContentCenterEventHandler {
   ): void;
 }
 
-/**
- * @ignore
- */
+/* class_musiccontentcenterconfiguration */
 export class MusicContentCenterConfiguration {
-  /**
-   * @ignore
-   */
+  /* class_musiccontentcenterconfiguration_appId */
   appId?: string;
-  /**
-   * @ignore
-   */
+  /* class_musiccontentcenterconfiguration_token */
   token?: string;
-  /**
-   * @ignore
-   */
+  /* class_musiccontentcenterconfiguration_mccUid */
   mccUid?: number;
 }
 
-/**
- * @ignore
- */
+/* class_imusicplayer */
 export abstract class IMusicPlayer extends IMediaPlayer {
-  /**
-   * @ignore
-   */
+  /* api_imusicplayer_openwithsongcode */
   abstract openWithSongCode(songCode: number, startPos?: number): number;
 }
 
-/**
- * @ignore
- */
+/* class_imusiccontentcenter */
 export abstract class IMusicContentCenter {
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_initialize */
   abstract initialize(configuration: MusicContentCenterConfiguration): number;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_renewtoken */
   abstract renewToken(token: string): number;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_release */
   abstract release(): void;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_registereventhandler */
   abstract registerEventHandler(
     eventHandler: IMusicContentCenterEventHandler
   ): number;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_unregistereventhandler */
   abstract unregisterEventHandler(): number;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_createmusicplayer */
   abstract createMusicPlayer(): IMusicPlayer;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_getmusiccharts */
   abstract getMusicCharts(): string;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_getmusiccollectionbymusicchartid */
   abstract getMusicCollectionByMusicChartId(
     musicChartId: number,
     page: number,
@@ -299,9 +179,7 @@ export abstract class IMusicContentCenter {
     jsonOption?: string
   ): string;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_searchmusic */
   abstract searchMusic(
     requestId: string,
     keyWord: string,
@@ -310,18 +188,12 @@ export abstract class IMusicContentCenter {
     jsonOption?: string
   ): number;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_preload */
   abstract preload(songCode: number, jsonOption?: string): number;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_ispreloaded */
   abstract isPreloaded(songCode: number): number;
 
-  /**
-   * @ignore
-   */
+  /* api_imusiccontentcenter_getlyric */
   abstract getLyric(songCode: number, lyricType?: number): string;
 }

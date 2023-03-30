@@ -1,3792 +1,2006 @@
 import './extension/AgoraBaseExtension';
 import { MediaSourceType, RenderModeType } from './AgoraMediaBase';
-/**
- * The channel profile.
- */
+/* enum_channelprofiletype */
 export enum ChannelProfileType {
-  /**
-   * 0: Communication. Use this profile when there are only two users in the channel.
-   */
+  /* enum_channelprofiletype_ChannelProfileCommunication */
   ChannelProfileCommunication = 0,
-  /**
-   * 1: Live streaming. Live streaming. Use this profile when there are more than two users in the channel.
-   */
+  /* enum_channelprofiletype_ChannelProfileLiveBroadcasting */
   ChannelProfileLiveBroadcasting = 1,
-  /**
-   * 2: Gaming. This profile is deprecated.
-   */
+  /* enum_channelprofiletype_ChannelProfileGame */
   ChannelProfileGame = 2,
-  /**
-   * Cloud gaming. The scenario is optimized for latency. Use this profile if the use case requires frequent interactions between users.
-   */
+  /* enum_channelprofiletype_ChannelProfileCloudGaming */
   ChannelProfileCloudGaming = 3,
-  /**
-   * @ignore
-   */
+  /* enum_channelprofiletype_ChannelProfileCommunication1v1 */
   ChannelProfileCommunication1v1 = 4,
 }
 
-/**
- * @ignore
- */
+/* enum_warncodetype */
 export enum WarnCodeType {
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnInvalidView */
   WarnInvalidView = 8,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnInitVideo */
   WarnInitVideo = 16,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnPending */
   WarnPending = 20,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnNoAvailableChannel */
   WarnNoAvailableChannel = 103,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnLookupChannelTimeout */
   WarnLookupChannelTimeout = 104,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnLookupChannelRejected */
   WarnLookupChannelRejected = 105,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnOpenChannelTimeout */
   WarnOpenChannelTimeout = 106,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnOpenChannelRejected */
   WarnOpenChannelRejected = 107,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnSwitchLiveVideoTimeout */
   WarnSwitchLiveVideoTimeout = 111,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnSetClientRoleTimeout */
   WarnSetClientRoleTimeout = 118,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnOpenChannelInvalidTicket */
   WarnOpenChannelInvalidTicket = 121,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnOpenChannelTryNextVos */
   WarnOpenChannelTryNextVos = 122,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnChannelConnectionUnrecoverable */
   WarnChannelConnectionUnrecoverable = 131,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnChannelConnectionIpChanged */
   WarnChannelConnectionIpChanged = 132,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnChannelConnectionPortChanged */
   WarnChannelConnectionPortChanged = 133,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnChannelSocketError */
   WarnChannelSocketError = 134,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAudioMixingOpenError */
   WarnAudioMixingOpenError = 701,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmRuntimePlayoutWarning */
   WarnAdmRuntimePlayoutWarning = 1014,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmRuntimeRecordingWarning */
   WarnAdmRuntimeRecordingWarning = 1016,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmRecordAudioSilence */
   WarnAdmRecordAudioSilence = 1019,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmPlayoutMalfunction */
   WarnAdmPlayoutMalfunction = 1020,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmRecordMalfunction */
   WarnAdmRecordMalfunction = 1021,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmRecordAudioLowlevel */
   WarnAdmRecordAudioLowlevel = 1031,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmPlayoutAudioLowlevel */
   WarnAdmPlayoutAudioLowlevel = 1032,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmWindowsNoDataReadyEvent */
   WarnAdmWindowsNoDataReadyEvent = 1040,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnApmHowling */
   WarnApmHowling = 1051,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmGlitchState */
   WarnAdmGlitchState = 1052,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmImproperSettings */
   WarnAdmImproperSettings = 1053,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmWinCoreNoRecordingDevice */
   WarnAdmWinCoreNoRecordingDevice = 1322,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmWinCoreNoPlayoutDevice */
   WarnAdmWinCoreNoPlayoutDevice = 1323,
-  /**
-   * @ignore
-   */
+  /* enum_warncodetype_WarnAdmWinCoreImproperCaptureRelease */
   WarnAdmWinCoreImproperCaptureRelease = 1324,
 }
 
-/**
- * Error codes.
- * An error code indicates that the SDK encountered an unrecoverable error that requires application intervention. For example, an error is returned when the camera fails to open, and the app needs to inform the user that the camera cannot be used.
- */
+/* enum_errorcodetype */
 export enum ErrorCodeType {
-  /**
-   * 0: No error.
-   */
+  /* enum_errorcodetype_ErrOk */
   ErrOk = 0,
-  /**
-   * 1: General error with no classified reason. Try calling the method again.
-   */
+  /* enum_errorcodetype_ErrFailed */
   ErrFailed = 1,
-  /**
-   * 2: An invalid parameter is used. For example, the specified channel name includes illegal characters. Reset the parameter.
-   */
+  /* enum_errorcodetype_ErrInvalidArgument */
   ErrInvalidArgument = 2,
-  /**
-   * 3: The SDK is not ready. Possible reasons include the following:The initialization of IRtcEngine fails. Reinitialize the IRtcEngine.No user has joined the channel when the method is called. Check the code logic.The user has not left the channel when the rate or complain method is called. Check the code logic.The audio module is disabled.The program is not complete.
-   */
+  /* enum_errorcodetype_ErrNotReady */
   ErrNotReady = 3,
-  /**
-   * 4: IRtcEngine does not support the request. Possible reasons include the following:The built-in encryption mode is incorrect, or the SDK fails to load the external encryption library. Check the encryption mode setting, or reload the external encryption library.
-   */
+  /* enum_errorcodetype_ErrNotSupported */
   ErrNotSupported = 4,
-  /**
-   * 5: The request is rejected. Possible reasons include the following:The IRtcEngine initialization fails. Reinitialize the IRtcEngine.The channel name is set as the empty string "" when joining the channel. Reset the channel name.When the joinChannelEx method is called to join multiple channels, the specified channel name is already in use. Reset the channel name.
-   */
+  /* enum_errorcodetype_ErrRefused */
   ErrRefused = 5,
-  /**
-   * 6: The buffer size is insufficient to store the returned data.
-   */
+  /* enum_errorcodetype_ErrBufferTooSmall */
   ErrBufferTooSmall = 6,
-  /**
-   * 7: A method is called before the initialization of IRtcEngine. Ensure that the IRtcEngine object is initialized before using this method.
-   */
+  /* enum_errorcodetype_ErrNotInitialized */
   ErrNotInitialized = 7,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrInvalidState */
   ErrInvalidState = 8,
-  /**
-   * 9: Permission to access is not granted. Check whether your app has access to the audio and video device.
-   */
+  /* enum_errorcodetype_ErrNoPermission */
   ErrNoPermission = 9,
-  /**
-   * 10: A timeout occurs. Some API calls require the SDK to return the execution result. This error occurs if the SDK takes too long (more than 10 seconds) to return the result.
-   */
+  /* enum_errorcodetype_ErrTimedout */
   ErrTimedout = 10,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCanceled */
   ErrCanceled = 11,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrTooOften */
   ErrTooOften = 12,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrBindSocket */
   ErrBindSocket = 13,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrNetDown */
   ErrNetDown = 14,
-  /**
-   * 17: The request to join the channel is rejected. Possible reasons include the following:The user is already in the channel. Agora recommends using the onConnectionStateChanged callback to get whether the user is in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected(1) state.After calling startEchoTest for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
-   */
+  /* enum_errorcodetype_ErrJoinChannelRejected */
   ErrJoinChannelRejected = 17,
-  /**
-   * 18: Fails to leave the channel. Possible reasons include the following:The user has left the channel before calling the leaveChannel [1/2] method. Stop calling this method to clear this error.The user calls the leaveChannel [1/2] method to leave the channel before joining the channel. In this case, no extra operation is needed.
-   */
+  /* enum_errorcodetype_ErrLeaveChannelRejected */
   ErrLeaveChannelRejected = 18,
-  /**
-   * 19: Resources are already in use.
-   */
+  /* enum_errorcodetype_ErrAlreadyInUse */
   ErrAlreadyInUse = 19,
-  /**
-   * 20: The request is abandoned by the SDK, possibly because the request has been sent too frequently.
-   */
+  /* enum_errorcodetype_ErrAborted */
   ErrAborted = 20,
-  /**
-   * 21: The IRtcEngine fails to initialize and has crashed because of specific Windows firewall settings.
-   */
+  /* enum_errorcodetype_ErrInitNetEngine */
   ErrInitNetEngine = 21,
-  /**
-   * 22: The SDK fails to allocate resources because your app uses too many system resources or system resources are insufficient.
-   */
+  /* enum_errorcodetype_ErrResourceLimited */
   ErrResourceLimited = 22,
-  /**
-   * 101: The specified App ID is invalid. Rejoin the channel with a valid App ID.
-   */
+  /* enum_errorcodetype_ErrInvalidAppId */
   ErrInvalidAppId = 101,
-  /**
-   * 102: The specified channel name is invalid. A possible reason is that the parameter's data type is incorrect. Rejoin the channel with a valid channel name.
-   */
+  /* enum_errorcodetype_ErrInvalidChannelName */
   ErrInvalidChannelName = 102,
-  /**
-   * 103: Fails to get server resources in the specified region. Try another region when initializing IRtcEngine.
-   */
+  /* enum_errorcodetype_ErrNoServerResources */
   ErrNoServerResources = 103,
-  /**
-   * 109: The current token has expired. Apply for a new token on the server and call renewToken .Deprecated:This enumerator is deprecated. Use ConnectionChangedTokenExpired(9) in the onConnectionStateChanged callback instead.
-   */
+  /* enum_errorcodetype_ErrTokenExpired */
   ErrTokenExpired = 109,
-  /**
-   * 110: Invalid token Typical reasons include the following:App Certificate is enabled in Agora Console, but the code still uses App ID for authentication. Once App Certificate is enabled for a project, you must use token-based authentication.The uid used to generate the token is not the same as the uid used to join the channel.Deprecated:This enumerator is deprecated. Use ConnectionChangedInvalidToken(8) in the onConnectionStateChanged callback instead.
-   */
+  /* enum_errorcodetype_ErrInvalidToken */
   ErrInvalidToken = 110,
-  /**
-   * 111: The network connection is interrupted. The SDK triggers this callback when it loses connection with the server for more than four seconds after the connection is established.
-   */
+  /* enum_errorcodetype_ErrConnectionInterrupted */
   ErrConnectionInterrupted = 111,
-  /**
-   * 112: The network connection is lost. Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
-   */
+  /* enum_errorcodetype_ErrConnectionLost */
   ErrConnectionLost = 112,
-  /**
-   * 113: The user is not in the channel when calling the sendStreamMessage method.
-   */
+  /* enum_errorcodetype_ErrNotInChannel */
   ErrNotInChannel = 113,
-  /**
-   * 114: The data size exceeds 1 KB when calling the sendStreamMessage method.
-   */
+  /* enum_errorcodetype_ErrSizeTooLarge */
   ErrSizeTooLarge = 114,
-  /**
-   * 115: The data bitrate exceeds 6 KB/s when calling the sendStreamMessage method.
-   */
+  /* enum_errorcodetype_ErrBitrateLimit */
   ErrBitrateLimit = 115,
-  /**
-   * 116: More than five data streams are created when calling the createDataStream method.
-   */
+  /* enum_errorcodetype_ErrTooManyDataStreams */
   ErrTooManyDataStreams = 116,
-  /**
-   * 117: The data stream transmission times out.
-   */
+  /* enum_errorcodetype_ErrStreamMessageTimeout */
   ErrStreamMessageTimeout = 117,
-  /**
-   * 119: Switching roles fails, try rejoining the channel.
-   */
+  /* enum_errorcodetype_ErrSetClientRoleNotAuthorized */
   ErrSetClientRoleNotAuthorized = 119,
-  /**
-   * 120: Decryption fails. The user might have entered an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
-   */
+  /* enum_errorcodetype_ErrDecryptionFailed */
   ErrDecryptionFailed = 120,
-  /**
-   * 121: The user ID is invalid.
-   */
+  /* enum_errorcodetype_ErrInvalidUserId */
   ErrInvalidUserId = 121,
-  /**
-   * 123: The user is banned from the server.
-   */
+  /* enum_errorcodetype_ErrClientIsBannedByServer */
   ErrClientIsBannedByServer = 123,
-  /**
-   * 130: The SDK does not support pushing encrypted streams to CDN.
-   */
+  /* enum_errorcodetype_ErrEncryptedStreamNotAllowedPublish */
   ErrEncryptedStreamNotAllowedPublish = 130,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrLicenseCredentialInvalid */
   ErrLicenseCredentialInvalid = 131,
-  /**
-   * 134: The user account is invalid, possibly because it contains invalid parameters.
-   */
+  /* enum_errorcodetype_ErrInvalidUserAccount */
   ErrInvalidUserAccount = 134,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrModuleNotFound */
   ErrModuleNotFound = 157,
-  /**
-   * 1001: The SDK fails to load the media engine.
-   */
+  /* enum_errorcodetype_ErrCertRaw */
   ErrCertRaw = 157,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertJsonPart */
   ErrCertJsonPart = 158,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertJsonInval */
   ErrCertJsonInval = 159,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertJsonNomem */
   ErrCertJsonNomem = 160,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertCustom */
   ErrCertCustom = 161,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertCredential */
   ErrCertCredential = 162,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertSign */
   ErrCertSign = 163,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertFail */
   ErrCertFail = 164,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertBuf */
   ErrCertBuf = 165,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertNull */
   ErrCertNull = 166,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertDuedate */
   ErrCertDuedate = 167,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrCertRequest */
   ErrCertRequest = 168,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrPcmsendFormat */
   ErrPcmsendFormat = 200,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrPcmsendBufferoverflow */
   ErrPcmsendBufferoverflow = 201,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrLoginAlreadyLogin */
   ErrLoginAlreadyLogin = 428,
-  /**
-   * @ignore
-   */
+  /* enum_errorcodetype_ErrLoadMediaEngine */
   ErrLoadMediaEngine = 1001,
-  /**
-   * 1005: A general error occurs (no specified reason). Check whether the audio device is already in use by another app, or try rejoining the channel.
-   */
+  /* enum_errorcodetype_ErrAdmGeneralError */
   ErrAdmGeneralError = 1005,
-  /**
-   * 1008: An error occurs when initializing the playback device. Check whether the playback device is already in use by another app, or try rejoining the channel.
-   */
+  /* enum_errorcodetype_ErrAdmInitPlayout */
   ErrAdmInitPlayout = 1008,
-  /**
-   * 1009: An error occurs when starting the playback device. Check the playback device.
-   */
+  /* enum_errorcodetype_ErrAdmStartPlayout */
   ErrAdmStartPlayout = 1009,
-  /**
-   * 1010: An error occurs when stopping the playback device.
-   */
+  /* enum_errorcodetype_ErrAdmStopPlayout */
   ErrAdmStopPlayout = 1010,
-  /**
-   * 1011: An error occurs when initializing the recording device. Check the recording device, or try rejoining the channel.
-   */
+  /* enum_errorcodetype_ErrAdmInitRecording */
   ErrAdmInitRecording = 1011,
-  /**
-   * 1012: An error occurs when starting the recording device. Check the recording device.
-   */
+  /* enum_errorcodetype_ErrAdmStartRecording */
   ErrAdmStartRecording = 1012,
-  /**
-   * 1013: An error occurs when stopping the recording device.
-   */
+  /* enum_errorcodetype_ErrAdmStopRecording */
   ErrAdmStopRecording = 1013,
-  /**
-   * 1501: Permission to access the camera is not granted. Check whether permission to access the camera permission is granted.
-   */
+  /* enum_errorcodetype_ErrVdmCameraNotAuthorized */
   ErrVdmCameraNotAuthorized = 1501,
 }
 
-/**
- * @ignore
- */
+/* enum_licenseerrortype */
 export enum LicenseErrorType {
-  /**
-   * @ignore
-   */
+  /* enum_licenseerrortype_LicenseErrInvalid */
   LicenseErrInvalid = 1,
-  /**
-   * @ignore
-   */
+  /* enum_licenseerrortype_LicenseErrExpire */
   LicenseErrExpire = 2,
-  /**
-   * @ignore
-   */
+  /* enum_licenseerrortype_LicenseErrMinutesExceed */
   LicenseErrMinutesExceed = 3,
-  /**
-   * @ignore
-   */
+  /* enum_licenseerrortype_LicenseErrLimitedPeriod */
   LicenseErrLimitedPeriod = 4,
-  /**
-   * @ignore
-   */
+  /* enum_licenseerrortype_LicenseErrDiffDevices */
   LicenseErrDiffDevices = 5,
-  /**
-   * @ignore
-   */
+  /* enum_licenseerrortype_LicenseErrInternal */
   LicenseErrInternal = 99,
 }
 
-/**
- * The operation permissions of the SDK on the audio session.
- */
+/* enum_audiosessionoperationrestriction */
 export enum AudioSessionOperationRestriction {
-  /**
-   * No restriction, the SDK can change the audio session.
-   */
+  /* enum_audiosessionoperationrestriction_AudioSessionOperationRestrictionNone */
   AudioSessionOperationRestrictionNone = 0,
-  /**
-   * The SDK cannot change the audio session category.
-   */
+  /* enum_audiosessionoperationrestriction_AudioSessionOperationRestrictionSetCategory */
   AudioSessionOperationRestrictionSetCategory = 1,
-  /**
-   * The SDK cannot change the audio session category, mode, or categoryOptions.
-   */
+  /* enum_audiosessionoperationrestriction_AudioSessionOperationRestrictionConfigureSession */
   AudioSessionOperationRestrictionConfigureSession = 1 << 1,
-  /**
-   * The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
-   */
+  /* enum_audiosessionoperationrestriction_AudioSessionOperationRestrictionDeactivateSession */
   AudioSessionOperationRestrictionDeactivateSession = 1 << 2,
-  /**
-   * Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
-   */
+  /* enum_audiosessionoperationrestriction_AudioSessionOperationRestrictionAll */
   AudioSessionOperationRestrictionAll = 1 << 7,
 }
 
-/**
- * Reasons for a user being offline.
- */
+/* enum_userofflinereasontype */
 export enum UserOfflineReasonType {
-  /**
-   * 0: The user quits the call.
-   */
+  /* enum_userofflinereasontype_UserOfflineQuit */
   UserOfflineQuit = 0,
-  /**
-   * 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time.If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
-   */
+  /* enum_userofflinereasontype_UserOfflineDropped */
   UserOfflineDropped = 1,
-  /**
-   * 2: The user switches the client role from the host to the audience.
-   */
+  /* enum_userofflinereasontype_UserOfflineBecomeAudience */
   UserOfflineBecomeAudience = 2,
 }
 
-/**
- * The interface class.
- */
+/* enum_interfaceidtype */
 export enum InterfaceIdType {
-  /**
-   * The IAudioDeviceManager interface class.
-   */
+  /* enum_interfaceidtype_AgoraIidAudioDeviceManager */
   AgoraIidAudioDeviceManager = 1,
-  /**
-   * The IVideoDeviceManager interface class.
-   */
+  /* enum_interfaceidtype_AgoraIidVideoDeviceManager */
   AgoraIidVideoDeviceManager = 2,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidParameterEngine */
   AgoraIidParameterEngine = 3,
-  /**
-   * The IMediaEngine interface class.
-   */
+  /* enum_interfaceidtype_AgoraIidMediaEngine */
   AgoraIidMediaEngine = 4,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidAudioEngine */
   AgoraIidAudioEngine = 5,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidVideoEngine */
   AgoraIidVideoEngine = 6,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidRtcConnection */
   AgoraIidRtcConnection = 7,
-  /**
-   * This interface class is deprecated.
-   */
+  /* enum_interfaceidtype_AgoraIidSignalingEngine */
   AgoraIidSignalingEngine = 8,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidMediaEngineRegulator */
   AgoraIidMediaEngineRegulator = 9,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidCloudSpatialAudio */
   AgoraIidCloudSpatialAudio = 10,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidLocalSpatialAudio */
   AgoraIidLocalSpatialAudio = 11,
-  /**
-   * The IMediaRecorder interface class.
-   */
+  /* enum_interfaceidtype_AgoraIidMediaRecorder */
   AgoraIidMediaRecorder = 12,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidStateSync */
   AgoraIidStateSync = 13,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidMetachatService */
   AgoraIidMetachatService = 14,
-  /**
-   * @ignore
-   */
+  /* enum_interfaceidtype_AgoraIidMusicContentCenter */
   AgoraIidMusicContentCenter = 15,
 }
 
-/**
- * Network quality types.
- */
+/* enum_qualitytype */
 export enum QualityType {
-  /**
-   * 0: The network quality is unknown.
-   */
+  /* enum_qualitytype_QualityUnknown */
   QualityUnknown = 0,
-  /**
-   * 1: The network quality is excellent.
-   */
+  /* enum_qualitytype_QualityExcellent */
   QualityExcellent = 1,
-  /**
-   * 2: The network quality is quite good, but the bitrate may be slightly lower than excellent.
-   */
+  /* enum_qualitytype_QualityGood */
   QualityGood = 2,
-  /**
-   * 3: Users can feel the communication is slightly impaired.
-   */
+  /* enum_qualitytype_QualityPoor */
   QualityPoor = 3,
-  /**
-   * 4: Users cannot communicate smoothly.
-   */
+  /* enum_qualitytype_QualityBad */
   QualityBad = 4,
-  /**
-   * 5: The quality is so bad that users can barely communicate.
-   */
+  /* enum_qualitytype_QualityVbad */
   QualityVbad = 5,
-  /**
-   * 6: The network is down and users cannot communicate at all.
-   */
+  /* enum_qualitytype_QualityDown */
   QualityDown = 6,
-  /**
-   * 7: Users cannot detect the network quality. (Not in use.)
-   */
+  /* enum_qualitytype_QualityUnsupported */
   QualityUnsupported = 7,
-  /**
-   * 8: Detecting the network quality.
-   */
+  /* enum_qualitytype_QualityDetecting */
   QualityDetecting = 8,
 }
 
-/**
- * @ignore
- */
+/* enum_fitmodetype */
 export enum FitModeType {
-  /**
-   * @ignore
-   */
+  /* enum_fitmodetype_ModeCover */
   ModeCover = 1,
-  /**
-   * @ignore
-   */
+  /* enum_fitmodetype_ModeContain */
   ModeContain = 2,
 }
 
-/**
- * The clockwise rotation of the video.
- */
+/* enum_videoorientation */
 export enum VideoOrientation {
-  /**
-   * 0: (Default) No rotation.
-   */
+  /* enum_videoorientation_VideoOrientation0 */
   VideoOrientation0 = 0,
-  /**
-   * 90: 90 degrees.
-   */
+  /* enum_videoorientation_VideoOrientation90 */
   VideoOrientation90 = 90,
-  /**
-   * 180: 180 degrees.
-   */
+  /* enum_videoorientation_VideoOrientation180 */
   VideoOrientation180 = 180,
-  /**
-   * 270: 270 degrees.
-   */
+  /* enum_videoorientation_VideoOrientation270 */
   VideoOrientation270 = 270,
 }
 
-/**
- * Video frame rate.
- */
+/* enum_framerate */
 export enum FrameRate {
-  /**
-   * 1: 1 fps
-   */
+  /* enum_framerate_FrameRateFps1 */
   FrameRateFps1 = 1,
-  /**
-   * 7: 7 fps
-   */
+  /* enum_framerate_FrameRateFps7 */
   FrameRateFps7 = 7,
-  /**
-   * 10: 10 fps
-   */
+  /* enum_framerate_FrameRateFps10 */
   FrameRateFps10 = 10,
-  /**
-   * 15: 15 fps
-   */
+  /* enum_framerate_FrameRateFps15 */
   FrameRateFps15 = 15,
-  /**
-   * 24: 24 fps
-   */
+  /* enum_framerate_FrameRateFps24 */
   FrameRateFps24 = 24,
-  /**
-   * 30: 30 fps
-   */
+  /* enum_framerate_FrameRateFps30 */
   FrameRateFps30 = 30,
-  /**
-   * @ignore
-   */
+  /* enum_framerate_FrameRateFps60 */
   FrameRateFps60 = 60,
 }
 
-/**
- * @ignore
- */
+/* enum_framewidth */
 export enum FrameWidth {
-  /**
-   * @ignore
-   */
+  /* enum_framewidth_FrameWidth640 */
   FrameWidth640 = 640,
 }
 
-/**
- * @ignore
- */
+/* enum_frameheight */
 export enum FrameHeight {
-  /**
-   * @ignore
-   */
+  /* enum_frameheight_FrameHeight360 */
   FrameHeight360 = 360,
 }
 
-/**
- * The video frame type.
- */
+/* enum_videoframetype */
 export enum VideoFrameType {
-  /**
-   * 0: A black frame.
-   */
+  /* enum_videoframetype_VideoFrameTypeBlankFrame */
   VideoFrameTypeBlankFrame = 0,
-  /**
-   * 3: Key frame.
-   */
+  /* enum_videoframetype_VideoFrameTypeKeyFrame */
   VideoFrameTypeKeyFrame = 3,
-  /**
-   * 4: Delta frame.
-   */
+  /* enum_videoframetype_VideoFrameTypeDeltaFrame */
   VideoFrameTypeDeltaFrame = 4,
-  /**
-   * 5: The B frame.
-   */
+  /* enum_videoframetype_VideoFrameTypeBFrame */
   VideoFrameTypeBFrame = 5,
-  /**
-   * 6: A discarded frame.
-   */
+  /* enum_videoframetype_VideoFrameTypeDroppableFrame */
   VideoFrameTypeDroppableFrame = 6,
-  /**
-   * Unknown frame.
-   */
+  /* enum_videoframetype_VideoFrameTypeUnknow */
   VideoFrameTypeUnknow = 7,
 }
 
-/**
- * Video output orientation mode.
- */
+/* enum_orientationmode */
 export enum OrientationMode {
-  /**
-   * 0: (Default) The output video always follows the orientation of the captured video. The receiver takes the rotational information passed on from the video encoder. This mode applies to scenarios where video orientation can be adjusted on the receiver.If the captured video is in landscape mode, the output video is in landscape mode.If the captured video is in portrait mode, the output video is in portrait mode.
-   */
+  /* enum_orientationmode_OrientationModeAdaptive */
   OrientationModeAdaptive = 0,
-  /**
-   * @ignore
-   */
+  /* enum_orientationmode_OrientationModeFixedLandscape */
   OrientationModeFixedLandscape = 1,
-  /**
-   * @ignore
-   */
+  /* enum_orientationmode_OrientationModeFixedPortrait */
   OrientationModeFixedPortrait = 2,
 }
 
-/**
- * Video degradation preferences when the bandwidth is a constraint.
- */
+/* enum_degradationpreference */
 export enum DegradationPreference {
-  /**
-   * 0: (Default) Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
-   */
+  /* enum_degradationpreference_MaintainQuality */
   MaintainQuality = 0,
-  /**
-   * 1: Reduces the video resolution while maintaining the video frame rate during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality is allowed to be reduced.
-   */
+  /* enum_degradationpreference_MaintainFramerate */
   MaintainFramerate = 1,
-  /**
-   * 2: Reduces the video frame rate and video resolution simultaneously during video encoding under limited bandwidth. The MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged .
-   */
+  /* enum_degradationpreference_MaintainBalanced */
   MaintainBalanced = 2,
-  /**
-   * 3: Reduces the video frame rate while maintaining the video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
-   */
+  /* enum_degradationpreference_MaintainResolution */
   MaintainResolution = 3,
-  /**
-   * @ignore
-   */
+  /* enum_degradationpreference_Disabled */
   Disabled = 100,
 }
 
-/**
- * The video dimension.
- */
+/* class_videodimensions */
 export class VideoDimensions {
-  /**
-   * The width (pixels) of the video.
-   */
+  /* class_videodimensions_width */
   width?: number;
-  /**
-   * The height (pixels) of the video.
-   */
+  /* class_videodimensions_height */
   height?: number;
 }
 
-/**
- * Video codec types.
- */
+/* enum_videocodectype */
 export enum VideoCodecType {
-  /**
-   * @ignore
-   */
+  /* enum_videocodectype_VideoCodecNone */
   VideoCodecNone = 0,
-  /**
-   * 1: Standard VP8.
-   */
+  /* enum_videocodectype_VideoCodecVp8 */
   VideoCodecVp8 = 1,
-  /**
-   * 2: Standard H.264.
-   */
+  /* enum_videocodectype_VideoCodecH264 */
   VideoCodecH264 = 2,
-  /**
-   * @ignore
-   */
+  /* enum_videocodectype_VideoCodecH265 */
   VideoCodecH265 = 3,
-  /**
-   * @ignore
-   */
+  /* enum_videocodectype_VideoCodecGeneric */
   VideoCodecGeneric = 6,
-  /**
-   * @ignore
-   */
+  /* enum_videocodectype_VideoCodecGenericH264 */
   VideoCodecGenericH264 = 7,
-  /**
-   * @ignore
-   */
+  /* enum_videocodectype_VideoCodecAv1 */
   VideoCodecAv1 = 12,
-  /**
-   * @ignore
-   */
+  /* enum_videocodectype_VideoCodecVp9 */
   VideoCodecVp9 = 13,
-  /**
-   * @ignore
-   */
+  /* enum_videocodectype_VideoCodecGenericJpeg */
   VideoCodecGenericJpeg = 20,
 }
 
-/**
- * @ignore
- */
+/* enum_tccmode */
 export enum TCcMode {
-  /**
-   * @ignore
-   */
+  /* enum_tccmode_CcEnabled */
   CcEnabled = 0,
-  /**
-   * @ignore
-   */
+  /* enum_tccmode_CcDisabled */
   CcDisabled = 1,
 }
 
-/**
- * @ignore
- */
+/* class_senderoptions */
 export class SenderOptions {
-  /**
-   * @ignore
-   */
+  /* class_senderoptions_ccMode */
   ccMode?: TCcMode;
-  /**
-   * @ignore
-   */
+  /* class_senderoptions_codecType */
   codecType?: VideoCodecType;
-  /**
-   * @ignore
-   */
+  /* class_senderoptions_targetBitrate */
   targetBitrate?: number;
 }
 
-/**
- * The codec type of audio.
- */
+/* enum_audiocodectype */
 export enum AudioCodecType {
-  /**
-   * 1: OPUS.
-   */
+  /* enum_audiocodectype_AudioCodecOpus */
   AudioCodecOpus = 1,
-  /**
-   * 3: PCMA.
-   */
+  /* enum_audiocodectype_AudioCodecPcma */
   AudioCodecPcma = 3,
-  /**
-   * 4: PCMU.
-   */
+  /* enum_audiocodectype_AudioCodecPcmu */
   AudioCodecPcmu = 4,
-  /**
-   * 5: G722.
-   */
+  /* enum_audiocodectype_AudioCodecG722 */
   AudioCodecG722 = 5,
-  /**
-   * 8: LC-AAC.
-   */
+  /* enum_audiocodectype_AudioCodecAaclc */
   AudioCodecAaclc = 8,
-  /**
-   * 9: HE-AAC.
-   */
+  /* enum_audiocodectype_AudioCodecHeaac */
   AudioCodecHeaac = 9,
-  /**
-   * 10: JC1.
-   */
+  /* enum_audiocodectype_AudioCodecJc1 */
   AudioCodecJc1 = 10,
-  /**
-   * 11: HE-AAC v2.
-   */
+  /* enum_audiocodectype_AudioCodecHeaac2 */
   AudioCodecHeaac2 = 11,
-  /**
-   * @ignore
-   */
+  /* enum_audiocodectype_AudioCodecLpcnet */
   AudioCodecLpcnet = 12,
 }
 
-/**
- * Audio encoding type.
- */
+/* enum_audioencodingtype */
 export enum AudioEncodingType {
-  /**
-   * AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeAac16000Low */
   AudioEncodingTypeAac16000Low = 0x010101,
-  /**
-   * AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeAac16000Medium */
   AudioEncodingTypeAac16000Medium = 0x010102,
-  /**
-   * AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeAac32000Low */
   AudioEncodingTypeAac32000Low = 0x010201,
-  /**
-   * AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeAac32000Medium */
   AudioEncodingTypeAac32000Medium = 0x010202,
-  /**
-   * AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeAac32000High */
   AudioEncodingTypeAac32000High = 0x010203,
-  /**
-   * AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeAac48000Medium */
   AudioEncodingTypeAac48000Medium = 0x010302,
-  /**
-   * AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeAac48000High */
   AudioEncodingTypeAac48000High = 0x010303,
-  /**
-   * OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeOpus16000Low */
   AudioEncodingTypeOpus16000Low = 0x020101,
-  /**
-   * OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeOpus16000Medium */
   AudioEncodingTypeOpus16000Medium = 0x020102,
-  /**
-   * OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeOpus48000Medium */
   AudioEncodingTypeOpus48000Medium = 0x020302,
-  /**
-   * OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
-   */
+  /* enum_audioencodingtype_AudioEncodingTypeOpus48000High */
   AudioEncodingTypeOpus48000High = 0x020303,
 }
 
-/**
- * The adaptation mode of the watermark.
- */
+/* enum_watermarkfitmode */
 export enum WatermarkFitMode {
-  /**
-   * Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions . The settings in WatermarkRatio are invalid.
-   */
+  /* enum_watermarkfitmode_FitModeCoverPosition */
   FitModeCoverPosition = 0,
-  /**
-   * Use the value you set in WatermarkRatio . The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
-   */
+  /* enum_watermarkfitmode_FitModeUseImageRatio */
   FitModeUseImageRatio = 1,
 }
 
-/**
- * @ignore
- */
+/* class_encodedaudioframeadvancedsettings */
 export class EncodedAudioFrameAdvancedSettings {
-  /**
-   * @ignore
-   */
+  /* class_encodedaudioframeadvancedsettings_speech */
   speech?: boolean;
-  /**
-   * @ignore
-   */
+  /* class_encodedaudioframeadvancedsettings_sendEvenIfEmpty */
   sendEvenIfEmpty?: boolean;
 }
 
-/**
- * Audio information after encoding.
- */
+/* class_encodedaudioframeinfo */
 export class EncodedAudioFrameInfo {
-  /**
-   * Audio Codec type: AudioCodecType
-   */
+  /* class_encodedaudioframeinfo_codec */
   codec?: AudioCodecType;
-  /**
-   * Audio sample rate (Hz).
-   */
+  /* class_encodedaudioframeinfo_sampleRateHz */
   sampleRateHz?: number;
-  /**
-   * The number of audio samples per channel.
-   */
+  /* class_encodedaudioframeinfo_samplesPerChannel */
   samplesPerChannel?: number;
-  /**
-   * The number of audio channels.
-   */
+  /* class_encodedaudioframeinfo_numberOfChannels */
   numberOfChannels?: number;
-  /**
-   * This function is currently not supported.
-   */
+  /* class_encodedaudioframeinfo_advancedSettings */
   advancedSettings?: EncodedAudioFrameAdvancedSettings;
-  /**
-   * The Unix timestamp (ms) for capturing the external encoded video frames.
-   */
+  /* class_encodedaudioframeinfo_captureTimeMs */
   captureTimeMs?: number;
 }
 
-/**
- * @ignore
- */
+/* class_audiopcmdatainfo */
 export class AudioPcmDataInfo {
-  /**
-   * @ignore
-   */
+  /* class_audiopcmdatainfo_samplesPerChannel */
   samplesPerChannel?: number;
-  /**
-   * @ignore
-   */
+  /* class_audiopcmdatainfo_channelNum */
   channelNum?: number;
-  /**
-   * @ignore
-   */
+  /* class_audiopcmdatainfo_samplesOut */
   samplesOut?: number;
-  /**
-   * @ignore
-   */
+  /* class_audiopcmdatainfo_elapsedTimeMs */
   elapsedTimeMs?: number;
-  /**
-   * @ignore
-   */
+  /* class_audiopcmdatainfo_ntpTimeMs */
   ntpTimeMs?: number;
 }
 
-/**
- * @ignore
- */
+/* enum_h264packetizemode */
 export enum H264PacketizeMode {
-  /**
-   * @ignore
-   */
+  /* enum_h264packetizemode_NonInterleaved */
   NonInterleaved = 0,
-  /**
-   * @ignore
-   */
+  /* enum_h264packetizemode_SingleNalUnit */
   SingleNalUnit = 1,
 }
 
-/**
- * The type of video streams.
- */
+/* enum_videostreamtype */
 export enum VideoStreamType {
-  /**
-   * 0: High-quality video stream.
-   */
+  /* enum_videostreamtype_VideoStreamHigh */
   VideoStreamHigh = 0,
-  /**
-   * 1: Low-quality video stream.
-   */
+  /* enum_videostreamtype_VideoStreamLow */
   VideoStreamLow = 1,
 }
 
-/**
- * Video subscription options.
- */
+/* class_videosubscriptionoptions */
 export class VideoSubscriptionOptions {
-  /**
-   * The video stream type that you want to subscribe to. The default value is VideoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType .
-   */
+  /* class_videosubscriptionoptions_type */
   type?: VideoStreamType;
-  /**
-   * Whether to subscribe to encoded video frames only:true: Subscribe to the encoded video data (structured data) only; the SDK does not decode or render raw video data.false: (Default) Subscribe to both raw video data and encoded video data.
-   */
+  /* class_videosubscriptionoptions_encodedFrameOnly */
   encodedFrameOnly?: boolean;
 }
 
-/**
- * Information about externally encoded video frames.
- */
+/* class_encodedvideoframeinfo */
 export class EncodedVideoFrameInfo {
-  /**
-   * The codec type of the local video stream. See VideoCodecType . The default value is VideoCodecH264 (2).
-   */
+  /* class_encodedvideoframeinfo_codecType */
   codecType?: VideoCodecType;
-  /**
-   * Width (pixel) of the video frame.
-   */
+  /* class_encodedvideoframeinfo_width */
   width?: number;
-  /**
-   * Height (pixel) of the video frame.
-   */
+  /* class_encodedvideoframeinfo_height */
   height?: number;
-  /**
-   * The number of video frames per second.When this parameter is not 0, you can use it to calculate the Unix timestamp of externally encoded video frames.
-   */
+  /* class_encodedvideoframeinfo_framesPerSecond */
   framesPerSecond?: number;
-  /**
-   * The video frame type. See VideoFrameType .
-   */
+  /* class_encodedvideoframeinfo_frameType */
   frameType?: VideoFrameType;
-  /**
-   * The rotation information of the video frame. See VideoOrientation .
-   */
+  /* class_encodedvideoframeinfo_rotation */
   rotation?: VideoOrientation;
-  /**
-   * Reserved for future use.
-   */
+  /* class_encodedvideoframeinfo_trackId */
   trackId?: number;
-  /**
-   * The Unix timestamp (ms) for capturing the external encoded video frames.
-   */
+  /* class_encodedvideoframeinfo_captureTimeMs */
   captureTimeMs?: number;
-  /**
-   * @ignore
-   */
+  /* class_encodedvideoframeinfo_decodeTimeMs */
   decodeTimeMs?: number;
-  /**
-   * The user ID to push the externally encoded video frame.
-   */
+  /* class_encodedvideoframeinfo_uid */
   uid?: number;
-  /**
-   * The type of video streams. See VideoStreamType .
-   */
+  /* class_encodedvideoframeinfo_streamType */
   streamType?: VideoStreamType;
 }
 
-/**
- * Compression preference for video encoding.
- */
+/* enum_compressionpreference */
 export enum CompressionPreference {
-  /**
-   * 0: Low latency preference. The SDK compresses video frames to reduce latency. This preference is suitable for scenarios where smoothness is prioritized and reduced video quality is acceptable.
-   */
+  /* enum_compressionpreference_PreferLowLatency */
   PreferLowLatency = 0,
-  /**
-   * 1: (Default) High quality preference. The SDK compresses video frames while maintaining video quality. This preference is suitable for scenarios where video quality is prioritized.
-   */
+  /* enum_compressionpreference_PreferQuality */
   PreferQuality = 1,
 }
 
-/**
- * Video encoder preference.
- */
+/* enum_encodingpreference */
 export enum EncodingPreference {
-  /**
-   * -1: Adaptive preference. The SDK automatically selects the optimal encoding type for encoding based on factors such as platform and device type.
-   */
+  /* enum_encodingpreference_PreferAuto */
   PreferAuto = -1,
-  /**
-   * 0: Software coding preference. The SDK prefers software encoders for video encoding.
-   */
+  /* enum_encodingpreference_PreferSoftware */
   PreferSoftware = 0,
-  /**
-   * 1: Hardware encoding preference. The SDK prefers a hardware encoder for video encoding. When the device does not support hardware encoding, the SDK automatically uses software encoding and reports the currently used video encoder type through hwEncoderAccelerating in the onLocalVideoStats callback.
-   */
+  /* enum_encodingpreference_PreferHardware */
   PreferHardware = 1,
 }
 
-/**
- * Advanced options for video encoding.
- */
+/* class_advanceoptions */
 export class AdvanceOptions {
-  /**
-   * Video encoder preference. See EncodingPreference .
-   */
+  /* class_advanceoptions_encodingPreference */
   encodingPreference?: EncodingPreference;
-  /**
-   * Compression preference for video encoding. See CompressionPreference .
-   */
+  /* class_advanceoptions_compressionPreference */
   compressionPreference?: CompressionPreference;
 }
 
-/**
- * Video mirror mode.
- */
+/* enum_videomirrormodetype */
 export enum VideoMirrorModeType {
-  /**
-   * 0: (Default) The SDK determines the mirror mode.
-   */
+  /* enum_videomirrormodetype_VideoMirrorModeAuto */
   VideoMirrorModeAuto = 0,
-  /**
-   * 1: Enable mirror mode.
-   */
+  /* enum_videomirrormodetype_VideoMirrorModeEnabled */
   VideoMirrorModeEnabled = 1,
-  /**
-   * 2: Disable mirror mode.
-   */
+  /* enum_videomirrormodetype_VideoMirrorModeDisabled */
   VideoMirrorModeDisabled = 2,
 }
 
-/**
- * Video encoder configurations.
- */
+/* class_videoencoderconfiguration */
 export class VideoEncoderConfiguration {
-  /**
-   * The codec type of the local video stream. See VideoCodecType .
-   */
+  /* class_videoencoderconfiguration_codecType */
   codecType?: VideoCodecType;
-  /**
-   * The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 640 × 360. You can set a custom value.
-   */
+  /* class_videoencoderconfiguration_dimensions */
   dimensions?: VideoDimensions;
-  /**
-   * The frame rate (fps) of the encoding video frame. The default value is 15. See FrameRate .
-   */
+  /* class_videoencoderconfiguration_frameRate */
   frameRate?: number;
-  /**
-   * The encoding bitrate (Kbps) of the video.
-   */
+  /* class_videoencoderconfiguration_bitrate */
   bitrate?: number;
-  /**
-   * The minimum encoding bitrate (Kbps) of the video.The SDK automatically adjusts the encoding bitrate to adapt to the network conditions. Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and sacrifice the smoothness of the video transmission. Unless you have special requirements for image quality, Agora does not recommend changing this value.This parameter only applies to the interactive streaming profile.
-   */
+  /* class_videoencoderconfiguration_minBitrate */
   minBitrate?: number;
-  /**
-   * The orientation mode of the encoded video. See OrientationMode .
-   */
+  /* class_videoencoderconfiguration_orientationMode */
   orientationMode?: OrientationMode;
-  /**
-   * Video degradation preference under limited bandwidth. See DegradationPreference .
-   */
+  /* class_videoencoderconfiguration_degradationPreference */
   degradationPreference?: DegradationPreference;
-  /**
-   * Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
-   */
+  /* class_videoencoderconfiguration_mirrorMode */
   mirrorMode?: VideoMirrorModeType;
-  /**
-   * Advanced options for video encoding. See AdvanceOptions .
-   */
+  /* class_videoencoderconfiguration_advanceOptions */
   advanceOptions?: AdvanceOptions;
 }
 
-/**
- * The configurations for the data stream.
- * The following table shows the SDK behaviors under different parameter settings:
- */
+/* class_datastreamconfig */
 export class DataStreamConfig {
-  /**
-   * Whether to synchronize the data packet with the published audio packet.true: Synchronize the data packet with the audio packet.false: Do not synchronize the data packet with the audio packet.When you set the data packet to synchronize with the audio, then if the data packet delay is within the audio delay, the SDK triggers the onStreamMessage callback when the synchronized audio packet is played out. Do not set this parameter as true if you need the receiver to receive the data packet immediately. Agora recommends that you set this parameter to true only when you need to implement specific functions, for example, lyric synchronization.
-   */
+  /* class_datastreamconfig_syncWithAudio */
   syncWithAudio?: boolean;
-  /**
-   * Whether the SDK guarantees that the receiver receives the data in the sent order.true: Guarantee that the receiver receives the data in the sent order.false: Do not guarantee that the receiver receives the data in the sent order.Do not set this parameter as true if you need the receiver to receive the data packet immediately.
-   */
+  /* class_datastreamconfig_ordered */
   ordered?: boolean;
 }
 
-/**
- * The mode in which the video stream is sent.
- */
+/* enum_simulcaststreammode */
 export enum SimulcastStreamMode {
-  /**
-   * -1: By default, the low-quality video steam is not sent; the SDK automatically switches to low-quality video stream mode after it receives a request to subscribe to a low-quality video stream.
-   */
+  /* enum_simulcaststreammode_AutoSimulcastStream */
   AutoSimulcastStream = -1,
-  /**
-   * 0: Never send low-quality video stream.
-   */
+  /* enum_simulcaststreammode_DisableSimulcastStream */
   DisableSimulcastStream = 0,
-  /**
-   * 1: Always send low-quality video stream.
-   */
+  /* enum_simulcaststreammode_EnableSimulcastStream */
   EnableSimulcastStream = 1,
 }
 
-/**
- * The configuration of the low-quality video stream.
- */
+/* class_simulcaststreamconfig */
 export class SimulcastStreamConfig {
-  /**
-   * The video dimension. See VideoDimensions . The default value is 160 × 120.
-   */
+  /* class_simulcaststreamconfig_dimensions */
   dimensions?: VideoDimensions;
-  /**
-   * @ignore
-   */
+  /* class_simulcaststreamconfig_kBitrate */
   kBitrate?: number;
-  /**
-   * The capture frame rate (fps) of the local video. The default value is 5.
-   */
+  /* class_simulcaststreamconfig_framerate */
   framerate?: number;
 }
 
-/**
- * The location of the target area relative to the screen or window. If you do not set this parameter, the SDK selects the whole screen or window.
- */
+/* class_rectangle */
 export class Rectangle {
-  /**
-   * The horizontal offset from the top-left corner.
-   */
+  /* class_rectangle_x */
   x?: number;
-  /**
-   * The vertical offset from the top-left corner.
-   */
+  /* class_rectangle_y */
   y?: number;
-  /**
-   * The width of the target area.
-   */
+  /* class_rectangle_width */
   width?: number;
-  /**
-   * The height of the target area.
-   */
+  /* class_rectangle_height */
   height?: number;
 }
 
-/**
- * The position and size of the watermark on the screen.
- * The position and size of the watermark on the screen are determined by xRatio, yRatio, and widthRatio:(xRatio, yRatio) refers to the coordinates of the upper left corner of the watermark, which determines the distance from the upper left corner of the watermark to the upper left corner of the screen.The widthRatio determines the width of the watermark.
- */
+/* class_watermarkratio */
 export class WatermarkRatio {
-  /**
-   * The x-coordinate of the upper left corner of the watermark. The horizontal position relative to the origin, where the upper left corner of the screen is the origin, and the x-coordinate is the upper left corner of the watermark. The value range is [0.0,1.0], and the default value is 0.
-   */
+  /* class_watermarkratio_xRatio */
   xRatio?: number;
-  /**
-   * The y-coordinate of the upper left corner of the watermark. The vertical position relative to the origin, where the upper left corner of the screen is the origin, and the y-coordinate is the upper left corner of the screen. The value range is [0.0,1.0], and the default value is 0.
-   */
+  /* class_watermarkratio_yRatio */
   yRatio?: number;
-  /**
-   * The width of the watermark. The SDK calculates the height of the watermark proportionally according to this parameter value to ensure that the enlarged or reduced watermark image is not distorted. The value range is [0,1], and the default value is 0, which means no watermark is displayed.
-   */
+  /* class_watermarkratio_widthRatio */
   widthRatio?: number;
 }
 
-/**
- * Configurations of the watermark image.
- */
+/* class_watermarkoptions */
 export class WatermarkOptions {
-  /**
-   * Reserved for future use.
-   */
+  /* class_watermarkoptions_visibleInPreview */
   visibleInPreview?: boolean;
-  /**
-   * When the adaptation mode of the watermark is FitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See FitModeCoverPosition for details.
-   */
+  /* class_watermarkoptions_positionInLandscapeMode */
   positionInLandscapeMode?: Rectangle;
-  /**
-   * When the adaptation mode of the watermark is FitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See FitModeCoverPosition for details.
-   */
+  /* class_watermarkoptions_positionInPortraitMode */
   positionInPortraitMode?: Rectangle;
-  /**
-   * When the watermark adaptation mode is FitModeUseImageRatio, this parameter is used to set the watermark coordinates. See WatermarkRatio .
-   */
+  /* class_watermarkoptions_watermarkRatio */
   watermarkRatio?: WatermarkRatio;
-  /**
-   * The adaptation mode of the watermark. See WatermarkFitMode .
-   */
+  /* class_watermarkoptions_mode */
   mode?: WatermarkFitMode;
 }
 
-/**
- * Statistics of the channel.
- */
+/* class_rtcstats */
 export class RtcStats {
-  /**
-   * Call duration of the local user in seconds, represented by an aggregate value.
-   */
+  /* class_rtcstats_duration */
   duration?: number;
-  /**
-   * Total number of bytes transmitted, represented by an aggregate value.
-   */
+  /* class_rtcstats_txBytes */
   txBytes?: number;
-  /**
-   * Total number of bytes received, represented by an aggregate value.
-   */
+  /* class_rtcstats_rxBytes */
   rxBytes?: number;
-  /**
-   * Total number of audio bytes sent, represented by an aggregate value.
-   */
+  /* class_rtcstats_txAudioBytes */
   txAudioBytes?: number;
-  /**
-   * The total number of video bytes sent, represented by an aggregate value.
-   */
+  /* class_rtcstats_txVideoBytes */
   txVideoBytes?: number;
-  /**
-   * The total number of audio bytes received, represented by an aggregate value.
-   */
+  /* class_rtcstats_rxAudioBytes */
   rxAudioBytes?: number;
-  /**
-   * The total number of video bytes received, represented by an aggregate value.
-   */
+  /* class_rtcstats_rxVideoBytes */
   rxVideoBytes?: number;
-  /**
-   * Video transmission bitrate (Kbps), represented by an instantaneous value.
-   */
+  /* class_rtcstats_txKBitRate */
   txKBitRate?: number;
-  /**
-   * The receiving bitrate (Kbps), represented by an instantaneous value.
-   */
+  /* class_rtcstats_rxKBitRate */
   rxKBitRate?: number;
-  /**
-   * Audio receive bitrate (Kbps), represented by an instantaneous value.
-   */
+  /* class_rtcstats_rxAudioKBitRate */
   rxAudioKBitRate?: number;
-  /**
-   * The bitrate (Kbps) of sending the audio packet.
-   */
+  /* class_rtcstats_txAudioKBitRate */
   txAudioKBitRate?: number;
-  /**
-   * Video receive bitrate (Kbps), represented by an instantaneous value.
-   */
+  /* class_rtcstats_rxVideoKBitRate */
   rxVideoKBitRate?: number;
-  /**
-   * The bitrate (Kbps) of sending the video.
-   */
+  /* class_rtcstats_txVideoKBitRate */
   txVideoKBitRate?: number;
-  /**
-   * The client-to-server delay (ms).
-   */
+  /* class_rtcstats_lastmileDelay */
   lastmileDelay?: number;
-  /**
-   * The number of users in the channel.
-   */
+  /* class_rtcstats_userCount */
   userCount?: number;
-  /**
-   * Application CPU usage (%).The value of cpuTotalUsage is always reported as 0 in the onLeaveChannel callback.
-   */
+  /* class_rtcstats_cpuAppUsage */
   cpuAppUsage?: number;
-  /**
-   * The system CPU usage (%).The value of cpuTotalUsage is always reported as 0 in the onLeaveChannel callback.As of Android 8.1, you cannot get the CPU usage from this attribute due to system limitations.
-   */
+  /* class_rtcstats_cpuTotalUsage */
   cpuTotalUsage?: number;
-  /**
-   * The round-trip time delay (ms) from the client to the local router.This property is disabled on devices running iOS 14 or later, and enabled on devices running versions earlier than iOS 14 by default.To enable this property on devices running iOS 14 or later, .On Android, to get gatewayRtt, ensure that you add the android.permission.ACCESS_WIFI_STATE permission after </application> in the AndroidManifest.xml file in your project.
-   */
+  /* class_rtcstats_gatewayRtt */
   gatewayRtt?: number;
-  /**
-   * The memory ratio occupied by the app (%).This value is for reference only. Due to system limitations, you may not get this value.
-   */
+  /* class_rtcstats_memoryAppUsageRatio */
   memoryAppUsageRatio?: number;
-  /**
-   * The memory occupied by the system (%).This value is for reference only. Due to system limitations, you may not get this value.
-   */
+  /* class_rtcstats_memoryTotalUsageRatio */
   memoryTotalUsageRatio?: number;
-  /**
-   * The memory size occupied by the app (KB).This value is for reference only. Due to system limitations, you may not get this value.
-   */
+  /* class_rtcstats_memoryAppUsageInKbytes */
   memoryAppUsageInKbytes?: number;
-  /**
-   * The duration (ms) between the SDK starts connecting and the connection is established. If the value reported is 0, it means invalid.
-   */
+  /* class_rtcstats_connectTimeMs */
   connectTimeMs?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstAudioPacketDuration */
   firstAudioPacketDuration?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstVideoPacketDuration */
   firstVideoPacketDuration?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstVideoKeyFramePacketDuration */
   firstVideoKeyFramePacketDuration?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_packetsBeforeFirstKeyFramePacket */
   packetsBeforeFirstKeyFramePacket?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstAudioPacketDurationAfterUnmute */
   firstAudioPacketDurationAfterUnmute?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstVideoPacketDurationAfterUnmute */
   firstVideoPacketDurationAfterUnmute?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstVideoKeyFramePacketDurationAfterUnmute */
   firstVideoKeyFramePacketDurationAfterUnmute?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstVideoKeyFrameDecodedDurationAfterUnmute */
   firstVideoKeyFrameDecodedDurationAfterUnmute?: number;
-  /**
-   * @ignore
-   */
+  /* class_rtcstats_firstVideoKeyFrameRenderedDurationAfterUnmute */
   firstVideoKeyFrameRenderedDurationAfterUnmute?: number;
-  /**
-   * The packet loss rate (%) from the client to the Agora server before applying the anti-packet-loss algorithm.
-   */
+  /* class_rtcstats_txPacketLossRate */
   txPacketLossRate?: number;
-  /**
-   * The packet loss rate (%) from the Agora server to the client before using the anti-packet-loss method.
-   */
+  /* class_rtcstats_rxPacketLossRate */
   rxPacketLossRate?: number;
 }
 
-/**
- * The capture type of the custom video source.
- */
+/* enum_videosourcetype */
 export enum VideoSourceType {
-  /**
-   * @ignore
-   */
+  /* enum_videosourcetype_VideoSourceCameraPrimary */
   VideoSourceCameraPrimary = 0,
-  /**
-   * The camera.
-   */
+  /* enum_videosourcetype_VideoSourceCamera */
   VideoSourceCamera = 0,
-  /**
-   * The secondary camera.
-   */
+  /* enum_videosourcetype_VideoSourceCameraSecondary */
   VideoSourceCameraSecondary = 1,
-  /**
-   * The primary screen.
-   */
+  /* enum_videosourcetype_VideoSourceScreenPrimary */
   VideoSourceScreenPrimary = 2,
-  /**
-   * The screen.
-   */
+  /* enum_videosourcetype_VideoSourceScreen */
   VideoSourceScreen = 2,
-  /**
-   * The secondary screen.
-   */
+  /* enum_videosourcetype_VideoSourceScreenSecondary */
   VideoSourceScreenSecondary = 3,
-  /**
-   * The custom video source.
-   */
+  /* enum_videosourcetype_VideoSourceCustom */
   VideoSourceCustom = 4,
-  /**
-   * The video source from the media player.
-   */
+  /* enum_videosourcetype_VideoSourceMediaPlayer */
   VideoSourceMediaPlayer = 5,
-  /**
-   * The video source is a PNG image.
-   */
+  /* enum_videosourcetype_VideoSourceRtcImagePng */
   VideoSourceRtcImagePng = 6,
-  /**
-   * The video source is a JPEG image.
-   */
+  /* enum_videosourcetype_VideoSourceRtcImageJpeg */
   VideoSourceRtcImageJpeg = 7,
-  /**
-   * The video source is a GIF image.
-   */
+  /* enum_videosourcetype_VideoSourceRtcImageGif */
   VideoSourceRtcImageGif = 8,
-  /**
-   * The video source is remote video acquired by the network.
-   */
+  /* enum_videosourcetype_VideoSourceRemote */
   VideoSourceRemote = 9,
-  /**
-   * A transcoded video source.
-   */
+  /* enum_videosourcetype_VideoSourceTranscoded */
   VideoSourceTranscoded = 10,
-  /**
-   * An unknown video source.
-   */
+  /* enum_videosourcetype_VideoSourceUnknown */
   VideoSourceUnknown = 100,
 }
 
-/**
- * The user role in the interactive live streaming.
- */
+/* enum_clientroletype */
 export enum ClientRoleType {
-  /**
-   * 1: Host. A host can both send and receive streams.
-   */
+  /* enum_clientroletype_ClientRoleBroadcaster */
   ClientRoleBroadcaster = 1,
-  /**
-   * 2: (Default) Audience. An audience member can only receive streams.
-   */
+  /* enum_clientroletype_ClientRoleAudience */
   ClientRoleAudience = 2,
 }
 
-/**
- * Quality change of the local video in terms of target frame rate and target bit rate since last count.
- */
+/* enum_qualityadaptindication */
 export enum QualityAdaptIndication {
-  /**
-   * 0: The local video quality stays the same.
-   */
+  /* enum_qualityadaptindication_AdaptNone */
   AdaptNone = 0,
-  /**
-   * 1: The local video quality improves because the network bandwidth increases.
-   */
+  /* enum_qualityadaptindication_AdaptUpBandwidth */
   AdaptUpBandwidth = 1,
-  /**
-   * 2: The local video quality deteriorates because the network bandwidth decreases.
-   */
+  /* enum_qualityadaptindication_AdaptDownBandwidth */
   AdaptDownBandwidth = 2,
 }
 
-/**
- * The latency level of an audience member in interactive live streaming. This enum takes effect only when the user role is set to ClientRoleAudience .
- */
+/* enum_audiencelatencyleveltype */
 export enum AudienceLatencyLevelType {
-  /**
-   * 1: Low latency.
-   */
+  /* enum_audiencelatencyleveltype_AudienceLatencyLevelLowLatency */
   AudienceLatencyLevelLowLatency = 1,
-  /**
-   * 2: (Default) Ultra low latency.
-   */
+  /* enum_audiencelatencyleveltype_AudienceLatencyLevelUltraLowLatency */
   AudienceLatencyLevelUltraLowLatency = 2,
 }
 
-/**
- * The detailed options of a user.
- */
+/* class_clientroleoptions */
 export class ClientRoleOptions {
-  /**
-   * The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType .
-   */
+  /* class_clientroleoptions_audienceLatencyLevel */
   audienceLatencyLevel?: AudienceLatencyLevelType;
 }
 
-/**
- * The Quality of Experience (QoE) of the local user when receiving a remote audio stream.
- */
+/* enum_experiencequalitytype */
 export enum ExperienceQualityType {
-  /**
-   * 0: The QoE of the local user is good.
-   */
+  /* enum_experiencequalitytype_ExperienceQualityGood */
   ExperienceQualityGood = 0,
-  /**
-   * 1: The QoE of the local user is poor.
-   */
+  /* enum_experiencequalitytype_ExperienceQualityBad */
   ExperienceQualityBad = 1,
 }
 
-/**
- * Reasons why the QoE of the local user when receiving a remote audio stream is poor.
- */
+/* enum_experiencepoorreason */
 export enum ExperiencePoorReason {
-  /**
-   * 0: No reason, indicating a good QoE of the local user.
-   */
+  /* enum_experiencepoorreason_ExperienceReasonNone */
   ExperienceReasonNone = 0,
-  /**
-   * 1: The remote user's network quality is poor.
-   */
+  /* enum_experiencepoorreason_RemoteNetworkQualityPoor */
   RemoteNetworkQualityPoor = 1,
-  /**
-   * 2: The local user's network quality is poor.
-   */
+  /* enum_experiencepoorreason_LocalNetworkQualityPoor */
   LocalNetworkQualityPoor = 2,
-  /**
-   * 4: The local user's Wi-Fi or mobile network signal is weak.
-   */
+  /* enum_experiencepoorreason_WirelessSignalPoor */
   WirelessSignalPoor = 4,
-  /**
-   * 8: The local user enables both Wi-Fi and bluetooth, and their signals interfere with each other. As a result, audio transmission quality is undermined.
-   */
+  /* enum_experiencepoorreason_WifiBluetoothCoexist */
   WifiBluetoothCoexist = 8,
 }
 
-/**
- * Audio statistics of the remote user.
- */
+/* class_remoteaudiostats */
 export class RemoteAudioStats {
-  /**
-   * The user ID of the remote user.
-   */
+  /* class_remoteaudiostats_uid */
   uid?: number;
-  /**
-   * The quality of the audio stream sent by the user. See QualityType .
-   */
+  /* class_remoteaudiostats_quality */
   quality?: number;
-  /**
-   * The network delay (ms) from the sender to the receiver.
-   */
+  /* class_remoteaudiostats_networkTransportDelay */
   networkTransportDelay?: number;
-  /**
-   * The network delay (ms) from the audio receiver to the jitter buffer.When the receiving end is an audience member and audienceLatencyLevel of ClientRoleOptions is 1, this parameter does not take effect.
-   */
+  /* class_remoteaudiostats_jitterBufferDelay */
   jitterBufferDelay?: number;
-  /**
-   * The frame loss rate (%) of the remote audio stream in the reported interval.
-   */
+  /* class_remoteaudiostats_audioLossRate */
   audioLossRate?: number;
-  /**
-   * The number of audio channels.
-   */
+  /* class_remoteaudiostats_numChannels */
   numChannels?: number;
-  /**
-   * The sampling rate of the received audio stream in the reported interval.
-   */
+  /* class_remoteaudiostats_receivedSampleRate */
   receivedSampleRate?: number;
-  /**
-   * The average bitrate (Kbps) of the received audio stream in the reported interval.
-   */
+  /* class_remoteaudiostats_receivedBitrate */
   receivedBitrate?: number;
-  /**
-   * The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
-   */
+  /* class_remoteaudiostats_totalFrozenTime */
   totalFrozenTime?: number;
-  /**
-   * The total audio freeze time as a percentage (%) of the total time when the audio is available. The audio is considered available when the remote user neither stops sending the audio stream nor disables the audio module after joining the channel.
-   */
+  /* class_remoteaudiostats_frozenRate */
   frozenRate?: number;
-  /**
-   * The quality of the remote audio stream in the reported interval. The quality is determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method. The return value range is [0, 500]. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.The subjective perception of audio quality corresponding to the Agora real-time audio MOS scores is as follows:MOS scorePerception of audio qualityGreater than 4Excellent. The audio sounds clear and smooth.From 3.5 to 4Good. The audio has some perceptible impairment but still sounds clear.From 3 to 3.5Fair. The audio freezes occasionally and requires attentive listening.From 2.5 to 3Poor. The audio sounds choppy and requires considerable effort to understand.From 2 to 2.5Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.Less than 2Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible.
-   */
+  /* class_remoteaudiostats_mosValue */
   mosValue?: number;
-  /**
-   * The total active time (ms) between the start of the audio call and the callback of the remote user.The active time refers to the total duration of the remote user without the mute state.
-   */
+  /* class_remoteaudiostats_totalActiveTime */
   totalActiveTime?: number;
-  /**
-   * The total duration (ms) of the remote audio stream.
-   */
+  /* class_remoteaudiostats_publishDuration */
   publishDuration?: number;
-  /**
-   * The Quality of Experience (QoE) of the local user when receiving a remote audio stream. See ExperienceQualityType .
-   */
+  /* class_remoteaudiostats_qoeQuality */
   qoeQuality?: number;
-  /**
-   * Reasons why the QoE of the local user when receiving a remote audio stream is poor. See ExperiencePoorReason .
-   */
+  /* class_remoteaudiostats_qualityChangedReason */
   qualityChangedReason?: number;
 }
 
-/**
- * The audio profile.
- */
+/* enum_audioprofiletype */
 export enum AudioProfileType {
-  /**
-   * 0: The default audio profile.For the interactive streaming profile: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.For the communication profile: A sample rate of 32 kHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-   */
+  /* enum_audioprofiletype_AudioProfileDefault */
   AudioProfileDefault = 0,
-  /**
-   * 1: A sample rate of 32 kHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
-   */
+  /* enum_audioprofiletype_AudioProfileSpeechStandard */
   AudioProfileSpeechStandard = 1,
-  /**
-   * 2: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 64 Kbps.
-   */
+  /* enum_audioprofiletype_AudioProfileMusicStandard */
   AudioProfileMusicStandard = 2,
-  /**
-   * 3: A sample rate of 48 kHz, music encoding, stereo, and a bitrate of up to 80 Kbps.To implement stereo audio, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to AudioProcessingStereo in AdvancedAudioOptions.
-   */
+  /* enum_audioprofiletype_AudioProfileMusicStandardStereo */
   AudioProfileMusicStandardStereo = 3,
-  /**
-   * 4: A sample rate of 48 kHz, music encoding, mono, and a bitrate of up to 96 Kbps.
-   */
+  /* enum_audioprofiletype_AudioProfileMusicHighQuality */
   AudioProfileMusicHighQuality = 4,
-  /**
-   * 5: A sample rate of 48 kHz, music encoding, stereo, and a bitrate of up to 128 Kbps.To implement stereo audio, you also need to call setAdvancedAudioOptions and set audioProcessingChannels to AudioProcessingStereo in AdvancedAudioOptions.
-   */
+  /* enum_audioprofiletype_AudioProfileMusicHighQualityStereo */
   AudioProfileMusicHighQualityStereo = 5,
-  /**
-   * 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
-   */
+  /* enum_audioprofiletype_AudioProfileIot */
   AudioProfileIot = 6,
-  /**
-   * Enumerator boundary.
-   */
+  /* enum_audioprofiletype_AudioProfileNum */
   AudioProfileNum = 7,
 }
 
-/**
- * The audio scenarios.
- */
+/* enum_audioscenariotype */
 export enum AudioScenarioType {
-  /**
-   * 0: (Default) Automatic scenario match, where the SDK chooses the appropriate audio quality according to the user role and audio route.
-   */
+  /* enum_audioscenariotype_AudioScenarioDefault */
   AudioScenarioDefault = 0,
-  /**
-   * 3: High-quality audio scenario, where users mainly play music.
-   */
+  /* enum_audioscenariotype_AudioScenarioGameStreaming */
   AudioScenarioGameStreaming = 3,
-  /**
-   * 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. In this scenario, audience members receive a pop-up window to request permission of using microphones.
-   */
+  /* enum_audioscenariotype_AudioScenarioChatroom */
   AudioScenarioChatroom = 5,
-  /**
-   * 7: Real-time chorus scenario, where users have good network conditions and require ultra-low latency.
-   */
+  /* enum_audioscenariotype_AudioScenarioChorus */
   AudioScenarioChorus = 7,
-  /**
-   * 8: Meeting scenario that mainly contains the human voice.
-   */
+  /* enum_audioscenariotype_AudioScenarioMeeting */
   AudioScenarioMeeting = 8,
-  /**
-   * The number of enumerations.
-   */
+  /* enum_audioscenariotype_AudioScenarioNum */
   AudioScenarioNum = 9,
 }
 
-/**
- * The format of the video frame.
- */
+/* class_videoformat */
 export class VideoFormat {
-  /**
-   * The width (px) of the video frame.
-   */
+  /* class_videoformat_width */
   width?: number;
-  /**
-   * The height (px) of the video frame.
-   */
+  /* class_videoformat_height */
   height?: number;
-  /**
-   * The video frame rate (fps).
-   */
+  /* class_videoformat_fps */
   fps?: number;
 }
 
-/**
- * The content hint for screen sharing.
- */
+/* enum_videocontenthint */
 export enum VideoContentHint {
-  /**
-   * (Default) No content hint.
-   */
+  /* enum_videocontenthint_ContentHintNone */
   ContentHintNone = 0,
-  /**
-   * Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
-   */
+  /* enum_videocontenthint_ContentHintMotion */
   ContentHintMotion = 1,
-  /**
-   * Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slides, or texts.
-   */
+  /* enum_videocontenthint_ContentHintDetails */
   ContentHintDetails = 2,
 }
 
-/**
- * The screen sharing scenario.
- */
+/* enum_screenscenariotype */
 export enum ScreenScenarioType {
-  /**
-   * 1: (Default) Document. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share documents, slides, and tables, you can set this scenario.
-   */
+  /* enum_screenscenariotype_ScreenScenarioDocument */
   ScreenScenarioDocument = 1,
-  /**
-   * 2: Game. This scenario prioritizes the smoothness of screen sharing. If you share games, you can set this scenario.
-   */
+  /* enum_screenscenariotype_ScreenScenarioGaming */
   ScreenScenarioGaming = 2,
-  /**
-   * 3: Video. This scenario prioritizes the smoothness of screen sharing. If you share movies or live videos, you can set this scenario.
-   */
+  /* enum_screenscenariotype_ScreenScenarioVideo */
   ScreenScenarioVideo = 3,
-  /**
-   * 4: Remote control. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share the device desktop being remotely controlled, you can set this scenario.
-   */
+  /* enum_screenscenariotype_ScreenScenarioRdc */
   ScreenScenarioRdc = 4,
 }
 
-/**
- * The brightness level of the video image captured by the local camera.
- */
+/* enum_capturebrightnessleveltype */
 export enum CaptureBrightnessLevelType {
-  /**
-   * @ignore
-   */
+  /* enum_capturebrightnessleveltype_CaptureBrightnessLevelInvalid */
   CaptureBrightnessLevelInvalid = -1,
-  /**
-   * @ignore
-   */
+  /* enum_capturebrightnessleveltype_CaptureBrightnessLevelNormal */
   CaptureBrightnessLevelNormal = 0,
-  /**
-   * @ignore
-   */
+  /* enum_capturebrightnessleveltype_CaptureBrightnessLevelBright */
   CaptureBrightnessLevelBright = 1,
-  /**
-   * @ignore
-   */
+  /* enum_capturebrightnessleveltype_CaptureBrightnessLevelDark */
   CaptureBrightnessLevelDark = 2,
 }
 
-/**
- * The state of the local audio.
- */
+/* enum_localaudiostreamstate */
 export enum LocalAudioStreamState {
-  /**
-   * 0: The local audio is in the initial state.
-   */
+  /* enum_localaudiostreamstate_LocalAudioStreamStateStopped */
   LocalAudioStreamStateStopped = 0,
-  /**
-   * 1: The local audio capturing device starts successfully.
-   */
+  /* enum_localaudiostreamstate_LocalAudioStreamStateRecording */
   LocalAudioStreamStateRecording = 1,
-  /**
-   * 2: The first audio frame encodes successfully.
-   */
+  /* enum_localaudiostreamstate_LocalAudioStreamStateEncoding */
   LocalAudioStreamStateEncoding = 2,
-  /**
-   * 3: The local audio fails to start.
-   */
+  /* enum_localaudiostreamstate_LocalAudioStreamStateFailed */
   LocalAudioStreamStateFailed = 3,
 }
 
-/**
- * Local audio state error codes.
- */
+/* enum_localaudiostreamerror */
 export enum LocalAudioStreamError {
-  /**
-   * 0: The local audio is normal.
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorOk */
   LocalAudioStreamErrorOk = 0,
-  /**
-   * 1: No specified reason for the local audio failure. Remind your users to try to rejoin the channel.
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorFailure */
   LocalAudioStreamErrorFailure = 1,
-  /**
-   * 2: No permission to use the local audio capturing device. Remind your users to grant permission.Deprecated:This enumerator is deprecated. Please use RecordAudio in the onPermissionError callback instead.
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorDeviceNoPermission */
   LocalAudioStreamErrorDeviceNoPermission = 2,
-  /**
-   * 3: (Android and iOS only) The local audio capture device is used. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorDeviceBusy */
   LocalAudioStreamErrorDeviceBusy = 3,
-  /**
-   * 4: The local audio capture fails.
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorRecordFailure */
   LocalAudioStreamErrorRecordFailure = 4,
-  /**
-   * 5: The local audio encoding fails.
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorEncodeFailure */
   LocalAudioStreamErrorEncodeFailure = 5,
-  /**
-   * @ignore
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorNoRecordingDevice */
   LocalAudioStreamErrorNoRecordingDevice = 6,
-  /**
-   * @ignore
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorNoPlayoutDevice */
   LocalAudioStreamErrorNoPlayoutDevice = 7,
-  /**
-   * 8: (Android and iOS only) The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorInterrupted */
   LocalAudioStreamErrorInterrupted = 8,
-  /**
-   * @ignore
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorRecordInvalidId */
   LocalAudioStreamErrorRecordInvalidId = 9,
-  /**
-   * @ignore
-   */
+  /* enum_localaudiostreamerror_LocalAudioStreamErrorPlayoutInvalidId */
   LocalAudioStreamErrorPlayoutInvalidId = 10,
 }
 
-/**
- * Local video state types.
- */
+/* enum_localvideostreamstate */
 export enum LocalVideoStreamState {
-  /**
-   * 0: The local video is in the initial state.
-   */
+  /* enum_localvideostreamstate_LocalVideoStreamStateStopped */
   LocalVideoStreamStateStopped = 0,
-  /**
-   * 1: The local video capturing device starts successfully.
-   */
+  /* enum_localvideostreamstate_LocalVideoStreamStateCapturing */
   LocalVideoStreamStateCapturing = 1,
-  /**
-   * 2: The first video frame is successfully encoded.
-   */
+  /* enum_localvideostreamstate_LocalVideoStreamStateEncoding */
   LocalVideoStreamStateEncoding = 2,
-  /**
-   * 3: Fails to start the local video.
-   */
+  /* enum_localvideostreamstate_LocalVideoStreamStateFailed */
   LocalVideoStreamStateFailed = 3,
 }
 
-/**
- * Local video state error codes.
- */
+/* enum_localvideostreamerror */
 export enum LocalVideoStreamError {
-  /**
-   * 0: The local video is normal.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorOk */
   LocalVideoStreamErrorOk = 0,
-  /**
-   * 1: No specified reason for the local video failure.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorFailure */
   LocalVideoStreamErrorFailure = 1,
-  /**
-   * 2: No permission to use the local video capturing device. Remind the user to grant permissions and rejoin the channel.Deprecated:This enumerator is deprecated. Please use CAMERA in the onPermissionError callback instead.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorDeviceNoPermission */
   LocalVideoStreamErrorDeviceNoPermission = 2,
-  /**
-   * 3: The local video capturing device is in use. Remind the user to check whether another application occupies the camera.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorDeviceBusy */
   LocalVideoStreamErrorDeviceBusy = 3,
-  /**
-   * 4: The local video capture fails. Remind your user to check whether the video capture device is working properly, whether the camera is occupied by another application, or try to rejoin the channel.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorCaptureFailure */
   LocalVideoStreamErrorCaptureFailure = 4,
-  /**
-   * 5: The local video encoding fails.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorEncodeFailure */
   LocalVideoStreamErrorEncodeFailure = 5,
-  /**
-   * 6:The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorCaptureInbackground */
   LocalVideoStreamErrorCaptureInbackground = 6,
-  /**
-   * 7: The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorCaptureMultipleForegroundApps */
   LocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
-  /**
-   * 8: Fails to find a local video capture device. Remind the user to check whether the camera is connected to the device properly or the camera is working properly, and then to rejoin the channel.
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorDeviceNotFound */
   LocalVideoStreamErrorDeviceNotFound = 8,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorDeviceDisconnected */
   LocalVideoStreamErrorDeviceDisconnected = 9,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorDeviceInvalidId */
   LocalVideoStreamErrorDeviceInvalidId = 10,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorDeviceSystemPressure */
   LocalVideoStreamErrorDeviceSystemPressure = 101,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorScreenCaptureWindowMinimized */
   LocalVideoStreamErrorScreenCaptureWindowMinimized = 11,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorScreenCaptureWindowClosed */
   LocalVideoStreamErrorScreenCaptureWindowClosed = 12,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorScreenCaptureWindowOccluded */
   LocalVideoStreamErrorScreenCaptureWindowOccluded = 13,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorScreenCaptureWindowNotSupported */
   LocalVideoStreamErrorScreenCaptureWindowNotSupported = 20,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorScreenCaptureFailure */
   LocalVideoStreamErrorScreenCaptureFailure = 21,
-  /**
-   * @ignore
-   */
+  /* enum_localvideostreamerror_LocalVideoStreamErrorScreenCaptureNoPermission */
   LocalVideoStreamErrorScreenCaptureNoPermission = 22,
 }
 
-/**
- * Remote audio states.
- */
+/* enum_remoteaudiostate */
 export enum RemoteAudioState {
-  /**
-   * 0: The local audio is in the initial state. The SDK reports this state in the case of RemoteAudioReasonLocalMuted, RemoteAudioReasonRemoteMuted or RemoteAudioReasonRemoteOffline.
-   */
+  /* enum_remoteaudiostate_RemoteAudioStateStopped */
   RemoteAudioStateStopped = 0,
-  /**
-   * 1: The first remote audio packet is received.
-   */
+  /* enum_remoteaudiostate_RemoteAudioStateStarting */
   RemoteAudioStateStarting = 1,
-  /**
-   * 2: The remote audio stream is decoded and plays normally. The SDK reports this state in the case of RemoteAudioReasonNetworkRecovery, RemoteAudioReasonLocalUnmuted or RemoteAudioReasonRemoteUnmuted.
-   */
+  /* enum_remoteaudiostate_RemoteAudioStateDecoding */
   RemoteAudioStateDecoding = 2,
-  /**
-   * 3: The remote audio is frozen. The SDK reports this state in the case of RemoteAudioReasonNetworkCongestion.
-   */
+  /* enum_remoteaudiostate_RemoteAudioStateFrozen */
   RemoteAudioStateFrozen = 3,
-  /**
-   * 4: The remote audio fails to start. The SDK reports this state in the case of RemoteAudioReasonInternal.
-   */
+  /* enum_remoteaudiostate_RemoteAudioStateFailed */
   RemoteAudioStateFailed = 4,
 }
 
-/**
- * The reason for the remote audio state change.
- */
+/* enum_remoteaudiostatereason */
 export enum RemoteAudioStateReason {
-  /**
-   * 0: The SDK reports this reason when the audio state changes.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonInternal */
   RemoteAudioReasonInternal = 0,
-  /**
-   * 1: Network congestion.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonNetworkCongestion */
   RemoteAudioReasonNetworkCongestion = 1,
-  /**
-   * 2: Network recovery.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonNetworkRecovery */
   RemoteAudioReasonNetworkRecovery = 2,
-  /**
-   * 3: The local user stops receiving the remote audio stream or disables the audio module.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonLocalMuted */
   RemoteAudioReasonLocalMuted = 3,
-  /**
-   * 4: The local user resumes receiving the remote audio stream or enables the audio module.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonLocalUnmuted */
   RemoteAudioReasonLocalUnmuted = 4,
-  /**
-   * 5: The remote user stops sending the audio stream or disables the audio module.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonRemoteMuted */
   RemoteAudioReasonRemoteMuted = 5,
-  /**
-   * 6: The remote user resumes sending the audio stream or enables the audio module.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonRemoteUnmuted */
   RemoteAudioReasonRemoteUnmuted = 6,
-  /**
-   * 7: The remote user leaves the channel.
-   */
+  /* enum_remoteaudiostatereason_RemoteAudioReasonRemoteOffline */
   RemoteAudioReasonRemoteOffline = 7,
 }
 
-/**
- * The state of the remote video.
- */
+/* enum_remotevideostate */
 export enum RemoteVideoState {
-  /**
-   * 0: The remote video is in the initial state. The SDK reports this state in the case of RemoteVideoStateReasonLocalMuted, RemoteVideoStateReasonRemoteMuted, or RemoteVideoStateReasonRemoteOffline.
-   */
+  /* enum_remotevideostate_RemoteVideoStateStopped */
   RemoteVideoStateStopped = 0,
-  /**
-   * 1: The first remote video packet is received.
-   */
+  /* enum_remotevideostate_RemoteVideoStateStarting */
   RemoteVideoStateStarting = 1,
-  /**
-   * 2: The remote video stream is decoded and plays normally. The SDK reports this state in the case of RemoteVideoStateReasonNetworkRecovery, RemoteVideoStateReasonLocalUnmuted, or RemoteVideoStateReasonRemoteUnmuted.
-   */
+  /* enum_remotevideostate_RemoteVideoStateDecoding */
   RemoteVideoStateDecoding = 2,
-  /**
-   * 3: The remote video is frozen. The SDK reports this state in the case of RemoteVideoStateReasonNetworkCongestion.
-   */
+  /* enum_remotevideostate_RemoteVideoStateFrozen */
   RemoteVideoStateFrozen = 3,
-  /**
-   * 4: The remote video fails to start. The SDK reports this state in the case of RemoteVideoStateReasonInternal.
-   */
+  /* enum_remotevideostate_RemoteVideoStateFailed */
   RemoteVideoStateFailed = 4,
 }
 
-/**
- * The reason for the remote video state change.
- */
+/* enum_remotevideostatereason */
 export enum RemoteVideoStateReason {
-  /**
-   * 0: The SDK reports this reason when the video state changes.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonInternal */
   RemoteVideoStateReasonInternal = 0,
-  /**
-   * 1: Network congestion.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonNetworkCongestion */
   RemoteVideoStateReasonNetworkCongestion = 1,
-  /**
-   * 2: Network recovery.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonNetworkRecovery */
   RemoteVideoStateReasonNetworkRecovery = 2,
-  /**
-   * 3: The local user stops receiving the remote video stream or disables the video module.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonLocalMuted */
   RemoteVideoStateReasonLocalMuted = 3,
-  /**
-   * 4: The local user resumes receiving the remote video stream or enables the video module.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonLocalUnmuted */
   RemoteVideoStateReasonLocalUnmuted = 4,
-  /**
-   * 5: The remote user stops sending the video stream or disables the video module.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonRemoteMuted */
   RemoteVideoStateReasonRemoteMuted = 5,
-  /**
-   * 6: The remote user resumes sending the video stream or enables the video module.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonRemoteUnmuted */
   RemoteVideoStateReasonRemoteUnmuted = 6,
-  /**
-   * 7: The remote user leaves the channel.
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonRemoteOffline */
   RemoteVideoStateReasonRemoteOffline = 7,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonAudioFallback */
   RemoteVideoStateReasonAudioFallback = 8,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonAudioFallbackRecovery */
   RemoteVideoStateReasonAudioFallbackRecovery = 9,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonVideoStreamTypeChangeToLow */
   RemoteVideoStateReasonVideoStreamTypeChangeToLow = 10,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonVideoStreamTypeChangeToHigh */
   RemoteVideoStateReasonVideoStreamTypeChangeToHigh = 11,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideostatereason_RemoteVideoStateReasonSdkInBackground */
   RemoteVideoStateReasonSdkInBackground = 12,
 }
 
-/**
- * @ignore
- */
+/* enum_remoteuserstate */
 export enum RemoteUserState {
-  /**
-   * @ignore
-   */
+  /* enum_remoteuserstate_UserStateMuteAudio */
   UserStateMuteAudio = 1 << 0,
-  /**
-   * @ignore
-   */
+  /* enum_remoteuserstate_UserStateMuteVideo */
   UserStateMuteVideo = 1 << 1,
-  /**
-   * @ignore
-   */
+  /* enum_remoteuserstate_UserStateEnableVideo */
   UserStateEnableVideo = 1 << 4,
-  /**
-   * @ignore
-   */
+  /* enum_remoteuserstate_UserStateEnableLocalVideo */
   UserStateEnableLocalVideo = 1 << 8,
 }
 
-/**
- * @ignore
- */
+/* class_videotrackinfo */
 export class VideoTrackInfo {
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_isLocal */
   isLocal?: boolean;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_ownerUid */
   ownerUid?: number;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_trackId */
   trackId?: number;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_channelId */
   channelId?: string;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_streamType */
   streamType?: VideoStreamType;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_codecType */
   codecType?: VideoCodecType;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_encodedFrameOnly */
   encodedFrameOnly?: boolean;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_sourceType */
   sourceType?: VideoSourceType;
-  /**
-   * @ignore
-   */
+  /* class_videotrackinfo_observationPosition */
   observationPosition?: number;
 }
 
-/**
- * @ignore
- */
+/* enum_remotevideodownscalelevel */
 export enum RemoteVideoDownscaleLevel {
-  /**
-   * @ignore
-   */
+  /* enum_remotevideodownscalelevel_RemoteVideoDownscaleLevelNone */
   RemoteVideoDownscaleLevelNone = 0,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideodownscalelevel_RemoteVideoDownscaleLevel1 */
   RemoteVideoDownscaleLevel1 = 1,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideodownscalelevel_RemoteVideoDownscaleLevel2 */
   RemoteVideoDownscaleLevel2 = 2,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideodownscalelevel_RemoteVideoDownscaleLevel3 */
   RemoteVideoDownscaleLevel3 = 3,
-  /**
-   * @ignore
-   */
+  /* enum_remotevideodownscalelevel_RemoteVideoDownscaleLevel4 */
   RemoteVideoDownscaleLevel4 = 4,
 }
 
-/**
- * The volume information of users.
- */
+/* class_audiovolumeinfo */
 export class AudioVolumeInfo {
-  /**
-   * The user ID.In the local user's callback, uid = 0.In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is one of the three highest.
-   */
+  /* class_audiovolumeinfo_uid */
   uid?: number;
-  /**
-   * The volume of the user. The value ranges between 0 (lowest volume) and 255 (highest volume).
-   */
+  /* class_audiovolumeinfo_volume */
   volume?: number;
-  /**
-   * Voice activity status of the local user.0: The local user is not speaking.1: The local user is speaking.The vad parameter does not report the voice activity status of remote users. In a remote user's callback, the value of vad is always 1.To use this parameter, you must set reportVad to true when calling enableAudioVolumeIndication .
-   */
+  /* class_audiovolumeinfo_vad */
   vad?: number;
-  /**
-   * The voice pitch of the local user. The value ranges between 0.0 and 4000.0.The voicePitch parameter does not report the voice pitch of remote users. In the remote users' callback, the value of voicePitch is always 0.0.
-   */
+  /* class_audiovolumeinfo_voicePitch */
   voicePitch?: number;
 }
 
-/**
- * The audio device information.
- * This class is for Android only.
- */
+/* class_deviceinfo */
 export class DeviceInfo {
-  /**
-   * Whether the audio device supports ultra-low-latency capture and playback:true: The device supports ultra-low-latency capture and playback.false: The device does not support ultra-low-latency capture and playback.
-   */
+  /* class_deviceinfo_isLowLatencyAudioSupported */
   isLowLatencyAudioSupported?: boolean;
 }
 
-/**
- * @ignore
- */
+/* class_packet */
 export class Packet {
-  /**
-   * @ignore
-   */
+  /* class_packet_buffer */
   buffer?: Uint8Array;
-  /**
-   * @ignore
-   */
+  /* class_packet_size */
   size?: number;
 }
 
-/**
- * The audio sampling rate of the stream to be pushed to the CDN.
- */
+/* enum_audiosampleratetype */
 export enum AudioSampleRateType {
-  /**
-   * 32000: 32 kHz
-   */
+  /* enum_audiosampleratetype_AudioSampleRate32000 */
   AudioSampleRate32000 = 32000,
-  /**
-   * 44100: 44.1 kHz
-   */
+  /* enum_audiosampleratetype_AudioSampleRate44100 */
   AudioSampleRate44100 = 44100,
-  /**
-   * 48000: (Default) 48 kHz
-   */
+  /* enum_audiosampleratetype_AudioSampleRate48000 */
   AudioSampleRate48000 = 48000,
 }
 
-/**
- * The codec type of the output video.
- */
+/* enum_videocodectypeforstream */
 export enum VideoCodecTypeForStream {
-  /**
-   * 1: (Default) H.264.
-   */
+  /* enum_videocodectypeforstream_VideoCodecH264ForStream */
   VideoCodecH264ForStream = 1,
-  /**
-   * 2: H.265.
-   */
+  /* enum_videocodectypeforstream_VideoCodecH265ForStream */
   VideoCodecH265ForStream = 2,
 }
 
-/**
- * Video codec profile types.
- */
+/* enum_videocodecprofiletype */
 export enum VideoCodecProfileType {
-  /**
-   * 66: Baseline video codec profile; generally used for video calls on mobile phones.
-   */
+  /* enum_videocodecprofiletype_VideoCodecProfileBaseline */
   VideoCodecProfileBaseline = 66,
-  /**
-   * 77: Main video codec profile; generally used in mainstream electronics such as MP4 players, portable video players, PSP, and iPads.
-   */
+  /* enum_videocodecprofiletype_VideoCodecProfileMain */
   VideoCodecProfileMain = 77,
-  /**
-   * 100: (Default) High video codec profile; generally used in high-resolution live streaming or television.
-   */
+  /* enum_videocodecprofiletype_VideoCodecProfileHigh */
   VideoCodecProfileHigh = 100,
 }
 
-/**
- * Self-defined audio codec profile.
- */
+/* enum_audiocodecprofiletype */
 export enum AudioCodecProfileType {
-  /**
-   * 0: (Default) LC-AAC.
-   */
+  /* enum_audiocodecprofiletype_AudioCodecProfileLcAac */
   AudioCodecProfileLcAac = 0,
-  /**
-   * 1: HE-AAC.
-   */
+  /* enum_audiocodecprofiletype_AudioCodecProfileHeAac */
   AudioCodecProfileHeAac = 1,
-  /**
-   * 2: HE-AAC v2.
-   */
+  /* enum_audiocodecprofiletype_AudioCodecProfileHeAacV2 */
   AudioCodecProfileHeAacV2 = 2,
 }
 
-/**
- * Local audio statistics.
- */
+/* class_localaudiostats */
 export class LocalAudioStats {
-  /**
-   * The number of audio channels.
-   */
+  /* class_localaudiostats_numChannels */
   numChannels?: number;
-  /**
-   * The sampling rate (Hz) of sending the local user's audio stream.
-   */
+  /* class_localaudiostats_sentSampleRate */
   sentSampleRate?: number;
-  /**
-   * The average bitrate (Kbps) of sending the local user's audio stream.
-   */
+  /* class_localaudiostats_sentBitrate */
   sentBitrate?: number;
-  /**
-   * The internal payload codec.
-   */
+  /* class_localaudiostats_internalCodec */
   internalCodec?: number;
-  /**
-   * The packet loss rate (%) from the local client to the Agora server before applying the anti-packet loss strategies.
-   */
+  /* class_localaudiostats_txPacketLossRate */
   txPacketLossRate?: number;
-  /**
-   * The delay of the audio device module when playing or recording audio.
-   */
+  /* class_localaudiostats_audioDeviceDelay */
   audioDeviceDelay?: number;
 }
 
-/**
- * States of the Media Push.
- */
+/* enum_rtmpstreampublishstate */
 export enum RtmpStreamPublishState {
-  /**
-   * 0: The Media Push has not started or has ended.
-   */
+  /* enum_rtmpstreampublishstate_RtmpStreamPublishStateIdle */
   RtmpStreamPublishStateIdle = 0,
-  /**
-   * 1: The SDK is connecting to Agora's streaming server and the CDN server.
-   */
+  /* enum_rtmpstreampublishstate_RtmpStreamPublishStateConnecting */
   RtmpStreamPublishStateConnecting = 1,
-  /**
-   * 2: The RTMP or RTMPS streaming publishes. The SDK successfully publishes the RTMP or RTMPS streaming and returns this state.
-   */
+  /* enum_rtmpstreampublishstate_RtmpStreamPublishStateRunning */
   RtmpStreamPublishStateRunning = 2,
-  /**
-   * 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.If the SDK successfully resumes the streaming, RtmpStreamPublishStateRunning(2) returns.
-   * If the streaming does not resume within 60 seconds or server errors occur, RtmpStreamPublishStateFailure(4) returns. You can also reconnect to the server by calling the stopRtmpStream method.
-   */
+  /* enum_rtmpstreampublishstate_RtmpStreamPublishStateRecovering */
   RtmpStreamPublishStateRecovering = 3,
-  /**
-   * 4: The RTMP or RTMPS streaming fails. See the errCode parameter for the detailed error information.
-   */
+  /* enum_rtmpstreampublishstate_RtmpStreamPublishStateFailure */
   RtmpStreamPublishStateFailure = 4,
-  /**
-   * 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call stopRtmpStream to stop the streaming normally, the SDK reports the streaming state as RtmpStreamPublishStateDisconnecting and RtmpStreamPublishStateIdle in sequence.
-   */
+  /* enum_rtmpstreampublishstate_RtmpStreamPublishStateDisconnecting */
   RtmpStreamPublishStateDisconnecting = 5,
 }
 
-/**
- * Error codes of the RTMP or RTMPS streaming.
- */
+/* enum_rtmpstreampublisherrortype */
 export enum RtmpStreamPublishErrorType {
-  /**
-   * 0: The RTMP or RTMPS streaming publishes successfully.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorOk */
   RtmpStreamPublishErrorOk = 0,
-  /**
-   * 1: Invalid argument used. Check the parameter setting.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorInvalidArgument */
   RtmpStreamPublishErrorInvalidArgument = 1,
-  /**
-   * 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorEncryptedStreamNotAllowed */
   RtmpStreamPublishErrorEncryptedStreamNotAllowed = 2,
-  /**
-   * 3: Timeout for the RTMP or RTMPS streaming. Try to publish the streaming again.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorConnectionTimeout */
   RtmpStreamPublishErrorConnectionTimeout = 3,
-  /**
-   * 4: An error occurs in Agora's streaming server. Try to publish the streaming again.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorInternalServerError */
   RtmpStreamPublishErrorInternalServerError = 4,
-  /**
-   * 5: An error occurs in the CDN server.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorRtmpServerError */
   RtmpStreamPublishErrorRtmpServerError = 5,
-  /**
-   * 6: The RTMP or RTMPS streaming publishing requests are too frequent.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorTooOften */
   RtmpStreamPublishErrorTooOften = 6,
-  /**
-   * 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorReachLimit */
   RtmpStreamPublishErrorReachLimit = 7,
-  /**
-   * 8: The host manipulates other hosts' URLs. For example, the host updates or stops other hosts' streams. Check your app logic.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorNotAuthorized */
   RtmpStreamPublishErrorNotAuthorized = 8,
-  /**
-   * 9: Agora's server fails to find the RTMP or RTMPS streaming.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorStreamNotFound */
   RtmpStreamPublishErrorStreamNotFound = 9,
-  /**
-   * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorFormatNotSupported */
   RtmpStreamPublishErrorFormatNotSupported = 10,
-  /**
-   * 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your app code logic.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorNotBroadcaster */
   RtmpStreamPublishErrorNotBroadcaster = 11,
-  /**
-   * 13: The updateRtmpTranscoding or setLiveTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorTranscodingNoMixStream */
   RtmpStreamPublishErrorTranscodingNoMixStream = 13,
-  /**
-   * 14: Errors occurred in the host's network.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorNetDown */
   RtmpStreamPublishErrorNetDown = 14,
-  /**
-   * 15: Your App ID does not have permission to use the CDN live streaming function.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorInvalidAppid */
   RtmpStreamPublishErrorInvalidAppid = 15,
-  /**
-   * @ignore
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamPublishErrorInvalidPrivilege */
   RtmpStreamPublishErrorInvalidPrivilege = 16,
-  /**
-   * 100: The streaming has been stopped normally. After you call stopRtmpStream to stop streaming, the SDK returns this value.
-   */
+  /* enum_rtmpstreampublisherrortype_RtmpStreamUnpublishErrorOk */
   RtmpStreamUnpublishErrorOk = 100,
 }
 
-/**
- * Events during the media push.
- */
+/* enum_rtmpstreamingevent */
 export enum RtmpStreamingEvent {
-  /**
-   * 1: An error occurs when you add a background image or a watermark image in the media push.
-   */
+  /* enum_rtmpstreamingevent_RtmpStreamingEventFailedLoadImage */
   RtmpStreamingEventFailedLoadImage = 1,
-  /**
-   * 2: The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
-   */
+  /* enum_rtmpstreamingevent_RtmpStreamingEventUrlAlreadyInUse */
   RtmpStreamingEventUrlAlreadyInUse = 2,
-  /**
-   * 3: The feature is not supported.
-   */
+  /* enum_rtmpstreamingevent_RtmpStreamingEventAdvancedFeatureNotSupport */
   RtmpStreamingEventAdvancedFeatureNotSupport = 3,
-  /**
-   * 4: Reserved.
-   */
+  /* enum_rtmpstreamingevent_RtmpStreamingEventRequestTooOften */
   RtmpStreamingEventRequestTooOften = 4,
 }
 
-/**
- * Image properties.
- * This class sets the properties of the watermark and background images in the live video.
- */
+/* class_rtcimage */
 export class RtcImage {
-  /**
-   * The HTTP/HTTPS URL address of the image in the live video. The maximum length of this parameter is 1024 bytes.
-   */
+  /* class_rtcimage_url */
   url?: string;
-  /**
-   * The x coordinate (pixel) of the image on the video frame (taking the upper left corner of the video frame as the origin).
-   */
+  /* class_rtcimage_x */
   x?: number;
-  /**
-   * The y coordinate (pixel) of the image on the video frame (taking the upper left corner of the video frame as the origin).
-   */
+  /* class_rtcimage_y */
   y?: number;
-  /**
-   * The width (pixel) of the image on the video frame.
-   */
+  /* class_rtcimage_width */
   width?: number;
-  /**
-   * The height (pixel) of the image on the video frame.
-   */
+  /* class_rtcimage_height */
   height?: number;
-  /**
-   * The layer index of the watermark or background image. When you use the watermark array to add a watermark or multiple watermarks, you must pass a value to zOrder in the range [1,255]; otherwise, the SDK reports an error. In other cases, zOrder can optionally be passed in the range [0,255], with 0 being the default value. 0 means the bottom layer and 255 means the top layer.
-   */
+  /* class_rtcimage_zOrder */
   zOrder?: number;
-  /**
-   * The transparency of the watermark or background image. The value ranges between 0.0 and 1.0:0.0: Completely transparent.1.0: (Default) Opaque.
-   */
+  /* class_rtcimage_alpha */
   alpha?: number;
 }
 
-/**
- * The configuration for advanced features of the RTMP or RTMPS streaming with transcoding.
- * If you want to enable the advanced features of streaming with transcoding, contact .
- */
+/* class_livestreamadvancedfeature */
 export class LiveStreamAdvancedFeature {
-  /**
-   * The feature names, including LBHQ (high-quality video with a lower bitrate) and VEO (optimized video encoder).
-   */
+  /* class_livestreamadvancedfeature_featureName */
   featureName?: string;
-  /**
-   * Whether to enable the advanced features of streaming with transcoding:true: Enable the advanced features.false: (Default) Do not enable the advanced features.
-   */
+  /* class_livestreamadvancedfeature_opened */
   opened?: boolean;
 }
 
-/**
- * Connection states.
- */
+/* enum_connectionstatetype */
 export enum ConnectionStateType {
-  /**
-   * 1: The SDK is disconnected from the Agora edge server. The state indicates the SDK is in one of the following phases:Theinitial state before calling the joinChannel [2/2] method.The app calls the leaveChannel method.
-   */
+  /* enum_connectionstatetype_ConnectionStateDisconnected */
   ConnectionStateDisconnected = 1,
-  /**
-   * 2: The SDK is connecting to the Agora edge server. This state indicates that the SDK is establishing a connection with the specified channel after the app calls joinChannel [2/2].If the SDK successfully joins the channel, it triggers the onConnectionStateChanged callback and the connection state switches to ConnectionStateConnected.After the connection is established, the SDK also initializes the media and triggers onJoinChannelSuccess when everything is ready.
-   */
+  /* enum_connectionstatetype_ConnectionStateConnecting */
   ConnectionStateConnecting = 2,
-  /**
-   * 3: The SDK is connected to the Agora edge server. This state also indicates that the user has joined a channel and can now publish or subscribe to a media stream in the channel. If the connection to the channel is lost because, for example, if the network is down or switched, the SDK automatically tries to reconnect and triggers onConnectionStateChanged callback, notifying that the current network state becomes ConnectionStateReconnecting.
-   */
+  /* enum_connectionstatetype_ConnectionStateConnected */
   ConnectionStateConnected = 3,
-  /**
-   * 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.If the SDK cannot rejoin the channel within 10 seconds, it triggers onConnectionLost , stays in the ConnectionStateReconnecting state, and keeps rejoining the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the onConnectionStateChanged callback, switches to the ConnectionStateFailed state, and stops rejoining the channel.
-   */
+  /* enum_connectionstatetype_ConnectionStateReconnecting */
   ConnectionStateReconnecting = 4,
-  /**
-   * 5: The SDK fails to connect to the Agora edge server or join the channel. This state indicates that the SDK stops trying to rejoin the channel. You must call leaveChannel to leave the channel.You can call joinChannel [2/2] to rejoin the channel.If the SDK is banned from joining the channel by the Agora edge server through the RESTful API, the SDK triggers the onConnectionStateChanged callback.
-   */
+  /* enum_connectionstatetype_ConnectionStateFailed */
   ConnectionStateFailed = 5,
 }
 
-/**
- * Transcoding configurations of each host.
- */
+/* class_transcodinguser */
 export class TranscodingUser {
-  /**
-   * The user ID of the host.
-   */
+  /* class_transcodinguser_uid */
   uid?: number;
-  /**
-   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding .
-   */
+  /* class_transcodinguser_x */
   x?: number;
-  /**
-   * The y coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, height], where height is the height set in LiveTranscoding .
-   */
+  /* class_transcodinguser_y */
   y?: number;
-  /**
-   * The width (pixel) of the host's video.
-   */
+  /* class_transcodinguser_width */
   width?: number;
-  /**
-   * The height (pixel) of the host's video.
-   */
+  /* class_transcodinguser_height */
   height?: number;
-  /**
-   * The layer index number of the host's video. The value range is [0, 100].0: (Default) The host's video is the bottom layer.100: The host's video is the top layer.If the value is less than 0 or greater than 100, ErrInvalidArgument error is returned.Setting zOrder to 0 is supported.
-   */
+  /* class_transcodinguser_zOrder */
   zOrder?: number;
-  /**
-   * The transparency of the host's video. The value range is [0.0,1.0].0.0: Completely transparent.1.0: (Default) Opaque.
-   */
+  /* class_transcodinguser_alpha */
   alpha?: number;
-  /**
-   * The audio channel used by the host's audio in the output audio. The default value is 0, and the value range is [0, 5].0: (Recommended) The defaut setting, which supports dual channels at most and depends on the upstream of the host.1: The host's audio uses the FL audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.2: The host's audio uses the FC audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.3: The host's audio uses the FR audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.4: The host's audio uses the BL audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.5: The host's audio uses the BR audio channel. If the host's upstream uses multiple audio channels, the Agora server mixes them into mono first.0xFF or a value greater than 5: The host's audio is muted, and the Agora server removes the host's audio.If the value is not 0, a special player is required.
-   */
+  /* class_transcodinguser_audioChannel */
   audioChannel?: number;
 }
 
-/**
- * Transcoding configurations for Media Push.
- */
+/* class_livetranscoding */
 export class LiveTranscoding {
-  /**
-   * The width of the video in pixels. The default value is 360.When pushing video streams to the CDN, the value range of width is [64,1920]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1920, Agora server automatically adjusts it to 1920.When pushing audio streams to the CDN, set width and height as 0.
-   */
+  /* class_livetranscoding_width */
   width?: number;
-  /**
-   * The height of the video in pixels. The default value is 640.When pushing video streams to the CDN, the value range of height is [64,1080]. If the value is less than 64, Agora server automatically adjusts it to 64; if the value is greater than 1080, Agora server automatically adjusts it to 1080.When pushing audio streams to the CDN, set width and height as 0.
-   */
+  /* class_livetranscoding_height */
   height?: number;
-  /**
-   * Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps.
-   */
+  /* class_livetranscoding_videoBitrate */
   videoBitrate?: number;
-  /**
-   * Frame rate (fps) of the output video stream set for Media Push. The default value is 15. The value range is (0,30].The Agora server adjusts any value over 30 to 30.
-   */
+  /* class_livetranscoding_videoFramerate */
   videoFramerate?: number;
-  /**
-   * DeprecatedThis parameter is deprecated.Latency mode:true: Low latency with unassured quality.false: (Default) High latency with assured quality.
-   */
+  /* class_livetranscoding_lowLatency */
   lowLatency?: boolean;
-  /**
-   * GOP (Group of Pictures) in fps of the video frames for Media Push. The default value is 30.
-   */
+  /* class_livetranscoding_videoGop */
   videoGop?: number;
-  /**
-   * Video codec profile type for Media Push. Set it as 66, 77, or 100 (default). See VideoCodecProfileType for details.If you set this parameter to any other value, Agora adjusts it to the default value.
-   */
+  /* class_livetranscoding_videoCodecProfile */
   videoCodecProfile?: VideoCodecProfileType;
-  /**
-   * The background color in RGB hex value. Value only. Do not include a preceeding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
-   */
+  /* class_livetranscoding_backgroundColor */
   backgroundColor?: number;
-  /**
-   * Video codec profile types for Media Push. See VideoCodecTypeForStream .
-   */
+  /* class_livetranscoding_videoCodecType */
   videoCodecType?: VideoCodecTypeForStream;
-  /**
-   * The number of users in the Media Push. The value range is [0,17].
-   */
+  /* class_livetranscoding_userCount */
   userCount?: number;
-  /**
-   * Manages the user layout configuration in the Media Push. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser .
-   */
+  /* class_livetranscoding_transcodingUsers */
   transcodingUsers?: TranscodingUser[];
-  /**
-   * Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 bytes. For more information on SEI, see SEI-related questions.
-   */
+  /* class_livetranscoding_transcodingExtraInfo */
   transcodingExtraInfo?: string;
-  /**
-   * DeprecatedThis parameter is deprecated.The metadata sent to the CDN client.
-   */
+  /* class_livetranscoding_metadata */
   metadata?: string;
-  /**
-   * The watermark on the live video. The image format needs to be PNG. See RtcImage .You can add one watermark, or add multiple watermarks using an array. This parameter is used with watermarkCount.
-   */
+  /* class_livetranscoding_watermark */
   watermark?: RtcImage[];
-  /**
-   * The number of watermarks on the live video. The total number of watermarks and background images can range from 0 to 10. This parameter is used with watermark.
-   */
+  /* class_livetranscoding_watermarkCount */
   watermarkCount?: number;
-  /**
-   * The number of background images on the live video. The image format needs to be PNG. See RtcImage .You can add a background image or use an array to add multiple background images. This parameter is used with backgroundImageCount.
-   */
+  /* class_livetranscoding_backgroundImage */
   backgroundImage?: RtcImage[];
-  /**
-   * The number of background images on the live video. The total number of watermarks and background images can range from 0 to 10. This parameter is used with backgroundImage.
-   */
+  /* class_livetranscoding_backgroundImageCount */
   backgroundImageCount?: number;
-  /**
-   * The audio sampling rate (Hz) of the output media stream. See AudioSampleRateType .
-   */
+  /* class_livetranscoding_audioSampleRate */
   audioSampleRate?: AudioSampleRateType;
-  /**
-   * Bitrate (Kbps) of the audio output stream for Media Push. The default value is 48, and the highest value is 128.
-   */
+  /* class_livetranscoding_audioBitrate */
   audioBitrate?: number;
-  /**
-   * The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.1: (Default) Mono2: Stereo.3: Three audio channels.4: Four audio channels.5: Five audio channels.
-   */
+  /* class_livetranscoding_audioChannels */
   audioChannels?: number;
-  /**
-   * Audio codec profile type for Media Push. See AudioCodecProfileType .
-   */
+  /* class_livetranscoding_audioCodecProfile */
   audioCodecProfile?: AudioCodecProfileType;
-  /**
-   * Advanced features of the Media Push with transcoding. See LiveStreamAdvancedFeature .
-   */
+  /* class_livetranscoding_advancedFeatures */
   advancedFeatures?: LiveStreamAdvancedFeature[];
-  /**
-   * The number of enabled advanced features. The default value is 0.
-   */
+  /* class_livetranscoding_advancedFeatureCount */
   advancedFeatureCount?: number;
 }
 
-/**
- * The video streams for the video mixing on the local client.
- */
+/* class_transcodingvideostream */
 export class TranscodingVideoStream {
-  /**
-   * The source type of video for the video mixing on the local client. See VideoSourceType .
-   */
+  /* class_transcodingvideostream_sourceType */
   sourceType?: MediaSourceType;
-  /**
-   * The ID of the remote user.Use this parameter only when the source type of the video for the video mixing on the local client is VideoSourceRemote.
-   */
+  /* class_transcodingvideostream_remoteUserUid */
   remoteUserUid?: number;
-  /**
-   * The URL of the image.
-   */
+  /* class_transcodingvideostream_imageUrl */
   imageUrl?: string;
-  /**
-   * The horizontal displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
-   */
+  /* class_transcodingvideostream_x */
   x?: number;
-  /**
-   * The vertical displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
-   */
+  /* class_transcodingvideostream_y */
   y?: number;
-  /**
-   * The width (px) of the video for the video mixing on the local client.
-   */
+  /* class_transcodingvideostream_width */
   width?: number;
-  /**
-   * The height (px) of the video for the video mixing on the local client.
-   */
+  /* class_transcodingvideostream_height */
   height?: number;
-  /**
-   * The number of the layer to which the video for the video mixing on the local client belongs. The value range is [0,100].0: (Default) The layer is at the bottom.100: The layer is at the top.
-   */
+  /* class_transcodingvideostream_zOrder */
   zOrder?: number;
-  /**
-   * The transparency of the video for the video mixing on the local client. The value range is [0.0,1.0]. 0.0 means the transparency is completely transparent. 1.0 means the transparency is opaque.
-   */
+  /* class_transcodingvideostream_alpha */
   alpha?: number;
-  /**
-   * Whether to mirror the video for the video mixing on the local client.true: Mirror the captured video.false: (Default) Do not mirror the captured video.The paramter only works for videos with the source type
-   */
+  /* class_transcodingvideostream_mirror */
   mirror?: boolean;
 }
 
-/**
- * The configuration of the video mixing on the local client.
- */
+/* class_localtranscoderconfiguration */
 export class LocalTranscoderConfiguration {
-  /**
-   * The number of the video streams for the video mixing on the local client.
-   */
+  /* class_localtranscoderconfiguration_streamCount */
   streamCount?: number;
-  /**
-   * The video streams for the video mixing on the local client. See TranscodingVideoStream .
-   */
+  /* class_localtranscoderconfiguration_VideoInputStreams */
   VideoInputStreams?: TranscodingVideoStream[];
-  /**
-   * The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration .
-   */
+  /* class_localtranscoderconfiguration_videoOutputConfiguration */
   videoOutputConfiguration?: VideoEncoderConfiguration;
-  /**
-   * @ignore
-   */
+  /* class_localtranscoderconfiguration_syncWithPrimaryCamera */
   syncWithPrimaryCamera?: boolean;
 }
 
-/**
- * Configurations of the last-mile network test.
- */
+/* class_lastmileprobeconfig */
 export class LastmileProbeConfig {
-  /**
-   * Sets whether to test the uplink network. Some users, for example, the audience members in a LIVE_BROADCASTING channel, do not need such a test.true: Test the uplink network.false: Do not test the uplink network.
-   */
+  /* class_lastmileprobeconfig_probeUplink */
   probeUplink?: boolean;
-  /**
-   * Sets whether to test the downlink network:true: Test the downlink network.false: Do not test the downlink network.
-   */
+  /* class_lastmileprobeconfig_probeDownlink */
   probeDownlink?: boolean;
-  /**
-   * The expected maximum uplink bitrate (bps) of the local user. The value range is [100000, 5000000]. Agora recommends referring to setVideoEncoderConfiguration to set the value.
-   */
+  /* class_lastmileprobeconfig_expectedUplinkBitrate */
   expectedUplinkBitrate?: number;
-  /**
-   * The expected maximum downlink bitrate (bps) of the local user. The value range is [100000,5000000].
-   */
+  /* class_lastmileprobeconfig_expectedDownlinkBitrate */
   expectedDownlinkBitrate?: number;
 }
 
-/**
- * The status of the last-mile probe test.
- */
+/* enum_lastmileproberesultstate */
 export enum LastmileProbeResultState {
-  /**
-   * 1: The last-mile network probe test is complete.
-   */
+  /* enum_lastmileproberesultstate_LastmileProbeResultComplete */
   LastmileProbeResultComplete = 1,
-  /**
-   * 2: The last-mile network probe test is incomplete because the bandwidth estimation is not available due to limited test resources. One possible reason is that testing resources are temporarily limited.
-   */
+  /* enum_lastmileproberesultstate_LastmileProbeResultIncompleteNoBwe */
   LastmileProbeResultIncompleteNoBwe = 2,
-  /**
-   * 3: The last-mile network probe test is not carried out. Probably due to poor network conditions.
-   */
+  /* enum_lastmileproberesultstate_LastmileProbeResultUnavailable */
   LastmileProbeResultUnavailable = 3,
 }
 
-/**
- * Results of the uplink or downlink last-mile network test.
- */
+/* class_lastmileprobeonewayresult */
 export class LastmileProbeOneWayResult {
-  /**
-   * The packet loss rate (%).
-   */
+  /* class_lastmileprobeonewayresult_packetLossRate */
   packetLossRate?: number;
-  /**
-   * The network jitter (ms).
-   */
+  /* class_lastmileprobeonewayresult_jitter */
   jitter?: number;
-  /**
-   * The estimated available bandwidth (bps).
-   */
+  /* class_lastmileprobeonewayresult_availableBandwidth */
   availableBandwidth?: number;
 }
 
-/**
- * Results of the uplink and downlink last-mile network tests.
- */
+/* class_lastmileproberesult */
 export class LastmileProbeResult {
-  /**
-   * The status of the last-mile probe test. See LastmileProbeResultState .
-   */
+  /* class_lastmileproberesult_state */
   state?: LastmileProbeResultState;
-  /**
-   * Results of the uplink last-mile network test. See LastmileProbeOneWayResult .
-   */
+  /* class_lastmileproberesult_uplinkReport */
   uplinkReport?: LastmileProbeOneWayResult;
-  /**
-   * Results of the downlink last-mile network test. See LastmileProbeOneWayResult .
-   */
+  /* class_lastmileproberesult_downlinkReport */
   downlinkReport?: LastmileProbeOneWayResult;
-  /**
-   * The round-trip time (ms).
-   */
+  /* class_lastmileproberesult_rtt */
   rtt?: number;
 }
 
-/**
- * Reasons causing the change of the connection state.
- */
+/* enum_connectionchangedreasontype */
 export enum ConnectionChangedReasonType {
-  /**
-   * 0: The SDK is connecting to the Agora edge server.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedConnecting */
   ConnectionChangedConnecting = 0,
-  /**
-   * 1: The SDK has joined the channel successfully.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedJoinSuccess */
   ConnectionChangedJoinSuccess = 1,
-  /**
-   * 2: The connection between the SDK and the Agora edge server is interrupted.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedInterrupted */
   ConnectionChangedInterrupted = 2,
-  /**
-   * 3: The connection between the SDK and the Agora edge server is banned by the Agora edge server. This error occurs when the user is kicked out of the channel by the server.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedBannedByServer */
   ConnectionChangedBannedByServer = 3,
-  /**
-   * 4: The SDK fails to join the channel. When the SDK fails to join the channel for more than 20 minutes, this error occurs and the SDK stops reconnecting to the channel.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedJoinFailed */
   ConnectionChangedJoinFailed = 4,
-  /**
-   * 5: The SDK has left the channel.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedLeaveChannel */
   ConnectionChangedLeaveChannel = 5,
-  /**
-   * 6: The connection failed because the App ID is not valid. Please rejoin the channel with a valid App ID.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedInvalidAppId */
   ConnectionChangedInvalidAppId = 6,
-  /**
-   * 7: The connection failed since channel name is not valid. Please rejoin the channel with a valid channel name.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedInvalidChannelName */
   ConnectionChangedInvalidChannelName = 7,
-  /**
-   * 8: The connection failed because the token is not valid. Typical reasons include:The App Certificate for the project is enabled in Agora Console, but you do not use a token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.The uid specified when calling joinChannel [2/2] to join the channel is inconsistent with the uid passed in when generating the token.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedInvalidToken */
   ConnectionChangedInvalidToken = 8,
-  /**
-   * 9: The connection failed since token is expired.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedTokenExpired */
   ConnectionChangedTokenExpired = 9,
-  /**
-   * 10: The connection is rejected by server. Typical reasons include:The user is already in the channel and still calls a method, for example, joinChannel [2/2], to join the channel. Stop calling this method to clear this error.The user tries to join the channel when conducting a pre-call test. The user needs to call the channel after the call test ends.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedRejectedByServer */
   ConnectionChangedRejectedByServer = 10,
-  /**
-   * 11: The connection state changed to reconnecting because the SDK has set a proxy server.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedSettingProxyServer */
   ConnectionChangedSettingProxyServer = 11,
-  /**
-   * 12: The connection state changed because the token is renewed.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedRenewToken */
   ConnectionChangedRenewToken = 12,
-  /**
-   * 13: The IP address of the client has changed, possibly because the network type, IP address, or port has been changed.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedClientIpAddressChanged */
   ConnectionChangedClientIpAddressChanged = 13,
-  /**
-   * 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The connection state changes to .
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedKeepAliveTimeout */
   ConnectionChangedKeepAliveTimeout = 14,
-  /**
-   * 15: The SDK has rejoined the channel successfully.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedRejoinSuccess */
   ConnectionChangedRejoinSuccess = 15,
-  /**
-   * 16: The connection between the SDK and the server is lost.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedLost */
   ConnectionChangedLost = 16,
-  /**
-   * 17: The connection state changes due to the echo test.
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedEchoTest */
   ConnectionChangedEchoTest = 17,
-  /**
-   * @ignore
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedClientIpAddressChangedByUser */
   ConnectionChangedClientIpAddressChangedByUser = 18,
-  /**
-   * @ignore
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedSameUidLogin */
   ConnectionChangedSameUidLogin = 19,
-  /**
-   * @ignore
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedTooManyBroadcasters */
   ConnectionChangedTooManyBroadcasters = 20,
-  /**
-   * @ignore
-   */
+  /* enum_connectionchangedreasontype_ConnectionChangedLicenseVerifyFailed */
   ConnectionChangedLicenseVerifyFailed = 21,
 }
 
-/**
- * The reason for a user role switch failure.
- */
+/* enum_clientrolechangefailedreason */
 export enum ClientRoleChangeFailedReason {
-  /**
-   * 1: The number of hosts in the channel is already at the upper limit.This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
-   */
+  /* enum_clientrolechangefailedreason_ClientRoleChangeFailedTooManyBroadcasters */
   ClientRoleChangeFailedTooManyBroadcasters = 1,
-  /**
-   * 2: The request is rejected by the Agora server. Agora recommends you prompt the user to try to switch their user role again.
-   */
+  /* enum_clientrolechangefailedreason_ClientRoleChangeFailedNotAuthorized */
   ClientRoleChangeFailedNotAuthorized = 2,
-  /**
-   * 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
-   */
+  /* enum_clientrolechangefailedreason_ClientRoleChangeFailedRequestTimeOut */
   ClientRoleChangeFailedRequestTimeOut = 3,
-  /**
-   * 4: The SDK connection fails. You can use reason reported in the onConnectionStateChanged callback to troubleshoot the failure.
-   */
+  /* enum_clientrolechangefailedreason_ClientRoleChangeFailedConnectionFailed */
   ClientRoleChangeFailedConnectionFailed = 4,
 }
 
-/**
- * @ignore
- */
+/* enum_wlaccmessagereason */
 export enum WlaccMessageReason {
-  /**
-   * @ignore
-   */
+  /* enum_wlaccmessagereason_WlaccMessageReasonWeakSignal */
   WlaccMessageReasonWeakSignal = 0,
-  /**
-   * @ignore
-   */
+  /* enum_wlaccmessagereason_WlaccMessageReasonChannelCongestion */
   WlaccMessageReasonChannelCongestion = 1,
 }
 
-/**
- * @ignore
- */
+/* enum_wlaccsuggestaction */
 export enum WlaccSuggestAction {
-  /**
-   * @ignore
-   */
+  /* enum_wlaccsuggestaction_WlaccSuggestActionCloseToWifi */
   WlaccSuggestActionCloseToWifi = 0,
-  /**
-   * @ignore
-   */
+  /* enum_wlaccsuggestaction_WlaccSuggestActionConnectSsid */
   WlaccSuggestActionConnectSsid = 1,
-  /**
-   * @ignore
-   */
+  /* enum_wlaccsuggestaction_WlaccSuggestActionCheck5g */
   WlaccSuggestActionCheck5g = 2,
-  /**
-   * @ignore
-   */
+  /* enum_wlaccsuggestaction_WlaccSuggestActionModifySsid */
   WlaccSuggestActionModifySsid = 3,
 }
 
-/**
- * @ignore
- */
+/* class_wlaccstats */
 export class WlAccStats {
-  /**
-   * @ignore
-   */
+  /* class_wlaccstats_e2eDelayPercent */
   e2eDelayPercent?: number;
-  /**
-   * @ignore
-   */
+  /* class_wlaccstats_frozenRatioPercent */
   frozenRatioPercent?: number;
-  /**
-   * @ignore
-   */
+  /* class_wlaccstats_lossRatePercent */
   lossRatePercent?: number;
 }
 
-/**
- * Network type.
- */
+/* enum_networktype */
 export enum NetworkType {
-  /**
-   * -1: The network type is unknown.
-   */
+  /* enum_networktype_NetworkTypeUnknown */
   NetworkTypeUnknown = -1,
-  /**
-   * 0: The SDK disconnects from the network.
-   */
+  /* enum_networktype_NetworkTypeDisconnected */
   NetworkTypeDisconnected = 0,
-  /**
-   * 1: The network type is LAN.
-   */
+  /* enum_networktype_NetworkTypeLan */
   NetworkTypeLan = 1,
-  /**
-   * 2: The network type is Wi-Fi (including hotspots).
-   */
+  /* enum_networktype_NetworkTypeWifi */
   NetworkTypeWifi = 2,
-  /**
-   * 3: The network type is mobile 2G.
-   */
+  /* enum_networktype_NetworkTypeMobile2g */
   NetworkTypeMobile2g = 3,
-  /**
-   * 4: The network type is mobile 3G.
-   */
+  /* enum_networktype_NetworkTypeMobile3g */
   NetworkTypeMobile3g = 4,
-  /**
-   * 5: The network type is mobile 4G.
-   */
+  /* enum_networktype_NetworkTypeMobile4g */
   NetworkTypeMobile4g = 5,
 }
 
-/**
- * Setting mode of the view.
- */
+/* enum_videoviewsetupmode */
 export enum VideoViewSetupMode {
-  /**
-   * 0: (Default) Replaces a view.
-   */
+  /* enum_videoviewsetupmode_VideoViewSetupReplace */
   VideoViewSetupReplace = 0,
-  /**
-   * 1: Adds a view.
-   */
+  /* enum_videoviewsetupmode_VideoViewSetupAdd */
   VideoViewSetupAdd = 1,
-  /**
-   * 2: Deletes a view.
-   */
+  /* enum_videoviewsetupmode_VideoViewSetupRemove */
   VideoViewSetupRemove = 2,
 }
 
-/**
- * Attributes of video canvas object.
- */
+/* class_videocanvas */
 export class VideoCanvas {
-  /**
-   * Video display window.
-   */
+  /* class_videocanvas_view */
   view?: any;
-  /**
-   * The user ID.
-   */
+  /* class_videocanvas_uid */
   uid?: number;
-  /**
-   * The rendering mode of the video. See RenderModeType .
-   */
+  /* class_videocanvas_renderMode */
   renderMode?: RenderModeType;
-  /**
-   * The mirror mode of the view. See VideoMirrorModeType .For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.For the remote user: The mirror mode is disabled by default.
-   */
+  /* class_videocanvas_mirrorMode */
   mirrorMode?: VideoMirrorModeType;
-  /**
-   * Setting mode of the view. See VideoViewSetupMode .
-   */
+  /* class_videocanvas_setupMode */
   setupMode?: VideoViewSetupMode;
-  /**
-   * The type of the video frame, see VideoSourceType .
-   */
+  /* class_videocanvas_sourceType */
   sourceType?: VideoSourceType;
-  /**
-   * The ID of the media player. You can get the media player ID by calling getMediaPlayerId .
-   */
+  /* class_videocanvas_mediaPlayerId */
   mediaPlayerId?: number;
-  /**
-   * (Android and iOS only) (Optional) The display area for the video frame. See Rectangle . width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
-   */
+  /* class_videocanvas_cropArea */
   cropArea?: Rectangle;
 }
 
-/**
- * The contrast level.
- */
+/* enum_lighteningcontrastlevel */
 export enum LighteningContrastLevel {
-  /**
-   * @ignore
-   */
+  /* enum_lighteningcontrastlevel_LighteningContrastLow */
   LighteningContrastLow = 0,
-  /**
-   * 1: (Default) Normal contrast level.
-   */
+  /* enum_lighteningcontrastlevel_LighteningContrastNormal */
   LighteningContrastNormal = 1,
-  /**
-   * 2: High contrast level.
-   */
+  /* enum_lighteningcontrastlevel_LighteningContrastHigh */
   LighteningContrastHigh = 2,
 }
 
-/**
- * Image enhancement options.
- */
+/* class_beautyoptions */
 export class BeautyOptions {
-  /**
-   * The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark.
-   */
+  /* class_beautyoptions_lighteningContrastLevel */
   lighteningContrastLevel?: LighteningContrastLevel;
-  /**
-   * The brightening level, in the range [0.0,1.0], where 0.0 means the original brightening. The default value is
-   */
+  /* class_beautyoptions_lighteningLevel */
   lighteningLevel?: number;
-  /**
-   * The smoothness level, in the range [0.0,1.0], where 0.0 means the original smoothness. The default value is
-   */
+  /* class_beautyoptions_smoothnessLevel */
   smoothnessLevel?: number;
-  /**
-   * The redness level, in the range [0.0,1.0], where 0.0 means the original redness. The default value is
-   */
+  /* class_beautyoptions_rednessLevel */
   rednessLevel?: number;
-  /**
-   * The sharpness level, in the range [0.0,1.0], where 0.0 means the original sharpness. The default value is
-   */
+  /* class_beautyoptions_sharpnessLevel */
   sharpnessLevel?: number;
 }
 
-/**
- * The low-light enhancement mode.
- */
+/* enum_lowlightenhancemode */
 export enum LowLightEnhanceMode {
-  /**
-   * 0: (Default) Automatic mode. The SDK automatically enables or disables the low-light enhancement feature according to the ambient light to compensate for the lighting level or prevent overexposure, as necessary.
-   */
+  /* enum_lowlightenhancemode_LowLightEnhanceAuto */
   LowLightEnhanceAuto = 0,
-  /**
-   * 1: Manual mode. Users need to enable or disable the low-light enhancement feature manually.
-   */
+  /* enum_lowlightenhancemode_LowLightEnhanceManual */
   LowLightEnhanceManual = 1,
 }
 
-/**
- * The low-light enhancement level.
- */
+/* enum_lowlightenhancelevel */
 export enum LowLightEnhanceLevel {
-  /**
-   * 0: (Default) Promotes video quality during low-light enhancement. It processes the brightness, details, and noise of the video image. The performance consumption is moderate, the processing speed is moderate, and the overall video quality is optimal.
-   */
+  /* enum_lowlightenhancelevel_LowLightEnhanceLevelHighQuality */
   LowLightEnhanceLevelHighQuality = 0,
-  /**
-   * 1: Promotes performance during low-light enhancement. It processes the brightness and details of the video image. The processing speed is faster.
-   */
+  /* enum_lowlightenhancelevel_LowLightEnhanceLevelFast */
   LowLightEnhanceLevelFast = 1,
 }
 
-/**
- * The low-light enhancement options.
- */
+/* class_lowlightenhanceoptions */
 export class LowlightEnhanceOptions {
-  /**
-   * The low-light enhancement mode. See LowLightEnhanceMode .
-   */
+  /* class_lowlightenhanceoptions_mode */
   mode?: LowLightEnhanceMode;
-  /**
-   * The low-light enhancement level. See LowLightEnhanceLevel .
-   */
+  /* class_lowlightenhanceoptions_level */
   level?: LowLightEnhanceLevel;
 }
 
-/**
- * Video noise reduction mode.
- */
+/* enum_videodenoisermode */
 export enum VideoDenoiserMode {
-  /**
-   * 0: (Default) Automatic mode. The SDK automatically enables or disables the video noise reduction feature according to the ambient light.
-   */
+  /* enum_videodenoisermode_VideoDenoiserAuto */
   VideoDenoiserAuto = 0,
-  /**
-   * 1: Manual mode. Users need to enable or disable the video noise reduction feature manually.
-   */
+  /* enum_videodenoisermode_VideoDenoiserManual */
   VideoDenoiserManual = 1,
 }
 
-/**
- * The video noise reduction level.
- */
+/* enum_videodenoiserlevel */
 export enum VideoDenoiserLevel {
-  /**
-   * 0: (Default) Promotes video quality during video noise reduction. balances performance consumption and video noise reduction quality. The performance consumption is moderate, the video noise reduction speed is moderate, and the overall video quality is optimal.
-   */
+  /* enum_videodenoiserlevel_VideoDenoiserLevelHighQuality */
   VideoDenoiserLevelHighQuality = 0,
-  /**
-   * 1: Promotes reducing performance consumption during video noise reduction. prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this settinging when the camera is fixed.
-   */
+  /* enum_videodenoiserlevel_VideoDenoiserLevelFast */
   VideoDenoiserLevelFast = 1,
-  /**
-   * 2: Enhanced video noise reduction. prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If VideoDenoiserLevelHighQuality is not enough for your video noise reduction needs, you can use this enumerator.
-   */
+  /* enum_videodenoiserlevel_VideoDenoiserLevelStrength */
   VideoDenoiserLevelStrength = 2,
 }
 
-/**
- * Video noise reduction options.
- */
+/* class_videodenoiseroptions */
 export class VideoDenoiserOptions {
-  /**
-   * Video noise reduction mode.
-   */
+  /* class_videodenoiseroptions_mode */
   mode?: VideoDenoiserMode;
-  /**
-   * Video noise reduction level.
-   */
+  /* class_videodenoiseroptions_level */
   level?: VideoDenoiserLevel;
 }
 
-/**
- * The color enhancement options.
- */
+/* class_colorenhanceoptions */
 export class ColorEnhanceOptions {
-  /**
-   * The level of color enhancement. The value range is [0.0, 1.0]. 0.0 is the default value, which means no color enhancement is applied to the video. The higher the value, the higher the level of color enhancement. The default value is 0.5.
-   */
+  /* class_colorenhanceoptions_strengthLevel */
   strengthLevel?: number;
-  /**
-   * The level of skin tone protection. The value range is [0.0, 1.0]. 0.0 means no skin tone protection. The higher the value, the higher the level of skin tone protection. The default value is 1.0.When the level of color enhancement is higher, the portrait skin tone can be significantly distorted, so you need to set the level of skin tone protection.When the level of skin tone protection is higher, the color enhancement effect can be slightly reduced.Therefore, to get the best color enhancement effect, Agora recommends that you adjust strengthLevel and skinProtectLevel to get the most appropriate values.
-   */
+  /* class_colorenhanceoptions_skinProtectLevel */
   skinProtectLevel?: number;
 }
 
-/**
- * The type of the custom background image.
- */
+/* enum_backgroundsourcetype */
 export enum BackgroundSourceType {
-  /**
-   * 1: (Default) The background image is a solid color.
-   */
+  /* enum_backgroundsourcetype_BackgroundColor */
   BackgroundColor = 1,
-  /**
-   * The background image is a file in PNG or JPG format.
-   */
+  /* enum_backgroundsourcetype_BackgroundImg */
   BackgroundImg = 2,
-  /**
-   * The background image is the blurred background.
-   */
+  /* enum_backgroundsourcetype_BackgroundBlur */
   BackgroundBlur = 3,
 }
 
-/**
- * The degree of blurring applied to the custom background image.
- */
+/* enum_backgroundblurdegree */
 export enum BackgroundBlurDegree {
-  /**
-   * 1: The degree of blurring applied to the custom background image is low. The user can almost see the background clearly.
-   */
+  /* enum_backgroundblurdegree_BlurDegreeLow */
   BlurDegreeLow = 1,
-  /**
-   * The degree of blurring applied to the custom background image is medium. It is difficult for the user to recognize details in the background.
-   */
+  /* enum_backgroundblurdegree_BlurDegreeMedium */
   BlurDegreeMedium = 2,
-  /**
-   * (Default) The degree of blurring applied to the custom background image is high. The user can barely see any distinguishing features in the background.
-   */
+  /* enum_backgroundblurdegree_BlurDegreeHigh */
   BlurDegreeHigh = 3,
 }
 
-/**
- * The custom background image.
- */
+/* class_virtualbackgroundsource */
 export class VirtualBackgroundSource {
-  /**
-   * @ignore
-   */
+  /* class_virtualbackgroundsource_background_source_type */
   background_source_type?: BackgroundSourceType;
-  /**
-   * The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BackgroundColor.
-   */
+  /* class_virtualbackgroundsource_color */
   color?: number;
-  /**
-   * The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BackgroundImg.
-   */
+  /* class_virtualbackgroundsource_source */
   source?: string;
-  /**
-   * The degree of blurring applied to the custom background image. This parameter takes effect only when the type of the custom background image is BackgroundBlur.
-   */
+  /* class_virtualbackgroundsource_blur_degree */
   blur_degree?: BackgroundBlurDegree;
 }
 
-/**
- * The type of algorithms to user for background processing.
- */
+/* enum_segmodeltype */
 export enum SegModelType {
-  /**
-   * 1: (Default) Use the algorithm suitable for all scenarios.
-   */
+  /* enum_segmodeltype_SegModelAi */
   SegModelAi = 1,
-  /**
-   * 2: Use the algorithm designed specifically for scenarios with a green screen background.
-   */
+  /* enum_segmodeltype_SegModelGreen */
   SegModelGreen = 2,
 }
 
-/**
- * Processing properties for background images.
- */
+/* class_segmentationproperty */
 export class SegmentationProperty {
-  /**
-   * The type of algorithms to user for background processing. See SegModelType .
-   */
+  /* class_segmentationproperty_modelType */
   modelType?: SegModelType;
-  /**
-   * The range of accuracy for identifying green colors (different shades of green) in the view. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of green. When the value of this parameter is too large, the edge of the portrait and the green color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect.This parameter only takes effect when modelType is set to SegModelGreen.
-   */
+  /* class_segmentationproperty_greenCapacity */
   greenCapacity?: number;
 }
 
-/**
- * The options for SDK preset voice beautifier effects.
- */
+/* enum_voicebeautifierpreset */
 export enum VoiceBeautifierPreset {
-  /**
-   * Turn off voice beautifier effects and use the original voice.
-   */
+  /* enum_voicebeautifierpreset_VoiceBeautifierOff */
   VoiceBeautifierOff = 0x00000000,
-  /**
-   * A more magnetic voice.Agora recommends using this enumerator to process a male-sounding voice; otherwise, you may experience vocal distortion.
-   */
+  /* enum_voicebeautifierpreset_ChatBeautifierMagnetic */
   ChatBeautifierMagnetic = 0x01010100,
-  /**
-   * A fresher voice.Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
-   */
+  /* enum_voicebeautifierpreset_ChatBeautifierFresh */
   ChatBeautifierFresh = 0x01010200,
-  /**
-   * A more vital voice.Agora recommends using this enumerator to process a female-sounding voice; otherwise, you may experience vocal distortion.
-   */
+  /* enum_voicebeautifierpreset_ChatBeautifierVitality */
   ChatBeautifierVitality = 0x01010300,
-  /**
-   * Singing beautifier effect.If you call setVoiceBeautifierPreset (SingingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.If you call setVoiceBeautifierParameters (SingingBeautifier, param1, param2), you can beautify a male or female-sounding voice and add a reverberation effect.
-   */
+  /* enum_voicebeautifierpreset_SingingBeautifier */
   SingingBeautifier = 0x01020100,
-  /**
-   * A more vigorous voice.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationVigorous */
   TimbreTransformationVigorous = 0x01030100,
-  /**
-   * A deep voice.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationDeep */
   TimbreTransformationDeep = 0x01030200,
-  /**
-   * A mellower voice.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationMellow */
   TimbreTransformationMellow = 0x01030300,
-  /**
-   * Falsetto.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationFalsetto */
   TimbreTransformationFalsetto = 0x01030400,
-  /**
-   * A fuller voice.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationFull */
   TimbreTransformationFull = 0x01030500,
-  /**
-   * A clearer voice.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationClear */
   TimbreTransformationClear = 0x01030600,
-  /**
-   * A more resounding voice.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationResounding */
   TimbreTransformationResounding = 0x01030700,
-  /**
-   * A more ringing voice.
-   */
+  /* enum_voicebeautifierpreset_TimbreTransformationRinging */
   TimbreTransformationRinging = 0x01030800,
-  /**
-   * A ultra-high quality voice, which makes the audio clearer and restores more details.To achieve better audio effect quality, Agora recommends that you set the profile of setAudioProfile [2/2] to AudioProfileMusicHighQuality(4) or AudioProfileMusicHighQualityStereo(5) and scenario to AudioScenarioGameStreaming(3) before calling setVoiceBeautifierPreset .If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
-   */
+  /* enum_voicebeautifierpreset_UltraHighQualityVoice */
   UltraHighQualityVoice = 0x01040100,
 }
 
-/**
- * Preset audio effects.
- * To get better audio effects, Agora recommends calling setAudioProfile and setting the profile parameter as recommended below before using the preset audio effects.
- */
+/* enum_audioeffectpreset */
 export enum AudioEffectPreset {
-  /**
-   * Turn off voice effects, that is, use the original voice.
-   */
+  /* enum_audioeffectpreset_AudioEffectOff */
   AudioEffectOff = 0x00000000,
-  /**
-   * The voice effect typical of a KTV venue.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsKtv */
   RoomAcousticsKtv = 0x02010100,
-  /**
-   * The voice effect typical of a concert hall.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsVocalConcert */
   RoomAcousticsVocalConcert = 0x02010200,
-  /**
-   * The voice effect typical of a recording studio.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsStudio */
   RoomAcousticsStudio = 0x02010300,
-  /**
-   * The voice effect typical of a vintage phonograph.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsPhonograph */
   RoomAcousticsPhonograph = 0x02010400,
-  /**
-   * The virtual stereo effect, which renders monophonic audio as stereo audio.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsVirtualStereo */
   RoomAcousticsVirtualStereo = 0x02010500,
-  /**
-   * A more spatial voice effect.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsSpacial */
   RoomAcousticsSpacial = 0x02010600,
-  /**
-   * A more ethereal voice effect.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsEthereal */
   RoomAcousticsEthereal = 0x02010700,
-  /**
-   * A 3D voice effect that makes the voice appear to be moving around the user. The default cycle period is 10 seconds. After setting this effect, you can call setAudioEffectParameters to modify the movement period.If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect.
-   */
+  /* enum_audioeffectpreset_RoomAcoustics3dVoice */
   RoomAcoustics3dVoice = 0x02010800,
-  /**
-   * Virtual surround sound, that is, the SDK generates a simulated surround sound field on the basis of stereo channels, thereby creating a surround sound effect.If the virtual surround sound is enabled, users need to use stereo audio playback devices to hear the anticipated audio effect.
-   */
+  /* enum_audioeffectpreset_RoomAcousticsVirtualSurroundSound */
   RoomAcousticsVirtualSurroundSound = 0x02010900,
-  /**
-   * A middle-aged man's voice.Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-   */
+  /* enum_audioeffectpreset_VoiceChangerEffectUncle */
   VoiceChangerEffectUncle = 0x02020100,
-  /**
-   * An older man's voice.Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-   */
+  /* enum_audioeffectpreset_VoiceChangerEffectOldman */
   VoiceChangerEffectOldman = 0x02020200,
-  /**
-   * A boy's voice.Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
-   */
+  /* enum_audioeffectpreset_VoiceChangerEffectBoy */
   VoiceChangerEffectBoy = 0x02020300,
-  /**
-   * A young woman's voice.Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
-   */
+  /* enum_audioeffectpreset_VoiceChangerEffectSister */
   VoiceChangerEffectSister = 0x02020400,
-  /**
-   * A girl's voice.Agora recommends using this preset to process a female-sounding voice; otherwise, you may not hear the anticipated voice effect.
-   */
+  /* enum_audioeffectpreset_VoiceChangerEffectGirl */
   VoiceChangerEffectGirl = 0x02020500,
-  /**
-   * The voice of Pig King, a character in Journey to the West who has a voice like a growling bear.
-   */
+  /* enum_audioeffectpreset_VoiceChangerEffectPigking */
   VoiceChangerEffectPigking = 0x02020600,
-  /**
-   * The Hulk's voice.
-   */
+  /* enum_audioeffectpreset_VoiceChangerEffectHulk */
   VoiceChangerEffectHulk = 0x02020700,
-  /**
-   * The voice effect typical of R&B music.
-   */
+  /* enum_audioeffectpreset_StyleTransformationRnb */
   StyleTransformationRnb = 0x02030100,
-  /**
-   * The voice effect typical of popular music.
-   */
+  /* enum_audioeffectpreset_StyleTransformationPopular */
   StyleTransformationPopular = 0x02030200,
-  /**
-   * A pitch correction effect that corrects the user's pitch based on the pitch of the natural C major scale. After setting this voice effect, you can call setAudioEffectParameters to adjust the basic mode of tuning and the pitch of the main tone.
-   */
+  /* enum_audioeffectpreset_PitchCorrection */
   PitchCorrection = 0x02040100,
 }
 
-/**
- * The options for SDK preset voice conversion effects.
- */
+/* enum_voiceconversionpreset */
 export enum VoiceConversionPreset {
-  /**
-   * Turn off voice conversion effects and use the original voice.
-   */
+  /* enum_voiceconversionpreset_VoiceConversionOff */
   VoiceConversionOff = 0x00000000,
-  /**
-   * A gender-neutral voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
-   */
+  /* enum_voiceconversionpreset_VoiceChangerNeutral */
   VoiceChangerNeutral = 0x03010100,
-  /**
-   * A sweet voice. To avoid audio distortion, ensure that you use this enumerator to process a female-sounding voice.
-   */
+  /* enum_voiceconversionpreset_VoiceChangerSweet */
   VoiceChangerSweet = 0x03010200,
-  /**
-   * A steady voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
-   */
+  /* enum_voiceconversionpreset_VoiceChangerSolid */
   VoiceChangerSolid = 0x03010300,
-  /**
-   * A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
-   */
+  /* enum_voiceconversionpreset_VoiceChangerBass */
   VoiceChangerBass = 0x03010400,
 }
 
-/**
- * Preset headphone equalizer types.
- */
+/* enum_headphoneequalizerpreset */
 export enum HeadphoneEqualizerPreset {
-  /**
-   * The headphone equalizer is disabled, and the original audio is heard.
-   */
+  /* enum_headphoneequalizerpreset_HeadphoneEqualizerOff */
   HeadphoneEqualizerOff = 0x00000000,
-  /**
-   * An equalizer is used for headphones.
-   */
+  /* enum_headphoneequalizerpreset_HeadphoneEqualizerOverear */
   HeadphoneEqualizerOverear = 0x04000001,
-  /**
-   * An equalizer is used for in-ear headphones.
-   */
+  /* enum_headphoneequalizerpreset_HeadphoneEqualizerInear */
   HeadphoneEqualizerInear = 0x04000002,
 }
 
-/**
- * @ignore
- */
+/* class_screencaptureparameters */
 export class ScreenCaptureParameters {
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_dimensions */
   dimensions?: VideoDimensions;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_frameRate */
   frameRate?: number;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_bitrate */
   bitrate?: number;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_captureMouseCursor */
   captureMouseCursor?: boolean;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_windowFocus */
   windowFocus?: boolean;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_excludeWindowList */
   excludeWindowList?: any[];
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_excludeWindowCount */
   excludeWindowCount?: number;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_highLightWidth */
   highLightWidth?: number;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_highLightColor */
   highLightColor?: number;
-  /**
-   * @ignore
-   */
+  /* class_screencaptureparameters_enableHighLight */
   enableHighLight?: boolean;
 }
 
-/**
- * Recording quality.
- */
+/* enum_audiorecordingqualitytype */
 export enum AudioRecordingQualityType {
-  /**
-   * 0: Low quality. The sample rate is 32 kHz, and the file size is around 1.2 MB after 10 minutes of recording.
-   */
+  /* enum_audiorecordingqualitytype_AudioRecordingQualityLow */
   AudioRecordingQualityLow = 0,
-  /**
-   * 1: Medium quality. The sample rate is 32 kHz, and the file size is around 2 MB after 10 minutes of recording.
-   */
+  /* enum_audiorecordingqualitytype_AudioRecordingQualityMedium */
   AudioRecordingQualityMedium = 1,
-  /**
-   * 2: High quality. The sample rate is 32 kHz, and the file size is around 3.75 MB after 10 minutes of recording.
-   */
+  /* enum_audiorecordingqualitytype_AudioRecordingQualityHigh */
   AudioRecordingQualityHigh = 2,
-  /**
-   * 3: Ultra high quality. The sample rate is 32 kHz, and the file size is around 7.5 MB after 10 minutes of recording.
-   */
+  /* enum_audiorecordingqualitytype_AudioRecordingQualityUltraHigh */
   AudioRecordingQualityUltraHigh = 3,
 }
 
-/**
- * Recording content. Set in startAudioRecording .
- */
+/* enum_audiofilerecordingtype */
 export enum AudioFileRecordingType {
-  /**
-   * 1: Only records the audio of the local user.
-   */
+  /* enum_audiofilerecordingtype_AudioFileRecordingMic */
   AudioFileRecordingMic = 1,
-  /**
-   * 2: Only records the audio of all remote users.
-   */
+  /* enum_audiofilerecordingtype_AudioFileRecordingPlayback */
   AudioFileRecordingPlayback = 2,
-  /**
-   * 3: Records the mixed audio of the local and all remote users.
-   */
+  /* enum_audiofilerecordingtype_AudioFileRecordingMixed */
   AudioFileRecordingMixed = 3,
 }
 
-/**
- * Audio profile.
- */
+/* enum_audioencodedframeobserverposition */
 export enum AudioEncodedFrameObserverPosition {
-  /**
-   * 1: Only records the audio of the local user.
-   */
+  /* enum_audioencodedframeobserverposition_AudioEncodedFrameObserverPositionRecord */
   AudioEncodedFrameObserverPositionRecord = 1,
-  /**
-   * 2: Only records the audio of all remote users.
-   */
+  /* enum_audioencodedframeobserverposition_AudioEncodedFrameObserverPositionPlayback */
   AudioEncodedFrameObserverPositionPlayback = 2,
-  /**
-   * 3: Records the mixed audio of the local and all remote users.
-   */
+  /* enum_audioencodedframeobserverposition_AudioEncodedFrameObserverPositionMixed */
   AudioEncodedFrameObserverPositionMixed = 3,
 }
 
-/**
- * Recording configuration.
- */
+/* class_audiorecordingconfiguration */
 export class AudioRecordingConfiguration {
-  /**
-   * The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4.
-   *  Ensure that the path for the recording file exists and is writable.
-   */
+  /* class_audiorecordingconfiguration_filePath */
   filePath?: string;
-  /**
-   * Whether to encode the audio data:
-   *  true: Encode audio data in AAC.false: (Default) Do not encode audio data, but save the recorded audio data directly.
-   */
+  /* class_audiorecordingconfiguration_encode */
   encode?: boolean;
-  /**
-   * Recording sample rate (Hz).16000(Default) 320004410048000If you set this parameter to 44100 or 48000, Agora recommends recording WAV files, or AAC files with quality set as AudioRecordingQualityMedium or AudioRecordingQualityHigh for better recording quality.
-   */
+  /* class_audiorecordingconfiguration_sampleRate */
   sampleRate?: number;
-  /**
-   * Recording content. See AudioFileRecordingType .
-   */
+  /* class_audiorecordingconfiguration_fileRecordingType */
   fileRecordingType?: AudioFileRecordingType;
-  /**
-   * Recording quality. See AudioRecordingQualityType .Note: This parameter applies to AAC files only.
-   */
+  /* class_audiorecordingconfiguration_quality */
   quality?: AudioRecordingQualityType;
-  /**
-   * The audio channel of recording: The parameter supports the following values:1: (Default) Mono.2: Stereo.The actual recorded audio channel is related to the audio channel that you capture.If the captured audio is mono and recordingChannel is 2, the recorded audio is the dual-channel data that is copied from mono data, not stereo.If the captured audio is dual channel and recordingChannel is 1, the recorded audio is the mono data that is mixed by dual-channel data.The integration scheme also affects the final recorded audio channel. Therefore, to record in stereo, technical support for assistance.
-   */
+  /* class_audiorecordingconfiguration_recordingChannel */
   recordingChannel?: number;
 }
 
-/**
- * Observer settings for encoded audio.
- */
+/* class_audioencodedframeobserverconfig */
 export class AudioEncodedFrameObserverConfig {
-  /**
-   * Audio profile. See AudioEncodedFrameObserverPosition .
-   */
+  /* class_audioencodedframeobserverconfig_postionType */
   postionType?: AudioEncodedFrameObserverPosition;
-  /**
-   * Audio encoding type. See AudioEncodingType .
-   */
+  /* class_audioencodedframeobserverconfig_encodingType */
   encodingType?: AudioEncodingType;
 }
 
-/**
- * The encoded audio observer.
- */
+/* class_iaudioencodedframeobserver */
 export interface IAudioEncodedFrameObserver {
-  /**
-   * Gets the encoded audio data of the local user.
-   * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
-   *
-   * @param channels The number of channels.
-   *  1: Mono.
-   *  2: Stereo. If the channel uses stereo, the data is interleaved.
-   * @param frameBuffer The audio buffer.
-   * @param length The data length (byte).
-   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
-   */
+  /* callback_iaudioencodedframeobserver_onrecordaudioencodedframe */
   onRecordAudioEncodedFrame?(
     frameBuffer: Uint8Array,
     length: number,
     audioEncodedFrameInfo: EncodedAudioFrameInfo
   ): void;
 
-  /**
-   * Gets the encoded audio data of all remote users.
-   * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
-   *
-   * @param samplesPerSec Recording sample rate (Hz).
-   * @param channels The number of channels.
-   *  1: Mono.
-   *  2: Stereo. If the channel uses stereo, the data is interleaved.
-   * @param samplesPerChannel The number of samples per channel in the audio frame.
-   * @param frameBuffer The audio buffer.
-   * @param length The data length (byte).
-   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
-   */
+  /* callback_iaudioencodedframeobserver_onplaybackaudioencodedframe */
   onPlaybackAudioEncodedFrame?(
     frameBuffer: Uint8Array,
     length: number,
     audioEncodedFrameInfo: EncodedAudioFrameInfo
   ): void;
 
-  /**
-   * Gets the mixed and encoded audio data of the local and all remote users.
-   * After calling registerAudioEncodedFrameObserver and setting the audio profile as AudioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
-   *
-   * @param samplesPerSec Recording sample rate (Hz).
-   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
-   * @param samplesPerChannel The number of samples per channel in the audio frame.
-   * @param frameBuffer The audio buffer.
-   * @param length The data length (byte).
-   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
-   */
+  /* callback_iaudioencodedframeobserver_onmixedaudioencodedframe */
   onMixedAudioEncodedFrame?(
     frameBuffer: Uint8Array,
     length: number,
@@ -3794,668 +2008,360 @@ export interface IAudioEncodedFrameObserver {
   ): void;
 }
 
-/**
- * The region for connection, which is the region where the server the SDK connects to is located.
- */
+/* enum_areacode */
 export enum AreaCode {
-  /**
-   * Mainland China.
-   */
+  /* enum_areacode_AreaCodeCn */
   AreaCodeCn = 0x00000001,
-  /**
-   * North America.
-   */
+  /* enum_areacode_AreaCodeNa */
   AreaCodeNa = 0x00000002,
-  /**
-   * Europe.
-   */
+  /* enum_areacode_AreaCodeEu */
   AreaCodeEu = 0x00000004,
-  /**
-   * Asia, excluding Mainland China.
-   */
+  /* enum_areacode_AreaCodeAs */
   AreaCodeAs = 0x00000008,
-  /**
-   * Japan.
-   */
+  /* enum_areacode_AreaCodeJp */
   AreaCodeJp = 0x00000010,
-  /**
-   * India.
-   */
+  /* enum_areacode_AreaCodeIn */
   AreaCodeIn = 0x00000020,
-  /**
-   * Global.
-   */
+  /* enum_areacode_AreaCodeGlob */
   AreaCodeGlob = 0xffffffff,
 }
 
-/**
- * @ignore
- */
+/* enum_areacodeex */
 export enum AreaCodeEx {
-  /**
-   * @ignore
-   */
+  /* enum_areacodeex_AreaCodeOc */
   AreaCodeOc = 0x00000040,
-  /**
-   * @ignore
-   */
+  /* enum_areacodeex_AreaCodeSa */
   AreaCodeSa = 0x00000080,
-  /**
-   * @ignore
-   */
+  /* enum_areacodeex_AreaCodeAf */
   AreaCodeAf = 0x00000100,
-  /**
-   * @ignore
-   */
+  /* enum_areacodeex_AreaCodeKr */
   AreaCodeKr = 0x00000200,
-  /**
-   * @ignore
-   */
+  /* enum_areacodeex_AreaCodeHkmc */
   AreaCodeHkmc = 0x00000400,
-  /**
-   * @ignore
-   */
+  /* enum_areacodeex_AreaCodeUs */
   AreaCodeUs = 0x00000800,
-  /**
-   * @ignore
-   */
+  /* enum_areacodeex_AreaCodeOvs */
   AreaCodeOvs = 0xfffffffe,
 }
 
-/**
- * The error code of the channel media relay.
- */
+/* enum_channelmediarelayerror */
 export enum ChannelMediaRelayError {
-  /**
-   * 0: No error.
-   */
+  /* enum_channelmediarelayerror_RelayOk */
   RelayOk = 0,
-  /**
-   * 1: An error occurs in the server response.
-   */
+  /* enum_channelmediarelayerror_RelayErrorServerErrorResponse */
   RelayErrorServerErrorResponse = 1,
-  /**
-   * 2: No server response.You can call leaveChannel to leave the channel.This error can also occur if your project has not enabled co-host token authentication. You can to enable the service for cohosting across channels before starting a channel media relay.
-   */
+  /* enum_channelmediarelayerror_RelayErrorServerNoResponse */
   RelayErrorServerNoResponse = 2,
-  /**
-   * 3: The SDK fails to access the service, probably due to limited resources of the server.
-   */
+  /* enum_channelmediarelayerror_RelayErrorNoResourceAvailable */
   RelayErrorNoResourceAvailable = 3,
-  /**
-   * 4: Fails to send the relay request.
-   */
+  /* enum_channelmediarelayerror_RelayErrorFailedJoinSrc */
   RelayErrorFailedJoinSrc = 4,
-  /**
-   * 5: Fails to accept the relay request.
-   */
+  /* enum_channelmediarelayerror_RelayErrorFailedJoinDest */
   RelayErrorFailedJoinDest = 5,
-  /**
-   * 6: The server fails to receive the media stream.
-   */
+  /* enum_channelmediarelayerror_RelayErrorFailedPacketReceivedFromSrc */
   RelayErrorFailedPacketReceivedFromSrc = 6,
-  /**
-   * 7: The server fails to send the media stream.
-   */
+  /* enum_channelmediarelayerror_RelayErrorFailedPacketSentToDest */
   RelayErrorFailedPacketSentToDest = 7,
-  /**
-   * 8: The SDK disconnects from the server due to poor network connections. You can call leaveChannel to leave the channel.
-   */
+  /* enum_channelmediarelayerror_RelayErrorServerConnectionLost */
   RelayErrorServerConnectionLost = 8,
-  /**
-   * 9: An internal error occurs in the server.
-   */
+  /* enum_channelmediarelayerror_RelayErrorInternalError */
   RelayErrorInternalError = 9,
-  /**
-   * 10: The token of the source channel has expired.
-   */
+  /* enum_channelmediarelayerror_RelayErrorSrcTokenExpired */
   RelayErrorSrcTokenExpired = 10,
-  /**
-   * 11: The token of the destination channel has expired.
-   */
+  /* enum_channelmediarelayerror_RelayErrorDestTokenExpired */
   RelayErrorDestTokenExpired = 11,
 }
 
-/**
- * The event code of channel media relay.
- */
+/* enum_channelmediarelayevent */
 export enum ChannelMediaRelayEvent {
-  /**
-   * 0: The user disconnects from the server due to a poor network connection.
-   */
+  /* enum_channelmediarelayevent_RelayEventNetworkDisconnected */
   RelayEventNetworkDisconnected = 0,
-  /**
-   * 1: The user is connected to the server.
-   */
+  /* enum_channelmediarelayevent_RelayEventNetworkConnected */
   RelayEventNetworkConnected = 1,
-  /**
-   * 2: The user joins the source channel.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketJoinedSrcChannel */
   RelayEventPacketJoinedSrcChannel = 2,
-  /**
-   * 3: The user joins the destination channel.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketJoinedDestChannel */
   RelayEventPacketJoinedDestChannel = 3,
-  /**
-   * 4: The SDK starts relaying the media stream to the destination channel.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketSentToDestChannel */
   RelayEventPacketSentToDestChannel = 4,
-  /**
-   * 5: The server receives the audio stream from the source channel.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketReceivedVideoFromSrc */
   RelayEventPacketReceivedVideoFromSrc = 5,
-  /**
-   * 6: The server receives the audio stream from the source channel.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketReceivedAudioFromSrc */
   RelayEventPacketReceivedAudioFromSrc = 6,
-  /**
-   * 7: The destination channel is updated.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketUpdateDestChannel */
   RelayEventPacketUpdateDestChannel = 7,
-  /**
-   * @ignore
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketUpdateDestChannelRefused */
   RelayEventPacketUpdateDestChannelRefused = 8,
-  /**
-   * 9: The destination channel does not change, which means that the destination channel fails to be updated.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketUpdateDestChannelNotChange */
   RelayEventPacketUpdateDestChannelNotChange = 9,
-  /**
-   * 10: The destination channel name is NULL.
-   */
+  /* enum_channelmediarelayevent_RelayEventPacketUpdateDestChannelIsNull */
   RelayEventPacketUpdateDestChannelIsNull = 10,
-  /**
-   * 11: The video profile is sent to the server.
-   */
+  /* enum_channelmediarelayevent_RelayEventVideoProfileUpdate */
   RelayEventVideoProfileUpdate = 11,
-  /**
-   * 12: The SDK successfully pauses relaying the media stream to destination channels.
-   */
+  /* enum_channelmediarelayevent_RelayEventPauseSendPacketToDestChannelSuccess */
   RelayEventPauseSendPacketToDestChannelSuccess = 12,
-  /**
-   * 13: The SDK fails to pause relaying the media stream to destination channels.
-   */
+  /* enum_channelmediarelayevent_RelayEventPauseSendPacketToDestChannelFailed */
   RelayEventPauseSendPacketToDestChannelFailed = 13,
-  /**
-   * 14: The SDK successfully resumes relaying the media stream to destination channels.
-   */
+  /* enum_channelmediarelayevent_RelayEventResumeSendPacketToDestChannelSuccess */
   RelayEventResumeSendPacketToDestChannelSuccess = 14,
-  /**
-   * 15: The SDK fails to resume relaying the media stream to destination channels.
-   */
+  /* enum_channelmediarelayevent_RelayEventResumeSendPacketToDestChannelFailed */
   RelayEventResumeSendPacketToDestChannelFailed = 15,
 }
 
-/**
- * The state code of the channel media relay.
- */
+/* enum_channelmediarelaystate */
 export enum ChannelMediaRelayState {
-  /**
-   * 0: The initial state. After you successfully stop the channel media relay by calling stopChannelMediaRelay , the onChannelMediaRelayStateChanged callback returns this state.
-   */
+  /* enum_channelmediarelaystate_RelayStateIdle */
   RelayStateIdle = 0,
-  /**
-   * 1: The SDK tries to relay the media stream to the destination channel.
-   */
+  /* enum_channelmediarelaystate_RelayStateConnecting */
   RelayStateConnecting = 1,
-  /**
-   * 2: The SDK successfully relays the media stream to the destination channel.
-   */
+  /* enum_channelmediarelaystate_RelayStateRunning */
   RelayStateRunning = 2,
-  /**
-   * 3: An error occurs. See code in onChannelMediaRelayStateChanged for the error code.
-   */
+  /* enum_channelmediarelaystate_RelayStateFailure */
   RelayStateFailure = 3,
 }
 
-/**
- * Channel media information.
- */
+/* class_channelmediainfo */
 export class ChannelMediaInfo {
-  /**
-   * The channel name.
-   */
+  /* class_channelmediainfo_channelName */
   channelName?: string;
-  /**
-   * The token that enables the user to join the channel.
-   */
+  /* class_channelmediainfo_token */
   token?: string;
-  /**
-   * The user ID.
-   */
+  /* class_channelmediainfo_uid */
   uid?: number;
 }
 
-/**
- * Configuration information of relaying media streams across channels.
- */
+/* class_channelmediarelayconfiguration */
 export class ChannelMediaRelayConfiguration {
-  /**
-   * The information of the source channel ChannelMediaInfo . It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.uid: The unique user ID to identify the relay stream in the source channel. The default value is 0, which means the SDK generates a random uid. You must set it as 0.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.
-   */
+  /* class_channelmediarelayconfiguration_srcInfo */
   srcInfo?: ChannelMediaInfo;
-  /**
-   * The information of the destination channel ChannelMediaInfo. It contains the following members:channelName: The name of the destination channel.uid: The unique user ID to identify the relay stream in the destination channel. The value ranges from 0 to (2 32-1). To avoid user ID conflicts, this user ID must be different from any other user ID in the destination channel. The default value is 0, which means the SDK generates a random user ID. Do not set this parameter as the user ID of the host in the destination channel, and ensure that this user ID is different from any other user ID in the channel.token: The token for joining the destination channel. It is generated with the channelName and uid you set in destInfos.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid.
-   */
+  /* class_channelmediarelayconfiguration_destInfos */
   destInfos?: ChannelMediaInfo[];
-  /**
-   * The number of destination channels. The default value is 0, and the value range is from 0 to 4. Ensure that the value of this parameter corresponds to the number of ChannelMediaInfo structs you define in destInfo.
-   */
+  /* class_channelmediarelayconfiguration_destCount */
   destCount?: number;
 }
 
-/**
- * The uplink network information.
- */
+/* class_uplinknetworkinfo */
 export class UplinkNetworkInfo {
-  /**
-   * The target video encoder bitrate (bps).
-   */
+  /* class_uplinknetworkinfo_video_encoder_target_bitrate_bps */
   video_encoder_target_bitrate_bps?: number;
 }
 
-/**
- * @ignore
- */
+/* class_peerdownlinkinfo */
 export class PeerDownlinkInfo {
-  /**
-   * @ignore
-   */
+  /* class_peerdownlinkinfo_uid */
   uid?: string;
-  /**
-   * @ignore
-   */
+  /* class_peerdownlinkinfo_stream_type */
   stream_type?: VideoStreamType;
-  /**
-   * @ignore
-   */
+  /* class_peerdownlinkinfo_current_downscale_level */
   current_downscale_level?: RemoteVideoDownscaleLevel;
-  /**
-   * @ignore
-   */
+  /* class_peerdownlinkinfo_expected_bitrate_bps */
   expected_bitrate_bps?: number;
 }
 
-/**
- * @ignore
- */
+/* class_downlinknetworkinfo */
 export class DownlinkNetworkInfo {
-  /**
-   * @ignore
-   */
+  /* class_downlinknetworkinfo_lastmile_buffer_delay_time_ms */
   lastmile_buffer_delay_time_ms?: number;
-  /**
-   * @ignore
-   */
+  /* class_downlinknetworkinfo_bandwidth_estimation_bps */
   bandwidth_estimation_bps?: number;
-  /**
-   * @ignore
-   */
+  /* class_downlinknetworkinfo_total_downscale_level_count */
   total_downscale_level_count?: number;
-  /**
-   * @ignore
-   */
+  /* class_downlinknetworkinfo_peer_downlink_info */
   peer_downlink_info?: PeerDownlinkInfo[];
-  /**
-   * @ignore
-   */
+  /* class_downlinknetworkinfo_total_received_video_count */
   total_received_video_count?: number;
 }
 
-/**
- * The built-in encryption mode.
- * Agora recommends using Aes128Gcm2 or Aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
- */
+/* enum_encryptionmode */
 export enum EncryptionMode {
-  /**
-   * 1: 128-bit AES encryption, XTS mode.
-   */
+  /* enum_encryptionmode_Aes128Xts */
   Aes128Xts = 1,
-  /**
-   * 2: 128-bit AES encryption, ECB mode.
-   */
+  /* enum_encryptionmode_Aes128Ecb */
   Aes128Ecb = 2,
-  /**
-   * 3: 256-bit AES encryption, XTS mode.
-   */
+  /* enum_encryptionmode_Aes256Xts */
   Aes256Xts = 3,
-  /**
-   * 4: 128-bit SM4 encryption, ECB mode.
-   */
+  /* enum_encryptionmode_Sm4128Ecb */
   Sm4128Ecb = 4,
-  /**
-   * 5: 128-bit AES encryption, GCM mode.
-   */
+  /* enum_encryptionmode_Aes128Gcm */
   Aes128Gcm = 5,
-  /**
-   * 6: 256-bit AES encryption, GCM mode.
-   */
+  /* enum_encryptionmode_Aes256Gcm */
   Aes256Gcm = 6,
-  /**
-   * 7: (Default) 128-bit AES encryption, GCM mode. This encryption mode requires the setting of salt (encryptionKdfSalt).
-   */
+  /* enum_encryptionmode_Aes128Gcm2 */
   Aes128Gcm2 = 7,
-  /**
-   * 8: 256-bit AES encryption, GCM mode. This encryption mode requires the setting of salt (encryptionKdfSalt).
-   */
+  /* enum_encryptionmode_Aes256Gcm2 */
   Aes256Gcm2 = 8,
-  /**
-   * Enumerator boundary.
-   */
+  /* enum_encryptionmode_ModeEnd */
   ModeEnd = 9,
 }
 
-/**
- * Built-in encryption configurations.
- */
+/* class_encryptionconfig */
 export class EncryptionConfig {
-  /**
-   * The built-in encryption mode. See EncryptionMode . Agora recommends using Aes128Gcm2 or Aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
-   */
+  /* class_encryptionconfig_encryptionMode */
   encryptionMode?: EncryptionMode;
-  /**
-   * Encryption key in string type with unlimited length. Agora recommends using a 32-byte key.If you do not set an encryption key or set it as NULL, you cannot use the built-in encryption, and the SDK returns -2.
-   */
+  /* class_encryptionconfig_encryptionKey */
   encryptionKey?: string;
-  /**
-   * Salt, 32 bytes in length. Agora recommends that you use OpenSSL to generate salt on the server side. See Media Stream Encryption for details. This parameter takes effect only in Aes128Gcm2 or Aes256Gcm2 encrypted mode. In this case, ensure that this parameter is not 0.
-   */
+  /* class_encryptionconfig_encryptionKdfSalt */
   encryptionKdfSalt?: number[];
 }
 
-/**
- * Encryption error type.
- */
+/* enum_encryptionerrortype */
 export enum EncryptionErrorType {
-  /**
-   * 0: Internal reason.
-   */
+  /* enum_encryptionerrortype_EncryptionErrorInternalFailure */
   EncryptionErrorInternalFailure = 0,
-  /**
-   * 1: Decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
-   */
+  /* enum_encryptionerrortype_EncryptionErrorDecryptionFailure */
   EncryptionErrorDecryptionFailure = 1,
-  /**
-   * 2: Encryption errors.
-   */
+  /* enum_encryptionerrortype_EncryptionErrorEncryptionFailure */
   EncryptionErrorEncryptionFailure = 2,
 }
 
-/**
- * @ignore
- */
+/* enum_uploaderrorreason */
 export enum UploadErrorReason {
-  /**
-   * @ignore
-   */
+  /* enum_uploaderrorreason_UploadSuccess */
   UploadSuccess = 0,
-  /**
-   * @ignore
-   */
+  /* enum_uploaderrorreason_UploadNetError */
   UploadNetError = 1,
-  /**
-   * @ignore
-   */
+  /* enum_uploaderrorreason_UploadServerError */
   UploadServerError = 2,
 }
 
-/**
- * The type of the device permission.
- */
+/* enum_permissiontype */
 export enum PermissionType {
-  /**
-   * 0: Permission for the audio capture device.
-   */
+  /* enum_permissiontype_RecordAudio */
   RecordAudio = 0,
-  /**
-   * 1: Permission for the camera.
-   */
+  /* enum_permissiontype_Camera */
   Camera = 1,
-  /**
-   * (For Android only) 2: Permission for screen sharing.
-   */
+  /* enum_permissiontype_ScreenCapture */
   ScreenCapture = 2,
 }
 
-/**
- * The maximum length of the user account.
- */
+/* enum_maxuseraccountlengthtype */
 export enum MaxUserAccountLengthType {
-  /**
-   * The maximum length of the user account is 256 bytes.
-   */
+  /* enum_maxuseraccountlengthtype_MaxUserAccountLength */
   MaxUserAccountLength = 256,
 }
 
-/**
- * The subscribing state.
- */
+/* enum_streamsubscribestate */
 export enum StreamSubscribeState {
-  /**
-   * 0: The initial publishing state after joining the channel.
-   */
+  /* enum_streamsubscribestate_SubStateIdle */
   SubStateIdle = 0,
-  /**
-   * 1: Fails to subscribe to the remote stream. Possible reasons:The remote user:Calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media stream.Calls disableAudio or disableVideo to disable the local audio or video module.Calls enableLocalAudio (false) or enableLocalVideo (false) to disable local audio or video capture.The role of the remote user is audience.The local user calls the following methods to stop receiving remote streams:Call muteRemoteAudioStream (true) or muteAllRemoteAudioStreams (true) to stop receiving the remote audio stream.Call muteRemoteVideoStream (true) or muteAllRemoteVideoStreams (true) to stop receiving the remote video stream.
-   */
+  /* enum_streamsubscribestate_SubStateNoSubscribed */
   SubStateNoSubscribed = 1,
-  /**
-   * 2: Subscribing.
-   */
+  /* enum_streamsubscribestate_SubStateSubscribing */
   SubStateSubscribing = 2,
-  /**
-   * 3: The remote stream is received, and the subscription is successful.
-   */
+  /* enum_streamsubscribestate_SubStateSubscribed */
   SubStateSubscribed = 3,
 }
 
-/**
- * The publishing state.
- */
+/* enum_streampublishstate */
 export enum StreamPublishState {
-  /**
-   * 0: The initial publishing state after joining the channel.
-   */
+  /* enum_streampublishstate_PubStateIdle */
   PubStateIdle = 0,
-  /**
-   * 1: Fails to publish the local stream. Possible reasons:The local user calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.The local user calls disableAudio or disableVideo to disable the local audio or video module.The local user calls enableLocalAudio (false) or enableLocalVideo (false) to disable the local audio or video capture.The role of the local user is audience.
-   */
+  /* enum_streampublishstate_PubStateNoPublished */
   PubStateNoPublished = 1,
-  /**
-   * 2: Publishing.
-   */
+  /* enum_streampublishstate_PubStatePublishing */
   PubStatePublishing = 2,
-  /**
-   * 3: Publishes successfully.
-   */
+  /* enum_streampublishstate_PubStatePublished */
   PubStatePublished = 3,
 }
 
-/**
- * The configuration of the audio and video call loop test.
- */
+/* class_echotestconfiguration */
 export class EchoTestConfiguration {
-  /**
-   * The view used to render the local user's video. This parameter is only applicable to scenarios testing video devices, that is, when enableVideo is true.
-   */
+  /* class_echotestconfiguration_view */
   view?: any;
-  /**
-   * Whether to enable the audio device for the loop test:true: (Default) Enable the audio device. To test the audio device, set this parameter as true.false: Disable the audio device.
-   */
+  /* class_echotestconfiguration_enableAudio */
   enableAudio?: boolean;
-  /**
-   * Whether to enable the video device for the loop test:true: (Default) Enable the video device. To test the video device, set this parameter as true.false: Disable the video device.
-   */
+  /* class_echotestconfiguration_enableVideo */
   enableVideo?: boolean;
-  /**
-   * @ignore
-   */
+  /* class_echotestconfiguration_token */
   token?: string;
-  /**
-   * The channel name that identifies each audio and video call loop. To ensure proper loop test functionality, the channel name passed in to identify each loop test cannot be the same when users of the same project (App ID) perform audio and video call loop tests on different devices.
-   */
+  /* class_echotestconfiguration_channelId */
   channelId?: string;
 }
 
-/**
- * The information of the user.
- */
+/* class_userinfo */
 export class UserInfo {
-  /**
-   * The user ID.
-   */
+  /* class_userinfo_uid */
   uid?: number;
-  /**
-   * User account. The maximum data length is MaxUserAccountLengthType .
-   */
+  /* class_userinfo_userAccount */
   userAccount?: string;
 }
 
-/**
- * The audio filter of in-ear monitoring.
- */
+/* enum_earmonitoringfiltertype */
 export enum EarMonitoringFilterType {
-  /**
-   * 1<<0: Do not add an audio filter to the in-ear monitor.
-   */
+  /* enum_earmonitoringfiltertype_EarMonitoringFilterNone */
   EarMonitoringFilterNone = 1 << 0,
-  /**
-   * 1<<1: Add an audio filter to the in-ear monitor. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
-   */
+  /* enum_earmonitoringfiltertype_EarMonitoringFilterBuiltInAudioFilters */
   EarMonitoringFilterBuiltInAudioFilters = 1 << 1,
-  /**
-   * 1<<2: Enable noise suppression to the in-ear monitor.
-   */
+  /* enum_earmonitoringfiltertype_EarMonitoringFilterNoiseSuppression */
   EarMonitoringFilterNoiseSuppression = 1 << 2,
 }
 
-/**
- * @ignore
- */
+/* enum_threadprioritytype */
 export enum ThreadPriorityType {
-  /**
-   * @ignore
-   */
+  /* enum_threadprioritytype_Lowest */
   Lowest = 0,
-  /**
-   * @ignore
-   */
+  /* enum_threadprioritytype_Low */
   Low = 1,
-  /**
-   * @ignore
-   */
+  /* enum_threadprioritytype_Normal */
   Normal = 2,
-  /**
-   * @ignore
-   */
+  /* enum_threadprioritytype_High */
   High = 3,
-  /**
-   * @ignore
-   */
+  /* enum_threadprioritytype_Highest */
   Highest = 4,
-  /**
-   * @ignore
-   */
+  /* enum_threadprioritytype_Critical */
   Critical = 5,
 }
 
-/**
- * The video configuration for the shared screen stream.
- */
+/* class_screenvideoparameters */
 export class ScreenVideoParameters {
-  /**
-   * The video encoding dimension. The default value is 1280 × 720.
-   */
+  /* class_screenvideoparameters_dimensions */
   dimensions?: VideoDimensions;
-  /**
-   * The video encoding frame rate (fps). The default value is 15.
-   */
+  /* class_screenvideoparameters_frameRate */
   frameRate?: number;
-  /**
-   * The video encoding bitrate (Kbps).
-   */
+  /* class_screenvideoparameters_bitrate */
   bitrate?: number;
-  /**
-   * The content hint for screen sharing.
-   */
+  /* class_screenvideoparameters_contentHint */
   contentHint?: VideoContentHint;
 }
 
-/**
- * The audio configuration for the shared screen stream.
- * Only available where captureAudio is true.
- */
+/* class_screenaudioparameters */
 export class ScreenAudioParameters {
-  /**
-   * Audio sample rate (Hz). The default value is 16000.
-   */
+  /* class_screenaudioparameters_sampleRate */
   sampleRate?: number;
-  /**
-   * The number of audio channels. The default value is 2, which means stereo.
-   */
+  /* class_screenaudioparameters_channels */
   channels?: number;
-  /**
-   * The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
-   */
+  /* class_screenaudioparameters_captureSignalVolume */
   captureSignalVolume?: number;
 }
 
-/**
- * Screen sharing configurations.
- */
+/* class_screencaptureparameters2 */
 export class ScreenCaptureParameters2 {
-  /**
-   * Determines whether to capture system audio during screen sharing:true: Capture system audio.false: (Default) Do not capture system audio.Due to system limitations, capturing system audio is only applicable to Android API level 29 and later (that is, Android 10 and later).
-   */
+  /* class_screencaptureparameters2_captureAudio */
   captureAudio?: boolean;
-  /**
-   * The audio configuration for the shared screen stream. See ScreenAudioParameters .This parameter only takes effect when captureAudio is true.
-   */
+  /* class_screencaptureparameters2_audioParams */
   audioParams?: ScreenAudioParameters;
-  /**
-   * Whether to capture the screen when screen sharing:true: (Default) Capture the screen.false: Do not capture the screen.Due to system limitations, the capture screen is only applicable to Android API level 21 and above, that is, Android 5 and above.
-   */
+  /* class_screencaptureparameters2_captureVideo */
   captureVideo?: boolean;
-  /**
-   * The video configuration for the shared screen stream. See ScreenVideoParameters .This parameter only takes effect when captureVideo is true.
-   */
+  /* class_screencaptureparameters2_videoParams */
   videoParams?: ScreenVideoParameters;
 }
 
-/**
- * The spatial audio parameters.
- */
+/* class_spatialaudioparams */
 export class SpatialAudioParams {
-  /**
-   * The azimuth angle of the remote user or media player relative to the local user. The value range is [0,360], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means directly in front on the horizontal plane.90: 90 degrees, which means directly to the left on the horizontal plane.180: 180 degrees, which means directly behind on the horizontal plane.270: 270 degrees, which means directly to the right on the horizontal plane.360: 360 degrees, which means directly in front on the horizontal plane.
-   */
+  /* class_spatialaudioparams_speaker_azimuth */
   speaker_azimuth?: number;
-  /**
-   * The elevation angle of the remote user or media player relative to the local user. The value range is [-90,90], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the horizontal plane is not rotated.-90: -90 degrees, which means that the horizontal plane is rotated 90 degrees downwards.90: 90 degrees, which means that the horizontal plane is rotated 90 degrees upwards.
-   */
+  /* class_spatialaudioparams_speaker_elevation */
   speaker_elevation?: number;
-  /**
-   * The distance of the remote user or media player relative to the local user. The value range is [1,50], and the unit is meters. The default value is 1 meter.
-   */
+  /* class_spatialaudioparams_speaker_distance */
   speaker_distance?: number;
-  /**
-   * The orientation of the remote user or media player relative to the local user. The value range is [0,180], and the unit is degrees, The values are as follows:0: (Default) 0 degrees, which means that the sound source and listener face the same direction.180: 180 degrees, which means that the sound source and listener face each other.
-   */
+  /* class_spatialaudioparams_speaker_orientation */
   speaker_orientation?: number;
-  /**
-   * Whether to enable audio blurring:true: Enable audio blurring.false: (Default) Disable audio blurring.
-   */
+  /* class_spatialaudioparams_enable_blur */
   enable_blur?: boolean;
-  /**
-   * Whether to enable air absorption, that is, to simulate the sound attenuation effect of sound transmitting in the air; under a certain transmission distance, the attenuation speed of high-frequency sound is fast, and the attenuation speed of low-frequency sound is slow.true: (Default) Enable air absorption. Make sure that the value of speaker_attenuation is not 0; otherwise, this setting does not take effect.false: Disable air absorption.
-   */
+  /* class_spatialaudioparams_enable_air_absorb */
   enable_air_absorb?: boolean;
-  /**
-   * The sound attenuation coefficient of the remote user or media player. The value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, where the volume and timbre only have a weak attenuation during the propagation, and the sound can travel farther than that in a real environment. enable_air_absorb needs to be enabled at the same time. 0.5: (Default) Simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, where volume and timbre attenuate rapidly during the propagation. enable_air_absorb needs to be enabled at the same time.
-   */
+  /* class_spatialaudioparams_speaker_attenuation */
   speaker_attenuation?: number;
-  /**
-   * Whether to enable the Doppler effect: When there is a relative displacement between the sound source and the receiver of the sound source, the tone heard by the receiver changes.true: Enable the Doppler effect.false: (Default) Disable the Doppler effect.This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, cohosting, or online KTV).When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo , updateSelfPosition , and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
-   */
+  /* class_spatialaudioparams_enable_doppler */
   enable_doppler?: boolean;
 }
