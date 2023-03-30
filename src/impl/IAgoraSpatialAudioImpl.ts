@@ -238,7 +238,7 @@ export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
     return 'BaseSpatialAudioEngine_muteAllRemoteAudioStreams';
   }
 
-  setZones(zones: SpatialAudioZone, zoneCount: number): number {
+  setZones(zones: SpatialAudioZone[], zoneCount: number): number {
     const apiType = this.getApiTypeFromSetZones(zones, zoneCount);
     const jsonParams = {
       zones: zones,
@@ -255,7 +255,7 @@ export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
   }
 
   protected getApiTypeFromSetZones(
-    zones: SpatialAudioZone,
+    zones: SpatialAudioZone[],
     zoneCount: number
   ): string {
     return 'BaseSpatialAudioEngine_setZones';

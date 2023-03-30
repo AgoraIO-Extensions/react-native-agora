@@ -155,7 +155,7 @@ export function processIMusicContentCenterEventHandler(
 
 // @ts-ignore
 export class IMusicPlayerImpl extends IMediaPlayerImpl implements IMusicPlayer {
-  openWithSongCode(songCode: number, startPos = 0): number {
+  openWithSongCode(songCode: number, startPos: number = 0): number {
     const apiType = this.getApiTypeFromOpenWithSongCode(songCode, startPos);
     const jsonParams = {
       songCode: songCode,
@@ -173,7 +173,7 @@ export class IMusicPlayerImpl extends IMediaPlayerImpl implements IMusicPlayer {
 
   protected getApiTypeFromOpenWithSongCode(
     songCode: number,
-    startPos = 0
+    startPos: number = 0
   ): string {
     return 'MusicPlayer_openWithSongCode';
   }
@@ -406,7 +406,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     return 'MusicContentCenter_isPreloaded';
   }
 
-  getLyric(songCode: number, lyricType = 0): string {
+  getLyric(songCode: number, lyricType: number = 0): string {
     const apiType = this.getApiTypeFromGetLyric(songCode, lyricType);
     const jsonParams = {
       songCode: songCode,
@@ -423,7 +423,10 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     return requestId;
   }
 
-  protected getApiTypeFromGetLyric(songCode: number, lyricType = 0): string {
+  protected getApiTypeFromGetLyric(
+    songCode: number,
+    lyricType: number = 0
+  ): string {
     return 'MusicContentCenter_getLyric';
   }
 }
