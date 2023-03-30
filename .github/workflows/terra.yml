@@ -1,4 +1,4 @@
-name: Update doc
+name: Generate code
 run-name: ${{ github.actor }} triggered this job
 on:
   workflow_dispatch:
