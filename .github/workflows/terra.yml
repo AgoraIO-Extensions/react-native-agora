@@ -25,6 +25,10 @@ jobs:
         run: |
           yarn lint --fix
 
+      - name: Generate ts interface
+        run: |
+          yarn ts_interface_builder
+
       - name: Generate comments
         uses: ./.github/workflows/doc.yml
         with:
