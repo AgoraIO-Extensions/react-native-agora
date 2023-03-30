@@ -13,7 +13,8 @@ jobs:
           target_branch: ${{ github.ref_name }}
           config: ci/config/terra_config.yaml
           output-dir: src/
-          pre-terra-command: |
+          pre-pr-command: |
             yarn install --frozen-lockfile
             yarn patch-package
+            yarn lint --fix
           github-token: ${{ secrets.GH_TOKEN }}
