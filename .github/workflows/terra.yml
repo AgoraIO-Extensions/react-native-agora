@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  update-doc:
+  generate-code:
     runs-on: macos-latest
     steps:
       - uses: AgoraIO-Extensions/actions/.github/actions/terra@main
@@ -13,4 +13,7 @@ jobs:
           target_branch: ${{ github.ref_name }}
           config: ci/config/terra_config.yaml
           output-dir: src/
+          pre-terra-command: |
+            yarn install --frozen-lockfile
+            yarn patch-package
           github-token: ${{ secrets.GH_TOKEN }}
