@@ -72,8 +72,8 @@ export class IMediaEngineImpl implements IMediaEngine {
   pushAudioFrame(
     type: MediaSourceType,
     frame: AudioFrame,
-    wrap = false,
-    sourceId = 0
+    wrap: boolean = false,
+    sourceId: number = 0
   ): number {
     const apiType = this.getApiTypeFromPushAudioFrame(
       type,
@@ -102,8 +102,8 @@ export class IMediaEngineImpl implements IMediaEngine {
   protected getApiTypeFromPushAudioFrame(
     type: MediaSourceType,
     frame: AudioFrame,
-    wrap = false,
-    sourceId = 0
+    wrap: boolean = false,
+    sourceId: number = 0
   ): string {
     return 'MediaEngine_pushAudioFrame';
   }
@@ -217,9 +217,9 @@ export class IMediaEngineImpl implements IMediaEngine {
     enabled: boolean,
     sampleRate: number,
     channels: number,
-    sourceNumber = 1,
-    localPlayback = false,
-    publish = true
+    sourceNumber: number = 1,
+    localPlayback: boolean = false,
+    publish: boolean = true
   ): number {
     const apiType = this.getApiTypeFromSetExternalAudioSource(
       enabled,
@@ -255,9 +255,9 @@ export class IMediaEngineImpl implements IMediaEngine {
     enabled: boolean,
     sampleRate: number,
     channels: number,
-    sourceNumber = 1,
-    localPlayback = false,
-    publish = true
+    sourceNumber: number = 1,
+    localPlayback: boolean = false,
+    publish: boolean = true
   ): string {
     return 'MediaEngine_setExternalAudioSource';
   }
@@ -322,7 +322,10 @@ export class IMediaEngineImpl implements IMediaEngine {
     return 'MediaEngine_enableCustomAudioLocalPlayback';
   }
 
-  setDirectExternalAudioSource(enable: boolean, localPlayback = false): number {
+  setDirectExternalAudioSource(
+    enable: boolean,
+    localPlayback: boolean = false
+  ): number {
     const apiType = this.getApiTypeFromSetDirectExternalAudioSource(
       enable,
       localPlayback
@@ -343,12 +346,12 @@ export class IMediaEngineImpl implements IMediaEngine {
 
   protected getApiTypeFromSetDirectExternalAudioSource(
     enable: boolean,
-    localPlayback = false
+    localPlayback: boolean = false
   ): string {
     return 'MediaEngine_setDirectExternalAudioSource';
   }
 
-  pushVideoFrame(frame: ExternalVideoFrame, videoTrackId = 0): number {
+  pushVideoFrame(frame: ExternalVideoFrame, videoTrackId: number = 0): number {
     const apiType = this.getApiTypeFromPushVideoFrame(frame, videoTrackId);
     const jsonParams = {
       frame: frame,
@@ -366,7 +369,7 @@ export class IMediaEngineImpl implements IMediaEngine {
 
   protected getApiTypeFromPushVideoFrame(
     frame: ExternalVideoFrame,
-    videoTrackId = 0
+    videoTrackId: number = 0
   ): string {
     return 'MediaEngine_pushVideoFrame';
   }
@@ -375,7 +378,7 @@ export class IMediaEngineImpl implements IMediaEngine {
     imageBuffer: Uint8Array,
     length: number,
     videoEncodedFrameInfo: EncodedVideoFrameInfo,
-    videoTrackId = 0
+    videoTrackId: number = 0
   ): number {
     const apiType = this.getApiTypeFromPushEncodedVideoImage(
       imageBuffer,
@@ -404,7 +407,7 @@ export class IMediaEngineImpl implements IMediaEngine {
     imageBuffer: Uint8Array,
     length: number,
     videoEncodedFrameInfo: EncodedVideoFrameInfo,
-    videoTrackId = 0
+    videoTrackId: number = 0
   ): string {
     return 'MediaEngine_pushEncodedVideoImage';
   }

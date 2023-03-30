@@ -41,7 +41,7 @@ export abstract class IAudioDeviceManager {
 
   /**
    * Sets the volume of the audio effects.
-   * Call this method after the playEffect method.
+   * Call this method after playEffect .
    *
    * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
    *
@@ -72,7 +72,7 @@ export abstract class IAudioDeviceManager {
 
   /**
    * Sets the volume of the audio effects.
-   * Call this method after the playEffect method.
+   * Call this method after playEffect .
    *
    * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
    *
@@ -97,13 +97,13 @@ export abstract class IAudioDeviceManager {
   abstract getLoopbackDevice(): string;
 
   /**
-   * Stops or resumes publishing the local video stream.
-   * A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.This method does not affect any ongoing video recording, because it does not disable the camera.
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel and set autoSubscribeVideo as false.
    *
-   * @param mute Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    *
    * @returns
-   * 0: Success.< 0: Failure.
+   * 0: Success. < 0: Failure.
    */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
@@ -113,13 +113,13 @@ export abstract class IAudioDeviceManager {
   abstract getPlaybackDeviceMute(): boolean;
 
   /**
-   * Stops or resumes publishing the local video stream.
-   * A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.This method does not affect any ongoing video recording, because it does not disable the camera.
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel and set autoSubscribeVideo as false.
    *
-   * @param mute Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    *
    * @returns
-   * 0: Success.< 0: Failure.
+   * 0: Success. < 0: Failure.
    */
   abstract setRecordingDeviceMute(mute: boolean): number;
 
@@ -159,38 +159,17 @@ export abstract class IAudioDeviceManager {
   abstract stopAudioDeviceLoopbackTest(): number;
 
   /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * @ignore
    */
   abstract followSystemPlaybackDevice(enable: boolean): number;
 
   /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * @ignore
    */
   abstract followSystemRecordingDevice(enable: boolean): number;
 
   /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * @ignore
    */
   abstract followSystemLoopbackDevice(enable: boolean): number;
 
