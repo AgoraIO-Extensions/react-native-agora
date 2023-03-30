@@ -30,9 +30,10 @@ jobs:
           yarn ts_interface_builder
 
       - name: Generate comments
-        uses: ./.github/workflows/doc.yml
+        uses: ./.github/actions/doc
         with:
           target-path: ${{ github.workspace }}
+          github-token: ${{ inputs.github-token }}
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main

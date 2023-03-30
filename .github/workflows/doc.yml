@@ -2,25 +2,12 @@ name: Generate comments
 run-name: ${{ github.actor }} triggered this job
 on:
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      target-path:
-        description: The path to generate comments, if set, will skip clone & pr
-        type: string
-        default: ""
 
 jobs:
   generate-comments:
     runs-on: ubuntu-latest
     steps:
       - name: Generate comments
-        uses: AgoraIO-Extensions/actions/.github/actions/doc@main
+        uses: ./.github/actions/doc
         with:
-          target-repo: ${{ github.repository }}
-          target-branch: ${{ github.ref_name }}
-          target-path: ${{ inputs.target-path }}
-          config: fmt_config/fmt_ts.yaml
-          language: ts
-          base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/main/rn_ng_json_template_en.json
-          export-file-path: src/index.ts
           github-token: ${{ secrets.GH_TOKEN }}
