@@ -40,5 +40,5 @@ jobs:
           target-branch-name-surffix: |
             terra-update
           pull-request-title: |
-            [ AUTO ] Generate code by terra
+            [AUTO] Generate code by terra
           github-token: ${{ inputs.github-token }}
