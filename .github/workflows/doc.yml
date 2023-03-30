@@ -7,7 +7,10 @@ jobs:
   generate-comments:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+    
       - name: Generate comments
-        uses: AgoraIO-Extensions/react-native-agora/.github/actions/doc@${{ github.ref_name }}
+        uses: ./.github/actions/doc
         with:
           github-token: ${{ secrets.GH_TOKEN }}
