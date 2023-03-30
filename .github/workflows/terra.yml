@@ -34,6 +34,10 @@ jobs:
         with:
           target-path: ${{ github.workspace }}
           github-token: ${{ secrets.GH_TOKEN }}
+          
+      - name: Clean
+        run: |
+          rm -rf
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main
@@ -44,4 +48,5 @@ jobs:
             terra-update
           pull-request-title: |
             [AUTO] Generate code by terra
+          add-paths: src
           github-token: ${{ secrets.GH_TOKEN }}
