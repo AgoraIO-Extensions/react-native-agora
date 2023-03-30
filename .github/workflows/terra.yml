@@ -18,7 +18,7 @@ jobs:
         with:
           target-repo: ${{ github.repository }}
           target-branch: ${{ github.ref_name }}
-          target-path: ${{ github.repository }}
+          target-path: ${{ github.workspace }}
           config: ci/config/terra_config.yaml
           output-dir: src
           github-token: ${{ secrets.GH_TOKEN }}
@@ -35,7 +35,7 @@ jobs:
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main
         with:
-          target-repo: ${{ github.repository }}
+          target-repo: ${{ github.workspace }}
           target-branch: ${{ github.ref_name }}
           target-branch-name-surffix: |
             terra-update
