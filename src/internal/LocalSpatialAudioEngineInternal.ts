@@ -62,7 +62,7 @@ export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImp
   }
 
   protected getApiTypeFromSetZones(
-    zones: SpatialAudioZone,
+    zones: SpatialAudioZone[],
     zoneCount: number
   ): string {
     return 'LocalSpatialAudioEngine_setZones';

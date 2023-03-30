@@ -1,16 +1,52 @@
-name: Generate code
+name: Generate codes
 run-name: ${{ github.actor }} triggered this job
 on:
   workflow_dispatch:
 
 jobs:
-  update-doc:
+  generate-codes:
     runs-on: macos-latest
     steps:
-      - uses: AgoraIO-Extensions/actions/.github/actions/terra@main
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Generate codes
+        uses: AgoraIO-Extensions/actions/.github/actions/terra@main
         with:
-          target_repo: ${{ github.repository }}
-          target_branch: ${{ github.ref_name }}
-          config: ci/conifg/terra_config.yaml
-          output-dir: src/
+          target-path: ${{ github.workspace }}
+          config: ci/config/terra_config.yaml
+          output-dir: src
+          github-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Format codes
+        run: |
+          yarn lint --fix
+
+      - name: Generate ts interface
+        run: |
+          yarn ts_interface_builder
+
+      - name: Generate comments
+        uses: ./.github/actions/doc
+        with:
+          target-path: ${{ github.workspace }}
+          github-token: ${{ secrets.GH_TOKEN }}
+          
+      - name: Clean
+        run: |
+          rm -rf
+
+      - name: Create pull request
+        uses: AgoraIO-Extensions/actions/.github/actions/pr@main
+        with:
+          target-repo: ${{ github.workspace }}
+          target-branch: ${{ github.ref_name }}
+          target-branch-name-surffix: |
+            terra-update
+          pull-request-title: |
+            [AUTO] Generate code by terra
+          add-paths: src
           github-token: ${{ secrets.GH_TOKEN }}

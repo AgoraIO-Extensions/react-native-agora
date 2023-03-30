@@ -20,7 +20,7 @@ export enum RhythmPlayerStateType {
    */
   RhythmPlayerStatePlaying = 813,
   /**
-   * 814: Failed to start virtual metronome. You can use the reported errorcode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
+   * 814: Failed to start virtual metronome. You can use the reported errorCode to troubleshoot the cause of the error, or you can try to start the virtual metronome again.
    */
   RhythmPlayerStateFailed = 814,
 }
@@ -34,7 +34,7 @@ export enum RhythmPlayerErrorType {
    */
   RhythmPlayerErrorOk = 0,
   /**
-   * 1: General error; no clear reason.
+   * 1: A general error; no specific reason.
    */
   RhythmPlayerErrorFailed = 1,
   /**

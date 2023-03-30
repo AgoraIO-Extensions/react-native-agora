@@ -56,7 +56,13 @@ export abstract class MusicChartCollection {
   abstract getCount(): number;
 
   /**
-   * @ignore
+   * Gets the detailed information of the media stream.
+   * Call this method after calling getStreamCount .
+   *
+   * @param index The index of the media stream.
+   *
+   * @returns
+   * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
    */
   abstract get(index: number): MusicChartInfo;
 }

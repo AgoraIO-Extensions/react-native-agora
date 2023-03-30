@@ -725,7 +725,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return 'MediaPlayer_renewAgoraCDNSrcToken';
   }
 
-  switchAgoraCDNSrc(src: string, syncPts = false): number {
+  switchAgoraCDNSrc(src: string, syncPts: boolean = false): number {
     const apiType = this.getApiTypeFromSwitchAgoraCDNSrc(src, syncPts);
     const jsonParams = {
       src: src,
@@ -743,12 +743,12 @@ export class IMediaPlayerImpl implements IMediaPlayer {
 
   protected getApiTypeFromSwitchAgoraCDNSrc(
     src: string,
-    syncPts = false
+    syncPts: boolean = false
   ): string {
     return 'MediaPlayer_switchAgoraCDNSrc';
   }
 
-  switchSrc(src: string, syncPts = true): number {
+  switchSrc(src: string, syncPts: boolean = true): number {
     const apiType = this.getApiTypeFromSwitchSrc(src, syncPts);
     const jsonParams = {
       src: src,
@@ -764,7 +764,10 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromSwitchSrc(src: string, syncPts = true): string {
+  protected getApiTypeFromSwitchSrc(
+    src: string,
+    syncPts: boolean = true
+  ): string {
     return 'MediaPlayer_switchSrc';
   }
 
