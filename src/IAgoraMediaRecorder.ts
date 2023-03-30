@@ -12,7 +12,7 @@ import {
 export abstract class IMediaRecorder {
   /**
    * Registers one IMediaRecorderObserver object.
-   * Make sure the IRtcEngine is initialized before you call this method.
+   * Make sure that IRtcEngine is initialized before you call this method.
    *
    * @param connection The connection information. See RtcConnection .
    * @param callback The callbacks for recording local audio and video streams. See IMediaRecorderObserver .
@@ -33,7 +33,7 @@ export abstract class IMediaRecorder {
    * @param config The recording configuration. See MediaRecorderConfiguration .
    *
    * @returns
-   * 0: Success.< 0: Failure.2: The parameter is invalid. Ensure the following:The specified path of the recording file exists and is writable.The specified format of the recording file is supported.The maximum recording duration is correctly set.4: IRtcEngine does not support the request. The recording is ongoing or the recording stops because an error occurs.7: A method is called before IRtcEngine is initialized.
+   * 0: Success.< 0: Failure.-2: The parameter is invalid. Ensure the following:The specified path of the recording file exists and is writable.The specified format of the recording file is supported.The maximum recording duration is correctly set.-4: IRtcEngine does not support the request. The recording is ongoing or the recording stops because an error occurs.-7: The method is called before IRtcEngine is initialized.
    */
   abstract startRecording(
     connection: RtcConnection,
@@ -47,7 +47,7 @@ export abstract class IMediaRecorder {
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.< 0: Failure.-7: A method is called before IRtcEngine is initialized.
+   * 0: Success.< 0: Failure.-7: The method is called before IRtcEngine is initialized.
    */
   abstract stopRecording(connection: RtcConnection): number;
 
