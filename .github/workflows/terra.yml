@@ -16,8 +16,6 @@ jobs:
       - name: Generate codes
         uses: AgoraIO-Extensions/actions/.github/actions/terra@main
         with:
-          target-repo: ${{ github.repository }}
-          target-branch: ${{ github.ref_name }}
           target-path: ${{ github.workspace }}
           config: ci/config/terra_config.yaml
           output-dir: src
@@ -30,7 +28,7 @@ jobs:
       - name: Generate comments
         uses: ./.github/workflows/doc.yml
         with:
-          target-path: ${{ github.repository }}
+          target-path: ${{ github.workspace }}
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main
