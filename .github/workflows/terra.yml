@@ -1,20 +1,39 @@
-name: Generate code
+name: Generate codes
 run-name: ${{ github.actor }} triggered this job
 on:
   workflow_dispatch:
 
 jobs:
-  generate-code:
+  generate-codes:
     runs-on: macos-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
       - uses: AgoraIO-Extensions/actions/.github/actions/terra@main
         with:
-          target_repo: ${{ github.repository }}
-          target_branch: ${{ github.ref_name }}
+          target-repo: ${{ github.repository }}
+          target-branch: ${{ github.ref_name }}
+          target-path: ${{ github.repository }}
           config: ci/config/terra_config.yaml
-          output-dir: src/
-          pre-pr-command: |
-            yarn install --frozen-lockfile
-            yarn patch-package
-            yarn lint --fix
+          output-dir: src
           github-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Format codes
+        run: |
+          yarn lint --fix
+
+      - uses: ./.github/workflows/doc.yml
+        target-path: ${{ github.repository }}
+
+      - name: Create pull request
+        uses: AgoraIO-Extensions/actions/.github/actions/pr@main
+        with:
+          target-repo: ${{ github.repository }}
+          target-branch: ${{ github.ref_name }}
+          target-branch-name-surffix: terra-update
+          pull-request-title: [ AUTO ] Generate code by terra
+          github-token: ${{ inputs.github-token }}
