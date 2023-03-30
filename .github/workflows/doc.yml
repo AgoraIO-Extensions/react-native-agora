@@ -1,16 +1,22 @@
-name: Update doc
+name: Generate comments
 run-name: ${{ github.actor }} triggered this job
 on:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      target-path:
+        description: The path to generate comments, if set, will skip clone & pr
+        default: ""
 
 jobs:
-  update-doc:
+  generate-comments:
     runs-on: ubuntu-latest
     steps:
       - uses: AgoraIO-Extensions/actions/.github/actions/doc@main
         with:
-          target_repo: ${{ github.repository }}
-          target_branch: ${{ github.ref_name }}
+          target-repo: ${{ github.repository }}
+          target-branch: ${{ github.ref_name }}
+          target-path: ${{ inpus.target-path }}
           config: fmt_config/fmt_ts.yaml
           language: ts
           base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/main/rn_ng_json_template_en.json
