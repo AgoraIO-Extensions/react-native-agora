@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate comments
-        uses: ./.github/actions/doc
+        uses: AgoraIO-Extensions/react-native-agora/.github/actions/doc@${{ github.ref_name }}
         with:
           github-token: ${{ secrets.GH_TOKEN }}
