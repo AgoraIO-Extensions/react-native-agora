@@ -16,7 +16,7 @@ jobs:
         with:
           target-repo: ${{ github.repository }}
           target-branch: ${{ github.ref_name }}
-          target-path: ${{ inpus.target-path }}
+          target-path: ${{ inputs.target-path }}
           config: fmt_config/fmt_ts.yaml
           language: ts
           base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/main/rn_ng_json_template_en.json
