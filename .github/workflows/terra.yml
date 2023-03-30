@@ -11,6 +11,6 @@ jobs:
         with:
           target_repo: ${{ github.repository }}
           target_branch: ${{ github.ref_name }}
-          config: ci/conifg/terra_config.yaml
+          config: ci/config/terra_config.yaml
           output-dir: src/
           github-token: ${{ secrets.GH_TOKEN }}
