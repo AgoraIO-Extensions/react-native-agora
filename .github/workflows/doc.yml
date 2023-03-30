@@ -6,6 +6,7 @@ on:
     inputs:
       target-path:
         description: The path to generate comments, if set, will skip clone & pr
+        type: string
         default: ""
 
 jobs:
