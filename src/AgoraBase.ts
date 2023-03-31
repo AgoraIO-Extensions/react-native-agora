@@ -2507,7 +2507,7 @@ export enum RtmpStreamPublishErrorType {
    */
   RtmpStreamPublishErrorNetDown = 14,
   /**
-   * 15: Your App ID does not have permission to use the CDN live streaming function.
+   * @ignore
    */
   RtmpStreamPublishErrorInvalidAppid = 15,
   /**

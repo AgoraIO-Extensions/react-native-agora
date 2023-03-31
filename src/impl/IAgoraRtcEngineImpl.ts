@@ -247,7 +247,7 @@ export function processIRtcEngineEventHandler(
     case 'onFirstLocalVideoFrame':
       if (handler.onFirstLocalVideoFrame !== undefined) {
         handler.onFirstLocalVideoFrame(
-          jsonParams.connection,
+          jsonParams.source,
           jsonParams.width,
           jsonParams.height,
           jsonParams.elapsed
