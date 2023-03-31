@@ -26,6 +26,7 @@ jobs:
 
       - name: Format codes
         run: |
+          rm -rf terra
           yarn lint --fix
 
       - name: Generate ts interface
