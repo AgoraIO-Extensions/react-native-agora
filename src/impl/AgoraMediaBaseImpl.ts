@@ -1,7 +1,5 @@
-import { callIrisApi } from '../internal/IrisApiEngine';
 import {
   IAudioPcmFrameSink,
-  AudioPcmFrame,
   IAudioFrameObserverBase,
   IAudioFrameObserver,
   IAudioSpectrumObserver,
@@ -9,23 +7,18 @@ import {
   IVideoFrameObserver,
   IMediaRecorderObserver,
 } from '../AgoraMediaBase';
-// @ts-ignore
-export class IAudioPcmFrameSinkImpl implements IAudioPcmFrameSink {
-  onFrame(frame: AudioPcmFrame): void {
-    const apiType = this.getApiTypeFromOnFrame(frame);
-    const jsonParams = {
-      frame: frame,
-      toJSON: () => {
-        return {
-          frame: frame,
-        };
-      },
-    };
-    callIrisApi.call(this, apiType, jsonParams);
-  }
 
-  protected getApiTypeFromOnFrame(frame: AudioPcmFrame): string {
-    return 'AudioPcmFrameSink_onFrame';
+export function processIAudioPcmFrameSink(
+  handler: IAudioPcmFrameSink,
+  event: string,
+  jsonParams: any
+) {
+  switch (event) {
+    case 'onFrame':
+      if (handler.onFrame !== undefined) {
+        handler.onFrame(jsonParams.frame);
+      }
+      break;
   }
 }
 
