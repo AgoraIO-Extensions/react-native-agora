@@ -694,14 +694,14 @@ export enum VideoModulePosition {
 /**
  * @ignore
  */
-export abstract class IAudioPcmFrameSink {
+export interface IAudioPcmFrameSink {
   /**
    * Occurs each time the player receives an audio frame.
    * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
    *
    * @param frame Audio frame information. See AudioPcmFrame .
    */
-  abstract onFrame(frame: AudioPcmFrame): void;
+  onFrame?(frame: AudioPcmFrame): void;
 }
 
 /**
