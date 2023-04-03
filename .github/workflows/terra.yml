@@ -22,6 +22,7 @@ jobs:
           target-path: ${{ github.workspace }}
           config: ci/config/terra_config.yaml
           output-dir: src
+          export-file-path: src/index.ts
           github-token: ${{ secrets.GH_TOKEN }}
 
       - name: Format codes
