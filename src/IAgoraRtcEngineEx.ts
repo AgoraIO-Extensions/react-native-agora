@@ -3,6 +3,7 @@ import {
   IRtcEngine,
   ChannelMediaOptions,
   LeaveChannelOptions,
+  StreamFallbackOptions,
 } from './IAgoraRtcEngine';
 import {
   VideoEncoderConfiguration,
@@ -384,6 +385,29 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
+   * @ignore
+   */
+  abstract adjustRecordingSignalVolumeEx(
+    volume: number,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * Stops or resumes subscribing to the audio streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   *
+   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param connection The connection information. See RtcConnection .
+   *
+   * @returns
+   * 0: Success. < 0: Failure.
+   */
+  abstract muteRecordingSignalEx(
+    mute: boolean,
+    connection: RtcConnection
+  ): number;
+
+  /**
    * Adjusts the playback signal volume of a specified remote user.
    * You can call this method to adjust the playback volume of a specified remote user. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.Call this method after joining a channel.The playback volume here refers to the mixed volume of a specified remote user.
    *
@@ -596,6 +620,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   abstract stopRtmpStreamEx(url: string, connection: RtcConnection): number;
 
   /**
+   * @ignore
+   */
+  abstract startOrUpdateChannelMediaRelayEx(
+    configuration: ChannelMediaRelayConfiguration,
+    connection: RtcConnection
+  ): number;
+
+  /**
    * Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
    * After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), and the onChannelMediaRelayEvent callback returns RelayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.If the onChannelMediaRelayStateChanged callback returnsRelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.The relaying media streams across channels function needs to be enabled by contacting .We do not support string user accounts in this API.
    *
@@ -721,15 +753,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Enables interoperability with the Agora Web SDK (applicable only in the live streaming scenarios).
-   * Deprecated:The SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.You can call this method to enable or disable interoperability with the Agora Web SDK. If a channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.This method is only applicable in live streaming scenarios, and interoperability is enabled by default in communication scenarios.
-   *
-   * @param enabled Whether to enable interoperability:true: Enable interoperability.false: (Default) Disable interoperability.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
-  abstract enableWirelessAccelerate(enabled: boolean): number;
+  abstract setHighPriorityUserListEx(
+    uidList: number[],
+    uidNum: number,
+    option: StreamFallbackOptions,
+    connection: RtcConnection
+  ): number;
 
   /**
    * Takes a snapshot of a video stream.
@@ -747,4 +778,12 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     uid: number,
     filePath: string
   ): number;
+
+  /**
+   * Occurs when the token expires.
+   * When the token expires during a call, the SDK triggers this callback to remind the app to renew the token.Once you receive this callback, generate a new token on your app server, and call joinChannel to rejoin the channel.
+   *
+   * @param connection The connection information. See RtcConnection .
+   */
+  abstract startMediaRenderingTracingEx(connection: RtcConnection): number;
 }
