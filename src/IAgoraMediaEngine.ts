@@ -3,12 +3,16 @@ import {
   IAudioFrameObserver,
   IVideoFrameObserver,
   IVideoEncodedFrameObserver,
-  MediaSourceType,
   AudioFrame,
   ExternalVideoSourceType,
   ExternalVideoFrame,
 } from './AgoraMediaBase';
-import { SenderOptions, EncodedVideoFrameInfo } from './AgoraBase';
+import {
+  SenderOptions,
+  AudioTrackType,
+  AudioTrackConfig,
+  EncodedVideoFrameInfo,
+} from './AgoraBase';
 /**
  * The channel mode.
  */
@@ -87,36 +91,7 @@ export abstract class IMediaEngine {
    * @returns
    * 0: Success.< 0: Failure.
    */
-  abstract pushAudioFrame(
-    type: MediaSourceType,
-    frame: AudioFrame,
-    wrap?: boolean,
-    sourceId?: number
-  ): number;
-
-  /**
-   * Occurs each time the player receives an audio frame.
-   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
-   *
-   * @param frame Audio frame information. See AudioPcmFrame .
-   */
-  abstract pushCaptureAudioFrame(frame: AudioFrame): number;
-
-  /**
-   * Occurs each time the player receives an audio frame.
-   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
-   *
-   * @param frame Audio frame information. See AudioPcmFrame .
-   */
-  abstract pushReverseAudioFrame(frame: AudioFrame): number;
-
-  /**
-   * Occurs each time the player receives an audio frame.
-   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
-   *
-   * @param frame Audio frame information. See AudioPcmFrame .
-   */
-  abstract pushDirectAudioFrame(frame: AudioFrame): number;
+  abstract pushAudioFrame(frame: AudioFrame, trackId?: number): number;
 
   /**
    * Pulls the remote audio data.
@@ -164,10 +139,22 @@ export abstract class IMediaEngine {
     enabled: boolean,
     sampleRate: number,
     channels: number,
-    sourceNumber?: number,
     localPlayback?: boolean,
     publish?: boolean
   ): number;
+
+  /**
+   * @ignore
+   */
+  abstract createCustomAudioTrack(
+    trackType: AudioTrackType,
+    config: AudioTrackConfig
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract destroyCustomAudioTrack(trackId: number): number;
 
   /**
    * Sets the external audio sink.
@@ -190,16 +177,8 @@ export abstract class IMediaEngine {
    * @ignore
    */
   abstract enableCustomAudioLocalPlayback(
-    sourceId: number,
+    trackId: number,
     enabled: boolean
-  ): number;
-
-  /**
-   * @ignore
-   */
-  abstract setDirectExternalAudioSource(
-    enable: boolean,
-    localPlayback?: boolean
   ): number;
 
   /**

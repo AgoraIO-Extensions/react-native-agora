@@ -5,10 +5,10 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const IMusicContentCenterEventHandler = t.iface([], {
-  "onMusicChartsResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("status", "MusicContentCenterStatusCode"), t.param("result", t.array("MusicChartInfo")))),
-  "onMusicCollectionResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("status", "MusicContentCenterStatusCode"), t.param("result", "MusicCollection"))),
-  "onLyricResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("lyricUrl", "string"))),
-  "onPreLoadEvent": t.opt(t.func("void", t.param("songCode", "number"), t.param("percent", "number"), t.param("status", "PreloadStatusCode"), t.param("msg", "string"), t.param("lyricUrl", "string", true))),
+  "onMusicChartsResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("result", t.array("MusicChartInfo")), t.param("errorCode", "MusicContentCenterStatusCode"))),
+  "onMusicCollectionResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("result", "MusicCollection"), t.param("errorCode", "MusicContentCenterStatusCode"))),
+  "onLyricResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("lyricUrl", "string"), t.param("errorCode", "MusicContentCenterStatusCode"))),
+  "onPreLoadEvent": t.opt(t.func("void", t.param("songCode", "number"), t.param("percent", "number"), t.param("lyricUrl", "string"), t.param("status", "PreloadStatusCode"), t.param("errorCode", "MusicContentCenterStatusCode"))),
 });
 
 const exportedTypeSuite: t.ITypeSuite = {

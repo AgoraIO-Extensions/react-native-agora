@@ -8,7 +8,8 @@ import {
   RenderModeType,
   IAudioSpectrumObserver,
   AudioDualMonoMode,
-  AudioPcmFrame,
+  IAudioPcmFrameSink,
+  RawAudioFrameOpModeType,
   VideoFrame,
 } from './AgoraMediaBase';
 import { IMediaPlayerSourceObserver } from './IAgoraMediaPlayerSource';
@@ -466,15 +467,12 @@ export abstract class IMediaPlayer {
 
   /**
    * Registers an audio frame observer object.
-   * You need to implement the IMediaPlayerAudioFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
    *
-   * @param observer The audio frame observer, reporting the reception of each audio frame. See IMediaPlayerAudioFrameObserver .
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType .
    */
   abstract registerAudioFrameObserver(
-    observer: IMediaPlayerAudioFrameObserver
+    observer: IAudioPcmFrameSink,
+    mode?: RawAudioFrameOpModeType
   ): number;
 
   /**
@@ -485,9 +483,7 @@ export abstract class IMediaPlayer {
    * @returns
    * 0: Success.< 0: Failure.
    */
-  abstract unregisterAudioFrameObserver(
-    observer: IMediaPlayerAudioFrameObserver
-  ): number;
+  abstract unregisterAudioFrameObserver(observer: IAudioPcmFrameSink): number;
 
   /**
    * Registers a video frame observer object.
@@ -630,19 +626,6 @@ export abstract class IMediaPlayerCacheManager {
    * ≥ 0: The call succeeds and returns the number of media files that are cached.< 0: Failure. See MediaPlayerError .
    */
   abstract getCacheFileCount(): number;
-}
-
-/**
- * The audio frame observer for the media player.
- */
-export interface IMediaPlayerAudioFrameObserver {
-  /**
-   * Occurs each time the player receives an audio frame.
-   * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
-   *
-   * @param frame Audio frame information. See AudioPcmFrame .
-   */
-  onFrame?(frame: AudioPcmFrame): void;
 }
 
 /**
