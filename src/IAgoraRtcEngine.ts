@@ -1416,7 +1416,7 @@ export interface IRtcEngineEventHandler {
    * @param elapsed Time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback. If you call startPreview before calling joinChannel, then this parameter is the time elapsed from calling the startPreview method until the SDK triggers this callback.
    */
   onFirstLocalVideoFrame?(
-    connection: RtcConnection,
+    source: VideoSourceType,
     width: number,
     height: number,
     elapsed: number
