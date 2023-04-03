@@ -4,12 +4,16 @@ import {
   IAudioFrameObserver,
   IVideoFrameObserver,
   IVideoEncodedFrameObserver,
-  MediaSourceType,
   AudioFrame,
   ExternalVideoSourceType,
   ExternalVideoFrame,
 } from '../AgoraMediaBase';
-import { SenderOptions, EncodedVideoFrameInfo } from '../AgoraBase';
+import {
+  SenderOptions,
+  AudioTrackType,
+  AudioTrackConfig,
+  EncodedVideoFrameInfo,
+} from '../AgoraBase';
 // @ts-ignore
 export class IMediaEngineImpl implements IMediaEngine {
   registerAudioFrameObserver(observer: IAudioFrameObserver): number {
@@ -69,29 +73,15 @@ export class IMediaEngineImpl implements IMediaEngine {
     return 'MediaEngine_registerVideoEncodedFrameObserver';
   }
 
-  pushAudioFrame(
-    type: MediaSourceType,
-    frame: AudioFrame,
-    wrap: boolean = false,
-    sourceId: number = 0
-  ): number {
-    const apiType = this.getApiTypeFromPushAudioFrame(
-      type,
-      frame,
-      wrap,
-      sourceId
-    );
+  pushAudioFrame(frame: AudioFrame, trackId: number = 0): number {
+    const apiType = this.getApiTypeFromPushAudioFrame(frame, trackId);
     const jsonParams = {
-      type: type,
       frame: frame,
-      wrap: wrap,
-      sourceId: sourceId,
+      trackId: trackId,
       toJSON: () => {
         return {
-          type: type,
           frame: frame,
-          wrap: wrap,
-          sourceId: sourceId,
+          trackId: trackId,
         };
       },
     };
@@ -100,66 +90,10 @@ export class IMediaEngineImpl implements IMediaEngine {
   }
 
   protected getApiTypeFromPushAudioFrame(
-    type: MediaSourceType,
     frame: AudioFrame,
-    wrap: boolean = false,
-    sourceId: number = 0
+    trackId: number = 0
   ): string {
     return 'MediaEngine_pushAudioFrame';
-  }
-
-  pushCaptureAudioFrame(frame: AudioFrame): number {
-    const apiType = this.getApiTypeFromPushCaptureAudioFrame(frame);
-    const jsonParams = {
-      frame: frame,
-      toJSON: () => {
-        return {
-          frame: frame,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromPushCaptureAudioFrame(frame: AudioFrame): string {
-    return 'MediaEngine_pushCaptureAudioFrame';
-  }
-
-  pushReverseAudioFrame(frame: AudioFrame): number {
-    const apiType = this.getApiTypeFromPushReverseAudioFrame(frame);
-    const jsonParams = {
-      frame: frame,
-      toJSON: () => {
-        return {
-          frame: frame,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromPushReverseAudioFrame(frame: AudioFrame): string {
-    return 'MediaEngine_pushReverseAudioFrame';
-  }
-
-  pushDirectAudioFrame(frame: AudioFrame): number {
-    const apiType = this.getApiTypeFromPushDirectAudioFrame(frame);
-    const jsonParams = {
-      frame: frame,
-      toJSON: () => {
-        return {
-          frame: frame,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromPushDirectAudioFrame(frame: AudioFrame): string {
-    return 'MediaEngine_pushDirectAudioFrame';
   }
 
   pullAudioFrame(): AudioFrame {
@@ -217,7 +151,6 @@ export class IMediaEngineImpl implements IMediaEngine {
     enabled: boolean,
     sampleRate: number,
     channels: number,
-    sourceNumber: number = 1,
     localPlayback: boolean = false,
     publish: boolean = true
   ): number {
@@ -225,7 +158,6 @@ export class IMediaEngineImpl implements IMediaEngine {
       enabled,
       sampleRate,
       channels,
-      sourceNumber,
       localPlayback,
       publish
     );
@@ -233,7 +165,6 @@ export class IMediaEngineImpl implements IMediaEngine {
       enabled: enabled,
       sampleRate: sampleRate,
       channels: channels,
-      sourceNumber: sourceNumber,
       localPlayback: localPlayback,
       publish: publish,
       toJSON: () => {
@@ -241,7 +172,6 @@ export class IMediaEngineImpl implements IMediaEngine {
           enabled: enabled,
           sampleRate: sampleRate,
           channels: channels,
-          sourceNumber: sourceNumber,
           localPlayback: localPlayback,
           publish: publish,
         };
@@ -255,11 +185,57 @@ export class IMediaEngineImpl implements IMediaEngine {
     enabled: boolean,
     sampleRate: number,
     channels: number,
-    sourceNumber: number = 1,
     localPlayback: boolean = false,
     publish: boolean = true
   ): string {
     return 'MediaEngine_setExternalAudioSource';
+  }
+
+  createCustomAudioTrack(
+    trackType: AudioTrackType,
+    config: AudioTrackConfig
+  ): number {
+    const apiType = this.getApiTypeFromCreateCustomAudioTrack(
+      trackType,
+      config
+    );
+    const jsonParams = {
+      trackType: trackType,
+      config: config,
+      toJSON: () => {
+        return {
+          trackType: trackType,
+          config: config,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromCreateCustomAudioTrack(
+    trackType: AudioTrackType,
+    config: AudioTrackConfig
+  ): string {
+    return 'MediaEngine_createCustomAudioTrack';
+  }
+
+  destroyCustomAudioTrack(trackId: number): number {
+    const apiType = this.getApiTypeFromDestroyCustomAudioTrack(trackId);
+    const jsonParams = {
+      trackId: trackId,
+      toJSON: () => {
+        return {
+          trackId: trackId,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromDestroyCustomAudioTrack(trackId: number): string {
+    return 'MediaEngine_destroyCustomAudioTrack';
   }
 
   setExternalAudioSink(
@@ -296,17 +272,17 @@ export class IMediaEngineImpl implements IMediaEngine {
     return 'MediaEngine_setExternalAudioSink';
   }
 
-  enableCustomAudioLocalPlayback(sourceId: number, enabled: boolean): number {
+  enableCustomAudioLocalPlayback(trackId: number, enabled: boolean): number {
     const apiType = this.getApiTypeFromEnableCustomAudioLocalPlayback(
-      sourceId,
+      trackId,
       enabled
     );
     const jsonParams = {
-      sourceId: sourceId,
+      trackId: trackId,
       enabled: enabled,
       toJSON: () => {
         return {
-          sourceId: sourceId,
+          trackId: trackId,
           enabled: enabled,
         };
       },
@@ -316,39 +292,10 @@ export class IMediaEngineImpl implements IMediaEngine {
   }
 
   protected getApiTypeFromEnableCustomAudioLocalPlayback(
-    sourceId: number,
+    trackId: number,
     enabled: boolean
   ): string {
     return 'MediaEngine_enableCustomAudioLocalPlayback';
-  }
-
-  setDirectExternalAudioSource(
-    enable: boolean,
-    localPlayback: boolean = false
-  ): number {
-    const apiType = this.getApiTypeFromSetDirectExternalAudioSource(
-      enable,
-      localPlayback
-    );
-    const jsonParams = {
-      enable: enable,
-      localPlayback: localPlayback,
-      toJSON: () => {
-        return {
-          enable: enable,
-          localPlayback: localPlayback,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetDirectExternalAudioSource(
-    enable: boolean,
-    localPlayback: boolean = false
-  ): string {
-    return 'MediaEngine_setDirectExternalAudioSource';
   }
 
   pushVideoFrame(frame: ExternalVideoFrame, videoTrackId: number = 0): number {

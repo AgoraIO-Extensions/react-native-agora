@@ -16,6 +16,10 @@ export enum PreloadStatusCode {
    * @ignore
    */
   KPreloadStatusPreloading = 2,
+  /**
+   * @ignore
+   */
+  KPreloadStatusRemoved = 3,
 }
 
 /**
@@ -30,6 +34,26 @@ export enum MusicContentCenterStatusCode {
    * @ignore
    */
   KMusicContentCenterStatusErr = 1,
+  /**
+   * @ignore
+   */
+  KMusicContentCenterStatusErrGateway = 2,
+  /**
+   * @ignore
+   */
+  KMusicContentCenterStatusErrPermissionAndResource = 3,
+  /**
+   * @ignore
+   */
+  KMusicContentCenterStatusErrInternalDataParse = 4,
+  /**
+   * @ignore
+   */
+  KMusicContentCenterStatusErrMusicLoading = 5,
+  /**
+   * @ignore
+   */
+  KMusicContentCenterStatusErrMusicDecryption = 6,
 }
 
 /**
@@ -44,6 +68,34 @@ export class MusicChartInfo {
    * @ignore
    */
   id?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum MusicCacheStatusType {
+  /**
+   * @ignore
+   */
+  MusicCacheStatusTypeCached = 0,
+  /**
+   * @ignore
+   */
+  MusicCacheStatusTypeCaching = 1,
+}
+
+/**
+ * @ignore
+ */
+export class MusicCacheInfo {
+  /**
+   * @ignore
+   */
+  songCode?: number;
+  /**
+   * @ignore
+   */
+  status?: MusicCacheStatusType;
 }
 
 /**
@@ -196,8 +248,8 @@ export interface IMusicContentCenterEventHandler {
    */
   onMusicChartsResult?(
     requestId: string,
-    status: MusicContentCenterStatusCode,
-    result: MusicChartInfo[]
+    result: MusicChartInfo[],
+    errorCode: MusicContentCenterStatusCode
   ): void;
 
   /**
@@ -205,14 +257,18 @@ export interface IMusicContentCenterEventHandler {
    */
   onMusicCollectionResult?(
     requestId: string,
-    status: MusicContentCenterStatusCode,
-    result: MusicCollection
+    result: MusicCollection,
+    errorCode: MusicContentCenterStatusCode
   ): void;
 
   /**
    * @ignore
    */
-  onLyricResult?(requestId: string, lyricUrl: string): void;
+  onLyricResult?(
+    requestId: string,
+    lyricUrl: string,
+    errorCode: MusicContentCenterStatusCode
+  ): void;
 
   /**
    * @ignore
@@ -220,9 +276,9 @@ export interface IMusicContentCenterEventHandler {
   onPreLoadEvent?(
     songCode: number,
     percent: number,
+    lyricUrl: string,
     status: PreloadStatusCode,
-    msg: string,
-    lyricUrl?: string
+    errorCode: MusicContentCenterStatusCode
   ): void;
 }
 
@@ -242,6 +298,10 @@ export class MusicContentCenterConfiguration {
    * @ignore
    */
   mccUid?: number;
+  /**
+   * @ignore
+   */
+  maxCacheSize?: number;
 }
 
 /**
@@ -320,6 +380,16 @@ export abstract class IMusicContentCenter {
    * @ignore
    */
   abstract preload(songCode: number, jsonOption?: string): number;
+
+  /**
+   * @ignore
+   */
+  abstract removeCache(songCode: number): number;
+
+  /**
+   * @ignore
+   */
+  abstract getCaches(): { cacheInfo: MusicCacheInfo[]; cacheInfoSize: number };
 
   /**
    * @ignore

@@ -1,5 +1,5 @@
 import './extension/AgoraBaseExtension';
-import { MediaSourceType, RenderModeType } from './AgoraMediaBase';
+import { VideoSourceType, RenderModeType } from './AgoraMediaBase';
 /**
  * The channel profile.
  */
@@ -546,10 +546,6 @@ export enum InterfaceIdType {
    */
   AgoraIidLocalSpatialAudio = 11,
   /**
-   * The IMediaRecorder interface class.
-   */
-  AgoraIidMediaRecorder = 12,
-  /**
    * @ignore
    */
   AgoraIidStateSync = 13,
@@ -561,6 +557,10 @@ export enum InterfaceIdType {
    * @ignore
    */
   AgoraIidMusicContentCenter = 15,
+  /**
+   * @ignore
+   */
+  AgoraIidH265Transcoder = 16,
 }
 
 /**
@@ -781,6 +781,24 @@ export class VideoDimensions {
    * The height (pixels) of the video.
    */
   height?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum ScreenCaptureCapabilityLevel {
+  /**
+   * @ignore
+   */
+  ScreenCaptureCapabilityLevel15Fps = 0,
+  /**
+   * @ignore
+   */
+  ScreenCaptureCapabilityLevel30Fps = 1,
+  /**
+   * @ignore
+   */
+  ScreenCaptureCapabilityLevel60Fps = 2,
 }
 
 /**
@@ -1191,6 +1209,46 @@ export enum VideoMirrorModeType {
 }
 
 /**
+ * @ignore
+ */
+export enum CodecCapMask {
+  /**
+   * @ignore
+   */
+  CodecCapMaskNone = 0,
+  /**
+   * @ignore
+   */
+  CodecCapMaskHwDec = 1 << 0,
+  /**
+   * @ignore
+   */
+  CodecCapMaskHwEnc = 1 << 1,
+  /**
+   * @ignore
+   */
+  CodecCapMaskSwDec = 1 << 2,
+  /**
+   * @ignore
+   */
+  CodecCapMaskSwEnc = 1 << 3,
+}
+
+/**
+ * @ignore
+ */
+export class CodecCapInfo {
+  /**
+   * @ignore
+   */
+  codec_type?: VideoCodecType;
+  /**
+   * @ignore
+   */
+  codec_cap_mask?: number;
+}
+
+/**
  * Video encoder configurations.
  */
 export class VideoEncoderConfiguration {
@@ -1489,68 +1547,6 @@ export class RtcStats {
 }
 
 /**
- * The capture type of the custom video source.
- */
-export enum VideoSourceType {
-  /**
-   * @ignore
-   */
-  VideoSourceCameraPrimary = 0,
-  /**
-   * The camera.
-   */
-  VideoSourceCamera = 0,
-  /**
-   * The secondary camera.
-   */
-  VideoSourceCameraSecondary = 1,
-  /**
-   * The primary screen.
-   */
-  VideoSourceScreenPrimary = 2,
-  /**
-   * The screen.
-   */
-  VideoSourceScreen = 2,
-  /**
-   * The secondary screen.
-   */
-  VideoSourceScreenSecondary = 3,
-  /**
-   * The custom video source.
-   */
-  VideoSourceCustom = 4,
-  /**
-   * The video source from the media player.
-   */
-  VideoSourceMediaPlayer = 5,
-  /**
-   * The video source is a PNG image.
-   */
-  VideoSourceRtcImagePng = 6,
-  /**
-   * The video source is a JPEG image.
-   */
-  VideoSourceRtcImageJpeg = 7,
-  /**
-   * The video source is a GIF image.
-   */
-  VideoSourceRtcImageGif = 8,
-  /**
-   * The video source is remote video acquired by the network.
-   */
-  VideoSourceRemote = 9,
-  /**
-   * A transcoded video source.
-   */
-  VideoSourceTranscoded = 10,
-  /**
-   * An unknown video source.
-   */
-  VideoSourceUnknown = 100,
-}
-
-/**
  * The user role in the interactive live streaming.
  */
 export enum ClientRoleType {
@@ -1647,69 +1643,21 @@ export enum ExperiencePoorReason {
 }
 
 /**
- * Audio statistics of the remote user.
+ * @ignore
  */
-export class RemoteAudioStats {
+export enum AudioAinsMode {
   /**
-   * The user ID of the remote user.
+   * @ignore
    */
-  uid?: number;
+  AinsModeBalanced = 0,
   /**
-   * The quality of the audio stream sent by the user. See QualityType .
+   * @ignore
    */
-  quality?: number;
+  AinsModeAggressive = 1,
   /**
-   * The network delay (ms) from the sender to the receiver.
+   * @ignore
    */
-  networkTransportDelay?: number;
-  /**
-   * The network delay (ms) from the audio receiver to the jitter buffer.When the receiving end is an audience member and audienceLatencyLevel of ClientRoleOptions is 1, this parameter does not take effect.
-   */
-  jitterBufferDelay?: number;
-  /**
-   * The frame loss rate (%) of the remote audio stream in the reported interval.
-   */
-  audioLossRate?: number;
-  /**
-   * The number of audio channels.
-   */
-  numChannels?: number;
-  /**
-   * The sampling rate of the received audio stream in the reported interval.
-   */
-  receivedSampleRate?: number;
-  /**
-   * The average bitrate (Kbps) of the received audio stream in the reported interval.
-   */
-  receivedBitrate?: number;
-  /**
-   * The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
-   */
-  totalFrozenTime?: number;
-  /**
-   * The total audio freeze time as a percentage (%) of the total time when the audio is available. The audio is considered available when the remote user neither stops sending the audio stream nor disables the audio module after joining the channel.
-   */
-  frozenRate?: number;
-  /**
-   * The quality of the remote audio stream in the reported interval. The quality is determined by the Agora real-time audio MOS (Mean Opinion Score) measurement method. The return value range is [0, 500]. Dividing the return value by 100 gets the MOS score, which ranges from 0 to 5. The higher the score, the better the audio quality.The subjective perception of audio quality corresponding to the Agora real-time audio MOS scores is as follows:MOS scorePerception of audio qualityGreater than 4Excellent. The audio sounds clear and smooth.From 3.5 to 4Good. The audio has some perceptible impairment but still sounds clear.From 3 to 3.5Fair. The audio freezes occasionally and requires attentive listening.From 2.5 to 3Poor. The audio sounds choppy and requires considerable effort to understand.From 2 to 2.5Bad. The audio has occasional noise. Consecutive audio dropouts occur, resulting in some information loss. The users can communicate only with difficulty.Less than 2Very bad. The audio has persistent noise. Consecutive audio dropouts are frequent, resulting in severe information loss. Communication is nearly impossible.
-   */
-  mosValue?: number;
-  /**
-   * The total active time (ms) between the start of the audio call and the callback of the remote user.The active time refers to the total duration of the remote user without the mute state.
-   */
-  totalActiveTime?: number;
-  /**
-   * The total duration (ms) of the remote audio stream.
-   */
-  publishDuration?: number;
-  /**
-   * The Quality of Experience (QoE) of the local user when receiving a remote audio stream. See ExperienceQualityType .
-   */
-  qoeQuality?: number;
-  /**
-   * Reasons why the QoE of the local user when receiving a remote audio stream is poor. See ExperiencePoorReason .
-   */
-  qualityChangedReason?: number;
+  AinsModeUltralowlatency = 2,
 }
 
 /**
@@ -1836,6 +1784,20 @@ export enum ScreenScenarioType {
    * 4: Remote control. This scenario prioritizes the video quality of screen sharing and reduces the latency of the shared video for the receiver. If you share the device desktop being remotely controlled, you can set this scenario.
    */
   ScreenScenarioRdc = 4,
+}
+
+/**
+ * @ignore
+ */
+export enum VideoApplicationScenarioType {
+  /**
+   * @ignore
+   */
+  ApplicationScenarioGeneral = 0,
+  /**
+   * @ignore
+   */
+  ApplicationScenarioMeeting = 1,
 }
 
 /**
@@ -1979,9 +1941,9 @@ export enum LocalVideoStreamError {
    */
   LocalVideoStreamErrorCaptureFailure = 4,
   /**
-   * 5: The local video encoding fails.
+   * @ignore
    */
-  LocalVideoStreamErrorEncodeFailure = 5,
+  LocalVideoStreamErrorCodecNotSupport = 5,
   /**
    * 6:The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
    */
@@ -2178,6 +2140,10 @@ export enum RemoteVideoStateReason {
    * @ignore
    */
   RemoteVideoStateReasonSdkInBackground = 12,
+  /**
+   * @ignore
+   */
+  RemoteVideoStateReasonCodecNotSupport = 13,
 }
 
 /**
@@ -2761,7 +2727,7 @@ export class TranscodingVideoStream {
   /**
    * The source type of video for the video mixing on the local client. See VideoSourceType .
    */
-  sourceType?: MediaSourceType;
+  sourceType?: VideoSourceType;
   /**
    * The ID of the remote user.Use this parameter only when the source type of the video for the video mixing on the local client is VideoSourceRemote.
    */
@@ -2770,6 +2736,10 @@ export class TranscodingVideoStream {
    * The URL of the image.
    */
   imageUrl?: string;
+  /**
+   * @ignore
+   */
+  mediaPlayerId?: number;
   /**
    * The horizontal displacement of the top-left corner of the video for the video mixing on the client relative to the top-left corner (origin) of the canvas for this video mixing.
    */
@@ -2811,7 +2781,7 @@ export class LocalTranscoderConfiguration {
   /**
    * The video streams for the video mixing on the local client. See TranscodingVideoStream .
    */
-  VideoInputStreams?: TranscodingVideoStream[];
+  videoInputStreams?: TranscodingVideoStream[];
   /**
    * The encoding configuration of the mixed video stream after the video mixing on the local client. See VideoEncoderConfiguration .
    */
@@ -2820,6 +2790,40 @@ export class LocalTranscoderConfiguration {
    * @ignore
    */
   syncWithPrimaryCamera?: boolean;
+}
+
+/**
+ * @ignore
+ */
+export enum VideoTranscoderError {
+  /**
+   * @ignore
+   */
+  VtErrOk = 0,
+  /**
+   * @ignore
+   */
+  VtErrVideoSourceNotReady = 1,
+  /**
+   * @ignore
+   */
+  VtErrInvalidVideoSourceType = 2,
+  /**
+   * @ignore
+   */
+  VtErrInvalidImagePath = 3,
+  /**
+   * @ignore
+   */
+  VtErrUnsupportImageFormat = 4,
+  /**
+   * @ignore
+   */
+  VtErrInvalidLayout = 5,
+  /**
+   * @ignore
+   */
+  VtErrInternal = 20,
 }
 
 /**
@@ -2993,7 +2997,7 @@ export enum ConnectionChangedReasonType {
   /**
    * @ignore
    */
-  ConnectionChangedLicenseVerifyFailed = 21,
+  ConnectionChangedLicenseValidationFailure = 21,
 }
 
 /**
@@ -3160,6 +3164,10 @@ export class VideoCanvas {
    * @ignore
    */
   cropArea?: Rectangle;
+  /**
+   * @ignore
+   */
+  enableAlphaMask?: boolean;
 }
 
 /**
@@ -3313,6 +3321,10 @@ export class ColorEnhanceOptions {
  */
 export enum BackgroundSourceType {
   /**
+   * @ignore
+   */
+  BackgroundNone = 0,
+  /**
    * 1: (Default) The background image is a solid color.
    */
   BackgroundColor = 1,
@@ -3324,6 +3336,10 @@ export enum BackgroundSourceType {
    * The background image is the blurred background.
    */
   BackgroundBlur = 3,
+  /**
+   * @ignore
+   */
+  BackgroundVideo = 4,
 }
 
 /**
@@ -3392,6 +3408,34 @@ export class SegmentationProperty {
    * The range of accuracy for identifying green colors (different shades of green) in the view. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of green. When the value of this parameter is too large, the edge of the portrait and the green color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect.This parameter only takes effect when modelType is set to SegModelGreen.
    */
   greenCapacity?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum AudioTrackType {
+  /**
+   * @ignore
+   */
+  AudioTrackInvalid = -1,
+  /**
+   * @ignore
+   */
+  AudioTrackMixable = 0,
+  /**
+   * @ignore
+   */
+  AudioTrackDirect = 1,
+}
+
+/**
+ * @ignore
+ */
+export class AudioTrackConfig {
+  /**
+   * @ignore
+   */
+  enableLocalPlayback?: boolean;
 }
 
 /**
@@ -3567,6 +3611,50 @@ export enum VoiceConversionPreset {
    * A deep voice. To avoid audio distortion, ensure that you use this enumerator to process a male-sounding voice.
    */
   VoiceChangerBass = 0x03010400,
+  /**
+   * @ignore
+   */
+  VoiceChangerCartoon = 0x03010500,
+  /**
+   * @ignore
+   */
+  VoiceChangerChildlike = 0x03010600,
+  /**
+   * @ignore
+   */
+  VoiceChangerPhoneOperator = 0x03010700,
+  /**
+   * @ignore
+   */
+  VoiceChangerMonster = 0x03010800,
+  /**
+   * @ignore
+   */
+  VoiceChangerTransformers = 0x03010900,
+  /**
+   * @ignore
+   */
+  VoiceChangerGroot = 0x03010a00,
+  /**
+   * @ignore
+   */
+  VoiceChangerDarthVader = 0x03010b00,
+  /**
+   * @ignore
+   */
+  VoiceChangerIronLady = 0x03010c00,
+  /**
+   * @ignore
+   */
+  VoiceChangerShinChan = 0x03010d00,
+  /**
+   * @ignore
+   */
+  VoiceChangerGirlishMan = 0x03010e00,
+  /**
+   * @ignore
+   */
+  VoiceChangerChipmunk = 0x03010f00,
 }
 
 /**
@@ -4290,6 +4378,10 @@ export class EchoTestConfiguration {
    * The channel name that identifies each audio and video call loop. To ensure proper loop test functionality, the channel name passed in to identify each loop test cannot be the same when users of the same project (App ID) perform audio and video call loop tests on different devices.
    */
   channelId?: string;
+  /**
+   * @ignore
+   */
+  intervalInSeconds?: number;
 }
 
 /**
@@ -4415,6 +4507,54 @@ export class ScreenCaptureParameters2 {
    * The video configuration for the shared screen stream. See ScreenVideoParameters .This parameter only takes effect when captureVideo is true.
    */
   videoParams?: ScreenVideoParameters;
+}
+
+/**
+ * @ignore
+ */
+export enum MediaTraceEvent {
+  /**
+   * @ignore
+   */
+  MediaTraceEventVideoRendered = 0,
+  /**
+   * @ignore
+   */
+  MediaTraceEventVideoDecoded = 1,
+}
+
+/**
+ * @ignore
+ */
+export class VideoRenderingTracingInfo {
+  /**
+   * @ignore
+   */
+  elapsedTime?: number;
+  /**
+   * @ignore
+   */
+  start2JoinChannel?: number;
+  /**
+   * @ignore
+   */
+  join2JoinSuccess?: number;
+  /**
+   * @ignore
+   */
+  joinSuccess2RemoteJoined?: number;
+  /**
+   * @ignore
+   */
+  remoteJoined2SetView?: number;
+  /**
+   * @ignore
+   */
+  remoteJoined2UnmuteVideo?: number;
+  /**
+   * @ignore
+   */
+  remoteJoined2PacketReceived?: number;
 }
 
 /**
