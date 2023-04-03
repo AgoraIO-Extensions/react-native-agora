@@ -4,6 +4,10 @@
 import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
+export const IAudioPcmFrameSink = t.iface([], {
+  "onFrame": t.opt(t.func("void", t.param("frame", "AudioPcmFrame"))),
+});
+
 export const IAudioFrameObserverBase = t.iface([], {
   "onRecordAudioFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
   "onPlaybackAudioFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
@@ -38,6 +42,7 @@ export const IMediaRecorderObserver = t.iface([], {
 });
 
 const exportedTypeSuite: t.ITypeSuite = {
+  IAudioPcmFrameSink,
   IAudioFrameObserverBase,
   IAudioFrameObserver,
   IAudioSpectrumObserver,
