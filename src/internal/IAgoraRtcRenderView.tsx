@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { HostComponent } from 'react-native';
 
-import { VideoSourceType } from '../AgoraBase';
+import { VideoSourceType } from '../AgoraMediaBase';
 import { RtcRendererViewProps } from '../AgoraRtcRenderView';
 import { IrisApiParam } from './IrisApiEngine';
 

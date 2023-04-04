@@ -40,10 +40,6 @@ jobs:
           target-path: ${{ github.workspace }}
           github-token: ${{ secrets.GH_TOKEN }}
 
-      - name: Clean
-        run: |
-          rm -rf
-
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main
         with:

@@ -2,7 +2,6 @@ import { createCheckers } from 'ts-interface-checker';
 
 import { ErrorCodeType } from '../AgoraBase';
 import { IMediaRecorderObserver } from '../AgoraMediaBase';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
 
 import { IMediaRecorderEvent } from '../extension/IAgoraMediaRecorderExtension';
 
@@ -20,6 +19,7 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
     string,
     IMediaRecorderObserver
   >();
+  private readonly _nativeHandle: string;
   private _events: Map<
     any,
     {
@@ -34,22 +34,27 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
     }
   >();
 
-  setMediaRecorderObserver(
-    connection: RtcConnection,
-    callback: IMediaRecorderObserver
-  ): number {
-    const key = (connection.channelId ?? '') + connection.localUid;
+  constructor(nativeHandle: string) {
+    super();
+    this._nativeHandle = nativeHandle;
+  }
+
+  release() {
+    MediaRecorderInternal._observers.delete(this._nativeHandle);
+    this.removeAllListeners();
+  }
+
+  get nativeHandle(): string {
+    return this._nativeHandle;
+  }
+
+  setMediaRecorderObserver(callback: IMediaRecorderObserver): number {
+    const key = this._nativeHandle;
     if (MediaRecorderInternal._observers.has(key)) {
       return ErrorCodeType.ErrOk;
     }
     MediaRecorderInternal._observers.set(key, callback);
-    return super.setMediaRecorderObserver(connection, callback);
-  }
-
-  release() {
-    MediaRecorderInternal._observers.clear();
-    this.removeAllListeners();
-    super.release();
+    return super.setMediaRecorderObserver(callback);
   }
 
   _addListenerPreCheck<EventType extends keyof IMediaRecorderEvent>(
@@ -60,11 +65,10 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
         [eventType]: undefined,
       })
     ) {
-      if (MediaRecorderInternal._observers.size === 0) {
-        console.error(
-          'Please call `setMediaRecorderObserver` before you want to receive event by `addListener`'
-        );
-        return false;
+      if (
+        MediaRecorderInternal._observers.get(this._nativeHandle) === undefined
+      ) {
+        this.setMediaRecorderObserver({});
       }
     }
     return true;

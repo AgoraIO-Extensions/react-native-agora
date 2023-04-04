@@ -1,19 +1,22 @@
 import { createCheckers } from 'ts-interface-checker';
 
 import { ErrorCodeType } from '../AgoraBase';
-import { IAudioSpectrumObserver } from '../AgoraMediaBase';
 import {
-  IMediaPlayerAudioFrameObserver,
-  IMediaPlayerVideoFrameObserver,
-} from '../IAgoraMediaPlayer';
+  IAudioSpectrumObserver,
+  IAudioPcmFrameSink,
+  RawAudioFrameOpModeType,
+} from '../AgoraMediaBase';
+import { IMediaPlayerVideoFrameObserver } from '../IAgoraMediaPlayer';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 
 import { IMediaPlayerEvent } from '../extension/IAgoraMediaPlayerExtension';
 
-import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
+import {
+  processIAudioPcmFrameSink,
+  processIAudioSpectrumObserver,
+} from '../impl/AgoraMediaBaseImpl';
 import {
   IMediaPlayerImpl,
-  processIMediaPlayerAudioFrameObserver,
   processIMediaPlayerVideoFrameObserver,
 } from '../impl/IAgoraMediaPlayerImpl';
 import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
@@ -35,8 +38,10 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     number,
     IMediaPlayerSourceObserver[]
   >();
-  static _audio_frame_observers: Map<number, IMediaPlayerAudioFrameObserver[]> =
-    new Map<number, IMediaPlayerAudioFrameObserver[]>();
+  static _audio_frame_observers: Map<number, IAudioPcmFrameSink[]> = new Map<
+    number,
+    IAudioPcmFrameSink[]
+  >();
   static _video_frame_observers: Map<number, IMediaPlayerVideoFrameObserver[]> =
     new Map<number, IMediaPlayerVideoFrameObserver[]>();
   static _audio_spectrum_observers: Map<number, IAudioSpectrumObserver[]> =
@@ -141,7 +146,7 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
           eventType,
           data[1]
         );
-        processIMediaPlayerAudioFrameObserver(
+        processIAudioPcmFrameSink(
           { [eventType]: listener },
           eventType,
           data[1]
@@ -222,7 +227,10 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     return super.unregisterPlayerSourceObserver(observer);
   }
 
-  registerAudioFrameObserver(observer: IMediaPlayerAudioFrameObserver): number {
+  registerAudioFrameObserver(
+    observer: IAudioPcmFrameSink,
+    mode: RawAudioFrameOpModeType = RawAudioFrameOpModeType.RawAudioFrameOpModeReadOnly
+  ): number {
     let observers = MediaPlayerInternal._audio_frame_observers.get(
       this._mediaPlayerId
     );
@@ -236,12 +244,10 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     if (!observers.find((value) => value === observer)) {
       observers.push(observer);
     }
-    return super.registerAudioFrameObserver(observer);
+    return super.registerAudioFrameObserver(observer, mode);
   }
 
-  unregisterAudioFrameObserver(
-    observer: IMediaPlayerAudioFrameObserver
-  ): number {
+  unregisterAudioFrameObserver(observer: IAudioPcmFrameSink): number {
     let observers = MediaPlayerInternal._audio_frame_observers.get(
       this._mediaPlayerId
     );

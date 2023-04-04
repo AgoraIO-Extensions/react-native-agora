@@ -6,13 +6,13 @@ import {
   ClientRoleOptions,
   ClientRoleType,
   DataStreamConfig,
+  EchoTestConfiguration,
   IAudioEncodedFrameObserver,
   SimulcastStreamConfig,
   SimulcastStreamMode,
-  VideoSourceType,
   WatermarkOptions,
 } from '../AgoraBase';
-import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { VideoSourceType, IAudioSpectrumObserver } from '../AgoraMediaBase';
 import { IMediaEngine } from '../IAgoraMediaEngine';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
@@ -70,7 +70,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   static _audio_encoded_frame_observers: IAudioEncodedFrameObserver[] = [];
   static _audio_spectrum_observers: IAudioSpectrumObserver[] = [];
   private _media_engine: IMediaEngine = new MediaEngineInternal();
-  private _media_recorder: IMediaRecorder = new MediaRecorderInternal();
   private _music_content_center: IMusicContentCenter =
     new MusicContentCenterInternal();
   private _local_spatial_audio_engine: ILocalSpatialAudioEngine =
@@ -99,7 +98,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   release(sync: boolean = false) {
     this._media_engine.release();
-    this._media_recorder.release();
     this._local_spatial_audio_engine.release();
     RtcEngineExInternal._event_handlers = [];
     RtcEngineExInternal._direct_cdn_streaming_event_handler = [];
@@ -280,6 +278,27 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     return ret;
   }
 
+  createLocalMediaRecorder(connection: RtcConnection): IMediaRecorder {
+    // @ts-ignore
+    const nativeHandle = super.createLocalMediaRecorder(connection) as string;
+    return new MediaRecorderInternal(nativeHandle);
+  }
+
+  createRemoteMediaRecorder(channelId: string, uid: number): IMediaRecorder {
+    // @ts-ignore
+    const nativeHandle = super.createRemoteMediaRecorder(
+      channelId,
+      uid
+    ) as string;
+    return new MediaRecorderInternal(nativeHandle);
+  }
+
+  destroyMediaRecorder(mediaRecorder: IMediaRecorder): number {
+    const ret = super.destroyMediaRecorder(mediaRecorder);
+    mediaRecorder.release?.call(mediaRecorder);
+    return ret;
+  }
+
   startDirectCdnStreaming(
     eventHandler: IDirectCdnStreamingEventHandler,
     publishUrl: string,
@@ -346,10 +365,8 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
       : 'RtcEngine_setClientRole2';
   }
 
-  protected getApiTypeFromStartEchoTest(
-    intervalInSeconds: number = 10
-  ): string {
-    return 'RtcEngine_startEchoTest2';
+  protected getApiTypeFromStartEchoTest(config: EchoTestConfiguration): string {
+    return 'RtcEngine_startEchoTest3';
   }
 
   protected getApiTypeFromStartPreview(
@@ -443,10 +460,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   getMediaEngine(): IMediaEngine {
     return this._media_engine;
-  }
-
-  getMediaRecorder(): IMediaRecorder {
-    return this._media_recorder;
   }
 
   getMusicContentCenter(): IMusicContentCenter {

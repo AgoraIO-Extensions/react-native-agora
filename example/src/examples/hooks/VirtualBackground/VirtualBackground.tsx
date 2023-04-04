@@ -74,22 +74,24 @@ export default function VirtualBackground() {
   const [enableVirtualBackground, setEnableVirtualBackground] =
     useState<boolean>(false);
 
+  const setupOtherExtension = useCallback(() => {
+    // Must call after initialize and before joinChannel
+    if (Platform.OS === 'android') {
+      engine.current.loadExtensionProvider('agora_segmentation_extension');
+    }
+    engine.current.enableExtension(
+      'agora_video_filters_segmentation',
+      'portrait_segmentation',
+      true
+    );
+  }, [engine]);
+
   const { token, initRtcEngine, startPreview } = useInitRtcEngine({
     enableAudio,
     enableVideo,
     enablePreview,
     engine: engine.current,
-    setupOtherExtension: () => {
-      // Must call after initialize and before joinChannel
-      if (Platform.OS === 'android') {
-        engine.current.loadExtensionProvider('agora_segmentation_extension');
-      }
-      engine.current.enableExtension(
-        'agora_video_filters_segmentation',
-        'portrait_segmentation',
-        true
-      );
-    },
+    setupOtherExtension,
   });
 
   /**
@@ -224,13 +226,6 @@ export default function VirtualBackground() {
           if (r === undefined) return [];
           return r.filter((value) => value !== remoteUid);
         });
-      }
-    );
-
-    engine.current.addListener(
-      'onLocalUserRegistered',
-      (uid: number, userAccount: string) => {
-        log.info('LocalUserRegistered', 'uid', uid, 'userAccount', userAccount);
       }
     );
 
