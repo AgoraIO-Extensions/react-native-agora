@@ -378,6 +378,8 @@ export function callIrisApi(funcName: string, params: any): any {
           buffers.push(base64.fromByteArray(Buffer.from('')));
           // frame.metadata_buffer
           buffers.push(base64.fromByteArray(Buffer.from('')));
+          // frame.alphaBuffer
+          buffers.push(base64.fromByteArray(params.frame.alphaBuffer));
           break;
         case 'MediaEngine_pushEncodedVideoImage':
           // imageBuffer
