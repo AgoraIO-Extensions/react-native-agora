@@ -4,6 +4,7 @@ import {
   ChannelProfileType,
   ClientRoleType,
   createAgoraRtcEngine,
+  IMediaRecorder,
   IMediaRecorderObserver,
   IRtcEngineEventHandler,
   MediaRecorderContainerFormat,
@@ -42,6 +43,8 @@ export default class MediaRecorder
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler, IMediaRecorderObserver
 {
+  protected recorder?: IMediaRecorder;
+
   protected createState(): State {
     return {
       appId: Config.appId,
@@ -97,6 +100,8 @@ export default class MediaRecorder
     // Start preview before joinChannel
     this.engine.startPreview();
     this.setState({ startPreview: true });
+
+    this.createMediaRecorder();
   }
 
   /**
@@ -126,11 +131,22 @@ export default class MediaRecorder
   }
 
   /**
-   * Step 3-1: startRecording
+   * Step 3-1: createMediaRecorder
+   */
+  createMediaRecorder = () => {
+    const { channelId, uid } = this.state;
+    this.recorder = this.engine?.createLocalMediaRecorder({
+      channelId,
+      localUid: uid,
+    });
+    this.recorder?.setMediaRecorderObserver(this);
+  };
+
+  /**
+   * Step 3-2: startRecording
    */
   startRecording = () => {
     const {
-      channelId,
       uid,
       storagePath,
       containerFormat,
@@ -138,50 +154,75 @@ export default class MediaRecorder
       maxDurationMs,
       recorderInfoUpdateInterval,
     } = this.state;
-    this.engine
-      ?.getMediaRecorder()
-      .setMediaRecorderObserver({ channelId, localUid: uid }, this);
-    this.engine?.getMediaRecorder().startRecording(
-      { channelId, localUid: uid },
-      {
-        storagePath: `${storagePath}/${uid}.mp4`,
-        containerFormat,
-        streamType,
-        maxDurationMs,
-        recorderInfoUpdateInterval,
-      }
-    );
+    this.recorder?.startRecording({
+      storagePath: `${storagePath}/${uid}.mp4`,
+      containerFormat,
+      streamType,
+      maxDurationMs,
+      recorderInfoUpdateInterval,
+    });
   };
 
   /**
-   * Step 3-2: stopRecording
+   * Step 3-3: stopRecording
    */
   stopRecording = () => {
-    const { channelId, uid } = this.state;
-    this.engine?.getMediaRecorder().stopRecording({ channelId, localUid: uid });
+    this.recorder?.stopRecording();
   };
 
   /**
-   * Step 4: leaveChannel
+   * Step 4: destroyMediaRecorder
+   */
+  protected destroyMediaRecorder() {
+    if (!this.recorder) return;
+    this.engine?.destroyMediaRecorder(this.recorder);
+  }
+
+  /**
+   * Step 5: leaveChannel
    */
   protected leaveChannel() {
     this.engine?.leaveChannel();
   }
 
   /**
-   * Step 5: releaseRtcEngine
+   * Step 6: releaseRtcEngine
    */
   protected releaseRtcEngine() {
+    this.destroyMediaRecorder();
     this.engine?.unregisterEventHandler(this);
     this.engine?.release();
   }
 
-  onRecorderInfoUpdated(info: RecorderInfo) {
-    this.info('onRecorderInfoUpdated', 'info', info);
+  onRecorderInfoUpdated(channelId: string, uid: number, info: RecorderInfo) {
+    this.info(
+      'onRecorderInfoUpdated',
+      'channelId',
+      channelId,
+      'uid',
+      uid,
+      'info',
+      info
+    );
   }
 
-  onRecorderStateChanged(state: RecorderState, error: RecorderErrorCode) {
-    this.info('onRecorderStateChanged', 'state', state, 'error', error);
+  onRecorderStateChanged(
+    channelId: string,
+    uid: number,
+    state: RecorderState,
+    error: RecorderErrorCode
+  ) {
+    this.info(
+      'onRecorderStateChanged',
+      'channelId',
+      channelId,
+      'uid',
+      uid,
+      'state',
+      state,
+      'error',
+      error
+    );
     switch (state) {
       case RecorderState.RecorderStateStart:
         this.setState({ startRecoding: true });

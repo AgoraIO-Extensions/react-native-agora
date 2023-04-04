@@ -32,7 +32,6 @@ export default function App() {
   useEffect(() => {
     const engine = createAgoraRtcEngine();
     setVersion(engine.getVersion());
-    engine.release();
   }, []);
 
   return (
