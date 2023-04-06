@@ -5010,16 +5010,19 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   startScreenCaptureDesktop(
-    type: VideoSourceType,
+    sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
   ): number {
-    const apiType = this.getApiTypeFromStartScreenCaptureDesktop(type, config);
+    const apiType = this.getApiTypeFromStartScreenCaptureDesktop(
+      sourceType,
+      config
+    );
     const jsonParams = {
-      type: type,
+      sourceType: sourceType,
       config: config,
       toJSON: () => {
         return {
-          type: type,
+          sourceType: sourceType,
           config: config,
         };
       },
@@ -5029,7 +5032,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromStartScreenCaptureDesktop(
-    type: VideoSourceType,
+    sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
   ): string {
     return 'RtcEngine_startScreenCaptureDesktop';
@@ -5087,14 +5090,14 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   stopScreenCapture(
-    type: VideoSourceType = VideoSourceType.VideoSourceScreenPrimary
+    sourceType: VideoSourceType = VideoSourceType.VideoSourceScreenPrimary
   ): number {
-    const apiType = this.getApiTypeFromStopScreenCapture(type);
+    const apiType = this.getApiTypeFromStopScreenCapture(sourceType);
     const jsonParams = {
-      type: type,
+      sourceType: sourceType,
       toJSON: () => {
         return {
-          type: type,
+          sourceType: sourceType,
         };
       },
     };
@@ -5103,7 +5106,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromStopScreenCapture(
-    type: VideoSourceType = VideoSourceType.VideoSourceScreenPrimary
+    sourceType: VideoSourceType = VideoSourceType.VideoSourceScreenPrimary
   ): string {
     return 'RtcEngine_stopScreenCapture';
   }

@@ -4834,7 +4834,7 @@ export abstract class IRtcEngine {
    * @ignore
    */
   abstract startScreenCaptureDesktop(
-    type: VideoSourceType,
+    sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
   ): number;
 
@@ -4866,12 +4866,15 @@ export abstract class IRtcEngine {
   abstract setScreenCaptureScenario(screenScenario: ScreenScenarioType): number;
 
   /**
-   * Stops screen sharing.
+   * Stops the local video preview.
+   * After calling startPreview to start the preview, if you want to close the local video preview, call this method.Call this method before joining a channel or after leaving a channel.
+   *
+   * @param sourceType The type of the video frame, see VideoSourceType .
    *
    * @returns
-   * 0: Success.< 0: Failure.
+   * < 0: Failure.
    */
-  abstract stopScreenCapture(type?: VideoSourceType): number;
+  abstract stopScreenCapture(sourceType?: VideoSourceType): number;
 
   /**
    * Retrieves the call ID.
