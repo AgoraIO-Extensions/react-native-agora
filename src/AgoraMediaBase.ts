@@ -986,7 +986,10 @@ export interface IVideoFrameObserver {
    * @returns
    * When the video processing mode is ProcessModeReadOnly:true: Reserved for future use.false: Reserved for future use.When the video processing mode is ProcessModeReadWrite:true: Sets the SDK to receive the video frame.false: Sets the SDK to discard the video frame.
    */
-  onCaptureVideoFrame?(type: VideoSourceType, videoFrame: VideoFrame): boolean;
+  onCaptureVideoFrame?(
+    sourceType: VideoSourceType,
+    videoFrame: VideoFrame
+  ): boolean;
 
   /**
    * Occurs each time the SDK receives a video frame before encoding.
@@ -1005,7 +1008,7 @@ export interface IVideoFrameObserver {
    *  false: Sets the SDK to discard the video frame.
    */
   onPreEncodeVideoFrame?(
-    type: VideoSourceType,
+    sourceType: VideoSourceType,
     videoFrame: VideoFrame
   ): boolean;
 

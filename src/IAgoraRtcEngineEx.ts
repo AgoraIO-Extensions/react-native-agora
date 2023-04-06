@@ -702,16 +702,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   abstract getUserInfoByUidEx(uid: number, connection: RtcConnection): UserInfo;
 
   /**
-   * @ignore
-   */
-  abstract setVideoProfileEx(
-    width: number,
-    height: number,
-    frameRate: number,
-    bitrate: number
-  ): number;
-
-  /**
    * Enables or disables dual-stream mode on the sender side.
    * After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.
    *  You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:

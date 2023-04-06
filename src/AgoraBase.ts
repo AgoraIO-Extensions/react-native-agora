@@ -682,7 +682,7 @@ export enum FrameWidth {
   /**
    * @ignore
    */
-  FrameWidth640 = 640,
+  FrameWidth960 = 960,
 }
 
 /**
@@ -692,7 +692,7 @@ export enum FrameHeight {
   /**
    * @ignore
    */
-  FrameHeight360 = 360,
+  FrameHeight540 = 540,
 }
 
 /**
@@ -786,19 +786,19 @@ export class VideoDimensions {
 /**
  * @ignore
  */
-export enum ScreenCaptureCapabilityLevel {
+export enum ScreenCaptureFramerateCapability {
   /**
    * @ignore
    */
-  ScreenCaptureCapabilityLevel15Fps = 0,
+  ScreenCaptureFramerateCapability15Fps = 0,
   /**
    * @ignore
    */
-  ScreenCaptureCapabilityLevel30Fps = 1,
+  ScreenCaptureFramerateCapability30Fps = 1,
   /**
    * @ignore
    */
-  ScreenCaptureCapabilityLevel60Fps = 2,
+  ScreenCaptureFramerateCapability60Fps = 2,
 }
 
 /**
@@ -4555,6 +4555,20 @@ export class VideoRenderingTracingInfo {
    * @ignore
    */
   remoteJoined2PacketReceived?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum ConfigFetchType {
+  /**
+   * @ignore
+   */
+  ConfigFetchTypeInitialize = 1,
+  /**
+   * @ignore
+   */
+  ConfigFetchTypeJoinChannel = 2,
 }
 
 /**
