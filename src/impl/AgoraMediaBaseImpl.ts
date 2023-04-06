@@ -125,13 +125,19 @@ export function processIVideoFrameObserver(
   switch (event) {
     case 'onCaptureVideoFrame':
       if (handler.onCaptureVideoFrame !== undefined) {
-        handler.onCaptureVideoFrame(jsonParams.type, jsonParams.videoFrame);
+        handler.onCaptureVideoFrame(
+          jsonParams.sourceType,
+          jsonParams.videoFrame
+        );
       }
       break;
 
     case 'onPreEncodeVideoFrame':
       if (handler.onPreEncodeVideoFrame !== undefined) {
-        handler.onPreEncodeVideoFrame(jsonParams.type, jsonParams.videoFrame);
+        handler.onPreEncodeVideoFrame(
+          jsonParams.sourceType,
+          jsonParams.videoFrame
+        );
       }
       break;
 

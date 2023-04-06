@@ -555,6 +555,10 @@ export class RemoteVideoStats {
    */
   delay?: number;
   /**
+   * @ignore
+   */
+  e2eDelay?: number;
+  /**
    * The width (pixels) of the video.
    */
   width?: number;
@@ -990,6 +994,10 @@ export class ScreenCaptureSourceInfo {
    * (For Windows only) Whether the window is minimized:true: The window is minimized.false: The window is not minimized.
    */
   minimizeWindow?: boolean;
+  /**
+   * @ignore
+   */
+  sourceDisplayId?: any;
 }
 
 /**
@@ -4983,14 +4991,20 @@ export abstract class IRtcEngine {
    * @ignore
    */
   abstract startCameraCapture(
-    type: VideoSourceType,
+    sourceType: VideoSourceType,
     config: CameraCapturerConfiguration
   ): number;
 
   /**
-   * @ignore
+   * Stops the local video preview.
+   * After calling startPreview to start the preview, if you want to close the local video preview, call this method.Call this method before joining a channel or after leaving a channel.
+   *
+   * @param sourceType The type of the video frame, see VideoSourceType .
+   *
+   * @returns
+   * < 0: Failure.
    */
-  abstract stopCameraCapture(type: VideoSourceType): number;
+  abstract stopCameraCapture(sourceType: VideoSourceType): number;
 
   /**
    * Sets the rotation angle of the captured video.
