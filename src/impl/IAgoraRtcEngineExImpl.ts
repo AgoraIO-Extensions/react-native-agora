@@ -1352,45 +1352,6 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_getUserInfoByUidEx';
   }
 
-  setVideoProfileEx(
-    width: number,
-    height: number,
-    frameRate: number,
-    bitrate: number
-  ): number {
-    const apiType = this.getApiTypeFromSetVideoProfileEx(
-      width,
-      height,
-      frameRate,
-      bitrate
-    );
-    const jsonParams = {
-      width: width,
-      height: height,
-      frameRate: frameRate,
-      bitrate: bitrate,
-      toJSON: () => {
-        return {
-          width: width,
-          height: height,
-          frameRate: frameRate,
-          bitrate: bitrate,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetVideoProfileEx(
-    width: number,
-    height: number,
-    frameRate: number,
-    bitrate: number
-  ): string {
-    return 'RtcEngineEx_setVideoProfileEx';
-  }
-
   enableDualStreamModeEx(
     enabled: boolean,
     streamConfig: SimulcastStreamConfig,

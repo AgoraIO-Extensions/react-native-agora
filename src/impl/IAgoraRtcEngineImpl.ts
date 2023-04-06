@@ -5311,16 +5311,16 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   startCameraCapture(
-    type: VideoSourceType,
+    sourceType: VideoSourceType,
     config: CameraCapturerConfiguration
   ): number {
-    const apiType = this.getApiTypeFromStartCameraCapture(type, config);
+    const apiType = this.getApiTypeFromStartCameraCapture(sourceType, config);
     const jsonParams = {
-      type: type,
+      sourceType: sourceType,
       config: config,
       toJSON: () => {
         return {
-          type: type,
+          sourceType: sourceType,
           config: config,
         };
       },
@@ -5330,19 +5330,19 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromStartCameraCapture(
-    type: VideoSourceType,
+    sourceType: VideoSourceType,
     config: CameraCapturerConfiguration
   ): string {
     return 'RtcEngine_startCameraCapture';
   }
 
-  stopCameraCapture(type: VideoSourceType): number {
-    const apiType = this.getApiTypeFromStopCameraCapture(type);
+  stopCameraCapture(sourceType: VideoSourceType): number {
+    const apiType = this.getApiTypeFromStopCameraCapture(sourceType);
     const jsonParams = {
-      type: type,
+      sourceType: sourceType,
       toJSON: () => {
         return {
-          type: type,
+          sourceType: sourceType,
         };
       },
     };
@@ -5350,7 +5350,9 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromStopCameraCapture(type: VideoSourceType): string {
+  protected getApiTypeFromStopCameraCapture(
+    sourceType: VideoSourceType
+  ): string {
     return 'RtcEngine_stopCameraCapture';
   }
 
