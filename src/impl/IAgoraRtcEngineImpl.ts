@@ -1165,7 +1165,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     const apiType = this.getApiTypeFromQueryCodecCapability();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    const codecInfo = jsonResults.codec_info;
+    const codecInfo = jsonResults.codecInfo;
     const size = jsonResults.size;
     return {
       codecInfo,
