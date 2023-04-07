@@ -89,11 +89,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The value of a member in the ChannelMediaOptions structure is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -8: The internal state of the IRtcEngine object is wrong. The possible reason is that the user is not in the channel. Agora recomments that you can use the onConnectionStateChanged callback to determine whether the user exists in the channel. If you receive the ConnectionStateDisconnected (1) or ConnectionStateFailed (5) state, the user is not in the channel. You need to call joinChannel to join a channel before calling this method.
+   * 0: Success.< 0: Failure.-2: The value of a member in the ChannelMediaOptions structure is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.-7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.-8: The internal state of the IRtcEngine object is wrong. The possible reason is that the user is not in the channel. Agora recomments that you can use the onConnectionStateChanged callback to determine whether the user exists in the channel. If you receive the ConnectionStateDisconnected (1) or ConnectionStateFailed (5) state, the user is not in the channel. You need to call joinChannel to join a channel before calling this method.
    */
   abstract updateChannelMediaOptionsEx(
     options: ChannelMediaOptions,
@@ -101,14 +97,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts recording the local audio and video.
-   * After successfully getting the IMediaRecorder object by calling getMediaRecorder , you can call this method to enable the recoridng of the local audio and video.This method can record the audio captured by the local microphone and encoded in AAC format, and the video captured by the local camera and encoded in H.264 format. The SDK can generate a recording file only when it detects audio and video streams; when there are no audio and video streams to be recorded or the audio and video streams are interrupted for more than five seconds, the SDK stops the recording and triggers the onRecorderStateChanged(RecorderStateError, RecorderErrorNoStream) callback.Once the recording is started, if the video resolution is changed, the SDK stops the recording; if the sampling rate and audio channel changes, the SDK continues recording and generates audio files respectively.Call this method after joining a channel.
+   * Creates a data stream.
+   * Creates a data stream. Each user can create up to five data streams in a single channel.Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
    *
-   * @param config The recording configuration. See MediaRecorderConfiguration .
+   * @param config The configurations for the data stream. See DataStreamConfig .
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.< 0: Failure.-2: The parameter is invalid. Ensure the following:The specified path of the recording file exists and is writable.The specified format of the recording file is supported.The maximum recording duration is correctly set.-4: IRtcEngine does not support the request. The recording is ongoing or the recording stops because an error occurs.-7: The method is called before IRtcEngine is initialized.
+   * ID of the created data stream, if the method call succeeds.< 0: Failure.
    */
   abstract setVideoEncoderConfigurationEx(
     config: VideoEncoderConfiguration,
@@ -173,14 +169,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success. < 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract muteLocalAudioStreamEx(
     mute: boolean,
@@ -188,14 +184,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success. < 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract muteLocalVideoStreamEx(
     mute: boolean,
@@ -203,14 +199,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success. < 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract muteAllRemoteAudioStreamsEx(
     mute: boolean,
@@ -218,14 +214,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success. < 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract muteAllRemoteVideoStreamsEx(
     mute: boolean,
@@ -233,15 +229,11 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the blocklist of subscriptions for video streams.
-   * You can call this method to specify the video streams of a user that you do not want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+   * Set the allowlist of subscriptions for video streams.
+   * You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   *  You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
    *
-   * @param uidList The user ID list of users that you do not want to subscribe to.
-   *  If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   *
+   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection .
    *
@@ -255,15 +247,11 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the blocklist of subscriptions for video streams.
-   * You can call this method to specify the video streams of a user that you do not want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+   * Set the allowlist of subscriptions for video streams.
+   * You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   *  You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
    *
-   * @param uidList The user ID list of users that you do not want to subscribe to.
-   *  If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   *
+   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection .
    *
@@ -277,15 +265,11 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the blocklist of subscriptions for video streams.
-   * You can call this method to specify the video streams of a user that you do not want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+   * Set the allowlist of subscriptions for video streams.
+   * You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   *  You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
    *
-   * @param uidList The user ID list of users that you do not want to subscribe to.
-   *  If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   *
+   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection .
    *
@@ -299,15 +283,11 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Set the blocklist of subscriptions for video streams.
-   * You can call this method to specify the video streams of a user that you do not want to subscribe to. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
+   * Set the allowlist of subscriptions for video streams.
+   * You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   *  You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
    *
-   * @param uidList The user ID list of users that you do not want to subscribe to.
-   *  If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   *
+   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection .
    *
@@ -393,14 +373,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success. < 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract muteRecordingSignalEx(
     mute: boolean,
@@ -445,14 +425,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts recording the local audio and video.
-   * After successfully getting the IMediaRecorder object by calling getMediaRecorder , you can call this method to enable the recoridng of the local audio and video.This method can record the audio captured by the local microphone and encoded in AAC format, and the video captured by the local camera and encoded in H.264 format. The SDK can generate a recording file only when it detects audio and video streams; when there are no audio and video streams to be recorded or the audio and video streams are interrupted for more than five seconds, the SDK stops the recording and triggers the onRecorderStateChanged(RecorderStateError, RecorderErrorNoStream) callback.Once the recording is started, if the video resolution is changed, the SDK stops the recording; if the sampling rate and audio channel changes, the SDK continues recording and generates audio files respectively.Call this method after joining a channel.
+   * Creates a data stream.
+   * Creates a data stream. Each user can create up to five data streams in a single channel.Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
    *
-   * @param config The recording configuration. See MediaRecorderConfiguration .
+   * @param config The configurations for the data stream. See DataStreamConfig .
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.< 0: Failure.-2: The parameter is invalid. Ensure the following:The specified path of the recording file exists and is writable.The specified format of the recording file is supported.The maximum recording duration is correctly set.-4: IRtcEngine does not support the request. The recording is ongoing or the recording stops because an error occurs.-7: The method is called before IRtcEngine is initialized.
+   * ID of the created data stream, if the method call succeeds.< 0: Failure.
    */
   abstract createDataStreamEx(
     config: DataStreamConfig,
@@ -589,6 +569,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * Agora recommends that you use the server-side Media Push function. After you start pushing media streams to CDN with transcoding, you can dynamically update the transcoding configuration according to the scenario. The SDK triggers the onTranscodingUpdated callback after the transcoding configuration is updated.
    *
    * @param transcoding The transcoding configuration for Media Push. See LiveTranscoding .
+   *
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
@@ -703,16 +684,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
 
   /**
    * Enables or disables dual-stream mode on the sender side.
-   * After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.
-   *  You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:
-   *  High-quality video stream: High bitrate, high resolution.
-   *  Low-quality video stream: Low bitrate, low resolution. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
+   * After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:High-quality video stream: High bitrate, high resolution.Low-quality video stream: Low bitrate, low resolution.This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
    *
-   * @param enabled Whether to enable dual-stream mode:
-   *  true: Enable dual-stream mode.
-   *  false: (Default) Disable dual-stream mode.
+   * @param enabled Whether to enable dual-stream mode:true: Enable dual-stream mode.false: (Default) Disable dual-stream mode.
    * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig .
-   *
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
@@ -754,11 +729,16 @@ export abstract class IRtcEngineEx extends IRtcEngine {
 
   /**
    * Takes a snapshot of a video stream.
-   * This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.The SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.Call this method after the joinChannelEx method.This method takes a snapshot of the published video stream specified in ChannelMediaOptions .If the user's video has been preprocessed, for example, watermarked or beautified, the resulting snapshot includes the pre-processing effect.
+   * This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+   *  The SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.Call this method after the joinChannelEx method.This method takes a snapshot of the published video stream specified in ChannelMediaOptions .If the user's video has been preprocessed, for example, watermarked or beautified, the resulting snapshot includes the pre-processing effect.
    *
    * @param connection The connection information. See RtcConnection .
    * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
-   * @param filePath The local path (including filename extensions) of the snapshot. For example:iOS: /App Sandbox/Library/Caches/example.jpgAndroid: /storage/emulated/0/Android/data/<package name>/files/example.jpgEnsure that the path you specify exists and is writable.
+   * @param filePath The local path (including filename extensions) of the snapshot. For example:
+   *  iOS: /App Sandbox/Library/Caches/example.jpg
+   *  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg
+   *  Ensure that the path you specify exists and is writable.
+   *
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -770,10 +750,13 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Occurs when the token expires.
-   * When the token expires during a call, the SDK triggers this callback to remind the app to renew the token.Once you receive this callback, generate a new token on your app server, and call joinChannel to rejoin the channel.
+   * Stops recording the local audio and video.
+   * After calling startRecording , if you want to stop the recording, you must call this method; otherwise, the generated recording files may not be playable.
    *
    * @param connection The connection information. See RtcConnection .
+   *
+   * @returns
+   * 0: Success.< 0: Failure.-7: The method is called before IRtcEngine is initialized.
    */
   abstract startMediaRenderingTracingEx(connection: RtcConnection): number;
 }

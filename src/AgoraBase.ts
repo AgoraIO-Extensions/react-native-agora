@@ -2241,11 +2241,11 @@ export enum RemoteVideoDownscaleLevel {
  */
 export class AudioVolumeInfo {
   /**
-   * The user ID.In the local user's callback, uid = 0.In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is one of the three highest.
+   * The user ID.In the local user's callback, uid is 0.In the remote users' callback, uid is the user ID of a remote user whose instantaneous volume is the highest.
    */
   uid?: number;
   /**
-   * The volume of the user. The value ranges between 0 (lowest volume) and 255 (highest volume).
+   * The volume of the user. The value ranges between 0 (the lowest volume) and 255 (the highest volume). If the local user enables audio capturing and calls muteLocalAudioStream and set it as true to mute, the value of volume indicates the volume of locally captured audio signal.
    */
   volume?: number;
   /**
@@ -2390,7 +2390,7 @@ export enum RtmpStreamPublishState {
    */
   RtmpStreamPublishStateIdle = 0,
   /**
-   * 1: The SDK is connecting to Agora's streaming server and the CDN server.
+   * 1: The streaming server and CDN server are being connected.
    */
   RtmpStreamPublishStateConnecting = 1,
   /**
@@ -2398,16 +2398,15 @@ export enum RtmpStreamPublishState {
    */
   RtmpStreamPublishStateRunning = 2,
   /**
-   * 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.If the SDK successfully resumes the streaming, RtmpStreamPublishStateRunning(2) returns.
-   * If the streaming does not resume within 60 seconds or server errors occur, RtmpStreamPublishStateFailure(4) returns. You can also reconnect to the server by calling the stopRtmpStream method.
+   * 3: The RTMP or RTMPS streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP or RTMPS streaming and returns this state.If the SDK successfully resumes the streaming, RtmpStreamPublishStateRunning(2) returns.If the streaming does not resume within 60 seconds or server errors occur, RtmpStreamPublishStateFailure(4) returns. If you feel that 60 seconds is too long, you can also actively try to reconnect.
    */
   RtmpStreamPublishStateRecovering = 3,
   /**
-   * 4: The RTMP or RTMPS streaming fails. See the errCode parameter for the detailed error information.
+   * 4: The RTMP or RTMPS streaming fails. After a failure, you can troubleshoot the cause of the error through the returned error code.
    */
   RtmpStreamPublishStateFailure = 4,
   /**
-   * 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call stopRtmpStream to stop the streaming normally, the SDK reports the streaming state as RtmpStreamPublishStateDisconnecting and RtmpStreamPublishStateIdle in sequence.
+   * 5: The SDK is disconnecting from the Agora streaming server and CDN. When you call stopRtmpStream to stop the Media Push normally, the SDK reports the Media Push state as RtmpStreamPublishStateDisconnecting and RtmpStreamPublishStateIdle in sequence.
    */
   RtmpStreamPublishStateDisconnecting = 5,
 }
@@ -2417,7 +2416,7 @@ export enum RtmpStreamPublishState {
  */
 export enum RtmpStreamPublishErrorType {
   /**
-   * 0: The RTMP or RTMPS streaming publishes successfully.
+   * 0: The RTMP or RTMPS streaming has not started or has ended.
    */
   RtmpStreamPublishErrorOk = 0,
   /**
@@ -2429,11 +2428,11 @@ export enum RtmpStreamPublishErrorType {
    */
   RtmpStreamPublishErrorEncryptedStreamNotAllowed = 2,
   /**
-   * 3: Timeout for the RTMP or RTMPS streaming. Try to publish the streaming again.
+   * 3: Timeout for the RTMP or RTMPS streaming.
    */
   RtmpStreamPublishErrorConnectionTimeout = 3,
   /**
-   * 4: An error occurs in Agora's streaming server. Try to publish the streaming again.
+   * 4: An error occurs in Agora's streaming server.
    */
   RtmpStreamPublishErrorInternalServerError = 4,
   /**
@@ -2441,7 +2440,7 @@ export enum RtmpStreamPublishErrorType {
    */
   RtmpStreamPublishErrorRtmpServerError = 5,
   /**
-   * 6: The RTMP or RTMPS streaming publishing requests are too frequent.
+   * 6: The RTMP or RTMPS streaming publishes too frequently.
    */
   RtmpStreamPublishErrorTooOften = 6,
   /**
@@ -2461,11 +2460,11 @@ export enum RtmpStreamPublishErrorType {
    */
   RtmpStreamPublishErrorFormatNotSupported = 10,
   /**
-   * 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your app code logic.
+   * 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
    */
   RtmpStreamPublishErrorNotBroadcaster = 11,
   /**
-   * 13: The updateRtmpTranscoding or setLiveTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
+   * 13: The updateRtmpTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
    */
   RtmpStreamPublishErrorTranscodingNoMixStream = 13,
   /**
@@ -2477,25 +2476,25 @@ export enum RtmpStreamPublishErrorType {
    */
   RtmpStreamPublishErrorInvalidAppid = 15,
   /**
-   * @ignore
+   * 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
    */
   RtmpStreamPublishErrorInvalidPrivilege = 16,
   /**
-   * 100: The streaming has been stopped normally. After you call stopRtmpStream to stop streaming, the SDK returns this value.
+   * 100: The streaming has been stopped normally. After you stop the media push, the SDK returns this value.
    */
   RtmpStreamUnpublishErrorOk = 100,
 }
 
 /**
- * Events during the media push.
+ * Events during the Media Push.
  */
 export enum RtmpStreamingEvent {
   /**
-   * 1: An error occurs when you add a background image or a watermark image in the media push.
+   * 1: An error occurs when you add a background image or a watermark image in the Media Push.
    */
   RtmpStreamingEventFailedLoadImage = 1,
   /**
-   * 2: The streaming URL is already being used for CDN live streaming. If you want to start new streaming, use a new streaming URL.
+   * 2: The streaming URL is already being used for Media Push. If you want to start new streaming, use a new streaming URL.
    */
   RtmpStreamingEventUrlAlreadyInUse = 2,
   /**
@@ -3157,7 +3156,7 @@ export class VideoCanvas {
    */
   sourceType?: VideoSourceType;
   /**
-   * The ID of the media player. You can get the Device ID by calling getMediaPlayerId .
+   * The ID of the media player. You can get the media player ID by calling getMediaPlayerId .
    */
   mediaPlayerId?: number;
   /**
@@ -3847,7 +3846,9 @@ export interface IAudioEncodedFrameObserver {
    * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
    *
    * @param samplesPerSec Recording sample rate (Hz).
-   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+   * @param channels The number of channels.
+   *  1: Mono.
+   *  2: Stereo. If the channel uses stereo, the data is interleaved.
    * @param samplesPerChannel The number of samples per channel in the audio frame.
    * @param frameBuffer The audio buffer.
    * @param length The data length (byte).

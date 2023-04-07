@@ -163,13 +163,7 @@ export abstract class IMediaPlayer {
   abstract setPlaybackSpeed(speed: number): number;
 
   /**
-   * Gets the detailed information of the media stream.
-   * Call this method after calling getStreamCount .
-   *
-   * @param index The index of the media stream.
-   *
-   * @returns
-   * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
+   * @ignore
    */
   abstract selectAudioTrack(index: number): number;
 
@@ -203,13 +197,7 @@ export abstract class IMediaPlayer {
   abstract takeScreenshot(filename: string): number;
 
   /**
-   * Gets the detailed information of the media stream.
-   * Call this method after calling getStreamCount .
-   *
-   * @param index The index of the media stream.
-   *
-   * @returns
-   * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
+   * @ignore
    */
   abstract selectInternalSubtitle(index: number): number;
 
@@ -338,9 +326,9 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
-   * Unregisters a receiver object for the encoded video image.
+   * Unregisters the encoded audio frame observer.
    *
-   * @param observer The video observer, reporting the reception of each video frame. See IVideoEncodedFrameObserver .
+   * @param observer The encoded audio observer. See IAudioEncodedFrameObserver .
    *
    * @returns
    * 0: Success.< 0: Failure.
