@@ -283,10 +283,13 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
   abstract clearRemotePositions(): number;
 
   /**
-   * Occurs when the token expires.
-   * When the token expires during a call, the SDK triggers this callback to remind the app to renew the token.Once you receive this callback, generate a new token on your app server, and call joinChannel to rejoin the channel.
+   * Stops recording the local audio and video.
+   * After calling startRecording , if you want to stop the recording, you must call this method; otherwise, the generated recording files may not be playable.
    *
    * @param connection The connection information. See RtcConnection .
+   *
+   * @returns
+   * 0: Success.< 0: Failure.-7: The method is called before IRtcEngine is initialized.
    */
   abstract clearRemotePositionsEx(connection: RtcConnection): number;
 
@@ -294,8 +297,16 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
    * Sets the sound attenuation effect for the specified user.
    *
    * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   * @param attenuation For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
-   * @param forceSet Whether to force the user's sound attenuation effect:true: Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation of the SpatialAudioZone does not take effect for the user.If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method.false: Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
+   * @param attenuation For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:
+   *  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
+   *  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
+   *  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.
+   *  (0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
+   *
+   * @param forceSet Whether to force the user's sound attenuation effect:true: Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation of the SpatialAudioZone does not take effect for the user.
+   *  If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.
+   *  If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method.
+   *  false: Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
    *
    * @returns
    * 0: Success.< 0: Failure.
