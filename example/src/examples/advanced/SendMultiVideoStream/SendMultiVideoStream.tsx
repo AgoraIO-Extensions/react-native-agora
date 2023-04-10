@@ -285,8 +285,11 @@ export default class SendMultiVideoStream
     return true;
   }
 
-  onCaptureVideoFrame(type: VideoSourceType, videoFrame: VideoFrame): boolean {
-    this.info('onCaptureVideoFrame', type, videoFrame);
+  onCaptureVideoFrame(
+    sourceType: VideoSourceType,
+    videoFrame: VideoFrame
+  ): boolean {
+    this.info('onCaptureVideoFrame', sourceType, videoFrame);
     return true;
   }
 

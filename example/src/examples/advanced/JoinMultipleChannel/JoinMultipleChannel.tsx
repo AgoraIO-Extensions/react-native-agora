@@ -248,12 +248,15 @@ export default class JoinMultipleChannel
       'elapsed',
       elapsed
     );
-    const { channelId, channelId2 } = this.state;
-    if (connection.channelId === channelId) {
+    const { channelId, channelId2, uid, uid2 } = this.state;
+    if (connection.channelId === channelId && connection.localUid === uid) {
       this.setState({
         joinChannelSuccess: true,
       });
-    } else if (connection.channelId === channelId2) {
+    } else if (
+      connection.channelId === channelId2 &&
+      connection.localUid === uid2
+    ) {
       this.setState({
         joinChannelSuccess2: true,
       });
@@ -262,13 +265,16 @@ export default class JoinMultipleChannel
 
   onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
     this.info('onLeaveChannel', 'connection', connection, 'stats', stats);
-    const { channelId, channelId2 } = this.state;
-    if (connection.channelId === channelId) {
+    const { channelId, channelId2, uid, uid2 } = this.state;
+    if (connection.channelId === channelId && connection.localUid === uid) {
       this.setState({
         joinChannelSuccess: false,
         remoteUsers: [],
       });
-    } else if (connection.channelId === channelId2) {
+    } else if (
+      connection.channelId === channelId2 &&
+      connection.localUid === uid2
+    ) {
       this.setState({
         joinChannelSuccess2: false,
         remoteUsers2: [],
@@ -326,19 +332,26 @@ export default class JoinMultipleChannel
       'elapsed',
       elapsed
     );
-    const { channelId, channelId2, remoteUsers, remoteUsers2 } = this.state;
+    const { channelId, channelId2, uid, uid2, remoteUsers, remoteUsers2 } =
+      this.state;
     if (state === RemoteVideoState.RemoteVideoStateStarting) {
-      if (connection.channelId === channelId) {
+      if (connection.channelId === channelId && connection.localUid === uid) {
         this.setState({ remoteUsers: [...remoteUsers, remoteUid] });
-      } else if (connection.channelId === channelId2) {
+      } else if (
+        connection.channelId === channelId2 &&
+        connection.localUid === uid2
+      ) {
         this.setState({ remoteUsers2: [...remoteUsers2, remoteUid] });
       }
     } else if (state === RemoteVideoState.RemoteVideoStateStopped) {
-      if (connection.channelId === channelId) {
+      if (connection.channelId === channelId && connection.localUid === uid) {
         this.setState({
           remoteUsers: remoteUsers.filter((value) => value !== remoteUid),
         });
-      } else if (connection.channelId === channelId2) {
+      } else if (
+        connection.channelId === channelId2 &&
+        connection.localUid === uid2
+      ) {
         this.setState({
           remoteUsers2: remoteUsers2.filter((value) => value !== remoteUid),
         });
