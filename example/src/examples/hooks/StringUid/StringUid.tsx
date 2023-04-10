@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -35,9 +35,6 @@ const styles = StyleSheet.create({
 });
 
 export default function StringUid() {
-  /**
-   * Step 1: initRtcEngine
-   */
   const [enableAudio] = useState<boolean>(true);
   const [enableVideo] = useState<boolean>(false);
   const [enablePreview] = useState<boolean>(false);
@@ -47,6 +44,9 @@ export default function StringUid() {
   const [channelId, setChannelId] = useState<string>(Config.channelId);
   const [joinChannelSuccess, setJoinChannelSuccess] = useState<boolean>(false);
 
+  /**
+   * Step 1: initRtcEngine
+   */
   const { token, initRtcEngine } = useInitRtcEngine({
     enableAudio,
     enableVideo,
@@ -102,6 +102,7 @@ export default function StringUid() {
     engine.current.addListener('onError', (err: ErrorCodeType, msg: string) => {
       log.info('onError', 'err', err, 'msg', msg);
     });
+
     engine.current.addListener(
       'onJoinChannelSuccess',
       (connection: RtcConnection, elapsed: number) => {
@@ -164,11 +165,17 @@ export default function StringUid() {
         log.info('LocalUserRegistered', 'uid', uid, 'userAccount', userAccount);
       }
     );
+
     const engineCopy = engine.current;
     return () => {
       engineCopy.removeAllListeners();
     };
   }, [initRtcEngine]);
+
+  const onChannelIdChange = useCallback(
+    (text: string) => setChannelId(text),
+    []
+  );
 
   return (
     <KeyboardAvoidingView
@@ -177,9 +184,7 @@ export default function StringUid() {
     >
       <AgoraView style={AgoraStyle.fullWidth}>
         <AgoraTextInput
-          onChangeText={(text) => {
-            setChannelId(text);
-          }}
+          onChangeText={onChannelIdChange}
           placeholder={`channelId`}
           value={channelId}
         />

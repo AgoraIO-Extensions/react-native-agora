@@ -234,6 +234,7 @@ export default function VirtualBackground() {
       engineCopy.removeAllListeners();
     };
   }, [initRtcEngine]);
+
   const onChannelIdChange = useCallback(
     (text: string) => setChannelId(text),
     []
