@@ -1,5 +1,5 @@
 import JoinChannelVideo from './JoinChannelVideo/JoinChannelVideo';
-import JoinChannelAudio from './joinChannelAudio/JoinChannelAudio';
+import JoinChannelAudio from './JoinChannelAudio/JoinChannelAudio';
 import StringUid from './StringUid/StringUid';
 import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
 import VirtualBackground from './VirtualBackground/VirtualBackground';

@@ -36,9 +36,6 @@ const styles = StyleSheet.create({
 });
 
 export default function JoinMultipleChannel() {
-  /**
-   * Step 1: initRtcEngine
-   */
   const [enableAudio] = useState<boolean>(false);
   const [enableVideo] = useState<boolean>(true);
   const [enablePreview] = useState<boolean>(true);
@@ -54,6 +51,9 @@ export default function JoinMultipleChannel() {
     useState<boolean>(false);
   const [remoteUsers2, setRemoteUsers2] = useState<number[]>([]);
 
+  /**
+   * Step 1: initRtcEngine
+   */
   const { token, startPreview, initRtcEngine } = useInitRtcEngine({
     enableAudio,
     enableVideo,
@@ -292,6 +292,7 @@ export default function JoinMultipleChannel() {
         }
       }
     );
+
     const engineCopy = engine.current;
     return () => {
       engineCopy.removeAllListeners();
