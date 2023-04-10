@@ -68,7 +68,8 @@ export default class DirectCdnStreaming
       frameRate: 15,
       bitrate: 0,
       minBitrate: -1,
-      orientationMode: OrientationMode.OrientationModeAdaptive,
+      // ⚠️ can not set OrientationMode.OrientationModeAdaptive
+      orientationMode: OrientationMode.OrientationModeFixedLandscape,
       degradationPreference: DegradationPreference.MaintainQuality,
       mirrorMode: VideoMirrorModeType.VideoMirrorModeDisabled,
       startDirectCdnStreaming: false,
@@ -146,6 +147,12 @@ export default class DirectCdnStreaming
       degradationPreference,
       mirrorMode,
     } = this.state;
+    if (orientationMode === OrientationMode.OrientationModeAdaptive) {
+      this.error(
+        'orientationMode is invalid, should not be OrientationMode.OrientationModeAdaptive'
+      );
+      return;
+    }
     this.engine?.setDirectCdnStreamingVideoConfiguration({
       codecType,
       dimensions: {

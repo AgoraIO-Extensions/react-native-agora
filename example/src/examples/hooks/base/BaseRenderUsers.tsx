@@ -11,22 +11,21 @@ export interface BaseRenderUsersProps {
   remoteUsers: number[];
 }
 
-const renderVideo = (uid: number): ReactNode => {
-  return (
-    <RtcSurfaceView
-      style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-      zOrderMediaOverlay={uid !== 0}
-      canvas={{ uid }}
-    />
-  );
-};
-
 function BaseRenderUsers({
   enableVideo,
   startPreview,
   joinChannelSuccess,
   remoteUsers,
 }: BaseRenderUsersProps) {
+  const renderVideo = (uid: number): ReactNode => {
+    return (
+      <RtcSurfaceView
+        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={uid !== 0}
+        canvas={{ uid }}
+      />
+    );
+  };
   return (
     <>
       {enableVideo ? (
