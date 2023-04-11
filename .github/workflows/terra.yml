@@ -42,5 +42,5 @@ jobs:
             terra-update
           pull-request-title: |
             [AUTO] Generate code by terra
-          add-paths: ts
+          add-paths: lib/src
           github-token: ${{ secrets.GH_TOKEN }}
