@@ -7,12 +7,39 @@ jobs:
   generate-codes:
     runs-on: macos-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: AgoraIO-Extensions/Agora-Flutter-SDK
+          ref: main
+
       - name: Generate codes
         uses: AgoraIO-Extensions/actions/.github/actions/terra@main
         with:
-          target-repo: AgoraIO-Extensions/Agora-Flutter-SDK
-          target-branch: main
+          target-path: ${{ github.workspace }}
           config: tool/terra/terra_config_main.yaml
           output-dir: lib/src
           export-file-path: lib/agora_rtc_engine.dart
+          github-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Generate comments
+        uses: AgoraIO-Extensions/actions/.github/actions/doc@main
+        with:
+          target-path: ${{ github.workspace }}
+          config: fmt_config/fmt_dart.yaml
+          language: dart
+          base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/main/flutter_ng_json_template_en.json
+          export-file-path: lib/agora_rtc_engine.dart
+          github-token: ${{ inputs.github-token }}
+
+      - name: Create pull request
+        uses: AgoraIO-Extensions/actions/.github/actions/pr@main
+        with:
+          target-repo: ${{ github.workspace }}
+          target-branch: main
+          target-branch-name-surffix: |
+            terra-update
+          pull-request-title: |
+            [AUTO] Generate code by terra
+          add-paths: ts
           github-token: ${{ secrets.GH_TOKEN }}
