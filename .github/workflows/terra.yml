@@ -5,49 +5,14 @@ on:
 
 jobs:
   generate-codes:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
       - name: Generate codes
         uses: AgoraIO-Extensions/actions/.github/actions/terra@main
-        env:
-          LLVM_DOWNLOAD_URL: |
-            https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz
         with:
-          target-path: ${{ github.workspace }}
-          config: ci/config/terra_config.yaml
-          output-dir: src
-          export-file-path: src/index.ts
-          github-token: ${{ secrets.GH_TOKEN }}
-
-      - name: Format codes
-        run: |
-          rm -rf terra
-          yarn lint --fix
-
-      - name: Generate ts interface
-        run: |
-          yarn ts_interface_builder
-
-      - name: Generate comments
-        uses: ./.github/actions/doc
-        with:
-          target-path: ${{ github.workspace }}
-          github-token: ${{ secrets.GH_TOKEN }}
-
-      - name: Create pull request
-        uses: AgoraIO-Extensions/actions/.github/actions/pr@main
-        with:
-          target-repo: ${{ github.workspace }}
-          target-branch: ${{ github.ref_name }}
-          target-branch-name-surffix: |
-            terra-update
-          pull-request-title: |
-            [AUTO] Generate code by terra
-          add-paths: src
+          target-repo: AgoraIO-Extensions/Agora-Flutter-SDK
+          target-branch: main
+          config: tool/terra/terra_config_main.yaml
+          output-dir: lib/src
+          export-file-path: lib/agora_rtc_engine.dart
           github-token: ${{ secrets.GH_TOKEN }}
