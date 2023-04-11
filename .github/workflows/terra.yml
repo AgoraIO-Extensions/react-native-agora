@@ -16,6 +16,7 @@ jobs:
       - name: Generate codes
         uses: AgoraIO-Extensions/actions/.github/actions/terra@main
         with:
+          terra-ref: dev/remove-iris-doc
           target-path: ${{ github.workspace }}
           config: tool/terra/terra_config_main.yaml
           output-dir: lib/src
