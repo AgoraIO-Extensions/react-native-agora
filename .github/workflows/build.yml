@@ -28,7 +28,8 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}
+          name: AgoraRtcNgExample
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.apk
 
   build-ios:
     runs-on: macos-latest
@@ -84,7 +85,13 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}
+          name: AgoraRtcNgExample
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.app
+
+      - uses: actions/upload-artifact@v3
+          with:
+            name: AgoraRtcNgExampleSymbol
+            path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.dSYM
 
   notification:
     runs-on: ubuntu-latest
