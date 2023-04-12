@@ -89,9 +89,9 @@ jobs:
           path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.app
 
       - uses: actions/upload-artifact@v3
-          with:
-            name: AgoraRtcNgExampleSymbol
-            path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.dSYM
+        with:
+          name: AgoraRtcNgExampleSymbol
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.dSYM
 
   notification:
     runs-on: ubuntu-latest
