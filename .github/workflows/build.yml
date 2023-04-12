@@ -81,7 +81,6 @@ jobs:
           debug: true
           root-directory: example
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
-          export-method: "development"
 
       - uses: actions/upload-artifact@v3
         with:
