@@ -218,7 +218,7 @@ export const EVENT_PROCESSORS = {
       MediaPlayerInternal._source_observers.get(data.playerId),
   },
   IMediaPlayerAudioFrameObserver: {
-    suffix: 'MediaPlayer_AudioFrameObserver_',
+    suffix: 'AudioPcmFrameSink_',
     type: EVENT_TYPE.IMediaPlayer,
     func: [processIAudioPcmFrameSink],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
@@ -230,7 +230,7 @@ export const EVENT_PROCESSORS = {
       MediaPlayerInternal._audio_frame_observers.get(data.playerId),
   },
   IMediaPlayerVideoFrameObserver: {
-    suffix: 'MediaPlayer_VideoFrameObserver_',
+    suffix: 'MediaPlayerVideoFrameObserver_',
     type: EVENT_TYPE.IMediaPlayer,
     func: [processIMediaPlayerVideoFrameObserver],
     preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
