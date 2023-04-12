@@ -1,10 +1,6 @@
 import React, { memo } from 'react';
-import {
-  AgoraButton,
-  AgoraTextInput,
-  AgoraStyle,
-  AgoraView,
-} from '../../../components/ui';
+
+import { AgoraButton, AgoraTextInput } from '../../../components/ui';
 
 export interface BaseRenderChannelProps {
   channelId: string;
@@ -21,14 +17,11 @@ function BaseRenderChannel({
   joinChannelSuccess,
   onChannelIdChange,
 }: BaseRenderChannelProps) {
-  const handleChannelIdChange = (text: string) => {
-    onChannelIdChange(text);
-  };
   return (
-    <AgoraView style={AgoraStyle.fullWidth}>
+    <>
       <AgoraTextInput
         onChangeText={(text) => {
-          handleChannelIdChange(text);
+          onChannelIdChange(text);
         }}
         placeholder={`channelId`}
         value={channelId}
@@ -39,7 +32,7 @@ function BaseRenderChannel({
           joinChannelSuccess ? leaveChannel() : joinChannel();
         }}
       />
-    </AgoraView>
+    </>
   );
 }
 

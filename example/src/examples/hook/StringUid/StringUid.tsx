@@ -1,58 +1,33 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   ClientRoleType,
-  createAgoraRtcEngine,
   ErrorCodeType,
-  IRtcEngine,
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
 } from 'react-native-agora';
 
-import Config from '../../../config/agora.config';
-import {
-  AgoraButton,
-  AgoraDivider,
-  AgoraStyle,
-  AgoraText,
-  AgoraView,
-  AgoraTextInput,
-} from '../../../components/ui';
+import { AgoraButton, AgoraTextInput } from '../../../components/ui';
 import * as log from '../../../utils/log';
-import { useInitRtcEngine } from '../../../hook/useInitRtcEngine';
-
-const styles = StyleSheet.create({
-  title: {
-    marginVertical: 10,
-    fontWeight: 'bold',
-  },
-});
+import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
+import BaseRenderChannel from '../components/BaseRenderChannel';
+import { BaseComponent } from '../components/BaseComponent';
 
 export default function StringUid() {
-  const [enableAudio] = useState<boolean>(true);
-  const [enableVideo] = useState<boolean>(false);
-  const [enablePreview] = useState<boolean>(false);
-  const engine = useRef<IRtcEngine>(createAgoraRtcEngine());
+  const {
+    channelId,
+    setChannelId,
+    token,
+    joinChannelSuccess,
+    setJoinChannelSuccess,
+    engine,
+  } =
+    /**
+     * Step 1: initRtcEngine
+     */
+    useInitRtcEngine(false);
 
   const [userAccount, setUserAccount] = useState<string>('');
-  const [channelId, setChannelId] = useState<string>(Config.channelId);
-  const [joinChannelSuccess, setJoinChannelSuccess] = useState<boolean>(false);
-
-  /**
-   * Step 1: initRtcEngine
-   */
-  const { token, initRtcEngine } = useInitRtcEngine({
-    enableAudio,
-    enableVideo,
-    enablePreview,
-    engine: engine.current,
-  });
 
   /**
    * Step 2: joinChannel
@@ -170,35 +145,29 @@ export default function StringUid() {
     return () => {
       engineCopy.removeAllListeners();
     };
-  }, [initRtcEngine]);
-
-  const onChannelIdChange = useCallback(
-    (text: string) => setChannelId(text),
-    []
-  );
+  }, [engine, setJoinChannelSuccess]);
 
   return (
-    <KeyboardAvoidingView
-      style={AgoraStyle.fullSize}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <AgoraView style={AgoraStyle.fullWidth}>
-        <AgoraTextInput
-          onChangeText={onChannelIdChange}
-          placeholder={`channelId`}
-          value={channelId}
+    <BaseComponent
+      name={'StringUid'}
+      enableVideo={false}
+      renderConfiguration={renderConfiguration}
+      renderChannel={() => (
+        <BaseRenderChannel
+          channelId={channelId}
+          joinChannel={joinChannel}
+          leaveChannel={leaveChannel}
+          joinChannelSuccess={joinChannelSuccess}
+          onChannelIdChange={setChannelId}
         />
-        <AgoraButton
-          title={`${joinChannelSuccess ? 'leave' : 'join'} Channel`}
-          onPress={() => {
-            joinChannelSuccess ? leaveChannel() : joinChannel();
-          }}
-        />
-      </AgoraView>
-      <AgoraDivider />
-      <AgoraText style={styles.title}>The Configuration of StringUid</AgoraText>
-      <AgoraDivider />
-      <ScrollView style={AgoraStyle.fullSize}>
+      )}
+      renderAction={renderAction}
+    />
+  );
+
+  function renderConfiguration(): ReactNode {
+    return (
+      <>
         <AgoraTextInput
           editable={!joinChannelSuccess}
           onChangeText={(text) => {
@@ -207,18 +176,19 @@ export default function StringUid() {
           placeholder={`userAccount`}
           value={userAccount}
         />
-      </ScrollView>
-      <AgoraView style={AgoraStyle.float}>
-        {
-          <>
-            <AgoraButton
-              disabled={!joinChannelSuccess}
-              title={`get User Info By User Account`}
-              onPress={getUserInfoByUserAccount}
-            />
-          </>
-        }
-      </AgoraView>
-    </KeyboardAvoidingView>
-  );
+      </>
+    );
+  }
+
+  function renderAction(): ReactNode {
+    return (
+      <>
+        <AgoraButton
+          disabled={!joinChannelSuccess}
+          title={`get User Info By User Account`}
+          onPress={getUserInfoByUserAccount}
+        />
+      </>
+    );
+  }
 }

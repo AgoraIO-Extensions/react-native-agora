@@ -133,12 +133,12 @@ export default class MusicContentCenter
    */
   getMusicCollectionByMusicChartId = () => {
     const { musicChartId, page, pageSize } = this.state;
-    if (!musicChartId) {
+    if (musicChartId < 0) {
       this.error(`musicChartId is invalid`);
     }
 
     this.musicContentCenter?.getMusicCollectionByMusicChartId(
-      musicChartId!,
+      musicChartId,
       page,
       pageSize
     );
@@ -153,7 +153,7 @@ export default class MusicContentCenter
       this.error(`songCode is invalid`);
     }
 
-    this.musicContentCenter?.preload(songCode!);
+    this.musicContentCenter?.preload(songCode);
   };
 
   /**
@@ -175,7 +175,7 @@ export default class MusicContentCenter
     }
 
     this.createMusicPlayer();
-    this.player?.openWithSongCode(songCode!, 0);
+    this.player?.openWithSongCode(songCode, 0);
   };
 
   /**
@@ -300,7 +300,7 @@ export default class MusicContentCenter
       case MediaPlayerState.PlayerStateOpenCompleted:
         this.setState({
           open: true,
-          duration: this.player?.getDuration()!,
+          duration: this.player?.getDuration() ?? 0,
         });
         break;
       case MediaPlayerState.PlayerStatePlaying:

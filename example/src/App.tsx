@@ -20,7 +20,7 @@ import {
 
 import Basic from './examples/basic';
 import Advanced from './examples/advanced';
-import Hooks from './examples/hooks';
+import Hooks from './examples/hook';
 
 const Stack = createStackNavigator();
 

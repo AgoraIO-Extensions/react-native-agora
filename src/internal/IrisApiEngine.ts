@@ -370,21 +370,29 @@ export function callIrisApi(funcName: string, params: any): any {
         case 'MediaEngine_pushReverseAudioFrame':
         case 'MediaEngine_pushDirectAudioFrame':
           // frame.buffer
-          buffers.push(base64.fromByteArray(params.frame.buffer));
+          buffers.push(
+            base64.fromByteArray(params.frame.buffer ?? Buffer.from(''))
+          );
           break;
         case 'MediaEngine_pushVideoFrame':
           // frame.buffer
-          buffers.push(base64.fromByteArray(params.frame.buffer));
+          buffers.push(
+            base64.fromByteArray(params.frame.buffer ?? Buffer.from(''))
+          );
           // frame.eglContext
           buffers.push(base64.fromByteArray(Buffer.from('')));
           // frame.metadata_buffer
           buffers.push(base64.fromByteArray(Buffer.from('')));
           // frame.alphaBuffer
-          buffers.push(base64.fromByteArray(params.frame.alphaBuffer));
+          buffers.push(
+            base64.fromByteArray(params.frame.alphaBuffer ?? Buffer.from(''))
+          );
           break;
         case 'MediaEngine_pushEncodedVideoImage':
           // imageBuffer
-          buffers.push(base64.fromByteArray(params.imageBuffer));
+          buffers.push(
+            base64.fromByteArray(params.imageBuffer ?? Buffer.from(''))
+          );
           break;
       }
     } else if (
@@ -419,12 +427,14 @@ export function callIrisApi(funcName: string, params: any): any {
           return;
         case 'RtcEngine_sendMetaData':
           // metadata.buffer
-          buffers.push(base64.fromByteArray(params.metadata.buffer));
+          buffers.push(
+            base64.fromByteArray(params.metadata.buffer ?? Buffer.from(''))
+          );
           break;
         case 'RtcEngine_sendStreamMessage':
         case 'RtcEngine_sendStreamMessageEx':
           // data
-          buffers.push(base64.fromByteArray(params.data));
+          buffers.push(base64.fromByteArray(params.data ?? Buffer.from('')));
           break;
         case 'RtcEngine_destroyMediaPlayer':
           // @ts-ignore
