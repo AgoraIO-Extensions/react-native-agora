@@ -1,15 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
-import {
-  ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   ErrorCodeType,
   RtcConnection,
   RtcStats,
@@ -20,79 +11,54 @@ import {
   LocalAudioStreamError,
 } from 'react-native-agora';
 
-import Config from '../../../config/agora.config';
-
 import {
   AgoraButton,
   AgoraDivider,
   AgoraDropdown,
-  AgoraStyle,
   AgoraSlider,
-  AgoraText,
-  AgoraView,
-  AgoraTextInput,
 } from '../../../components/ui';
 import { enumToItems } from '../../../utils';
-
-const styles = StyleSheet.create({
-  title: {
-    marginVertical: 10,
-    fontWeight: 'bold',
-  },
-});
+import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
+import * as log from '../../../utils/log';
+import { BaseComponent } from '../components/BaseComponent';
+import BaseRenderChannel from '../components/BaseRenderChannel';
 
 export default function JoinChannelAudio() {
-  const [appId] = useState(Config.appId);
-  const [channelId, setChannelId] = useState(Config.channelId);
-  const [token] = useState(Config.token);
-  const [uid] = useState(Config.uid);
-  const [joinChannelSuccess, setJoinChannelSuccess] = useState(false);
+  const {
+    channelId,
+    setChannelId,
+    token,
+    uid,
+    joinChannelSuccess,
+    setJoinChannelSuccess,
+    engine,
+  } =
+    /**
+     * Step 1: initRtcEngine
+     */
+    useInitRtcEngine(false);
+
   const [enableLocalAudio, setEnableLocalAudio] = useState(false);
-  const [enableSpeakerphone, setEnableSpeakerphone] = useState(false);
   const [muteLocalAudioStream, setMuteLocalAudioStream] = useState(false);
-  const [enableInEarMonitoring, setEnableInEarMonitoring] = useState(false);
+  const [enableSpeakerphone, setEnableSpeakerphone] = useState(false);
   const [recordingSignalVolume, setRecordingSignalVolume] = useState(100);
   const [playbackSignalVolume, setPlaybackSignalVolume] = useState(100);
-  const [inEarMonitoringVolume, setInEarMonitoringVolume] = useState(100);
   const [includeAudioFilters, setIncludeAudioFilters] = useState(
     EarMonitoringFilterType.EarMonitoringFilterNone
   );
-
-  const engine = useRef(createAgoraRtcEngine());
-
-  /**
-   * Step 1: initRtcEngine
-   */
-  const initRtcEngine = useCallback(async () => {
-    if (!appId) {
-      console.error(`appId is invalid`);
-    }
-
-    engine.current.initialize({
-      appId,
-      // Should use ChannelProfileLiveBroadcasting on most of cases
-      channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
-    });
-
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
-
-    // Only need to enable audio on this case
-    engine.current.enableAudio();
-  }, [appId]);
+  const [enableInEarMonitoring, setEnableInEarMonitoring] = useState(false);
+  const [inEarMonitoringVolume, setInEarMonitoringVolume] = useState(100);
 
   /**
    * Step 2: joinChannel
    */
   const joinChannel = () => {
     if (!channelId) {
-      console.error('channelId is invalid');
+      log.error('channelId is invalid');
       return;
     }
     if (uid < 0) {
-      console.error('uid is invalid');
+      log.error('uid is invalid');
       return;
     }
 
@@ -209,179 +175,150 @@ export default function JoinChannelAudio() {
   };
 
   useEffect(() => {
-    initRtcEngine().then(() => {
-      engine.current.addListener(
-        'onError',
-        (err: ErrorCodeType, msg: string) => {
-          console.info('onError', 'err', err, 'msg', msg);
-        }
-      );
+    engine.current.addListener('onError', (err: ErrorCodeType, msg: string) => {
+      console.info('onError', 'err', err, 'msg', msg);
+    });
 
-      engine.current.addListener(
-        'onJoinChannelSuccess',
-        (connection: RtcConnection, elapsed: number) => {
-          console.info(
-            'onJoinChannelSuccess',
-            'connection',
-            connection,
-            'elapsed',
-            elapsed
-          );
-          setJoinChannelSuccess(true);
-        }
-      );
+    engine.current.addListener(
+      'onJoinChannelSuccess',
+      (connection: RtcConnection, elapsed: number) => {
+        console.info(
+          'onJoinChannelSuccess',
+          'connection',
+          connection,
+          'elapsed',
+          elapsed
+        );
+        setJoinChannelSuccess(true);
+      }
+    );
 
-      engine.current.addListener(
-        'onLeaveChannel',
-        (connection: RtcConnection, stats: RtcStats) => {
-          console.info(
-            'onLeaveChannel',
-            'connection',
-            connection,
-            'stats',
-            stats
-          );
-          setJoinChannelSuccess(false);
-        }
-      );
+    engine.current.addListener(
+      'onLeaveChannel',
+      (connection: RtcConnection, stats: RtcStats) => {
+        console.info(
+          'onLeaveChannel',
+          'connection',
+          connection,
+          'stats',
+          stats
+        );
+        setJoinChannelSuccess(false);
+      }
+    );
 
-      engine.current.addListener(
-        'onUserJoined',
-        (connection: RtcConnection, remoteUid: number, elapsed: number) => {
-          console.info(
-            'onUserJoined',
-            'connection',
-            connection,
-            'remoteUid',
-            remoteUid,
-            'elapsed',
-            elapsed
-          );
-        }
-      );
+    engine.current.addListener(
+      'onUserJoined',
+      (connection: RtcConnection, remoteUid: number, elapsed: number) => {
+        console.info(
+          'onUserJoined',
+          'connection',
+          connection,
+          'remoteUid',
+          remoteUid,
+          'elapsed',
+          elapsed
+        );
+      }
+    );
 
-      engine.current.addListener(
-        'onUserOffline',
-        (
-          connection: RtcConnection,
-          remoteUid: number,
-          reason: UserOfflineReasonType
-        ) => {
-          console.info(
-            'onUserOffline',
-            'connection',
-            connection,
-            'remoteUid',
-            remoteUid,
-            'reason',
-            reason
-          );
-        }
-      );
+    engine.current.addListener(
+      'onUserOffline',
+      (
+        connection: RtcConnection,
+        remoteUid: number,
+        reason: UserOfflineReasonType
+      ) => {
+        console.info(
+          'onUserOffline',
+          'connection',
+          connection,
+          'remoteUid',
+          remoteUid,
+          'reason',
+          reason
+        );
+      }
+    );
 
-      engine.current.addListener(
-        'onAudioDeviceStateChanged',
-        (deviceId: string, deviceType: number, deviceState: number) => {
-          console.info(
-            'onAudioDeviceStateChanged',
-            'deviceId',
-            deviceId,
-            'deviceType',
-            deviceType,
-            'deviceState',
-            deviceState
-          );
-        }
-      );
+    engine.current.addListener(
+      'onAudioDeviceStateChanged',
+      (deviceId: string, deviceType: number, deviceState: number) => {
+        console.info(
+          'onAudioDeviceStateChanged',
+          'deviceId',
+          deviceId,
+          'deviceType',
+          deviceType,
+          'deviceState',
+          deviceState
+        );
+      }
+    );
 
-      engine.current.addListener(
-        'onAudioDeviceVolumeChanged',
-        (deviceType: MediaDeviceType, volume: number, muted: boolean) => {
-          console.info(
-            'onAudioDeviceVolumeChanged',
-            'deviceType',
-            deviceType,
-            'volume',
-            volume,
-            'muted',
-            muted
-          );
-        }
-      );
+    engine.current.addListener(
+      'onAudioDeviceVolumeChanged',
+      (deviceType: MediaDeviceType, volume: number, muted: boolean) => {
+        console.info(
+          'onAudioDeviceVolumeChanged',
+          'deviceType',
+          deviceType,
+          'volume',
+          volume,
+          'muted',
+          muted
+        );
+      }
+    );
 
-      engine.current.addListener(
-        'onLocalAudioStateChanged',
-        (
-          connection: RtcConnection,
-          state: LocalAudioStreamState,
-          error: LocalAudioStreamError
-        ) => {
-          console.info(
-            'onLocalAudioStateChanged',
-            'connection',
-            connection,
-            'state',
-            state,
-            'error',
-            error
-          );
-        }
-      );
+    engine.current.addListener(
+      'onLocalAudioStateChanged',
+      (
+        connection: RtcConnection,
+        state: LocalAudioStreamState,
+        error: LocalAudioStreamError
+      ) => {
+        console.info(
+          'onLocalAudioStateChanged',
+          'connection',
+          connection,
+          'state',
+          state,
+          'error',
+          error
+        );
+      }
+    );
 
-      engine.current.addListener('onAudioRoutingChanged', (routing: number) => {
-        console.info('onAudioRoutingChanged', 'routing', routing);
-      });
+    engine.current.addListener('onAudioRoutingChanged', (routing: number) => {
+      console.info('onAudioRoutingChanged', 'routing', routing);
     });
 
     const engineCopy = engine.current;
     return () => {
-      engineCopy.release();
+      engineCopy.removeAllListeners();
     };
-  }, [initRtcEngine]);
-
-  const configuration = renderConfiguration();
+  }, [engine, setJoinChannelSuccess]);
 
   return (
-    <KeyboardAvoidingView
-      style={AgoraStyle.fullSize}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <AgoraView style={AgoraStyle.fullWidth}>{renderChannel()}</AgoraView>
-      {configuration ? (
-        <>
-          <AgoraDivider />
-          <AgoraText style={styles.title}>
-            The Configuration of JoinChannelAudio
-          </AgoraText>
-          <AgoraDivider />
-          <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
-        </>
-      ) : undefined}
-      <AgoraView style={AgoraStyle.float}>{renderAction()}</AgoraView>
-    </KeyboardAvoidingView>
+    <BaseComponent
+      name={'JoinChannelAudio'}
+      enableVideo={false}
+      renderConfiguration={renderConfiguration}
+      renderChannel={() => (
+        <BaseRenderChannel
+          channelId={channelId}
+          joinChannel={joinChannel}
+          leaveChannel={leaveChannel}
+          joinChannelSuccess={joinChannelSuccess}
+          onChannelIdChange={setChannelId}
+        />
+      )}
+      renderAction={renderAction}
+    />
   );
 
-  function renderChannel() {
-    return (
-      <>
-        <AgoraTextInput
-          onChangeText={(text) => {
-            setChannelId(text);
-          }}
-          placeholder={`channelId`}
-          value={channelId}
-        />
-        <AgoraButton
-          title={`${joinChannelSuccess ? 'leave' : 'join'} Channel`}
-          onPress={() => {
-            joinChannelSuccess ? leaveChannel() : joinChannel();
-          }}
-        />
-      </>
-    );
-  }
-
-  function renderConfiguration(): React.ReactNode {
+  function renderConfiguration(): ReactNode {
     return (
       <>
         <AgoraSlider
@@ -443,7 +380,7 @@ export default function JoinChannelAudio() {
     );
   }
 
-  function renderAction(): React.ReactNode {
+  function renderAction(): ReactNode {
     return (
       <>
         <AgoraButton

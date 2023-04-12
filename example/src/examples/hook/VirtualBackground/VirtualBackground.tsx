@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import { ColorPicker, fromHsv } from 'react-native-color-picker';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
   ClientRoleType,
-  createAgoraRtcEngine,
   ErrorCodeType,
-  IRtcEngine,
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
@@ -13,68 +13,45 @@ import {
 
 import {
   AgoraButton,
-  AgoraDivider,
   AgoraDropdown,
   AgoraTextInput,
-  AgoraStyle,
-  AgoraView,
-  AgoraText,
 } from '../../../components/ui';
 import * as log from '../../../utils/log';
-import { useInitRtcEngine } from '../../../hook/useInitRtcEngine';
-import Config from '../../../config/agora.config';
+import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 import { enumToItems, getAbsolutePath, getAssetPath } from '../../../utils';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
-import { ColorPicker, fromHsv } from 'react-native-color-picker';
-import BaseRenderUsers from '../base/BaseRenderUsers';
-import BaseRenderChannel from '../base/BaseRenderChannel';
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  picker: {
-    width: '100%',
-    height: 200,
-  },
-  title: {
-    marginVertical: 10,
-    fontWeight: 'bold',
-  },
-});
+import BaseRenderChannel from '../components/BaseRenderChannel';
+import { BaseComponent } from '../components/BaseComponent';
+import BaseRenderUsers from '../components/BaseRenderUsers';
 
 export default function VirtualBackground() {
-  /**
-   * Step 1: initRtcEngine
-   */
-  const [enableAudio] = useState<boolean>(false);
-  const [enableVideo] = useState<boolean>(true);
-  const [enablePreview] = useState<boolean>(true);
-  const engine = useRef<IRtcEngine>(createAgoraRtcEngine());
+  const {
+    channelId,
+    setChannelId,
+    token,
+    uid,
+    joinChannelSuccess,
+    setJoinChannelSuccess,
+    remoteUsers,
+    setRemoteUsers,
+    startPreview,
+    engine,
+  } =
+    /**
+     * Step 1: initRtcEngine
+     */
+    useInitRtcEngine(true);
 
-  const [channelId, setChannelId] = useState<string>(Config.channelId);
-  const [uid] = useState<number>(Config.uid);
-  const [joinChannelSuccess, setJoinChannelSuccess] = useState<boolean>(false);
-  const [remoteUsers, setRemoteUsers] = useState<number[]>([]);
   const [background_source_type, setBackground_source_type] = useState<number>(
     BackgroundSourceType.BackgroundColor
   );
-  const [color, setColor] = useState<number>(0xffffff);
-  const [source, setSource] = useState<string>(getAssetPath('agora-logo.png'));
-  const [blur_degree, setBlur_degree] = useState<BackgroundBlurDegree>(
+  const [color, setColor] = useState(0xffffff);
+  const [source, setSource] = useState(getAssetPath('agora-logo.png'));
+  const [blur_degree, setBlur_degree] = useState(
     BackgroundBlurDegree.BlurDegreeMedium
   );
-  const [enableVirtualBackground, setEnableVirtualBackground] =
-    useState<boolean>(false);
+  const [enableVirtualBackground, setEnableVirtualBackground] = useState(false);
 
-  const setupOtherExtension = useCallback(() => {
+  useEffect(() => {
     // Must call after initialize and before joinChannel
     if (Platform.OS === 'android') {
       engine.current.loadExtensionProvider('agora_segmentation_extension');
@@ -85,14 +62,6 @@ export default function VirtualBackground() {
       true
     );
   }, [engine]);
-
-  const { token, initRtcEngine, startPreview } = useInitRtcEngine({
-    enableAudio,
-    enableVideo,
-    enablePreview,
-    engine: engine.current,
-    setupOtherExtension,
-  });
 
   /**
    * Step 2: joinChannel
@@ -122,7 +91,7 @@ export default function VirtualBackground() {
   /**
    * Step 3-1: enableVirtualBackground
    */
-  const handleEnableVirtualBackground = async () => {
+  const _enableVirtualBackground = async () => {
     if (
       background_source_type === BackgroundSourceType.BackgroundImg &&
       !source
@@ -199,9 +168,9 @@ export default function VirtualBackground() {
           'elapsed',
           elapsed
         );
-        setRemoteUsers((r) => {
-          if (r === undefined) return [];
-          return [...r, remoteUid];
+        setRemoteUsers((prev) => {
+          if (prev === undefined) return [];
+          return [...prev, remoteUid];
         });
       }
     );
@@ -222,9 +191,9 @@ export default function VirtualBackground() {
           'reason',
           reason
         );
-        setRemoteUsers((r) => {
-          if (r === undefined) return [];
-          return r.filter((value) => value !== remoteUid);
+        setRemoteUsers((prev) => {
+          if (prev === undefined) return [];
+          return prev.filter((value) => value !== remoteUid);
         });
       }
     );
@@ -233,37 +202,36 @@ export default function VirtualBackground() {
     return () => {
       engineCopy.removeAllListeners();
     };
-  }, [initRtcEngine]);
-
-  const onChannelIdChange = useCallback(
-    (text: string) => setChannelId(text),
-    []
-  );
+  }, [engine, setJoinChannelSuccess, setRemoteUsers]);
 
   return (
-    <KeyboardAvoidingView
-      style={AgoraStyle.fullSize}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <BaseRenderChannel
-        joinChannelSuccess={joinChannelSuccess}
-        joinChannel={joinChannel}
-        leaveChannel={leaveChannel}
-        onChannelIdChange={onChannelIdChange}
-        channelId={channelId}
-      />
-      <BaseRenderUsers
-        startPreview={startPreview}
-        enableVideo={enableVideo}
-        joinChannelSuccess={joinChannelSuccess}
-        remoteUsers={remoteUsers}
-      />
-      <AgoraDivider />
-      <AgoraText style={styles.title}>
-        The Configuration of VirtualBackground
-      </AgoraText>
-      <AgoraDivider />
-      <ScrollView style={AgoraStyle.fullSize}>
+    <BaseComponent
+      name={'VirtualBackground'}
+      enableVideo={true}
+      renderConfiguration={renderConfiguration}
+      renderChannel={() => (
+        <BaseRenderChannel
+          channelId={channelId}
+          joinChannel={joinChannel}
+          leaveChannel={leaveChannel}
+          joinChannelSuccess={joinChannelSuccess}
+          onChannelIdChange={setChannelId}
+        />
+      )}
+      renderUsers={() => (
+        <BaseRenderUsers
+          startPreview={startPreview}
+          joinChannelSuccess={joinChannelSuccess}
+          remoteUsers={remoteUsers}
+        />
+      )}
+      renderAction={renderAction}
+    />
+  );
+
+  function renderConfiguration(): ReactNode {
+    return (
+      <>
         <AgoraDropdown
           title={'backgroundSourceType'}
           items={enumToItems(BackgroundSourceType)}
@@ -302,8 +270,13 @@ export default function VirtualBackground() {
             setBlur_degree(value);
           }}
         />
-      </ScrollView>
-      <AgoraView style={AgoraStyle.float}>
+      </>
+    );
+  }
+
+  function renderAction(): ReactNode {
+    return (
+      <>
         <AgoraButton
           disabled={!(startPreview || joinChannelSuccess)}
           title={`${
@@ -312,10 +285,22 @@ export default function VirtualBackground() {
           onPress={
             enableVirtualBackground
               ? disableVirtualBackground
-              : handleEnableVirtualBackground
+              : _enableVirtualBackground
           }
         />
-      </AgoraView>
-    </KeyboardAvoidingView>
-  );
+      </>
+    );
+  }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  picker: {
+    width: '100%',
+    height: 200,
+  },
+});

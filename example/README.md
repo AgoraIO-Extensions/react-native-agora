@@ -55,11 +55,11 @@ Any scene of this project can run successfully alone.
 
 | Demo                                                         | Description                                        |
 | ------------------------------------------------------------ | -------------------------------------------------- |
-| [JoinChannelAudio](./src/examples/hooks/JoinChannelAudio) | Audio live streaming |
-| [JoinChannelVideo](./src/examples/hooks/JoinChannelVideo) | Video live streaming |
-| [StringUid](./src/examples/hooks//StringUid) | String user ID |
-| [JoinMultipleChannel](./src/examples/hooks/JoinMultipleChannel) | Joins a channel with the connection ID |
-| [VirtualBackground](./src/examples/hooks//VirtualBackground) | Enables/Disables the virtual background (beta feature) |
+| [JoinChannelAudio](src/examples/hook/JoinChannelAudio) | Audio live streaming |
+| [JoinChannelVideo](src/examples/hook/JoinChannelVideo) | Video live streaming |
+| [StringUid](src/examples/hook/StringUid) | String user ID |
+| [JoinMultipleChannel](src/examples/hook/JoinMultipleChannel) | Joins a channel with the connection ID |
+| [VirtualBackground](src/examples/hook/VirtualBackground) | Enables/Disables the virtual background (beta feature) |
 
 ## How to run the sample project
 
