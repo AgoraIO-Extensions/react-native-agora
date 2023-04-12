@@ -3,7 +3,7 @@ import {
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
-import { EmitterSubscription } from '../internal/emitter/EventEmitter';
+import type { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaEngineEvent = IAudioFrameObserver &
   IVideoFrameObserver &

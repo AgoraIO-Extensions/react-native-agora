@@ -1,5 +1,5 @@
 import { IMusicContentCenterEventHandler } from '../IAgoraMusicContentCenter';
-import { EmitterSubscription } from '../internal/emitter/EventEmitter';
+import type { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMusicContentCenterEvent = IMusicContentCenterEventHandler;
 

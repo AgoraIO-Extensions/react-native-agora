@@ -31,7 +31,7 @@ const checkers = createCheckers(
 );
 
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
-import { EmitterSubscription } from './emitter/EventEmitter';
+import type { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaPlayerInternal extends IMediaPlayerImpl {
   static _source_observers: Map<number, IMediaPlayerSourceObserver[]> = new Map<
@@ -173,9 +173,7 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     listener: IMediaPlayerEvent[EventType]
   ) {
     if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeSubscription(
-      this._events.get(listener)!.subscription
-    );
+    this._events.get(listener)!.subscription.remove();
     this._events.delete(listener);
   }
 

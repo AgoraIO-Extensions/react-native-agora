@@ -57,6 +57,7 @@ import {
 } from './MusicContentCenterInternal';
 import { RtcEngineExInternal } from './RtcEngineExInternal';
 
+import type { EventEmitter as IEventEmitter } from './emitter/EventEmitter';
 import EventEmitter from './emitter/EventEmitter';
 
 export type IrisApiParam = {
@@ -66,7 +67,7 @@ export type IrisApiParam = {
 };
 
 // @ts-ignore
-export const DeviceEventEmitter = new EventEmitter();
+export const DeviceEventEmitter: IEventEmitter = new EventEmitter();
 
 // @ts-ignore
 const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);

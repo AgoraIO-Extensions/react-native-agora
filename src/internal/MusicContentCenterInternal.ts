@@ -20,7 +20,7 @@ const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 
-import { EmitterSubscription } from './emitter/EventEmitter';
+import type { EmitterSubscription } from './emitter/EventEmitter';
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
@@ -79,9 +79,7 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     listener: IMusicContentCenterEvent[EventType]
   ) {
     if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeSubscription(
-      this._events.get(listener)!.subscription
-    );
+    this._events.get(listener)!.subscription.remove();
     this._events.delete(listener);
   }
 

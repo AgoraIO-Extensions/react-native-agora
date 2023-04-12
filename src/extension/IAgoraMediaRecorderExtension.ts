@@ -1,5 +1,5 @@
 import { IMediaRecorderObserver } from '../AgoraMediaBase';
-import { EmitterSubscription } from '../internal/emitter/EventEmitter';
+import type { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaRecorderEvent = IMediaRecorderObserver;
 
