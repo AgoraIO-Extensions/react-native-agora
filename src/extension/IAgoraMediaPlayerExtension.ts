@@ -1,7 +1,7 @@
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import { IMediaPlayerVideoFrameObserver } from '../IAgoraMediaPlayer';
 import { IAudioPcmFrameSink, IAudioSpectrumObserver } from '../AgoraMediaBase';
-import { EmitterSubscription } from '../internal/emitter/EventEmitter';
+import type { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaPlayerEvent = IMediaPlayerSourceObserver &
   IAudioPcmFrameSink &
