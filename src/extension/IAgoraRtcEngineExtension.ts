@@ -1,10 +1,10 @@
+import { IAudioEncodedFrameObserver } from '../AgoraBase';
+import { IAudioSpectrumObserver } from '../AgoraMediaBase';
 import {
-  IRtcEngineEventHandler,
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
+  IRtcEngineEventHandler,
 } from '../IAgoraRtcEngine';
-import { IAudioSpectrumObserver } from '../AgoraMediaBase';
-import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import type { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IRtcEngineEvent = IRtcEngineEventHandler &

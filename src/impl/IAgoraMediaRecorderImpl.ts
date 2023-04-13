@@ -1,9 +1,9 @@
-import { callIrisApi } from '../internal/IrisApiEngine';
-import { IMediaRecorder } from '../IAgoraMediaRecorder';
 import {
   IMediaRecorderObserver,
   MediaRecorderConfiguration,
 } from '../AgoraMediaBase';
+import { IMediaRecorder } from '../IAgoraMediaRecorder';
+import { callIrisApi } from '../internal/IrisApiEngine';
 // @ts-ignore
 export class IMediaRecorderImpl implements IMediaRecorder {
   setMediaRecorderObserver(callback: IMediaRecorderObserver): number {

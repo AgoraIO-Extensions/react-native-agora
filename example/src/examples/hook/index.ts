@@ -1,7 +1,7 @@
-import JoinChannelVideo from './JoinChannelVideo/JoinChannelVideo';
 import JoinChannelAudio from './JoinChannelAudio/JoinChannelAudio';
-import StringUid from './StringUid/StringUid';
+import JoinChannelVideo from './JoinChannelVideo/JoinChannelVideo';
 import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
+import StringUid from './StringUid/StringUid';
 import VirtualBackground from './VirtualBackground/VirtualBackground';
 
 const Hooks = {

@@ -3,7 +3,6 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   EarMonitoringFilterType,
   ErrorCodeType,
   IRtcEngineEventHandler,
@@ -13,9 +12,8 @@ import {
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -27,6 +25,7 @@ import {
   AgoraDropdown,
   AgoraSlider,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 
 interface State extends BaseAudioComponentState {

@@ -1,14 +1,12 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import {
   ClientRoleType,
-  ErrorCodeType,
-  RtcConnection,
-  RtcStats,
-  UserOfflineReasonType,
   EarMonitoringFilterType,
+  ErrorCodeType,
+  LocalAudioStreamError,
   LocalAudioStreamState,
   MediaDeviceType,
-  LocalAudioStreamError,
+  RtcConnection,
 } from 'react-native-agora';
 
 import {
@@ -18,10 +16,11 @@ import {
   AgoraSlider,
 } from '../../../components/ui';
 import { enumToItems } from '../../../utils';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
+import BaseRenderUsers from '../components/BaseRenderUsers';
+import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 
 export default function JoinChannelAudio() {
   const {
@@ -30,7 +29,7 @@ export default function JoinChannelAudio() {
     token,
     uid,
     joinChannelSuccess,
-    setJoinChannelSuccess,
+    remoteUsers,
     engine,
   } =
     /**
@@ -38,7 +37,7 @@ export default function JoinChannelAudio() {
      */
     useInitRtcEngine(false);
 
-  const [enableLocalAudio, setEnableLocalAudio] = useState(false);
+  const [enableLocalAudio, setEnableLocalAudio] = useState(true);
   const [muteLocalAudioStream, setMuteLocalAudioStream] = useState(false);
   const [enableSpeakerphone, setEnableSpeakerphone] = useState(false);
   const [recordingSignalVolume, setRecordingSignalVolume] = useState(100);
@@ -175,76 +174,10 @@ export default function JoinChannelAudio() {
   };
 
   useEffect(() => {
-    engine.current.addListener('onError', (err: ErrorCodeType, msg: string) => {
-      console.info('onError', 'err', err, 'msg', msg);
-    });
-
-    engine.current.addListener(
-      'onJoinChannelSuccess',
-      (connection: RtcConnection, elapsed: number) => {
-        console.info(
-          'onJoinChannelSuccess',
-          'connection',
-          connection,
-          'elapsed',
-          elapsed
-        );
-        setJoinChannelSuccess(true);
-      }
-    );
-
-    engine.current.addListener(
-      'onLeaveChannel',
-      (connection: RtcConnection, stats: RtcStats) => {
-        console.info(
-          'onLeaveChannel',
-          'connection',
-          connection,
-          'stats',
-          stats
-        );
-        setJoinChannelSuccess(false);
-      }
-    );
-
-    engine.current.addListener(
-      'onUserJoined',
-      (connection: RtcConnection, remoteUid: number, elapsed: number) => {
-        console.info(
-          'onUserJoined',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'elapsed',
-          elapsed
-        );
-      }
-    );
-
-    engine.current.addListener(
-      'onUserOffline',
-      (
-        connection: RtcConnection,
-        remoteUid: number,
-        reason: UserOfflineReasonType
-      ) => {
-        console.info(
-          'onUserOffline',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'reason',
-          reason
-        );
-      }
-    );
-
     engine.current.addListener(
       'onAudioDeviceStateChanged',
       (deviceId: string, deviceType: number, deviceState: number) => {
-        console.info(
+        log.info(
           'onAudioDeviceStateChanged',
           'deviceId',
           deviceId,
@@ -259,7 +192,7 @@ export default function JoinChannelAudio() {
     engine.current.addListener(
       'onAudioDeviceVolumeChanged',
       (deviceType: MediaDeviceType, volume: number, muted: boolean) => {
-        console.info(
+        log.info(
           'onAudioDeviceVolumeChanged',
           'deviceType',
           deviceType,
@@ -278,7 +211,7 @@ export default function JoinChannelAudio() {
         state: LocalAudioStreamState,
         error: LocalAudioStreamError
       ) => {
-        console.info(
+        log.info(
           'onLocalAudioStateChanged',
           'connection',
           connection,
@@ -291,14 +224,14 @@ export default function JoinChannelAudio() {
     );
 
     engine.current.addListener('onAudioRoutingChanged', (routing: number) => {
-      console.info('onAudioRoutingChanged', 'routing', routing);
+      log.info('onAudioRoutingChanged', 'routing', routing);
     });
 
     const engineCopy = engine.current;
     return () => {
       engineCopy.removeAllListeners();
     };
-  }, [engine, setJoinChannelSuccess]);
+  }, [engine]);
 
   return (
     <BaseComponent
@@ -312,6 +245,12 @@ export default function JoinChannelAudio() {
           leaveChannel={leaveChannel}
           joinChannelSuccess={joinChannelSuccess}
           onChannelIdChange={setChannelId}
+        />
+      )}
+      renderUsers={() => (
+        <BaseRenderUsers
+          joinChannelSuccess={joinChannelSuccess}
+          remoteUsers={remoteUsers}
         />
       )}
       renderAction={renderAction}
@@ -385,35 +324,33 @@ export default function JoinChannelAudio() {
       <>
         <AgoraButton
           title={`${enableLocalAudio ? 'disable' : 'enable'} Local Audio`}
-          onPress={() => {
-            enableLocalAudio ? disableLocalAudio() : _enableLocalAudio();
-          }}
+          onPress={enableLocalAudio ? disableLocalAudio : _enableLocalAudio}
         />
         <AgoraButton
           title={`${
             muteLocalAudioStream ? 'unmute' : 'mute'
           } Local Audio Stream`}
-          onPress={() => {
+          onPress={
             muteLocalAudioStream
-              ? unmuteLocalAudioStream()
-              : _muteLocalAudioStream();
-          }}
+              ? unmuteLocalAudioStream
+              : _muteLocalAudioStream
+          }
         />
         <AgoraButton
           title={`${enableSpeakerphone ? 'disable' : 'enable'} Speakerphone`}
-          onPress={() => {
-            enableSpeakerphone ? disableSpeakerphone() : _enableSpeakerphone();
-          }}
+          onPress={
+            enableSpeakerphone ? disableSpeakerphone : _enableSpeakerphone
+          }
         />
         <AgoraButton
           title={`${
             enableInEarMonitoring ? 'disable' : 'enable'
           } In Ear Monitoring`}
-          onPress={() => {
+          onPress={
             enableInEarMonitoring
-              ? disableInEarMonitoring()
-              : _enableInEarMonitoring();
-          }}
+              ? disableInEarMonitoring
+              : _enableInEarMonitoring
+          }
         />
       </>
     );

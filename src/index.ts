@@ -1,12 +1,12 @@
+import { IMediaPlayerCacheManager } from './IAgoraMediaPlayer';
+import { IRtcEngine } from './IAgoraRtcEngine';
+import { IMediaPlayerCacheManagerImpl } from './impl/IAgoraMediaPlayerImpl';
+import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
+
 import AgoraRtcNg from './specs';
 
 export const showRPSystemBroadcastPickerView =
   AgoraRtcNg.showRPSystemBroadcastPickerView;
-
-import { IRtcEngine } from './IAgoraRtcEngine';
-import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
-import { IMediaPlayerCacheManager } from './IAgoraMediaPlayer';
-import { IMediaPlayerCacheManagerImpl } from './impl/IAgoraMediaPlayerImpl';
 
 export * from './AgoraBase';
 export * from './AgoraMediaBase';

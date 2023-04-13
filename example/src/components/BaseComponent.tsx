@@ -1,4 +1,5 @@
-import React, { Component, ReactNode, useState } from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { Component, ReactElement, ReactNode, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -15,17 +16,17 @@ import {
   RtcSurfaceView,
   UserOfflineReasonType,
 } from 'react-native-agora';
-import { StackScreenProps } from '@react-navigation/stack';
 
+import { LogSink } from './LogSink';
 import {
   AgoraButton,
   AgoraDivider,
+  AgoraList,
   AgoraStyle,
   AgoraText,
   AgoraTextInput,
   AgoraView,
 } from './ui';
-import { LogSink } from './LogSink';
 
 const Header = ({ getData }: { getData: () => Array<string> }) => {
   const [visible, setVisible] = useState(false);
@@ -219,21 +220,23 @@ export abstract class BaseComponent<
     const { startPreview, joinChannelSuccess, remoteUsers } = this.state;
     return (
       <>
-        {startPreview || joinChannelSuccess ? this.renderVideo(0) : undefined}
-        {remoteUsers !== undefined && remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
-            {remoteUsers.map((value, index) => (
-              <AgoraView key={`${value}-${index}`}>
-                {this.renderVideo(value)}
-              </AgoraView>
-            ))}
-          </ScrollView>
+        {!!startPreview || joinChannelSuccess ? this.renderVideo(0) : undefined}
+        {!!startPreview || joinChannelSuccess ? (
+          <AgoraList
+            style={AgoraStyle.videoContainer}
+            numColumns={undefined}
+            horizontal={true}
+            data={remoteUsers}
+            renderItem={({ item }) => {
+              return this.renderVideo(item);
+            }}
+          />
         ) : undefined}
       </>
     );
   }
 
-  protected renderVideo(uid: number): ReactNode {
+  protected renderVideo(uid: number): ReactElement {
     return (
       <RtcSurfaceView
         style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}

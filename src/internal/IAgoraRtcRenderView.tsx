@@ -3,6 +3,7 @@ import { HostComponent } from 'react-native';
 
 import { VideoSourceType } from '../AgoraMediaBase';
 import { RtcRendererViewProps } from '../AgoraRtcRenderView';
+
 import { IrisApiParam } from './IrisApiEngine';
 
 export default abstract class IAgoraRtcRenderView<

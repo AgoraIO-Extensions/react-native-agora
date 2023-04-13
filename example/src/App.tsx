@@ -1,25 +1,25 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import {
+  Keyboard,
   SafeAreaView,
   SectionList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Keyboard,
 } from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import {
-  createAgoraRtcEngine,
   SDKBuildInfo,
+  createAgoraRtcEngine,
   isDebuggable,
   setDebuggable,
 } from 'react-native-agora';
 
-import Basic from './examples/basic';
 import Advanced from './examples/advanced';
+import Basic from './examples/basic';
 import Hooks from './examples/hook';
 
 const Stack = createStackNavigator();

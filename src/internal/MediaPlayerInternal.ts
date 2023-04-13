@@ -2,8 +2,8 @@ import { createCheckers } from 'ts-interface-checker';
 
 import { ErrorCodeType } from '../AgoraBase';
 import {
-  IAudioSpectrumObserver,
   IAudioPcmFrameSink,
+  IAudioSpectrumObserver,
   RawAudioFrameOpModeType,
 } from '../AgoraMediaBase';
 import { IMediaPlayerVideoFrameObserver } from '../IAgoraMediaPlayer';

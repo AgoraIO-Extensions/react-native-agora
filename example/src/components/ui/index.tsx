@@ -1,32 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
-import PickerSelect, {
-  PickerSelectProps,
-  Item,
-} from 'react-native-picker-select';
 import { PickerProps } from '@react-native-picker/picker/typings/Picker';
 import {
   Button,
   ButtonProps,
-  DividerProps,
+  Card,
+  CardProps,
   Divider,
-  InputProps,
+  DividerProps,
+  Image,
+  ImageProps,
   Input,
+  InputProps,
+  ListItem,
+  ListItemProps,
   Slider,
   SliderProps,
-  SwitchProps,
   Switch,
+  SwitchProps,
   Text,
   TextProps,
-  ImageProps,
-  Image,
   lightColors,
 } from '@rneui/base';
+import React, { ReactNode, useEffect, useState } from 'react';
+import {
+  FlatList,
+  FlatListProps,
+  Platform,
+  StyleSheet,
+  View,
+  ViewProps,
+} from 'react-native';
+import PickerSelect, {
+  Item,
+  PickerSelectProps,
+} from 'react-native-picker-select';
 
-export const AgoraView = (props: ViewProps) => {
+export const AgoraView = (props: ViewProps & { horizontal?: boolean }) => {
+  const { horizontal, style, ...others } = props;
   return (
     <>
-      <View {...props} />
+      <View {...others} style={[style, !!horizontal && AgoraStyle.row]} />
     </>
   );
 };
@@ -55,19 +67,28 @@ export const AgoraDivider = (props: DividerProps) => {
   );
 };
 
-export const AgoraTextInput = (props: InputProps) => {
+export const AgoraTextInput = (
+  props: InputProps & { numberKeyboard?: boolean }
+) => {
   const [value, setValue] = useState(props.value);
 
   useEffect(() => {
     setValue(props.value);
   }, [props.value]);
 
-  const { style, ref, ...others } = props;
+  const { style, ref, numberKeyboard, ...others } = props;
   return (
     <>
       <Input
         containerStyle={[AgoraStyle.input, style]}
         placeholderTextColor={'gray'}
+        keyboardType={
+          numberKeyboard
+            ? Platform.OS === 'android'
+              ? 'numeric'
+              : 'numbers-and-punctuation'
+            : 'default'
+        }
         {...others}
         onChangeText={(text) => {
           setValue(text);
@@ -136,6 +157,40 @@ export const AgoraImage = (props: ImageProps) => {
   );
 };
 
+export function AgoraList<T>(props: FlatListProps<T>) {
+  const { renderItem, ...others } = props;
+  return (
+    <FlatList
+      style={{ width: '100%' }}
+      numColumns={2}
+      {...others}
+      renderItem={({ item, index, separators }) => {
+        return (
+          <AgoraListItem containerStyle={AgoraStyle.listItem}>
+            {renderItem ? renderItem({ item, index, separators }) : undefined}
+          </AgoraListItem>
+        );
+      }}
+    />
+  );
+}
+
+export const AgoraListItem = (props: ListItemProps) => {
+  return <ListItem {...props} />;
+};
+
+export const AgoraCard = (
+  props: CardProps & { title: string; children?: ReactNode | undefined }
+) => {
+  const { title, children, ...others } = props;
+  return (
+    <Card {...others}>
+      <Card.Title>{title}</Card.Title>
+      {children}
+    </Card>
+  );
+};
+
 export interface AgoraDropdownItem extends Item {}
 
 export const AgoraDropdown = (
@@ -190,8 +245,8 @@ export const AgoraStyle = StyleSheet.create({
     flex: 1,
   },
   videoSmall: {
-    width: 120,
-    height: 120,
+    width: 150,
+    height: 150,
   },
   float: {
     position: 'absolute',
@@ -207,5 +262,15 @@ export const AgoraStyle = StyleSheet.create({
     height: 20,
     width: 20,
     backgroundColor: lightColors.primary,
+  },
+  listItem: {
+    backgroundColor: 'transparent',
+    padding: 0,
+  },
+  row: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

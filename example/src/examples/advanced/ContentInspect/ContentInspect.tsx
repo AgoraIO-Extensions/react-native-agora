@@ -1,16 +1,14 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
   ContentInspectModule,
   ContentInspectResult,
   ContentInspectType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -24,6 +22,7 @@ import {
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -175,7 +174,7 @@ export default class ContentInspect
             this.setState({ type: value });
           }}
         />
-        <AgoraView style={styles.container}>
+        <AgoraView horizontal={true}>
           <AgoraButton
             title={'Add'}
             onPress={() => {
@@ -208,9 +207,7 @@ export default class ContentInspect
               interval: text === '' ? this.createState().interval : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`interval (defaults: ${this.createState().interval})`}
         />
       </>
@@ -237,11 +234,3 @@ export default class ContentInspect
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});

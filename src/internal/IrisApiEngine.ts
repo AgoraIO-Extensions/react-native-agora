@@ -1,9 +1,8 @@
-import { NativeEventEmitter } from 'react-native';
-import base64 from 'base64-js';
 import { Buffer } from 'buffer';
-const JSON = require('json-bigint');
 
-import AgoraRtcNg from '../specs';
+import base64 from 'base64-js';
+import { NativeEventEmitter } from 'react-native';
+
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import {
   AudioFrame,
@@ -17,17 +16,17 @@ import {
   VideoFrame,
 } from '../AgoraMediaBase';
 import {
-  IDirectCdnStreamingEventHandler,
-  IMetadataObserver,
-  IRtcEngineEventHandler,
-  Metadata,
-} from '../IAgoraRtcEngine';
-import {
   IMediaPlayer,
   IMediaPlayerVideoFrameObserver,
 } from '../IAgoraMediaPlayer';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import { IMusicContentCenterEventHandler } from '../IAgoraMusicContentCenter';
+import {
+  IDirectCdnStreamingEventHandler,
+  IMetadataObserver,
+  IRtcEngineEventHandler,
+  Metadata,
+} from '../IAgoraRtcEngine';
 
 import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
 import {
@@ -39,14 +38,15 @@ import {
   processIVideoEncodedFrameObserver,
   processIVideoFrameObserver,
 } from '../impl/AgoraMediaBaseImpl';
+import { processIMediaPlayerVideoFrameObserver } from '../impl/IAgoraMediaPlayerImpl';
+import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
+import { processIMusicContentCenterEventHandler } from '../impl/IAgoraMusicContentCenterImpl';
 import {
   processIDirectCdnStreamingEventHandler,
   processIMetadataObserver,
   processIRtcEngineEventHandler,
 } from '../impl/IAgoraRtcEngineImpl';
-import { processIMediaPlayerVideoFrameObserver } from '../impl/IAgoraMediaPlayerImpl';
-import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
-import { processIMusicContentCenterEventHandler } from '../impl/IAgoraMusicContentCenterImpl';
+import AgoraRtcNg from '../specs';
 
 import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
@@ -59,6 +59,8 @@ import { RtcEngineExInternal } from './RtcEngineExInternal';
 
 import type { EventEmitter as IEventEmitter } from './emitter/EventEmitter';
 import EventEmitter from './emitter/EventEmitter';
+
+const JSON = require('json-bigint');
 
 export type IrisApiParam = {
   funcName: string;

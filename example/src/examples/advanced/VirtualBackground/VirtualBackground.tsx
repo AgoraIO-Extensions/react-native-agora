@@ -5,12 +5,10 @@ import {
   BackgroundSourceType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -21,6 +19,7 @@ import {
   AgoraDropdown,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems, getAbsolutePath, getAssetPath } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -244,11 +243,6 @@ export default class VirtualBackground
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   picker: {
     width: '100%',
     height: 200,

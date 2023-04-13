@@ -5,10 +5,9 @@ import {
   AudioPcmFrame,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IAudioFrameObserver,
-  IMediaPlayer,
   IAudioPcmFrameSink,
+  IMediaPlayer,
   IMediaPlayerSourceObserver,
   IMediaPlayerVideoFrameObserver,
   IRtcEngineEventHandler,
@@ -21,19 +20,15 @@ import {
   UserOfflineReasonType,
   VideoFrame,
   VideoSourceType,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
 } from '../../../components/BaseComponent';
-import {
-  AgoraButton,
-  AgoraStyle,
-  AgoraTextInput,
-} from '../../../components/ui';
+import { AgoraButton, AgoraTextInput } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseVideoComponentState {
   token2: string;
@@ -316,9 +311,7 @@ export default class SendMultiVideoStream
               uid2: text === '' ? this.createState().uid2 : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`uid2 (must > 0)`}
           value={uid2 > 0 ? uid2.toString() : ''}
         />
@@ -340,7 +333,6 @@ export default class SendMultiVideoStream
         {super.renderUsers()}
         {open ? (
           <RtcSurfaceView
-            style={AgoraStyle.videoLarge}
             canvas={{
               uid: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,

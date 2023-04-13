@@ -5,19 +5,17 @@ import {
   AudioSampleRateType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   LiveTranscoding,
-  RtmpStreamingEvent,
   RtmpStreamPublishErrorType,
   RtmpStreamPublishState,
+  RtmpStreamingEvent,
   TranscodingUser,
   VideoCodecProfileType,
   VideoCodecTypeForStream,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -34,6 +32,7 @@ import {
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -374,7 +373,7 @@ export default class RTMPStreaming
               />
             </>
             <AgoraDivider />
-            <AgoraView style={styles.container}>
+            <AgoraView horizontal={true}>
               <AgoraTextInput
                 style={AgoraStyle.fullSize}
                 onChangeText={(text) => {
@@ -383,11 +382,7 @@ export default class RTMPStreaming
                     width: text === '' ? this.createState().width : +text,
                   });
                 }}
-                keyboardType={
-                  Platform.OS === 'android'
-                    ? 'numeric'
-                    : 'numbers-and-punctuation'
-                }
+                numberKeyboard={true}
                 placeholder={`width (defaults: ${this.createState().width})`}
               />
               <AgoraTextInput
@@ -398,11 +393,7 @@ export default class RTMPStreaming
                     height: text === '' ? this.createState().height : +text,
                   });
                 }}
-                keyboardType={
-                  Platform.OS === 'android'
-                    ? 'numeric'
-                    : 'numbers-and-punctuation'
-                }
+                numberKeyboard={true}
                 placeholder={`height (defaults: ${this.createState().height})`}
               />
             </AgoraView>
@@ -414,11 +405,7 @@ export default class RTMPStreaming
                     text === '' ? this.createState().videoBitrate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`videoBitrate (defaults: ${
                 this.createState().videoBitrate
               })`}
@@ -431,11 +418,7 @@ export default class RTMPStreaming
                     text === '' ? this.createState().videoFramerate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`videoFramerate (defaults: ${
                 this.createState().videoFramerate
               })`}
@@ -447,11 +430,7 @@ export default class RTMPStreaming
                   videoGop: text === '' ? this.createState().videoGop : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`videoGop (defaults: ${
                 this.createState().videoGop
               })`}
@@ -505,11 +484,7 @@ export default class RTMPStreaming
                     text === '' ? this.createState().audioBitrate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`audioBitrate (defaults: ${
                 this.createState().audioBitrate
               })`}
@@ -535,7 +510,6 @@ export default class RTMPStreaming
             />
           </>
         ) : undefined}
-        <AgoraDivider />
       </>
     );
   }
@@ -564,12 +538,6 @@ export default class RTMPStreaming
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
   picker: {
     width: '100%',
     height: 200,

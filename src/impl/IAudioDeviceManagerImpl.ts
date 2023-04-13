@@ -1,6 +1,6 @@
-import { callIrisApi } from '../internal/IrisApiEngine';
-import { IAudioDeviceManager } from '../IAudioDeviceManager';
 import { AudioDeviceInfo } from '../IAgoraRtcEngine';
+import { IAudioDeviceManager } from '../IAudioDeviceManager';
+import { callIrisApi } from '../internal/IrisApiEngine';
 // @ts-ignore
 export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   enumeratePlaybackDevices(): AudioDeviceInfo[] {

@@ -3,15 +3,13 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   RhythmPlayerErrorType,
   RhythmPlayerStateType,
   RtcConnection,
   RtcStats,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -23,6 +21,7 @@ import {
   AgoraSlider,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { getAbsolutePath, getAssetPath } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
@@ -238,7 +237,6 @@ export default class RhythmPlayer
             this.setState({ beatsPerMinute: value });
           }}
         />
-        <AgoraDivider />
       </>
     );
   }

@@ -19,7 +19,7 @@ interface Props {
   renderConfiguration?: () => ReactNode;
   renderChannel: () => ReactNode;
   renderUsers?: () => ReactNode;
-  renderAction: () => ReactNode;
+  renderAction?: () => ReactNode;
 }
 
 export function BaseComponent({
@@ -52,7 +52,9 @@ export function BaseComponent({
           <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
         </>
       ) : undefined}
-      <AgoraView style={AgoraStyle.float}>{renderAction()}</AgoraView>
+      <AgoraView style={AgoraStyle.float}>
+        {renderAction ? renderAction() : undefined}
+      </AgoraView>
     </KeyboardAvoidingView>
   );
 }

@@ -1,27 +1,23 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Platform, StyleSheet } from 'react-native';
-import { ColorPicker, fromHsv } from 'react-native-color-picker';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
   ClientRoleType,
-  ErrorCodeType,
-  RtcConnection,
-  RtcStats,
-  UserOfflineReasonType,
 } from 'react-native-agora';
+import { ColorPicker, fromHsv } from 'react-native-color-picker';
 
 import {
   AgoraButton,
   AgoraDropdown,
   AgoraTextInput,
 } from '../../../components/ui';
-import * as log from '../../../utils/log';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 import { enumToItems, getAbsolutePath, getAssetPath } from '../../../utils';
-import BaseRenderChannel from '../components/BaseRenderChannel';
+import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
+import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
+import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 
 export default function VirtualBackground() {
   const {
@@ -30,9 +26,7 @@ export default function VirtualBackground() {
     token,
     uid,
     joinChannelSuccess,
-    setJoinChannelSuccess,
     remoteUsers,
-    setRemoteUsers,
     startPreview,
     engine,
   } =
@@ -128,82 +122,6 @@ export default function VirtualBackground() {
     engine.current.leaveChannel();
   };
 
-  useEffect(() => {
-    engine.current.addListener('onError', (err: ErrorCodeType, msg: string) => {
-      log.info('onError', 'err', err, 'msg', msg);
-    });
-
-    engine.current.addListener(
-      'onJoinChannelSuccess',
-      (connection: RtcConnection, elapsed: number) => {
-        log.info(
-          'onJoinChannelSuccess',
-          'connection',
-          connection,
-          'elapsed',
-          elapsed
-        );
-        setJoinChannelSuccess(true);
-      }
-    );
-
-    engine.current.addListener(
-      'onLeaveChannel',
-      (connection: RtcConnection, stats: RtcStats) => {
-        log.info('onLeaveChannel', 'connection', connection, 'stats', stats);
-        setJoinChannelSuccess(false);
-        setRemoteUsers([]);
-      }
-    );
-
-    engine.current.addListener(
-      'onUserJoined',
-      (connection: RtcConnection, remoteUid: number, elapsed: number) => {
-        log.info(
-          'onUserJoined',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'elapsed',
-          elapsed
-        );
-        setRemoteUsers((prev) => {
-          if (prev === undefined) return [];
-          return [...prev, remoteUid];
-        });
-      }
-    );
-
-    engine.current.addListener(
-      'onUserOffline',
-      (
-        connection: RtcConnection,
-        remoteUid: number,
-        reason: UserOfflineReasonType
-      ) => {
-        log.info(
-          'onUserOffline',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'reason',
-          reason
-        );
-        setRemoteUsers((prev) => {
-          if (prev === undefined) return [];
-          return prev.filter((value) => value !== remoteUid);
-        });
-      }
-    );
-
-    const engineCopy = engine.current;
-    return () => {
-      engineCopy.removeAllListeners();
-    };
-  }, [engine, setJoinChannelSuccess, setRemoteUsers]);
-
   return (
     <BaseComponent
       name={'VirtualBackground'}
@@ -294,11 +212,6 @@ export default function VirtualBackground() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   picker: {
     width: '100%',
     height: 200,

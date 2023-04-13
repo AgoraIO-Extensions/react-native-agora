@@ -1,15 +1,14 @@
+import { Buffer } from 'buffer';
+
 import React from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   RtcConnection,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-import { Buffer } from 'buffer';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -22,6 +21,7 @@ import {
   AgoraText,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseAudioComponentState {
   syncWithAudio: boolean;

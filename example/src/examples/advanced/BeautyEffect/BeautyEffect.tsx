@@ -3,12 +3,10 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   LighteningContrastLevel,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -20,6 +18,7 @@ import {
   AgoraDropdown,
   AgoraSlider,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -239,7 +238,6 @@ export default class BeautyEffect
             });
           }}
         />
-        <AgoraDivider />
       </>
     );
   }

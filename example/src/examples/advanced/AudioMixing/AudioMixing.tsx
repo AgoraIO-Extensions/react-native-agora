@@ -5,22 +5,22 @@ import {
   AudioMixingStateType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 
-import Config from '../../../config/agora.config';
-
+import {
+  BaseAudioComponentState,
+  BaseComponent,
+} from '../../../components/BaseComponent';
 import {
   AgoraButton,
   AgoraDivider,
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
-import {
-  BaseAudioComponentState,
-  BaseComponent,
-} from '../../../components/BaseComponent';
+import Config from '../../../config/agora.config';
+
 import { getAssetPath } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
@@ -227,9 +227,7 @@ export default class AudioMixing
               cycle: text === '' ? this.createState().cycle : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`cycle (defaults: ${this.createState().cycle})`}
         />
         <AgoraTextInput
@@ -239,9 +237,7 @@ export default class AudioMixing
               startPos: text === '' ? this.createState().startPos : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`startPos (defaults: ${this.createState().startPos})`}
         />
       </>

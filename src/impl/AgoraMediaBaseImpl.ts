@@ -1,11 +1,11 @@
 import {
-  IAudioPcmFrameSink,
-  IAudioFrameObserverBase,
   IAudioFrameObserver,
+  IAudioFrameObserverBase,
+  IAudioPcmFrameSink,
   IAudioSpectrumObserver,
+  IMediaRecorderObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
-  IMediaRecorderObserver,
 } from '../AgoraMediaBase';
 
 export function processIAudioPcmFrameSink(

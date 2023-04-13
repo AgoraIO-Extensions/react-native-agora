@@ -67,6 +67,7 @@
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-auto-import": "^0.1.1",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.1",
     "patch-package": "^6.5.0",
@@ -127,6 +128,7 @@
       "prettier"
     ],
     "plugins": [
+      "import",
       "auto-import"
     ],
     "rules": {
@@ -146,6 +148,23 @@
         "error",
         {
           "rootPath": "./src"
+        }
+      ],
+      "import/order": [
+        "error",
+        {
+          "newlines-between": "always-and-inside-groups",
+          "alphabetize": {
+            "order": "asc",
+            "orderImportKind": "asc"
+          }
+        }
+      ],
+      "sort-imports": [
+        "error",
+        {
+          "ignoreDeclarationSort": true,
+          "ignoreMemberSort": false
         }
       ]
     }

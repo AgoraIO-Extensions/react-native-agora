@@ -1,14 +1,8 @@
-import React from 'react';
-import {
-  PermissionsAndroid,
-  Platform,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import React, { ReactElement } from 'react';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   IRtcEngineEx,
   RemoteVideoState,
@@ -17,9 +11,8 @@ import {
   RtcStats,
   RtcSurfaceView,
   UserOfflineReasonType,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -27,9 +20,12 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
+  AgoraCard,
+  AgoraList,
   AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseVideoComponentState {
   channelId2: string;
@@ -384,9 +380,7 @@ export default class JoinMultipleChannel
               uid: text === '' ? this.createState().uid : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`uid (must > 0)`}
           value={uid > 0 ? uid.toString() : ''}
         />
@@ -410,9 +404,7 @@ export default class JoinMultipleChannel
               uid2: text === '' ? this.createState().uid2 : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`uid2 (must > 0)`}
           value={uid2 > 0 ? uid2.toString() : ''}
         />
@@ -441,35 +433,34 @@ export default class JoinMultipleChannel
     return (
       <>
         {startPreview || joinChannelSuccess || joinChannelSuccess2 ? (
-          <RtcSurfaceView style={AgoraStyle.videoLarge} canvas={{ uid: 0 }} />
-        ) : undefined}
-        {remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
-            {remoteUsers.map((value, index) => (
-              <RtcSurfaceView
-                key={`${value}-${index}`}
-                style={AgoraStyle.videoSmall}
-                canvas={{ uid: value }}
-                zOrderMediaOverlay={true}
-                connection={{ channelId, localUid: uid }}
-              />
-            ))}
-          </ScrollView>
-        ) : undefined}
-        {remoteUsers2.length > 0 ? (
-          <ScrollView horizontal={true} style={styles.videoContainer2}>
-            {remoteUsers2.map((value, index) => (
-              <RtcSurfaceView
-                key={`${value}-${index}`}
-                style={AgoraStyle.videoSmall}
-                canvas={{ uid: value }}
-                zOrderMediaOverlay={true}
-                connection={{ channelId: channelId2, localUid: uid2 }}
-              />
-            ))}
-          </ScrollView>
+          <AgoraList
+            data={[0, ...remoteUsers, ...remoteUsers2]}
+            renderItem={({ item }) => {
+              return this.renderVideo(
+                item,
+                remoteUsers2.indexOf(item) === -1 ? channelId : channelId2,
+                remoteUsers2.indexOf(item) === -1 ? uid : uid2
+              );
+            }}
+          />
         ) : undefined}
       </>
+    );
+  }
+
+  protected renderVideo(
+    uid: number,
+    channelId?: string,
+    localUid?: number
+  ): ReactElement {
+    return (
+      <AgoraCard title={`ChannelId: ${channelId} Uid: ${uid}`}>
+        <RtcSurfaceView
+          style={AgoraStyle.videoSmall}
+          canvas={{ uid }}
+          connection={{ channelId, localUid }}
+        />
+      </AgoraCard>
     );
   }
 
@@ -491,11 +482,3 @@ export default class JoinMultipleChannel
     );
   }
 }
-
-const styles = StyleSheet.create({
-  videoContainer2: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-  },
-});

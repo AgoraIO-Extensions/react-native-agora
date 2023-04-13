@@ -6,18 +6,26 @@ import {
   AudioReverbType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
   BaseComponent,
 } from '../../../components/BaseComponent';
+
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraDropdown,
+  AgoraSlider,
+} from '../../../components/ui';
+import Config from '../../../config/agora.config';
+import { enumToItems } from '../../../utils';
+
 import {
   AudioEffectPresetParam1Limit,
   AudioEffectPresetParam2Limit,
@@ -25,13 +33,6 @@ import {
   VoiceBeautifierPresetParam1Limit,
   VoiceBeautifierPresetParam2Limit,
 } from './VoiceChangerConfig';
-import {
-  AgoraButton,
-  AgoraDivider,
-  AgoraDropdown,
-  AgoraSlider,
-} from '../../../components/ui';
-import { enumToItems } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   voiceBeautifierPreset: VoiceBeautifierPreset;
@@ -226,7 +227,6 @@ export default class VoiceChanger
         {this._renderLocalVoicePitch()}
         <AgoraDivider />
         {this._renderVoiceConversionPreset()}
-        <AgoraDivider />
       </>
     );
   }

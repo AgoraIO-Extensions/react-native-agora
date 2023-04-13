@@ -1,9 +1,8 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, ScrollView } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   ErrorCodeType,
   IRtcEngineEventHandler,
   LocalVideoStreamError,
@@ -15,9 +14,8 @@ import {
   UserOfflineReasonType,
   VideoSourceType,
   VideoViewSetupMode,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -30,6 +28,7 @@ import {
   AgoraStyle,
   AgoraSwitch,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -199,50 +198,22 @@ export default class JoinChannelVideo
   }
 
   protected renderUsers(): React.ReactNode {
-    const {
-      startPreview,
-      joinChannelSuccess,
-      remoteUsers,
-      renderByTextureView,
-      setupMode,
-    } = this.state;
+    return super.renderUsers();
+  }
 
-    return (
-      <>
-        {startPreview || joinChannelSuccess ? (
-          renderByTextureView ? (
-            <RtcTextureView
-              style={AgoraStyle.videoLarge}
-              canvas={{ uid: 0, setupMode }}
-            />
-          ) : (
-            <RtcSurfaceView
-              style={AgoraStyle.videoLarge}
-              canvas={{ uid: 0, setupMode }}
-            />
-          )
-        ) : undefined}
-        {remoteUsers !== undefined && remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
-            {remoteUsers.map((value, index) =>
-              renderByTextureView ? (
-                <RtcTextureView
-                  key={`${value}-${index}`}
-                  style={AgoraStyle.videoSmall}
-                  canvas={{ uid: value, setupMode }}
-                />
-              ) : (
-                <RtcSurfaceView
-                  key={`${value}-${index}`}
-                  style={AgoraStyle.videoSmall}
-                  zOrderMediaOverlay={true}
-                  canvas={{ uid: value, setupMode }}
-                />
-              )
-            )}
-          </ScrollView>
-        ) : undefined}
-      </>
+  protected renderVideo(uid: number): React.ReactElement {
+    const { renderByTextureView, setupMode } = this.state;
+    return renderByTextureView ? (
+      <RtcTextureView
+        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        canvas={{ uid, setupMode }}
+      />
+    ) : (
+      <RtcSurfaceView
+        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={uid !== 0}
+        canvas={{ uid, setupMode }}
+      />
     );
   }
 
