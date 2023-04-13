@@ -4,20 +4,19 @@ import {
   AudioSpectrumData,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IAudioSpectrumObserver,
   IRtcEngineEventHandler,
   UserAudioSpectrumInfo,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import { LineChart } from 'react-native-chart-kit';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
   BaseComponent,
 } from '../../../components/BaseComponent';
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseAudioComponentState {
   intervalInMS: number;
@@ -177,9 +176,7 @@ export default class AudioSpectrum
                 text === '' ? this.createState().intervalInMS : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`intervalInMS (defaults: ${
             this.createState().intervalInMS
           })`}

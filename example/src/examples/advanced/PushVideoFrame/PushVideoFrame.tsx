@@ -3,17 +3,15 @@ import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   ExternalVideoSourceType,
   IRtcEngineEventHandler,
   IRtcEngineEx,
   VideoBufferType,
   VideoPixelFormat,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 // @ts-ignore
 import ImageTools from 'react-native-image-tool';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -24,6 +22,7 @@ import {
   AgoraImage,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { getAbsolutePath, getAssetPath } from '../../../utils';
 
 interface State extends BaseVideoComponentState {

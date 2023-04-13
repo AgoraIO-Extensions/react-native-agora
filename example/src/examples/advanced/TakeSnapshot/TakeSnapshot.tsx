@@ -3,14 +3,12 @@ import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   ErrorCodeType,
   IRtcEngineEventHandler,
   RtcConnection,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import RNFS from 'react-native-fs';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -22,6 +20,7 @@ import {
   AgoraDropdown,
   AgoraImage,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -193,7 +192,6 @@ export default class TakeSnapshot
             />
           </>
         ) : undefined}
-        <AgoraDivider />
       </>
     );
   }

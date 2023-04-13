@@ -12,12 +12,11 @@ import {
   SimulcastStreamMode,
   WatermarkOptions,
 } from '../AgoraBase';
-import { VideoSourceType, IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { IAudioSpectrumObserver, VideoSourceType } from '../AgoraMediaBase';
 import { IMediaEngine } from '../IAgoraMediaEngine';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
 import { IMusicContentCenter } from '../IAgoraMusicContentCenter';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
 import {
   ChannelMediaOptions,
   DirectCdnStreamingMediaOptions,
@@ -30,6 +29,7 @@ import {
   RtcEngineContext,
   SDKBuildInfo,
 } from '../IAgoraRtcEngine';
+import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
 
@@ -53,13 +53,13 @@ const checkers = createCheckers(
   IAgoraRtcEngineTI
 );
 
+import { DeviceEventEmitter, EVENT_TYPE, callIrisApi } from './IrisApiEngine';
 import { LocalSpatialAudioEngineInternal } from './LocalSpatialAudioEngineInternal';
 import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
 import { MusicContentCenterInternal } from './MusicContentCenterInternal';
 
-import { callIrisApi, DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 import type { EmitterSubscription } from './emitter/EventEmitter';
 
 export class RtcEngineExInternal extends IRtcEngineExImpl {

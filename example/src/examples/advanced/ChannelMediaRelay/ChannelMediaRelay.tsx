@@ -6,22 +6,16 @@ import {
   ChannelMediaRelayState,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
 } from '../../../components/BaseComponent';
-import {
-  AgoraButton,
-  AgoraDivider,
-  AgoraText,
-  AgoraTextInput,
-} from '../../../components/ui';
+import { AgoraButton, AgoraText, AgoraTextInput } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseVideoComponentState {
   destChannelNames: string[];
@@ -236,7 +230,6 @@ export default class ChannelMediaRelay
           value={destChannelNames.join(' ')}
         />
         <AgoraText>{`destCount: ${destChannelNames.length}`}</AgoraText>
-        <AgoraDivider />
       </>
     );
   }

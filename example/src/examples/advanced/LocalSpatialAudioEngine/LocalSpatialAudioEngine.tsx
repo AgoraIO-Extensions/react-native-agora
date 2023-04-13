@@ -1,14 +1,12 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   AudioScenarioType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -22,6 +20,7 @@ import {
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
@@ -200,9 +199,7 @@ export default class LocalSpatialAudioEngine
               range: text === '' ? this.createState().range : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`range (defaults: ${this.createState().range})`}
         />
         <AgoraButton
@@ -220,7 +217,7 @@ export default class LocalSpatialAudioEngine
           }}
         />
         <AgoraDivider />
-        <AgoraView style={styles.container}>
+        <AgoraView horizontal={true}>
           {position.map((value, index) => (
             <AgoraTextInput
               key={`position-${index}`}
@@ -230,18 +227,15 @@ export default class LocalSpatialAudioEngine
                 position[index] = +text;
                 this.setState({ position });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`position (defaults: ${
                 this.createState().position[index]
               })`}
             />
           ))}
         </AgoraView>
-        <AgoraView style={styles.container}>
+        <AgoraDivider />
+        <AgoraView horizontal={true}>
           {axisForward.map((value, index) => (
             <AgoraTextInput
               key={`axisForward-${index}`}
@@ -251,18 +245,15 @@ export default class LocalSpatialAudioEngine
                 axisForward[index] = +text;
                 this.setState({ axisForward });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`axisForward (defaults: ${
                 this.createState().axisForward[index]
               })`}
             />
           ))}
         </AgoraView>
-        <AgoraView style={styles.container}>
+        <AgoraDivider />
+        <AgoraView horizontal={true}>
           {axisRight.map((value, index) => (
             <AgoraTextInput
               key={`axisRight-${index}`}
@@ -272,18 +263,15 @@ export default class LocalSpatialAudioEngine
                 axisRight[index] = +text;
                 this.setState({ axisRight });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`axisRight (defaults: ${
                 this.createState().axisRight[index]
               })`}
             />
           ))}
         </AgoraView>
-        <AgoraView style={styles.container}>
+        <AgoraDivider />
+        <AgoraView horizontal={true}>
           {axisUp.map((value, index) => (
             <AgoraTextInput
               key={`axisUp-${index}`}
@@ -293,11 +281,7 @@ export default class LocalSpatialAudioEngine
                 axisUp[index] = +text;
                 this.setState({ axisUp });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`axisUp (defaults: ${
                 this.createState().axisUp[index]
               })`}
@@ -325,11 +309,3 @@ export default class LocalSpatialAudioEngine
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});

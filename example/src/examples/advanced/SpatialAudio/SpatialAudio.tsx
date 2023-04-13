@@ -4,11 +4,9 @@ import {
   AudioScenarioType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -21,6 +19,7 @@ import {
   AgoraSlider,
   AgoraSwitch,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
@@ -260,7 +259,6 @@ export default class SpatialAudio
             });
           }}
         />
-        <AgoraDivider />
       </>
     );
   }

@@ -3,14 +3,12 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   EncryptionErrorType,
   EncryptionMode,
   IRtcEngineEventHandler,
   RtcConnection,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -23,6 +21,7 @@ import {
   AgoraText,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -186,14 +185,11 @@ export default class Encryption
               encryptionKdfSalt: text.split(' ').map((value) => +value),
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={'encryptionKdfSalt (split by blank)'}
           value={encryptionKdfSalt.join(' ')}
         />
         <AgoraText>{`encryptionKdfSaltLength: ${encryptionKdfSalt.length}`}</AgoraText>
-        <AgoraDivider />
       </>
     );
   }

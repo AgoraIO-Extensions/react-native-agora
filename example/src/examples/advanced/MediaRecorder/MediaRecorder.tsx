@@ -3,7 +3,6 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IMediaRecorder,
   IMediaRecorderObserver,
   IRtcEngineEventHandler,
@@ -12,10 +11,9 @@ import {
   RecorderErrorCode,
   RecorderInfo,
   RecorderState,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import RNFS from 'react-native-fs';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -28,6 +26,7 @@ import {
   AgoraSlider,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
@@ -279,9 +278,7 @@ export default class MediaRecorder
                 text === '' ? this.createState().maxDurationMs : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`maxDurationMs (defaults: ${
             this.createState().maxDurationMs
           })`}

@@ -2,12 +2,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import createAgoraRtcEngine, {
   ChannelProfileType,
+  ErrorCodeType,
   IRtcEngineEx,
+  RtcConnection,
+  RtcStats,
+  UserOfflineReasonType,
 } from 'react-native-agora';
 
-import * as log from '../../../utils/log';
-
 import Config from '../../../config/agora.config';
+import * as log from '../../../utils/log';
 
 export function useInitRtcEngine(enableVideo: boolean) {
   const [appId] = useState(Config.appId);
@@ -64,6 +67,95 @@ export function useInitRtcEngine(enableVideo: boolean) {
     }
   }, [appId, enableVideo]);
 
+  const onError = useCallback((err: ErrorCodeType, msg: string) => {
+    log.info('onError', 'err', err, 'msg', msg);
+  }, []);
+
+  const onJoinChannelSuccess = useCallback(
+    (connection: RtcConnection, elapsed: number) => {
+      log.info(
+        'onJoinChannelSuccess',
+        'connection',
+        connection,
+        'elapsed',
+        elapsed
+      );
+      if (
+        connection.channelId === channelId &&
+        (connection.localUid === uid || uid === 0)
+      ) {
+        setJoinChannelSuccess(true);
+      }
+    },
+    [channelId, uid]
+  );
+
+  const onLeaveChannel = useCallback(
+    (connection: RtcConnection, stats: RtcStats) => {
+      log.info('onLeaveChannel', 'connection', connection, 'stats', stats);
+      if (
+        connection.channelId === channelId &&
+        (connection.localUid === uid || uid === 0)
+      ) {
+        setJoinChannelSuccess(false);
+        setRemoteUsers([]);
+      }
+    },
+    [channelId, uid]
+  );
+
+  const onUserJoined = useCallback(
+    (connection: RtcConnection, remoteUid: number, elapsed: number) => {
+      log.info(
+        'onUserJoined',
+        'connection',
+        connection,
+        'remoteUid',
+        remoteUid,
+        'elapsed',
+        elapsed
+      );
+      if (
+        connection.channelId === channelId &&
+        (connection.localUid === uid || uid === 0)
+      ) {
+        setRemoteUsers((prev) => {
+          if (prev === undefined) return [];
+          return [...prev, remoteUid];
+        });
+      }
+    },
+    [channelId, uid]
+  );
+
+  const onUserOffline = useCallback(
+    (
+      connection: RtcConnection,
+      remoteUid: number,
+      reason: UserOfflineReasonType
+    ) => {
+      log.info(
+        'onUserOffline',
+        'connection',
+        connection,
+        'remoteUid',
+        remoteUid,
+        'reason',
+        reason
+      );
+      if (
+        connection.channelId === channelId &&
+        (connection.localUid === uid || uid === 0)
+      ) {
+        setRemoteUsers((prev) => {
+          if (prev === undefined) return [];
+          return prev!.filter((value) => value !== remoteUid);
+        });
+      }
+    },
+    [channelId, uid]
+  );
+
   useEffect(() => {
     (async () => {
       await initRtcEngine();
@@ -74,6 +166,31 @@ export function useInitRtcEngine(enableVideo: boolean) {
       engineCopy.release();
     };
   }, [engine, initRtcEngine]);
+
+  useEffect(() => {
+    engine.current.addListener('onError', onError);
+    engine.current.addListener('onJoinChannelSuccess', onJoinChannelSuccess);
+    engine.current.addListener('onLeaveChannel', onLeaveChannel);
+    engine.current.addListener('onUserJoined', onUserJoined);
+    engine.current.addListener('onUserOffline', onUserOffline);
+
+    const engineCopy = engine.current;
+    return () => {
+      engineCopy.removeListener('onError', onError);
+      engineCopy.removeListener('onJoinChannelSuccess', onJoinChannelSuccess);
+      engineCopy.removeListener('onLeaveChannel', onLeaveChannel);
+      engineCopy.removeListener('onUserJoined', onUserJoined);
+      engineCopy.removeListener('onUserOffline', onUserOffline);
+    };
+  }, [
+    engine,
+    initRtcEngine,
+    onError,
+    onJoinChannelSuccess,
+    onLeaveChannel,
+    onUserJoined,
+    onUserOffline,
+  ]);
 
   return {
     appId,

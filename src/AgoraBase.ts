@@ -1,5 +1,5 @@
 import './extension/AgoraBaseExtension';
-import { VideoSourceType, RenderModeType } from './AgoraMediaBase';
+import { RenderModeType, VideoSourceType } from './AgoraMediaBase';
 /**
  * The channel profile.
  */

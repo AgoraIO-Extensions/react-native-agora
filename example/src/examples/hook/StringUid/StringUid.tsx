@@ -1,17 +1,12 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import {
-  ClientRoleType,
-  ErrorCodeType,
-  RtcConnection,
-  RtcStats,
-  UserOfflineReasonType,
-} from 'react-native-agora';
+import { ClientRoleType } from 'react-native-agora';
 
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
 import * as log from '../../../utils/log';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
-import BaseRenderChannel from '../components/BaseRenderChannel';
 import { BaseComponent } from '../components/BaseComponent';
+import BaseRenderChannel from '../components/BaseRenderChannel';
+import BaseRenderUsers from '../components/BaseRenderUsers';
+import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 
 export default function StringUid() {
   const {
@@ -19,7 +14,7 @@ export default function StringUid() {
     setChannelId,
     token,
     joinChannelSuccess,
-    setJoinChannelSuccess,
+    remoteUsers,
     engine,
   } =
     /**
@@ -74,66 +69,6 @@ export default function StringUid() {
   };
 
   useEffect(() => {
-    engine.current.addListener('onError', (err: ErrorCodeType, msg: string) => {
-      log.info('onError', 'err', err, 'msg', msg);
-    });
-
-    engine.current.addListener(
-      'onJoinChannelSuccess',
-      (connection: RtcConnection, elapsed: number) => {
-        log.info(
-          'onJoinChannelSuccess',
-          'connection',
-          connection,
-          'elapsed',
-          elapsed
-        );
-        setJoinChannelSuccess(true);
-      }
-    );
-
-    engine.current.addListener(
-      'onLeaveChannel',
-      (connection: RtcConnection, stats: RtcStats) => {
-        log.info('onLeaveChannel', 'connection', connection, 'stats', stats);
-        setJoinChannelSuccess(false);
-      }
-    );
-
-    engine.current.addListener(
-      'onUserJoined',
-      (connection: RtcConnection, remoteUid: number, elapsed: number) => {
-        log.info(
-          'onUserJoined',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'elapsed',
-          elapsed
-        );
-      }
-    );
-
-    engine.current.addListener(
-      'onUserOffline',
-      (
-        connection: RtcConnection,
-        remoteUid: number,
-        reason: UserOfflineReasonType
-      ) => {
-        log.info(
-          'onUserOffline',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'reason',
-          reason
-        );
-      }
-    );
-
     engine.current.addListener(
       'onLocalUserRegistered',
       (uid: number, userAccount: string) => {
@@ -145,7 +80,7 @@ export default function StringUid() {
     return () => {
       engineCopy.removeAllListeners();
     };
-  }, [engine, setJoinChannelSuccess]);
+  }, [engine]);
 
   return (
     <BaseComponent
@@ -159,6 +94,12 @@ export default function StringUid() {
           leaveChannel={leaveChannel}
           joinChannelSuccess={joinChannelSuccess}
           onChannelIdChange={setChannelId}
+        />
+      )}
+      renderUsers={() => (
+        <BaseRenderUsers
+          joinChannelSuccess={joinChannelSuccess}
+          remoteUsers={remoteUsers}
         />
       )}
       renderAction={renderAction}

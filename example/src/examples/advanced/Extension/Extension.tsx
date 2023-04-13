@@ -3,17 +3,16 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
 } from '../../../components/BaseComponent';
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseVideoComponentState {
   path: string;
@@ -94,6 +93,7 @@ export default class Extension
     if (Platform.OS === 'android') {
       this.engine?.loadExtensionProvider(path);
     }
+
     this.engine?.enableExtension(provider, extension, true);
     this.setState({ enableExtension: true });
   };

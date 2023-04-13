@@ -1,15 +1,11 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import {
   ClientRoleType,
-  ErrorCodeType,
   LocalVideoStreamError,
   LocalVideoStreamState,
-  RtcConnection,
-  RtcStats,
   RtcSurfaceView,
   RtcTextureView,
-  UserOfflineReasonType,
   VideoSourceType,
   VideoViewSetupMode,
 } from 'react-native-agora';
@@ -22,11 +18,11 @@ import {
   AgoraSwitch,
 } from '../../../components/ui';
 import { enumToItems } from '../../../utils';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
+import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
 
 export default function JoinChannelVideo() {
   const {
@@ -35,9 +31,7 @@ export default function JoinChannelVideo() {
     token,
     uid,
     joinChannelSuccess,
-    setJoinChannelSuccess,
     remoteUsers,
-    setRemoteUsers,
     startPreview,
     engine,
   } =
@@ -92,75 +86,6 @@ export default function JoinChannelVideo() {
   };
 
   useEffect(() => {
-    engine.current.addListener('onError', (err: ErrorCodeType, msg: string) => {
-      log.info('onError', 'err', err, 'msg', msg);
-    });
-
-    engine.current.addListener(
-      'onJoinChannelSuccess',
-      (connection: RtcConnection, elapsed: number) => {
-        log.info(
-          'onJoinChannelSuccess',
-          'connection',
-          connection,
-          'elapsed',
-          elapsed
-        );
-        setJoinChannelSuccess(true);
-      }
-    );
-
-    engine.current.addListener(
-      'onLeaveChannel',
-      (connection: RtcConnection, stats: RtcStats) => {
-        log.info('onLeaveChannel', 'connection', connection, 'stats', stats);
-        setJoinChannelSuccess(false);
-        setRemoteUsers([]);
-      }
-    );
-
-    engine.current.addListener(
-      'onUserJoined',
-      (connection: RtcConnection, remoteUid: number, elapsed: number) => {
-        log.info(
-          'onUserJoined',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'elapsed',
-          elapsed
-        );
-        setRemoteUsers((prev) => {
-          if (prev === undefined) return [];
-          return [...prev, remoteUid];
-        });
-      }
-    );
-
-    engine.current.addListener(
-      'onUserOffline',
-      (
-        connection: RtcConnection,
-        remoteUid: number,
-        reason: UserOfflineReasonType
-      ) => {
-        log.info(
-          'onUserOffline',
-          'connection',
-          connection,
-          'remoteUid',
-          remoteUid,
-          'reason',
-          reason
-        );
-        setRemoteUsers((prev) => {
-          if (prev === undefined) return [];
-          return prev.filter((value) => value !== remoteUid);
-        });
-      }
-    );
-
     engine.current.addListener(
       'onVideoDeviceStateChanged',
       (deviceId: string, deviceType: number, deviceState: number) => {
@@ -199,7 +124,7 @@ export default function JoinChannelVideo() {
     return () => {
       engineCopy.removeAllListeners();
     };
-  }, [engine, setJoinChannelSuccess, setRemoteUsers]);
+  }, [engine]);
 
   return (
     <BaseComponent
@@ -227,7 +152,7 @@ export default function JoinChannelVideo() {
     />
   );
 
-  function renderVideo(uid: number): ReactNode {
+  function renderVideo(uid: number): ReactElement {
     return renderByTextureView ? (
       <RtcTextureView
         style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}

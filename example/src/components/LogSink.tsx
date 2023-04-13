@@ -1,6 +1,6 @@
+import { Overlay } from '@rneui/themed';
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import { Overlay } from '@rneui/themed';
 
 import { AgoraDivider, AgoraText } from './ui';
 

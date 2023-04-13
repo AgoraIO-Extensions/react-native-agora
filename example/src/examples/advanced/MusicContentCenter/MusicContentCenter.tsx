@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  createAgoraRtcEngine,
   IMediaPlayerSourceObserver,
   IMusicContentCenter,
   IMusicContentCenterEventHandler,
@@ -13,9 +12,8 @@ import {
   MusicCollection,
   MusicContentCenterStatusCode,
   PreloadStatusCode,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -23,12 +21,12 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
-  AgoraDivider,
   AgoraDropdown,
   AgoraImage,
   AgoraSlider,
   AgoraTextInput,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseComponentState {
   rtmAppId: string;
@@ -406,7 +404,6 @@ export default class MusicContentCenter
           title={`init Music Content Center`}
           onPress={this.initMusicContentCenter}
         />
-        <AgoraDivider />
         <AgoraDropdown
           title={'musicChartInfos:'}
           items={musicChartInfos?.map((value) => {
@@ -420,7 +417,6 @@ export default class MusicContentCenter
             this.setState({ musicChartId: value });
           }}
         />
-        <AgoraDivider />
         {musicChartId >= 0 ? (
           <>
             <AgoraTextInput
@@ -447,7 +443,6 @@ export default class MusicContentCenter
               title={`get Music Collection`}
               onPress={this.getMusicCollectionByMusicChartId}
             />
-            <AgoraDivider />
             <AgoraDropdown
               title={'musics:'}
               items={musics?.map((value) => {
@@ -466,34 +461,27 @@ export default class MusicContentCenter
                 });
               }}
             />
-            <AgoraDivider />
           </>
         ) : undefined}
         {songCode >= 0 ? (
-          <>
-            <AgoraButton
-              disabled={open}
-              title={`openWithSongCode`}
-              onPress={this.openWithSongCode}
-            />
-            <AgoraDivider />
-          </>
+          <AgoraButton
+            disabled={open}
+            title={`openWithSongCode`}
+            onPress={this.openWithSongCode}
+          />
         ) : undefined}
         {preload ? (
-          <>
-            <AgoraSlider
-              disabled={!open}
-              title={`${position} ms : ${duration} ms`}
-              minimumValue={0}
-              maximumValue={duration}
-              step={1000}
-              value={position}
-              onSlidingComplete={(value) => {
-                this.seek(value);
-              }}
-            />
-            <AgoraDivider />
-          </>
+          <AgoraSlider
+            disabled={!open}
+            title={`${position} ms : ${duration} ms`}
+            minimumValue={0}
+            maximumValue={duration}
+            step={1000}
+            value={position}
+            onSlidingComplete={(value) => {
+              this.seek(value);
+            }}
+          />
         ) : undefined}
       </>
     );

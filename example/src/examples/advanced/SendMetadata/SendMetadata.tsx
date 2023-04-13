@@ -1,24 +1,24 @@
+import { Buffer } from 'buffer';
+
 import React from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IMetadataObserver,
   IRtcEngineEventHandler,
   Metadata,
   MetadataType,
   VideoSourceType,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-import { Buffer } from 'buffer';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
 } from '../../../components/BaseComponent';
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseVideoComponentState {
   metadataBuffer: string;
