@@ -154,6 +154,12 @@
         "error",
         {
           "newlines-between": "always-and-inside-groups",
+          "pathGroups": [
+            {
+              "pattern": "../internal/IrisApiEngine",
+              "group": "unknown"
+            }
+          ],
           "alphabetize": {
             "order": "asc",
             "orderImportKind": "asc"
