@@ -17,7 +17,7 @@ import {
   IMediaPlayerVideoFrameObserver,
 } from '../IAgoraMediaPlayer';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
-import { callIrisApi } from '../internal/IrisApiEngine';
+
 // @ts-ignore
 export class IMediaPlayerImpl implements IMediaPlayer {
   getMediaPlayerId(): number {
@@ -1136,3 +1136,5 @@ export function processIMediaPlayerVideoFrameObserver(
       break;
   }
 }
+
+import { callIrisApi } from '../internal/IrisApiEngine';
