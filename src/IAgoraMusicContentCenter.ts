@@ -1,5 +1,6 @@
 import './extension/IAgoraMusicContentCenterExtension';
 import { IMediaPlayer } from './IAgoraMediaPlayer';
+
 /**
  * @ignore
  */

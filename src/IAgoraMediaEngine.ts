@@ -13,6 +13,7 @@ import {
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from './AgoraMediaBase';
+
 /**
  * The channel mode.
  */
@@ -126,7 +127,7 @@ export abstract class IMediaEngine {
    * Call this method before joining a channel.
    *
    * @param enabled Whether to enable the external audio source:true: Enable the external audio source.false: (Default) Disable the external audio source.
-   * @param sampleRate The sample rate (Hz) of the external audio source which can be set as 8000, 16000, 32000, 44100, or 48000.
+   * @param sampleRate The sample rate (Hz) of the external audio which can be set as 8000, 16000, 32000, 44100, or 48000.
    * @param channels The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
    * @param sourceNumber The number of external audio sources. The value of this parameter should be larger than 0. The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions , you can set publishCustomAudioSourceId to the audio track ID you want to publish.
    * @param localPlayback Whether to play the external audio source:true: Play the external audio source.false: (Default) Do not play the external source.

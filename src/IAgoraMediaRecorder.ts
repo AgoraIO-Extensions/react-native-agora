@@ -3,6 +3,7 @@ import {
   IMediaRecorderObserver,
   MediaRecorderConfiguration,
 } from './AgoraMediaBase';
+
 /**
  * Used for recording audio and video on the client.
  * IMediaRecorder can record the following:

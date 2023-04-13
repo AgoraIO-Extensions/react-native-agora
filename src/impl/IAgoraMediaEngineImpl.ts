@@ -13,7 +13,7 @@ import {
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
 import { IMediaEngine } from '../IAgoraMediaEngine';
-import { callIrisApi } from '../internal/IrisApiEngine';
+
 // @ts-ignore
 export class IMediaEngineImpl implements IMediaEngine {
   registerAudioFrameObserver(observer: IAudioFrameObserver): number {
@@ -426,3 +426,5 @@ export class IMediaEngineImpl implements IMediaEngine {
     return 'MediaEngine_unregisterVideoEncodedFrameObserver';
   }
 }
+
+import { callIrisApi } from '../internal/IrisApiEngine';

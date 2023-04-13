@@ -118,6 +118,7 @@ import {
 import { RtcConnection } from './IAgoraRtcEngineEx';
 import { ILocalSpatialAudioEngine } from './IAgoraSpatialAudio';
 import { IAudioDeviceManager } from './IAudioDeviceManager';
+
 /**
  * Media device types.
  */
@@ -1038,7 +1039,7 @@ export class ChannelMediaOptions {
    */
   publishCameraTrack?: boolean;
   /**
-   * Whether to publish the video captured by the second camera:true: Publish the video captured by the second camera.false: (Default) Do not publish the video captured by the second camera.
+   * @ignore
    */
   publishSecondaryCameraTrack?: boolean;
   /**
@@ -1046,7 +1047,7 @@ export class ChannelMediaOptions {
    */
   publishMicrophoneTrack?: boolean;
   /**
-   * @ignore
+   * Whether to publish the video captured from the screen:true: Publish the video captured from the screen.false: (Default) Do not publish the video captured from the screen.This parameter applies to Android and iOS only.
    */
   publishScreenCaptureVideo?: boolean;
   /**
@@ -1366,10 +1367,10 @@ export interface IRtcEngineEventHandler {
 
   /**
    * Reports the volume information of users.
-   * By default, this callback is disabled. You can enable it by calling enableAudioVolumeIndication . Once this callback is enabled and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback according to the time interval set in enableAudioVolumeIndication. The SDK triggers two independent onAudioVolumeIndication callbacks simultaneously, which separately report the volume information of the local user who sends a stream and the remote users (up to three) whose instantaneous volume is the highest.Once this callback is enabled, if the local user calls the muteLocalAudioStream method to mute, the SDK continues to report the volume indication of the local user.If a remote user whose volume is one of the three highest in the channel stops publishing the audio stream for 20 seconds, the callback excludes this user's information; if all remote users stop publishing audio streams for 20 seconds, the SDK stops triggering the callback for remote users.
+   * By default, this callback is disabled. You can enable it by calling enableAudioVolumeIndication . Once this callback is enabled and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback according to the time interval set in enableAudioVolumeIndication. The SDK triggers two independent onAudioVolumeIndication callbacks simultaneously, which separately report the volume information of the local user who sends a stream and the remote users (up to three) whose instantaneous volume is the highest.Once this callback is enabled, if the local user calls the muteLocalAudioStream method for muting, the SDK continues to report the volume indication of the local user. In the callbacks triggered, the volume information about the local user is 0 If a remote user whose volume is one of the three highest in the channel stops publishing the audio stream for 20 seconds, the callback excludes this user's information; if all remote users stop publishing audio streams for 20 seconds, the SDK stops triggering the callback for remote users.
    *
    * @param connection The connection information. See RtcConnection .
-   * @param speakers The volume information of the users. See AudioVolumeInfo . An empty speakers array in the callback indicates that no remote user is in the channel or is sending a stream.
+   * @param speakers The volume information of the users, see AudioVolumeInfo . An empty speakers array in the callback indicates that no remote user is in the channel or is sending a stream.
    * @param speakerNumber The total number of users.In the callback for the local user, if the local user is sending streams, the value of speakerNumber is 1.In the callback for remote users, the value range of speakerNumber is [0,3]. If the number of remote users who send streams is greater than or equal to three, the value of speakerNumber is 3.
    * @param totalVolume The volume of the speaker. The value range is [0,255].In the callback for the local user, totalVolume is the volume of the local user who sends a stream.In the callback for remote users, totalVolume is the sum of the volume of all remote users (up to three) whose instantaneous volume is the highest.
    */
@@ -2058,12 +2059,12 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * Occurs when the state of Media Push changes.
-   * When the state of Media Push changes, the SDK triggers this callback and reports the URL address and the current state of the Media Push. This callback indicates the state of the Media Push. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the error code parameter.
+   * Occurs when the media push state changes.
+   * When the media push state changes, the SDK triggers this callback and reports the URL address and the current state of the media push. This callback indicates the state of the media push. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the error code parameter.
    *
-   * @param url The URL address where the state of the Media Push changes.
-   * @param state The current state of the Media Push. See RtmpStreamPublishState .
-   * @param errCode The detailed error information for the Media Push. See RtmpStreamPublishErrorType .
+   * @param url The URL address where the state of the media push changes.
+   * @param state The current state of the media push. See RtmpStreamPublishState .
+   * @param errCode The detailed error information for the media push. See RtmpStreamPublishErrorType .
    */
   onRtmpStreamingStateChanged?(
     url: string,
@@ -2072,10 +2073,10 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * Reports events during the Media Push.
+   * Reports events during the media push.
    *
-   * @param url The URL for Media Push.
-   * @param eventCode The event code of Media Push.  RtmpStreamingEvent
+   * @param url The URL of media push.
+   * @param eventCode The event code of media push. See RtmpStreamingEvent .
    */
   onRtmpStreamingEvent?(url: string, eventCode: RtmpStreamingEvent): void;
 

@@ -3,7 +3,7 @@ import {
   MediaRecorderConfiguration,
 } from '../AgoraMediaBase';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
-import { callIrisApi } from '../internal/IrisApiEngine';
+
 // @ts-ignore
 export class IMediaRecorderImpl implements IMediaRecorder {
   setMediaRecorderObserver(callback: IMediaRecorderObserver): number {
@@ -55,3 +55,5 @@ export class IMediaRecorderImpl implements IMediaRecorder {
     return 'MediaRecorder_stopRecording';
   }
 }
+
+import { callIrisApi } from '../internal/IrisApiEngine';
