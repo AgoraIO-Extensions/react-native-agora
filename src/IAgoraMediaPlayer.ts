@@ -14,6 +14,7 @@ import {
   PlayerStreamInfo,
 } from './AgoraMediaPlayerTypes';
 import { IMediaPlayerSourceObserver } from './IAgoraMediaPlayerSource';
+
 /**
  * This class provides media player functions and supports multiple instances.
  */

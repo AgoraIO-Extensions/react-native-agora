@@ -7,6 +7,7 @@ import {
   PlayerUpdatedInfo,
   SrcInfo,
 } from './AgoraMediaPlayerTypes';
+
 /**
  * Provides callbacks for media players.
  */

@@ -1,5 +1,6 @@
 import './extension/IAgoraSpatialAudioExtension';
 import { RtcConnection } from './IAgoraRtcEngineEx';
+
 /**
  * The spatial position of the remote user or the media player.
  */

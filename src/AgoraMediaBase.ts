@@ -1,5 +1,6 @@
 import './extension/AgoraMediaBaseExtension';
 import { EncodedVideoFrameInfo } from './AgoraBase';
+
 /**
  * The capture type of the custom video source.
  */
@@ -910,7 +911,7 @@ export class UserAudioSpectrumInfo {
 export interface IAudioSpectrumObserver {
   /**
    * Gets the statistics of a local audio spectrum.
-   * After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
+   * After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrumcallback in IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
    *
    * @param data The audio spectrum data of the local user. See AudioSpectrumData .
    *
@@ -979,7 +980,7 @@ export enum VideoFrameProcessMode {
 export interface IVideoFrameObserver {
   /**
    * Occurs each time the SDK receives a video frame captured by the local camera.
-   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.Once the pre-processing is complete, you can directly modify videoFrame in this callback, and set the return value to true to send the modified video data to the SDK.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
+   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.After pre-processing, you can send the processed video data back to the SDK through this callback.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
    *
    * @param videoFrame The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffer
    *

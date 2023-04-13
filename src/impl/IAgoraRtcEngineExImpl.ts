@@ -22,9 +22,9 @@ import {
   StreamFallbackOptions,
 } from '../IAgoraRtcEngine';
 import { IRtcEngineEx, RtcConnection } from '../IAgoraRtcEngineEx';
-import { callIrisApi } from '../internal/IrisApiEngine';
 
 import { IRtcEngineImpl } from './IAgoraRtcEngineImpl';
+
 // @ts-ignore
 export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   joinChannelEx(
@@ -1514,3 +1514,5 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_startMediaRenderingTracingEx';
   }
 }
+
+import { callIrisApi } from '../internal/IrisApiEngine';
