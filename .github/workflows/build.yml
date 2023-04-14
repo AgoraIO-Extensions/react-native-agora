@@ -83,6 +83,7 @@ jobs:
           root-directory: example
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
           provisioning-profile-specifier: "AgoraQA2021"
+          codesigning-identity: "Apple Development: xuewen xu (66NMZN987N)"
 
       - uses: actions/upload-artifact@v3
         with:
