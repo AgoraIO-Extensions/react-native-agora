@@ -76,7 +76,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-      - uses: nitro-build/github-action-nitro-ios@v1
+      - uses: AgoraIO-Extensions/actions/.github/actions/github-action-nitro-ios@main
         id: nitro
         with:
           debug: true
