@@ -57,7 +57,7 @@ jobs:
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/${{ secrets.BUILD_CERTIFICATE_UUID }}.mobileprovision
+          PP_PATH=$RUNNER_TEMP/${{ secrets.BUILD_PROVISION_PROFILE_UUID }}.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
@@ -84,7 +84,7 @@ jobs:
           root-directory: example
           export-method: development
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
-          provisioning-profile-specifier: ${{ secrets.BUILD_CERTIFICATE_NAME }}
+          provisioning-profile-specifier: ${{ secrets.BUILD_PROVISION_PROFILE_NAME }}
 
       - uses: actions/upload-artifact@v3
         with:
