@@ -229,6 +229,9 @@ export const AgoraStyle = StyleSheet.create({
   fullWidth: {
     width: '100%',
   },
+  fullHeight: {
+    height: '100%',
+  },
   fullSize: {
     flex: 1,
   },

@@ -266,7 +266,6 @@ export default function JoinMultipleChannel() {
   return (
     <BaseComponent
       name={'JoinMultipleChannel'}
-      enableVideo={true}
       renderChannel={renderChannel}
       renderUsers={renderUsers}
       renderAction={renderAction}

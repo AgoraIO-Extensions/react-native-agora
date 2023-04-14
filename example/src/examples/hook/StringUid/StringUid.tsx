@@ -85,7 +85,6 @@ export default function StringUid() {
   return (
     <BaseComponent
       name={'StringUid'}
-      enableVideo={false}
       renderConfiguration={renderConfiguration}
       renderChannel={() => (
         <BaseRenderChannel

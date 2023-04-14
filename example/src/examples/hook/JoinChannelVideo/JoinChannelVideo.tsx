@@ -129,7 +129,6 @@ export default function JoinChannelVideo() {
   return (
     <BaseComponent
       name={'JoinChannelVideo'}
-      enableVideo={true}
       renderConfiguration={renderConfiguration}
       renderChannel={() => (
         <BaseRenderChannel
