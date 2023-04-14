@@ -29,7 +29,8 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}
+          path: |
+            ${{ steps.nitro.outputs.nitro-output-dir }}/*apk
 
   build-ios:
     runs-on: macos-latest
@@ -56,7 +57,7 @@ jobs:
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/e280f6be-32c3-44d3-81e1-d0d109706d68.mobileprovision
+          PP_PATH=$RUNNER_TEMP/${{ secrets.BUILD_CERTIFICATE_UUID }}.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
@@ -81,14 +82,21 @@ jobs:
         with:
           debug: true
           root-directory: example
+          export-method: development
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
-          provisioning-profile-specifier: "AgoraQA2021"
-          codesigning-identity: "Apple Development: xuewen xu (66NMZN987N)"
+          provisioning-profile-specifier: ${{ secrets.BUILD_CERTIFICATE_NAME }}
 
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}
+          path: |
+            ${{ steps.nitro.outputs.nitro-output-dir }}/*.ipa
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: AgoraRtcNgExampleSymbol
+          path: |
+            ${{ steps.nitro.outputs.nitro-output-dir }}/*.dSYM.zip
 
   notification:
     runs-on: ubuntu-latest
