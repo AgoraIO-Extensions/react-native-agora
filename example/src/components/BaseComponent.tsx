@@ -165,7 +165,7 @@ export abstract class BaseComponent<
   }
 
   render() {
-    const { enableVideo } = this.state;
+    const users = this.renderUsers();
     const configuration = this.renderConfiguration();
     return (
       <KeyboardAvoidingView
@@ -175,16 +175,14 @@ export abstract class BaseComponent<
         <AgoraView style={AgoraStyle.fullWidth}>
           {this.renderChannel()}
         </AgoraView>
-        {enableVideo ? (
-          <AgoraView style={AgoraStyle.videoLarge}>
-            {this.renderUsers()}
-          </AgoraView>
+        {users ? (
+          <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
         ) : undefined}
         {configuration ? (
           <>
             <AgoraDivider />
             <AgoraText style={styles.title}>
-              The Configuration of {this.constructor.name}
+              {`The Configuration of ${this.constructor.name}`}
             </AgoraText>
             <AgoraDivider />
             <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
@@ -217,8 +215,9 @@ export abstract class BaseComponent<
   }
 
   protected renderUsers(): ReactNode {
-    const { startPreview, joinChannelSuccess, remoteUsers } = this.state;
-    return (
+    const { enableVideo, startPreview, joinChannelSuccess, remoteUsers } =
+      this.state;
+    return enableVideo ? (
       <>
         {!!startPreview || joinChannelSuccess ? this.renderVideo(0) : undefined}
         {!!startPreview || joinChannelSuccess ? (
@@ -233,7 +232,7 @@ export abstract class BaseComponent<
           />
         ) : undefined}
       </>
-    );
+    ) : undefined;
   }
 
   protected renderVideo(uid: number): ReactElement {

@@ -24,6 +24,7 @@ import {
   AgoraDropdown,
   AgoraImage,
   AgoraSlider,
+  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
@@ -58,9 +59,10 @@ export default class MusicContentCenter
     return {
       appId: Config.appId,
       enableVideo: false,
-      rtmAppId: '',
-      rtmToken: '',
-      mccUid: 0,
+      rtmAppId: '695752b975654e44bea00137d084c71c',
+      rtmToken:
+        '006695752b975654e44bea00137d084c71cIABOYvH82zr9Aju51FoegrlRW+FQNnhxrgWxR058dUiMQdJjSIgAAAAAEABPwsbDfDw6ZAEA6AN8PDpk',
+      mccUid: 123,
       musicChartInfos: [],
       musicChartId: -1,
       page: 0,
@@ -489,19 +491,16 @@ export default class MusicContentCenter
 
   protected renderUsers(): React.ReactNode {
     const { musics, songCode } = this.state;
-    return (
-      <>
-        {songCode >= 0 ? (
-          <AgoraImage
-            source={{
-              uri: musics.find((value) => {
-                return value.songCode === songCode;
-              })?.poster,
-            }}
-          />
-        ) : undefined}
-      </>
-    );
+    return +songCode >= 0 ? (
+      <AgoraImage
+        style={[AgoraStyle.fullWidth, AgoraStyle.fullHeight]}
+        source={{
+          uri: musics.find((value) => {
+            return value.songCode == songCode;
+          })?.poster,
+        }}
+      />
+    ) : undefined;
   }
 
   protected renderAction(): React.ReactNode {

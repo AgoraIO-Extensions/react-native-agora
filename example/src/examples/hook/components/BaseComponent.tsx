@@ -15,7 +15,6 @@ import {
 
 interface Props {
   name: string;
-  enableVideo: boolean;
   renderConfiguration?: () => ReactNode;
   renderChannel: () => ReactNode;
   renderUsers?: () => ReactNode;
@@ -24,12 +23,12 @@ interface Props {
 
 export function BaseComponent({
   name,
-  enableVideo,
   renderConfiguration,
   renderChannel,
   renderUsers,
   renderAction,
 }: Props) {
+  const users = renderUsers ? renderUsers() : undefined;
   const configuration = renderConfiguration ? renderConfiguration() : undefined;
   return (
     <KeyboardAvoidingView
@@ -37,16 +36,14 @@ export function BaseComponent({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <AgoraView style={AgoraStyle.fullWidth}>{renderChannel()}</AgoraView>
-      {enableVideo ? (
-        <AgoraView style={AgoraStyle.videoLarge}>
-          {renderUsers ? renderUsers() : undefined}
-        </AgoraView>
+      {users ? (
+        <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
       ) : undefined}
       {configuration ? (
         <>
           <AgoraDivider />
           <AgoraText style={styles.title}>
-            The Configuration of {name}
+            {`The Configuration of ${name}`}
           </AgoraText>
           <AgoraDivider />
           <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>

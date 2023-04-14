@@ -29,7 +29,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.apk
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
 
   build-ios:
     runs-on: macos-latest
@@ -82,16 +82,12 @@ jobs:
           debug: true
           root-directory: example
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
+          provisioning-profile-specifier: "AgoraQA2021"
 
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.app.zip
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: AgoraRtcNgExampleSymbol
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}/*.dSYM.zip
+          path: ${{ steps.nitro.outputs.nitro-output-dir }}
 
   notification:
     runs-on: ubuntu-latest
