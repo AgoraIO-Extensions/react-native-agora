@@ -1087,9 +1087,9 @@ export class ChannelMediaOptions {
    */
   publishMediaPlayerVideoTrack?: boolean;
   /**
-   * Whether to publish the local transcoded video:true: Publish the local transcoded video.false: (Default) Do not publish the local transcoded video.
+   * @ignore
    */
-  publishTrancodedVideoTrack?: boolean;
+  publishTranscodedVideoTrack?: boolean;
   /**
    * Whether to automatically subscribe to all remote audio streams when the user joins a channel:true: (Default) Automatically subscribe to all remote audio streams.false: Do not automatically subscribe to any remote audio streams.
    */
@@ -4830,7 +4830,7 @@ export abstract class IRtcEngine {
   /**
    * @ignore
    */
-  abstract startScreenCaptureDesktop(
+  abstract startScreenCaptureBySourceType(
     sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
   ): number;
@@ -4865,6 +4865,14 @@ export abstract class IRtcEngine {
   abstract setScreenCaptureScenario(screenScenario: ScreenScenarioType): number;
 
   /**
+   * Stops screen sharing.
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
+   */
+  abstract stopScreenCapture(): number;
+
+  /**
    * Stops the local video preview.
    * After calling startPreview to start the preview, if you want to close the local video preview, call this method.Call this method before joining a channel or after leaving a channel.
    *
@@ -4873,7 +4881,7 @@ export abstract class IRtcEngine {
    * @returns
    * < 0: Failure.
    */
-  abstract stopScreenCapture(sourceType?: VideoSourceType): number;
+  abstract stopScreenCaptureBySourceType(sourceType: VideoSourceType): number;
 
   /**
    * Retrieves the call ID.
@@ -5645,7 +5653,7 @@ export abstract class IRtcEngine {
   /**
    * @ignore
    */
-  abstract getNtpTimeInMs(): number;
+  abstract getNtpWallTimeInMs(): number;
 
   /**
    * Gets the IAudioDeviceManager object to manage audio devices.

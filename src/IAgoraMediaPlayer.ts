@@ -319,6 +319,51 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
+   * Registers an audio frame observer object.
+   *
+   * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType .
+   */
+  abstract registerAudioFrameObserver(
+    observer: IAudioPcmFrameSink,
+    mode?: RawAudioFrameOpModeType
+  ): number;
+
+  /**
+   * Unregisters an audio observer.
+   *
+   * @param observer The audio observer. See IMediaPlayerAudioFrameObserver .
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
+   */
+  abstract unregisterAudioFrameObserver(observer: IAudioPcmFrameSink): number;
+
+  /**
+   * Registers a video frame observer object.
+   * You need to implement the IMediaPlayerVideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+   *
+   * @param observer The video observer, reporting the reception of each video frame. See IMediaPlayerVideoFrameObserver .
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
+   */
+  abstract registerVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): number;
+
+  /**
+   * Unregisters the video frame observer.
+   *
+   * @param observer The video observer, reporting the reception of each video frame. See IMediaPlayerVideoFrameObserver .
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
+   */
+  abstract unregisterVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): number;
+
+  /**
    * @ignore
    */
   abstract registerMediaPlayerAudioSpectrumObserver(
@@ -453,51 +498,6 @@ export abstract class IMediaPlayer {
    * @ignore
    */
   abstract setSoundPositionParams(pan: number, gain: number): number;
-
-  /**
-   * Registers an audio frame observer object.
-   *
-   * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType .
-   */
-  abstract registerAudioFrameObserver(
-    observer: IAudioPcmFrameSink,
-    mode?: RawAudioFrameOpModeType
-  ): number;
-
-  /**
-   * Unregisters an audio observer.
-   *
-   * @param observer The audio observer. See IMediaPlayerAudioFrameObserver .
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
-  abstract unregisterAudioFrameObserver(observer: IAudioPcmFrameSink): number;
-
-  /**
-   * Registers a video frame observer object.
-   * You need to implement the IMediaPlayerVideoFrameObserver class in this method and register callbacks according to your scenarios. After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
-   *
-   * @param observer The video observer, reporting the reception of each video frame. See IMediaPlayerVideoFrameObserver .
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
-  abstract registerVideoFrameObserver(
-    observer: IMediaPlayerVideoFrameObserver
-  ): number;
-
-  /**
-   * Unregisters the video frame observer.
-   *
-   * @param observer The video observer, reporting the reception of each video frame. See IMediaPlayerVideoFrameObserver .
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
-   */
-  abstract unregisterVideoFrameObserver(
-    observer: IMediaPlayerVideoFrameObserver
-  ): number;
 }
 
 /**
