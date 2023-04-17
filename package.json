@@ -38,7 +38,7 @@
     "bootstrap": "yarn example && yarn install && yarn patch-package && yarn ts_interface_builder && yarn example pods",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
     "ts_interface_builder": "yarn ts-interface-builder src/*.ts -o src/ti/",
-    "doc": "typedoc src --out ./docs --exclude '**/{example}/**/*'"
+    "doc": "typedoc src --out ./docs --exclude \"example/**\""
   },
   "keywords": [
     "react-native",
@@ -78,7 +78,7 @@
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
     "ts-interface-builder": "^0.3.3",
-    "typedoc": "^0.24.4",
+    "typedoc": "^0.24.1",
     "typescript": "^4.5.2"
   },
   "resolutions": {
