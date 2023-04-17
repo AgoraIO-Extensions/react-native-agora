@@ -5009,11 +5009,11 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_startScreenCapture';
   }
 
-  startScreenCaptureDesktop(
+  startScreenCaptureBySourceType(
     sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
   ): number {
-    const apiType = this.getApiTypeFromStartScreenCaptureDesktop(
+    const apiType = this.getApiTypeFromStartScreenCaptureBySourceType(
       sourceType,
       config
     );
@@ -5031,11 +5031,11 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromStartScreenCaptureDesktop(
+  protected getApiTypeFromStartScreenCaptureBySourceType(
     sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
   ): string {
-    return 'RtcEngine_startScreenCaptureDesktop';
+    return 'RtcEngine_startScreenCaptureBySourceType';
   }
 
   updateScreenCapture(captureParams: ScreenCaptureParameters2): number {
@@ -5089,10 +5089,20 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setScreenCaptureScenario';
   }
 
-  stopScreenCapture(
-    sourceType: VideoSourceType = VideoSourceType.VideoSourceScreenPrimary
-  ): number {
-    const apiType = this.getApiTypeFromStopScreenCapture(sourceType);
+  stopScreenCapture(): number {
+    const apiType = this.getApiTypeFromStopScreenCapture();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromStopScreenCapture(): string {
+    return 'RtcEngine_stopScreenCapture';
+  }
+
+  stopScreenCaptureBySourceType(sourceType: VideoSourceType): number {
+    const apiType =
+      this.getApiTypeFromStopScreenCaptureBySourceType(sourceType);
     const jsonParams = {
       sourceType: sourceType,
       toJSON: () => {
@@ -5105,10 +5115,10 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromStopScreenCapture(
-    sourceType: VideoSourceType = VideoSourceType.VideoSourceScreenPrimary
+  protected getApiTypeFromStopScreenCaptureBySourceType(
+    sourceType: VideoSourceType
   ): string {
-    return 'RtcEngine_stopScreenCapture';
+    return 'RtcEngine_stopScreenCaptureBySourceType';
   }
 
   getCallId(): string {
@@ -6593,15 +6603,15 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_enableInstantMediaRendering';
   }
 
-  getNtpTimeInMs(): number {
-    const apiType = this.getApiTypeFromGetNtpTimeInMs();
+  getNtpWallTimeInMs(): number {
+    const apiType = this.getApiTypeFromGetNtpWallTimeInMs();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
-  protected getApiTypeFromGetNtpTimeInMs(): string {
-    return 'RtcEngine_getNtpTimeInMs';
+  protected getApiTypeFromGetNtpWallTimeInMs(): string {
+    return 'RtcEngine_getNtpWallTimeInMs';
   }
 
   getAudioDeviceManager(): IAudioDeviceManager {
