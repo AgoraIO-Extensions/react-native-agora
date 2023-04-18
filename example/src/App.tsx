@@ -46,11 +46,8 @@ export default function App() {
           return false;
         }}
       >
-        <RootStack.Navigator
-          screenOptions={{ gestureEnabled: false }}
-          initialRouteName={'Home'}
-        >
-          <RootStack.Screen name={'Home'} component={Home} />
+        <RootStack.Navigator screenOptions={{ gestureEnabled: false }}>
+          <RootStack.Screen name={'APIExample'} component={Home} />
           {DATA.map((value) =>
             value.data.map(({ name, component }) => {
               return component ? (
