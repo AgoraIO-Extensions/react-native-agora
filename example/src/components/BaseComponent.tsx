@@ -1,3 +1,4 @@
+import { ParamListBase } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { Component, ReactElement, ReactNode, useState } from 'react';
 import {
@@ -71,21 +72,20 @@ export interface BaseVideoComponentState extends BaseAudioComponentState {
 }
 
 export abstract class BaseComponent<
-    P = {},
+    P extends ParamListBase,
     S extends BaseComponentState = BaseComponentState
   >
-  extends Component<P & StackScreenProps<{}>, S>
+  extends Component<StackScreenProps<{ [T in keyof P]: P[T] }, string>, S>
   implements IRtcEngineEventHandler
 {
   protected engine?: IRtcEngine;
   private _data: Array<string> = [];
 
-  protected constructor(props: P & StackScreenProps<{}>) {
+  constructor(props: StackScreenProps<{ [T in keyof P]: P[T] }, string>) {
     super(props);
     this.state = this.createState();
-    props.navigation.setOptions({
-      headerRight: () => <Header getData={() => this._data} />,
-    });
+    const headerRight = () => <Header getData={() => this._data} />;
+    props.navigation.setOptions({ headerRight });
   }
 
   componentDidMount() {
