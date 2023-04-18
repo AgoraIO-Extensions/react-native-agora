@@ -20,11 +20,11 @@ const Hooks = {
       component: StringUid,
     },
     {
-      name: 'JoinMultipleChannelHook',
+      name: 'JoinMultipleChannelHooks',
       component: JoinMultipleChannel,
     },
     {
-      name: 'VirtualBackgroundHook',
+      name: 'VirtualBackgroundHooks',
       component: VirtualBackground,
     },
   ],
