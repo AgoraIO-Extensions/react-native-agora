@@ -59,10 +59,9 @@ export default class MusicContentCenter
     return {
       appId: Config.appId,
       enableVideo: false,
-      rtmAppId: '695752b975654e44bea00137d084c71c',
-      rtmToken:
-        '006695752b975654e44bea00137d084c71cIABOYvH82zr9Aju51FoegrlRW+FQNnhxrgWxR058dUiMQdJjSIgAAAAAEABPwsbDfDw6ZAEA6AN8PDpk',
-      mccUid: 123,
+      rtmAppId: '',
+      rtmToken: '',
+      mccUid: 0,
       musicChartInfos: [],
       musicChartId: -1,
       page: 0,
