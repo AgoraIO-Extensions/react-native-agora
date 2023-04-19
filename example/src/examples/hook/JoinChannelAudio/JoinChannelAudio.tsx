@@ -248,6 +248,7 @@ export default function JoinChannelAudio() {
       )}
       renderUsers={() => (
         <BaseRenderUsers
+          enableVideo={false}
           joinChannelSuccess={joinChannelSuccess}
           remoteUsers={remoteUsers}
         />
