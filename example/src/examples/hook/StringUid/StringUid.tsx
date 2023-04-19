@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { ClientRoleType } from 'react-native-agora';
 
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
@@ -13,6 +13,7 @@ export default function StringUid() {
     channelId,
     setChannelId,
     token,
+    setUid,
     joinChannelSuccess,
     remoteUsers,
     engine,
@@ -68,19 +69,22 @@ export default function StringUid() {
     engine.current.leaveChannel();
   };
 
+  const onLocalUserRegistered = useCallback(
+    (uid: number, userAccount: string) => {
+      log.info('LocalUserRegistered', 'uid', uid, 'userAccount', userAccount);
+      setUid(uid);
+    },
+    [setUid]
+  );
+
   useEffect(() => {
-    engine.current.addListener(
-      'onLocalUserRegistered',
-      (uid: number, userAccount: string) => {
-        log.info('LocalUserRegistered', 'uid', uid, 'userAccount', userAccount);
-      }
-    );
+    engine.current.addListener('onLocalUserRegistered', onLocalUserRegistered);
 
     const engineCopy = engine.current;
     return () => {
       engineCopy.removeAllListeners();
     };
-  }, [engine]);
+  }, [engine, onLocalUserRegistered]);
 
   return (
     <BaseComponent
@@ -97,6 +101,7 @@ export default function StringUid() {
       )}
       renderUsers={() => (
         <BaseRenderUsers
+          enableVideo={false}
           joinChannelSuccess={joinChannelSuccess}
           remoteUsers={remoteUsers}
         />

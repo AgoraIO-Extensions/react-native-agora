@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
@@ -12,6 +12,7 @@ import {
   RtcSurfaceView,
   RtcTextureView,
   UserOfflineReasonType,
+  VideoCanvas,
   VideoSourceType,
   VideoViewSetupMode,
   createAgoraRtcEngine,
@@ -201,18 +202,18 @@ export default class JoinChannelVideo
     return super.renderUsers();
   }
 
-  protected renderVideo(uid: number): React.ReactElement {
+  protected renderVideo(user: VideoCanvas): ReactElement {
     const { renderByTextureView, setupMode } = this.state;
     return renderByTextureView ? (
       <RtcTextureView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        canvas={{ uid, setupMode }}
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        canvas={{ ...user, setupMode }}
       />
     ) : (
       <RtcSurfaceView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid, setupMode }}
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={user.uid !== 0}
+        canvas={{ ...user, setupMode }}
       />
     );
   }

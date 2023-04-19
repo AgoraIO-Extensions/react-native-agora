@@ -16,6 +16,8 @@ import {
   RtcStats,
   RtcSurfaceView,
   UserOfflineReasonType,
+  VideoCanvas,
+  VideoSourceType,
 } from 'react-native-agora';
 
 import { LogSink } from './LogSink';
@@ -220,31 +222,45 @@ export abstract class BaseComponent<
       this.state;
     return enableVideo ? (
       <>
-        {!!startPreview || joinChannelSuccess ? this.renderUser(0) : undefined}
+        {!!startPreview || joinChannelSuccess
+          ? this.renderUser({
+              uid: 0,
+              sourceType: VideoSourceType.VideoSourceCamera,
+            })
+          : undefined}
         {!!startPreview || joinChannelSuccess ? (
           <AgoraList
             style={AgoraStyle.videoContainer}
             numColumns={undefined}
             horizontal={true}
             data={remoteUsers}
-            renderItem={({ item }) => this.renderUser(item)}
+            renderItem={({ item }) =>
+              this.renderUser({
+                uid: item,
+                sourceType: VideoSourceType.VideoSourceRemote,
+              })
+            }
           />
         ) : undefined}
       </>
     ) : undefined;
   }
 
-  private renderUser(uid: number): ReactElement {
-    const video = this.renderVideo(uid);
-    return uid === 0 ? video : <AgoraCard title={`${uid}`}>{video}</AgoraCard>;
+  protected renderUser(user: VideoCanvas): ReactElement {
+    const video = this.renderVideo(user);
+    return user.uid === 0 ? (
+      video
+    ) : (
+      <AgoraCard title={`${user.uid} - ${user.sourceType}`}>{video}</AgoraCard>
+    );
   }
 
-  protected renderVideo(uid: number): ReactElement {
+  protected renderVideo(user: VideoCanvas): ReactElement {
     return (
       <RtcSurfaceView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid }}
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={user.uid !== 0}
+        canvas={user}
       />
     );
   }

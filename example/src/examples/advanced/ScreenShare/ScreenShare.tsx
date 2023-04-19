@@ -13,6 +13,7 @@ import {
   RtcStats,
   RtcSurfaceView,
   UserOfflineReasonType,
+  VideoCanvas,
   VideoContentHint,
   VideoSourceType,
   createAgoraRtcEngine,
@@ -408,14 +409,11 @@ export default class ScreenShare
     );
   }
 
-  protected renderVideo(uid: number): ReactElement {
-    return (
-      <RtcSurfaceView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid, renderMode: RenderModeType.RenderModeFit }}
-      />
-    );
+  protected renderVideo(user: VideoCanvas): ReactElement {
+    return super.renderVideo({
+      ...user,
+      renderMode: RenderModeType.RenderModeFit,
+    });
   }
 
   protected renderConfiguration(): React.ReactNode {

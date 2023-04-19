@@ -11,6 +11,7 @@ import {
   RtcStats,
   RtcSurfaceView,
   UserOfflineReasonType,
+  VideoCanvas,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
@@ -437,7 +438,7 @@ export default class JoinMultipleChannel
             data={[0, ...remoteUsers, ...remoteUsers2]}
             renderItem={({ item }) => {
               return this.renderVideo(
-                item,
+                { uid: item },
                 remoteUsers2.indexOf(item) === -1 ? channelId : channelId2,
                 remoteUsers2.indexOf(item) === -1 ? uid : uid2
               );
@@ -449,15 +450,15 @@ export default class JoinMultipleChannel
   }
 
   protected renderVideo(
-    uid: number,
+    user: VideoCanvas,
     channelId?: string,
     localUid?: number
   ): ReactElement {
     return (
-      <AgoraCard title={`${channelId} - ${uid}`}>
+      <AgoraCard title={`${channelId} - ${user.uid}`}>
         <RtcSurfaceView
           style={AgoraStyle.videoSmall}
-          canvas={{ uid }}
+          canvas={user}
           connection={{ channelId, localUid }}
         />
       </AgoraCard>

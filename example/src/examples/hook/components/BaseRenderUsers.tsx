@@ -4,6 +4,7 @@ import { RtcSurfaceView } from 'react-native-agora';
 import { AgoraCard, AgoraList, AgoraStyle } from '../../../components/ui';
 
 export interface BaseRenderUsersProps {
+  enableVideo: boolean;
   startPreview?: boolean;
   joinChannelSuccess: boolean;
   remoteUsers: number[];
@@ -12,12 +13,20 @@ export interface BaseRenderUsersProps {
 }
 
 function BaseRenderUsers({
+  enableVideo,
   startPreview,
   joinChannelSuccess,
   remoteUsers,
   renderUser = (uid) => {
     const video = renderVideo(uid);
-    return uid === 0 ? video : <AgoraCard title={`${uid}`}>{video}</AgoraCard>;
+    if (enableVideo && uid === 0) {
+      return video;
+    }
+    return (
+      <AgoraCard title={`${uid}`}>
+        {enableVideo ? <>{video}</> : undefined}
+      </AgoraCard>
+    );
   },
   renderVideo = (uid) => (
     <RtcSurfaceView
