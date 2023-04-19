@@ -1,5 +1,5 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
@@ -17,6 +17,7 @@ import {
 import {
   AgoraButton,
   AgoraDropdown,
+  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
@@ -185,7 +186,7 @@ export default class VirtualBackground
         />
         {background_source_type === BackgroundSourceType.BackgroundColor ? (
           <ColorPicker
-            style={styles.picker}
+            style={AgoraStyle.picker}
             onColorChange={(selectedColor) => {
               this.setState({
                 color: +fromHsv(selectedColor).replace('#', '0x'),
@@ -241,10 +242,3 @@ export default class VirtualBackground
     );
   }
 }
-
-const styles = StyleSheet.create({
-  picker: {
-    width: '100%',
-    height: 200,
-  },
-});

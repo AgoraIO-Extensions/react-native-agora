@@ -18,6 +18,7 @@ import {
   AgoraButton,
   AgoraCard,
   AgoraList,
+  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
 import * as log from '../../../utils/log';
@@ -349,7 +350,11 @@ export default function JoinMultipleChannel() {
   ): ReactElement {
     return (
       <AgoraCard title={`${channelId} - ${uid}`}>
-        <RtcSurfaceView canvas={{ uid }} connection={{ channelId, localUid }} />
+        <RtcSurfaceView
+          style={AgoraStyle.videoSmall}
+          canvas={{ uid }}
+          connection={{ channelId, localUid }}
+        />
       </AgoraCard>
     );
   }

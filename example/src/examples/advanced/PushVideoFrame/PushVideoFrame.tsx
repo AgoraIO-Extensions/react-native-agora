@@ -1,5 +1,5 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -20,6 +20,7 @@ import {
 import {
   AgoraButton,
   AgoraImage,
+  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
@@ -170,7 +171,7 @@ export default class PushVideoFrame
           value={filePath}
         />
         <AgoraImage
-          style={styles.image}
+          style={AgoraStyle.image}
           source={{
             uri: `${
               Platform.OS === 'android'
@@ -196,10 +197,3 @@ export default class PushVideoFrame
     );
   }
 }
-
-const styles = StyleSheet.create({
-  image: {
-    width: 120,
-    height: 120,
-  },
-});
