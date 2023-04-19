@@ -161,7 +161,6 @@ export function AgoraList<T>(props: FlatListProps<T>) {
   const { renderItem, ...others } = props;
   return (
     <FlatList
-      style={{ width: '100%' }}
       numColumns={2}
       {...others}
       renderItem={({ item, index, separators }) => {
@@ -184,7 +183,7 @@ export const AgoraCard = (
 ) => {
   const { title, children, ...others } = props;
   return (
-    <Card {...others}>
+    <Card containerStyle={AgoraStyle.listItem} {...others}>
       <Card.Title>{title}</Card.Title>
       {children}
     </Card>
@@ -269,11 +268,20 @@ export const AgoraStyle = StyleSheet.create({
   listItem: {
     backgroundColor: 'transparent',
     padding: 0,
+    margin: 0,
   },
   row: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  image: {
+    width: 120,
+    height: 120,
+  },
+  picker: {
+    width: '100%',
+    height: 200,
   },
 });

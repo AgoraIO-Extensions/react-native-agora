@@ -7,6 +7,7 @@ export interface BaseRenderUsersProps {
   startPreview?: boolean;
   joinChannelSuccess: boolean;
   remoteUsers: number[];
+  renderUser?: (uid: number) => ReactElement;
   renderVideo?: (uid: number) => ReactElement;
 }
 
@@ -14,31 +15,28 @@ function BaseRenderUsers({
   startPreview,
   joinChannelSuccess,
   remoteUsers,
+  renderUser = (uid) => {
+    const video = renderVideo(uid);
+    return uid === 0 ? video : <AgoraCard title={`${uid}`}>{video}</AgoraCard>;
+  },
   renderVideo = (uid) => (
-    <AgoraCard
-      containerStyle={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-      title={`${uid === 0 ? 'Local' : 'Remote'} Uid: ${uid}`}
-    >
-      <RtcSurfaceView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid }}
-      />
-    </AgoraCard>
+    <RtcSurfaceView
+      style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+      zOrderMediaOverlay={uid !== 0}
+      canvas={{ uid }}
+    />
   ),
 }: BaseRenderUsersProps) {
   return (
     <>
-      {!!startPreview || joinChannelSuccess ? renderVideo(0) : undefined}
+      {!!startPreview || joinChannelSuccess ? renderUser(0) : undefined}
       {!!startPreview || joinChannelSuccess ? (
         <AgoraList
           style={AgoraStyle.videoContainer}
           numColumns={undefined}
           horizontal={true}
           data={remoteUsers}
-          renderItem={({ item }) => {
-            return renderVideo(item);
-          }}
+          renderItem={({ item }) => renderUser(item)}
         />
       ) : undefined}
     </>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -19,6 +19,7 @@ import {
   AgoraDivider,
   AgoraDropdown,
   AgoraImage,
+  AgoraStyle,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
@@ -183,7 +184,7 @@ export default class TakeSnapshot
           <>
             <AgoraDivider />
             <AgoraImage
-              style={styles.image}
+              style={AgoraStyle.image}
               source={{
                 uri: `${
                   Platform.OS === 'android' ? 'file://' : ''
@@ -209,10 +210,3 @@ export default class TakeSnapshot
     );
   }
 }
-
-const styles = StyleSheet.create({
-  image: {
-    width: 120,
-    height: 120,
-  },
-});

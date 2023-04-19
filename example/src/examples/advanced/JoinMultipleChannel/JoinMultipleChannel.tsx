@@ -454,7 +454,7 @@ export default class JoinMultipleChannel
     localUid?: number
   ): ReactElement {
     return (
-      <AgoraCard title={`ChannelId: ${channelId} Uid: ${uid}`}>
+      <AgoraCard title={`${channelId} - ${uid}`}>
         <RtcSurfaceView
           style={AgoraStyle.videoSmall}
           canvas={{ uid }}

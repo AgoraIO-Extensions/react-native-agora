@@ -334,7 +334,7 @@ export default class SendMultiVideoStream
         {open ? (
           <RtcSurfaceView
             canvas={{
-              uid: this.player?.getMediaPlayerId(),
+              mediaPlayerId: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,
             }}
           />

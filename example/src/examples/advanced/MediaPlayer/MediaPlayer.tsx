@@ -350,7 +350,7 @@ export default class MediaPlayer
         {open ? (
           <RtcSurfaceView
             canvas={{
-              uid: this.player?.getMediaPlayerId(),
+              mediaPlayerId: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,
             }}
           />

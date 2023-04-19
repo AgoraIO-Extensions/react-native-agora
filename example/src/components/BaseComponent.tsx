@@ -21,6 +21,7 @@ import {
 import { LogSink } from './LogSink';
 import {
   AgoraButton,
+  AgoraCard,
   AgoraDivider,
   AgoraList,
   AgoraStyle,
@@ -219,7 +220,7 @@ export abstract class BaseComponent<
       this.state;
     return enableVideo ? (
       <>
-        {!!startPreview || joinChannelSuccess ? this.renderVideo(0) : undefined}
+        {!!startPreview || joinChannelSuccess ? this.renderUser(0) : undefined}
         {!!startPreview || joinChannelSuccess ? (
           <AgoraList
             style={AgoraStyle.videoContainer}
@@ -227,12 +228,17 @@ export abstract class BaseComponent<
             horizontal={true}
             data={remoteUsers}
             renderItem={({ item }) => {
-              return this.renderVideo(item);
+              return this.renderUser(item);
             }}
           />
         ) : undefined}
       </>
     ) : undefined;
+  }
+
+  private renderUser(uid: number): ReactElement {
+    const video = this.renderVideo(uid);
+    return uid === 0 ? video : <AgoraCard title={`${uid}`}>{video}</AgoraCard>;
   }
 
   protected renderVideo(uid: number): ReactElement {

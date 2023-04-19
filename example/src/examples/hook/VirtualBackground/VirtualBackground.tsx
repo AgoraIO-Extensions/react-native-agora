@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
@@ -10,6 +10,7 @@ import { ColorPicker, fromHsv } from 'react-native-color-picker';
 import {
   AgoraButton,
   AgoraDropdown,
+  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
 import { enumToItems, getAbsolutePath, getAssetPath } from '../../../utils';
@@ -159,7 +160,7 @@ export default function VirtualBackground() {
         />
         {background_source_type === BackgroundSourceType.BackgroundColor ? (
           <ColorPicker
-            style={styles.picker}
+            style={AgoraStyle.picker}
             onColorChange={(selectedColor) => {
               setColor(+fromHsv(selectedColor).replace('#', '0x'));
             }}
@@ -209,10 +210,3 @@ export default function VirtualBackground() {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  picker: {
-    width: '100%',
-    height: 200,
-  },
-});
