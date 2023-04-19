@@ -16,7 +16,6 @@ import {
   BaseAudioComponentState,
   BaseComponent,
 } from '../../../components/BaseComponent';
-
 import {
   AgoraButton,
   AgoraDivider,
