@@ -6,6 +6,7 @@ import {
   LocalVideoStreamState,
   RtcSurfaceView,
   RtcTextureView,
+  VideoCanvas,
   VideoSourceType,
   VideoViewSetupMode,
 } from 'react-native-agora';
@@ -152,17 +153,17 @@ export default function JoinChannelVideo() {
     />
   );
 
-  function renderVideo(uid: number): ReactElement {
+  function renderVideo(user: VideoCanvas): ReactElement {
     return renderByTextureView ? (
       <RtcTextureView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        canvas={{ uid, setupMode }}
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        canvas={{ ...user, setupMode }}
       />
     ) : (
       <RtcSurfaceView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid, setupMode }}
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={user.uid !== 0}
+        canvas={{ ...user, setupMode }}
       />
     );
   }

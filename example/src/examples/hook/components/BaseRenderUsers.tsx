@@ -1,5 +1,9 @@
 import React, { ReactElement, memo } from 'react';
-import { RtcSurfaceView } from 'react-native-agora';
+import {
+  RtcSurfaceView,
+  VideoCanvas,
+  VideoSourceType,
+} from 'react-native-agora';
 
 import { AgoraCard, AgoraList, AgoraStyle } from '../../../components/ui';
 
@@ -8,8 +12,8 @@ export interface BaseRenderUsersProps {
   startPreview?: boolean;
   joinChannelSuccess: boolean;
   remoteUsers: number[];
-  renderUser?: (uid: number) => ReactElement;
-  renderVideo?: (uid: number) => ReactElement;
+  renderUser?: (user: VideoCanvas) => ReactElement;
+  renderVideo?: (user: VideoCanvas) => ReactElement;
 }
 
 function BaseRenderUsers({
@@ -17,35 +21,45 @@ function BaseRenderUsers({
   startPreview,
   joinChannelSuccess,
   remoteUsers,
-  renderUser = (uid) => {
-    const video = renderVideo(uid);
-    if (enableVideo && uid === 0) {
+  renderUser = (user) => {
+    const video = renderVideo(user);
+    if (enableVideo && user.uid === 0) {
       return video;
     }
     return (
-      <AgoraCard title={`${uid}`}>
+      <AgoraCard title={`${user.uid} - ${user.sourceType}`}>
         {enableVideo ? <>{video}</> : undefined}
       </AgoraCard>
     );
   },
-  renderVideo = (uid) => (
+  renderVideo = (user) => (
     <RtcSurfaceView
-      style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-      zOrderMediaOverlay={uid !== 0}
-      canvas={{ uid }}
+      style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+      zOrderMediaOverlay={user.uid !== 0}
+      canvas={user}
     />
   ),
 }: BaseRenderUsersProps) {
   return (
     <>
-      {!!startPreview || joinChannelSuccess ? renderUser(0) : undefined}
+      {!!startPreview || joinChannelSuccess
+        ? renderUser({
+            uid: 0,
+            sourceType: VideoSourceType.VideoSourceCamera,
+          })
+        : undefined}
       {!!startPreview || joinChannelSuccess ? (
         <AgoraList
           style={AgoraStyle.videoContainer}
           numColumns={undefined}
           horizontal={true}
           data={remoteUsers}
-          renderItem={({ item }) => renderUser(item)}
+          renderItem={({ item }) =>
+            renderUser({
+              uid: item,
+              sourceType: VideoSourceType.VideoSourceRemote,
+            })
+          }
         />
       ) : undefined}
     </>
