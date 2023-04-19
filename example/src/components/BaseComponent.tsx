@@ -227,9 +227,7 @@ export abstract class BaseComponent<
             numColumns={undefined}
             horizontal={true}
             data={remoteUsers}
-            renderItem={({ item }) => {
-              return this.renderUser(item);
-            }}
+            renderItem={({ item }) => this.renderUser(item)}
           />
         ) : undefined}
       </>
