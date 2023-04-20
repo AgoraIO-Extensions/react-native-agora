@@ -44,8 +44,8 @@ jobs:
 
       - name: Modify APP ID
         run: |
-          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
-          mv tmp agora.config.ts
+          sed "s/\"appId\": \(.*\),/\"appId\": \"${{ secrets.APP_ID }}\",/g" agora.config.json > tmp
+          mv tmp agora.config.json
         working-directory: example/src/config
 
       - name: Install the Apple certificate and provisioning profile
