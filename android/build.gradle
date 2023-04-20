@@ -135,8 +135,8 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 // From node_modules
-  api 'io.agora.rtc:full-sdk:3.7.0.3'
-  api 'io.agora.rtc:full-screen-sharing:3.7.0.3'
+  api 'io.agora.rtc:agora-special-full:3.7.2.4'
+  api 'io.agora.rtc:full-screen-sharing:3.7.2.4'
 }
 
 if (isNewArchitectureEnabled()) {

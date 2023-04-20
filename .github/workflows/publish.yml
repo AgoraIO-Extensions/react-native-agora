@@ -1,0 +1,41 @@
+name: Publish to NPM
+run-name: ${{ github.actor }} triggered this job
+on:
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: 'Increment "major", "minor", "patch", or "pre*" version; or specify version [default: "patch"]'
+        required: true
+        default: 'patch'
+        type: string
+      dry-run:
+        description: 'Do not touch or write anything, but show the commands'
+        default: true
+        type: boolean
+
+jobs:
+  release-it:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Setup NPM auth token
+        run: |
+          npm set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_TOKEN }}
+
+      - if: ${{ inputs.dry-run }}
+        run: |
+          yarn release ${{ inputs.increment }} -d --ci
+
+      - if: ${{ !inputs.dry-run }}
+        run: |
+          git config --global user.email "${{ secrets.GIT_EMAIL }}"
+          git config --global user.name "${{ secrets.GIT_USERNAME }}"
+          yarn release ${{ inputs.increment }} --ci
