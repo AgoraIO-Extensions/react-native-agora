@@ -6,7 +6,7 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     env:
-      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY1 }}
     steps:
       - uses: actions/checkout@v3
 
@@ -35,7 +35,7 @@ jobs:
   build-ios:
     runs-on: macos-latest
     env:
-      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
+      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY1 }}
     steps:
       - uses: actions/checkout@v3
 
