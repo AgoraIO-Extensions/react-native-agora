@@ -34,6 +34,8 @@ export default class TakeSnapshot
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler
 {
+  _timestamp: number = 0;
+
   protected createState(): State {
     return {
       appId: Config.appId,
@@ -120,7 +122,11 @@ export default class TakeSnapshot
       return;
     }
 
-    this.engine?.takeSnapshot(targetUid, `${filePath}/${targetUid}.jpg`);
+    this._timestamp = new Date().getTime();
+    this.engine?.takeSnapshot(
+      targetUid,
+      `${filePath}/${targetUid}-${this._timestamp}.jpg`
+    );
     this.setState({ takeSnapshot: false });
   };
 
@@ -163,7 +169,7 @@ export default class TakeSnapshot
       errCode
     );
     const { targetUid, filePath: path } = this.state;
-    if (filePath === `${path}/${targetUid}.jpg`) {
+    if (filePath === `${path}/${targetUid}-${this._timestamp}.jpg`) {
       this.setState({ takeSnapshot: errCode === ErrorCodeType.ErrOk });
     }
   }
@@ -188,7 +194,7 @@ export default class TakeSnapshot
               source={{
                 uri: `${
                   Platform.OS === 'android' ? 'file://' : ''
-                }${filePath}/${targetUid}.jpg`,
+                }${filePath}/${targetUid}-${this._timestamp}.jpg`,
               }}
             />
           </>
