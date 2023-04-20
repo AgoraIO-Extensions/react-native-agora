@@ -51,7 +51,6 @@ jobs:
       - name: SetupExample
         run: |
           yarn
-        working-directory: example
 
       - name: Modify APP ID
         run: |
