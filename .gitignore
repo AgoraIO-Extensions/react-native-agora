@@ -72,3 +72,4 @@ lib/
 # Custom
 *.xcframework
 ios/AgoraRtcWrapper.podspec
+appId.*
