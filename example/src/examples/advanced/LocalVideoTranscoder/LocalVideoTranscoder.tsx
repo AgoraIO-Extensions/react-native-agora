@@ -11,16 +11,12 @@ import createAgoraRtcEngine, {
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
-  ScreenCaptureSourceInfo,
-  ScreenCaptureSourceType,
   TranscodingVideoStream,
-  VideoCanvas,
-  VideoDeviceInfo,
   VideoSourceType,
   showRPSystemBroadcastPickerView,
 } from 'react-native-agora';
 import React, { ReactElement } from 'react';
-import { Platform } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 import {
   BaseComponent,
@@ -28,18 +24,13 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
-  AgoraCard,
   AgoraDivider,
-  AgoraDropdown,
-  AgoraImage,
   AgoraStyle,
-  AgoraText,
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 
 import { getAbsolutePath, getAssetPath } from '../../../utils';
-
 
 interface State extends BaseVideoComponentState {
   startScreenCapture: boolean;
@@ -191,7 +182,6 @@ export default class LocalVideoTranscoder
    */
   startLocalVideoTranscoder = async () => {
     const config = await this._generateLocalTranscoderConfiguration();
-    console.log('startLocalVideoTranscoder', config)
 
     this.engine?.startLocalVideoTranscoder(config);
     this.setState({ startLocalVideoTranscoder: true });
@@ -216,8 +206,8 @@ export default class LocalVideoTranscoder
 
   _generateLocalTranscoderConfiguration = async (): Promise<LocalTranscoderConfiguration> => {
     const { startScreenCapture, open, imageUrl } = this.state;
-    const max_width = 1080,
-      max_height = 720,
+    const max_width = Dimensions.get('window').width,
+      max_height = Dimensions.get('window').height,
       width = 300,
       height = 300;
 
@@ -341,25 +331,33 @@ export default class LocalVideoTranscoder
     }
   }
 
-  protected renderVideo(user: VideoCanvas, channelId?: string): ReactElement {
-    const { startLocalVideoTranscoder } = this.state;
-    const sourceType =
-      user.uid === 0
-        ? startLocalVideoTranscoder
-          ? VideoSourceType.VideoSourceTranscoded
-          : VideoSourceType.VideoSourceCamera
-        : VideoSourceType.VideoSourceRemote;
-
+  protected renderUsers(): React.ReactNode {
+    const {
+      startPreview,
+      joinChannelSuccess,
+      startLocalVideoTranscoder,
+    } = this.state;
     return (
-      <RtcSurfaceView
-        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={user.uid !== 0}
-        canvas={{
-          renderMode: RenderModeType.RenderModeFit,
-          uid: user.uid,
-          sourceType,
-        }}
-      />
+      <>
+        {startLocalVideoTranscoder
+          ? this.renderUser({
+              renderMode: RenderModeType.RenderModeFit,
+              uid: 0,
+              sourceType: VideoSourceType.VideoSourceTranscoded,
+            })
+          : undefined}
+          {startPreview || joinChannelSuccess ?
+            <RtcSurfaceView
+              style={AgoraStyle.videoLarge}
+              zOrderMediaOverlay={false}
+              canvas={{
+                renderMode: RenderModeType.RenderModeFit,
+                uid: 0,
+                sourceType: VideoSourceType.VideoSourceCamera,
+              }}
+            />
+          : undefined}
+      </>
     );
   }
 
