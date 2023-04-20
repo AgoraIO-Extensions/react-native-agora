@@ -15,7 +15,7 @@ import createAgoraRtcEngine, {
   VideoSourceType,
   showRPSystemBroadcastPickerView,
 } from 'react-native-agora';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { Dimensions, Platform } from 'react-native';
 
 import {
@@ -184,6 +184,7 @@ export default class LocalVideoTranscoder
     const config = await this._generateLocalTranscoderConfiguration();
 
     this.engine?.startLocalVideoTranscoder(config);
+    this.engine?.startPreview(VideoSourceType.VideoSourceTranscoded);
     this.setState({ startLocalVideoTranscoder: true });
   };
 
@@ -347,15 +348,11 @@ export default class LocalVideoTranscoder
             })
           : undefined}
           {startPreview || joinChannelSuccess ?
-            <RtcSurfaceView
-              style={AgoraStyle.videoLarge}
-              zOrderMediaOverlay={false}
-              canvas={{
-                renderMode: RenderModeType.RenderModeFit,
-                uid: 0,
-                sourceType: VideoSourceType.VideoSourceCamera,
-              }}
-            />
+            this.renderUser({
+              renderMode: RenderModeType.RenderModeFit,
+              uid: 0,
+              sourceType: VideoSourceType.VideoSourceCamera,
+            })
           : undefined}
       </>
     );
