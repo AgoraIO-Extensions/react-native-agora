@@ -14,6 +14,7 @@ jobs:
       - name: SetupExample
         run: |
           yarn install --frozen-lockfile
+        working-directory: example
 
       - name: Modify APP ID
         run: |
@@ -51,6 +52,7 @@ jobs:
         run: |
           yarn install --frozen-lockfile
           yarn pods
+        working-directory: example
 
       - name: Modify APP ID
         run: |
