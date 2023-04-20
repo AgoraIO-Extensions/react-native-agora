@@ -239,23 +239,23 @@ export default class LocalVideoTranscoder
         mediaPlayerId: this.player?.getMediaPlayerId(),
       });
     }
-    // let imageAbsoluteUrl = await getAbsolutePath(imageUrl);
-    // if (imageAbsoluteUrl) {
-    //   const getImageType = (url: string): VideoSourceType | undefined => {
-    //     if (url.endsWith('.png')) {
-    //       return VideoSourceType.VideoSourceRtcImagePng;
-    //     } else if (url.endsWith('.jepg') || url.endsWith('.jpg')) {
-    //       return VideoSourceType.VideoSourceRtcImageJpeg;
-    //     } else if (url.endsWith('.gif')) {
-    //       return VideoSourceType.VideoSourceRtcImageGif;
-    //     }
-    //     return undefined;
-    //   };
-    //   streams.push({
-    //     sourceType: getImageType(imageUrl),
-    //     imageUrl: imageUrl,
-    //   });
-    // }
+    let imageAbsoluteUrl = await getAbsolutePath(imageUrl);
+    if (imageAbsoluteUrl) {
+      const getImageType = (url: string): VideoSourceType | undefined => {
+        if (url.endsWith('.png')) {
+          return VideoSourceType.VideoSourceRtcImagePng;
+        } else if (url.endsWith('.jepg') || url.endsWith('.jpg')) {
+          return VideoSourceType.VideoSourceRtcImageJpeg;
+        } else if (url.endsWith('.gif')) {
+          return VideoSourceType.VideoSourceRtcImageGif;
+        }
+        return undefined;
+      };
+      streams.push({
+        sourceType: getImageType(imageAbsoluteUrl),
+        imageUrl: imageAbsoluteUrl,
+      });
+    }
 
     streams.map((value, index) => {
       const maxNumPerRow = Math.floor(max_width / width);
