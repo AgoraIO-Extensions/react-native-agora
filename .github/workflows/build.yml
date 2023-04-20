@@ -50,9 +50,7 @@ jobs:
 
       - name: SetupExample
         run: |
-          bundle install
-          yarn install --frozen-lockfile
-          yarn pods
+          yarn
         working-directory: example
 
       - name: Modify APP ID
