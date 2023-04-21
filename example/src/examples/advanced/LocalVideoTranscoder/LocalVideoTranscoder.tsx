@@ -43,8 +43,7 @@ interface State extends BaseVideoComponentState {
 
 export default class LocalVideoTranscoder
   extends BaseComponent<{}, State>
-  implements IRtcEngineEventHandler, IMediaPlayerSourceObserver
-  {
+  implements IRtcEngineEventHandler, IMediaPlayerSourceObserver {
   protected player?: IMediaPlayer;
 
   protected createState(): State {
@@ -342,17 +341,17 @@ export default class LocalVideoTranscoder
       <>
         {startLocalVideoTranscoder
           ? this.renderUser({
-              renderMode: RenderModeType.RenderModeFit,
-              uid: 0,
-              sourceType: VideoSourceType.VideoSourceTranscoded,
-            })
+            renderMode: RenderModeType.RenderModeFit,
+            uid: 0,
+            sourceType: VideoSourceType.VideoSourceTranscoded,
+          })
           : undefined}
-          {startPreview || joinChannelSuccess ?
-            this.renderUser({
-              renderMode: RenderModeType.RenderModeFit,
-              uid: 0,
-              sourceType: VideoSourceType.VideoSourceCamera,
-            })
+        {startPreview || joinChannelSuccess ?
+          this.renderUser({
+            renderMode: RenderModeType.RenderModeFit,
+            uid: 0,
+            sourceType: VideoSourceType.VideoSourceCamera,
+          })
           : undefined}
       </>
     );
@@ -413,8 +412,7 @@ export default class LocalVideoTranscoder
     return (
       <>
         <AgoraButton
-          title={`${
-            startLocalVideoTranscoder ? 'stop' : 'start'
+          title={`${startLocalVideoTranscoder ? 'stop' : 'start'
             } Local Video Transcoder`}
           onPress={
             startLocalVideoTranscoder
