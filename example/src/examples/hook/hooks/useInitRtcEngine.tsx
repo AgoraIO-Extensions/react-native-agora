@@ -60,11 +60,6 @@ export function useInitRtcEngine(enableVideo: boolean) {
       setStartPreview(true);
     }
 
-    if (enableVideo) {
-      // Start preview before joinChannel
-      engine.current.startPreview();
-      setStartPreview(true);
-    }
   }, [appId, enableVideo]);
 
   const onError = useCallback((err: ErrorCodeType, msg: string) => {

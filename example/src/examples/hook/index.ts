@@ -3,6 +3,7 @@ import JoinChannelVideo from './JoinChannelVideo/JoinChannelVideo';
 import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
 import StringUid from './StringUid/StringUid';
 import VirtualBackground from './VirtualBackground/VirtualBackground';
+import AudioMixing from './AudioMixing/AudioMixing';
 
 const Hooks = {
   title: 'Hooks',
@@ -26,6 +27,10 @@ const Hooks = {
     {
       name: 'VirtualBackgroundHooks',
       component: VirtualBackground,
+    },
+    {
+      name: 'AudioMixingHooks',
+      component: AudioMixing,
     },
   ],
 };
