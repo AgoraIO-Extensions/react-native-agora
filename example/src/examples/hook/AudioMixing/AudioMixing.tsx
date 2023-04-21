@@ -15,10 +15,9 @@ import { getAssetPath } from '../../../utils';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
-import BaseRenderUsers from '../components/BaseRenderUsers';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
-
+import useInitRtcEngine from '../hooks/useInitRtcEngine';
 export default function AudioMixing() {
+  const [enableVideo] = useState<boolean>(false);
   const {
     channelId,
     setChannelId,
@@ -31,7 +30,7 @@ export default function AudioMixing() {
     /**
      * Step 1: initRtcEngine
      */
-    useInitRtcEngine(false);
+    useInitRtcEngine(enableVideo);
 
   const [filePath, setFilePath] = useState<string>(
     getAssetPath('Sound_Horizon.mp3')
@@ -167,7 +166,7 @@ export default function AudioMixing() {
 
   return (
     <BaseComponent
-      name={'StringUid'}
+      name={'AudioMixing'}
       renderConfiguration={renderConfiguration}
       renderChannel={() => (
         <BaseRenderChannel
@@ -176,13 +175,6 @@ export default function AudioMixing() {
           leaveChannel={leaveChannel}
           joinChannelSuccess={joinChannelSuccess}
           onChannelIdChange={setChannelId}
-        />
-      )}
-      renderUsers={() => (
-        <BaseRenderUsers
-          enableVideo={false}
-          joinChannelSuccess={joinChannelSuccess}
-          remoteUsers={remoteUsers}
         />
       )}
       renderAction={renderAction}

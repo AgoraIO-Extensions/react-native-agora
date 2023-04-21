@@ -24,9 +24,9 @@ import {
 } from '../../../components/ui';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
-
+import useInitRtcEngine from '../hooks/useInitRtcEngine';
 export default function JoinMultipleChannel() {
+  const [enableVideo] = useState<boolean>(true);
   const {
     channelId,
     setChannelId,
@@ -42,7 +42,7 @@ export default function JoinMultipleChannel() {
     /**
      * Step 1: initRtcEngine
      */
-    useInitRtcEngine(true);
+    useInitRtcEngine(enableVideo);
 
   const [channelId2, setChannelId2] = useState<string>('');
   const [token2] = useState<string>('');

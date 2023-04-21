@@ -20,9 +20,9 @@ import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
-
+import useInitRtcEngine from '../hooks/useInitRtcEngine';
 export default function JoinChannelAudio() {
+  const [enableVideo] = useState<boolean>(false);
   const {
     channelId,
     setChannelId,
@@ -35,7 +35,7 @@ export default function JoinChannelAudio() {
     /**
      * Step 1: initRtcEngine
      */
-    useInitRtcEngine(false);
+    useInitRtcEngine(enableVideo);
 
   const [enableLocalAudio, setEnableLocalAudio] = useState(true);
   const [muteLocalAudioStream, setMuteLocalAudioStream] = useState(false);
@@ -248,7 +248,7 @@ export default function JoinChannelAudio() {
       )}
       renderUsers={() => (
         <BaseRenderUsers
-          enableVideo={false}
+          enableVideo={enableVideo}
           joinChannelSuccess={joinChannelSuccess}
           remoteUsers={remoteUsers}
         />

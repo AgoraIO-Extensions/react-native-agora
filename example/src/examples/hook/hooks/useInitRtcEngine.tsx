@@ -12,7 +12,7 @@ import createAgoraRtcEngine, {
 import Config from '../../../config/agora.config';
 import * as log from '../../../utils/log';
 
-export function useInitRtcEngine(enableVideo: boolean) {
+const useInitRtcEngine = (enableVideo: boolean) => {
   const [appId] = useState(Config.appId);
   const [channelId, setChannelId] = useState(Config.channelId);
   const [token] = useState(Config.token);
@@ -200,4 +200,5 @@ export function useInitRtcEngine(enableVideo: boolean) {
     startPreview,
     engine,
   };
-}
+};
+export default useInitRtcEngine;

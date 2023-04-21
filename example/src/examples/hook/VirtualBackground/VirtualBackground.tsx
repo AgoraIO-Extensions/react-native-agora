@@ -18,9 +18,9 @@ import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
-
+import useInitRtcEngine from '../hooks/useInitRtcEngine';
 export default function VirtualBackground() {
+  const [enableVideo] = useState<boolean>(true);
   const {
     channelId,
     setChannelId,
@@ -34,7 +34,7 @@ export default function VirtualBackground() {
     /**
      * Step 1: initRtcEngine
      */
-    useInitRtcEngine(true);
+    useInitRtcEngine(enableVideo);
 
   const [background_source_type, setBackground_source_type] = useState<number>(
     BackgroundSourceType.BackgroundColor
@@ -138,7 +138,7 @@ export default function VirtualBackground() {
       )}
       renderUsers={() => (
         <BaseRenderUsers
-          enableVideo={true}
+          enableVideo={enableVideo}
           startPreview={startPreview}
           joinChannelSuccess={joinChannelSuccess}
           remoteUsers={remoteUsers}

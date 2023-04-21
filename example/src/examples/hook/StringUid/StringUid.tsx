@@ -6,9 +6,9 @@ import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
-
+import useInitRtcEngine from '../hooks/useInitRtcEngine';
 export default function StringUid() {
+  const [enableVideo] = useState<boolean>(false);
   const {
     channelId,
     setChannelId,
@@ -21,7 +21,7 @@ export default function StringUid() {
     /**
      * Step 1: initRtcEngine
      */
-    useInitRtcEngine(false);
+    useInitRtcEngine(enableVideo);
 
   const [userAccount, setUserAccount] = useState<string>('');
 
