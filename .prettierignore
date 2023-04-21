@@ -4,5 +4,4 @@
 **/node_modules/*
 .snapshots/
 lib/
-# src/ti/
-**/src/**
+src/ti/
