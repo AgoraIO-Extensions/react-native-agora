@@ -1,3 +1,5 @@
+import React from 'react';
+import { Dimensions, Platform } from 'react-native';
 import createAgoraRtcEngine, {
   ChannelProfileType,
   ClientRoleType,
@@ -15,8 +17,6 @@ import createAgoraRtcEngine, {
   VideoSourceType,
   showRPSystemBroadcastPickerView,
 } from 'react-native-agora';
-import React from 'react';
-import { Dimensions, Platform } from 'react-native';
 
 import {
   BaseComponent,
@@ -44,7 +44,7 @@ interface State extends BaseVideoComponentState {
 export default class LocalVideoTranscoder
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler, IMediaPlayerSourceObserver
-  {
+{
   protected player?: IMediaPlayer;
 
   protected createState(): State {
@@ -90,7 +90,6 @@ export default class LocalVideoTranscoder
     // Start preview before joinChannel
     this.engine.startPreview();
     this.setState({ startPreview: true });
-
   }
 
   /**
@@ -125,15 +124,13 @@ export default class LocalVideoTranscoder
    * Step 3-1 (Optional): startScreenCapture
    */
   startScreenCapture = async () => {
-    this.engine?.startScreenCapture(
-      {
-        videoParams: {
-          dimensions: { width: 1920, height: 1080 },
-          bitrate: 1000,
-          frameRate: 15,
-        },
-      }
-    );
+    this.engine?.startScreenCapture({
+      videoParams: {
+        dimensions: { width: 1920, height: 1080 },
+        bitrate: 1000,
+        frameRate: 15,
+      },
+    });
     this.engine?.startPreview(VideoSourceType.VideoSourceScreen);
     if (Platform.OS === 'ios') {
       // Show the picker view for screen share, ⚠️ only support for iOS 12+
@@ -205,70 +202,71 @@ export default class LocalVideoTranscoder
     this.setState({ startLocalVideoTranscoder: false });
   };
 
-  _generateLocalTranscoderConfiguration = async (): Promise<LocalTranscoderConfiguration> => {
-    const { startScreenCapture, open, imageUrl } = this.state;
-    const max_width = Dimensions.get('window').width,
-      max_height = Dimensions.get('window').height,
-      width = 300,
-      height = 300;
+  _generateLocalTranscoderConfiguration =
+    async (): Promise<LocalTranscoderConfiguration> => {
+      const { startScreenCapture, open, imageUrl } = this.state;
+      const max_width = Dimensions.get('window').width,
+        max_height = Dimensions.get('window').height,
+        width = 300,
+        height = 300;
 
-    const streams: TranscodingVideoStream[] = [];
+      const streams: TranscodingVideoStream[] = [];
 
-    streams.push({
-      sourceType: VideoSourceType.VideoSourceCamera,
-    });
-
-    if (startScreenCapture) {
       streams.push({
-        sourceType: VideoSourceType.VideoSourceScreenPrimary,
+        sourceType: VideoSourceType.VideoSourceCamera,
       });
-    }
 
-    if (open) {
-      streams.push({
-        sourceType: VideoSourceType.VideoSourceMediaPlayer,
-        mediaPlayerId: this.player?.getMediaPlayerId(),
+      if (startScreenCapture) {
+        streams.push({
+          sourceType: VideoSourceType.VideoSourceScreenPrimary,
+        });
+      }
+
+      if (open) {
+        streams.push({
+          sourceType: VideoSourceType.VideoSourceMediaPlayer,
+          mediaPlayerId: this.player?.getMediaPlayerId(),
+        });
+      }
+      let imageAbsoluteUrl = await getAbsolutePath(imageUrl);
+      if (imageAbsoluteUrl) {
+        const getImageType = (url: string): VideoSourceType | undefined => {
+          if (url.endsWith('.png')) {
+            return VideoSourceType.VideoSourceRtcImagePng;
+          } else if (url.endsWith('.jepg') || url.endsWith('.jpg')) {
+            return VideoSourceType.VideoSourceRtcImageJpeg;
+          } else if (url.endsWith('.gif')) {
+            return VideoSourceType.VideoSourceRtcImageGif;
+          }
+          return undefined;
+        };
+        streams.push({
+          sourceType: getImageType(imageAbsoluteUrl),
+          imageUrl: imageAbsoluteUrl,
+        });
+      }
+
+      streams.map((value, index) => {
+        const maxNumPerRow = Math.floor(max_width / width);
+        const numOfRow = Math.floor(index / maxNumPerRow);
+        const numOfColumn = Math.floor(index % maxNumPerRow);
+        value.x = numOfColumn * width;
+        value.y = numOfRow * height;
+        value.width = width;
+        value.height = height;
+        value.zOrder = 1;
+        value.alpha = 1;
+        value.mirror = false;
       });
-    }
-    let imageAbsoluteUrl = await getAbsolutePath(imageUrl);
-    if (imageAbsoluteUrl) {
-      const getImageType = (url: string): VideoSourceType | undefined => {
-        if (url.endsWith('.png')) {
-          return VideoSourceType.VideoSourceRtcImagePng;
-        } else if (url.endsWith('.jepg') || url.endsWith('.jpg')) {
-          return VideoSourceType.VideoSourceRtcImageJpeg;
-        } else if (url.endsWith('.gif')) {
-          return VideoSourceType.VideoSourceRtcImageGif;
-        }
-        return undefined;
+
+      return {
+        streamCount: streams.length,
+        videoInputStreams: streams,
+        videoOutputConfiguration: {
+          dimensions: { width: max_width, height: max_height },
+        },
       };
-      streams.push({
-        sourceType: getImageType(imageAbsoluteUrl),
-        imageUrl: imageAbsoluteUrl,
-      });
-    }
-
-    streams.map((value, index) => {
-      const maxNumPerRow = Math.floor(max_width / width);
-      const numOfRow = Math.floor(index / maxNumPerRow);
-      const numOfColumn = Math.floor(index % maxNumPerRow);
-      value.x = numOfColumn * width;
-      value.y = numOfRow * height;
-      value.width = width;
-      value.height = height;
-      value.zOrder = 1;
-      value.alpha = 1;
-      value.mirror = false;
-    });
-
-    return {
-      streamCount: streams.length,
-      videoInputStreams: streams,
-      videoOutputConfiguration: {
-        dimensions: { width: max_width, height: max_height },
-      },
     };
-  };
 
   /**
    * Step 4: leaveChannel
@@ -333,11 +331,8 @@ export default class LocalVideoTranscoder
   }
 
   protected renderUsers(): React.ReactNode {
-    const {
-      startPreview,
-      joinChannelSuccess,
-      startLocalVideoTranscoder,
-    } = this.state;
+    const { startPreview, joinChannelSuccess, startLocalVideoTranscoder } =
+      this.state;
     return (
       <>
         {startLocalVideoTranscoder
@@ -347,8 +342,8 @@ export default class LocalVideoTranscoder
               sourceType: VideoSourceType.VideoSourceTranscoded,
             })
           : undefined}
-          {startPreview || joinChannelSuccess ?
-            this.renderUser({
+        {startPreview || joinChannelSuccess
+          ? this.renderUser({
               renderMode: RenderModeType.RenderModeFit,
               uid: 0,
               sourceType: VideoSourceType.VideoSourceCamera,
@@ -359,12 +354,7 @@ export default class LocalVideoTranscoder
   }
 
   protected renderConfiguration(): React.ReactNode {
-    const {
-      startScreenCapture,
-      url,
-      open,
-      imageUrl,
-    } = this.state;
+    const { startScreenCapture, url, open, imageUrl } = this.state;
     return (
       <>
         <AgoraButton
@@ -415,7 +405,7 @@ export default class LocalVideoTranscoder
         <AgoraButton
           title={`${
             startLocalVideoTranscoder ? 'stop' : 'start'
-            } Local Video Transcoder`}
+          } Local Video Transcoder`}
           onPress={
             startLocalVideoTranscoder
               ? this.stopLocalVideoTranscoder
