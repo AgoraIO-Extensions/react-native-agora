@@ -59,7 +59,6 @@ export function useInitRtcEngine(enableVideo: boolean) {
       engine.current.startPreview();
       setStartPreview(true);
     }
-
   }, [appId, enableVideo]);
 
   const onError = useCallback((err: ErrorCodeType, msg: string) => {

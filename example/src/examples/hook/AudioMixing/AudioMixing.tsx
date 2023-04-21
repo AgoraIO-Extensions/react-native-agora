@@ -1,13 +1,22 @@
-import { AudioMixingReasonType, AudioMixingStateType, ClientRoleType } from 'react-native-agora';
 import React, { ReactNode, useEffect, useState } from 'react';
+import {
+  AudioMixingReasonType,
+  AudioMixingStateType,
+  ClientRoleType,
+} from 'react-native-agora';
 
-import { AgoraButton, AgoraDivider, AgoraSwitch, AgoraTextInput } from '../../../components/ui';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraSwitch,
+  AgoraTextInput,
+} from '../../../components/ui';
+import { getAssetPath } from '../../../utils';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
 import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
-import { getAssetPath } from '../../../utils';
 
 export default function AudioMixing() {
   const {
@@ -24,7 +33,9 @@ export default function AudioMixing() {
      */
     useInitRtcEngine(false);
 
-  const [filePath, setFilePath] = useState<string>(getAssetPath('Sound_Horizon.mp3'));
+  const [filePath, setFilePath] = useState<string>(
+    getAssetPath('Sound_Horizon.mp3')
+  );
   const [loopback, setLoopback] = useState<boolean>(false);
   const [cycle, setCycle] = useState<number>(-1);
   const [startPos, setStartPos] = useState<number>(0);
@@ -140,12 +151,9 @@ export default function AudioMixing() {
       }
     );
 
-    engine.current.addListener(
-      'onAudioMixingFinished',
-      () => {
-        log.info('AudioMixingFinished');
-      }
-    );
+    engine.current.addListener('onAudioMixingFinished', () => {
+      log.info('AudioMixingFinished');
+    });
 
     engine.current.addListener('onAudioRoutingChanged', (routing: number) => {
       log.info('onAudioRoutingChanged', 'routing', routing);
@@ -202,8 +210,7 @@ export default function AudioMixing() {
         <AgoraTextInput
           onChangeText={(text) => {
             if (isNaN(+text)) return;
-            setCycle(text === '' ? cycle : +text,
-            );
+            setCycle(text === '' ? cycle : +text);
           }}
           numberKeyboard={true}
           placeholder={`cycle (defaults: ${cycle})`}
@@ -225,16 +232,12 @@ export default function AudioMixing() {
       <>
         <AgoraButton
           title={`${startAudioMixing ? 'stop' : 'start'} Audio Mixing`}
-          onPress={
-            startAudioMixing ? stopAudioMixing : _startAudioMixing
-          }
+          onPress={startAudioMixing ? stopAudioMixing : _startAudioMixing}
         />
         <AgoraButton
           disabled={!startAudioMixing}
           title={`${pauseAudioMixing ? 'resume' : 'pause'} Audio Mixing`}
-          onPress={
-            pauseAudioMixing ? resumeAudioMixing : _pauseAudioMixing
-          }
+          onPress={pauseAudioMixing ? resumeAudioMixing : _pauseAudioMixing}
         />
         <AgoraButton
           disabled={!startAudioMixing}
