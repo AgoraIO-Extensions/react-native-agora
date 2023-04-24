@@ -1,6 +1,7 @@
 import { Buffer } from 'buffer';
 
 import base64 from 'base64-js';
+import JSON from 'json-bigint';
 import { NativeEventEmitter } from 'react-native';
 
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
@@ -59,8 +60,6 @@ import { RtcEngineExInternal } from './RtcEngineExInternal';
 
 import type { EventEmitter as IEventEmitter } from './emitter/EventEmitter';
 import EventEmitter from './emitter/EventEmitter';
-
-const JSON = require('json-bigint');
 
 export type IrisApiParam = {
   funcName: string;
