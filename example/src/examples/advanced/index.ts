@@ -9,6 +9,7 @@ import Encryption from './Encryption/Encryption';
 import Extension from './Extension/Extension';
 import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
 import LocalSpatialAudioEngine from './LocalSpatialAudioEngine/LocalSpatialAudioEngine';
+import LocalVideoTranscoder from './LocalVideoTranscoder/LocalVideoTranscoder';
 import MediaPlayer from './MediaPlayer/MediaPlayer';
 import MediaRecorder from './MediaRecorder/MediaRecorder';
 import MusicContentCenter from './MusicContentCenter/MusicContentCenter';
@@ -73,6 +74,10 @@ const Advanced = {
     {
       name: 'LocalSpatialAudioEngine',
       component: LocalSpatialAudioEngine,
+    },
+    {
+      name: 'LocalVideoTranscoder',
+      component: LocalVideoTranscoder,
     },
     {
       name: 'MediaPlayer',

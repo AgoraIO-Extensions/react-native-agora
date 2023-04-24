@@ -75,7 +75,7 @@
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
     "react": "18.2.0",
-    "react-native": "0.71.4",
+    "react-native": "0.71.6",
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
     "ts-interface-builder": "^0.3.3",
@@ -121,72 +121,6 @@
         "infile": "CHANGELOG.md"
       }
     }
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@react-native-community",
-      "prettier"
-    ],
-    "plugins": [
-      "import",
-      "auto-import"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
-        }
-      ],
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
-      "auto-import/auto-import": [
-        "error",
-        {
-          "rootPath": "./src"
-        }
-      ],
-      "import/order": [
-        "error",
-        {
-          "newlines-between": "always-and-inside-groups",
-          "pathGroups": [
-            {
-              "pattern": "../internal/IrisApiEngine",
-              "group": "unknown"
-            }
-          ],
-          "alphabetize": {
-            "order": "asc",
-            "orderImportKind": "asc"
-          }
-        }
-      ],
-      "sort-imports": [
-        "error",
-        {
-          "ignoreDeclarationSort": true,
-          "ignoreMemberSort": false
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/",
-    "src/ti/"
-  ],
-  "prettier": {
-    "quoteProps": "consistent",
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5",
-    "useTabs": false
   },
   "react-native-builder-bob": {
     "source": "src",
