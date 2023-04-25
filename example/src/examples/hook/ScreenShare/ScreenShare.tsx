@@ -55,7 +55,7 @@ export default function ScreenShare() {
      * Step 1: initRtcEngine
      */
     useInitRtcEngine(enableVideo);
-  const [token2, setToken2] = useState<string>('');
+  const [token2] = useState<string>('');
   const [uid2, setUid2] = useState<number>(0);
   const [captureAudio, setCaptureAudio] = useState<boolean>(false);
   const [sampleRate, setSampleRate] = useState<number>(16000);

@@ -24,6 +24,7 @@ import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
 import useInitRtcEngine from '../hooks/useInitRtcEngine';
+
 export default function JoinChannelVideo() {
   const [enableVideo] = useState<boolean>(true);
   const {

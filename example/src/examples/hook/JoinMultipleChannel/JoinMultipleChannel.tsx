@@ -25,6 +25,7 @@ import {
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import useInitRtcEngine from '../hooks/useInitRtcEngine';
+
 export default function JoinMultipleChannel() {
   const [enableVideo] = useState<boolean>(true);
   const {

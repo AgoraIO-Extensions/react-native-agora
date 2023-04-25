@@ -16,17 +16,10 @@ import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import useInitRtcEngine from '../hooks/useInitRtcEngine';
+
 export default function AudioMixing() {
   const [enableVideo] = useState<boolean>(false);
-  const {
-    channelId,
-    setChannelId,
-    token,
-    uid,
-    joinChannelSuccess,
-    remoteUsers,
-    engine,
-  } =
+  const { channelId, setChannelId, token, uid, joinChannelSuccess, engine } =
     /**
      * Step 1: initRtcEngine
      */

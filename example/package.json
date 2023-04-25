@@ -6,7 +6,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "pods": "pod-install --quiet"
+    "pods": "pod-install --quiet",
+    "install": "yarn patch-package"
   },
   "dependencies": {
     "@react-native-community/slider": "^4.4.2",
@@ -16,7 +17,7 @@
     "@rneui/base": "^4.0.0-rc.7",
     "@rneui/themed": "^4.0.0-rc.7",
     "react": "18.2.0",
-    "react-native": "0.71.6",
+    "react-native": "0.71.4",
     "react-native-agora-rawdata": "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#main",
     "react-native-chart-kit": "^6.12.0",
     "react-native-color-picker": "^0.6.0",
@@ -36,6 +37,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "detox": "^20.6.0",
     "jest": "^29.5.0",
-    "metro-react-native-babel-preset": "0.73.8"
+    "metro-react-native-babel-preset": "0.73.8",
+    "patch-package": "^6.5.1"
   }
 }
