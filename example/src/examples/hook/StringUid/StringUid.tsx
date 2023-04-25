@@ -102,7 +102,7 @@ export default function StringUid() {
       )}
       renderUsers={() => (
         <BaseRenderUsers
-          enableVideo={false}
+          enableVideo={enableVideo}
           joinChannelSuccess={joinChannelSuccess}
           remoteUsers={remoteUsers}
         />
