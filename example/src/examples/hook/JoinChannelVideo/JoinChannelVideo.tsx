@@ -23,9 +23,10 @@ import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
 import BaseRenderUsers from '../components/BaseRenderUsers';
-import { useInitRtcEngine } from '../hooks/useInitRtcEngine';
+import useInitRtcEngine from '../hooks/useInitRtcEngine';
 
 export default function JoinChannelVideo() {
+  const [enableVideo] = useState<boolean>(true);
   const {
     channelId,
     setChannelId,
@@ -39,7 +40,7 @@ export default function JoinChannelVideo() {
     /**
      * Step 1: initRtcEngine
      */
-    useInitRtcEngine(true);
+    useInitRtcEngine(enableVideo);
   const [switchCamera, setSwitchCamera] = useState(false);
   const [renderByTextureView, setRenderByTextureView] = useState(false);
   const [setupMode, setSetupMode] = useState(
@@ -142,7 +143,7 @@ export default function JoinChannelVideo() {
       )}
       renderUsers={() => (
         <BaseRenderUsers
-          enableVideo={true}
+          enableVideo={enableVideo}
           renderVideo={renderVideo}
           startPreview={startPreview}
           joinChannelSuccess={joinChannelSuccess}

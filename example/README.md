@@ -60,7 +60,9 @@ Any scene of this project can run successfully alone.
 | [StringUid](src/examples/hook/StringUid) | String user ID |
 | [JoinMultipleChannel](src/examples/hook/JoinMultipleChannel) | Joins a channel with the connection ID |
 | [VirtualBackground](src/examples/hook/VirtualBackground) | Enables/Disables the virtual background (beta feature) |
-
+| [AudioMixing](src/renderer/examples/hook/AudioMixing/AudioMixing.tsx) | Starts playing the music file |
+| [TakeSnapshot](src/renderer/examples/hook/TakeSnapshot/TakeSnapshot.tsx) | Takes a snapshot of a video stream |
+| [ScreenShare](src/renderer/examples/hook/ScreenShare/ScreenShare.tsx) | sharing application screen view |
 ## How to run the sample project
 
 #### Developer Environment Requirements
