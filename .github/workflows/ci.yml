@@ -28,7 +28,7 @@ jobs:
 
       - name: Typecheck files
         run: |
-          yarn install --cwd example --frozen-lockfile
+          yarn example install --frozen-lockfile
           yarn typecheck
 
   test-android:
@@ -110,7 +110,6 @@ jobs:
           detox-configuration: ios.sim.release
           root-directory: example
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
-          pre-install-command: yarn install --frozen-lockfile
 
       - uses: futureware-tech/simulator-action@v1
         with:
