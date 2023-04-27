@@ -30,7 +30,7 @@ jobs:
         with:
           name: AgoraRtcNgExample
           path: |
-            example/android/**/*.apk
+            example/android/app/build/outputs/apk/release/*.apk
 
   build-ios:
     runs-on: macos-latest
