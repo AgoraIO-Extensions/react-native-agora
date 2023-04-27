@@ -5,13 +5,16 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    env:
-      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Setup
         uses: ./.github/actions/setup
+
+      - name: SetupExample
+        run: |
+          yarn install --frozen-lockfile
+        working-directory: example
 
       - name: Modify APP ID
         run: |
@@ -19,28 +22,45 @@ jobs:
           mv tmp agora.config.ts
         working-directory: example/src/config
 
-      - uses: nitro-build/github-action-nitro-android@v1
-        id: nitro
-        with:
-          debug: true
-          root-directory: example
-          cache-env-var-lookup-keys: ORG_GRADLE_PROJECT_*
+      - name: Gradle build
+        run: |
+          ./gradlew :app:assembleRelease
+        working-directory: example/android
 
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
           path: |
-            ${{ steps.nitro.outputs.nitro-output-dir }}/*apk
+            example/android/**/*.apk
 
   build-ios:
     runs-on: macos-latest
-    env:
-      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Setup
         uses: ./.github/actions/setup
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            **/Pods
+          key: ${{ runner.os }}-pods-ng-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-ng
+
+      - uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 1024M
+          key: ${{ runner.os }}-ccache-ng
+          restore-keys: |
+            ${{ runner.os }}-ccache-ng
+
+      - name: SetupExample
+        run: |
+          yarn install --frozen-lockfile
+          yarn pods
+        working-directory: example
 
       - name: Modify APP ID
         run: |
@@ -77,26 +97,34 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-      - uses: AgoraIO-Extensions/actions/.github/actions/github-action-nitro-ios@main
-        id: nitro
-        with:
-          debug: true
-          root-directory: example
-          export-method: development
-          cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
-          provisioning-profile-specifier: ${{ secrets.BUILD_PROVISION_PROFILE_NAME }}
+      - name: Fastlane build
+        env:
+          CC: clang
+          CXX: clang++
+          CLANG: clang
+          CLANGPLUSPLUS: clang++
+          LD: clang
+          LDPLUSPLUS: clang++
+          CCACHE_SLOPPINESS: clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
+          CCACHE_FILECLONE: true
+          CCACHE_DEPEND: true
+          CCACHE_INODECACHE: true
+        run: |
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+          fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
+        working-directory: example/ios
 
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExample
           path: |
-            ${{ steps.nitro.outputs.nitro-output-dir }}/*.ipa
+            example/ios/*.ipa
 
       - uses: actions/upload-artifact@v3
         with:
           name: AgoraRtcNgExampleSymbol
           path: |
-            ${{ steps.nitro.outputs.nitro-output-dir }}/*.dSYM.zip
+            example/ios/*.dSYM.zip
 
   notification:
     runs-on: ubuntu-latest
