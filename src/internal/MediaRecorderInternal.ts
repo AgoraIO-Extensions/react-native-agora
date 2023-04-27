@@ -48,7 +48,7 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
     return this._nativeHandle;
   }
 
-  setMediaRecorderObserver(callback: IMediaRecorderObserver): number {
+  override setMediaRecorderObserver(callback: IMediaRecorderObserver): number {
     const key = this._nativeHandle;
     if (MediaRecorderInternal._observers.has(key)) {
       return ErrorCodeType.ErrOk;

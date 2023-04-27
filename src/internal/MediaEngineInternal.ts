@@ -39,7 +39,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     }
   >();
 
-  registerAudioFrameObserver(observer: IAudioFrameObserver): number {
+  override registerAudioFrameObserver(observer: IAudioFrameObserver): number {
     if (
       !MediaEngineInternal._audio_frame_observers.find(
         (value) => value === observer
@@ -50,7 +50,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.registerAudioFrameObserver(observer);
   }
 
-  unregisterAudioFrameObserver(observer: IAudioFrameObserver): number {
+  override unregisterAudioFrameObserver(observer: IAudioFrameObserver): number {
     MediaEngineInternal._audio_frame_observers =
       MediaEngineInternal._audio_frame_observers.filter(
         (value) => value !== observer
@@ -58,7 +58,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.unregisterAudioFrameObserver(observer);
   }
 
-  registerVideoFrameObserver(observer: IVideoFrameObserver): number {
+  override registerVideoFrameObserver(observer: IVideoFrameObserver): number {
     if (
       !MediaEngineInternal._video_frame_observers.find(
         (value) => value === observer
@@ -69,7 +69,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.registerVideoFrameObserver(observer);
   }
 
-  unregisterVideoFrameObserver(observer: IVideoFrameObserver): number {
+  override unregisterVideoFrameObserver(observer: IVideoFrameObserver): number {
     MediaEngineInternal._video_frame_observers =
       MediaEngineInternal._video_frame_observers.filter(
         (value) => value !== observer
@@ -77,7 +77,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.unregisterVideoFrameObserver(observer);
   }
 
-  registerVideoEncodedFrameObserver(
+  override registerVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number {
     if (
@@ -90,7 +90,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.registerVideoEncodedFrameObserver(observer);
   }
 
-  unregisterVideoEncodedFrameObserver(
+  override unregisterVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number {
     MediaEngineInternal._video_encoded_frame_observers =
@@ -100,7 +100,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.unregisterVideoEncodedFrameObserver(observer);
   }
 
-  release() {
+  override release() {
     MediaEngineInternal._audio_frame_observers = [];
     MediaEngineInternal._video_frame_observers = [];
     MediaEngineInternal._video_encoded_frame_observers = [];

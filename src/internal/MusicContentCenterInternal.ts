@@ -5,7 +5,6 @@ import {
   IMusicPlayer,
   Music,
 } from '../IAgoraMusicContentCenter';
-
 import { IMusicContentCenterEvent } from '../extension/IAgoraMusicContentCenterExtension';
 
 import {
@@ -20,7 +19,6 @@ const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
-
 import type { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
@@ -101,7 +99,9 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     }
   }
 
-  registerEventHandler(eventHandler: IMusicContentCenterEventHandler): number {
+  override registerEventHandler(
+    eventHandler: IMusicContentCenterEventHandler
+  ): number {
     if (
       !MusicContentCenterInternal._event_handlers.find(
         (value) => value === eventHandler
@@ -112,17 +112,17 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     return super.registerEventHandler(eventHandler);
   }
 
-  unregisterEventHandler(): number {
+  override unregisterEventHandler(): number {
     MusicContentCenterInternal._event_handlers = [];
     return super.unregisterEventHandler();
   }
 
-  release() {
+  override release() {
     MusicContentCenterInternal._event_handlers = [];
     super.release();
   }
 
-  createMusicPlayer(): IMusicPlayer {
+  override createMusicPlayer(): IMusicPlayer {
     // @ts-ignore
     const mediaPlayerId = super.createMusicPlayer() as number;
     return new MusicPlayerInternal(mediaPlayerId);
@@ -137,11 +137,11 @@ class _MusicPlayerInternal extends IMusicPlayerImpl {
     this._mediaPlayerId = mediaPlayerId;
   }
 
-  getMediaPlayerId(): number {
+  override getMediaPlayerId(): number {
     return this._mediaPlayerId;
   }
 
-  protected getApiTypeFromOpenWithSongCode(
+  protected override getApiTypeFromOpenWithSongCode(
     songCode: number,
     startPos = 0
   ): string {
@@ -182,23 +182,23 @@ export class MusicCollectionInternal extends MusicCollectionImpl {
     this._musicCollection = musicCollection;
   }
 
-  getCount(): number {
+  override getCount(): number {
     return this._musicCollection.count;
   }
 
-  getMusic(index: number): Music {
+  override getMusic(index: number): Music {
     return this._musicCollection.music[index] ?? {};
   }
 
-  getPage(): number {
+  override getPage(): number {
     return this._musicCollection.page;
   }
 
-  getPageSize(): number {
+  override getPageSize(): number {
     return this._musicCollection.pageSize;
   }
 
-  getTotal(): number {
+  override getTotal(): number {
     return this._musicCollection.total;
   }
 }

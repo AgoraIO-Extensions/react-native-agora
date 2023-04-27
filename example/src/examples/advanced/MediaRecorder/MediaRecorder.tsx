@@ -134,9 +134,9 @@ export default class MediaRecorder
    */
   createMediaRecorder = () => {
     const { channelId, uid } = this.state;
-    this.recorder = this.engine?.createLocalMediaRecorder({
+    this.recorder = this.engine?.createMediaRecorder({
       channelId,
-      localUid: uid,
+      uid,
     });
     this.recorder?.setMediaRecorderObserver(this);
   };

@@ -28,7 +28,6 @@ import {
   IRtcEngineEventHandler,
   Metadata,
 } from '../IAgoraRtcEngine';
-
 import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
 import {
   processIAudioFrameObserver,
@@ -57,7 +56,6 @@ import {
   MusicContentCenterInternal,
 } from './MusicContentCenterInternal';
 import { RtcEngineExInternal } from './RtcEngineExInternal';
-
 import type { EventEmitter as IEventEmitter } from './emitter/EventEmitter';
 import EventEmitter from './emitter/EventEmitter';
 
