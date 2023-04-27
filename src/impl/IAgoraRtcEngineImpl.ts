@@ -25,6 +25,7 @@ import {
   LiveTranscoding,
   LocalTranscoderConfiguration,
   LowlightEnhanceOptions,
+  RecorderStreamInfo,
   Rectangle,
   ScreenCaptureParameters,
   ScreenCaptureParameters2,
@@ -91,7 +92,6 @@ import {
   StreamFallbackOptions,
   VideoDeviceInfo,
 } from '../IAgoraRtcEngine';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
 
@@ -2284,13 +2284,13 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_destroyMediaPlayer';
   }
 
-  createLocalMediaRecorder(connection: RtcConnection): IMediaRecorder {
-    const apiType = this.getApiTypeFromCreateLocalMediaRecorder(connection);
+  createMediaRecorder(info: RecorderStreamInfo): IMediaRecorder {
+    const apiType = this.getApiTypeFromCreateMediaRecorder(info);
     const jsonParams = {
-      connection: connection,
+      info: info,
       toJSON: () => {
         return {
-          connection: connection,
+          info: info,
         };
       },
     };
@@ -2298,36 +2298,10 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromCreateLocalMediaRecorder(
-    connection: RtcConnection
+  protected getApiTypeFromCreateMediaRecorder(
+    info: RecorderStreamInfo
   ): string {
-    return 'RtcEngine_createLocalMediaRecorder';
-  }
-
-  createRemoteMediaRecorder(channelId: string, uid: number): IMediaRecorder {
-    const apiType = this.getApiTypeFromCreateRemoteMediaRecorder(
-      channelId,
-      uid
-    );
-    const jsonParams = {
-      channelId: channelId,
-      uid: uid,
-      toJSON: () => {
-        return {
-          channelId: channelId,
-          uid: uid,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromCreateRemoteMediaRecorder(
-    channelId: string,
-    uid: number
-  ): string {
-    return 'RtcEngine_createRemoteMediaRecorder';
+    return 'RtcEngine_createMediaRecorder';
   }
 
   destroyMediaRecorder(mediaRecorder: IMediaRecorder): number {
