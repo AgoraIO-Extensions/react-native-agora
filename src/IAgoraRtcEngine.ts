@@ -50,6 +50,7 @@ import {
   PermissionType,
   QualityAdaptIndication,
   QualityType,
+  RecorderStreamInfo,
   Rectangle,
   RemoteAudioState,
   RemoteAudioStateReason,
@@ -3377,23 +3378,12 @@ export abstract class IRtcEngine {
   abstract destroyMediaPlayer(mediaPlayer: IMediaPlayer): number;
 
   /**
-   * Stops recording the local audio and video.
-   * After calling startRecording , if you want to stop the recording, you must call this method; otherwise, the generated recording files may not be playable.
+   * Occurs when the uplink network information changes.
+   * The SDK triggers this callback when the uplink network information changes.This callback only applies to scenarios where you push externally encoded video data in H.264 format to the SDK.
    *
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @returns
-   * 0: Success.< 0: Failure.-7: The method is called before IRtcEngine is initialized.
+   * @param info The uplink network information. See UplinkNetworkInfo .
    */
-  abstract createLocalMediaRecorder(connection: RtcConnection): IMediaRecorder;
-
-  /**
-   * @ignore
-   */
-  abstract createRemoteMediaRecorder(
-    channelId: string,
-    uid: number
-  ): IMediaRecorder;
+  abstract createMediaRecorder(info: RecorderStreamInfo): IMediaRecorder;
 
   /**
    * @ignore
