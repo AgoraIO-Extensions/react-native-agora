@@ -37,7 +37,7 @@ export default class AudioSpectrum
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      intervalInMS: 100,
+      intervalInMS: 500,
       enableAudioSpectrumMonitor: false,
       audioSpectrumData: [],
     };
