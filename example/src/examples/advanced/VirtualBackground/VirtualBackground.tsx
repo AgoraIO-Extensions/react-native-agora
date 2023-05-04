@@ -1,5 +1,4 @@
 import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
@@ -21,7 +20,8 @@ import {
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
-import { enumToItems, getAbsolutePath, getAssetPath } from '../../../utils';
+import { enumToItems, getAbsolutePath, getResourcePath } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   background_source_type: BackgroundSourceType;
@@ -47,7 +47,7 @@ export default class VirtualBackground
       startPreview: false,
       background_source_type: BackgroundSourceType.BackgroundColor,
       color: 0xffffff,
-      source: getAssetPath('agora-logo.png'),
+      source: getResourcePath('agora-logo.png'),
       blur_degree: BackgroundBlurDegree.BlurDegreeMedium,
       enableVirtualBackground: false,
     };
@@ -65,23 +65,18 @@ export default class VirtualBackground
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
-    // Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      this.engine?.loadExtensionProvider('agora_segmentation_extension');
-    }
     this.engine?.enableExtension(
       'agora_video_filters_segmentation',
       'portrait_segmentation',

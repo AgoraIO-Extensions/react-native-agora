@@ -1,5 +1,4 @@
 import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -19,7 +18,8 @@ import {
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
-import { getAbsolutePath, getAssetPath } from '../../../utils';
+import { getAbsolutePath, getResourcePath } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   soundId: number;
@@ -48,7 +48,7 @@ export default class PlayEffect
       joinChannelSuccess: false,
       remoteUsers: [],
       soundId: 0,
-      filePath: getAssetPath('Sound_Horizon.mp3'),
+      filePath: getResourcePath('effect.mp3'),
       loopCount: 1,
       pitch: 1.0,
       pan: 0,
@@ -72,15 +72,14 @@ export default class PlayEffect
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     // Only need to enable audio on this case
     this.engine.enableAudio();

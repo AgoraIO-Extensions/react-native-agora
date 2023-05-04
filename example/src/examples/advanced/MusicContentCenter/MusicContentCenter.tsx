@@ -90,6 +90,7 @@ export default class MusicContentCenter
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
     });
   }
 

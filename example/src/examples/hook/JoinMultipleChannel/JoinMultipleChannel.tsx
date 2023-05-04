@@ -11,7 +11,6 @@ import {
   RemoteVideoStateReason,
   RtcConnection,
   RtcStats,
-  RtcSurfaceView,
   VideoCanvas,
 } from 'react-native-agora';
 
@@ -21,6 +20,7 @@ import {
   AgoraList,
   AgoraStyle,
   AgoraTextInput,
+  RtcSurfaceView,
 } from '../../../components/ui';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';

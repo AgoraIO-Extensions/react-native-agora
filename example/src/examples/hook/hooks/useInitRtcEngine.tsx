@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import createAgoraRtcEngine, {
   ChannelProfileType,
   ErrorCodeType,
@@ -11,6 +10,7 @@ import createAgoraRtcEngine, {
 
 import Config from '../../../config/agora.config';
 import * as log from '../../../utils/log';
+import { askMediaAccess } from '../../../utils/permissions';
 
 const useInitRtcEngine = (enableVideo: boolean) => {
   const [appId] = useState(Config.appId);
@@ -30,27 +30,21 @@ const useInitRtcEngine = (enableVideo: boolean) => {
 
     engine.current.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
 
-    if (Platform.OS === 'android') {
-      if (!enableVideo) {
-        // Need granted the microphone
-        await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-      } else {
-        // Need granted the microphone and camera permission
-        await PermissionsAndroid.requestMultiple([
-          'android.permission.RECORD_AUDIO',
-          'android.permission.CAMERA',
-        ]);
-      }
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     // Only need to enable audio on this case
     engine.current.enableAudio();
 
     if (enableVideo) {
+      // Need granted the camera permission
+      await askMediaAccess(['android.permission.CAMERA']);
+
       // Need to enable video on this case
       // If you only call `enableAudio`, only relay the audio stream to the target channel
       engine.current.enableVideo();

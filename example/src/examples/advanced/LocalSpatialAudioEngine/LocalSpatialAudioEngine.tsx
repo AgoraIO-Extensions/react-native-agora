@@ -1,5 +1,4 @@
 import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import {
   AudioScenarioType,
   ChannelProfileType,
@@ -22,6 +21,7 @@ import {
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   range: number;
@@ -66,6 +66,7 @@ export default class LocalSpatialAudioEngine
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
       // ⚠️ Must use AudioScenarioGameStreaming on this case
@@ -73,15 +74,8 @@ export default class LocalSpatialAudioEngine
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
-
-    // ⚠️ Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      this.engine?.loadExtensionProvider('agora_spatial_audio_extension');
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     // Only need to enable audio on this case
     this.engine.enableAudio();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import createAgoraRtcEngine, {
   ChannelProfileType,
   ClientRoleType,
@@ -12,8 +12,8 @@ import createAgoraRtcEngine, {
   RenderModeType,
   RtcConnection,
   RtcStats,
-  RtcSurfaceView,
   TranscodingVideoStream,
+  VideoMirrorModeType,
   VideoSourceType,
   showRPSystemBroadcastPickerView,
 } from 'react-native-agora';
@@ -27,10 +27,11 @@ import {
   AgoraDivider,
   AgoraStyle,
   AgoraTextInput,
+  RtcSurfaceView,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
-
-import { getAbsolutePath, getAssetPath } from '../../../utils';
+import { getAbsolutePath, getResourcePath } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   startScreenCapture: boolean;
@@ -60,7 +61,7 @@ export default class LocalVideoTranscoder
       startScreenCapture: false,
       url: 'https://agora-adc-artifacts.oss-cn-beijing.aliyuncs.com/video/meta_live_mpk.mov',
       open: false,
-      imageUrl: getAssetPath('agora-logo.png'),
+      imageUrl: getResourcePath('agora-logo.png'),
       startLocalVideoTranscoder: false,
       VideoInputStreams: [],
     };
@@ -79,9 +80,16 @@ export default class LocalVideoTranscoder
     this.engine.registerEventHandler(this);
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
+
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -205,13 +213,12 @@ export default class LocalVideoTranscoder
   _generateLocalTranscoderConfiguration =
     async (): Promise<LocalTranscoderConfiguration> => {
       const { startScreenCapture, open, imageUrl } = this.state;
-      const max_width = Dimensions.get('window').width,
-        max_height = Dimensions.get('window').height,
+      const max_width = 1080,
+        max_height = 720,
         width = 300,
         height = 300;
 
       const streams: TranscodingVideoStream[] = [];
-
       streams.push({
         sourceType: VideoSourceType.VideoSourceCamera,
       });
@@ -340,11 +347,11 @@ export default class LocalVideoTranscoder
               renderMode: RenderModeType.RenderModeFit,
               uid: 0,
               sourceType: VideoSourceType.VideoSourceTranscoded,
+              mirrorMode: VideoMirrorModeType.VideoMirrorModeDisabled,
             })
           : undefined}
         {startPreview || joinChannelSuccess
           ? this.renderUser({
-              renderMode: RenderModeType.RenderModeFit,
               uid: 0,
               sourceType: VideoSourceType.VideoSourceCamera,
             })
@@ -377,7 +384,7 @@ export default class LocalVideoTranscoder
           <RtcSurfaceView
             style={AgoraStyle.videoSmall}
             canvas={{
-              uid: this.player?.getMediaPlayerId(),
+              mediaPlayerId: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,
             }}
           />

@@ -1,5 +1,4 @@
 import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import {
   AudioFrame,
   AudioPcmFrame,
@@ -16,7 +15,6 @@ import {
   MediaPlayerError,
   MediaPlayerState,
   RtcConnection,
-  RtcSurfaceView,
   UserOfflineReasonType,
   VideoFrame,
   VideoSourceType,
@@ -27,8 +25,13 @@ import {
   BaseComponent,
   BaseVideoComponentState,
 } from '../../../components/BaseComponent';
-import { AgoraButton, AgoraTextInput } from '../../../components/ui';
+import {
+  AgoraButton,
+  AgoraTextInput,
+  RtcSurfaceView,
+} from '../../../components/ui';
 import Config from '../../../config/agora.config';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   token2: string;
@@ -80,6 +83,7 @@ export default class SendMultiVideoStream
     this.engine = createAgoraRtcEngine() as IRtcEngineEx;
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
@@ -87,13 +91,11 @@ export default class SendMultiVideoStream
     // this.engine.getMediaEngine().registerAudioFrameObserver(this);
     // this.engine.getMediaEngine().registerVideoFrameObserver(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel

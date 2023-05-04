@@ -36,7 +36,7 @@ export const enumToItems = (enumType: any): AgoraDropdownItem[] => {
   }));
 };
 
-export function getAssetPath(fileName: string): string {
+export function getResourcePath(fileName: string): string {
   if (Platform.OS === 'android') {
     return `/assets/${fileName}`;
   }

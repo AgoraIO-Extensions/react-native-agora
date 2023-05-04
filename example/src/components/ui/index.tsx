@@ -34,6 +34,8 @@ import PickerSelect, {
   PickerSelectProps,
 } from 'react-native-picker-select';
 
+export { RtcSurfaceView } from 'react-native-agora';
+
 export const AgoraView = (props: ViewProps & { horizontal?: boolean }) => {
   const { horizontal, style, ...others } = props;
   return (

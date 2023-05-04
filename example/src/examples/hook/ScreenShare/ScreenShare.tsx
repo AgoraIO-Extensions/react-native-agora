@@ -14,7 +14,6 @@ import {
   RenderModeType,
   RtcConnection,
   RtcStats,
-  RtcSurfaceView,
   UserOfflineReasonType,
   VideoCanvas,
   VideoContentHint,
@@ -31,6 +30,7 @@ import {
   AgoraSwitch,
   AgoraTextInput,
   AgoraView,
+  RtcSurfaceView,
 } from '../../../components/ui';
 import { enumToItems } from '../../../utils';
 import * as log from '../../../utils/log';

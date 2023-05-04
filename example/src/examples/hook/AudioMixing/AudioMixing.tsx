@@ -11,7 +11,7 @@ import {
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
-import { getAssetPath } from '../../../utils';
+import { getResourcePath } from '../../../utils';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
@@ -26,7 +26,7 @@ export default function AudioMixing() {
     useInitRtcEngine(enableVideo);
 
   const [filePath, setFilePath] = useState<string>(
-    getAssetPath('Sound_Horizon.mp3')
+    getResourcePath('effect.mp3')
   );
   const [loopback, setLoopback] = useState<boolean>(false);
   const [cycle, setCycle] = useState<number>(-1);

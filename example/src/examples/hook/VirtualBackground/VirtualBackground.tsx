@@ -1,5 +1,4 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Platform } from 'react-native';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
@@ -13,7 +12,7 @@ import {
   AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
-import { enumToItems, getAbsolutePath, getAssetPath } from '../../../utils';
+import { enumToItems, getAbsolutePath, getResourcePath } from '../../../utils';
 import * as log from '../../../utils/log';
 import { BaseComponent } from '../components/BaseComponent';
 import BaseRenderChannel from '../components/BaseRenderChannel';
@@ -41,17 +40,13 @@ export default function VirtualBackground() {
     BackgroundSourceType.BackgroundColor
   );
   const [color, setColor] = useState(0xffffff);
-  const [source, setSource] = useState(getAssetPath('agora-logo.png'));
+  const [source, setSource] = useState(getResourcePath('agora-logo.png'));
   const [blur_degree, setBlur_degree] = useState(
     BackgroundBlurDegree.BlurDegreeMedium
   );
   const [enableVirtualBackground, setEnableVirtualBackground] = useState(false);
 
   useEffect(() => {
-    // Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      engine.current.loadExtensionProvider('agora_segmentation_extension');
-    }
     engine.current.enableExtension(
       'agora_video_filters_segmentation',
       'portrait_segmentation',

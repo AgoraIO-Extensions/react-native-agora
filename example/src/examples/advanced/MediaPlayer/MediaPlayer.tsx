@@ -6,7 +6,6 @@ import {
   MediaPlayerError,
   MediaPlayerEvent,
   MediaPlayerState,
-  RtcSurfaceView,
   VideoSourceType,
   createAgoraRtcEngine,
 } from 'react-native-agora';
@@ -20,6 +19,7 @@ import {
   AgoraDivider,
   AgoraSlider,
   AgoraTextInput,
+  RtcSurfaceView,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 
@@ -69,6 +69,7 @@ export default class MediaPlayer
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
     });
     this.engine.registerEventHandler(this);
 
