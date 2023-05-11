@@ -54,7 +54,6 @@ import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
 import { MusicContentCenterInternal } from './MusicContentCenterInternal';
-import type { EmitterSubscription } from './emitter/EventEmitter';
 
 const checkers = createCheckers(
   AgoraBaseTI,
@@ -74,19 +73,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     new MusicContentCenterInternal();
   private _local_spatial_audio_engine: ILocalSpatialAudioEngine =
     new LocalSpatialAudioEngineInternal();
-  private _events: Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  > = new Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  >();
 
   override initialize(context: RtcEngineContext): number {
     const ret = super.initialize(context);
@@ -175,7 +161,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   addListener<EventType extends keyof IRtcEngineEvent>(
     eventType: EventType,
     listener: IRtcEngineEvent[EventType]
-  ): EmitterSubscription {
+  ): void {
     this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IRtcEngine) {
@@ -203,36 +189,20 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
         data[1]
       );
     };
-    const subscription = DeviceEventEmitter.addListener(eventType, callback);
-    this._events.set(listener, { eventType, subscription });
-    return subscription;
+    DeviceEventEmitter.addListener(eventType, callback);
   }
 
   removeListener<EventType extends keyof IRtcEngineEvent>(
     eventType: EventType,
     listener: IRtcEngineEvent[EventType]
   ) {
-    if (!this._events.has(listener)) return;
-    this._events.get(listener)!.subscription.remove();
-    this._events.delete(listener);
+    DeviceEventEmitter.removeListener(eventType, listener);
   }
 
   removeAllListeners<EventType extends keyof IRtcEngineEvent>(
     eventType?: EventType
   ) {
-    if (eventType === undefined) {
-      this._events.forEach((value) => {
-        DeviceEventEmitter.removeAllListeners(value.eventType);
-      });
-      this._events.clear();
-    } else {
-      DeviceEventEmitter.removeAllListeners(eventType);
-      this._events.forEach((value, key) => {
-        if (value.eventType === eventType) {
-          this._events.delete(key);
-        }
-      });
-    }
+    DeviceEventEmitter.removeAllListeners(eventType);
   }
 
   override getVersion(): SDKBuildInfo {

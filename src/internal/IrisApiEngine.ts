@@ -1,6 +1,7 @@
 import { Buffer } from 'buffer';
 
 import base64 from 'base64-js';
+import EventEmitter from 'eventemitter3';
 import JSON from 'json-bigint';
 import { NativeEventEmitter } from 'react-native';
 
@@ -56,8 +57,6 @@ import {
   MusicContentCenterInternal,
 } from './MusicContentCenterInternal';
 import { RtcEngineExInternal } from './RtcEngineExInternal';
-import type { EventEmitter as IEventEmitter } from './emitter/EventEmitter';
-import EventEmitter from './emitter/EventEmitter';
 
 export type IrisApiParam = {
   funcName: string;
@@ -66,7 +65,7 @@ export type IrisApiParam = {
 };
 
 // @ts-ignore
-export const DeviceEventEmitter: IEventEmitter = new EventEmitter();
+export const DeviceEventEmitter: EventEmitter = new EventEmitter();
 
 const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);
 AgoraEventEmitter.addListener('AgoraRtcNg:onEvent', handleEvent);

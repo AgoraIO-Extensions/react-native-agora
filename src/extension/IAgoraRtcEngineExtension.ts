@@ -5,7 +5,6 @@ import {
   IMetadataObserver,
   IRtcEngineEventHandler,
 } from '../IAgoraRtcEngine';
-import type { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IRtcEngineEvent = IRtcEngineEventHandler &
   IDirectCdnStreamingEventHandler &
@@ -29,14 +28,11 @@ declare module '../IAgoraRtcEngine' {
      * const onJoinChannelSuccess = (connection: RtcConnection, elapsed: number) => {};
      * // Add one onJoinChannelSuccess listener
      * engine.addListener('onJoinChannelSuccess', onJoinChannelSuccess);
-     *
-     * @returns
-     * The native interface EventSubscription in React Native API.
      */
     addListener<EventType extends keyof IRtcEngineEvent>(
       eventType: EventType,
       listener: IRtcEngineEvent[EventType]
-    ): EmitterSubscription;
+    ): void;
 
     /**
      * Removes the specified IRtcEngineEvent listener.

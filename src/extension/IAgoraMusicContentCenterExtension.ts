@@ -1,5 +1,4 @@
 import { IMusicContentCenterEventHandler } from '../IAgoraMusicContentCenter';
-import type { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMusicContentCenterEvent = IMusicContentCenterEventHandler;
 
@@ -15,7 +14,7 @@ declare module '../IAgoraMusicContentCenter' {
     addListener<EventType extends keyof IMusicContentCenterEvent>(
       eventType: EventType,
       listener: IMusicContentCenterEvent[EventType]
-    ): EmitterSubscription;
+    ): void;
 
     /**
      * @ignore

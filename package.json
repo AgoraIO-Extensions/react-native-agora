@@ -138,6 +138,7 @@
   },
   "dependencies": {
     "buffer": "^6.0.3",
+    "eventemitter3": "^5.0.1",
     "json-bigint": "^1.0.0",
     "ts-interface-checker": "^1.0.2"
   },

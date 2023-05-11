@@ -19,25 +19,11 @@ import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
 import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
-import type { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaEngineInternal extends IMediaEngineImpl {
   static _audio_frame_observers: IAudioFrameObserver[] = [];
   static _video_frame_observers: IVideoFrameObserver[] = [];
   static _video_encoded_frame_observers: IVideoEncodedFrameObserver[] = [];
-  private _events: Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  > = new Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  >();
 
   override registerAudioFrameObserver(observer: IAudioFrameObserver): number {
     if (
@@ -144,7 +130,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
   addListener<EventType extends keyof IMediaEngineEvent>(
     eventType: EventType,
     listener: IMediaEngineEvent[EventType]
-  ): EmitterSubscription {
+  ) {
     this._addListenerPreCheck(eventType);
     const callback = (...data: any[]) => {
       if (data[0] !== EVENT_TYPE.IMediaEngine) {
@@ -158,35 +144,19 @@ export class MediaEngineInternal extends IMediaEngineImpl {
         data[1]
       );
     };
-    const subscription = DeviceEventEmitter.addListener(eventType, callback);
-    this._events.set(listener, { eventType, subscription });
-    return subscription;
+    DeviceEventEmitter.addListener(eventType, callback);
   }
 
   removeListener<EventType extends keyof IMediaEngineEvent>(
     eventType: EventType,
     listener: IMediaEngineEvent[EventType]
   ) {
-    if (!this._events.has(listener)) return;
-    this._events.get(listener)!.subscription.remove();
-    this._events.delete(listener);
+    DeviceEventEmitter.removeListener(eventType, listener);
   }
 
   removeAllListeners<EventType extends keyof IMediaEngineEvent>(
     eventType?: EventType
   ) {
-    if (eventType === undefined) {
-      this._events.forEach((value) => {
-        DeviceEventEmitter.removeAllListeners(value.eventType);
-      });
-      this._events.clear();
-    } else {
-      DeviceEventEmitter.removeAllListeners(eventType);
-      this._events.forEach((value, key) => {
-        if (value.eventType === eventType) {
-          this._events.delete(key);
-        }
-      });
-    }
+    DeviceEventEmitter.removeAllListeners(eventType);
   }
 }
