@@ -31,7 +31,7 @@ export abstract class IMediaPlayer {
    * Opens the media resource.
    * If you need to play a media file, make sure you receive the onPlayerSourceStateChanged callback reporting PlayerStateOpenCompleted before calling the play method to play the file.
    *
-   * @param url The path of the media file. Both local path and online path are supported.On the Android platform, if you need to open a file in URI format, use open .
+   * @param url The path of the media file. Both local path and online path are supported.
    * @param startPos The starting position (ms) for playback. Default value is 0.
    *
    * @returns
@@ -164,7 +164,13 @@ export abstract class IMediaPlayer {
   abstract setPlaybackSpeed(speed: number): number;
 
   /**
-   * @ignore
+   * Selects the audio track used during playback.
+   * After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.You need to call this method after calling getStreamInfo to get the audio stream index value.
+   *
+   * @param index The index of the audio track.
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
    */
   abstract selectAudioTrack(index: number): number;
 
@@ -198,7 +204,13 @@ export abstract class IMediaPlayer {
   abstract takeScreenshot(filename: string): number;
 
   /**
-   * @ignore
+   * Gets the detailed information of the media stream.
+   * Call this method after calling getStreamCount .
+   *
+   * @param index The index of the media stream.
+   *
+   * @returns
+   * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
    */
   abstract selectInternalSubtitle(index: number): number;
 
@@ -272,7 +284,7 @@ export abstract class IMediaPlayer {
    * Gets the volume of the media file for publishing.
    *
    * @returns
-   * The remote playback volume, if the method call succeeds.< 0: Failure.
+   * ≥ 0: The remote playback volume.< 0: Failure.
    */
   abstract getPublishSignalVolume(): number;
 
@@ -321,7 +333,11 @@ export abstract class IMediaPlayer {
   /**
    * Registers an audio frame observer object.
    *
+   * @param observer The audio frame observer, reporting the reception of each audio frame. See IAudioPcmFrameSink .
    * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType .
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
    */
   abstract registerAudioFrameObserver(
     observer: IAudioPcmFrameSink,
@@ -329,9 +345,9 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
-   * Unregisters an audio observer.
+   * Unregisters an audio frame observer.
    *
-   * @param observer The audio observer. See IMediaPlayerAudioFrameObserver .
+   * @param observer The audio observer. See IAudioPcmFrameSink .
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -372,9 +388,9 @@ export abstract class IMediaPlayer {
   ): number;
 
   /**
-   * Unregisters the encoded audio frame observer.
+   * Unregisters the video frame observer.
    *
-   * @param observer The encoded audio observer. See IAudioEncodedFrameObserver .
+   * @param observer The video observer, reporting the reception of each video frame. See IVideoFrameObserver .
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -400,7 +416,10 @@ export abstract class IMediaPlayer {
   abstract getPlayerSdkVersion(): string;
 
   /**
-   * @ignore
+   * Gets the path of the media resource being played.
+   *
+   * @returns
+   * The path of the media resource being played.
    */
   abstract getPlaySrc(): string;
 
@@ -518,8 +537,7 @@ export abstract class IMediaPlayerCacheManager {
    * You can call this method to delete a cached media file when the storage space for the cached files is about to reach its limit. After you call this method, the SDK deletes the cached media file that is least used.The cached media file currently being played will not be deleted.
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract removeOldCache(): number;
 
@@ -530,8 +548,7 @@ export abstract class IMediaPlayerCacheManager {
    * @param uri The URI (Uniform Resource Identifier) of the media file to be deleted.
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * 0: Success.< 0: Failure. See MediaPlayerError .
    */
   abstract removeCacheByUri(uri: string): number;
 
@@ -563,7 +580,8 @@ export abstract class IMediaPlayerCacheManager {
    * @param cacheSize The maximum size (bytes) of the aggregate storage space for cached media files. The default value is 1 GB.
    *
    * @returns
-   * 0: Success.< 0: Failure. See MediaPlayerError .
+   * 0: Success.
+   *  < 0: Failure. See MediaPlayerError .
    */
   abstract setMaxCacheFileSize(cacheSize: number): number;
 

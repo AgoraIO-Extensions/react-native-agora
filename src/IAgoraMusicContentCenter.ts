@@ -109,7 +109,13 @@ export abstract class MusicChartCollection {
   abstract getCount(): number;
 
   /**
-   * @ignore
+   * Gets the detailed information of the media stream.
+   * Call this method after calling getStreamCount .
+   *
+   * @param index The index of the media stream.
+   *
+   * @returns
+   * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
    */
   abstract get(index: number): MusicChartInfo;
 }
@@ -377,12 +383,19 @@ export abstract class IMusicContentCenter {
   abstract preload(songCode: number, jsonOption?: string): number;
 
   /**
-   * @ignore
+   * 删除已缓存的音乐资源。
+   * 你可以调用该方法删除某一已缓存的音乐资源，如需删除多个音乐资源，你可以多次调用该方法。 The cached media file currently being played will not be deleted.
+   *
+   * @param songCode 待删除的音乐资源的编号。
+   *
+   * @returns
+   * 0: 方法调用成功，音乐资源已删除。< 0: Failure.
    */
   abstract removeCache(songCode: number): number;
 
   /**
-   * @ignore
+   * 获取已缓存的音乐资源信息。
+   * 当你不再需要使用已缓存的音乐资源时，你需要及时释放内存以防止内存泄漏。
    */
   abstract getCaches(): { cacheInfo: MusicCacheInfo[]; cacheInfoSize: number };
 

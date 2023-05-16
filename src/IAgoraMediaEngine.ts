@@ -84,10 +84,8 @@ export abstract class IMediaEngine {
   /**
    * Pushes the external audio frame.
    *
-   * @param type The type of the audio recording device. See MediaSourceType .
    * @param frame The external audio frame. See AudioFrame .
-   * @param wrap Whether to use the placeholder. Agora recommends using the default value.true: Use the placeholder.false: (Default) Do not use the placeholder.
-   * @param sourceId The ID of external audio source. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
+   * @param trackId The audio track ID. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -127,7 +125,7 @@ export abstract class IMediaEngine {
    * Call this method before joining a channel.
    *
    * @param enabled Whether to enable the external audio source:true: Enable the external audio source.false: (Default) Disable the external audio source.
-   * @param sampleRate The sample rate (Hz) of the external audio which can be set as 8000, 16000, 32000, 44100, or 48000.
+   * @param sampleRate The sample rate (Hz) of the external audio source which can be set as 8000, 16000, 32000, 44100, or 48000.
    * @param channels The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
    * @param sourceNumber The number of external audio sources. The value of this parameter should be larger than 0. The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions , you can set publishCustomAudioSourceId to the audio track ID you want to publish.
    * @param localPlayback Whether to play the external audio source:true: Play the external audio source.false: (Default) Do not play the external source.
@@ -145,7 +143,14 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * @ignore
+   * Creates a customized audio track.
+   * When you need to publish multiple custom captured videos in the channel, you can refer to the following steps:Call this method to create a video track and get the video track ID.In ChannelMediaOptions of each channel, set customVideoTrackId to the video track ID that you want to publish, and set publishCustomVideoTrack to true.If you call pushAudioFrame trackId as the video track ID set in step 2, you can publish the corresponding custom video source in multiple channels.
+   *
+   * @param trackType The type of the custom audio track. See AudioTrackType .
+   * @param config The configuration of the custom audio track. See AudioTrackConfig .
+   *
+   * @returns
+   * If the method call is successful, the video track ID is returned as the unique identifier of the video track.If the method call fails, a negative value is returned.
    */
   abstract createCustomAudioTrack(
     trackType: AudioTrackType,
@@ -153,7 +158,12 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * @ignore
+   * Destroys the specified video track.
+   *
+   * @param trackId The custom audio track ID returned in createCustomAudioTrack .
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
    */
   abstract destroyCustomAudioTrack(trackId: number): number;
 
