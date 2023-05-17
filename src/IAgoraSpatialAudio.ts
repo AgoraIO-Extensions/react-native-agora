@@ -155,7 +155,7 @@ export abstract class IBaseSpatialAudioEngine {
    * Stops or resumes publishing the local audio stream.
    * This method does not affect any ongoing audio recording, because it does not disable the audio capture device.Call this method after joinChannel .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio stream of a specified user, Agora recommends calling this method instead of the muteLocalAudioStream method in IRtcEngine .
    *
-   * @param mute Whether to stop publishing the local audio stream:: Stop publishing the local audio stream.true: Publish the local audio stream.false
+   * @param mute Whether to stop publishing the local audio stream:true: Stop publishing the local audio stream.false: Publish the local audio stream.
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -178,6 +178,7 @@ export abstract class IBaseSpatialAudioEngine {
    * In virtual interactive scenarios, you can use this method to set the sound insulation area and sound attenuation coefficient. When the sound source (which can be the user or the media player) and the listener belong to the inside and outside of the sound insulation area, they can experience the attenuation effect of sound similar to the real environment when it encounters a building partition.When the sound source and the listener belong to the inside and outside of the sound insulation area, the sound attenuation effect is determined by the sound attenuation coefficient in SpatialAudioZone .If the user or media player is in the same sound insulation area, it is not affected by SpatialAudioZone, and the sound attenuation effect is determined by the attenuation parameter in setPlayerAttenuation or setRemoteAudioAttenuation. If you do not call setPlayerAttenuation or setRemoteAudioAttenuation, the default sound attenuation coefficient of the SDK is 0.5, which simulates the attenuation of the sound in the real environment.If the sound source and the receiver belong to two sound insulation areas, the receiver cannot hear the sound source.If this method is called multiple times, the last sound insulation area set takes effect.
    *
    * @param zones Sound insulation area settings. See SpatialAudioZone.
+   * @param zoneCount The number of sound insulation areas.
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -264,9 +265,9 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
 
   /**
    * Occurs when the most active remote speaker is detected.
-   * After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user, who is detected as the loudest for the most times, is the most active user.When the number of users is no less than two and an active remote speaker exists, the SDK triggers this callback and reports the uid of the most active remote speaker.If the most active remote speaker is always the same user, the SDK triggers the onActiveSpeaker callback only once.If the most active remote speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active remote speaker.
+   * After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user whose volume is detected as the loudest for the most times, is the most active user.When the number of users is no less than two and an active remote speaker exists, the SDK triggers this callback and reports the uid of the most active remote speaker.If the most active remote speaker is always the same user, the SDK triggers the onActiveSpeaker callback only once.If the most active remote speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active remote speaker.
    *
-   * @param uid The user ID of the most active remote speaker.
+   * @param uid The user ID of the most active speaker.
    * @param connection The connection information. See RtcConnection .
    */
   abstract removeRemotePositionEx(
@@ -284,13 +285,15 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
   abstract clearRemotePositions(): number;
 
   /**
-   * Stops recording the local audio and video.
-   * After calling startRecording , if you want to stop the recording, you must call this method; otherwise, the generated recording files may not be playable.
+   * Enables tracing the video frame rendering process.
+   * By default, the SDK starts tracing the video rendering event automatically when the local user successfully joins the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
+   *  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
+   *  The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
    *
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.< 0: Failure.-7: The method is called before IRtcEngine is initialized.
+   * 0: Success.< 0: Failure.
    */
   abstract clearRemotePositionsEx(connection: RtcConnection): number;
 
@@ -298,16 +301,8 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
    * Sets the sound attenuation effect for the specified user.
    *
    * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   * @param attenuation For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:
-   *  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-   *  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-   *  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.
-   *  (0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
-   *
-   * @param forceSet Whether to force the user's sound attenuation effect:true: Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation of the SpatialAudioZone does not take effect for the user.
-   *  If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.
-   *  If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method.
-   *  false: Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
+   * @param attenuation For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.(0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.(0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
+   * @param forceSet Whether to force the user's sound attenuation effect:true: Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation of the SpatialAudioZone does not take effect for the user.If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method.false: Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
    *
    * @returns
    * 0: Success.< 0: Failure.

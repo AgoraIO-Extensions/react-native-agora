@@ -41,10 +41,10 @@ export abstract class IAudioDeviceManager {
   abstract getPlaybackDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * Sets the volume of the in-ear monitor.
-   * Users must use wired earphones to hear their own voices.You can call this method either before or after joining a channel.
+   * Adjusts the volume of audio mixing for publishing.
+   * This method adjusts the volume of audio mixing for publishing (sending to other users).Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(AudioMixingStatePlaying) callback.
    *
-   * @param volume The volume of the in-ear monitor. The value ranges between 0 and 100. The default value is 100.
+   * @param volume The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -72,10 +72,10 @@ export abstract class IAudioDeviceManager {
   abstract getRecordingDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * Sets the volume of the in-ear monitor.
-   * Users must use wired earphones to hear their own voices.You can call this method either before or after joining a channel.
+   * Adjusts the volume of audio mixing for publishing.
+   * This method adjusts the volume of audio mixing for publishing (sending to other users).Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(AudioMixingStatePlaying) callback.
    *
-   * @param volume The volume of the in-ear monitor. The value ranges between 0 and 100. The default value is 100.
+   * @param volume The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
    *
    * @returns
    * 0: Success.< 0: Failure.
@@ -98,13 +98,13 @@ export abstract class IAudioDeviceManager {
   abstract getLoopbackDevice(): string;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method in IRtcEngine .After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
+   * Stops or resumes publishing the local audio stream.
+   * This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
+   * @param mute Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
    *
    * @returns
-   * 0: Success.< 0: Failure.
+   * 0: Success. < 0: Failure.
    */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
@@ -114,13 +114,13 @@ export abstract class IAudioDeviceManager {
   abstract getPlaybackDeviceMute(): boolean;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joinChannel .When using the spatial audio effect, if you need to set whether to stop subscribing to the audio streams of all remote users, Agora recommends calling this method instead of the muteAllRemoteAudioStreams method in IRtcEngine .After calling this method, you need to call updateSelfPosition and updateRemotePosition to update the spatial location of the local user and the remote user; otherwise, the settings in this method do not take effect.
+   * Stops or resumes publishing the local audio stream.
+   * This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stop subscribing to the audio streams of all remote users.false: Subscribe to the audio streams of all remote users.
+   * @param mute Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
    *
    * @returns
-   * 0: Success.< 0: Failure.
+   * 0: Success. < 0: Failure.
    */
   abstract setRecordingDeviceMute(mute: boolean): number;
 
@@ -160,38 +160,17 @@ export abstract class IAudioDeviceManager {
   abstract stopAudioDeviceLoopbackTest(): number;
 
   /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * @ignore
    */
   abstract followSystemPlaybackDevice(enable: boolean): number;
 
   /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * @ignore
    */
   abstract followSystemRecordingDevice(enable: boolean): number;
 
   /**
-   * Sets whether to delete cached media files automatically.
-   * If you enable this function to remove cached media files automatically, when the cached media files exceed either the number or size limit you set, the SDK automatically deletes the least recently used cache file.
-   *
-   * @param enable Whether to enable the SDK to delete cached media files automatically:true: Delete cached media files automatically.false: (Default) Do not delete cached media files automatically.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError .
+   * @ignore
    */
   abstract followSystemLoopbackDevice(enable: boolean): number;
 
