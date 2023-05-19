@@ -22,7 +22,10 @@ import {
   IMediaPlayerVideoFrameObserver,
 } from '../IAgoraMediaPlayer';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
-import { IMusicContentCenterEventHandler } from '../IAgoraMusicContentCenter';
+import {
+  IMusicContentCenterEventHandler,
+  MusicCollection,
+} from '../IAgoraMusicContentCenter';
 import {
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
@@ -112,9 +115,13 @@ export const EVENT_PROCESSORS = {
     suffix: 'AudioFrameObserver_',
     type: EVENT_TYPE.IMediaEngine,
     func: [processIAudioFrameObserver, processIAudioFrameObserverBase],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: { audioFrame?: AudioFrame },
+      buffers: Uint8Array[]
+    ) => {
       if (data.audioFrame) {
-        (data.audioFrame as AudioFrame).buffer = buffers[0];
+        data.audioFrame.buffer = buffers[0];
       }
     },
     handlers: () => MediaEngineInternal._audio_frame_observers,
@@ -123,13 +130,17 @@ export const EVENT_PROCESSORS = {
     suffix: 'VideoFrameObserver_',
     type: EVENT_TYPE.IMediaEngine,
     func: [processIVideoFrameObserver],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: { videoFrame?: VideoFrame },
+      buffers: Uint8Array[]
+    ) => {
       if (data.videoFrame) {
-        (data.videoFrame as VideoFrame).yBuffer = buffers[0];
-        (data.videoFrame as VideoFrame).uBuffer = buffers[1];
-        (data.videoFrame as VideoFrame).vBuffer = buffers[2];
-        (data.videoFrame as VideoFrame).metadata_buffer = buffers[3];
-        (data.videoFrame as VideoFrame).alphaBuffer = buffers[4];
+        data.videoFrame.yBuffer = buffers[0];
+        data.videoFrame.uBuffer = buffers[1];
+        data.videoFrame.vBuffer = buffers[2];
+        data.videoFrame.metadata_buffer = buffers[3];
+        data.videoFrame.alphaBuffer = buffers[4];
       }
     },
     handlers: () => MediaEngineInternal._video_frame_observers,
@@ -138,11 +149,6 @@ export const EVENT_PROCESSORS = {
     suffix: 'AudioSpectrumObserver_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIAudioSpectrumObserver],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
-      // if (data.data) {
-      //   (data.data as AudioSpectrumData).audioSpectrumData = buffers[0];
-      // }
-    },
     handlers: (data: any) =>
       data.playerId === 0
         ? RtcEngineExInternal._audio_spectrum_observers
@@ -152,11 +158,6 @@ export const EVENT_PROCESSORS = {
     suffix: 'AudioSpectrumObserver_',
     type: EVENT_TYPE.IMediaPlayer,
     func: [processIAudioSpectrumObserver],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
-      // if (data.data) {
-      //   (data.data as AudioSpectrumData).audioSpectrumData = buffers[0];
-      // }
-    },
     handlers: (data: any) =>
       data.playerId !== 0
         ? MediaPlayerInternal._audio_spectrum_observers.get(data.playerId)
@@ -166,7 +167,13 @@ export const EVENT_PROCESSORS = {
     suffix: 'AudioEncodedFrameObserver_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIAudioEncodedFrameObserver],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: {
+        frameBuffer?: Uint8Array;
+      },
+      buffers: Uint8Array[]
+    ) => {
       switch (event) {
         case 'OnRecordAudioEncodedFrame':
         case 'OnPlaybackAudioEncodedFrame':
@@ -181,7 +188,13 @@ export const EVENT_PROCESSORS = {
     suffix: 'VideoEncodedFrameObserver_',
     type: EVENT_TYPE.IMediaEngine,
     func: [processIVideoEncodedFrameObserver],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: {
+        imageBuffer?: Uint8Array;
+      },
+      buffers: Uint8Array[]
+    ) => {
       switch (event) {
         case 'onEncodedVideoFrameReceived':
           data.imageBuffer = buffers[0];
@@ -201,9 +214,13 @@ export const EVENT_PROCESSORS = {
     suffix: 'AudioPcmFrameSink_',
     type: EVENT_TYPE.IMediaPlayer,
     func: [processIAudioPcmFrameSink],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: { frame?: AudioPcmFrame },
+      buffers: Uint8Array[]
+    ) => {
       if (data.frame) {
-        (data.frame as AudioPcmFrame).data_ = Array.from(buffers[0] ?? []);
+        data.frame.data_ = Array.from(buffers[0] ?? []);
       }
     },
     handlers: (data: any) =>
@@ -213,13 +230,17 @@ export const EVENT_PROCESSORS = {
     suffix: 'MediaPlayerVideoFrameObserver_',
     type: EVENT_TYPE.IMediaPlayer,
     func: [processIMediaPlayerVideoFrameObserver],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: { frame?: VideoFrame },
+      buffers: Uint8Array[]
+    ) => {
       if (data.frame) {
-        (data.frame as VideoFrame).yBuffer = buffers[0];
-        (data.frame as VideoFrame).uBuffer = buffers[1];
-        (data.frame as VideoFrame).vBuffer = buffers[2];
-        (data.frame as VideoFrame).metadata_buffer = buffers[3];
-        (data.frame as VideoFrame).alphaBuffer = buffers[4];
+        data.frame.yBuffer = buffers[0];
+        data.frame.uBuffer = buffers[1];
+        data.frame.vBuffer = buffers[2];
+        data.frame.metadata_buffer = buffers[3];
+        data.frame.alphaBuffer = buffers[4];
       }
     },
     handlers: (data: any) =>
@@ -237,11 +258,15 @@ export const EVENT_PROCESSORS = {
     suffix: 'MetadataObserver_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIMetadataObserver],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: { metadata?: Metadata },
+      buffers: Uint8Array[]
+    ) => {
       switch (event) {
         case 'onMetadataReceived':
           if (data.metadata) {
-            (data.metadata as Metadata).buffer = buffers[0];
+            data.metadata.buffer = buffers[0];
           }
           break;
       }
@@ -258,7 +283,11 @@ export const EVENT_PROCESSORS = {
     suffix: 'RtcEngineEventHandler_',
     type: EVENT_TYPE.IRtcEngine,
     func: [processIRtcEngineEventHandler],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: { data?: Uint8Array },
+      buffers: Uint8Array[]
+    ) => {
       switch (event) {
         case 'onStreamMessage':
         case 'onStreamMessageEx':
@@ -272,7 +301,11 @@ export const EVENT_PROCESSORS = {
     suffix: 'MusicContentCenterEventHandler_',
     type: EVENT_TYPE.IMusicContentCenter,
     func: [processIMusicContentCenterEventHandler],
-    preprocess: (event: string, data: any, buffers: Uint8Array[]) => {
+    preprocess: (
+      event: string,
+      data: { result: MusicCollection },
+      buffers: Uint8Array[]
+    ) => {
       switch (event) {
         case 'onMusicCollectionResult': {
           const result = data.result;

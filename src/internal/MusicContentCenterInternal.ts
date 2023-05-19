@@ -4,6 +4,7 @@ import {
   IMusicContentCenterEventHandler,
   IMusicPlayer,
   Music,
+  MusicCollection,
 } from '../IAgoraMusicContentCenter';
 import { IMusicContentCenterEvent } from '../extension/IAgoraMusicContentCenterExtension';
 
@@ -133,40 +134,69 @@ export class MusicPlayerInternal
   }
 }
 
-interface _MusicCollection {
+class _MusicCollection extends MusicCollection {
   count: number;
   music: Music[];
   page: number;
   pageSize: number;
   total: number;
+
+  constructor(collection: any | _MusicCollection) {
+    super();
+    this.count = collection.count;
+    this.music = collection.music;
+    this.page = collection.page;
+    this.pageSize = collection.pageSize;
+    this.total = collection.total;
+  }
+
+  getCount(): number {
+    return this.count;
+  }
+
+  getMusic(index: number): Music {
+    return this.music[index] ?? {};
+  }
+
+  getPage(): number {
+    return this.page;
+  }
+
+  getPageSize(): number {
+    return this.pageSize;
+  }
+
+  getTotal(): number {
+    return this.total;
+  }
 }
 
 export class MusicCollectionInternal extends MusicCollectionImpl {
-  private readonly _musicCollection: _MusicCollection;
+  private readonly _musicCollection: MusicCollection;
 
-  constructor(musicCollection: _MusicCollection) {
+  constructor(musicCollection: MusicCollection) {
     super();
-    this._musicCollection = musicCollection;
+    this._musicCollection = new _MusicCollection(musicCollection);
   }
 
   override getCount(): number {
-    return this._musicCollection.count;
+    return this._musicCollection.getCount();
   }
 
   override getMusic(index: number): Music {
-    return this._musicCollection.music[index] ?? {};
+    return this._musicCollection.getMusic(index);
   }
 
   override getPage(): number {
-    return this._musicCollection.page;
+    return this._musicCollection.getPage();
   }
 
   override getPageSize(): number {
-    return this._musicCollection.pageSize;
+    return this._musicCollection.getPageSize();
   }
 
   override getTotal(): number {
-    return this._musicCollection.total;
+    return this._musicCollection.getTotal();
   }
 }
 
