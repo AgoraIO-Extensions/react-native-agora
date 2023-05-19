@@ -1,29 +1,44 @@
 import createAgoraRtcEngine from '../';
 
+const nativeHandle = 1;
 jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
   getEnforcing: () => {},
 }));
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => ({
-  default: () => ({ addListener: () => {} }),
-}));
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
+  return {
+    default: function () {
+      return { addListener: () => {} };
+    },
+  };
+});
 jest.mock('react-native/Libraries/StyleSheet/StyleSheet', () => ({
   create: () => {},
 }));
 jest.mock('../specs', () => ({
   showRPSystemBroadcastPickerView: () => {},
-  callApi: () => {},
+  callApi: () => {
+    return JSON.stringify({ result: nativeHandle });
+  },
 }));
 
 test('addListener', () => {
   const engine = createAgoraRtcEngine().createMediaRecorder({});
   const callback = jest.fn();
   engine.addListener('onRecorderInfoUpdated', callback);
-  emitEvent(
-    'onRecorderInfoUpdated',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
   expect(callback).toBeCalledTimes(1);
+});
+
+test('addListenerWithWrongData', () => {
+  const engine = createAgoraRtcEngine().createMediaRecorder({});
+  const callback = jest.fn();
+  engine.addListener('onRecorderInfoUpdated', callback);
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle: 2,
+  });
+  expect(callback).not.toBeCalled();
 });
 
 test('addListenerWithSameEventTypeAndCallback', () => {
@@ -31,11 +46,9 @@ test('addListenerWithSameEventTypeAndCallback', () => {
   const callback = jest.fn();
   engine.addListener('onRecorderInfoUpdated', callback);
   engine.addListener('onRecorderInfoUpdated', callback);
-  emitEvent(
-    'onRecorderInfoUpdated',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
   expect(callback).toBeCalledTimes(2);
 });
 
@@ -44,16 +57,12 @@ test('addListenerWithSameCallback', () => {
   const callback = jest.fn();
   engine.addListener('onRecorderInfoUpdated', callback);
   engine.addListener('onRecorderStateChanged', callback);
-  emitEvent(
-    'onRecorderInfoUpdated',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
-  emitEvent(
-    'onRecorderStateChanged',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
+  emitEvent('onRecorderStateChanged', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
   expect(callback).toBeCalledTimes(2);
 });
 
@@ -62,11 +71,9 @@ test('removeListener', () => {
   const callback = jest.fn();
   engine.addListener('onRecorderInfoUpdated', callback);
   engine.removeListener('onRecorderInfoUpdated', callback);
-  emitEvent(
-    'onRecorderInfoUpdated',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
   expect(callback).not.toBeCalled();
 });
 
@@ -75,11 +82,9 @@ test('removeListenerWithoutCallback', () => {
   const callback = jest.fn();
   engine.addListener('onRecorderInfoUpdated', callback);
   engine.removeListener('onRecorderInfoUpdated');
-  emitEvent(
-    'onRecorderInfoUpdated',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
   expect(callback).not.toBeCalled();
 });
 
@@ -90,11 +95,9 @@ test('removeAllListenersWithEventType', () => {
   engine.addListener('onRecorderInfoUpdated', callback1);
   engine.addListener('onRecorderInfoUpdated', callback2);
   engine.removeAllListeners('onRecorderInfoUpdated');
-  emitEvent(
-    'onRecorderInfoUpdated',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
@@ -106,16 +109,12 @@ test('removeAllListeners', () => {
   engine.addListener('onRecorderInfoUpdated', callback1);
   engine.addListener('onRecorderStateChanged', callback2);
   engine.removeAllListeners();
-  emitEvent(
-    'onRecorderInfoUpdated',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
-  emitEvent(
-    'onRecorderStateChanged',
-    EVENT_PROCESSORS.IMediaRecorderObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onRecorderInfoUpdated', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
+  emitEvent('onRecorderStateChanged', EVENT_PROCESSORS.IMediaRecorderObserver, {
+    nativeHandle,
+  });
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });

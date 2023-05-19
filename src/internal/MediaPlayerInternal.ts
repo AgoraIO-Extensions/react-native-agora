@@ -119,11 +119,12 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
       if (eventProcessor.type(data) !== EVENT_TYPE.IMediaPlayer) {
         return;
       }
-      if (data.playerId === this._mediaPlayerId) {
-        eventProcessor.func.map((it) => {
-          it({ [eventType]: listener }, eventType, data);
-        });
+      if (data.playerId !== this._mediaPlayerId) {
+        return;
       }
+      eventProcessor.func.map((it) => {
+        it({ [eventType]: listener }, eventType, data);
+      });
     };
     listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);

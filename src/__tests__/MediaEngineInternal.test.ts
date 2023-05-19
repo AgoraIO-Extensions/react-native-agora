@@ -3,9 +3,13 @@ import createAgoraRtcEngine from '../';
 jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
   getEnforcing: () => {},
 }));
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => ({
-  default: () => ({ addListener: () => {} }),
-}));
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
+  return {
+    default: function () {
+      return { addListener: () => {} };
+    },
+  };
+});
 jest.mock('react-native/Libraries/StyleSheet/StyleSheet', () => ({
   create: () => {},
 }));
@@ -18,11 +22,7 @@ test('addListener', () => {
   const engine = createAgoraRtcEngine().getMediaEngine();
   const callback = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback);
-  emitEvent(
-    'onCaptureVideoFrame',
-    EVENT_PROCESSORS.IVideoFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
   expect(callback).toBeCalledTimes(1);
 });
 
@@ -31,11 +31,7 @@ test('addListenerWithSameEventTypeAndCallback', () => {
   const callback = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback);
   engine.addListener('onCaptureVideoFrame', callback);
-  emitEvent(
-    'onCaptureVideoFrame',
-    EVENT_PROCESSORS.IVideoFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
   expect(callback).toBeCalledTimes(2);
 });
 
@@ -44,16 +40,8 @@ test('addListenerWithSameCallback', () => {
   const callback = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback);
   engine.addListener('onRecordAudioFrame', callback);
-  emitEvent(
-    'onCaptureVideoFrame',
-    EVENT_PROCESSORS.IVideoFrameObserver,
-    JSON.stringify({})
-  );
-  emitEvent(
-    'onRecordAudioFrame',
-    EVENT_PROCESSORS.IAudioFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
+  emitEvent('onRecordAudioFrame', EVENT_PROCESSORS.IAudioFrameObserver, {});
   expect(callback).toBeCalledTimes(2);
 });
 
@@ -62,11 +50,7 @@ test('removeListener', () => {
   const callback = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback);
   engine.removeListener('onCaptureVideoFrame', callback);
-  emitEvent(
-    'onCaptureVideoFrame',
-    EVENT_PROCESSORS.IVideoFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
   expect(callback).not.toBeCalled();
 });
 
@@ -75,11 +59,7 @@ test('removeListenerWithoutCallback', () => {
   const callback = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback);
   engine.removeListener('onCaptureVideoFrame');
-  emitEvent(
-    'onCaptureVideoFrame',
-    EVENT_PROCESSORS.IVideoFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
   expect(callback).not.toBeCalled();
 });
 
@@ -90,11 +70,7 @@ test('removeAllListenersWithEventType', () => {
   engine.addListener('onCaptureVideoFrame', callback1);
   engine.addListener('onCaptureVideoFrame', callback2);
   engine.removeAllListeners('onCaptureVideoFrame');
-  emitEvent(
-    'onCaptureVideoFrame',
-    EVENT_PROCESSORS.IVideoFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
@@ -106,16 +82,8 @@ test('removeAllListeners', () => {
   engine.addListener('onCaptureVideoFrame', callback1);
   engine.addListener('onRecordAudioFrame', callback2);
   engine.removeAllListeners();
-  emitEvent(
-    'onCaptureVideoFrame',
-    EVENT_PROCESSORS.IVideoFrameObserver,
-    JSON.stringify({})
-  );
-  emitEvent(
-    'onRecordAudioFrame',
-    EVENT_PROCESSORS.IAudioFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
+  emitEvent('onRecordAudioFrame', EVENT_PROCESSORS.IAudioFrameObserver, {});
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });

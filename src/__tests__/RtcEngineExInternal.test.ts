@@ -3,9 +3,13 @@ import createAgoraRtcEngine from '../';
 jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
   getEnforcing: () => {},
 }));
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => ({
-  default: () => ({ addListener: () => {} }),
-}));
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
+  return {
+    default: function () {
+      return { addListener: () => {} };
+    },
+  };
+});
 jest.mock('react-native/Libraries/StyleSheet/StyleSheet', () => ({
   create: () => {},
 }));
@@ -21,7 +25,7 @@ test('addListener', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback).toBeCalledTimes(1);
 });
@@ -34,7 +38,7 @@ test('addListenerWithSameEventTypeAndCallback', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback).toBeCalledTimes(2);
 });
@@ -47,12 +51,12 @@ test('addListenerWithSameCallback', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   emitEvent(
     'onRejoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback).toBeCalledTimes(2);
 });
@@ -65,7 +69,7 @@ test('removeListener', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback).not.toBeCalled();
 });
@@ -78,7 +82,7 @@ test('removeListenerWithoutCallback', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback).not.toBeCalled();
 });
@@ -92,7 +96,7 @@ test('removeListenerWithDifferentCallback', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback1).toBeCalledTimes(1);
 });
@@ -107,7 +111,7 @@ test('removeAllListenersWithEventType', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
@@ -123,12 +127,12 @@ test('removeAllListeners', () => {
   emitEvent(
     'onJoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   emitEvent(
     'onRejoinChannelSuccess',
     EVENT_PROCESSORS.IRtcEngineEventHandler,
-    JSON.stringify({})
+    {}
   );
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();

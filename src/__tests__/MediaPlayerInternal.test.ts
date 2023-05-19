@@ -1,17 +1,24 @@
 import createAgoraRtcEngine from '../';
 
+const playerId = 1;
 jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
   getEnforcing: () => {},
 }));
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => ({
-  default: () => ({ addListener: () => {} }),
-}));
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
+  return {
+    default: function () {
+      return { addListener: () => {} };
+    },
+  };
+});
 jest.mock('react-native/Libraries/StyleSheet/StyleSheet', () => ({
   create: () => {},
 }));
 jest.mock('../specs', () => ({
   showRPSystemBroadcastPickerView: () => {},
-  callApi: () => {},
+  callApi: () => {
+    return JSON.stringify({ result: playerId });
+  },
 }));
 
 test('addListener', () => {
@@ -21,9 +28,21 @@ test('addListener', () => {
   emitEvent(
     'onAgoraCDNTokenWillExpire',
     EVENT_PROCESSORS.IMediaPlayerSourceObserver,
-    JSON.stringify({})
+    { playerId }
   );
   expect(callback).toBeCalledTimes(1);
+});
+
+test('addListenerWithWrongData', () => {
+  const engine = createAgoraRtcEngine().createMediaPlayer();
+  const callback = jest.fn();
+  engine.addListener('onAgoraCDNTokenWillExpire', callback);
+  emitEvent(
+    'onAgoraCDNTokenWillExpire',
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
+    { playerId: 2 }
+  );
+  expect(callback).not.toBeCalled();
 });
 
 test('addListenerWithSameEventTypeAndCallback', () => {
@@ -34,7 +53,7 @@ test('addListenerWithSameEventTypeAndCallback', () => {
   emitEvent(
     'onAgoraCDNTokenWillExpire',
     EVENT_PROCESSORS.IMediaPlayerSourceObserver,
-    JSON.stringify({})
+    { playerId }
   );
   expect(callback).toBeCalledTimes(2);
 });
@@ -47,13 +66,11 @@ test('addListenerWithSameCallback', () => {
   emitEvent(
     'onAgoraCDNTokenWillExpire',
     EVENT_PROCESSORS.IMediaPlayerSourceObserver,
-    JSON.stringify({})
+    { playerId }
   );
-  emitEvent(
-    'onFrame',
-    EVENT_PROCESSORS.IMediaPlayerVideoFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onFrame', EVENT_PROCESSORS.IMediaPlayerVideoFrameObserver, {
+    playerId,
+  });
   expect(callback).toBeCalledTimes(2);
 });
 
@@ -65,7 +82,7 @@ test('removeListener', () => {
   emitEvent(
     'onAgoraCDNTokenWillExpire',
     EVENT_PROCESSORS.IMediaPlayerSourceObserver,
-    JSON.stringify({})
+    { playerId }
   );
   expect(callback).not.toBeCalled();
 });
@@ -78,7 +95,7 @@ test('removeListenerWithoutCallback', () => {
   emitEvent(
     'onAgoraCDNTokenWillExpire',
     EVENT_PROCESSORS.IMediaPlayerSourceObserver,
-    JSON.stringify({})
+    { playerId }
   );
   expect(callback).not.toBeCalled();
 });
@@ -93,7 +110,7 @@ test('removeAllListenersWithEventType', () => {
   emitEvent(
     'onAgoraCDNTokenWillExpire',
     EVENT_PROCESSORS.IMediaPlayerSourceObserver,
-    JSON.stringify({})
+    { playerId }
   );
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
@@ -109,13 +126,11 @@ test('removeAllListeners', () => {
   emitEvent(
     'onAgoraCDNTokenWillExpire',
     EVENT_PROCESSORS.IMediaPlayerSourceObserver,
-    JSON.stringify({})
+    { playerId }
   );
-  emitEvent(
-    'onFrame',
-    EVENT_PROCESSORS.IMediaPlayerVideoFrameObserver,
-    JSON.stringify({})
-  );
+  emitEvent('onFrame', EVENT_PROCESSORS.IMediaPlayerVideoFrameObserver, {
+    playerId,
+  });
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });

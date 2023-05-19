@@ -70,6 +70,9 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
       if (eventProcessor.type(data) !== EVENT_TYPE.IMediaRecorder) {
         return;
       }
+      if (data.nativeHandle !== this._nativeHandle) {
+        return;
+      }
       eventProcessor.func.map((it) => {
         it({ [eventType]: listener }, eventType, data);
       });
