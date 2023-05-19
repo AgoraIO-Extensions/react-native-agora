@@ -41,13 +41,7 @@ export abstract class IAudioDeviceManager {
   abstract getPlaybackDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * Adjusts the volume of audio mixing for publishing.
-   * This method adjusts the volume of audio mixing for publishing (sending to other users).Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(AudioMixingStatePlaying) callback.
-   *
-   * @param volume The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
   abstract setPlaybackDeviceVolume(volume: number): number;
 
@@ -72,13 +66,7 @@ export abstract class IAudioDeviceManager {
   abstract getRecordingDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * Adjusts the volume of audio mixing for publishing.
-   * This method adjusts the volume of audio mixing for publishing (sending to other users).Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(AudioMixingStatePlaying) callback.
-   *
-   * @param volume The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
   abstract setRecordingDeviceVolume(volume: number): number;
 
@@ -98,13 +86,7 @@ export abstract class IAudioDeviceManager {
   abstract getLoopbackDevice(): string;
 
   /**
-   * Stops or resumes publishing the local audio stream.
-   * This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
-   *
-   * @param mute Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
-   *
-   * @returns
-   * 0: Success. < 0: Failure.
+   * @ignore
    */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
@@ -114,13 +96,7 @@ export abstract class IAudioDeviceManager {
   abstract getPlaybackDeviceMute(): boolean;
 
   /**
-   * Stops or resumes publishing the local audio stream.
-   * This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
-   *
-   * @param mute Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
-   *
-   * @returns
-   * 0: Success. < 0: Failure.
+   * @ignore
    */
   abstract setRecordingDeviceMute(mute: boolean): number;
 

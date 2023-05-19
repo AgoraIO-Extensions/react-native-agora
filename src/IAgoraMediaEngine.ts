@@ -144,13 +144,13 @@ export abstract class IMediaEngine {
 
   /**
    * Creates a customized audio track.
-   * When you need to publish multiple custom captured videos in the channel, you can refer to the following steps:Call this method to create a video track and get the video track ID.In ChannelMediaOptions of each channel, set customVideoTrackId to the video track ID that you want to publish, and set publishCustomVideoTrack to true.If you call pushAudioFrame trackId as the video track ID set in step 2, you can publish the corresponding custom video source in multiple channels.
+   * When you need to publish multiple custom captured audios in the channel, you can refer to the following steps:Call this method to create a custom audio track and get the audio track ID.In ChannelMediaOptions of each channel, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.If you call pushAudioFrame trackId as the audio track ID set in step 2, you can publish the corresponding custom audio source in multiple channels.
    *
    * @param trackType The type of the custom audio track. See AudioTrackType .
    * @param config The configuration of the custom audio track. See AudioTrackConfig .
    *
    * @returns
-   * If the method call is successful, the video track ID is returned as the unique identifier of the video track.If the method call fails, a negative value is returned.
+   * If the method call is successful, the audio track ID is returned as the unique identifier of the audio track.If the method call fails, a negative value is returned.
    */
   abstract createCustomAudioTrack(
     trackType: AudioTrackType,
@@ -158,7 +158,7 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * Destroys the specified video track.
+   * Destroys the specified audio track.
    *
    * @param trackId The custom audio track ID returned in createCustomAudioTrack .
    *
