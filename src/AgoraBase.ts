@@ -227,7 +227,7 @@ export enum ErrorCodeType {
    */
   ErrJoinChannelRejected = 17,
   /**
-   * 18: Fails to leave the channel. Possible reasons include the following:The user has left the channel before calling the method. Stop calling this method to clear this error.The user calls the method to leave the channel before joining the channel. In this case, no extra operation is needed.
+   * 18: Fails to leave the channel. Possible reasons include the following:The user has left the channel before calling the leaveChannel method. Stop calling this method to clear this error.The user calls the leaveChannel method to leave the channel before joining the channel. In this case, no extra operation is needed.
    */
   ErrLeaveChannelRejected = 18,
   /**
@@ -1332,7 +1332,7 @@ export class SimulcastStreamConfig {
    */
   dimensions?: VideoDimensions;
   /**
-   * @ignore
+   * Video receive bitrate (Kbps), represented by an instantaneous value. The default value is 65.
    */
   kBitrate?: number;
   /**
@@ -1655,7 +1655,7 @@ export enum AudioAinsMode {
    */
   AinsModeAggressive = 1,
   /**
-   * 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive mode. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real-time.
+   * 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real time.
    */
   AinsModeUltralowlatency = 2,
 }
@@ -2480,7 +2480,7 @@ export enum RtmpStreamPublishErrorType {
    */
   RtmpStreamPublishErrorInvalidPrivilege = 16,
   /**
-   * 100: The streaming has been stopped normally. After you stop the media push, the SDK returns this value.
+   * 100: The streaming has been stopped normally. After you stop the Media Push, the SDK returns this value.
    */
   RtmpStreamUnpublishErrorOk = 100,
 }
@@ -3368,15 +3368,15 @@ export class VirtualBackgroundSource {
    */
   background_source_type?: BackgroundSourceType;
   /**
-   * The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image isBackgroundColor .
+   * The type of the custom background image. The color of the custom background image. The format is a hexadecimal integer defined by RGB, without the # sign, such as 0xFFB6C1 for light pink. The default value is 0xFFFFFF, which signifies white. The value range is [0x000000, 0xffffff]. If the value is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BackgroundColor.
    */
   color?: number;
   /**
-   * The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image isBackgroundImg .
+   * The local absolute path of the custom background image. PNG and JPG formats are supported. If the path is invalid, the SDK replaces the original background image with a white background image.This parameter takes effect only when the type of the custom background image is BackgroundImg.
    */
   source?: string;
   /**
-   * The degree of blurring applied to the custom background image. See BackgroundBlurDegree .This parameter takes effect only when the type of the custom background image isBackgroundBlur .
+   * The degree of blurring applied to the custom background image. See BackgroundBlurDegree .This parameter takes effect only when the type of the custom background image is BackgroundBlur.
    */
   blur_degree?: BackgroundBlurDegree;
 }
@@ -4575,15 +4575,15 @@ export enum ConfigFetchType {
 }
 
 /**
- * The information about the media streams to be recorded.
+ * @ignore
  */
 export class RecorderStreamInfo {
   /**
-   * The name of the channel in which the media streams publish.
+   * @ignore
    */
   channelId?: string;
   /**
-   * The ID of the user whose media streams you want to record.
+   * @ignore
    */
   uid?: number;
 }
