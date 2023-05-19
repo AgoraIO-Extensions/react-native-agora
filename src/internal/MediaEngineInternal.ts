@@ -11,7 +11,11 @@ import { IMediaEngineEvent } from '../extension/IAgoraMediaEngineExtension';
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
-import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import {
+  DeviceEventEmitter,
+  EVENT_TYPE,
+  EventProcessor,
+} from './IrisApiEngine';
 
 export class MediaEngineInternal extends IMediaEngineImpl {
   static _audio_frame_observers: IAudioFrameObserver[] = [];
@@ -125,22 +129,13 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     listener: IMediaEngineEvent[EventType]
   ) {
     this._addListenerPreCheck(eventType);
-    const callback = (...data: any[]) => {
-      if (data[0] !== EVENT_TYPE.IMediaEngine) {
+    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
+      if (eventProcessor.type(data) !== EVENT_TYPE.IMediaEngine) {
         return;
       }
-      processIAudioFrameObserver({ [eventType]: listener }, eventType, data[1]);
-      processIAudioFrameObserverBase(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
-      processIVideoFrameObserver({ [eventType]: listener }, eventType, data[1]);
-      processIVideoEncodedFrameObserver(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
+      eventProcessor.func.map((it) => {
+        it({ [eventType]: listener }, eventType, data);
+      });
     };
     listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
@@ -163,10 +158,4 @@ export class MediaEngineInternal extends IMediaEngineImpl {
   }
 }
 
-import {
-  processIAudioFrameObserver,
-  processIAudioFrameObserverBase,
-  processIVideoEncodedFrameObserver,
-  processIVideoFrameObserver,
-} from '../impl/AgoraMediaBaseImpl';
 import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';

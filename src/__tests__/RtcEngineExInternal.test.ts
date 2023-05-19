@@ -18,7 +18,11 @@ test('addListener', () => {
   const engine = createAgoraRtcEngine();
   const callback = jest.fn();
   engine.addListener('onJoinChannelSuccess', callback);
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   expect(callback).toBeCalledTimes(1);
 });
 
@@ -27,7 +31,11 @@ test('addListenerWithSameEventTypeAndCallback', () => {
   const callback = jest.fn();
   engine.addListener('onJoinChannelSuccess', callback);
   engine.addListener('onJoinChannelSuccess', callback);
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   expect(callback).toBeCalledTimes(2);
 });
 
@@ -36,10 +44,14 @@ test('addListenerWithSameCallback', () => {
   const callback = jest.fn();
   engine.addListener('onJoinChannelSuccess', callback);
   engine.addListener('onRejoinChannelSuccess', callback);
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   emitEvent(
     'onRejoinChannelSuccess',
-    EVENT_TYPE.IRtcEngine,
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
     JSON.stringify({})
   );
   expect(callback).toBeCalledTimes(2);
@@ -50,7 +62,11 @@ test('removeListener', () => {
   const callback = jest.fn();
   engine.addListener('onJoinChannelSuccess', callback);
   engine.removeListener('onJoinChannelSuccess', callback);
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   expect(callback).not.toBeCalled();
 });
 
@@ -59,7 +75,11 @@ test('removeListenerWithoutCallback', () => {
   const callback = jest.fn();
   engine.addListener('onJoinChannelSuccess', callback);
   engine.removeListener('onJoinChannelSuccess');
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   expect(callback).not.toBeCalled();
 });
 
@@ -69,7 +89,11 @@ test('removeListenerWithDifferentCallback', () => {
   const callback2 = jest.fn();
   engine.addListener('onJoinChannelSuccess', callback1);
   engine.removeListener('onJoinChannelSuccess', callback2);
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   expect(callback1).toBeCalledTimes(1);
 });
 
@@ -80,7 +104,11 @@ test('removeAllListenersWithEventType', () => {
   engine.addListener('onJoinChannelSuccess', callback1);
   engine.addListener('onJoinChannelSuccess', callback2);
   engine.removeAllListeners('onJoinChannelSuccess');
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
@@ -92,14 +120,18 @@ test('removeAllListeners', () => {
   engine.addListener('onJoinChannelSuccess', callback1);
   engine.addListener('onRejoinChannelSuccess', callback2);
   engine.removeAllListeners();
-  emitEvent('onJoinChannelSuccess', EVENT_TYPE.IRtcEngine, JSON.stringify({}));
+  emitEvent(
+    'onJoinChannelSuccess',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    JSON.stringify({})
+  );
   emitEvent(
     'onRejoinChannelSuccess',
-    EVENT_TYPE.IRtcEngine,
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
     JSON.stringify({})
   );
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
 
-import { EVENT_TYPE, emitEvent } from '../internal/IrisApiEngine';
+import { EVENT_PROCESSORS, emitEvent } from '../internal/IrisApiEngine';

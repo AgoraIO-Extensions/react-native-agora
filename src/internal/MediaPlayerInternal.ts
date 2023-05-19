@@ -19,7 +19,11 @@ const checkers = createCheckers(
   IAgoraMediaPlayerSourceTI
 );
 
-import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import {
+  DeviceEventEmitter,
+  EVENT_TYPE,
+  EventProcessor,
+} from './IrisApiEngine';
 
 export class MediaPlayerInternal extends IMediaPlayerImpl {
   static _source_observers: Map<number, IMediaPlayerSourceObserver[]> = new Map<
@@ -111,31 +115,14 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     listener: IMediaPlayerEvent[EventType]
   ): void {
     this._addListenerPreCheck(eventType);
-    const callback = (...data: any[]) => {
-      if (data[0] !== EVENT_TYPE.IMediaPlayer) {
+    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
+      if (eventProcessor.type(data) !== EVENT_TYPE.IMediaPlayer) {
         return;
       }
-      if (data[1].playerId === this._mediaPlayerId) {
-        processIMediaPlayerSourceObserver(
-          { [eventType]: listener },
-          eventType,
-          data[1]
-        );
-        processIAudioPcmFrameSink(
-          { [eventType]: listener },
-          eventType,
-          data[1]
-        );
-        processIMediaPlayerVideoFrameObserver(
-          { [eventType]: listener },
-          eventType,
-          data[1]
-        );
-        processIAudioSpectrumObserver(
-          { [eventType]: listener },
-          eventType,
-          data[1]
-        );
+      if (data.playerId === this._mediaPlayerId) {
+        eventProcessor.func.map((it) => {
+          it({ [eventType]: listener }, eventType, data);
+        });
       }
     };
     listener!.prototype.callback = callback;
@@ -309,12 +296,4 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
   }
 }
 
-import {
-  processIAudioPcmFrameSink,
-  processIAudioSpectrumObserver,
-} from '../impl/AgoraMediaBaseImpl';
-import {
-  IMediaPlayerImpl,
-  processIMediaPlayerVideoFrameObserver,
-} from '../impl/IAgoraMediaPlayerImpl';
-import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
+import { IMediaPlayerImpl } from '../impl/IAgoraMediaPlayerImpl';

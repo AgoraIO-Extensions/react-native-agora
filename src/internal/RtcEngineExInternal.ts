@@ -39,7 +39,12 @@ import AgoraBaseTI from '../ti/AgoraBase-ti';
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 import IAgoraRtcEngineTI from '../ti/IAgoraRtcEngine-ti';
 
-import { DeviceEventEmitter, EVENT_TYPE, callIrisApi } from './IrisApiEngine';
+import {
+  DeviceEventEmitter,
+  EVENT_TYPE,
+  EventProcessor,
+  callIrisApi,
+} from './IrisApiEngine';
 import { LocalSpatialAudioEngineInternal } from './LocalSpatialAudioEngineInternal';
 import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
@@ -154,31 +159,13 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     listener: IRtcEngineEvent[EventType]
   ): void {
     this._addListenerPreCheck(eventType);
-    const callback = (...data: any[]) => {
-      if (data[0] !== EVENT_TYPE.IRtcEngine) {
+    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
+      if (eventProcessor.type(data) !== EVENT_TYPE.IRtcEngine) {
         return;
       }
-      processIRtcEngineEventHandler(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
-      processIDirectCdnStreamingEventHandler(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
-      processIMetadataObserver({ [eventType]: listener }, eventType, data[1]);
-      processIAudioEncodedFrameObserver(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
-      processIAudioSpectrumObserver(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
+      eventProcessor.func.map((it) => {
+        it({ [eventType]: listener }, eventType, data);
+      });
     };
     listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
@@ -480,11 +467,4 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   }
 }
 
-import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
-import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
 import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
-import {
-  processIDirectCdnStreamingEventHandler,
-  processIMetadataObserver,
-  processIRtcEngineEventHandler,
-} from '../impl/IAgoraRtcEngineImpl';

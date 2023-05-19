@@ -20,7 +20,7 @@ test('addListener', () => {
   engine.addListener('onMusicChartsResult', callback);
   emitEvent(
     'onMusicChartsResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   expect(callback).toBeCalledTimes(1);
@@ -33,7 +33,7 @@ test('addListenerWithSameEventTypeAndCallback', () => {
   engine.addListener('onMusicChartsResult', callback);
   emitEvent(
     'onMusicChartsResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   expect(callback).toBeCalledTimes(2);
@@ -46,12 +46,12 @@ test('addListenerWithSameCallback', () => {
   engine.addListener('onMusicCollectionResult', callback);
   emitEvent(
     'onMusicChartsResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   emitEvent(
     'onMusicCollectionResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   expect(callback).toBeCalledTimes(2);
@@ -64,7 +64,7 @@ test('removeListener', () => {
   engine.removeListener('onMusicChartsResult', callback);
   emitEvent(
     'onMusicChartsResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   expect(callback).not.toBeCalled();
@@ -77,7 +77,7 @@ test('removeListenerWithoutCallback', () => {
   engine.removeListener('onMusicChartsResult');
   emitEvent(
     'onMusicChartsResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   expect(callback).not.toBeCalled();
@@ -92,7 +92,7 @@ test('removeAllListenersWithEventType', () => {
   engine.removeAllListeners('onMusicChartsResult');
   emitEvent(
     'onMusicChartsResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   expect(callback1).not.toBeCalled();
@@ -108,16 +108,16 @@ test('removeAllListeners', () => {
   engine.removeAllListeners();
   emitEvent(
     'onMusicChartsResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   emitEvent(
     'onMusicCollectionResult',
-    EVENT_TYPE.IMusicContentCenter,
+    EVENT_PROCESSORS.IMusicContentCenterEventHandler,
     JSON.stringify({})
   );
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
 
-import { EVENT_TYPE, emitEvent } from '../internal/IrisApiEngine';
+import { EVENT_PROCESSORS, emitEvent } from '../internal/IrisApiEngine';

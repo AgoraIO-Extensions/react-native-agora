@@ -74,29 +74,12 @@ export function isDebuggable() {
 /**
  * @internal
  */
-export type EventProcessor = {
+export type EventProcessor<T extends ProcessorType> = {
   suffix: string;
-  type: EVENT_TYPE;
+  type: (data: any) => EVENT_TYPE;
   func: Function[];
   preprocess?: (event: string, data: any, buffers: Uint8Array[]) => void;
-  handlers: (
-    data: any
-  ) =>
-    | (
-        | IAudioFrameObserver
-        | IVideoFrameObserver
-        | IAudioSpectrumObserver
-        | IAudioEncodedFrameObserver
-        | IVideoEncodedFrameObserver
-        | IMediaPlayerSourceObserver
-        | IAudioPcmFrameSink
-        | IMediaPlayerVideoFrameObserver
-        | IMediaRecorderObserver
-        | IMetadataObserver
-        | IDirectCdnStreamingEventHandler
-        | IRtcEngineEventHandler
-        | IMusicContentCenterEventHandler
-      )[];
+  handlers: (data: any) => (T | undefined)[] | undefined;
 };
 
 export enum EVENT_TYPE {
@@ -107,13 +90,44 @@ export enum EVENT_TYPE {
   IMusicContentCenter,
 }
 
+type ProcessorType =
+  | IAudioFrameObserver
+  | IVideoFrameObserver
+  | IAudioSpectrumObserver
+  | IAudioEncodedFrameObserver
+  | IVideoEncodedFrameObserver
+  | IMediaPlayerSourceObserver
+  | IAudioPcmFrameSink
+  | IMediaPlayerVideoFrameObserver
+  | IMediaRecorderObserver
+  | IMetadataObserver
+  | IDirectCdnStreamingEventHandler
+  | IRtcEngineEventHandler
+  | IMusicContentCenterEventHandler;
+
+type EventProcessors = {
+  IAudioFrameObserver: EventProcessor<IAudioFrameObserver>;
+  IVideoFrameObserver: EventProcessor<IVideoFrameObserver>;
+  IAudioSpectrumObserver: EventProcessor<IAudioSpectrumObserver>;
+  IAudioEncodedFrameObserver: EventProcessor<IAudioEncodedFrameObserver>;
+  IVideoEncodedFrameObserver: EventProcessor<IVideoEncodedFrameObserver>;
+  IMediaPlayerSourceObserver: EventProcessor<IMediaPlayerSourceObserver>;
+  IAudioPcmFrameSink: EventProcessor<IAudioPcmFrameSink>;
+  IMediaPlayerVideoFrameObserver: EventProcessor<IMediaPlayerVideoFrameObserver>;
+  IMediaRecorderObserver: EventProcessor<IMediaRecorderObserver>;
+  IMetadataObserver: EventProcessor<IMetadataObserver>;
+  IDirectCdnStreamingEventHandler: EventProcessor<IDirectCdnStreamingEventHandler>;
+  IRtcEngineEventHandler: EventProcessor<IRtcEngineEventHandler>;
+  IMusicContentCenterEventHandler: EventProcessor<IMusicContentCenterEventHandler>;
+};
+
 /**
  * @internal
  */
-export const EVENT_PROCESSORS = {
+export const EVENT_PROCESSORS: EventProcessors = {
   IAudioFrameObserver: {
     suffix: 'AudioFrameObserver_',
-    type: EVENT_TYPE.IMediaEngine,
+    type: () => EVENT_TYPE.IMediaEngine,
     func: [processIAudioFrameObserver, processIAudioFrameObserverBase],
     preprocess: (
       event: string,
@@ -128,7 +142,7 @@ export const EVENT_PROCESSORS = {
   },
   IVideoFrameObserver: {
     suffix: 'VideoFrameObserver_',
-    type: EVENT_TYPE.IMediaEngine,
+    type: () => EVENT_TYPE.IMediaEngine,
     func: [processIVideoFrameObserver],
     preprocess: (
       event: string,
@@ -147,25 +161,17 @@ export const EVENT_PROCESSORS = {
   },
   IAudioSpectrumObserver: {
     suffix: 'AudioSpectrumObserver_',
-    type: EVENT_TYPE.IRtcEngine,
+    type: (data: any) =>
+      data.playerId === 0 ? EVENT_TYPE.IRtcEngine : EVENT_TYPE.IMediaPlayer,
     func: [processIAudioSpectrumObserver],
     handlers: (data: any) =>
       data.playerId === 0
         ? RtcEngineExInternal._audio_spectrum_observers
-        : undefined,
-  },
-  IMediaPlayerAudioSpectrumObserver: {
-    suffix: 'AudioSpectrumObserver_',
-    type: EVENT_TYPE.IMediaPlayer,
-    func: [processIAudioSpectrumObserver],
-    handlers: (data: any) =>
-      data.playerId !== 0
-        ? MediaPlayerInternal._audio_spectrum_observers.get(data.playerId)
-        : undefined,
+        : MediaPlayerInternal._audio_spectrum_observers.get(data.playerId),
   },
   IAudioEncodedFrameObserver: {
     suffix: 'AudioEncodedFrameObserver_',
-    type: EVENT_TYPE.IRtcEngine,
+    type: () => EVENT_TYPE.IRtcEngine,
     func: [processIAudioEncodedFrameObserver],
     preprocess: (
       event: string,
@@ -186,7 +192,7 @@ export const EVENT_PROCESSORS = {
   },
   IVideoEncodedFrameObserver: {
     suffix: 'VideoEncodedFrameObserver_',
-    type: EVENT_TYPE.IMediaEngine,
+    type: () => EVENT_TYPE.IMediaEngine,
     func: [processIVideoEncodedFrameObserver],
     preprocess: (
       event: string,
@@ -205,14 +211,14 @@ export const EVENT_PROCESSORS = {
   },
   IMediaPlayerSourceObserver: {
     suffix: 'MediaPlayerSourceObserver_',
-    type: EVENT_TYPE.IMediaPlayer,
+    type: () => EVENT_TYPE.IMediaPlayer,
     func: [processIMediaPlayerSourceObserver],
     handlers: (data: any) =>
       MediaPlayerInternal._source_observers.get(data.playerId),
   },
-  IMediaPlayerAudioFrameObserver: {
+  IAudioPcmFrameSink: {
     suffix: 'AudioPcmFrameSink_',
-    type: EVENT_TYPE.IMediaPlayer,
+    type: () => EVENT_TYPE.IMediaPlayer,
     func: [processIAudioPcmFrameSink],
     preprocess: (
       event: string,
@@ -228,7 +234,7 @@ export const EVENT_PROCESSORS = {
   },
   IMediaPlayerVideoFrameObserver: {
     suffix: 'MediaPlayerVideoFrameObserver_',
-    type: EVENT_TYPE.IMediaPlayer,
+    type: () => EVENT_TYPE.IMediaPlayer,
     func: [processIMediaPlayerVideoFrameObserver],
     preprocess: (
       event: string,
@@ -248,7 +254,7 @@ export const EVENT_PROCESSORS = {
   },
   IMediaRecorderObserver: {
     suffix: 'MediaRecorderObserver_',
-    type: EVENT_TYPE.IMediaRecorder,
+    type: () => EVENT_TYPE.IMediaRecorder,
     func: [processIMediaRecorderObserver],
     handlers: (data: any) => [
       MediaRecorderInternal._observers.get(data.nativeHandle),
@@ -256,7 +262,7 @@ export const EVENT_PROCESSORS = {
   },
   IMetadataObserver: {
     suffix: 'MetadataObserver_',
-    type: EVENT_TYPE.IRtcEngine,
+    type: () => EVENT_TYPE.IRtcEngine,
     func: [processIMetadataObserver],
     preprocess: (
       event: string,
@@ -275,13 +281,13 @@ export const EVENT_PROCESSORS = {
   },
   IDirectCdnStreamingEventHandler: {
     suffix: 'DirectCdnStreamingEventHandler_',
-    type: EVENT_TYPE.IRtcEngine,
+    type: () => EVENT_TYPE.IRtcEngine,
     func: [processIDirectCdnStreamingEventHandler],
     handlers: () => RtcEngineExInternal._direct_cdn_streaming_event_handler,
   },
   IRtcEngineEventHandler: {
     suffix: 'RtcEngineEventHandler_',
-    type: EVENT_TYPE.IRtcEngine,
+    type: () => EVENT_TYPE.IRtcEngine,
     func: [processIRtcEngineEventHandler],
     preprocess: (
       event: string,
@@ -299,7 +305,7 @@ export const EVENT_PROCESSORS = {
   },
   IMusicContentCenterEventHandler: {
     suffix: 'MusicContentCenterEventHandler_',
-    type: EVENT_TYPE.IMusicContentCenter,
+    type: () => EVENT_TYPE.IMusicContentCenter,
     func: [processIMusicContentCenterEventHandler],
     preprocess: (
       event: string,
@@ -331,10 +337,10 @@ function handleEvent({ event, data, buffers }: any) {
   }
 
   let _event: string = event;
-  let processor: EventProcessor = EVENT_PROCESSORS.IRtcEngineEventHandler;
+  let processor: EventProcessor<any> = EVENT_PROCESSORS.IRtcEngineEventHandler;
 
   Object.values(EVENT_PROCESSORS).some((it) => {
-    const p = it as EventProcessor;
+    const p = it as EventProcessor<any>;
     if (
       _event.startsWith(p.suffix) &&
       processor.handlers(_data) !== undefined
@@ -354,17 +360,21 @@ function handleEvent({ event, data, buffers }: any) {
   const _buffers: Uint8Array[] = (buffers as string[])?.map((value) => {
     return Buffer.from(value, 'base64');
   });
-  if (processor.preprocess) processor.preprocess!(_event, _data, _buffers);
+  if (processor.preprocess) {
+    processor.preprocess(_event, _data, _buffers);
+  }
 
-  processor.handlers(_data)?.map((value) => {
-    if (value) {
-      processor.func.map((it) => {
-        it(value, _event, _data);
-      });
-    }
-  });
+  if (processor.handlers) {
+    processor.handlers(_data)?.map((value) => {
+      if (value) {
+        processor.func.map((it) => {
+          it(value, _event, _data);
+        });
+      }
+    });
+  }
 
-  emitEvent(_event, processor.type, _data);
+  emitEvent(_event, processor, _data);
 }
 
 /**
@@ -492,8 +502,12 @@ export function callIrisApi(funcName: string, params: any): any {
 /**
  * @internal
  */
-export function emitEvent(eventType: string, ...params: any[]): void {
-  DeviceEventEmitter.emit(eventType, ...params);
+export function emitEvent<EventType extends keyof T, T extends ProcessorType>(
+  eventType: EventType,
+  eventProcessor: EventProcessor<T>,
+  data: any
+): void {
+  DeviceEventEmitter.emit(eventType as string, eventProcessor, data);
 }
 
 import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';

@@ -20,7 +20,7 @@ test('addListener', () => {
   engine.addListener('onAgoraCDNTokenWillExpire', callback);
   emitEvent(
     'onAgoraCDNTokenWillExpire',
-    EVENT_TYPE.IMediaPlayer,
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
     JSON.stringify({})
   );
   expect(callback).toBeCalledTimes(1);
@@ -33,7 +33,7 @@ test('addListenerWithSameEventTypeAndCallback', () => {
   engine.addListener('onAgoraCDNTokenWillExpire', callback);
   emitEvent(
     'onAgoraCDNTokenWillExpire',
-    EVENT_TYPE.IMediaPlayer,
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
     JSON.stringify({})
   );
   expect(callback).toBeCalledTimes(2);
@@ -46,10 +46,14 @@ test('addListenerWithSameCallback', () => {
   engine.addListener('onFrame', callback);
   emitEvent(
     'onAgoraCDNTokenWillExpire',
-    EVENT_TYPE.IMediaPlayer,
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
     JSON.stringify({})
   );
-  emitEvent('onFrame', EVENT_TYPE.IMediaPlayer, JSON.stringify({}));
+  emitEvent(
+    'onFrame',
+    EVENT_PROCESSORS.IMediaPlayerVideoFrameObserver,
+    JSON.stringify({})
+  );
   expect(callback).toBeCalledTimes(2);
 });
 
@@ -60,7 +64,7 @@ test('removeListener', () => {
   engine.removeListener('onAgoraCDNTokenWillExpire', callback);
   emitEvent(
     'onAgoraCDNTokenWillExpire',
-    EVENT_TYPE.IMediaPlayer,
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
     JSON.stringify({})
   );
   expect(callback).not.toBeCalled();
@@ -73,7 +77,7 @@ test('removeListenerWithoutCallback', () => {
   engine.removeListener('onAgoraCDNTokenWillExpire');
   emitEvent(
     'onAgoraCDNTokenWillExpire',
-    EVENT_TYPE.IMediaPlayer,
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
     JSON.stringify({})
   );
   expect(callback).not.toBeCalled();
@@ -88,7 +92,7 @@ test('removeAllListenersWithEventType', () => {
   engine.removeAllListeners('onAgoraCDNTokenWillExpire');
   emitEvent(
     'onAgoraCDNTokenWillExpire',
-    EVENT_TYPE.IMediaPlayer,
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
     JSON.stringify({})
   );
   expect(callback1).not.toBeCalled();
@@ -104,12 +108,16 @@ test('removeAllListeners', () => {
   engine.removeAllListeners();
   emitEvent(
     'onAgoraCDNTokenWillExpire',
-    EVENT_TYPE.IMediaPlayer,
+    EVENT_PROCESSORS.IMediaPlayerSourceObserver,
     JSON.stringify({})
   );
-  emitEvent('onFrame', EVENT_TYPE.IMediaPlayer, JSON.stringify({}));
+  emitEvent(
+    'onFrame',
+    EVENT_PROCESSORS.IMediaPlayerVideoFrameObserver,
+    JSON.stringify({})
+  );
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
 
-import { EVENT_TYPE, emitEvent } from '../internal/IrisApiEngine';
+import { EVENT_PROCESSORS, emitEvent } from '../internal/IrisApiEngine';

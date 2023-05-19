@@ -8,7 +8,11 @@ import { IMediaRecorderEvent } from '../extension/IAgoraMediaRecorderExtension';
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
-import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import {
+  DeviceEventEmitter,
+  EVENT_TYPE,
+  EventProcessor,
+} from './IrisApiEngine';
 
 export class MediaRecorderInternal extends IMediaRecorderImpl {
   static _observers: Map<string, IMediaRecorderObserver> = new Map<
@@ -62,15 +66,13 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
     listener: IMediaRecorderEvent[EventType]
   ): void {
     this._addListenerPreCheck(eventType);
-    const callback = (...data: any[]) => {
-      if (data[0] !== EVENT_TYPE.IMediaRecorder) {
+    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
+      if (eventProcessor.type(data) !== EVENT_TYPE.IMediaRecorder) {
         return;
       }
-      processIMediaRecorderObserver(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
+      eventProcessor.func.map((it) => {
+        it({ [eventType]: listener }, eventType, data);
+      });
     };
     listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
@@ -93,5 +95,4 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
   }
 }
 
-import { processIMediaRecorderObserver } from '../impl/AgoraMediaBaseImpl';
 import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';

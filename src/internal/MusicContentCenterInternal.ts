@@ -11,7 +11,11 @@ import { IMusicContentCenterEvent } from '../extension/IAgoraMusicContentCenterE
 import IAgoraMusicContentCenterTI from '../ti/IAgoraMusicContentCenter-ti';
 const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
-import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import {
+  DeviceEventEmitter,
+  EVENT_TYPE,
+  EventProcessor,
+} from './IrisApiEngine';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
@@ -37,15 +41,13 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     listener: IMusicContentCenterEvent[EventType]
   ): void {
     this._addListenerPreCheck(eventType);
-    const callback = (...data: any[]) => {
-      if (data[0] !== EVENT_TYPE.IMusicContentCenter) {
+    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
+      if (eventProcessor.type(data) !== EVENT_TYPE.IMusicContentCenter) {
         return;
       }
-      processIMusicContentCenterEventHandler(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
+      eventProcessor.func.map((it) => {
+        it({ [eventType]: listener }, eventType, data);
+      });
     };
     listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
@@ -204,5 +206,4 @@ import {
   IMusicContentCenterImpl,
   IMusicPlayerImpl,
   MusicCollectionImpl,
-  processIMusicContentCenterEventHandler,
 } from '../impl/IAgoraMusicContentCenterImpl';
