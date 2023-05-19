@@ -264,11 +264,7 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
   abstract removeRemotePosition(uid: number): number;
 
   /**
-   * Occurs when the most active remote speaker is detected.
-   * After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user whose volume is detected as the loudest for the most times, is the most active user.When the number of users is no less than two and an active remote speaker exists, the SDK triggers this callback and reports the uid of the most active remote speaker.If the most active remote speaker is always the same user, the SDK triggers the onActiveSpeaker callback only once.If the most active remote speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active remote speaker.
-   *
-   * @param uid The user ID of the most active speaker.
-   * @param connection The connection information. See RtcConnection .
+   * @ignore
    */
   abstract removeRemotePositionEx(
     uid: number,
@@ -285,15 +281,7 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
   abstract clearRemotePositions(): number;
 
   /**
-   * Enables tracing the video frame rendering process.
-   * By default, the SDK starts tracing the video rendering event automatically when the local user successfully joins the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
-   *  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
-   *  The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
-   *
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @returns
-   * 0: Success.< 0: Failure.
+   * @ignore
    */
   abstract clearRemotePositionsEx(connection: RtcConnection): number;
 

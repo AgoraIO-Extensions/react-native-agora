@@ -70,7 +70,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
 
   /**
    * Sets channel options and leaves the channel.
-   * This method lets the user leave the channel, for example, by hanging up or exiting the call.After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call.This method can be called whether or not a call is currently in progress. This method releases all resources related to the session.Calling this method does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback.After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.Calling will leave the channels when calling joinChannel and joinChannelEx at the same time.
+   * This method lets the user leave the channel, for example, by hanging up or exiting the call.After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call.This method can be called whether or not a call is currently in progress. This method releases all resources related to the session.Calling this method does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback.After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.Calling leaveChannel will leave the channels when calling joinChannel and joinChannelEx at the same time.
    *
    * @param connection The connection information. See RtcConnection .
    * @param options The options for leaving the channel. See LeaveChannelOptions .This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
@@ -102,14 +102,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Creates a data stream.
-   * Creates a data stream. Each user can create up to five data streams in a single channel.Compared with createDataStreamEx , this method does not support data reliability. If a data packet is not received five seconds after it was sent, the SDK directly discards the data.
+   * Sets the encoder configuration for the local video.
+   * Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate.The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
    *
-   * @param config The configurations for the data stream. See DataStreamConfig .
+   * @param config Video profile. See VideoEncoderConfiguration .
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * ID of the created data stream, if the method call succeeds.< 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract setVideoEncoderConfigurationEx(
     config: VideoEncoderConfiguration,
@@ -125,15 +125,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes receiving the video stream of a specified user.
-   * This method is used to stop or resume receiving the video stream of a specified user. You can call this method before or after joining a channel. If a user leaves a channel, the settings in this method become invalid.
+   * Stops or resumes receiving the audio stream of a specified user.
    *
-   * @param uid The user ID of the remote user.
-   * @param mute Whether to stop receiving the video stream of the specified user:true: Stop receiving the video stream of the specified user.false: (Default) Resume receiving the video stream of the specified user.
+   * @param uid The ID of the specified user.
+   * @param mute Whether to stop receiving the audio stream of the specified user:true: Stop receiving the audio stream of the specified user.false: (Default) Resume receiving the audio stream of the specified user.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.< 0: Failure.
+   * 0: Success. < 0: Failure.
    */
   abstract muteRemoteAudioStreamEx(
     uid: number,
@@ -176,10 +175,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes publishing the local audio stream.
+   * This method does not affect any ongoing audio recording, because it does not disable the audio capture device.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop publishing the local audio stream:true: Stops publishing the local audio stream.false: (Default) Resumes publishing the local audio stream.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
@@ -191,14 +190,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes publishing the local video stream.
+   * A successful call of this method triggers the onUserMuteVideo callback on the remote client.This method does not affect any ongoing video recording, because it does not disable the camera.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success. < 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract muteLocalVideoStreamEx(
     mute: boolean,
@@ -221,14 +220,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success. < 0: Failure.
+   * 0: Success.< 0: Failure.
    */
   abstract muteAllRemoteVideoStreamsEx(
     mute: boolean,
@@ -236,10 +235,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the allowlist of subscriptions for audio streams.
-   * You can call this method to specify the audio streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   * Set the blocklist of subscriptions for audio streams.
+   * You can call this method to specify the audio streams of a user that you do not want to subscribe to.You can call this method either before or after joining a channel.The blocklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams , and autoSubscribeAudio in ChannelMediaOptions .Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
    *
-   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
+   * @param uidList The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection .
    *
@@ -270,10 +269,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the allowlist of subscriptions for audio streams.
-   * You can call this method to specify the audio streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   * Set the blocklist of subscriptions for video streams.
+   * You can call this method to specify the video streams of a user that you do not want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The blocklist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
    *
-   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
+   * @param uidList The user ID list of users that you do not want to subscribe to.If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection .
    *
@@ -287,10 +286,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the allowlist of subscriptions for audio streams.
-   * You can call this method to specify the audio streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions .Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
+   * Set the allowlist of subscriptions for video streams.
+   * You can call this method to specify the video streams of a user that you want to subscribe to.If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.You can call this method either before or after joining a channel.The allowlist is not affected by the setting in muteRemoteVideoStream , muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions .
    *
-   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
+   * @param uidList The user ID list of users that you want to subscribe to.If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection .
    *
@@ -386,14 +385,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including the ones join the channel subsequent to this call.Call this method after joining a channel.If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel .
-   *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users:true: Stops subscribing to the audio streams of all remote users.false: (Default) Subscribes to the audio streams of all remote users by default.
-   * @param connection The connection information. See RtcConnection .
-   *
-   * @returns
-   * 0: Success. < 0: Failure.
+   * @ignore
    */
   abstract muteRecordingSignalEx(
     mute: boolean,
@@ -588,22 +580,13 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts pushing media streams to a CDN without transcoding.
-   * Ensure that you enable the Media Push service before using this function. See Enable Media Push.
-   *  Call this method after joining a channel.
-   *  Only hosts in the LIVE_BROADCASTING profile can call this method.
-   *  If you want to retry pushing streams after a failed push, make sure to call stopRtmpStream first, then call this method to retry pushing streams; otherwise, the SDK returns the same error code as the last failed push.
-   *  Agora recommends that you use the server-side Media Push function. You can call this method to push an audio or video stream to the specified CDN address. This method can push media streams to only one CDN address at a time, so if you need to push streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+   * Stops pushing media streams to a CDN.
+   * Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times.After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
    *
    * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
-   * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The URL is null or the string length is 0.
-   *  -7: The SDK is not initialized before calling this method.
-   *  -19: The Media Push URL is already in use, use another URL instead.
+   * 0: Success.< 0: Failure.
    */
   abstract stopRtmpStreamEx(url: string, connection: RtcConnection): number;
 
@@ -623,8 +606,8 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts relaying media streams across channels or updates channels for media relay.
-   * The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels.After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), it means that the SDK starts relaying media streams from the source channel to the destination channel.If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.The relaying media streams across channels function needs to be enabled by contacting .Agora does not support string user accounts in this API.
+   * Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
+   * Deprecated:This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead.After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), and the onChannelMediaRelayEvent callback returns RelayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.The relaying media streams across channels function needs to be enabled by contacting .Agora does not support string user accounts in this API.
    *
    * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
    * @param connection The connection information. See RtcConnection .
@@ -638,14 +621,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts relaying media streams across channels or updates channels for media relay.
-   * The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels.After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), it means that the SDK starts relaying media streams from the source channel to the destination channel.If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.Call this method after joining the channel.This method takes effect only when you are a host in a live streaming channel.The relaying media streams across channels function needs to be enabled by contacting .Agora does not support string user accounts in this API.
+   * Updates the channels for media stream relay.
+   * Deprecated:This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead.After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method.After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the RelayEventPacketUpdateDestChannel (7) state code.Call the method after successfully calling the startChannelMediaRelayEx method and receiving onChannelMediaRelayStateChanged (RelayStateRunning, RelayOk); otherwise, the method call fails.
    *
    * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration .
    * @param connection The connection information. See RtcConnection .
    *
    * @returns
-   * 0: Success.< 0: Failure.-1: A general error occurs (no specified reason).-2: The parameter is invalid.-7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not an host.-8: Internal state error. Probably because the user is not an audience member.
+   * 0: Success.< 0: Failure.
    */
   abstract updateChannelMediaRelayEx(
     configuration: ChannelMediaRelayConfiguration,
@@ -694,11 +677,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): UserInfo;
 
   /**
-   * Occurs when the most active remote speaker is detected.
-   * After a successful call of enableAudioVolumeIndication , the SDK continuously detects which remote user has the loudest volume. During the current period, the remote user whose volume is detected as the loudest for the most times, is the most active user.When the number of users is no less than two and an active remote speaker exists, the SDK triggers this callback and reports the uid of the most active remote speaker.If the most active remote speaker is always the same user, the SDK triggers the onActiveSpeaker callback only once.If the most active remote speaker changes to another user, the SDK triggers this callback again and reports the uid of the new active remote speaker.
-   *
-   * @param uid The user ID of the most active speaker.
-   * @param connection The connection information. See RtcConnection .
+   * @ignore
    */
   abstract getUserInfoByUidEx(uid: number, connection: RtcConnection): UserInfo;
 
