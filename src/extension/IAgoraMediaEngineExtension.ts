@@ -45,7 +45,7 @@ declare module '../IAgoraMediaEngine' {
      */
     removeListener<EventType extends keyof IMediaEngineEvent>(
       eventType: EventType,
-      listener: IMediaEngineEvent[EventType]
+      listener?: IMediaEngineEvent[EventType]
     ): void;
 
     /**

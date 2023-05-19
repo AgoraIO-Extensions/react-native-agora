@@ -21,7 +21,7 @@ declare module '../IAgoraMusicContentCenter' {
      */
     removeListener<EventType extends keyof IMusicContentCenterEvent>(
       eventType: EventType,
-      listener: IMusicContentCenterEvent[EventType]
+      listener?: IMusicContentCenterEvent[EventType]
     ): void;
 
     /**

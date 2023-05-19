@@ -44,7 +44,7 @@ declare module '../IAgoraMediaPlayer' {
      */
     removeListener<EventType extends keyof IMediaPlayerEvent>(
       eventType: EventType,
-      listener: IMediaPlayerEvent[EventType]
+      listener?: IMediaPlayerEvent[EventType]
     ): void;
 
     /**

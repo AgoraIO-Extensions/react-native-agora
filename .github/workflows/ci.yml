@@ -31,6 +31,30 @@ jobs:
           yarn example install --frozen-lockfile
           yarn typecheck
 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build package
+        run: yarn prepack
+
+  tets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Jest
+        run: yarn test
+
   test-android:
     strategy:
       matrix:
@@ -123,14 +147,3 @@ jobs:
           detox build-framework-cache
           detox test -c ios.sim.release
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Build package
-        run: yarn prepack

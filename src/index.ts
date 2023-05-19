@@ -1,6 +1,5 @@
 import { IMediaPlayerCacheManager } from './IAgoraMediaPlayer';
 import { IRtcEngine } from './IAgoraRtcEngine';
-import { IMediaPlayerCacheManagerImpl } from './impl/IAgoraMediaPlayerImpl';
 import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
 
 import AgoraRtcNg from './specs';
@@ -54,3 +53,5 @@ export function getMediaPlayerCacheManager(): IMediaPlayerCacheManager {
 }
 
 export default createAgoraRtcEngine;
+
+import { IMediaPlayerCacheManagerImpl } from './impl/IAgoraMediaPlayerImpl';

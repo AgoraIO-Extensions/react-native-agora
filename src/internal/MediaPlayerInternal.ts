@@ -10,16 +10,6 @@ import { IMediaPlayerVideoFrameObserver } from '../IAgoraMediaPlayer';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
 import { IMediaPlayerEvent } from '../extension/IAgoraMediaPlayerExtension';
 
-import {
-  processIAudioPcmFrameSink,
-  processIAudioSpectrumObserver,
-} from '../impl/AgoraMediaBaseImpl';
-import {
-  IMediaPlayerImpl,
-  processIMediaPlayerVideoFrameObserver,
-} from '../impl/IAgoraMediaPlayerImpl';
-import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
-
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 import IAgoraMediaPlayerTI from '../ti/IAgoraMediaPlayer-ti';
 import IAgoraMediaPlayerSourceTI from '../ti/IAgoraMediaPlayerSource-ti';
@@ -148,14 +138,18 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
         );
       }
     };
+    listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
   }
 
   removeListener<EventType extends keyof IMediaPlayerEvent>(
     eventType: EventType,
-    listener: IMediaPlayerEvent[EventType]
+    listener?: IMediaPlayerEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(eventType);
+    DeviceEventEmitter.removeListener(
+      eventType,
+      listener?.prototype.callback ?? listener
+    );
   }
 
   removeAllListeners<EventType extends keyof IMediaPlayerEvent>(
@@ -314,3 +308,13 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     return 'MediaPlayer_setPlayerOption2';
   }
 }
+
+import {
+  processIAudioPcmFrameSink,
+  processIAudioSpectrumObserver,
+} from '../impl/AgoraMediaBaseImpl';
+import {
+  IMediaPlayerImpl,
+  processIMediaPlayerVideoFrameObserver,
+} from '../impl/IAgoraMediaPlayerImpl';
+import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';

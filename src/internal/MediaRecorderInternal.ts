@@ -5,9 +5,6 @@ import { IMediaRecorderObserver } from '../AgoraMediaBase';
 
 import { IMediaRecorderEvent } from '../extension/IAgoraMediaRecorderExtension';
 
-import { processIMediaRecorderObserver } from '../impl/AgoraMediaBaseImpl';
-import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
-
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
@@ -75,14 +72,18 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
         data[1]
       );
     };
+    listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
   }
 
   removeListener<EventType extends keyof IMediaRecorderEvent>(
     eventType: EventType,
-    listener: IMediaRecorderEvent[EventType]
+    listener?: IMediaRecorderEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(eventType, listener);
+    DeviceEventEmitter.removeListener(
+      eventType,
+      listener?.prototype.callback ?? listener
+    );
   }
 
   removeAllListeners<EventType extends keyof IMediaRecorderEvent>(
@@ -91,3 +92,6 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
     DeviceEventEmitter.removeAllListeners(eventType);
   }
 }
+
+import { processIMediaRecorderObserver } from '../impl/AgoraMediaBaseImpl';
+import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';

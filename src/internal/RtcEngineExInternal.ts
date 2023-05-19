@@ -35,15 +35,6 @@ import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
 import { IRtcEngineEvent } from '../extension/IAgoraRtcEngineExtension';
 
-import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
-import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
-import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
-import {
-  processIDirectCdnStreamingEventHandler,
-  processIMetadataObserver,
-  processIRtcEngineEventHandler,
-} from '../impl/IAgoraRtcEngineImpl';
-
 import AgoraBaseTI from '../ti/AgoraBase-ti';
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 import IAgoraRtcEngineTI from '../ti/IAgoraRtcEngine-ti';
@@ -189,14 +180,18 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
         data[1]
       );
     };
+    listener!.prototype.callback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
   }
 
   removeListener<EventType extends keyof IRtcEngineEvent>(
     eventType: EventType,
-    listener: IRtcEngineEvent[EventType]
+    listener?: IRtcEngineEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(eventType, listener);
+    DeviceEventEmitter.removeListener(
+      eventType,
+      listener?.prototype.callback ?? listener
+    );
   }
 
   removeAllListeners<EventType extends keyof IRtcEngineEvent>(
@@ -484,3 +479,12 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     return super.unregisterAudioSpectrumObserver(observer);
   }
 }
+
+import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
+import { processIAudioSpectrumObserver } from '../impl/AgoraMediaBaseImpl';
+import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
+import {
+  processIDirectCdnStreamingEventHandler,
+  processIMetadataObserver,
+  processIRtcEngineEventHandler,
+} from '../impl/IAgoraRtcEngineImpl';

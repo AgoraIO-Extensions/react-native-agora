@@ -49,7 +49,7 @@ declare module '../IAgoraRtcEngine' {
      */
     removeListener<EventType extends keyof IRtcEngineEvent>(
       eventType: EventType,
-      listener: IRtcEngineEvent[EventType]
+      listener?: IRtcEngineEvent[EventType]
     ): void;
 
     /**
