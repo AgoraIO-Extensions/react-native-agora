@@ -1,23 +1,20 @@
 import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   AudioCodecProfileType,
   AudioSampleRateType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   LiveTranscoding,
-  RtmpStreamingEvent,
   RtmpStreamPublishErrorType,
   RtmpStreamPublishState,
+  RtmpStreamingEvent,
   TranscodingUser,
   VideoCodecProfileType,
   VideoCodecTypeForStream,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -34,7 +31,9 @@ import {
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   url: string;
@@ -86,8 +85,8 @@ export default class RTMPStreaming
           uid: 0,
           x: 0,
           y: 0,
-          width: styles.image.width,
-          height: styles.image.height,
+          width: AgoraStyle.image.width,
+          height: AgoraStyle.image.height,
           zOrder: 50,
         },
       ],
@@ -114,18 +113,17 @@ export default class RTMPStreaming
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -217,15 +215,15 @@ export default class RTMPStreaming
       transcodingUsers: [
         ...transcodingUsers,
         ...remoteUsers.map((value, index) => {
-          const maxNumPerRow = Math.floor(width / styles.image.width);
+          const maxNumPerRow = Math.floor(width / AgoraStyle.image.width);
           const numOfRow = Math.floor((index + 1) / maxNumPerRow);
           const numOfColumn = Math.floor((index + 1) % maxNumPerRow);
           return {
             uid: value,
-            x: numOfColumn * styles.image.width,
-            y: numOfRow * styles.image.height,
-            width: styles.image.width,
-            height: styles.image.height,
+            x: numOfColumn * AgoraStyle.image.width,
+            y: numOfRow * AgoraStyle.image.height,
+            width: AgoraStyle.image.width,
+            height: AgoraStyle.image.height,
             zOrder: 50,
           };
         }),
@@ -234,10 +232,10 @@ export default class RTMPStreaming
       watermark: [
         {
           url: watermarkUrl,
-          x: width - styles.image.width,
-          y: height - styles.image.height,
-          width: styles.image.width,
-          height: styles.image.height,
+          x: width - AgoraStyle.image.width,
+          y: height - AgoraStyle.image.height,
+          width: AgoraStyle.image.width,
+          height: AgoraStyle.image.height,
           zOrder: 100,
         },
       ],
@@ -364,7 +362,7 @@ export default class RTMPStreaming
             <>
               <AgoraText>backgroundColor</AgoraText>
               <ColorPicker
-                style={styles.picker}
+                style={AgoraStyle.picker}
                 onColorChange={(selectedColor) => {
                   this.setState({
                     backgroundColor: +fromHsv(selectedColor).replace('#', '0x'),
@@ -374,7 +372,7 @@ export default class RTMPStreaming
               />
             </>
             <AgoraDivider />
-            <AgoraView style={styles.container}>
+            <AgoraView horizontal={true}>
               <AgoraTextInput
                 style={AgoraStyle.fullSize}
                 onChangeText={(text) => {
@@ -383,11 +381,7 @@ export default class RTMPStreaming
                     width: text === '' ? this.createState().width : +text,
                   });
                 }}
-                keyboardType={
-                  Platform.OS === 'android'
-                    ? 'numeric'
-                    : 'numbers-and-punctuation'
-                }
+                numberKeyboard={true}
                 placeholder={`width (defaults: ${this.createState().width})`}
               />
               <AgoraTextInput
@@ -398,11 +392,7 @@ export default class RTMPStreaming
                     height: text === '' ? this.createState().height : +text,
                   });
                 }}
-                keyboardType={
-                  Platform.OS === 'android'
-                    ? 'numeric'
-                    : 'numbers-and-punctuation'
-                }
+                numberKeyboard={true}
                 placeholder={`height (defaults: ${this.createState().height})`}
               />
             </AgoraView>
@@ -414,11 +404,7 @@ export default class RTMPStreaming
                     text === '' ? this.createState().videoBitrate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`videoBitrate (defaults: ${
                 this.createState().videoBitrate
               })`}
@@ -431,11 +417,7 @@ export default class RTMPStreaming
                     text === '' ? this.createState().videoFramerate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`videoFramerate (defaults: ${
                 this.createState().videoFramerate
               })`}
@@ -447,11 +429,7 @@ export default class RTMPStreaming
                   videoGop: text === '' ? this.createState().videoGop : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`videoGop (defaults: ${
                 this.createState().videoGop
               })`}
@@ -505,11 +483,7 @@ export default class RTMPStreaming
                     text === '' ? this.createState().audioBitrate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`audioBitrate (defaults: ${
                 this.createState().audioBitrate
               })`}
@@ -535,7 +509,6 @@ export default class RTMPStreaming
             />
           </>
         ) : undefined}
-        <AgoraDivider />
       </>
     );
   }
@@ -562,20 +535,3 @@ export default class RTMPStreaming
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  picker: {
-    width: '100%',
-    height: 200,
-  },
-  image: {
-    width: 120,
-    height: 120,
-  },
-});

@@ -1,0 +1,16 @@
+diff --git a/node_modules/json-bigint/lib/parse.js b/node_modules/json-bigint/lib/parse.js
+index bb4e5eb..91ff283 100644
+--- a/node_modules/json-bigint/lib/parse.js
++++ b/node_modules/json-bigint/lib/parse.js
+@@ -206,9 +206,9 @@ var json_parse = function (options) {
+         error('Bad number');
+       } else {
+         if (BigNumber == null) BigNumber = require('bignumber.js');
+-        //if (number > 9007199254740992 || number < -9007199254740992)
++        if (number > 9007199254740992 || number < -9007199254740992)
+         // Bignumber has stricter check: everything with length > 15 digits disallowed
+-        if (string.length > 15)
++        // if (string.length > 15)
+           return _options.storeAsString
+             ? string
+             : _options.useNativeBigInt

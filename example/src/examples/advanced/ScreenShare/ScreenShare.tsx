@@ -1,27 +1,23 @@
-import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import React, { ReactElement } from 'react';
+import { Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   IRtcEngineEx,
-  LocalAudioStreamError,
-  LocalAudioStreamState,
   LocalVideoStreamError,
   LocalVideoStreamState,
   PermissionType,
   RenderModeType,
   RtcConnection,
   RtcStats,
-  RtcSurfaceView,
-  showRPSystemBroadcastPickerView,
   UserOfflineReasonType,
+  VideoCanvas,
   VideoContentHint,
   VideoSourceType,
+  createAgoraRtcEngine,
+  showRPSystemBroadcastPickerView,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -36,8 +32,11 @@ import {
   AgoraSwitch,
   AgoraTextInput,
   AgoraView,
+  RtcSurfaceView,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   token2: string;
@@ -102,23 +101,17 @@ export default class ScreenShare
     this.engine = createAgoraRtcEngine() as IRtcEngineEx;
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
-
-    // Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      this.engine?.loadExtensionProvider('agora_screen_capture_extension');
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -261,7 +254,7 @@ export default class ScreenShare
       return;
     }
 
-    // publish media player stream
+    // publish screen share stream
     this.engine?.joinChannelEx(
       token2,
       { channelId, localUid: uid2 },
@@ -336,7 +329,12 @@ export default class ScreenShare
 
   onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
     const { uid2 } = this.state;
-    if (connection.localUid === uid2 || remoteUid === uid2) return;
+    if (connection.localUid === uid2 || remoteUid === uid2) {
+      // ⚠️ mute the streams from screen sharing
+      this.engine?.muteRemoteAudioStream(uid2, true);
+      this.engine?.muteRemoteVideoStream(uid2, true);
+      return;
+    }
     super.onUserJoined(connection, remoteUid, elapsed);
   }
 
@@ -358,22 +356,6 @@ export default class ScreenShare
     this.setState({
       startScreenCapture: false,
     });
-  }
-
-  onLocalAudioStateChanged(
-    connection: RtcConnection,
-    state: LocalAudioStreamState,
-    error: LocalAudioStreamError
-  ) {
-    this.info(
-      'onLocalAudioStateChanged',
-      'connection',
-      connection,
-      'state',
-      state,
-      'error',
-      error
-    );
   }
 
   onLocalVideoStateChanged(
@@ -422,14 +404,11 @@ export default class ScreenShare
     );
   }
 
-  protected renderVideo(uid: number): React.ReactNode {
-    return (
-      <RtcSurfaceView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid, renderMode: RenderModeType.RenderModeFit }}
-      />
-    );
+  protected renderVideo(user: VideoCanvas): ReactElement {
+    return super.renderVideo({
+      ...user,
+      renderMode: RenderModeType.RenderModeFit,
+    });
   }
 
   protected renderConfiguration(): React.ReactNode {
@@ -451,9 +430,7 @@ export default class ScreenShare
               uid2: text === '' ? this.createState().uid2 : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`uid2 (must > 0)`}
           value={uid2 > 0 ? uid2.toString() : ''}
         />
@@ -477,11 +454,7 @@ export default class ScreenShare
                         text === '' ? this.createState().sampleRate : +text,
                     });
                   }}
-                  keyboardType={
-                    Platform.OS === 'android'
-                      ? 'numeric'
-                      : 'numbers-and-punctuation'
-                  }
+                  numberKeyboard={true}
                   placeholder={`sampleRate (defaults: ${
                     this.createState().sampleRate
                   })`}
@@ -494,11 +467,7 @@ export default class ScreenShare
                         text === '' ? this.createState().channels : +text,
                     });
                   }}
-                  keyboardType={
-                    Platform.OS === 'android'
-                      ? 'numeric'
-                      : 'numbers-and-punctuation'
-                  }
+                  numberKeyboard={true}
                   placeholder={`channels (defaults: ${
                     this.createState().channels
                   })`}
@@ -528,7 +497,7 @@ export default class ScreenShare
         <AgoraDivider />
         {captureVideo ? (
           <>
-            <AgoraView style={styles.container}>
+            <AgoraView horizontal={true}>
               <AgoraTextInput
                 style={AgoraStyle.fullSize}
                 onChangeText={(text) => {
@@ -537,11 +506,7 @@ export default class ScreenShare
                     width: text === '' ? this.createState().width : +text,
                   });
                 }}
-                keyboardType={
-                  Platform.OS === 'android'
-                    ? 'numeric'
-                    : 'numbers-and-punctuation'
-                }
+                numberKeyboard={true}
                 placeholder={`width (defaults: ${this.createState().width})`}
               />
               <AgoraTextInput
@@ -552,11 +517,7 @@ export default class ScreenShare
                     height: text === '' ? this.createState().height : +text,
                   });
                 }}
-                keyboardType={
-                  Platform.OS === 'android'
-                    ? 'numeric'
-                    : 'numbers-and-punctuation'
-                }
+                numberKeyboard={true}
                 placeholder={`height (defaults: ${this.createState().height})`}
               />
             </AgoraView>
@@ -567,11 +528,7 @@ export default class ScreenShare
                   frameRate: text === '' ? this.createState().frameRate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`frameRate (defaults: ${
                 this.createState().frameRate
               })`}
@@ -583,11 +540,7 @@ export default class ScreenShare
                   bitrate: text === '' ? this.createState().bitrate : +text,
                 });
               }}
-              keyboardType={
-                Platform.OS === 'android'
-                  ? 'numeric'
-                  : 'numbers-and-punctuation'
-              }
+              numberKeyboard={true}
               placeholder={`bitrate (defaults: ${this.createState().bitrate})`}
             />
             <AgoraDropdown
@@ -635,11 +588,3 @@ export default class ScreenShare
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});

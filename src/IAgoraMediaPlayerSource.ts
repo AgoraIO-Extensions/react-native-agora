@@ -1,21 +1,22 @@
 import './extension/IAgoraMediaPlayerSourceExtension';
 import {
-  MediaPlayerState,
   MediaPlayerError,
   MediaPlayerEvent,
+  MediaPlayerState,
   PlayerPreloadEvent,
-  SrcInfo,
   PlayerUpdatedInfo,
+  SrcInfo,
 } from './AgoraMediaPlayerTypes';
+
 /**
  * Provides callbacks for media players.
  */
 export interface IMediaPlayerSourceObserver {
   /**
-   * Reports the playback state change.
+   * Reports the changes of playback state.
    * When the state of the media player changes, the SDK triggers this callback to report the current playback state.
    *
-   * @param state The playback state, see MediaPlayerState .
+   * @param state The playback state. See MediaPlayerState .
    * @param ec The error code. See MediaPlayerError .
    */
   onPlayerSourceStateChanged?(
@@ -25,17 +26,17 @@ export interface IMediaPlayerSourceObserver {
 
   /**
    * Reports current playback progress.
-   * When playing media files, the SDK triggers this callback every one second to report current playback progress.
+   * When playing media files, the SDK triggers this callback every two second to report current playback progress.
    *
    * @param position The playback position (ms) of media files.
    */
   onPositionChanged?(positionMs: number): void;
 
   /**
-   * Reports the playback event.
+   * Reports the player events.
    * After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
    *
-   * @param eventCode The playback event. See MediaPlayerEvent .
+   * @param eventCode The player events. See MediaPlayerEvent .
    * @param elapsedTime The time (ms) when the event occurs.
    * @param message Information about the event.
    */

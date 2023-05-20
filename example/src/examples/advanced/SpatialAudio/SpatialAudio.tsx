@@ -1,14 +1,11 @@
 import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import {
   AudioScenarioType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -21,7 +18,9 @@ import {
   AgoraSlider,
   AgoraSwitch,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   targetUid: number;
@@ -70,21 +69,15 @@ export default class SpatialAudio
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
       audioScenario: AudioScenarioType.AudioScenarioGameStreaming,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
-
-    // Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      this.engine?.loadExtensionProvider('agora_spatial_audio_extension');
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     this.engine.setParameters(
       JSON.stringify({ 'rtc.audio.force_bluetooth_a2dp': true })
@@ -260,7 +253,6 @@ export default class SpatialAudio
             });
           }}
         />
-        <AgoraDivider />
       </>
     );
   }

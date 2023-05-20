@@ -1,25 +1,30 @@
-import { callIrisApi } from '../internal/IrisApiEngine';
-import { IRtcEngineImpl } from './IAgoraRtcEngineImpl';
-import { IRtcEngineEx, RtcConnection } from '../IAgoraRtcEngineEx';
-import { ChannelMediaOptions, LeaveChannelOptions } from '../IAgoraRtcEngine';
 import {
-  VideoEncoderConfiguration,
-  VideoCanvas,
-  VideoStreamType,
-  VideoSubscriptionOptions,
-  SpatialAudioParams,
-  VideoMirrorModeType,
-  ConnectionStateType,
-  EncryptionConfig,
-  DataStreamConfig,
-  WatermarkOptions,
-  LiveTranscoding,
   ChannelMediaRelayConfiguration,
-  UserInfo,
+  ConnectionStateType,
+  DataStreamConfig,
+  EncryptionConfig,
+  LiveTranscoding,
   SimulcastStreamConfig,
   SimulcastStreamMode,
+  SpatialAudioParams,
+  UserInfo,
+  VideoCanvas,
+  VideoEncoderConfiguration,
+  VideoMirrorModeType,
+  VideoStreamType,
+  VideoSubscriptionOptions,
+  WatermarkOptions,
 } from '../AgoraBase';
 import { RenderModeType } from '../AgoraMediaBase';
+import {
+  ChannelMediaOptions,
+  LeaveChannelOptions,
+  StreamFallbackOptions,
+} from '../IAgoraRtcEngine';
+import { IRtcEngineEx, RtcConnection } from '../IAgoraRtcEngineEx';
+
+import { IRtcEngineImpl } from './IAgoraRtcEngineImpl';
+
 // @ts-ignore
 export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   joinChannelEx(
@@ -685,6 +690,58 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_enableLoopbackRecordingEx';
   }
 
+  adjustRecordingSignalVolumeEx(
+    volume: number,
+    connection: RtcConnection
+  ): number {
+    const apiType = this.getApiTypeFromAdjustRecordingSignalVolumeEx(
+      volume,
+      connection
+    );
+    const jsonParams = {
+      volume: volume,
+      connection: connection,
+      toJSON: () => {
+        return {
+          volume: volume,
+          connection: connection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromAdjustRecordingSignalVolumeEx(
+    volume: number,
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_adjustRecordingSignalVolumeEx';
+  }
+
+  muteRecordingSignalEx(mute: boolean, connection: RtcConnection): number {
+    const apiType = this.getApiTypeFromMuteRecordingSignalEx(mute, connection);
+    const jsonParams = {
+      mute: mute,
+      connection: connection,
+      toJSON: () => {
+        return {
+          mute: mute,
+          connection: connection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromMuteRecordingSignalEx(
+    mute: boolean,
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_muteRecordingSignalEx';
+  }
+
   adjustUserPlaybackSignalVolumeEx(
     uid: number,
     volume: number,
@@ -1095,6 +1152,35 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_stopRtmpStreamEx';
   }
 
+  startOrUpdateChannelMediaRelayEx(
+    configuration: ChannelMediaRelayConfiguration,
+    connection: RtcConnection
+  ): number {
+    const apiType = this.getApiTypeFromStartOrUpdateChannelMediaRelayEx(
+      configuration,
+      connection
+    );
+    const jsonParams = {
+      configuration: configuration,
+      connection: connection,
+      toJSON: () => {
+        return {
+          configuration: configuration,
+          connection: connection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromStartOrUpdateChannelMediaRelayEx(
+    configuration: ChannelMediaRelayConfiguration,
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_startOrUpdateChannelMediaRelayEx';
+  }
+
   startChannelMediaRelayEx(
     configuration: ChannelMediaRelayConfiguration,
     connection: RtcConnection
@@ -1267,45 +1353,6 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_getUserInfoByUidEx';
   }
 
-  setVideoProfileEx(
-    width: number,
-    height: number,
-    frameRate: number,
-    bitrate: number
-  ): number {
-    const apiType = this.getApiTypeFromSetVideoProfileEx(
-      width,
-      height,
-      frameRate,
-      bitrate
-    );
-    const jsonParams = {
-      width: width,
-      height: height,
-      frameRate: frameRate,
-      bitrate: bitrate,
-      toJSON: () => {
-        return {
-          width: width,
-          height: height,
-          frameRate: frameRate,
-          bitrate: bitrate,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetVideoProfileEx(
-    width: number,
-    height: number,
-    frameRate: number,
-    bitrate: number
-  ): string {
-    return 'RtcEngineEx_setVideoProfileEx';
-  }
-
   enableDualStreamModeEx(
     enabled: boolean,
     streamConfig: SimulcastStreamConfig,
@@ -1374,13 +1421,29 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_setDualStreamModeEx';
   }
 
-  enableWirelessAccelerate(enabled: boolean): number {
-    const apiType = this.getApiTypeFromEnableWirelessAccelerate(enabled);
+  setHighPriorityUserListEx(
+    uidList: number[],
+    uidNum: number,
+    option: StreamFallbackOptions,
+    connection: RtcConnection
+  ): number {
+    const apiType = this.getApiTypeFromSetHighPriorityUserListEx(
+      uidList,
+      uidNum,
+      option,
+      connection
+    );
     const jsonParams = {
-      enabled: enabled,
+      uidList: uidList,
+      uidNum: uidNum,
+      option: option,
+      connection: connection,
       toJSON: () => {
         return {
-          enabled: enabled,
+          uidList: uidList,
+          uidNum: uidNum,
+          option: option,
+          connection: connection,
         };
       },
     };
@@ -1388,8 +1451,13 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromEnableWirelessAccelerate(enabled: boolean): string {
-    return 'RtcEngineEx_enableWirelessAccelerate';
+  protected getApiTypeFromSetHighPriorityUserListEx(
+    uidList: number[],
+    uidNum: number,
+    option: StreamFallbackOptions,
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_setHighPriorityUserListEx';
   }
 
   takeSnapshotEx(
@@ -1425,4 +1493,26 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   ): string {
     return 'RtcEngineEx_takeSnapshotEx';
   }
+
+  startMediaRenderingTracingEx(connection: RtcConnection): number {
+    const apiType = this.getApiTypeFromStartMediaRenderingTracingEx(connection);
+    const jsonParams = {
+      connection: connection,
+      toJSON: () => {
+        return {
+          connection: connection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromStartMediaRenderingTracingEx(
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_startMediaRenderingTracingEx';
+  }
 }
+
+import { callIrisApi } from '../internal/IrisApiEngine';

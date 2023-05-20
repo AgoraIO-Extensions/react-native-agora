@@ -5,44 +5,64 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    env:
-      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: SetupExample
+        run: |
+          yarn example install --frozen-lockfile
+
       - name: Modify APP ID
         run: |
-          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
 
-      - uses: nitro-build/github-action-nitro-android@v1
-        id: nitro
-        with:
-          debug: true
-          root-directory: example
-          cache-env-var-lookup-keys: ORG_GRADLE_PROJECT_*
+      - name: Gradle build
+        run: |
+          ./gradlew :app:assembleRelease
+        working-directory: example/android
 
       - uses: actions/upload-artifact@v3
         with:
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}
+          name: AgoraRtcNgExample
+          path: |
+            example/android/app/build/outputs/apk/release/*.apk
 
   build-ios:
     runs-on: macos-latest
-    env:
-      NITRO_API_KEY: ${{ secrets.NITRO_API_KEY }}
     steps:
       - uses: actions/checkout@v3
 
       - name: Setup
         uses: ./.github/actions/setup
 
+      - uses: actions/cache@v3
+        with:
+          path: |
+            **/Pods
+          key: ${{ runner.os }}-pods-ng-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-ng
+
+      - uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 1024M
+          key: ${{ runner.os }}-ccache-ng
+          restore-keys: |
+            ${{ runner.os }}-ccache-ng
+
+      - name: SetupExample
+        run: |
+          yarn example install --frozen-lockfile
+          yarn example pods
+
       - name: Modify APP ID
         run: |
-          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
 
@@ -55,7 +75,7 @@ jobs:
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          PP_PATH=$RUNNER_TEMP/${{ secrets.BUILD_PROVISION_PROFILE_UUID }}.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
@@ -75,17 +95,34 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-      - uses: nitro-build/github-action-nitro-ios@v1
-        id: nitro
-        with:
-          debug: true
-          root-directory: example
-          cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
-          export-method: "development"
+      - name: Fastlane build
+        env:
+          CC: clang
+          CXX: clang++
+          CLANG: clang
+          CLANGPLUSPLUS: clang++
+          LD: clang
+          LDPLUSPLUS: clang++
+          CCACHE_SLOPPINESS: clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
+          CCACHE_FILECLONE: true
+          CCACHE_DEPEND: true
+          CCACHE_INODECACHE: true
+        run: |
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+          fastlane gym --export_method "development" --export_options "{\"compileBitcode\":false}"
+        working-directory: example/ios
 
       - uses: actions/upload-artifact@v3
         with:
-          path: ${{ steps.nitro.outputs.nitro-output-dir }}
+          name: AgoraRtcNgExample
+          path: |
+            example/ios/*.ipa
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: AgoraRtcNgExampleSymbol
+          path: |
+            example/ios/*.dSYM.zip
 
   notification:
     runs-on: ubuntu-latest

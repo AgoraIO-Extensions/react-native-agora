@@ -1,17 +1,14 @@
 import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   RhythmPlayerErrorType,
   RhythmPlayerStateType,
   RtcConnection,
   RtcStats,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -23,7 +20,9 @@ import {
   AgoraSlider,
   AgoraTextInput,
 } from '../../../components/ui';
-import { getAbsolutePath, getAssetPath } from '../../../utils';
+import Config from '../../../config/agora.config';
+import { getAbsolutePath, getResourcePath } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   sound1: string;
@@ -46,8 +45,8 @@ export default class RhythmPlayer
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      sound1: getAssetPath('ding.mp3'),
-      sound2: getAssetPath('dang.mp3'),
+      sound1: getResourcePath('ding.mp3'),
+      sound2: getResourcePath('dang.mp3'),
       beatsPerMeasure: 4,
       beatsPerMinute: 60,
       startRhythmPlayer: false,
@@ -66,15 +65,14 @@ export default class RhythmPlayer
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
@@ -238,7 +236,6 @@ export default class RhythmPlayer
             this.setState({ beatsPerMinute: value });
           }}
         />
-        <AgoraDivider />
       </>
     );
   }

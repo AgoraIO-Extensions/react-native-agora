@@ -20,7 +20,7 @@ public:
     EventHandler(void *plugin) {
         plugin_ = (__bridge AgoraRtcNg *)plugin;
     }
-    
+
     void OnEvent(const char *event, const char *data, void **buffer,
                  unsigned int *length, unsigned int buffer_count) {
         @autoreleasepool {
@@ -29,7 +29,7 @@ public:
                 NSString *base64Buffer = [[[NSData alloc] initWithBytes:buffer[i] length:length[i]] base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
                 [array addObject:base64Buffer];
             }
-            
+
             if (plugin_.hasListeners) {
                 [plugin_ sendEventWithName:EVENT_NAME
                                       body:@{
@@ -41,11 +41,11 @@ public:
             }
         }
     }
-    
+
     void OnEvent(EventParam *param) override {
         OnEvent(param->event, param->data, param->buffer, param->length, param->buffer_count);
     }
-    
+
 private:
     AgoraRtcNg *plugin_;
 };
@@ -64,18 +64,15 @@ static AgoraRtcNg *instance = nil;
 RCT_EXPORT_MODULE()
 
 + (instancetype)shareInstance {
-    return [[self alloc] init];
+    return instance;
 }
 
 - (instancetype)init {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [super init];
-        if (instance) {
-            instance.irisApiEngine = nullptr;
-            instance.eventHandler = new agora::iris::EventHandler((__bridge void *)self);
-        }
-    });
+    if (self = [super init]) {
+        self.irisApiEngine = nullptr;
+        self.eventHandler = new agora::iris::EventHandler((__bridge void *)self);
+        instance = self;
+    }
     return instance;
 }
 
@@ -144,7 +141,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
 #else
     args[@"params"];
 #endif
-    
+
     NSMutableArray<NSData *> *bufferArray = [NSMutableArray new];
 #ifdef RCT_NEW_ARCH_ENABLED
     if (args.buffers().has_value()) {
@@ -160,17 +157,17 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
             [bufferArray addObject:data];
         }
     }
-    
+
     void *buffers[bufferArray.count];
     unsigned int length[bufferArray.count];
     for (int i = 0; i < bufferArray.count; ++i) {
         buffers[i] = const_cast<void *>(bufferArray[i].bytes);
         length[i] = static_cast<unsigned int>(bufferArray[i].length);
     }
-    
+
     char result[kBasicResultLength] = "";
     int error_code;
-    
+
     ApiParam param = {
         .event = funcName.UTF8String,
         .data = params.UTF8String,
@@ -180,7 +177,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
         .length = length,
         .buffer_count = static_cast<unsigned int>(bufferArray.count),
     };
-    
+
     void *handler[1] = {self.eventHandler};
     if (bufferArray.count == 0) {
         std::smatch output;
@@ -191,10 +188,10 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
             param.buffer_count = 1;
         }
     }
-    
+
     [self newIrisApiEngine];
     error_code = self.irisApiEngine->CallIrisApi(&param);
-    
+
     if (error_code != 0) {
         NSError *error;
         NSData *data = [NSJSONSerialization
@@ -207,10 +204,13 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
     }
     return [NSString stringWithUTF8String:result];
 }
-    
 
 + (BOOL)requiresMainQueueSetup {
     return YES;
+}
+
+- (dispatch_queue_t)methodQueue {
+    return dispatch_get_main_queue();
 }
 
 - (NSArray<NSString *> *)supportedEvents {
@@ -223,6 +223,11 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
 
 - (void)stopObserving {
     _hasListeners = NO;
+}
+
+- (void)invalidate {
+    [super invalidate];
+    instance = nil;
 }
 
 // Don't compile this code when we build for the old architecture.

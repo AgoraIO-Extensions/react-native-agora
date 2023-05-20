@@ -1,0 +1,7 @@
+**/android/*
+**/ios/*
+**/dist/*
+**/node_modules/*
+.snapshots/
+lib/
+src/ti/

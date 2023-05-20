@@ -1,25 +1,17 @@
-import React from 'react';
-import {
-  PermissionsAndroid,
-  Platform,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   IRtcEngineEx,
   RemoteVideoState,
   RemoteVideoStateReason,
   RtcConnection,
   RtcStats,
-  RtcSurfaceView,
   UserOfflineReasonType,
+  VideoCanvas,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -27,9 +19,14 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
+  AgoraCard,
+  AgoraList,
   AgoraStyle,
   AgoraTextInput,
+  RtcSurfaceView,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   channelId2: string;
@@ -76,18 +73,17 @@ export default class JoinMultipleChannel
     this.engine = createAgoraRtcEngine() as IRtcEngineEx;
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -248,12 +244,15 @@ export default class JoinMultipleChannel
       'elapsed',
       elapsed
     );
-    const { channelId, channelId2 } = this.state;
-    if (connection.channelId === channelId) {
+    const { channelId, channelId2, uid, uid2 } = this.state;
+    if (connection.channelId === channelId && connection.localUid === uid) {
       this.setState({
         joinChannelSuccess: true,
       });
-    } else if (connection.channelId === channelId2) {
+    } else if (
+      connection.channelId === channelId2 &&
+      connection.localUid === uid2
+    ) {
       this.setState({
         joinChannelSuccess2: true,
       });
@@ -262,13 +261,16 @@ export default class JoinMultipleChannel
 
   onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
     this.info('onLeaveChannel', 'connection', connection, 'stats', stats);
-    const { channelId, channelId2 } = this.state;
-    if (connection.channelId === channelId) {
+    const { channelId, channelId2, uid, uid2 } = this.state;
+    if (connection.channelId === channelId && connection.localUid === uid) {
       this.setState({
         joinChannelSuccess: false,
         remoteUsers: [],
       });
-    } else if (connection.channelId === channelId2) {
+    } else if (
+      connection.channelId === channelId2 &&
+      connection.localUid === uid2
+    ) {
       this.setState({
         joinChannelSuccess2: false,
         remoteUsers2: [],
@@ -326,19 +328,26 @@ export default class JoinMultipleChannel
       'elapsed',
       elapsed
     );
-    const { channelId, channelId2, remoteUsers, remoteUsers2 } = this.state;
+    const { channelId, channelId2, uid, uid2, remoteUsers, remoteUsers2 } =
+      this.state;
     if (state === RemoteVideoState.RemoteVideoStateStarting) {
-      if (connection.channelId === channelId) {
+      if (connection.channelId === channelId && connection.localUid === uid) {
         this.setState({ remoteUsers: [...remoteUsers, remoteUid] });
-      } else if (connection.channelId === channelId2) {
+      } else if (
+        connection.channelId === channelId2 &&
+        connection.localUid === uid2
+      ) {
         this.setState({ remoteUsers2: [...remoteUsers2, remoteUid] });
       }
     } else if (state === RemoteVideoState.RemoteVideoStateStopped) {
-      if (connection.channelId === channelId) {
+      if (connection.channelId === channelId && connection.localUid === uid) {
         this.setState({
           remoteUsers: remoteUsers.filter((value) => value !== remoteUid),
         });
-      } else if (connection.channelId === channelId2) {
+      } else if (
+        connection.channelId === channelId2 &&
+        connection.localUid === uid2
+      ) {
         this.setState({
           remoteUsers2: remoteUsers2.filter((value) => value !== remoteUid),
         });
@@ -371,9 +380,7 @@ export default class JoinMultipleChannel
               uid: text === '' ? this.createState().uid : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`uid (must > 0)`}
           value={uid > 0 ? uid.toString() : ''}
         />
@@ -397,9 +404,7 @@ export default class JoinMultipleChannel
               uid2: text === '' ? this.createState().uid2 : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`uid2 (must > 0)`}
           value={uid2 > 0 ? uid2.toString() : ''}
         />
@@ -428,35 +433,34 @@ export default class JoinMultipleChannel
     return (
       <>
         {startPreview || joinChannelSuccess || joinChannelSuccess2 ? (
-          <RtcSurfaceView style={AgoraStyle.videoLarge} canvas={{ uid: 0 }} />
-        ) : undefined}
-        {remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
-            {remoteUsers.map((value, index) => (
-              <RtcSurfaceView
-                key={`${value}-${index}`}
-                style={AgoraStyle.videoSmall}
-                canvas={{ uid: value }}
-                zOrderMediaOverlay={true}
-                connection={{ channelId, localUid: uid }}
-              />
-            ))}
-          </ScrollView>
-        ) : undefined}
-        {remoteUsers2.length > 0 ? (
-          <ScrollView horizontal={true} style={styles.videoContainer2}>
-            {remoteUsers2.map((value, index) => (
-              <RtcSurfaceView
-                key={`${value}-${index}`}
-                style={AgoraStyle.videoSmall}
-                canvas={{ uid: value }}
-                zOrderMediaOverlay={true}
-                connection={{ channelId: channelId2, localUid: uid2 }}
-              />
-            ))}
-          </ScrollView>
+          <AgoraList
+            data={[0, ...remoteUsers, ...remoteUsers2]}
+            renderItem={({ item }) => {
+              return this.renderVideo(
+                { uid: item },
+                remoteUsers2.indexOf(item) === -1 ? channelId : channelId2,
+                remoteUsers2.indexOf(item) === -1 ? uid : uid2
+              );
+            }}
+          />
         ) : undefined}
       </>
+    );
+  }
+
+  protected renderVideo(
+    user: VideoCanvas,
+    channelId?: string,
+    localUid?: number
+  ): ReactElement {
+    return (
+      <AgoraCard title={`${channelId} - ${user.uid}`}>
+        <RtcSurfaceView
+          style={AgoraStyle.videoSmall}
+          canvas={user}
+          connection={{ channelId, localUid }}
+        />
+      </AgoraCard>
     );
   }
 
@@ -478,11 +482,3 @@ export default class JoinMultipleChannel
     );
   }
 }
-
-const styles = StyleSheet.create({
-  videoContainer2: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-  },
-});

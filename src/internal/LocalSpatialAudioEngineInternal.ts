@@ -4,26 +4,26 @@ import {
   SpatialAudioZone,
 } from '../IAgoraSpatialAudio';
 
-import { ILocalSpatialAudioEngineImpl } from '../impl/IAgoraSpatialAudioImpl';
-
 export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImpl {
-  protected getApiTypeFromRelease(): string {
+  protected override getApiTypeFromRelease(): string {
     return 'LocalSpatialAudioEngine_release';
   }
 
-  protected getApiTypeFromSetMaxAudioRecvCount(maxCount: number): string {
+  protected override getApiTypeFromSetMaxAudioRecvCount(
+    maxCount: number
+  ): string {
     return 'LocalSpatialAudioEngine_setMaxAudioRecvCount';
   }
 
-  protected getApiTypeFromSetAudioRecvRange(range: number): string {
+  protected override getApiTypeFromSetAudioRecvRange(range: number): string {
     return 'LocalSpatialAudioEngine_setAudioRecvRange';
   }
 
-  protected getApiTypeFromSetDistanceUnit(unit: number): string {
+  protected override getApiTypeFromSetDistanceUnit(unit: number): string {
     return 'LocalSpatialAudioEngine_setDistanceUnit';
   }
 
-  protected getApiTypeFromUpdateSelfPosition(
+  protected override getApiTypeFromUpdateSelfPosition(
     position: number[],
     axisForward: number[],
     axisRight: number[],
@@ -32,7 +32,7 @@ export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImp
     return 'LocalSpatialAudioEngine_updateSelfPosition';
   }
 
-  protected getApiTypeFromUpdateSelfPositionEx(
+  protected override getApiTypeFromUpdateSelfPositionEx(
     position: number[],
     axisForward: number[],
     axisRight: number[],
@@ -42,33 +42,35 @@ export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImp
     return 'LocalSpatialAudioEngine_updateSelfPositionEx';
   }
 
-  protected getApiTypeFromUpdatePlayerPositionInfo(
+  protected override getApiTypeFromUpdatePlayerPositionInfo(
     playerId: number,
     positionInfo: RemoteVoicePositionInfo
   ): string {
     return 'LocalSpatialAudioEngine_updatePlayerPositionInfo';
   }
 
-  protected getApiTypeFromSetParameters(params: string): string {
+  protected override getApiTypeFromSetParameters(params: string): string {
     return 'LocalSpatialAudioEngine_setParameters';
   }
 
-  protected getApiTypeFromMuteLocalAudioStream(mute: boolean): string {
+  protected override getApiTypeFromMuteLocalAudioStream(mute: boolean): string {
     return 'LocalSpatialAudioEngine_muteLocalAudioStream';
   }
 
-  protected getApiTypeFromMuteAllRemoteAudioStreams(mute: boolean): string {
+  protected override getApiTypeFromMuteAllRemoteAudioStreams(
+    mute: boolean
+  ): string {
     return 'LocalSpatialAudioEngine_muteAllRemoteAudioStreams';
   }
 
-  protected getApiTypeFromSetZones(
+  protected override getApiTypeFromSetZones(
     zones: SpatialAudioZone[],
     zoneCount: number
   ): string {
     return 'LocalSpatialAudioEngine_setZones';
   }
 
-  protected getApiTypeFromSetPlayerAttenuation(
+  protected override getApiTypeFromSetPlayerAttenuation(
     playerId: number,
     attenuation: number,
     forceSet: boolean
@@ -76,10 +78,12 @@ export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImp
     return 'LocalSpatialAudioEngine_setPlayerAttenuation';
   }
 
-  protected getApiTypeFromMuteRemoteAudioStream(
+  protected override getApiTypeFromMuteRemoteAudioStream(
     uid: number,
     mute: boolean
   ): string {
     return 'LocalSpatialAudioEngine_muteRemoteAudioStream';
   }
 }
+
+import { ILocalSpatialAudioEngineImpl } from '../impl/IAgoraSpatialAudioImpl';

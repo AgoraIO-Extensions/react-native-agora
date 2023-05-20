@@ -1,23 +1,30 @@
 import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import {
   AudioEffectPreset,
   AudioEqualizationBandFrequency,
   AudioReverbType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
   BaseComponent,
 } from '../../../components/BaseComponent';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraDropdown,
+  AgoraSlider,
+} from '../../../components/ui';
+import Config from '../../../config/agora.config';
+import { enumToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
+
 import {
   AudioEffectPresetParam1Limit,
   AudioEffectPresetParam2Limit,
@@ -25,13 +32,6 @@ import {
   VoiceBeautifierPresetParam1Limit,
   VoiceBeautifierPresetParam2Limit,
 } from './VoiceChangerConfig';
-import {
-  AgoraButton,
-  AgoraDivider,
-  AgoraDropdown,
-  AgoraSlider,
-} from '../../../components/ui';
-import { enumToItems } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   voiceBeautifierPreset: VoiceBeautifierPreset;
@@ -84,20 +84,14 @@ export default class VoiceChanger
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
-
-    // Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      this.engine?.loadExtensionProvider('agora_audio_beauty_extension');
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
@@ -226,7 +220,6 @@ export default class VoiceChanger
         {this._renderLocalVoicePitch()}
         <AgoraDivider />
         {this._renderVoiceConversionPreset()}
-        <AgoraDivider />
       </>
     );
   }

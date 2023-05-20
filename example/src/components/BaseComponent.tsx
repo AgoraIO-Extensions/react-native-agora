@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { ParamListBase } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { Component, ReactElement, ReactNode, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -14,18 +16,21 @@ import {
   RtcStats,
   RtcSurfaceView,
   UserOfflineReasonType,
+  VideoCanvas,
+  VideoSourceType,
 } from 'react-native-agora';
-import { StackScreenProps } from '@react-navigation/stack';
 
+import { LogSink } from './LogSink';
 import {
   AgoraButton,
+  AgoraCard,
   AgoraDivider,
+  AgoraList,
   AgoraStyle,
   AgoraText,
   AgoraTextInput,
   AgoraView,
 } from './ui';
-import { LogSink } from './LogSink';
 
 const Header = ({ getData }: { getData: () => Array<string> }) => {
   const [visible, setVisible] = useState(false);
@@ -70,21 +75,20 @@ export interface BaseVideoComponentState extends BaseAudioComponentState {
 }
 
 export abstract class BaseComponent<
-    P = {},
+    P extends ParamListBase,
     S extends BaseComponentState = BaseComponentState
   >
-  extends React.Component<P & StackScreenProps<{}>, S>
+  extends Component<StackScreenProps<{ [T in keyof P]: P[T] }, string>, S>
   implements IRtcEngineEventHandler
 {
   protected engine?: IRtcEngine;
   private _data: Array<string> = [];
 
-  protected constructor(props: P & StackScreenProps<{}>) {
+  constructor(props: StackScreenProps<{ [T in keyof P]: P[T] }, string>) {
     super(props);
     this.state = this.createState();
-    props.navigation.setOptions({
-      headerRight: () => <Header getData={() => this._data} />,
-    });
+    const headerRight = () => <Header getData={() => this._data} />;
+    props.navigation.setOptions({ headerRight });
   }
 
   componentDidMount() {
@@ -164,7 +168,7 @@ export abstract class BaseComponent<
   }
 
   render() {
-    const { enableVideo } = this.state;
+    const users = this.renderUsers();
     const configuration = this.renderConfiguration();
     return (
       <KeyboardAvoidingView
@@ -174,16 +178,14 @@ export abstract class BaseComponent<
         <AgoraView style={AgoraStyle.fullWidth}>
           {this.renderChannel()}
         </AgoraView>
-        {enableVideo ? (
-          <AgoraView style={AgoraStyle.videoLarge}>
-            {this.renderUsers()}
-          </AgoraView>
+        {users ? (
+          <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
         ) : undefined}
         {configuration ? (
           <>
             <AgoraDivider />
             <AgoraText style={styles.title}>
-              The Configuration of {this.constructor.name}
+              {`The Configuration of ${this.constructor.name}`}
             </AgoraText>
             <AgoraDivider />
             <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
@@ -194,7 +196,7 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderChannel(): React.ReactNode {
+  protected renderChannel(): ReactNode {
     const { channelId, joinChannelSuccess } = this.state;
     return (
       <>
@@ -215,39 +217,59 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderUsers(): React.ReactNode {
-    const { startPreview, joinChannelSuccess, remoteUsers } = this.state;
-    return (
+  protected renderUsers(): ReactNode {
+    const { enableVideo, startPreview, joinChannelSuccess, remoteUsers } =
+      this.state;
+    return enableVideo ? (
       <>
-        {startPreview || joinChannelSuccess ? this.renderVideo(0) : undefined}
-        {remoteUsers !== undefined && remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
-            {remoteUsers.map((value, index) => (
-              <AgoraView key={`${value}-${index}`}>
-                {this.renderVideo(value)}
-              </AgoraView>
-            ))}
-          </ScrollView>
+        {!!startPreview || joinChannelSuccess
+          ? this.renderUser({
+              uid: 0,
+              sourceType: VideoSourceType.VideoSourceCamera,
+            })
+          : undefined}
+        {!!startPreview || joinChannelSuccess ? (
+          <AgoraList
+            style={AgoraStyle.videoContainer}
+            numColumns={undefined}
+            horizontal={true}
+            data={remoteUsers}
+            renderItem={({ item }) =>
+              this.renderUser({
+                uid: item,
+                sourceType: VideoSourceType.VideoSourceRemote,
+              })
+            }
+          />
         ) : undefined}
       </>
+    ) : undefined;
+  }
+
+  protected renderUser(user: VideoCanvas): ReactElement {
+    const video = this.renderVideo(user);
+    return user.uid === 0 ? (
+      video
+    ) : (
+      <AgoraCard title={`${user.uid} - ${user.sourceType}`}>{video}</AgoraCard>
     );
   }
 
-  protected renderVideo(uid: number): React.ReactNode {
+  protected renderVideo(user: VideoCanvas): ReactElement {
     return (
       <RtcSurfaceView
-        style={uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={uid !== 0}
-        canvas={{ uid }}
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={user.uid !== 0}
+        canvas={user}
       />
     );
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactNode {
     return undefined;
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactNode {
     return undefined;
   }
 
