@@ -8,7 +8,7 @@
 #else
 #import <React/RCTBridgeModule.h>
 
-@interface AgoraRtcNg : RCTEventEmitter <RCTBridgeModule, RCTInvalidating>
+@interface AgoraRtcNg : RCTEventEmitter <RCTBridgeModule>
 #endif
 
 @property(nonatomic) IApiEngineBase *irisApiEngine;

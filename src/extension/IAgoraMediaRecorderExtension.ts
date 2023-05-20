@@ -1,4 +1,5 @@
 import { IMediaRecorderObserver } from '../AgoraMediaBase';
+import { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaRecorderEvent = IMediaRecorderObserver;
 
@@ -18,11 +19,14 @@ declare module '../IAgoraMediaRecorder' {
      * const onRecorderStateChanged = (state: RecorderState, error: RecorderErrorCode) => {};
      * // Add one onRecorderStateChanged listener
      * engine.addListener('onRecorderStateChanged', onRecorderStateChanged);
+     *
+     * @returns
+     * The native interface EventSubscription in React Native API.
      */
     addListener<EventType extends keyof IMediaRecorderEvent>(
       eventType: EventType,
       listener: IMediaRecorderEvent[EventType]
-    ): void;
+    ): EmitterSubscription;
 
     /**
      * Removes the specified IMediaRecorderEvent listener.
@@ -39,7 +43,7 @@ declare module '../IAgoraMediaRecorder' {
      */
     removeListener<EventType extends keyof IMediaRecorderEvent>(
       eventType: EventType,
-      listener?: IMediaRecorderEvent[EventType]
+      listener: IMediaRecorderEvent[EventType]
     ): void;
 
     /**
@@ -50,10 +54,5 @@ declare module '../IAgoraMediaRecorder' {
     removeAllListeners<EventType extends keyof IMediaRecorderEvent>(
       eventType?: EventType
     ): void;
-
-    /**
-     * @ignore
-     */
-    release(): void;
   }
 }

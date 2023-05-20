@@ -14,6 +14,10 @@ export const _logSink = (
   return content;
 };
 
+export const alert = (title: string, message?: string): void => {
+  Alert.alert(title, message);
+};
+
 export const debug = (message?: any, ...optionalParams: any[]): void => {
   alert(message, _logSink('debug', message, optionalParams));
 };
@@ -32,8 +36,4 @@ export const warn = (message?: any, ...optionalParams: any[]): void => {
 
 export const error = (message?: any, ...optionalParams: any[]): void => {
   _logSink('error', message, optionalParams);
-};
-
-export const alert = (title: string, message?: string): void => {
-  Alert.alert(title, message);
 };

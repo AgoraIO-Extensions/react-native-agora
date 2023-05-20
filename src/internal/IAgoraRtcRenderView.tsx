@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { HostComponent, StyleSheet } from 'react-native';
+import { HostComponent } from 'react-native';
 
-import { VideoSourceType } from '../AgoraMediaBase';
+import { VideoSourceType } from '../AgoraBase';
 import { RtcRendererViewProps } from '../AgoraRtcRenderView';
-
 import { IrisApiParam } from './IrisApiEngine';
 
 export default abstract class IAgoraRtcRenderView<
@@ -21,6 +20,8 @@ export default abstract class IAgoraRtcRenderView<
       } else {
         funcName = 'RtcEngine_setupLocalVideo';
       }
+    } else if (canvas.sourceType === VideoSourceType.VideoSourceMediaPlayer) {
+      funcName = 'MediaPlayer_setView';
     } else if (canvas.sourceType === VideoSourceType.VideoSourceRemote) {
       funcName = 'RtcEngine_setupRemoteVideo';
     } else {
@@ -34,22 +35,12 @@ export default abstract class IAgoraRtcRenderView<
   }
 
   params(props: RtcRendererViewProps): IrisApiParam {
-    const { canvas, connection } = props;
-    let { mediaPlayerId } = canvas;
-    if (
-      canvas.sourceType === VideoSourceType.VideoSourceMediaPlayer &&
-      canvas.mediaPlayerId === undefined
-    ) {
-      mediaPlayerId = canvas.uid;
-    }
     return {
       funcName: this.funcName,
       params: JSON.stringify({
-        canvas: {
-          ...canvas,
-          mediaPlayerId,
-        },
-        connection,
+        canvas: props.canvas,
+        connection: props.connection,
+        playerId: props.canvas.uid,
       }),
     };
   }
@@ -59,16 +50,9 @@ export default abstract class IAgoraRtcRenderView<
     const AgoraRtcRenderer = this.view;
     return (
       <AgoraRtcRenderer
-        style={styles.renderer}
         callApi={this.params({ canvas, connection })}
         {...others}
       />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  renderer: {
-    flex: 1,
-  },
-});

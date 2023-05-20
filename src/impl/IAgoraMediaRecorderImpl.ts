@@ -1,17 +1,27 @@
+import { callIrisApi } from '../internal/IrisApiEngine';
+import { IMediaRecorder } from '../IAgoraMediaRecorder';
+import { RtcConnection } from '../IAgoraRtcEngineEx';
 import {
   IMediaRecorderObserver,
   MediaRecorderConfiguration,
 } from '../AgoraMediaBase';
-import { IMediaRecorder } from '../IAgoraMediaRecorder';
-
 // @ts-ignore
 export class IMediaRecorderImpl implements IMediaRecorder {
-  setMediaRecorderObserver(callback: IMediaRecorderObserver): number {
-    const apiType = this.getApiTypeFromSetMediaRecorderObserver(callback);
+  setMediaRecorderObserver(
+    connection: RtcConnection,
+    callback: IMediaRecorderObserver
+  ): number {
+    const apiType = this.getApiTypeFromSetMediaRecorderObserver(
+      connection,
+      callback
+    );
     const jsonParams = {
+      connection: connection,
       callback: callback,
       toJSON: () => {
-        return {};
+        return {
+          connection: connection,
+        };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
@@ -19,17 +29,23 @@ export class IMediaRecorderImpl implements IMediaRecorder {
   }
 
   protected getApiTypeFromSetMediaRecorderObserver(
+    connection: RtcConnection,
     callback: IMediaRecorderObserver
   ): string {
     return 'MediaRecorder_setMediaRecorderObserver';
   }
 
-  startRecording(config: MediaRecorderConfiguration): number {
-    const apiType = this.getApiTypeFromStartRecording(config);
+  startRecording(
+    connection: RtcConnection,
+    config: MediaRecorderConfiguration
+  ): number {
+    const apiType = this.getApiTypeFromStartRecording(connection, config);
     const jsonParams = {
+      connection: connection,
       config: config,
       toJSON: () => {
         return {
+          connection: connection,
           config: config,
         };
       },
@@ -39,21 +55,37 @@ export class IMediaRecorderImpl implements IMediaRecorder {
   }
 
   protected getApiTypeFromStartRecording(
+    connection: RtcConnection,
     config: MediaRecorderConfiguration
   ): string {
     return 'MediaRecorder_startRecording';
   }
 
-  stopRecording(): number {
-    const apiType = this.getApiTypeFromStopRecording();
-    const jsonParams = {};
+  stopRecording(connection: RtcConnection): number {
+    const apiType = this.getApiTypeFromStopRecording(connection);
+    const jsonParams = {
+      connection: connection,
+      toJSON: () => {
+        return {
+          connection: connection,
+        };
+      },
+    };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
-  protected getApiTypeFromStopRecording(): string {
+  protected getApiTypeFromStopRecording(connection: RtcConnection): string {
     return 'MediaRecorder_stopRecording';
   }
-}
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+  release(): void {
+    const apiType = this.getApiTypeFromRelease();
+    const jsonParams = {};
+    callIrisApi.call(this, apiType, jsonParams);
+  }
+
+  protected getApiTypeFromRelease(): string {
+    return 'MediaRecorder_release';
+  }
+}

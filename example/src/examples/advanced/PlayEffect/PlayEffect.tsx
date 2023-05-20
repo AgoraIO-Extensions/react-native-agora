@@ -1,10 +1,13 @@
 import React from 'react';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  IRtcEngineEventHandler,
   createAgoraRtcEngine,
+  IRtcEngineEventHandler,
 } from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -17,9 +20,7 @@ import {
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
-import { getAbsolutePath, getResourcePath } from '../../../utils';
-import { askMediaAccess } from '../../../utils/permissions';
+import { getAbsolutePath, getAssetPath } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   soundId: number;
@@ -48,7 +49,7 @@ export default class PlayEffect
       joinChannelSuccess: false,
       remoteUsers: [],
       soundId: 0,
-      filePath: getResourcePath('effect.mp3'),
+      filePath: getAssetPath('Sound_Horizon.mp3'),
       loopCount: 1,
       pitch: 1.0,
       pan: 0,
@@ -72,14 +73,15 @@ export default class PlayEffect
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone permission
-    await askMediaAccess(['android.permission.RECORD_AUDIO']);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone permission
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
+    }
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
@@ -205,7 +207,9 @@ export default class PlayEffect
               soundId: text === '' ? this.createState().soundId : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`soundId (defaults: ${this.createState().soundId})`}
         />
         <AgoraTextInput
@@ -222,7 +226,9 @@ export default class PlayEffect
               loopCount: text === '' ? this.createState().loopCount : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`loopCount (defaults: ${this.createState().loopCount})`}
         />
         <AgoraSlider
@@ -273,7 +279,9 @@ export default class PlayEffect
               startPos: text === '' ? this.createState().startPos : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`startPos (defaults: ${this.createState().startPos})`}
         />
       </>

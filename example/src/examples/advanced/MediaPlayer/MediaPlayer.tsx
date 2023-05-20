@@ -1,14 +1,18 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import {
+  createAgoraRtcEngine,
   IMediaPlayer,
   IMediaPlayerSourceObserver,
   IRtcEngineEventHandler,
   MediaPlayerError,
   MediaPlayerEvent,
   MediaPlayerState,
+  RtcSurfaceView,
   VideoSourceType,
-  createAgoraRtcEngine,
 } from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -18,10 +22,9 @@ import {
   AgoraButton,
   AgoraDivider,
   AgoraSlider,
+  AgoraStyle,
   AgoraTextInput,
-  RtcSurfaceView,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
 
 interface State extends BaseComponentState {
   url: string;
@@ -69,7 +72,6 @@ export default class MediaPlayer
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
     });
     this.engine.registerEventHandler(this);
 
@@ -332,7 +334,9 @@ export default class MediaPlayer
               loopCount: text === '' ? this.createState().loopCount : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`loopCount (defaults: ${this.createState().loopCount})`}
         />
         <AgoraButton
@@ -340,6 +344,7 @@ export default class MediaPlayer
           title={'set Loop Count'}
           onPress={this.setLoopCount}
         />
+        <AgoraDivider />
       </>
     );
   }
@@ -350,8 +355,9 @@ export default class MediaPlayer
       <>
         {open ? (
           <RtcSurfaceView
+            style={AgoraStyle.videoLarge}
             canvas={{
-              mediaPlayerId: this.player?.getMediaPlayerId(),
+              uid: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,
             }}
           />

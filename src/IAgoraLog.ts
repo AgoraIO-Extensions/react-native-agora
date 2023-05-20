@@ -68,11 +68,11 @@ export enum LogFilterType {
  */
 export class LogConfig {
   /**
-   * The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files.The default path is:Android：/storage/emulated/0/Android/data/<packagename>/files/agorasdk.log.iOS：App Sandbox/Library/caches/agorasdk.log.
+   * The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files.The default file path is:Android：/storage/emulated/0/Android/data/<packagename>/files/agorasdk.log.iOS：App Sandbox/Library/caches/agorasdk.log.
    */
   filePath?: string;
   /**
-   * The size (KB) of an agorasdk.log file. The value range is [128,1024]. The default value is 1,024 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 1,024 KB, the SDK automatically adjusts it to 1,024 KB.
+   * The size (KB) of an agorasdk.log file. The value range is [128,1024]. The default value is 1,024 KB. If you set fileSizeInKByte to a value lower than 128 KB, the SDK adjusts it to 128 KB. If you set fileSizeInKBytes to a value higher than 1,024 KB, the SDK adjusts it to 1,024 KB.
    */
   fileSizeInKB?: number;
   /**

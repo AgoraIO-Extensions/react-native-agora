@@ -1,9 +1,9 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  IMediaRecorder,
+  createAgoraRtcEngine,
   IMediaRecorderObserver,
   IRtcEngineEventHandler,
   MediaRecorderContainerFormat,
@@ -11,9 +11,10 @@ import {
   RecorderErrorCode,
   RecorderInfo,
   RecorderState,
-  createAgoraRtcEngine,
 } from 'react-native-agora';
 import RNFS from 'react-native-fs';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -26,9 +27,7 @@ import {
   AgoraSlider,
   AgoraTextInput,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
-import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   storagePath: string;
@@ -43,8 +42,6 @@ export default class MediaRecorder
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler, IMediaRecorderObserver
 {
-  protected recorder?: IMediaRecorder;
-
   protected createState(): State {
     return {
       appId: Config.appId,
@@ -80,17 +77,18 @@ export default class MediaRecorder
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone and camera permission
-    await askMediaAccess([
-      'android.permission.RECORD_AUDIO',
-      'android.permission.CAMERA',
-    ]);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone and camera permission
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -125,27 +123,14 @@ export default class MediaRecorder
       // Make myself as the broadcaster to send stream to remote
       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
     });
-
-    this.createMediaRecorder();
   }
 
   /**
-   * Step 3-1: createMediaRecorder
-   */
-  createMediaRecorder = () => {
-    const { channelId, uid } = this.state;
-    this.recorder = this.engine?.createMediaRecorder({
-      channelId,
-      uid,
-    });
-    this.recorder?.setMediaRecorderObserver(this);
-  };
-
-  /**
-   * Step 3-2: startRecording
+   * Step 3-1: startRecording
    */
   startRecording = () => {
     const {
+      channelId,
       uid,
       storagePath,
       containerFormat,
@@ -153,75 +138,50 @@ export default class MediaRecorder
       maxDurationMs,
       recorderInfoUpdateInterval,
     } = this.state;
-    this.recorder?.startRecording({
-      storagePath: `${storagePath}/${uid}.mp4`,
-      containerFormat,
-      streamType,
-      maxDurationMs,
-      recorderInfoUpdateInterval,
-    });
+    this.engine
+      ?.getMediaRecorder()
+      .setMediaRecorderObserver({ channelId, localUid: uid }, this);
+    this.engine?.getMediaRecorder().startRecording(
+      { channelId, localUid: uid },
+      {
+        storagePath: `${storagePath}/${uid}.mp4`,
+        containerFormat,
+        streamType,
+        maxDurationMs,
+        recorderInfoUpdateInterval,
+      }
+    );
   };
 
   /**
-   * Step 3-3: stopRecording
+   * Step 3-2: stopRecording
    */
   stopRecording = () => {
-    this.recorder?.stopRecording();
+    const { channelId, uid } = this.state;
+    this.engine?.getMediaRecorder().stopRecording({ channelId, localUid: uid });
   };
 
   /**
-   * Step 4: destroyMediaRecorder
-   */
-  protected destroyMediaRecorder() {
-    if (!this.recorder) return;
-    this.engine?.destroyMediaRecorder(this.recorder);
-  }
-
-  /**
-   * Step 5: leaveChannel
+   * Step 4: leaveChannel
    */
   protected leaveChannel() {
     this.engine?.leaveChannel();
   }
 
   /**
-   * Step 6: releaseRtcEngine
+   * Step 5: releaseRtcEngine
    */
   protected releaseRtcEngine() {
-    this.destroyMediaRecorder();
     this.engine?.unregisterEventHandler(this);
     this.engine?.release();
   }
 
-  onRecorderInfoUpdated(channelId: string, uid: number, info: RecorderInfo) {
-    this.info(
-      'onRecorderInfoUpdated',
-      'channelId',
-      channelId,
-      'uid',
-      uid,
-      'info',
-      info
-    );
+  onRecorderInfoUpdated(info: RecorderInfo) {
+    this.info('onRecorderInfoUpdated', 'info', info);
   }
 
-  onRecorderStateChanged(
-    channelId: string,
-    uid: number,
-    state: RecorderState,
-    error: RecorderErrorCode
-  ) {
-    this.info(
-      'onRecorderStateChanged',
-      'channelId',
-      channelId,
-      'uid',
-      uid,
-      'state',
-      state,
-      'error',
-      error
-    );
+  onRecorderStateChanged(state: RecorderState, error: RecorderErrorCode) {
+    this.info('onRecorderStateChanged', 'state', state, 'error', error);
     switch (state) {
       case RecorderState.RecorderStateStart:
         this.setState({ startRecoding: true });
@@ -278,7 +238,9 @@ export default class MediaRecorder
                 text === '' ? this.createState().maxDurationMs : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`maxDurationMs (defaults: ${
             this.createState().maxDurationMs
           })`}

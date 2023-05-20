@@ -4,22 +4,40 @@ import {
   IMusicContentCenterEventHandler,
   IMusicPlayer,
   Music,
-  MusicCollection,
 } from '../IAgoraMusicContentCenter';
+
 import { IMusicContentCenterEvent } from '../extension/IAgoraMusicContentCenterExtension';
+
+import {
+  IMusicContentCenterImpl,
+  IMusicPlayerImpl,
+  MusicCollectionImpl,
+  processIMusicContentCenterEventHandler,
+} from '../impl/IAgoraMusicContentCenterImpl';
 
 import IAgoraMusicContentCenterTI from '../ti/IAgoraMusicContentCenter-ti';
 const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-} from './IrisApiEngine';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
+
+import { EmitterSubscription } from './emitter/EventEmitter';
+import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   static _event_handlers: IMusicContentCenterEventHandler[] = [];
+  private _events: Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  > = new Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  >();
 
   _addListenerPreCheck<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType
@@ -39,39 +57,53 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   addListener<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType,
     listener: IMusicContentCenterEvent[EventType]
-  ): void {
+  ): EmitterSubscription {
     this._addListenerPreCheck(eventType);
-    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
-      if (eventProcessor.type(data) !== EVENT_TYPE.IMusicContentCenter) {
+    const callback = (...data: any[]) => {
+      if (data[0] !== EVENT_TYPE.IMusicContentCenter) {
         return;
       }
-      eventProcessor.func.map((it) => {
-        it({ [eventType]: listener }, eventType, data);
-      });
+      processIMusicContentCenterEventHandler(
+        { [eventType]: listener },
+        eventType,
+        data[1]
+      );
     };
-    listener!.prototype.callback = callback;
-    DeviceEventEmitter.addListener(eventType, callback);
+    const subscription = DeviceEventEmitter.addListener(eventType, callback);
+    this._events.set(listener, { eventType, subscription });
+    return subscription;
   }
 
   removeListener<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType,
-    listener?: IMusicContentCenterEvent[EventType]
+    listener: IMusicContentCenterEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(
-      eventType,
-      listener?.prototype.callback ?? listener
+    if (!this._events.has(listener)) return;
+    DeviceEventEmitter.removeSubscription(
+      this._events.get(listener)!.subscription
     );
+    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IMusicContentCenterEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    if (eventType === undefined) {
+      this._events.forEach((value) => {
+        DeviceEventEmitter.removeAllListeners(value.eventType);
+      });
+      this._events.clear();
+    } else {
+      DeviceEventEmitter.removeAllListeners(eventType);
+      this._events.forEach((value, key) => {
+        if (value.eventType === eventType) {
+          this._events.delete(key);
+        }
+      });
+    }
   }
 
-  override registerEventHandler(
-    eventHandler: IMusicContentCenterEventHandler
-  ): number {
+  registerEventHandler(eventHandler: IMusicContentCenterEventHandler): number {
     if (
       !MusicContentCenterInternal._event_handlers.find(
         (value) => value === eventHandler
@@ -82,17 +114,17 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     return super.registerEventHandler(eventHandler);
   }
 
-  override unregisterEventHandler(): number {
+  unregisterEventHandler(): number {
     MusicContentCenterInternal._event_handlers = [];
     return super.unregisterEventHandler();
   }
 
-  override release() {
+  release() {
     MusicContentCenterInternal._event_handlers = [];
     super.release();
   }
 
-  override createMusicPlayer(): IMusicPlayer {
+  createMusicPlayer(): IMusicPlayer {
     // @ts-ignore
     const mediaPlayerId = super.createMusicPlayer() as number;
     return new MusicPlayerInternal(mediaPlayerId);
@@ -107,11 +139,11 @@ class _MusicPlayerInternal extends IMusicPlayerImpl {
     this._mediaPlayerId = mediaPlayerId;
   }
 
-  override getMediaPlayerId(): number {
+  getMediaPlayerId(): number {
     return this._mediaPlayerId;
   }
 
-  protected override getApiTypeFromOpenWithSongCode(
+  protected getApiTypeFromOpenWithSongCode(
     songCode: number,
     startPos = 0
   ): string {
@@ -136,74 +168,39 @@ export class MusicPlayerInternal
   }
 }
 
-class _MusicCollection extends MusicCollection {
+interface _MusicCollection {
   count: number;
   music: Music[];
   page: number;
   pageSize: number;
   total: number;
-
-  constructor(collection: any | _MusicCollection) {
-    super();
-    this.count = collection.count;
-    this.music = collection.music;
-    this.page = collection.page;
-    this.pageSize = collection.pageSize;
-    this.total = collection.total;
-  }
-
-  getCount(): number {
-    return this.count;
-  }
-
-  getMusic(index: number): Music {
-    return this.music[index] ?? {};
-  }
-
-  getPage(): number {
-    return this.page;
-  }
-
-  getPageSize(): number {
-    return this.pageSize;
-  }
-
-  getTotal(): number {
-    return this.total;
-  }
 }
 
 export class MusicCollectionInternal extends MusicCollectionImpl {
-  private readonly _musicCollection: MusicCollection;
+  private readonly _musicCollection: _MusicCollection;
 
-  constructor(musicCollection: MusicCollection) {
+  constructor(musicCollection: _MusicCollection) {
     super();
-    this._musicCollection = new _MusicCollection(musicCollection);
+    this._musicCollection = musicCollection;
   }
 
-  override getCount(): number {
-    return this._musicCollection.getCount();
+  getCount(): number {
+    return this._musicCollection.count;
   }
 
-  override getMusic(index: number): Music {
-    return this._musicCollection.getMusic(index);
+  getMusic(index: number): Music {
+    return this._musicCollection.music[index] ?? {};
   }
 
-  override getPage(): number {
-    return this._musicCollection.getPage();
+  getPage(): number {
+    return this._musicCollection.page;
   }
 
-  override getPageSize(): number {
-    return this._musicCollection.getPageSize();
+  getPageSize(): number {
+    return this._musicCollection.pageSize;
   }
 
-  override getTotal(): number {
-    return this._musicCollection.getTotal();
+  getTotal(): number {
+    return this._musicCollection.total;
   }
 }
-
-import {
-  IMusicContentCenterImpl,
-  IMusicPlayerImpl,
-  MusicCollectionImpl,
-} from '../impl/IAgoraMusicContentCenterImpl';

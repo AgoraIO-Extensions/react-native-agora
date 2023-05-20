@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "4.2.0-dev.15",
+  "version": "4.1.2",
   "description": "Agora RTC SDK For React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -61,7 +61,6 @@
     "@react-native-community/eslint-config": "^3.0.2",
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^28.1.2",
-    "@types/json-bigint": "^1.0.1",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
     "commitlint": "^17.0.2",
@@ -69,7 +68,6 @@
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-auto-import": "^0.1.1",
-    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.1",
     "patch-package": "^6.5.0",
@@ -99,9 +97,6 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/example/e2e"
     ]
   },
   "commitlint": {
@@ -127,6 +122,48 @@
       }
     }
   },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@react-native-community",
+      "prettier"
+    ],
+    "plugins": [
+      "auto-import"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ],
+      "no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "auto-import/auto-import": [
+        "error",
+        {
+          "rootPath": "./src"
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/",
+    "src/ti/"
+  ],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
@@ -143,7 +180,6 @@
   },
   "dependencies": {
     "buffer": "^6.0.3",
-    "eventemitter3": "^5.0.1",
     "json-bigint": "^1.0.0",
     "ts-interface-checker": "^1.0.2"
   },

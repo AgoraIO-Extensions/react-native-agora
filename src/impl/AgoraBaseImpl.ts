@@ -6,7 +6,7 @@ export function processIAudioEncodedFrameObserver(
   jsonParams: any
 ) {
   switch (event) {
-    case 'onRecordAudioEncodedFrame':
+    case 'OnRecordAudioEncodedFrame':
       if (handler.onRecordAudioEncodedFrame !== undefined) {
         handler.onRecordAudioEncodedFrame(
           jsonParams.frameBuffer,
@@ -16,7 +16,7 @@ export function processIAudioEncodedFrameObserver(
       }
       break;
 
-    case 'onPlaybackAudioEncodedFrame':
+    case 'OnPlaybackAudioEncodedFrame':
       if (handler.onPlaybackAudioEncodedFrame !== undefined) {
         handler.onPlaybackAudioEncodedFrame(
           jsonParams.frameBuffer,
@@ -26,7 +26,7 @@ export function processIAudioEncodedFrameObserver(
       }
       break;
 
-    case 'onMixedAudioEncodedFrame':
+    case 'OnMixedAudioEncodedFrame':
       if (handler.onMixedAudioEncodedFrame !== undefined) {
         handler.onMixedAudioEncodedFrame(
           jsonParams.frameBuffer,

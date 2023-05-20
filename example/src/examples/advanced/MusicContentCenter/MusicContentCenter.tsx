@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  createAgoraRtcEngine,
   IMediaPlayerSourceObserver,
   IMusicContentCenter,
   IMusicContentCenterEventHandler,
@@ -12,8 +13,9 @@ import {
   MusicCollection,
   MusicContentCenterStatusCode,
   PreloadStatusCode,
-  createAgoraRtcEngine,
 } from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -21,13 +23,12 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
+  AgoraDivider,
   AgoraDropdown,
   AgoraImage,
   AgoraSlider,
-  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
 
 interface State extends BaseComponentState {
   rtmAppId: string;
@@ -90,7 +91,6 @@ export default class MusicContentCenter
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
     });
   }
 
@@ -133,12 +133,12 @@ export default class MusicContentCenter
    */
   getMusicCollectionByMusicChartId = () => {
     const { musicChartId, page, pageSize } = this.state;
-    if (musicChartId < 0) {
+    if (!musicChartId) {
       this.error(`musicChartId is invalid`);
     }
 
     this.musicContentCenter?.getMusicCollectionByMusicChartId(
-      musicChartId,
+      musicChartId!,
       page,
       pageSize
     );
@@ -153,7 +153,7 @@ export default class MusicContentCenter
       this.error(`songCode is invalid`);
     }
 
-    this.musicContentCenter?.preload(songCode);
+    this.musicContentCenter?.preload(songCode!);
   };
 
   /**
@@ -175,7 +175,7 @@ export default class MusicContentCenter
     }
 
     this.createMusicPlayer();
-    this.player?.openWithSongCode(songCode, 0);
+    this.player?.openWithSongCode(songCode!, 0);
   };
 
   /**
@@ -250,19 +250,19 @@ export default class MusicContentCenter
 
   onMusicChartsResult(
     requestId: string,
-    result: MusicChartInfo[],
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode,
+    result: MusicChartInfo[]
   ) {
-    this.info('onMusicChartsResult', requestId, result, errorCode);
+    this.info('onMusicChartsResult', requestId, status, result);
     this.setState({ musicChartInfos: result });
   }
 
   onMusicCollectionResult(
     requestId: string,
-    result: MusicCollection,
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode,
+    result: MusicCollection
   ) {
-    this.info('onMusicCollectionResult', requestId, result, errorCode);
+    this.info('onMusicCollectionResult', requestId, status, result);
     this.setState({
       musicCollection: result,
       musics: Array.from({ length: result.getCount() }, (value, index) => {
@@ -274,11 +274,11 @@ export default class MusicContentCenter
   onPreLoadEvent(
     songCode: number,
     percent: number,
-    lyricUrl: string,
     status: PreloadStatusCode,
-    errorCode: MusicContentCenterStatusCode
+    msg: string,
+    lyricUrl?: string
   ) {
-    this.info('onPreLoadEvent', songCode, percent, lyricUrl, status, errorCode);
+    this.info('onPreLoadEvent', songCode, percent, status, msg, lyricUrl);
     if (songCode === this.state.songCode) {
       this.setState({
         preload: status === PreloadStatusCode.KPreloadStatusCompleted,
@@ -300,7 +300,7 @@ export default class MusicContentCenter
       case MediaPlayerState.PlayerStateOpenCompleted:
         this.setState({
           open: true,
-          duration: this.player?.getDuration() ?? 0,
+          duration: this.player?.getDuration()!,
         });
         break;
       case MediaPlayerState.PlayerStatePlaying:
@@ -406,6 +406,7 @@ export default class MusicContentCenter
           title={`init Music Content Center`}
           onPress={this.initMusicContentCenter}
         />
+        <AgoraDivider />
         <AgoraDropdown
           title={'musicChartInfos:'}
           items={musicChartInfos?.map((value) => {
@@ -419,6 +420,7 @@ export default class MusicContentCenter
             this.setState({ musicChartId: value });
           }}
         />
+        <AgoraDivider />
         {musicChartId >= 0 ? (
           <>
             <AgoraTextInput
@@ -445,6 +447,7 @@ export default class MusicContentCenter
               title={`get Music Collection`}
               onPress={this.getMusicCollectionByMusicChartId}
             />
+            <AgoraDivider />
             <AgoraDropdown
               title={'musics:'}
               items={musics?.map((value) => {
@@ -463,27 +466,34 @@ export default class MusicContentCenter
                 });
               }}
             />
+            <AgoraDivider />
           </>
         ) : undefined}
         {songCode >= 0 ? (
-          <AgoraButton
-            disabled={open}
-            title={`openWithSongCode`}
-            onPress={this.openWithSongCode}
-          />
+          <>
+            <AgoraButton
+              disabled={open}
+              title={`openWithSongCode`}
+              onPress={this.openWithSongCode}
+            />
+            <AgoraDivider />
+          </>
         ) : undefined}
         {preload ? (
-          <AgoraSlider
-            disabled={!open}
-            title={`${position} ms : ${duration} ms`}
-            minimumValue={0}
-            maximumValue={duration}
-            step={1000}
-            value={position}
-            onSlidingComplete={(value) => {
-              this.seek(value);
-            }}
-          />
+          <>
+            <AgoraSlider
+              disabled={!open}
+              title={`${position} ms : ${duration} ms`}
+              minimumValue={0}
+              maximumValue={duration}
+              step={1000}
+              value={position}
+              onSlidingComplete={(value) => {
+                this.seek(value);
+              }}
+            />
+            <AgoraDivider />
+          </>
         ) : undefined}
       </>
     );
@@ -491,16 +501,19 @@ export default class MusicContentCenter
 
   protected renderUsers(): React.ReactNode {
     const { musics, songCode } = this.state;
-    return +songCode >= 0 ? (
-      <AgoraImage
-        style={[AgoraStyle.fullWidth, AgoraStyle.fullHeight]}
-        source={{
-          uri: musics.find((value) => {
-            return value.songCode == songCode;
-          })?.poster,
-        }}
-      />
-    ) : undefined;
+    return (
+      <>
+        {songCode >= 0 ? (
+          <AgoraImage
+            source={{
+              uri: musics.find((value) => {
+                return value.songCode === songCode;
+              })?.poster,
+            }}
+          />
+        ) : undefined}
+      </>
+    );
   }
 
   protected renderAction(): React.ReactNode {

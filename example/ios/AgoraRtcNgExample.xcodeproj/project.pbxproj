@@ -16,12 +16,12 @@
 		7699B88040F8A987B510C191 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F5652807291BE31F00793068 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F56527FF291BE31E00793068 /* agora-logo.png */; };
+		F5652808291BE31F00793068 /* Sound_Horizon.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652800291BE31E00793068 /* Sound_Horizon.mp3 */; };
 		F5652809291BE31F00793068 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652801291BE31E00793068 /* ding.mp3 */; };
 		F565280A291BE31F00793068 /* dang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652802291BE31E00793068 /* dang.mp3 */; };
 		F5652813291BE33F00793068 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5652812291BE33F00793068 /* ReplayKit.framework */; };
 		F5652817291BE33F00793068 /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F5652816291BE33F00793068 /* SampleHandler.m */; };
 		F565281B291BE33F00793068 /* ScreenShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F5652811291BE33F00793068 /* ScreenShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		F57F54D62A03AEA8008DFB3C /* effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F57F54D52A03AEA7008DFB3C /* effect.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +77,7 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F56527FF291BE31E00793068 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
+		F5652800291BE31E00793068 /* Sound_Horizon.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sound_Horizon.mp3; sourceTree = "<group>"; };
 		F5652801291BE31E00793068 /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
 		F5652802291BE31E00793068 /* dang.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dang.mp3; sourceTree = "<group>"; };
 		F5652811291BE33F00793068 /* ScreenShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScreenShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,7 +86,6 @@
 		F5652816291BE33F00793068 /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
 		F5652818291BE33F00793068 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5652820291C0EE700793068 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
-		F57F54D52A03AEA7008DFB3C /* effect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = effect.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,9 +211,9 @@
 			isa = PBXGroup;
 			children = (
 				F56527FF291BE31E00793068 /* agora-logo.png */,
+				F5652800291BE31E00793068 /* Sound_Horizon.mp3 */,
 				F5652801291BE31E00793068 /* ding.mp3 */,
 				F5652802291BE31E00793068 /* dang.mp3 */,
-				F57F54D52A03AEA7008DFB3C /* effect.mp3 */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -346,8 +346,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5652808291BE31F00793068 /* Sound_Horizon.mp3 in Resources */,
 				F5652809291BE31F00793068 /* ding.mp3 in Resources */,
-				F57F54D62A03AEA8008DFB3C /* effect.mp3 in Resources */,
 				F565280A291BE31F00793068 /* dang.mp3 in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -660,12 +660,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -694,11 +690,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

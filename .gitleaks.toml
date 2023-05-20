@@ -1,6 +1,0 @@
-# ----- BEGIN Agora AppId -----
-[[rules]]
-id = "agora-appid"
-description = "Agora AppId"
-regex = '''"[0-9a-f]{32}"'''
-# ----- END Agora AppId -----

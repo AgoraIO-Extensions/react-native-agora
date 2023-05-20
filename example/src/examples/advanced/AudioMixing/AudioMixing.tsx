@@ -1,26 +1,27 @@
 import React from 'react';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   AudioMixingReasonType,
   AudioMixingStateType,
   ChannelProfileType,
   ClientRoleType,
-  IRtcEngineEventHandler,
   createAgoraRtcEngine,
+  IRtcEngineEventHandler,
 } from 'react-native-agora';
 
-import {
-  BaseAudioComponentState,
-  BaseComponent,
-} from '../../../components/BaseComponent';
+import Config from '../../../config/agora.config';
+
 import {
   AgoraButton,
   AgoraDivider,
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
-import { getResourcePath } from '../../../utils';
-import { askMediaAccess } from '../../../utils/permissions';
+import {
+  BaseAudioComponentState,
+  BaseComponent,
+} from '../../../components/BaseComponent';
+import { getAssetPath } from '../../../utils';
 
 interface State extends BaseAudioComponentState {
   filePath: string;
@@ -44,7 +45,7 @@ export default class AudioMixing
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      filePath: getResourcePath('effect.mp3'),
+      filePath: getAssetPath('Sound_Horizon.mp3'),
       loopback: false,
       cycle: -1,
       startPos: 0,
@@ -65,14 +66,15 @@ export default class AudioMixing
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone permission
-    await askMediaAccess(['android.permission.RECORD_AUDIO']);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone permission
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
+    }
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
@@ -225,7 +227,9 @@ export default class AudioMixing
               cycle: text === '' ? this.createState().cycle : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`cycle (defaults: ${this.createState().cycle})`}
         />
         <AgoraTextInput
@@ -235,7 +239,9 @@ export default class AudioMixing
               startPos: text === '' ? this.createState().startPos : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`startPos (defaults: ${this.createState().startPos})`}
         />
       </>

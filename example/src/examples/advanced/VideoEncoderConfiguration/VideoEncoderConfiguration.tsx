@@ -1,14 +1,17 @@
 import React from 'react';
+import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
+  createAgoraRtcEngine,
   DegradationPreference,
   IRtcEngineEventHandler,
   OrientationMode,
   VideoCodecType,
   VideoMirrorModeType,
-  createAgoraRtcEngine,
 } from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -22,9 +25,7 @@ import {
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
-import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   codecType: VideoCodecType;
@@ -76,17 +77,18 @@ export default class VideoEncoderConfiguration
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone and camera permission
-    await askMediaAccess([
-      'android.permission.RECORD_AUDIO',
-      'android.permission.CAMERA',
-    ]);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone and camera permission
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -182,7 +184,7 @@ export default class VideoEncoderConfiguration
           }}
         />
         <AgoraDivider />
-        <AgoraView horizontal={true}>
+        <AgoraView style={styles.container}>
           <AgoraTextInput
             style={AgoraStyle.fullSize}
             onChangeText={(text) => {
@@ -191,7 +193,9 @@ export default class VideoEncoderConfiguration
                 width: text === '' ? this.createState().width : +text,
               });
             }}
-            numberKeyboard={true}
+            keyboardType={
+              Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+            }
             placeholder={`width (defaults: ${this.createState().width})`}
           />
           <AgoraTextInput
@@ -202,7 +206,9 @@ export default class VideoEncoderConfiguration
                 height: text === '' ? this.createState().height : +text,
               });
             }}
-            numberKeyboard={true}
+            keyboardType={
+              Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+            }
             placeholder={`height (defaults: ${this.createState().height})`}
           />
         </AgoraView>
@@ -213,7 +219,9 @@ export default class VideoEncoderConfiguration
               frameRate: text === '' ? this.createState().frameRate : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`frameRate (defaults: ${this.createState().frameRate})`}
         />
         <AgoraTextInput
@@ -223,7 +231,9 @@ export default class VideoEncoderConfiguration
               bitrate: text === '' ? this.createState().bitrate : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`bitrate (defaults: ${this.createState().bitrate})`}
         />
         <AgoraTextInput
@@ -233,7 +243,9 @@ export default class VideoEncoderConfiguration
               minBitrate: text === '' ? this.createState().minBitrate : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`minBitrate (defaults: ${
             this.createState().minBitrate
           })`}
@@ -264,6 +276,7 @@ export default class VideoEncoderConfiguration
             this.setState({ mirrorMode: value });
           }}
         />
+        <AgoraDivider />
       </>
     );
   }
@@ -279,3 +292,12 @@ export default class VideoEncoderConfiguration
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+});

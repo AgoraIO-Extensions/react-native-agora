@@ -1,32 +1,31 @@
-import AudioMixing from './AudioMixing/AudioMixing';
-import AudioSpectrum from './AudioSpectrum/AudioSpectrum';
-import BeautyEffect from './BeautyEffect/BeautyEffect';
-import ChannelMediaRelay from './ChannelMediaRelay/ChannelMediaRelay';
-import ContentInspect from './ContentInspect/ContentInspect';
-import DirectCdnStreaming from './DirectCdnStreaming/DirectCdnStreaming';
-import EncodedVideoFrame from './EncodedVideoFrame/EncodedVideoFrame';
-import Encryption from './Encryption/Encryption';
-import Extension from './Extension/Extension';
 import JoinMultipleChannel from './JoinMultipleChannel/JoinMultipleChannel';
-import LocalSpatialAudioEngine from './LocalSpatialAudioEngine/LocalSpatialAudioEngine';
-import LocalVideoTranscoder from './LocalVideoTranscoder/LocalVideoTranscoder';
+import StreamMessage from './StreamMessage/StreamMessage';
+import ChannelMediaRelay from './ChannelMediaRelay/ChannelMediaRelay';
+import VoiceChanger from './VoiceChanger/VoiceChanger';
+import SpatialAudio from './SpatialAudio/SpatialAudio';
 import MediaPlayer from './MediaPlayer/MediaPlayer';
 import MediaRecorder from './MediaRecorder/MediaRecorder';
-import MusicContentCenter from './MusicContentCenter/MusicContentCenter';
 import PlayEffect from './PlayEffect/PlayEffect';
-import ProcessVideoRawData from './ProcessVideoRawData/ProcessVideoRawData';
-import PushVideoFrame from './PushVideoFrame/PushVideoFrame';
-import RTMPStreaming from './RTMPStreaming/RTMPStreaming';
-import RhythmPlayer from './RhythmPlayer/RhythmPlayer';
-import ScreenShare from './ScreenShare/ScreenShare';
-import SendMetadata from './SendMetadata/SendMetadata';
-import SendMultiVideoStream from './SendMultiVideoStream/SendMultiVideoStream';
-import SpatialAudio from './SpatialAudio/SpatialAudio';
-import StreamMessage from './StreamMessage/StreamMessage';
 import TakeSnapshot from './TakeSnapshot/TakeSnapshot';
+import ContentInspect from './ContentInspect/ContentInspect';
+import RhythmPlayer from './RhythmPlayer/RhythmPlayer';
+import SendMultiVideoStream from './SendMultiVideoStream/SendMultiVideoStream';
+import AudioMixing from './AudioMixing/AudioMixing';
+import AudioSpectrum from './AudioSpectrum/AudioSpectrum';
+import RTMPStreaming from './RTMPStreaming/RTMPStreaming';
+import LocalSpatialAudioEngine from './LocalSpatialAudioEngine/LocalSpatialAudioEngine';
+import ScreenShare from './ScreenShare/ScreenShare';
+import Encryption from './Encryption/Encryption';
 import VideoEncoderConfiguration from './VideoEncoderConfiguration/VideoEncoderConfiguration';
+import DirectCdnStreaming from './DirectCdnStreaming/DirectCdnStreaming';
 import VirtualBackground from './VirtualBackground/VirtualBackground';
-import VoiceChanger from './VoiceChanger/VoiceChanger';
+import SendMetadata from './SendMetadata/SendMetadata';
+import Extension from './Extension/Extension';
+import BeautyEffect from './BeautyEffect/BeautyEffect';
+import EncodedVideoFrame from './EncodedVideoFrame/EncodedVideoFrame';
+import PushVideoFrame from './PushVideoFrame/PushVideoFrame';
+import MusicContentCenter from './MusicContentCenter/MusicContentCenter';
+import ProcessVideoRawData from './ProcessVideoRawData/ProcessVideoRawData';
 
 const Advanced = {
   title: 'Advanced',
@@ -74,10 +73,6 @@ const Advanced = {
     {
       name: 'LocalSpatialAudioEngine',
       component: LocalSpatialAudioEngine,
-    },
-    {
-      name: 'LocalVideoTranscoder',
-      component: LocalVideoTranscoder,
     },
     {
       name: 'MediaPlayer',

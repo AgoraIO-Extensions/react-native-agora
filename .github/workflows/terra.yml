@@ -22,7 +22,6 @@ jobs:
           target-path: ${{ github.workspace }}
           config: ci/config/terra_config.yaml
           output-dir: src
-          export-file-path: src/index.ts
           github-token: ${{ secrets.GH_TOKEN }}
 
       - name: Format codes
@@ -39,6 +38,10 @@ jobs:
         with:
           target-path: ${{ github.workspace }}
           github-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Clean
+        run: |
+          rm -rf
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main

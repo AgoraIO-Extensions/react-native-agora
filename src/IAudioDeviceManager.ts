@@ -1,6 +1,5 @@
 import './extension/IAudioDeviceManagerExtension';
 import { AudioDeviceInfo } from './IAgoraRtcEngine';
-
 /**
  * The maximum length of the device ID.
  */
@@ -41,7 +40,13 @@ export abstract class IAudioDeviceManager {
   abstract getPlaybackDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * @ignore
+   * Sets the volume of the audio effects.
+   * Call this method after playEffect .
+   *
+   * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
    */
   abstract setPlaybackDeviceVolume(volume: number): number;
 
@@ -66,7 +71,13 @@ export abstract class IAudioDeviceManager {
   abstract getRecordingDeviceInfo(): AudioDeviceInfo;
 
   /**
-   * @ignore
+   * Sets the volume of the audio effects.
+   * Call this method after playEffect .
+   *
+   * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
+   *
+   * @returns
+   * 0: Success.< 0: Failure.
    */
   abstract setRecordingDeviceVolume(volume: number): number;
 
@@ -86,7 +97,13 @@ export abstract class IAudioDeviceManager {
   abstract getLoopbackDevice(): string;
 
   /**
-   * @ignore
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel and set autoSubscribeVideo as false.
+   *
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
+   *
+   * @returns
+   * 0: Success. < 0: Failure.
    */
   abstract setPlaybackDeviceMute(mute: boolean): number;
 
@@ -96,7 +113,13 @@ export abstract class IAudioDeviceManager {
   abstract getPlaybackDeviceMute(): boolean;
 
   /**
-   * @ignore
+   * Stops or resumes subscribing to the video streams of all remote users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.Call this method after joining a channel.If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel and set autoSubscribeVideo as false.
+   *
+   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
+   *
+   * @returns
+   * 0: Success. < 0: Failure.
    */
   abstract setRecordingDeviceMute(mute: boolean): number;
 
