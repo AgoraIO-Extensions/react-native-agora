@@ -1,7 +1,9 @@
 import React from 'react';
+import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
+  createAgoraRtcEngine,
   DegradationPreference,
   DirectCdnStreamingError,
   DirectCdnStreamingState,
@@ -13,8 +15,9 @@ import {
   RtcStats,
   VideoCodecType,
   VideoMirrorModeType,
-  createAgoraRtcEngine,
 } from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -28,9 +31,7 @@ import {
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
-import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   url: string;
@@ -67,8 +68,7 @@ export default class DirectCdnStreaming
       frameRate: 15,
       bitrate: 0,
       minBitrate: -1,
-      // ⚠️ can not set OrientationMode.OrientationModeAdaptive
-      orientationMode: OrientationMode.OrientationModeFixedLandscape,
+      orientationMode: OrientationMode.OrientationModeAdaptive,
       degradationPreference: DegradationPreference.MaintainQuality,
       mirrorMode: VideoMirrorModeType.VideoMirrorModeDisabled,
       startDirectCdnStreaming: false,
@@ -87,17 +87,18 @@ export default class DirectCdnStreaming
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone and camera permission
-    await askMediaAccess([
-      'android.permission.RECORD_AUDIO',
-      'android.permission.CAMERA',
-    ]);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone and camera permission
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -145,12 +146,6 @@ export default class DirectCdnStreaming
       degradationPreference,
       mirrorMode,
     } = this.state;
-    if (orientationMode === OrientationMode.OrientationModeAdaptive) {
-      this.error(
-        'orientationMode is invalid, should not be OrientationMode.OrientationModeAdaptive'
-      );
-      return;
-    }
     this.engine?.setDirectCdnStreamingVideoConfiguration({
       codecType,
       dimensions: {
@@ -271,7 +266,7 @@ export default class DirectCdnStreaming
           }}
         />
         <AgoraDivider />
-        <AgoraView horizontal={true}>
+        <AgoraView style={styles.container}>
           <AgoraTextInput
             style={AgoraStyle.fullSize}
             onChangeText={(text) => {
@@ -280,7 +275,9 @@ export default class DirectCdnStreaming
                 width: text === '' ? this.createState().width : +text,
               });
             }}
-            numberKeyboard={true}
+            keyboardType={
+              Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+            }
             placeholder={`width (defaults: ${this.createState().width})`}
           />
           <AgoraTextInput
@@ -291,7 +288,9 @@ export default class DirectCdnStreaming
                 height: text === '' ? this.createState().height : +text,
               });
             }}
-            numberKeyboard={true}
+            keyboardType={
+              Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+            }
             placeholder={`height (defaults: ${this.createState().height})`}
           />
         </AgoraView>
@@ -302,7 +301,9 @@ export default class DirectCdnStreaming
               frameRate: text === '' ? this.createState().frameRate : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`frameRate (defaults: ${this.createState().frameRate})`}
         />
         <AgoraTextInput
@@ -312,7 +313,9 @@ export default class DirectCdnStreaming
               bitrate: text === '' ? this.createState().bitrate : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`bitrate (defaults: ${this.createState().bitrate})`}
         />
         <AgoraTextInput
@@ -322,7 +325,9 @@ export default class DirectCdnStreaming
               minBitrate: text === '' ? this.createState().minBitrate : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`minBitrate (defaults: ${
             this.createState().minBitrate
           })`}
@@ -380,3 +385,12 @@ export default class DirectCdnStreaming
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+});

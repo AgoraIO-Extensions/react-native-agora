@@ -1,17 +1,19 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
+  createAgoraRtcEngine,
   ExternalVideoSourceType,
   IRtcEngineEventHandler,
   IRtcEngineEx,
   VideoBufferType,
   VideoPixelFormat,
-  createAgoraRtcEngine,
 } from 'react-native-agora';
 // @ts-ignore
 import ImageTools from 'react-native-image-tool';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -20,12 +22,9 @@ import {
 import {
   AgoraButton,
   AgoraImage,
-  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
-import { getAbsolutePath, getResourcePath } from '../../../utils';
-import { askMediaAccess } from '../../../utils/permissions';
+import { getAbsolutePath, getAssetPath } from '../../../utils';
 
 interface State extends BaseVideoComponentState {
   filePath: string;
@@ -48,7 +47,7 @@ export default class PushVideoFrame
       joinChannelSuccess: false,
       remoteUsers: [],
       startPreview: false,
-      filePath: getResourcePath('agora-logo.png'),
+      filePath: getAssetPath('agora-logo.png'),
     };
   }
 
@@ -64,17 +63,18 @@ export default class PushVideoFrame
     this.engine = createAgoraRtcEngine() as IRtcEngineEx;
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone and camera permission
-    await askMediaAccess([
-      'android.permission.RECORD_AUDIO',
-      'android.permission.CAMERA',
-    ]);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone and camera permission
+      await PermissionsAndroid.requestMultiple([
+        'android.permission.RECORD_AUDIO',
+        'android.permission.CAMERA',
+      ]);
+    }
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -171,7 +171,7 @@ export default class PushVideoFrame
           value={filePath}
         />
         <AgoraImage
-          style={AgoraStyle.image}
+          style={styles.image}
           source={{
             uri: `${
               Platform.OS === 'android'
@@ -197,3 +197,10 @@ export default class PushVideoFrame
     );
   }
 }
+
+const styles = StyleSheet.create({
+  image: {
+    width: 120,
+    height: 120,
+  },
+});

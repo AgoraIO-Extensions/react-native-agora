@@ -1,11 +1,11 @@
-import { RtcConnection } from '../IAgoraRtcEngineEx';
+import { callIrisApi } from '../internal/IrisApiEngine';
 import {
   IBaseSpatialAudioEngine,
-  ILocalSpatialAudioEngine,
   RemoteVoicePositionInfo,
   SpatialAudioZone,
+  ILocalSpatialAudioEngine,
 } from '../IAgoraSpatialAudio';
-
+import { RtcConnection } from '../IAgoraRtcEngineEx';
 // @ts-ignore
 export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
   release(): void {
@@ -498,5 +498,3 @@ export class ILocalSpatialAudioEngineImpl
     return 'LocalSpatialAudioEngine_setRemoteAudioAttenuation';
   }
 }
-
-import { callIrisApi } from '../internal/IrisApiEngine';

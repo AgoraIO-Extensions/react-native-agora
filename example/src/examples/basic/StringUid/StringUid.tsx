@@ -1,22 +1,23 @@
 import React from 'react';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
+  createAgoraRtcEngine,
   ErrorCodeType,
   IRtcEngineEventHandler,
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
-  createAgoraRtcEngine,
 } from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
   BaseComponent,
 } from '../../../components/BaseComponent';
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
-import Config from '../../../config/agora.config';
-import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   userAccount: string;
@@ -51,14 +52,15 @@ export default class StringUid
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone permission
-    await askMediaAccess(['android.permission.RECORD_AUDIO']);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone permission
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
+    }
 
     // Only need to enable audio on this case
     this.engine.enableAudio();

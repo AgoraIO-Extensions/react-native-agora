@@ -1,10 +1,10 @@
 import type { ViewProps } from 'react-native';
 
-import { VideoCanvas } from './AgoraBase';
-import { RtcConnection } from './IAgoraRtcEngineEx';
-import IAgoraRtcRenderView from './internal/IAgoraRtcRenderView';
 import AgoraRtcSurfaceViewNativeComponent from './specs/AgoraRtcSurfaceViewNativeComponent';
 import AgoraRtcTextureViewNativeComponent from './specs/AgoraRtcTextureViewNativeComponent';
+import IAgoraRtcRenderView from './internal/IAgoraRtcRenderView';
+import { VideoCanvas } from './AgoraBase';
+import { RtcConnection } from './IAgoraRtcEngineEx';
 
 /**
  * A common property for RtcSurfaceView and RtcTextureView .

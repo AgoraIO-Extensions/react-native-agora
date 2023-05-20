@@ -1,46 +1,32 @@
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, ViewProps } from 'react-native';
+import PickerSelect, {
+  PickerSelectProps,
+  Item,
+} from 'react-native-picker-select';
 import { PickerProps } from '@react-native-picker/picker/typings/Picker';
 import {
   Button,
   ButtonProps,
-  Card,
-  CardProps,
-  Divider,
   DividerProps,
-  Image,
-  ImageProps,
-  Input,
+  Divider,
   InputProps,
-  ListItem,
-  ListItemProps,
+  Input,
   Slider,
   SliderProps,
-  Switch,
   SwitchProps,
+  Switch,
   Text,
   TextProps,
+  ImageProps,
+  Image,
   lightColors,
 } from '@rneui/base';
-import React, { ReactNode, useEffect, useState } from 'react';
-import {
-  FlatList,
-  FlatListProps,
-  Platform,
-  StyleSheet,
-  View,
-  ViewProps,
-} from 'react-native';
-import PickerSelect, {
-  Item,
-  PickerSelectProps,
-} from 'react-native-picker-select';
 
-export { RtcSurfaceView } from 'react-native-agora';
-
-export const AgoraView = (props: ViewProps & { horizontal?: boolean }) => {
-  const { horizontal, style, ...others } = props;
+export const AgoraView = (props: ViewProps) => {
   return (
     <>
-      <View {...others} style={[style, !!horizontal && AgoraStyle.row]} />
+      <View {...props} />
     </>
   );
 };
@@ -69,28 +55,19 @@ export const AgoraDivider = (props: DividerProps) => {
   );
 };
 
-export const AgoraTextInput = (
-  props: InputProps & { numberKeyboard?: boolean }
-) => {
+export const AgoraTextInput = (props: InputProps) => {
   const [value, setValue] = useState(props.value);
 
   useEffect(() => {
     setValue(props.value);
   }, [props.value]);
 
-  const { style, ref, numberKeyboard, ...others } = props;
+  const { style, ref, ...others } = props;
   return (
     <>
       <Input
         containerStyle={[AgoraStyle.input, style]}
         placeholderTextColor={'gray'}
-        keyboardType={
-          numberKeyboard
-            ? Platform.OS === 'android'
-              ? 'numeric'
-              : 'numbers-and-punctuation'
-            : 'default'
-        }
         {...others}
         onChangeText={(text) => {
           setValue(text);
@@ -159,39 +136,6 @@ export const AgoraImage = (props: ImageProps) => {
   );
 };
 
-export function AgoraList<T>(props: FlatListProps<T>) {
-  const { renderItem, ...others } = props;
-  return (
-    <FlatList
-      numColumns={2}
-      {...others}
-      renderItem={({ item, index, separators }) => {
-        return (
-          <AgoraListItem containerStyle={AgoraStyle.listItem}>
-            {renderItem ? renderItem({ item, index, separators }) : undefined}
-          </AgoraListItem>
-        );
-      }}
-    />
-  );
-}
-
-export const AgoraListItem = (props: ListItemProps) => {
-  return <ListItem {...props} />;
-};
-
-export const AgoraCard = (
-  props: CardProps & { title: string; children?: ReactNode | undefined }
-) => {
-  const { title, children, ...others } = props;
-  return (
-    <Card containerStyle={AgoraStyle.listItem} {...others}>
-      <Card.Title>{title}</Card.Title>
-      {children}
-    </Card>
-  );
-};
-
 export interface AgoraDropdownItem extends Item {}
 
 export const AgoraDropdown = (
@@ -230,9 +174,6 @@ export const AgoraStyle = StyleSheet.create({
   fullWidth: {
     width: '100%',
   },
-  fullHeight: {
-    height: '100%',
-  },
   fullSize: {
     flex: 1,
   },
@@ -242,15 +183,15 @@ export const AgoraStyle = StyleSheet.create({
   },
   videoContainer: {
     position: 'absolute',
-    bottom: 0,
+    top: 0,
     left: 0,
   },
   videoLarge: {
     flex: 1,
   },
   videoSmall: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
   },
   float: {
     position: 'absolute',
@@ -266,24 +207,5 @@ export const AgoraStyle = StyleSheet.create({
     height: 20,
     width: 20,
     backgroundColor: lightColors.primary,
-  },
-  listItem: {
-    backgroundColor: 'transparent',
-    padding: 0,
-    margin: 0,
-  },
-  row: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  image: {
-    width: 120,
-    height: 120,
-  },
-  picker: {
-    width: '100%',
-    height: 200,
   },
 });

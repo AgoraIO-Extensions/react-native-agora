@@ -1,31 +1,28 @@
-import { NavigationContainer } from '@react-navigation/native';
-import {
-  StackScreenProps,
-  createStackNavigator,
-} from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import {
-  Keyboard,
   SafeAreaView,
   SectionList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Keyboard,
 } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import {
-  SDKBuildInfo,
   createAgoraRtcEngine,
+  SDKBuildInfo,
   isDebuggable,
   setDebuggable,
 } from 'react-native-agora';
 
-import Advanced from './examples/advanced';
 import Basic from './examples/basic';
-import Hooks from './examples/hook';
+import Advanced from './examples/advanced';
+import Hooks from './examples/hooks';
 
-const RootStack = createStackNavigator<any>();
+const Stack = createStackNavigator();
 
 const DATA = [Basic, Advanced, Hooks];
 
@@ -35,6 +32,7 @@ export default function App() {
   useEffect(() => {
     const engine = createAgoraRtcEngine();
     setVersion(engine.getVersion());
+    engine.release();
   }, []);
 
   return (
@@ -46,16 +44,17 @@ export default function App() {
           return false;
         }}
       >
-        <RootStack.Navigator screenOptions={{ gestureEnabled: false }}>
-          <RootStack.Screen name={'APIExample'} component={Home} />
+        <Stack.Navigator screenOptions={{ gestureEnabled: false }}>
+          <Stack.Screen name={'APIExample'} component={Home} />
           {DATA.map((value) =>
-            value.data.map(({ name, component }) => {
-              return component ? (
-                <RootStack.Screen name={name} component={component} />
-              ) : undefined;
-            })
+            value.data.map(({ name, component }) =>
+              component ? (
+                // @ts-ignore
+                <Stack.Screen name={name} component={component} />
+              ) : undefined
+            )
           )}
-        </RootStack.Navigator>
+        </Stack.Navigator>
         <TouchableOpacity
           onPress={() => {
             setDebuggable(!isDebuggable());
@@ -70,11 +69,11 @@ export default function App() {
   );
 }
 
-const AppSectionList = SectionList<any>;
-
-const Home = ({ navigation }: StackScreenProps<any>) => {
+// @ts-ignore
+const Home = ({ navigation }) => {
   return (
-    <AppSectionList
+    <SectionList
+      // @ts-ignore
       sections={DATA}
       keyExtractor={(item, index) => item.name + index}
       renderItem={({ item }) => <Item item={item} navigation={navigation} />}
@@ -85,10 +84,8 @@ const Home = ({ navigation }: StackScreenProps<any>) => {
   );
 };
 
-const Item = ({
-  item,
-  navigation,
-}: Omit<StackScreenProps<any>, 'route'> & { item: any }) => (
+// @ts-ignore
+const Item = ({ item, navigation }) => (
   <View style={styles.item}>
     <TouchableOpacity onPress={() => navigation.navigate(item.name)}>
       <Text style={styles.title}>{item.name}</Text>

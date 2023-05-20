@@ -1,23 +1,22 @@
-import { SpatialAudioParams } from '../AgoraBase';
-import {
-  AudioDualMonoMode,
-  IAudioPcmFrameSink,
-  IAudioSpectrumObserver,
-  RawAudioFrameOpModeType,
-  RenderModeType,
-} from '../AgoraMediaBase';
-import {
-  MediaPlayerState,
-  MediaSource,
-  PlayerStreamInfo,
-} from '../AgoraMediaPlayerTypes';
+import { callIrisApi } from '../internal/IrisApiEngine';
 import {
   IMediaPlayer,
-  IMediaPlayerCacheManager,
+  IMediaPlayerAudioFrameObserver,
   IMediaPlayerVideoFrameObserver,
+  IMediaPlayerCacheManager,
 } from '../IAgoraMediaPlayer';
+import {
+  MediaSource,
+  PlayerStreamInfo,
+  MediaPlayerState,
+} from '../AgoraMediaPlayerTypes';
+import {
+  RenderModeType,
+  IAudioSpectrumObserver,
+  AudioDualMonoMode,
+} from '../AgoraMediaBase';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
-
+import { SpatialAudioParams } from '../AgoraBase';
 // @ts-ignore
 export class IMediaPlayerImpl implements IMediaPlayer {
   getMediaPlayerId(): number {
@@ -531,90 +530,6 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return 'MediaPlayer_unregisterPlayerSourceObserver';
   }
 
-  registerAudioFrameObserver(
-    observer: IAudioPcmFrameSink,
-    mode: RawAudioFrameOpModeType = RawAudioFrameOpModeType.RawAudioFrameOpModeReadOnly
-  ): number {
-    const apiType = this.getApiTypeFromRegisterAudioFrameObserver(
-      observer,
-      mode
-    );
-    const jsonParams = {
-      observer: observer,
-      mode: mode,
-      toJSON: () => {
-        return {
-          mode: mode,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromRegisterAudioFrameObserver(
-    observer: IAudioPcmFrameSink,
-    mode: RawAudioFrameOpModeType = RawAudioFrameOpModeType.RawAudioFrameOpModeReadOnly
-  ): string {
-    return 'MediaPlayer_registerAudioFrameObserver';
-  }
-
-  unregisterAudioFrameObserver(observer: IAudioPcmFrameSink): number {
-    const apiType = this.getApiTypeFromUnregisterAudioFrameObserver(observer);
-    const jsonParams = {
-      observer: observer,
-      toJSON: () => {
-        return {};
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromUnregisterAudioFrameObserver(
-    observer: IAudioPcmFrameSink
-  ): string {
-    return 'MediaPlayer_unregisterAudioFrameObserver';
-  }
-
-  registerVideoFrameObserver(observer: IMediaPlayerVideoFrameObserver): number {
-    const apiType = this.getApiTypeFromRegisterVideoFrameObserver(observer);
-    const jsonParams = {
-      observer: observer,
-      toJSON: () => {
-        return {};
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromRegisterVideoFrameObserver(
-    observer: IMediaPlayerVideoFrameObserver
-  ): string {
-    return 'MediaPlayer_registerVideoFrameObserver';
-  }
-
-  unregisterVideoFrameObserver(
-    observer: IMediaPlayerVideoFrameObserver
-  ): number {
-    const apiType = this.getApiTypeFromUnregisterVideoFrameObserver(observer);
-    const jsonParams = {
-      observer: observer,
-      toJSON: () => {
-        return {};
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromUnregisterVideoFrameObserver(
-    observer: IMediaPlayerVideoFrameObserver
-  ): string {
-    return 'MediaPlayer_unregisterVideoFrameObserver';
-  }
-
   registerMediaPlayerAudioSpectrumObserver(
     observer: IAudioSpectrumObserver,
     intervalInMS: number
@@ -954,6 +869,82 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   ): string {
     return 'MediaPlayer_setSoundPositionParams';
   }
+
+  registerAudioFrameObserver(observer: IMediaPlayerAudioFrameObserver): number {
+    const apiType = this.getApiTypeFromRegisterAudioFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterAudioFrameObserver(
+    observer: IMediaPlayerAudioFrameObserver
+  ): string {
+    return 'MediaPlayer_registerAudioFrameObserver';
+  }
+
+  unregisterAudioFrameObserver(
+    observer: IMediaPlayerAudioFrameObserver
+  ): number {
+    const apiType = this.getApiTypeFromUnregisterAudioFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromUnregisterAudioFrameObserver(
+    observer: IMediaPlayerAudioFrameObserver
+  ): string {
+    return 'MediaPlayer_unregisterAudioFrameObserver';
+  }
+
+  registerVideoFrameObserver(observer: IMediaPlayerVideoFrameObserver): number {
+    const apiType = this.getApiTypeFromRegisterVideoFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): string {
+    return 'MediaPlayer_registerVideoFrameObserver';
+  }
+
+  unregisterVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): number {
+    const apiType = this.getApiTypeFromUnregisterVideoFrameObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromUnregisterVideoFrameObserver(
+    observer: IMediaPlayerVideoFrameObserver
+  ): string {
+    return 'MediaPlayer_unregisterVideoFrameObserver';
+  }
 }
 
 // @ts-ignore
@@ -1123,6 +1114,20 @@ export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   }
 }
 
+export function processIMediaPlayerAudioFrameObserver(
+  handler: IMediaPlayerAudioFrameObserver,
+  event: string,
+  jsonParams: any
+) {
+  switch (event) {
+    case 'onFrame':
+      if (handler.onFrame !== undefined) {
+        handler.onFrame(jsonParams.frame);
+      }
+      break;
+  }
+}
+
 export function processIMediaPlayerVideoFrameObserver(
   handler: IMediaPlayerVideoFrameObserver,
   event: string,
@@ -1136,5 +1141,3 @@ export function processIMediaPlayerVideoFrameObserver(
       break;
   }
 }
-
-import { callIrisApi } from '../internal/IrisApiEngine';

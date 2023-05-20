@@ -1,11 +1,14 @@
 import React from 'react';
+import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import {
   AudioScenarioType,
   ChannelProfileType,
   ClientRoleType,
-  IRtcEngineEventHandler,
   createAgoraRtcEngine,
+  IRtcEngineEventHandler,
 } from 'react-native-agora';
+
+import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -19,9 +22,7 @@ import {
   AgoraTextInput,
   AgoraView,
 } from '../../../components/ui';
-import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
-import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   range: number;
@@ -66,7 +67,6 @@ export default class LocalSpatialAudioEngine
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
-      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
       // ⚠️ Must use AudioScenarioGameStreaming on this case
@@ -74,8 +74,15 @@ export default class LocalSpatialAudioEngine
     });
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone permission
-    await askMediaAccess(['android.permission.RECORD_AUDIO']);
+    if (Platform.OS === 'android') {
+      // Need granted the microphone permission
+      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
+    }
+
+    // ⚠️ Must call after initialize and before joinChannel
+    if (Platform.OS === 'android') {
+      this.engine?.loadExtensionProvider('agora_spatial_audio_extension');
+    }
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
@@ -193,7 +200,9 @@ export default class LocalSpatialAudioEngine
               range: text === '' ? this.createState().range : +text,
             });
           }}
-          numberKeyboard={true}
+          keyboardType={
+            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
+          }
           placeholder={`range (defaults: ${this.createState().range})`}
         />
         <AgoraButton
@@ -211,7 +220,7 @@ export default class LocalSpatialAudioEngine
           }}
         />
         <AgoraDivider />
-        <AgoraView horizontal={true}>
+        <AgoraView style={styles.container}>
           {position.map((value, index) => (
             <AgoraTextInput
               key={`position-${index}`}
@@ -221,15 +230,18 @@ export default class LocalSpatialAudioEngine
                 position[index] = +text;
                 this.setState({ position });
               }}
-              numberKeyboard={true}
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
+              }
               placeholder={`position (defaults: ${
                 this.createState().position[index]
               })`}
             />
           ))}
         </AgoraView>
-        <AgoraDivider />
-        <AgoraView horizontal={true}>
+        <AgoraView style={styles.container}>
           {axisForward.map((value, index) => (
             <AgoraTextInput
               key={`axisForward-${index}`}
@@ -239,15 +251,18 @@ export default class LocalSpatialAudioEngine
                 axisForward[index] = +text;
                 this.setState({ axisForward });
               }}
-              numberKeyboard={true}
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
+              }
               placeholder={`axisForward (defaults: ${
                 this.createState().axisForward[index]
               })`}
             />
           ))}
         </AgoraView>
-        <AgoraDivider />
-        <AgoraView horizontal={true}>
+        <AgoraView style={styles.container}>
           {axisRight.map((value, index) => (
             <AgoraTextInput
               key={`axisRight-${index}`}
@@ -257,15 +272,18 @@ export default class LocalSpatialAudioEngine
                 axisRight[index] = +text;
                 this.setState({ axisRight });
               }}
-              numberKeyboard={true}
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
+              }
               placeholder={`axisRight (defaults: ${
                 this.createState().axisRight[index]
               })`}
             />
           ))}
         </AgoraView>
-        <AgoraDivider />
-        <AgoraView horizontal={true}>
+        <AgoraView style={styles.container}>
           {axisUp.map((value, index) => (
             <AgoraTextInput
               key={`axisUp-${index}`}
@@ -275,7 +293,11 @@ export default class LocalSpatialAudioEngine
                 axisUp[index] = +text;
                 this.setState({ axisUp });
               }}
-              numberKeyboard={true}
+              keyboardType={
+                Platform.OS === 'android'
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
+              }
               placeholder={`axisUp (defaults: ${
                 this.createState().axisUp[index]
               })`}
@@ -303,3 +325,11 @@ export default class LocalSpatialAudioEngine
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});

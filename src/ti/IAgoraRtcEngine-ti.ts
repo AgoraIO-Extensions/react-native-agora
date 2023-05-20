@@ -38,6 +38,7 @@ export const IRtcEngineEventHandler = t.iface([], {
   "onUserEnableVideo": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("remoteUid", "number"), t.param("enabled", "boolean"))),
   "onUserStateChanged": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("remoteUid", "number"), t.param("state", "number"))),
   "onUserEnableLocalVideo": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("remoteUid", "number"), t.param("enabled", "boolean"))),
+  "onApiCallExecuted": t.opt(t.func("void", t.param("err", "ErrorCodeType"), t.param("api", "string"), t.param("result", "string"))),
   "onLocalAudioStats": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("stats", "LocalAudioStats"))),
   "onRemoteAudioStats": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("stats", "RemoteAudioStats"))),
   "onLocalVideoStats": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("stats", "LocalVideoStats"))),
@@ -96,8 +97,6 @@ export const IRtcEngineEventHandler = t.iface([], {
   "onExtensionStopped": t.opt(t.func("void", t.param("provider", "string"), t.param("extension", "string"))),
   "onExtensionError": t.opt(t.func("void", t.param("provider", "string"), t.param("extension", "string"), t.param("error", "number"), t.param("message", "string"))),
   "onUserAccountUpdated": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("remoteUid", "number"), t.param("userAccount", "string"))),
-  "onLocalVideoTranscoderError": t.opt(t.func("void", t.param("stream", "TranscodingVideoStream"), t.param("error", "VideoTranscoderError"))),
-  "onVideoRenderingTracingResult": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("uid", "number"), t.param("currentEvent", "MediaTraceEvent"), t.param("tracingInfo", "VideoRenderingTracingInfo"))),
 });
 
 export const IMetadataObserver = t.iface([], {

@@ -8,21 +8,38 @@ import {
 
 import { IMediaEngineEvent } from '../extension/IAgoraMediaEngineExtension';
 
+import {
+  processIAudioFrameObserver,
+  processIVideoEncodedFrameObserver,
+  processIVideoFrameObserver,
+} from '../impl/AgoraMediaBaseImpl';
+import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';
+
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-} from './IrisApiEngine';
+import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
+import { EmitterSubscription } from './emitter/EventEmitter';
 
 export class MediaEngineInternal extends IMediaEngineImpl {
   static _audio_frame_observers: IAudioFrameObserver[] = [];
   static _video_frame_observers: IVideoFrameObserver[] = [];
   static _video_encoded_frame_observers: IVideoEncodedFrameObserver[] = [];
+  private _events: Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  > = new Map<
+    any,
+    {
+      eventType: string;
+      subscription: EmitterSubscription;
+    }
+  >();
 
-  override registerAudioFrameObserver(observer: IAudioFrameObserver): number {
+  registerAudioFrameObserver(observer: IAudioFrameObserver): number {
     if (
       !MediaEngineInternal._audio_frame_observers.find(
         (value) => value === observer
@@ -33,7 +50,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.registerAudioFrameObserver(observer);
   }
 
-  override unregisterAudioFrameObserver(observer: IAudioFrameObserver): number {
+  unregisterAudioFrameObserver(observer: IAudioFrameObserver): number {
     MediaEngineInternal._audio_frame_observers =
       MediaEngineInternal._audio_frame_observers.filter(
         (value) => value !== observer
@@ -41,7 +58,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.unregisterAudioFrameObserver(observer);
   }
 
-  override registerVideoFrameObserver(observer: IVideoFrameObserver): number {
+  registerVideoFrameObserver(observer: IVideoFrameObserver): number {
     if (
       !MediaEngineInternal._video_frame_observers.find(
         (value) => value === observer
@@ -52,7 +69,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.registerVideoFrameObserver(observer);
   }
 
-  override unregisterVideoFrameObserver(observer: IVideoFrameObserver): number {
+  unregisterVideoFrameObserver(observer: IVideoFrameObserver): number {
     MediaEngineInternal._video_frame_observers =
       MediaEngineInternal._video_frame_observers.filter(
         (value) => value !== observer
@@ -60,7 +77,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.unregisterVideoFrameObserver(observer);
   }
 
-  override registerVideoEncodedFrameObserver(
+  registerVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number {
     if (
@@ -73,7 +90,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.registerVideoEncodedFrameObserver(observer);
   }
 
-  override unregisterVideoEncodedFrameObserver(
+  unregisterVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number {
     MediaEngineInternal._video_encoded_frame_observers =
@@ -83,7 +100,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.unregisterVideoEncodedFrameObserver(observer);
   }
 
-  override release() {
+  release() {
     MediaEngineInternal._audio_frame_observers = [];
     MediaEngineInternal._video_frame_observers = [];
     MediaEngineInternal._video_encoded_frame_observers = [];
@@ -127,35 +144,51 @@ export class MediaEngineInternal extends IMediaEngineImpl {
   addListener<EventType extends keyof IMediaEngineEvent>(
     eventType: EventType,
     listener: IMediaEngineEvent[EventType]
-  ) {
+  ): EmitterSubscription {
     this._addListenerPreCheck(eventType);
-    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
-      if (eventProcessor.type(data) !== EVENT_TYPE.IMediaEngine) {
+    const callback = (...data: any[]) => {
+      if (data[0] !== EVENT_TYPE.IMediaEngine) {
         return;
       }
-      eventProcessor.func.map((it) => {
-        it({ [eventType]: listener }, eventType, data);
-      });
+      processIAudioFrameObserver({ [eventType]: listener }, eventType, data[1]);
+      processIVideoFrameObserver({ [eventType]: listener }, eventType, data[1]);
+      processIVideoEncodedFrameObserver(
+        { [eventType]: listener },
+        eventType,
+        data[1]
+      );
     };
-    listener!.prototype.callback = callback;
-    DeviceEventEmitter.addListener(eventType, callback);
+    const subscription = DeviceEventEmitter.addListener(eventType, callback);
+    this._events.set(listener, { eventType, subscription });
+    return subscription;
   }
 
   removeListener<EventType extends keyof IMediaEngineEvent>(
     eventType: EventType,
-    listener?: IMediaEngineEvent[EventType]
+    listener: IMediaEngineEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(
-      eventType,
-      listener?.prototype.callback ?? listener
+    if (!this._events.has(listener)) return;
+    DeviceEventEmitter.removeSubscription(
+      this._events.get(listener)!.subscription
     );
+    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IMediaEngineEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    if (eventType === undefined) {
+      this._events.forEach((value) => {
+        DeviceEventEmitter.removeAllListeners(value.eventType);
+      });
+      this._events.clear();
+    } else {
+      DeviceEventEmitter.removeAllListeners(eventType);
+      this._events.forEach((value, key) => {
+        if (value.eventType === eventType) {
+          this._events.delete(key);
+        }
+      });
+    }
   }
 }
-
-import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';

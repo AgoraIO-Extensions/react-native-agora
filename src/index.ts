@@ -1,11 +1,12 @@
-import { IMediaPlayerCacheManager } from './IAgoraMediaPlayer';
-import { IRtcEngine } from './IAgoraRtcEngine';
-import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
-
 import AgoraRtcNg from './specs';
 
 export const showRPSystemBroadcastPickerView =
   AgoraRtcNg.showRPSystemBroadcastPickerView;
+
+import { IRtcEngine } from './IAgoraRtcEngine';
+import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
+import { IMediaPlayerCacheManager } from './IAgoraMediaPlayer';
+import { IMediaPlayerCacheManagerImpl } from './impl/IAgoraMediaPlayerImpl';
 
 export * from './AgoraBase';
 export * from './AgoraMediaBase';
@@ -31,7 +32,7 @@ export {
 const instance = new RtcEngineExInternal();
 
 /**
- * Creates one IRtcEngine object.
+ * Creates an IRtcEngine object.
  * Currently, the Agora RTC SDK v4.x supports creating only one IRtcEngine object for each app.
  *
  * @returns
@@ -53,5 +54,3 @@ export function getMediaPlayerCacheManager(): IMediaPlayerCacheManager {
 }
 
 export default createAgoraRtcEngine;
-
-import { IMediaPlayerCacheManagerImpl } from './impl/IAgoraMediaPlayerImpl';

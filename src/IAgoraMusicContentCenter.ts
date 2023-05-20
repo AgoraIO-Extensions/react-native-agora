@@ -1,6 +1,5 @@
 import './extension/IAgoraMusicContentCenterExtension';
 import { IMediaPlayer } from './IAgoraMediaPlayer';
-
 /**
  * @ignore
  */
@@ -17,10 +16,6 @@ export enum PreloadStatusCode {
    * @ignore
    */
   KPreloadStatusPreloading = 2,
-  /**
-   * @ignore
-   */
-  KPreloadStatusRemoved = 3,
 }
 
 /**
@@ -35,26 +30,6 @@ export enum MusicContentCenterStatusCode {
    * @ignore
    */
   KMusicContentCenterStatusErr = 1,
-  /**
-   * @ignore
-   */
-  KMusicContentCenterStatusErrGateway = 2,
-  /**
-   * @ignore
-   */
-  KMusicContentCenterStatusErrPermissionAndResource = 3,
-  /**
-   * @ignore
-   */
-  KMusicContentCenterStatusErrInternalDataParse = 4,
-  /**
-   * @ignore
-   */
-  KMusicContentCenterStatusErrMusicLoading = 5,
-  /**
-   * @ignore
-   */
-  KMusicContentCenterStatusErrMusicDecryption = 6,
 }
 
 /**
@@ -74,34 +49,6 @@ export class MusicChartInfo {
 /**
  * @ignore
  */
-export enum MusicCacheStatusType {
-  /**
-   * @ignore
-   */
-  MusicCacheStatusTypeCached = 0,
-  /**
-   * @ignore
-   */
-  MusicCacheStatusTypeCaching = 1,
-}
-
-/**
- * @ignore
- */
-export class MusicCacheInfo {
-  /**
-   * @ignore
-   */
-  songCode?: number;
-  /**
-   * @ignore
-   */
-  status?: MusicCacheStatusType;
-}
-
-/**
- * @ignore
- */
 export abstract class MusicChartCollection {
   /**
    * @ignore
@@ -109,7 +56,13 @@ export abstract class MusicChartCollection {
   abstract getCount(): number;
 
   /**
-   * @ignore
+   * Gets the detailed information of the media stream.
+   * Call this method after calling getStreamCount .
+   *
+   * @param index The index of the media stream.
+   *
+   * @returns
+   * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo .If the call fails, returns NULL.
    */
   abstract get(index: number): MusicChartInfo;
 }
@@ -243,8 +196,8 @@ export interface IMusicContentCenterEventHandler {
    */
   onMusicChartsResult?(
     requestId: string,
-    result: MusicChartInfo[],
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode,
+    result: MusicChartInfo[]
   ): void;
 
   /**
@@ -252,18 +205,14 @@ export interface IMusicContentCenterEventHandler {
    */
   onMusicCollectionResult?(
     requestId: string,
-    result: MusicCollection,
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode,
+    result: MusicCollection
   ): void;
 
   /**
    * @ignore
    */
-  onLyricResult?(
-    requestId: string,
-    lyricUrl: string,
-    errorCode: MusicContentCenterStatusCode
-  ): void;
+  onLyricResult?(requestId: string, lyricUrl: string): void;
 
   /**
    * @ignore
@@ -271,9 +220,9 @@ export interface IMusicContentCenterEventHandler {
   onPreLoadEvent?(
     songCode: number,
     percent: number,
-    lyricUrl: string,
     status: PreloadStatusCode,
-    errorCode: MusicContentCenterStatusCode
+    msg: string,
+    lyricUrl?: string
   ): void;
 }
 
@@ -293,10 +242,6 @@ export class MusicContentCenterConfiguration {
    * @ignore
    */
   mccUid?: number;
-  /**
-   * @ignore
-   */
-  maxCacheSize?: number;
 }
 
 /**
@@ -375,23 +320,6 @@ export abstract class IMusicContentCenter {
    * @ignore
    */
   abstract preload(songCode: number, jsonOption?: string): number;
-
-  /**
-   * 删除已缓存的音乐资源。
-   * 你可以调用该方法删除某一已缓存的音乐资源，如需删除多个音乐资源，你可以多次调用该方法。 The cached media file currently being played will not be deleted.
-   *
-   * @param songCode 待删除的音乐资源的编号。
-   *
-   * @returns
-   * 0: 方法调用成功，音乐资源已删除。< 0: Failure.
-   */
-  abstract removeCache(songCode: number): number;
-
-  /**
-   * 获取已缓存的音乐资源信息。
-   * 当你不再需要使用已缓存的音乐资源时，你需要及时释放内存以防止内存泄漏。
-   */
-  abstract getCaches(): { cacheInfo: MusicCacheInfo[]; cacheInfoSize: number };
 
   /**
    * @ignore

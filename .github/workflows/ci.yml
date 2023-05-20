@@ -1,9 +1,4 @@
 name: CI
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   push:
     branches:
@@ -11,7 +6,6 @@ on:
   pull_request:
     branches:
       - main
-      - release/*
 
 jobs:
   lint:
@@ -28,32 +22,8 @@ jobs:
 
       - name: Typecheck files
         run: |
-          yarn example install --frozen-lockfile
+          yarn install --cwd example --frozen-lockfile
           yarn typecheck
-
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Build package
-        run: yarn prepack
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Jest
-        run: yarn test
 
   test-android:
     strategy:
@@ -77,7 +47,7 @@ jobs:
 
       - name: Modify APP ID
         run: |
-          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
 
@@ -123,7 +93,7 @@ jobs:
 
       - name: Modify APP ID
         run: |
-          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          sed "s/appId: '\(.*\)'/appId: '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
         working-directory: example/src/config
 
@@ -134,6 +104,7 @@ jobs:
           detox-configuration: ios.sim.release
           root-directory: example
           cache-env-var-lookup-keys: RCT_NEW_ARCH_ENABLED
+          pre-install-command: yarn install --frozen-lockfile
 
       - uses: futureware-tech/simulator-action@v1
         with:
@@ -147,3 +118,14 @@ jobs:
           detox build-framework-cache
           detox test -c ios.sim.release
 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build package
+        run: yarn prepack
