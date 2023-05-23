@@ -1,6 +1,6 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.2.0-dev.15)
-  - AgoraRtcEngine_iOS_Preview (4.2.0-dev.15)
+  - AgoraIrisRTC_iOS (4.2.0-build.1)
+  - AgoraRtcEngine_iOS_Preview (4.2.0-dev.16)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -331,9 +331,9 @@ PODS:
   - React-jsinspector (0.71.4)
   - React-logger (0.71.4):
     - glog
-  - react-native-agora (4.2.0-dev.15):
-    - AgoraIrisRTC_iOS (= 4.2.0-dev.15)
-    - AgoraRtcEngine_iOS_Preview (= 4.2.0-dev.15)
+  - react-native-agora (4.2.0-beta.1):
+    - AgoraIrisRTC_iOS (= 4.2.0-build.1)
+    - AgoraRtcEngine_iOS_Preview (= 4.2.0-dev.16)
     - React-Core
   - react-native-agora-rawdata (0.1.0):
     - React-Core
@@ -450,7 +450,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS_Preview (= 4.2.0-dev.15)
+  - AgoraRtcEngine_iOS_Preview (= 4.2.0-dev.16)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -635,8 +635,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: e7bac5aecc440213ab623e0ff5be7dbe9e984beb
-  AgoraRtcEngine_iOS_Preview: ec452e4760cfaa84d7af68462a028aff8bd32feb
+  AgoraIrisRTC_iOS: 52acbca099caa2b34e6136ff6b1e903839cda3d8
+  AgoraRtcEngine_iOS_Preview: d432dfb0cc836a6af578e00c3d4a3f8f0a85057c
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -670,7 +670,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d6b7fa9260aa3cb40afee0507e3bc1d17ecaa6f2
   React-jsinspector: 1f51e775819199d3fe9410e69ee8d4c4161c7b06
   React-logger: 0d58569ec51d30d1792c5e86a8e3b78d24b582c6
-  react-native-agora: 19de2c3b65e04f60137ff6d1fc22893dfc55d475
+  react-native-agora: 0fa21f56f969f327f5b314d715c1840bbd3eff0b
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
@@ -698,6 +698,6 @@ SPEC CHECKSUMS:
   Yoga: 79dd7410de6f8ad73a77c868d3d368843f0c93e0
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 4b9df9da5a9c56ae78cf89afd4c48a60ea768b6c
+PODFILE CHECKSUM: d57bff40013bbb3f1b183ff899a371ed41c164a0
 
 COCOAPODS: 1.12.0

@@ -5,9 +5,8 @@ import {
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
-
 import { IMediaEngineEvent } from '../extension/IAgoraMediaEngineExtension';
-
+import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
@@ -137,7 +136,8 @@ export class MediaEngineInternal extends IMediaEngineImpl {
         it({ [eventType]: listener }, eventType, data);
       });
     };
-    listener!.prototype.callback = callback;
+    // @ts-ignore
+    listener!.agoraCallback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
   }
 
@@ -147,7 +147,8 @@ export class MediaEngineInternal extends IMediaEngineImpl {
   ) {
     DeviceEventEmitter.removeListener(
       eventType,
-      listener?.prototype.callback ?? listener
+      // @ts-ignore
+      listener?.agoraCallback ?? listener
     );
   }
 
@@ -157,5 +158,3 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     DeviceEventEmitter.removeAllListeners(eventType);
   }
 }
-
-import { IMediaEngineImpl } from '../impl/IAgoraMediaEngineImpl';

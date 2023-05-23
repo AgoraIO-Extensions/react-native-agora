@@ -37,10 +37,6 @@
             "group": "unknown"
           },
           {
-            "pattern": "../impl/**",
-            "group": "unknown"
-          },
-          {
             "pattern": "./impl/**",
             "group": "unknown"
           }

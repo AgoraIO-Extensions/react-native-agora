@@ -7,7 +7,11 @@ import {
   MusicCollection,
 } from '../IAgoraMusicContentCenter';
 import { IMusicContentCenterEvent } from '../extension/IAgoraMusicContentCenterExtension';
-
+import {
+  IMusicContentCenterImpl,
+  IMusicPlayerImpl,
+  MusicCollectionImpl,
+} from '../impl/IAgoraMusicContentCenterImpl';
 import IAgoraMusicContentCenterTI from '../ti/IAgoraMusicContentCenter-ti';
 const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
@@ -49,7 +53,8 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
         it({ [eventType]: listener }, eventType, data);
       });
     };
-    listener!.prototype.callback = callback;
+    // @ts-ignore
+    listener!.agoraCallback = callback;
     DeviceEventEmitter.addListener(eventType, callback);
   }
 
@@ -59,7 +64,8 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   ) {
     DeviceEventEmitter.removeListener(
       eventType,
-      listener?.prototype.callback ?? listener
+      // @ts-ignore
+      listener?.agoraCallback ?? listener
     );
   }
 
@@ -201,9 +207,3 @@ export class MusicCollectionInternal extends MusicCollectionImpl {
     return this._musicCollection.getTotal();
   }
 }
-
-import {
-  IMusicContentCenterImpl,
-  IMusicPlayerImpl,
-  MusicCollectionImpl,
-} from '../impl/IAgoraMusicContentCenterImpl';

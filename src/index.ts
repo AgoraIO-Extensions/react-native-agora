@@ -1,7 +1,6 @@
 import { IMediaPlayerCacheManager } from './IAgoraMediaPlayer';
 import { IRtcEngine } from './IAgoraRtcEngine';
 import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
-
 import AgoraRtcNg from './specs';
 
 export const showRPSystemBroadcastPickerView =

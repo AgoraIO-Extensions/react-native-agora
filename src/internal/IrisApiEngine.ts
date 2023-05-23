@@ -32,6 +32,24 @@ import {
   IRtcEngineEventHandler,
   Metadata,
 } from '../IAgoraRtcEngine';
+import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
+import {
+  processIAudioFrameObserver,
+  processIAudioFrameObserverBase,
+  processIAudioPcmFrameSink,
+  processIAudioSpectrumObserver,
+  processIMediaRecorderObserver,
+  processIVideoEncodedFrameObserver,
+  processIVideoFrameObserver,
+} from '../impl/AgoraMediaBaseImpl';
+import { processIMediaPlayerVideoFrameObserver } from '../impl/IAgoraMediaPlayerImpl';
+import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
+import { processIMusicContentCenterEventHandler } from '../impl/IAgoraMusicContentCenterImpl';
+import {
+  processIDirectCdnStreamingEventHandler,
+  processIMetadataObserver,
+  processIRtcEngineEventHandler,
+} from '../impl/IAgoraRtcEngineImpl';
 import AgoraRtcNg from '../specs';
 
 import { MediaEngineInternal } from './MediaEngineInternal';
@@ -509,22 +527,3 @@ export function emitEvent<EventType extends keyof T, T extends ProcessorType>(
 ): void {
   DeviceEventEmitter.emit(eventType as string, eventProcessor, data);
 }
-
-import { processIAudioEncodedFrameObserver } from '../impl/AgoraBaseImpl';
-import {
-  processIAudioFrameObserver,
-  processIAudioFrameObserverBase,
-  processIAudioPcmFrameSink,
-  processIAudioSpectrumObserver,
-  processIMediaRecorderObserver,
-  processIVideoEncodedFrameObserver,
-  processIVideoFrameObserver,
-} from '../impl/AgoraMediaBaseImpl';
-import { processIMediaPlayerVideoFrameObserver } from '../impl/IAgoraMediaPlayerImpl';
-import { processIMediaPlayerSourceObserver } from '../impl/IAgoraMediaPlayerSourceImpl';
-import { processIMusicContentCenterEventHandler } from '../impl/IAgoraMusicContentCenterImpl';
-import {
-  processIDirectCdnStreamingEventHandler,
-  processIMetadataObserver,
-  processIRtcEngineEventHandler,
-} from '../impl/IAgoraRtcEngineImpl';

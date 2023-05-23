@@ -3,6 +3,7 @@ import {
   RemoteVoicePositionInfo,
   SpatialAudioZone,
 } from '../IAgoraSpatialAudio';
+import { ILocalSpatialAudioEngineImpl } from '../impl/IAgoraSpatialAudioImpl';
 
 export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImpl {
   protected override getApiTypeFromRelease(): string {
@@ -85,5 +86,3 @@ export class LocalSpatialAudioEngineInternal extends ILocalSpatialAudioEngineImp
     return 'LocalSpatialAudioEngine_muteRemoteAudioStream';
   }
 }
-
-import { ILocalSpatialAudioEngineImpl } from '../impl/IAgoraSpatialAudioImpl';
