@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -194,7 +194,7 @@ export default class PlayEffect
     this.setState({ playEffect: false });
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { filePath, pitch, pan, gain, publish } = this.state;
     return (
       <>
@@ -280,7 +280,7 @@ export default class PlayEffect
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { playEffect, pauseEffect } = this.state;
     return (
       <>

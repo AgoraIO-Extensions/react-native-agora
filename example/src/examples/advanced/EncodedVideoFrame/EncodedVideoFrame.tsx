@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -203,7 +203,7 @@ export default class EncodedVideoFrame
     return true;
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { imageBuffer } = this.state;
     return (
       <>
@@ -218,7 +218,7 @@ export default class EncodedVideoFrame
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess } = this.state;
     return (
       <>

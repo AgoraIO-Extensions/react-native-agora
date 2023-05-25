@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -156,7 +156,7 @@ export default class ContentInspect
     this.info('onContentInspectResult', 'result', result);
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { modules, type, interval } = this.state;
     return (
       <>
@@ -208,7 +208,7 @@ export default class ContentInspect
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, enableContentInspect } =
       this.state;
     return (

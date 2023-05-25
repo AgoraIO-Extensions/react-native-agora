@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   IMediaPlayer,
   IMediaPlayerSourceObserver,
@@ -282,11 +282,11 @@ export default class MediaPlayer
     );
   }
 
-  protected renderChannel(): React.ReactNode {
+  protected renderChannel(): ReactElement | undefined {
     return undefined;
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { url, open, position, duration, playoutVolume } = this.state;
     return (
       <>
@@ -344,7 +344,7 @@ export default class MediaPlayer
     );
   }
 
-  protected renderUsers(): React.ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     const { open } = this.state;
     return (
       <>
@@ -360,7 +360,7 @@ export default class MediaPlayer
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { open, play, pause, mute } = this.state;
     return (
       <>

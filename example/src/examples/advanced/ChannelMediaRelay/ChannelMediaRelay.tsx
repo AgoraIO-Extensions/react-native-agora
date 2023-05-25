@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelMediaRelayError,
   ChannelMediaRelayEvent,
@@ -217,7 +217,7 @@ export default class ChannelMediaRelay
     this.info('onChannelMediaRelayEvent', 'code', code);
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { destChannelNames } = this.state;
     return (
       <>
@@ -233,7 +233,7 @@ export default class ChannelMediaRelay
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const {
       joinChannelSuccess,
       startChannelMediaRelay,

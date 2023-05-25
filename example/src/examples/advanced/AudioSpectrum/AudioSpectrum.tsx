@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Dimensions } from 'react-native';
 import {
   AudioSpectrumData,
@@ -164,7 +164,7 @@ export default class AudioSpectrum
     return true;
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { enableAudioSpectrumMonitor, audioSpectrumData } = this.state;
     return (
       <>
@@ -206,7 +206,7 @@ export default class AudioSpectrum
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { enableAudioSpectrumMonitor } = this.state;
     return (
       <>

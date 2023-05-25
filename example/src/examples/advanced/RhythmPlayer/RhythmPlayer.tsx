@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -197,7 +197,7 @@ export default class RhythmPlayer
     }
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { sound1, sound2, beatsPerMeasure, beatsPerMinute } = this.state;
     return (
       <>
@@ -240,7 +240,7 @@ export default class RhythmPlayer
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startRhythmPlayer } = this.state;
     return (
       <>

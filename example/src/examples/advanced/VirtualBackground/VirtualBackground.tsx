@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
@@ -167,7 +167,7 @@ export default class VirtualBackground
     this.engine?.release();
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { background_source_type, color, source, blur_degree } = this.state;
     return (
       <>
@@ -217,7 +217,7 @@ export default class VirtualBackground
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, enableVirtualBackground } =
       this.state;
     return (

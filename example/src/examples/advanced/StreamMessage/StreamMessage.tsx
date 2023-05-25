@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -200,7 +200,7 @@ export default class StreamMessage
     );
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { syncWithAudio, ordered, streamId, data } = this.state;
     return (
       <>
@@ -235,7 +235,7 @@ export default class StreamMessage
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess, streamId } = this.state;
     return (
       <>

@@ -355,7 +355,7 @@ export default class JoinMultipleChannel
     }
   }
 
-  protected renderChannel(): React.ReactNode {
+  protected renderChannel(): ReactElement | undefined {
     const {
       channelId,
       channelId2,
@@ -418,7 +418,7 @@ export default class JoinMultipleChannel
     );
   }
 
-  protected renderUsers(): React.ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     const {
       startPreview,
       channelId,
@@ -440,7 +440,7 @@ export default class JoinMultipleChannel
                 { uid: item },
                 remoteUsers2.indexOf(item) === -1 ? channelId : channelId2,
                 remoteUsers2.indexOf(item) === -1 ? uid : uid2
-              );
+              )!;
             }}
           />
         ) : undefined}
@@ -452,7 +452,7 @@ export default class JoinMultipleChannel
     user: VideoCanvas,
     channelId?: string,
     localUid?: number
-  ): ReactElement {
+  ): ReactElement | undefined {
     return (
       <AgoraCard title={`${channelId} - ${user.uid}`}>
         <RtcSurfaceView
@@ -464,7 +464,7 @@ export default class JoinMultipleChannel
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess, joinChannelSuccess2 } = this.state;
     return (
       <>

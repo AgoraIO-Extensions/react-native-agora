@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -146,7 +146,7 @@ export default class StringUid
     this.info('LocalUserRegistered', uid, userAccount);
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { userAccount, joinChannelSuccess } = this.state;
     return (
       <>
@@ -162,7 +162,7 @@ export default class StringUid
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess } = this.state;
     return (
       <>

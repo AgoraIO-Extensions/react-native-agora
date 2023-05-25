@@ -1,6 +1,6 @@
 import { ParamListBase } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { Component, ReactElement, ReactNode, useState } from 'react';
+import React, { Component, ReactElement, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -196,7 +196,7 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderChannel(): ReactNode {
+  protected renderChannel(): ReactElement | undefined {
     const { channelId, joinChannelSuccess } = this.state;
     return (
       <>
@@ -217,7 +217,7 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderUsers(): ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     const { enableVideo, startPreview, joinChannelSuccess, remoteUsers } =
       this.state;
     return enableVideo ? (
@@ -238,7 +238,7 @@ export abstract class BaseComponent<
               this.renderUser({
                 uid: item,
                 sourceType: VideoSourceType.VideoSourceRemote,
-              })
+              })!
             }
           />
         ) : undefined}
@@ -246,7 +246,7 @@ export abstract class BaseComponent<
     ) : undefined;
   }
 
-  protected renderUser(user: VideoCanvas): ReactElement {
+  protected renderUser(user: VideoCanvas): ReactElement | undefined {
     const video = this.renderVideo(user);
     return user.uid === 0 ? (
       video
@@ -255,7 +255,7 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderVideo(user: VideoCanvas): ReactElement {
+  protected renderVideo(user: VideoCanvas): ReactElement | undefined {
     return (
       <RtcSurfaceView
         style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
@@ -265,11 +265,11 @@ export abstract class BaseComponent<
     );
   }
 
-  protected renderConfiguration(): ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     return undefined;
   }
 
-  protected renderAction(): ReactNode {
+  protected renderAction(): ReactElement | undefined {
     return undefined;
   }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Platform } from 'react-native';
 import {
   ChannelProfileType,
@@ -236,7 +236,7 @@ export default class MediaRecorder
     }
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const {
       storagePath,
       containerFormat,
@@ -297,7 +297,7 @@ export default class MediaRecorder
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess, startRecoding } = this.state;
     return (
       <>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -303,7 +303,7 @@ export default class JoinChannelAudio
     this.info('onAudioRoutingChanged', 'routing', routing);
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const {
       recordingSignalVolume,
       playbackSignalVolume,
@@ -372,7 +372,7 @@ export default class JoinChannelAudio
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const {
       enableLocalAudio,
       muteLocalAudioStream,

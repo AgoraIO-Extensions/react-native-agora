@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Platform } from 'react-native';
 import {
   ChannelProfileType,
@@ -159,7 +159,7 @@ export default class PushVideoFrame
     this.engine?.release();
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { filePath } = this.state;
     return (
       <>
@@ -184,7 +184,7 @@ export default class PushVideoFrame
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess } = this.state;
     return (
       <>

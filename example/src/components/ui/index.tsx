@@ -20,7 +20,7 @@ import {
   TextProps,
   lightColors,
 } from '@rneui/base';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import {
   FlatList,
   FlatListProps,
@@ -181,7 +181,7 @@ export const AgoraListItem = (props: ListItemProps) => {
 };
 
 export const AgoraCard = (
-  props: CardProps & { title: string; children?: ReactNode | undefined }
+  props: CardProps & { title: string; children?: ReactElement }
 ) => {
   const { title, children, ...others } = props;
   return (

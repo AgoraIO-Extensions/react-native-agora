@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -163,7 +163,7 @@ export default class BeautyEffect
     this.engine?.release();
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const {
       lighteningContrastLevel,
       lighteningLevel,
@@ -237,7 +237,7 @@ export default class BeautyEffect
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, enableBeautyEffect } = this.state;
     return (
       <>

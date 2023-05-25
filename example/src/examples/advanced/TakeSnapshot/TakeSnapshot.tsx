@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Platform } from 'react-native';
 import {
   ChannelProfileType,
@@ -174,7 +174,7 @@ export default class TakeSnapshot
     }
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { remoteUsers, targetUid, filePath, takeSnapshot } = this.state;
     return (
       <>
@@ -203,7 +203,7 @@ export default class TakeSnapshot
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess } = this.state;
     return (
       <>

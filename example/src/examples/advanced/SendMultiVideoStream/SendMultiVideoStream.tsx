@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   AudioFrame,
   AudioPcmFrame,
@@ -302,7 +302,7 @@ export default class SendMultiVideoStream
     this.info('onFrame', frame);
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { uid2, url } = this.state;
     return (
       <>
@@ -328,7 +328,7 @@ export default class SendMultiVideoStream
     );
   }
 
-  protected renderUsers(): React.ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     const { open } = this.state;
     return (
       <>
@@ -345,7 +345,7 @@ export default class SendMultiVideoStream
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { open } = this.state;
     return (
       <>

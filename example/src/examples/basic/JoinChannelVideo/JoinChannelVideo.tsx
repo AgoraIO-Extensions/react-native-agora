@@ -198,11 +198,11 @@ export default class JoinChannelVideo
     );
   }
 
-  protected renderUsers(): React.ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     return super.renderUsers();
   }
 
-  protected renderVideo(user: VideoCanvas): ReactElement {
+  protected renderVideo(user: VideoCanvas): ReactElement | undefined {
     const { renderByTextureView, setupMode } = this.state;
     return renderByTextureView ? (
       <RtcTextureView
@@ -218,7 +218,7 @@ export default class JoinChannelVideo
     );
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, renderByTextureView, setupMode } =
       this.state;
     return (
@@ -263,7 +263,7 @@ export default class JoinChannelVideo
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess } = this.state;
     return (
       <>

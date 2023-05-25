@@ -385,7 +385,7 @@ export default class ScreenShare
     }
   }
 
-  protected renderUsers(): React.ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     const { startScreenCapture } = this.state;
     return (
       <>
@@ -404,14 +404,14 @@ export default class ScreenShare
     );
   }
 
-  protected renderVideo(user: VideoCanvas): ReactElement {
+  protected renderVideo(user: VideoCanvas): ReactElement | undefined {
     return super.renderVideo({
       ...user,
       renderMode: RenderModeType.RenderModeFit,
     });
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const {
       uid2,
       captureAudio,
@@ -557,7 +557,7 @@ export default class ScreenShare
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startScreenCapture, publishScreenCapture } = this.state;
     return (
       <>

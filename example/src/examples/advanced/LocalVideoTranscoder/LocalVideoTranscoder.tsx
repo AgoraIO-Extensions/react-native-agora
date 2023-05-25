@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Platform } from 'react-native';
 import createAgoraRtcEngine, {
   ChannelProfileType,
@@ -337,7 +337,7 @@ export default class LocalVideoTranscoder
     }
   }
 
-  protected renderUsers(): React.ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, startLocalVideoTranscoder } =
       this.state;
     return (
@@ -360,7 +360,7 @@ export default class LocalVideoTranscoder
     );
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { startScreenCapture, url, open, imageUrl } = this.state;
     return (
       <>
@@ -405,7 +405,7 @@ export default class LocalVideoTranscoder
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startLocalVideoTranscoder } = this.state;
     return (
       <>

@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -153,7 +153,7 @@ export default class SendMetadata
     );
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { metadataBuffer } = this.state;
     return (
       <>
@@ -168,7 +168,7 @@ export default class SendMetadata
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess } = this.state;
     return (
       <>

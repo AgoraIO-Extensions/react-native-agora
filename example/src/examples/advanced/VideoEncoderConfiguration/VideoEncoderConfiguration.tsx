@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
@@ -168,7 +168,7 @@ export default class VideoEncoderConfiguration
     this.engine?.release();
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { codecType, orientationMode, degradationPreference, mirrorMode } =
       this.state;
     return (
@@ -268,7 +268,7 @@ export default class VideoEncoderConfiguration
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     return (
       <>
         <AgoraButton

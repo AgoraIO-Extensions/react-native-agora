@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Platform } from 'react-native';
 import {
   ChannelProfileType,
@@ -196,7 +196,7 @@ export default class Extension
     this.setState({ enableExtension: false });
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { path, provider, extension } = this.state;
     return (
       <>
@@ -233,7 +233,7 @@ export default class Extension
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess, enableExtension } = this.state;
     return (
       <>

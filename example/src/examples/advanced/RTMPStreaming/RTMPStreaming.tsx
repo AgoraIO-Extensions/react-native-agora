@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   AudioCodecProfileType,
   AudioSampleRateType,
@@ -325,7 +325,7 @@ export default class RTMPStreaming
     this.debug('onTranscodingUpdated');
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const {
       url,
       startRtmpStreamWithTranscoding,
@@ -513,7 +513,7 @@ export default class RTMPStreaming
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const {
       joinChannelSuccess,
       startRtmpStreamWithTranscoding,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   AudioScenarioType,
   ChannelProfileType,
@@ -168,7 +168,7 @@ export default class SpatialAudio
     this.engine?.release();
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const {
       remoteUsers,
       targetUid,
@@ -257,7 +257,7 @@ export default class SpatialAudio
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess, enableSpatialAudio } = this.state;
     return (
       <>
