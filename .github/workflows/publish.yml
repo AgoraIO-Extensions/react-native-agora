@@ -27,12 +27,16 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Setup NPM auth token
+        run: |
+          npm set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_TOKEN }}
+
       - name: Dry Run Release
         if: ${{ inputs.dry-run }}
         run: |
           yarn release ${{ inputs.increment }} -d --ci
 
-      - name: Release
+      - name: NPM Publish
         if: ${{ !inputs.dry-run }}
         run: |
           git config --global user.email "${{ secrets.GIT_EMAIL }}"
