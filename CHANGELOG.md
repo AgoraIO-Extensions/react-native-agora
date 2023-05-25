@@ -1,3 +1,19 @@
+
+
+# [4.2.0-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.1.2...v4.2.0-rc.1) (2023-05-25)
+
+
+### Features
+
+* support 4.2.0 ([#647](https://github.com/AgoraIO-Extensions/react-native-agora/issues/647)) ([e959dac](https://github.com/AgoraIO-Extensions/react-native-agora/commit/e959dac51911f842efac4de6fd01897d06defbee)), closes [#624](https://github.com/AgoraIO-Extensions/react-native-agora/issues/624) [#626](https://github.com/AgoraIO-Extensions/react-native-agora/issues/626) [#628](https://github.com/AgoraIO-Extensions/react-native-agora/issues/628) [#629](https://github.com/AgoraIO-Extensions/react-native-agora/issues/629) [#630](https://github.com/AgoraIO-Extensions/react-native-agora/issues/630) [#635](https://github.com/AgoraIO-Extensions/react-native-agora/issues/635) [#638](https://github.com/AgoraIO-Extensions/react-native-agora/issues/638) [#642](https://github.com/AgoraIO-Extensions/react-native-agora/issues/642)
+* support 4.2.0 ([#656](https://github.com/AgoraIO-Extensions/react-native-agora/issues/656)) ([d4fcbbe](https://github.com/AgoraIO-Extensions/react-native-agora/commit/d4fcbbe706ca016408d4958c5cac659cbc199308)), closes [#624](https://github.com/AgoraIO-Extensions/react-native-agora/issues/624) [#626](https://github.com/AgoraIO-Extensions/react-native-agora/issues/626) [#628](https://github.com/AgoraIO-Extensions/react-native-agora/issues/628) [#629](https://github.com/AgoraIO-Extensions/react-native-agora/issues/629) [#630](https://github.com/AgoraIO-Extensions/react-native-agora/issues/630) [#635](https://github.com/AgoraIO-Extensions/react-native-agora/issues/635) [#638](https://github.com/AgoraIO-Extensions/react-native-agora/issues/638) [#642](https://github.com/AgoraIO-Extensions/react-native-agora/issues/642)
+* support new arch ([#608](https://github.com/AgoraIO-Extensions/react-native-agora/issues/608)) ([25ff823](https://github.com/AgoraIO-Extensions/react-native-agora/commit/25ff8233d543f47bbb75ce9b134f3defa286fcbf))
+
+
+### Reverts
+
+* Revert "feat: support 4.2.0 (#647)" (#655) ([256ce52](https://github.com/AgoraIO-Extensions/react-native-agora/commit/256ce523a951341138e0a718f36fe0a7fcc0b1d3)), closes [#647](https://github.com/AgoraIO-Extensions/react-native-agora/issues/647) [#655](https://github.com/AgoraIO-Extensions/react-native-agora/issues/655)
+
 ## [4.1.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.1.0...v4.1.2) (2023-03-14)
 
 
