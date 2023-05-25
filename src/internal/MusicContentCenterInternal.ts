@@ -95,6 +95,7 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
 
   override release() {
     MusicContentCenterInternal._event_handlers = [];
+    this.removeAllListeners();
     super.release();
   }
 
