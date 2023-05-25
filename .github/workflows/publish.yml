@@ -1,5 +1,5 @@
 name: Publish to NPM
-run-name: ${{ github.actor }} triggered this job
+
 on:
   workflow_dispatch:
     inputs:

@@ -1,5 +1,5 @@
 name: Generate comments
-run-name: ${{ github.actor }} triggered this job
+
 on:
   workflow_dispatch:
 

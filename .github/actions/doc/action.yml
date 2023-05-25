@@ -1,5 +1,6 @@
-name: doc
+name: Doc
 description: Generate comments
+
 inputs:
   target-path:
     description: The path to generate comments, if set, will skip clone & pr

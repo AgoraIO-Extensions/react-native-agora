@@ -1,7 +1,8 @@
 name: Build API Example
-run-name: ${{ github.actor }} triggered this job
+
 on:
   workflow_dispatch:
+
 jobs:
   build-android:
     runs-on: ubuntu-latest
