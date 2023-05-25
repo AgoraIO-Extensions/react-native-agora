@@ -17,9 +17,9 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm}"
 
   s.dependency "React-Core"
-  s.dependency 'AgoraRtcEngine_iOS', '4.1.0'
-  s.dependency 'AgoraIrisRTC_iOS', '4.1.0-rc.2'
-  s.weak_frameworks = 'AgoraAiEchoCancellationExtension', 'AgoraAiNoiseSuppressionExtension', 'AgoraAudioBeautyExtension', 'AgoraClearVisionExtension', 'AgoraContentInspectExtension', 'AgoraDrmLoaderExtension', 'AgoraReplayKitExtension', 'AgoraSpatialAudioExtension', 'AgoraSuperResolutionExtension', 'AgoraVideoQualityAnalyzerExtension', 'AgoraVideoSegmentationExtension'
+  s.dependency 'AgoraRtcEngine_iOS', '4.2.0'
+  s.dependency 'AgoraIrisRTC_iOS', '4.2.0-build.3'
+  s.weak_frameworks = 'AgoraAiNoiseSuppressionExtension', 'AgoraAudioBeautyExtension', 'AgoraClearVisionExtension', 'AgoraContentInspectExtension', 'AgoraSpatialAudioExtension', 'AgoraVideoSegmentationExtension', 'AgoraAiEchoCancellationExtension', 'AgoraDrmLoaderExtension', 'AgoraVideoQualityAnalyzerExtension', 'AgoraFaceDetectionExtension', 'AgoraVideoEncoderExtension', 'video_enc', 'AgoraVideoDecoderExtension', 'video_dec', 'AgoraReplayKitExtension'
   s.libraries = 'stdc++'
   s.framework = 'ReplayKit'
 

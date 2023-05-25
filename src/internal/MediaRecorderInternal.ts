@@ -2,54 +2,45 @@ import { createCheckers } from 'ts-interface-checker';
 
 import { ErrorCodeType } from '../AgoraBase';
 import { IMediaRecorderObserver } from '../AgoraMediaBase';
-import { RtcConnection } from '../IAgoraRtcEngineEx';
-
 import { IMediaRecorderEvent } from '../extension/IAgoraMediaRecorderExtension';
-
-import { processIMediaRecorderObserver } from '../impl/AgoraMediaBaseImpl';
 import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
-
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
-import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
-import { EmitterSubscription } from './emitter/EventEmitter';
+import {
+  DeviceEventEmitter,
+  EVENT_TYPE,
+  EventProcessor,
+} from './IrisApiEngine';
 
 export class MediaRecorderInternal extends IMediaRecorderImpl {
   static _observers: Map<string, IMediaRecorderObserver> = new Map<
     string,
     IMediaRecorderObserver
   >();
-  private _events: Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  > = new Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  >();
+  private readonly _nativeHandle: string;
 
-  setMediaRecorderObserver(
-    connection: RtcConnection,
-    callback: IMediaRecorderObserver
-  ): number {
-    const key = (connection.channelId ?? '') + connection.localUid;
+  constructor(nativeHandle: string) {
+    super();
+    this._nativeHandle = nativeHandle;
+  }
+
+  release() {
+    MediaRecorderInternal._observers.delete(this._nativeHandle);
+    this.removeAllListeners();
+  }
+
+  get nativeHandle(): string {
+    return this._nativeHandle;
+  }
+
+  override setMediaRecorderObserver(callback: IMediaRecorderObserver): number {
+    const key = this._nativeHandle;
     if (MediaRecorderInternal._observers.has(key)) {
       return ErrorCodeType.ErrOk;
     }
     MediaRecorderInternal._observers.set(key, callback);
-    return super.setMediaRecorderObserver(connection, callback);
-  }
-
-  release() {
-    MediaRecorderInternal._observers.clear();
-    this.removeAllListeners();
-    super.release();
+    return super.setMediaRecorderObserver(callback);
   }
 
   _addListenerPreCheck<EventType extends keyof IMediaRecorderEvent>(
@@ -60,11 +51,10 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
         [eventType]: undefined,
       })
     ) {
-      if (MediaRecorderInternal._observers.size === 0) {
-        console.error(
-          'Please call `setMediaRecorderObserver` before you want to receive event by `addListener`'
-        );
-        return false;
+      if (
+        MediaRecorderInternal._observers.get(this._nativeHandle) === undefined
+      ) {
+        this.setMediaRecorderObserver({});
       }
     }
     return true;
@@ -73,49 +63,38 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
   addListener<EventType extends keyof IMediaRecorderEvent>(
     eventType: EventType,
     listener: IMediaRecorderEvent[EventType]
-  ): EmitterSubscription {
+  ): void {
     this._addListenerPreCheck(eventType);
-    const callback = (...data: any[]) => {
-      if (data[0] !== EVENT_TYPE.IMediaRecorder) {
+    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
+      if (eventProcessor.type(data) !== EVENT_TYPE.IMediaRecorder) {
         return;
       }
-      processIMediaRecorderObserver(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
+      if (data.nativeHandle !== this._nativeHandle) {
+        return;
+      }
+      eventProcessor.func.map((it) => {
+        it({ [eventType]: listener }, eventType, data);
+      });
     };
-    const subscription = DeviceEventEmitter.addListener(eventType, callback);
-    this._events.set(listener, { eventType, subscription });
-    return subscription;
+    // @ts-ignore
+    listener!.agoraCallback = callback;
+    DeviceEventEmitter.addListener(eventType, callback);
   }
 
   removeListener<EventType extends keyof IMediaRecorderEvent>(
     eventType: EventType,
-    listener: IMediaRecorderEvent[EventType]
+    listener?: IMediaRecorderEvent[EventType]
   ) {
-    if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeSubscription(
-      this._events.get(listener)!.subscription
+    DeviceEventEmitter.removeListener(
+      eventType,
+      // @ts-ignore
+      listener?.agoraCallback ?? listener
     );
-    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IMediaRecorderEvent>(
     eventType?: EventType
   ) {
-    if (eventType === undefined) {
-      this._events.forEach((value) => {
-        DeviceEventEmitter.removeAllListeners(value.eventType);
-      });
-      this._events.clear();
-    } else {
-      DeviceEventEmitter.removeAllListeners(eventType);
-      this._events.forEach((value, key) => {
-        if (value.eventType === eventType) {
-          this._events.delete(key);
-        }
-      });
-    }
+    DeviceEventEmitter.removeAllListeners(eventType);
   }
 }

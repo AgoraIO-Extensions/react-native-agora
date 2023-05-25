@@ -1,11 +1,10 @@
+import { IAudioEncodedFrameObserver } from '../AgoraBase';
+import { IAudioSpectrumObserver } from '../AgoraMediaBase';
 import {
-  IRtcEngineEventHandler,
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
+  IRtcEngineEventHandler,
 } from '../IAgoraRtcEngine';
-import { IAudioSpectrumObserver } from '../AgoraMediaBase';
-import { IAudioEncodedFrameObserver } from '../AgoraBase';
-import { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IRtcEngineEvent = IRtcEngineEventHandler &
   IDirectCdnStreamingEventHandler &
@@ -29,14 +28,11 @@ declare module '../IAgoraRtcEngine' {
      * const onJoinChannelSuccess = (connection: RtcConnection, elapsed: number) => {};
      * // Add one onJoinChannelSuccess listener
      * engine.addListener('onJoinChannelSuccess', onJoinChannelSuccess);
-     *
-     * @returns
-     * The native interface EventSubscription in React Native API.
      */
     addListener<EventType extends keyof IRtcEngineEvent>(
       eventType: EventType,
       listener: IRtcEngineEvent[EventType]
-    ): EmitterSubscription;
+    ): void;
 
     /**
      * Removes the specified IRtcEngineEvent listener.
@@ -53,7 +49,7 @@ declare module '../IAgoraRtcEngine' {
      */
     removeListener<EventType extends keyof IRtcEngineEvent>(
       eventType: EventType,
-      listener: IRtcEngineEvent[EventType]
+      listener?: IRtcEngineEvent[EventType]
     ): void;
 
     /**

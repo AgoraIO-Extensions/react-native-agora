@@ -4,6 +4,10 @@
 import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
+export const IAudioPcmFrameSink = t.iface([], {
+  "onFrame": t.opt(t.func("void", t.param("frame", "AudioPcmFrame"))),
+});
+
 export const IAudioFrameObserverBase = t.iface([], {
   "onRecordAudioFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
   "onPlaybackAudioFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
@@ -25,25 +29,20 @@ export const IVideoEncodedFrameObserver = t.iface([], {
 });
 
 export const IVideoFrameObserver = t.iface([], {
-  "onCaptureVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
-  "onPreEncodeVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
-  "onSecondaryCameraCaptureVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
-  "onSecondaryPreEncodeCameraVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
-  "onScreenCaptureVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
-  "onPreEncodeScreenVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
+  "onCaptureVideoFrame": t.opt(t.func("boolean", t.param("sourceType", "VideoSourceType"), t.param("videoFrame", "VideoFrame"))),
+  "onPreEncodeVideoFrame": t.opt(t.func("boolean", t.param("sourceType", "VideoSourceType"), t.param("videoFrame", "VideoFrame"))),
   "onMediaPlayerVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"), t.param("mediaPlayerId", "number"))),
-  "onSecondaryScreenCaptureVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
-  "onSecondaryPreEncodeScreenVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
   "onRenderVideoFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("remoteUid", "number"), t.param("videoFrame", "VideoFrame"))),
   "onTranscodedVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
 });
 
 export const IMediaRecorderObserver = t.iface([], {
-  "onRecorderStateChanged": t.opt(t.func("void", t.param("state", "RecorderState"), t.param("error", "RecorderErrorCode"))),
-  "onRecorderInfoUpdated": t.opt(t.func("void", t.param("info", "RecorderInfo"))),
+  "onRecorderStateChanged": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("state", "RecorderState"), t.param("error", "RecorderErrorCode"))),
+  "onRecorderInfoUpdated": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("info", "RecorderInfo"))),
 });
 
 const exportedTypeSuite: t.ITypeSuite = {
+  IAudioPcmFrameSink,
   IAudioFrameObserverBase,
   IAudioFrameObserver,
   IAudioSpectrumObserver,

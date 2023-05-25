@@ -30,12 +30,12 @@ using namespace facebook::react;
     if (self = [super initWithFrame:frame]) {
         static const auto defaultProps = std::make_shared<const AgoraRtcSurfaceViewProps>();
         _props = defaultProps;
-        
+
         _view = [[UIView alloc] init];
-        
+
         self.contentView = _view;
     }
-    
+
     return self;
 }
 
@@ -43,7 +43,7 @@ using namespace facebook::react;
 {
     const auto &oldViewProps = *std::static_pointer_cast<AgoraRtcSurfaceViewProps const>(_props);
     const auto &newViewProps = *std::static_pointer_cast<AgoraRtcSurfaceViewProps const>(props);
-    
+
     if (oldViewProps.callApi.funcName != newViewProps.callApi.funcName || oldViewProps.callApi.params != newViewProps.callApi.params) {
         char result[kBasicResultLength];
         void *buffers[1];
@@ -57,9 +57,11 @@ using namespace facebook::react;
             .length = nullptr,
             .buffer_count = 1,
         };
-        [[AgoraRtcNg shareInstance] irisApiEngine]->CallIrisApi(&param);
+        if ([[AgoraRtcNg shareInstance] irisApiEngine]) {
+            [[AgoraRtcNg shareInstance] irisApiEngine]->CallIrisApi(&param);
+        }
     }
-    
+
     [super updateProps:props oldProps:oldProps];
 }
 

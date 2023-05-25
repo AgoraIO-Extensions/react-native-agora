@@ -1,9 +1,8 @@
-import React from 'react';
-import { PermissionsAndroid, Platform, ScrollView } from 'react-native';
+import React, { ReactElement } from 'react';
+import { Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   ErrorCodeType,
   IRtcEngineEventHandler,
   LocalVideoStreamError,
@@ -13,11 +12,11 @@ import {
   RtcSurfaceView,
   RtcTextureView,
   UserOfflineReasonType,
+  VideoCanvas,
   VideoSourceType,
   VideoViewSetupMode,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -30,7 +29,9 @@ import {
   AgoraStyle,
   AgoraSwitch,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   switchCamera: boolean;
@@ -70,18 +71,17 @@ export default class JoinChannelVideo
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -198,55 +198,27 @@ export default class JoinChannelVideo
     );
   }
 
-  protected renderUsers(): React.ReactNode {
-    const {
-      startPreview,
-      joinChannelSuccess,
-      remoteUsers,
-      renderByTextureView,
-      setupMode,
-    } = this.state;
+  protected renderUsers(): ReactElement | undefined {
+    return super.renderUsers();
+  }
 
-    return (
-      <>
-        {startPreview || joinChannelSuccess ? (
-          renderByTextureView ? (
-            <RtcTextureView
-              style={AgoraStyle.videoLarge}
-              canvas={{ uid: 0, setupMode }}
-            />
-          ) : (
-            <RtcSurfaceView
-              style={AgoraStyle.videoLarge}
-              canvas={{ uid: 0, setupMode }}
-            />
-          )
-        ) : undefined}
-        {remoteUsers !== undefined && remoteUsers.length > 0 ? (
-          <ScrollView horizontal={true} style={AgoraStyle.videoContainer}>
-            {remoteUsers.map((value, index) =>
-              renderByTextureView ? (
-                <RtcTextureView
-                  key={`${value}-${index}`}
-                  style={AgoraStyle.videoSmall}
-                  canvas={{ uid: value, setupMode }}
-                />
-              ) : (
-                <RtcSurfaceView
-                  key={`${value}-${index}`}
-                  style={AgoraStyle.videoSmall}
-                  zOrderMediaOverlay={true}
-                  canvas={{ uid: value, setupMode }}
-                />
-              )
-            )}
-          </ScrollView>
-        ) : undefined}
-      </>
+  protected renderVideo(user: VideoCanvas): ReactElement | undefined {
+    const { renderByTextureView, setupMode } = this.state;
+    return renderByTextureView ? (
+      <RtcTextureView
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        canvas={{ ...user, setupMode }}
+      />
+    ) : (
+      <RtcSurfaceView
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={user.uid !== 0}
+        canvas={{ ...user, setupMode }}
+      />
     );
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, renderByTextureView, setupMode } =
       this.state;
     return (
@@ -291,7 +263,7 @@ export default class JoinChannelVideo
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess } = this.state;
     return (
       <>

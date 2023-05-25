@@ -1,16 +1,14 @@
-import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import React, { ReactElement } from 'react';
+import { Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   ErrorCodeType,
   IRtcEngineEventHandler,
   RtcConnection,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import RNFS from 'react-native-fs';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -21,8 +19,11 @@ import {
   AgoraDivider,
   AgoraDropdown,
   AgoraImage,
+  AgoraStyle,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   targetUid: number;
@@ -34,6 +35,8 @@ export default class TakeSnapshot
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler
 {
+  _timestamp: number = 0;
+
   protected createState(): State {
     return {
       appId: Config.appId,
@@ -66,18 +69,17 @@ export default class TakeSnapshot
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
@@ -120,7 +122,11 @@ export default class TakeSnapshot
       return;
     }
 
-    this.engine?.takeSnapshot(targetUid, `${filePath}/${targetUid}.jpg`);
+    this._timestamp = new Date().getTime();
+    this.engine?.takeSnapshot(
+      targetUid,
+      `${filePath}/${targetUid}-${this._timestamp}.jpg`
+    );
     this.setState({ takeSnapshot: false });
   };
 
@@ -163,12 +169,12 @@ export default class TakeSnapshot
       errCode
     );
     const { targetUid, filePath: path } = this.state;
-    if (filePath === `${path}/${targetUid}.jpg`) {
+    if (filePath === `${path}/${targetUid}-${this._timestamp}.jpg`) {
       this.setState({ takeSnapshot: errCode === ErrorCodeType.ErrOk });
     }
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { remoteUsers, targetUid, filePath, takeSnapshot } = this.state;
     return (
       <>
@@ -184,21 +190,20 @@ export default class TakeSnapshot
           <>
             <AgoraDivider />
             <AgoraImage
-              style={styles.image}
+              style={AgoraStyle.image}
               source={{
                 uri: `${
                   Platform.OS === 'android' ? 'file://' : ''
-                }${filePath}/${targetUid}.jpg`,
+                }${filePath}/${targetUid}-${this._timestamp}.jpg`,
               }}
             />
           </>
         ) : undefined}
-        <AgoraDivider />
       </>
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess } = this.state;
     return (
       <>
@@ -211,10 +216,3 @@ export default class TakeSnapshot
     );
   }
 }
-
-const styles = StyleSheet.create({
-  image: {
-    width: 120,
-    height: 120,
-  },
-});

@@ -1,13 +1,10 @@
-import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseAudioComponentState,
@@ -20,7 +17,9 @@ import {
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
-import { getAbsolutePath, getAssetPath } from '../../../utils';
+import Config from '../../../config/agora.config';
+import { getAbsolutePath, getResourcePath } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   soundId: number;
@@ -49,7 +48,7 @@ export default class PlayEffect
       joinChannelSuccess: false,
       remoteUsers: [],
       soundId: 0,
-      filePath: getAssetPath('Sound_Horizon.mp3'),
+      filePath: getResourcePath('effect.mp3'),
       loopCount: 1,
       pitch: 1.0,
       pan: 0,
@@ -73,15 +72,14 @@ export default class PlayEffect
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
@@ -196,7 +194,7 @@ export default class PlayEffect
     this.setState({ playEffect: false });
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { filePath, pitch, pan, gain, publish } = this.state;
     return (
       <>
@@ -207,9 +205,7 @@ export default class PlayEffect
               soundId: text === '' ? this.createState().soundId : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`soundId (defaults: ${this.createState().soundId})`}
         />
         <AgoraTextInput
@@ -226,9 +222,7 @@ export default class PlayEffect
               loopCount: text === '' ? this.createState().loopCount : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`loopCount (defaults: ${this.createState().loopCount})`}
         />
         <AgoraSlider
@@ -279,16 +273,14 @@ export default class PlayEffect
               startPos: text === '' ? this.createState().startPos : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`startPos (defaults: ${this.createState().startPos})`}
         />
       </>
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { playEffect, pauseEffect } = this.state;
     return (
       <>

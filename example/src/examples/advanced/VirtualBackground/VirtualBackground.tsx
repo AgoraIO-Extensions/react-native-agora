@@ -1,16 +1,13 @@
-import React from 'react';
-import { PermissionsAndroid, Platform, StyleSheet } from 'react-native';
+import React, { ReactElement } from 'react';
 import {
   BackgroundBlurDegree,
   BackgroundSourceType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -19,9 +16,12 @@ import {
 import {
   AgoraButton,
   AgoraDropdown,
+  AgoraStyle,
   AgoraTextInput,
 } from '../../../components/ui';
-import { enumToItems, getAbsolutePath, getAssetPath } from '../../../utils';
+import Config from '../../../config/agora.config';
+import { enumToItems, getAbsolutePath, getResourcePath } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   background_source_type: BackgroundSourceType;
@@ -47,7 +47,7 @@ export default class VirtualBackground
       startPreview: false,
       background_source_type: BackgroundSourceType.BackgroundColor,
       color: 0xffffff,
-      source: getAssetPath('agora-logo.png'),
+      source: getResourcePath('agora-logo.png'),
       blur_degree: BackgroundBlurDegree.BlurDegreeMedium,
       enableVirtualBackground: false,
     };
@@ -65,23 +65,18 @@ export default class VirtualBackground
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
-    // Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      this.engine?.loadExtensionProvider('agora_segmentation_extension');
-    }
     this.engine?.enableExtension(
       'agora_video_filters_segmentation',
       'portrait_segmentation',
@@ -172,7 +167,7 @@ export default class VirtualBackground
     this.engine?.release();
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { background_source_type, color, source, blur_degree } = this.state;
     return (
       <>
@@ -186,7 +181,7 @@ export default class VirtualBackground
         />
         {background_source_type === BackgroundSourceType.BackgroundColor ? (
           <ColorPicker
-            style={styles.picker}
+            style={AgoraStyle.picker}
             onColorChange={(selectedColor) => {
               this.setState({
                 color: +fromHsv(selectedColor).replace('#', '0x'),
@@ -222,7 +217,7 @@ export default class VirtualBackground
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, enableVirtualBackground } =
       this.state;
     return (
@@ -242,15 +237,3 @@ export default class VirtualBackground
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  picker: {
-    width: '100%',
-    height: 200,
-  },
-});

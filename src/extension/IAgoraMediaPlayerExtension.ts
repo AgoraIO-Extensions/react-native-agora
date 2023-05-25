@@ -1,13 +1,9 @@
+import { IAudioPcmFrameSink, IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { IMediaPlayerVideoFrameObserver } from '../IAgoraMediaPlayer';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
-import {
-  IMediaPlayerAudioFrameObserver,
-  IMediaPlayerVideoFrameObserver,
-} from '../IAgoraMediaPlayer';
-import { IAudioSpectrumObserver } from '../AgoraMediaBase';
-import { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaPlayerEvent = IMediaPlayerSourceObserver &
-  IMediaPlayerAudioFrameObserver &
+  IAudioPcmFrameSink &
   IMediaPlayerVideoFrameObserver &
   IAudioSpectrumObserver;
 
@@ -27,14 +23,11 @@ declare module '../IAgoraMediaPlayer' {
      * const onPlayerSourceStateChanged = (connection: RtcConnection, elapsed: number) => {};
      * // Add one onPlayerSourceStateChanged listener
      * engine.addListener('onPlayerSourceStateChanged', onPlayerSourceStateChanged);
-     *
-     * @returns
-     * The native interface EventSubscription in React Native API.
      */
     addListener<EventType extends keyof IMediaPlayerEvent>(
       eventType: EventType,
       listener: IMediaPlayerEvent[EventType]
-    ): EmitterSubscription;
+    ): void;
 
     /**
      * Removes the specified IMediaPlayerEvent listener.
@@ -51,7 +44,7 @@ declare module '../IAgoraMediaPlayer' {
      */
     removeListener<EventType extends keyof IMediaPlayerEvent>(
       eventType: EventType,
-      listener: IMediaPlayerEvent[EventType]
+      listener?: IMediaPlayerEvent[EventType]
     ): void;
 
     /**

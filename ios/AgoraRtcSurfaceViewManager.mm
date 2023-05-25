@@ -33,7 +33,9 @@ RCT_CUSTOM_VIEW_PROPERTY(callApi, NSDictionary, UIView) {
             .length = nullptr,
             .buffer_count = 1,
         };
-        module.irisApiEngine->CallIrisApi(&param);
+        if (module.irisApiEngine) {
+            module.irisApiEngine->CallIrisApi(&param);
+        }
     }
 }
 

@@ -1,18 +1,14 @@
-import React from 'react';
-import { Platform } from 'react-native';
+import React, { ReactElement } from 'react';
 import {
-  createAgoraRtcEngine,
   IMediaPlayer,
   IMediaPlayerSourceObserver,
   IRtcEngineEventHandler,
   MediaPlayerError,
   MediaPlayerEvent,
   MediaPlayerState,
-  RtcSurfaceView,
   VideoSourceType,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -22,9 +18,10 @@ import {
   AgoraButton,
   AgoraDivider,
   AgoraSlider,
-  AgoraStyle,
   AgoraTextInput,
+  RtcSurfaceView,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 
 interface State extends BaseComponentState {
   url: string;
@@ -72,6 +69,7 @@ export default class MediaPlayer
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
     });
     this.engine.registerEventHandler(this);
 
@@ -284,11 +282,11 @@ export default class MediaPlayer
     );
   }
 
-  protected renderChannel(): React.ReactNode {
+  protected renderChannel(): ReactElement | undefined {
     return undefined;
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { url, open, position, duration, playoutVolume } = this.state;
     return (
       <>
@@ -334,9 +332,7 @@ export default class MediaPlayer
               loopCount: text === '' ? this.createState().loopCount : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`loopCount (defaults: ${this.createState().loopCount})`}
         />
         <AgoraButton
@@ -344,20 +340,18 @@ export default class MediaPlayer
           title={'set Loop Count'}
           onPress={this.setLoopCount}
         />
-        <AgoraDivider />
       </>
     );
   }
 
-  protected renderUsers(): React.ReactNode {
+  protected renderUsers(): ReactElement | undefined {
     const { open } = this.state;
     return (
       <>
         {open ? (
           <RtcSurfaceView
-            style={AgoraStyle.videoLarge}
             canvas={{
-              uid: this.player?.getMediaPlayerId(),
+              mediaPlayerId: this.player?.getMediaPlayerId(),
               sourceType: VideoSourceType.VideoSourceMediaPlayer,
             }}
           />
@@ -366,7 +360,7 @@ export default class MediaPlayer
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { open, play, pause, mute } = this.state;
     return (
       <>

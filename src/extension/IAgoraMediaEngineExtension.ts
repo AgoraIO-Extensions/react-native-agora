@@ -3,7 +3,6 @@ import {
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
-import { EmitterSubscription } from '../internal/emitter/EventEmitter';
 
 export type IMediaEngineEvent = IAudioFrameObserver &
   IVideoFrameObserver &
@@ -25,14 +24,11 @@ declare module '../IAgoraMediaEngine' {
      * const onPlaybackAudioFrameBeforeMixing = (channelId: string, uid: number, audioFrame: AudioFrame) => {};
      * // Add one onPlaybackAudioFrameBeforeMixing listener
      * engine.addListener('onPlaybackAudioFrameBeforeMixing', onPlaybackAudioFrameBeforeMixing);
-     *
-     * @returns
-     * The native interface EventSubscription in React Native API.
      */
     addListener<EventType extends keyof IMediaEngineEvent>(
       eventType: EventType,
       listener: IMediaEngineEvent[EventType]
-    ): EmitterSubscription;
+    ): void;
 
     /**
      * Removes the specified IMediaEngineEvent listener.
@@ -49,7 +45,7 @@ declare module '../IAgoraMediaEngine' {
      */
     removeListener<EventType extends keyof IMediaEngineEvent>(
       eventType: EventType,
-      listener: IMediaEngineEvent[EventType]
+      listener?: IMediaEngineEvent[EventType]
     ): void;
 
     /**

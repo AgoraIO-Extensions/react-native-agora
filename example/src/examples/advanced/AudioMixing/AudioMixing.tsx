@@ -1,27 +1,26 @@
-import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
+import React, { ReactElement } from 'react';
 import {
   AudioMixingReasonType,
   AudioMixingStateType,
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
 
-import Config from '../../../config/agora.config';
-
+import {
+  BaseAudioComponentState,
+  BaseComponent,
+} from '../../../components/BaseComponent';
 import {
   AgoraButton,
   AgoraDivider,
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
-import {
-  BaseAudioComponentState,
-  BaseComponent,
-} from '../../../components/BaseComponent';
-import { getAssetPath } from '../../../utils';
+import Config from '../../../config/agora.config';
+import { getResourcePath } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   filePath: string;
@@ -45,7 +44,7 @@ export default class AudioMixing
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      filePath: getAssetPath('Sound_Horizon.mp3'),
+      filePath: getResourcePath('effect.mp3'),
       loopback: false,
       cycle: -1,
       startPos: 0,
@@ -66,15 +65,14 @@ export default class AudioMixing
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone permission
-      await PermissionsAndroid.request('android.permission.RECORD_AUDIO');
-    }
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
@@ -201,7 +199,7 @@ export default class AudioMixing
     this.info('AudioMixingFinished');
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const { filePath, loopback } = this.state;
     return (
       <>
@@ -227,9 +225,7 @@ export default class AudioMixing
               cycle: text === '' ? this.createState().cycle : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`cycle (defaults: ${this.createState().cycle})`}
         />
         <AgoraTextInput
@@ -239,16 +235,14 @@ export default class AudioMixing
               startPos: text === '' ? this.createState().startPos : +text,
             });
           }}
-          keyboardType={
-            Platform.OS === 'android' ? 'numeric' : 'numbers-and-punctuation'
-          }
+          numberKeyboard={true}
           placeholder={`startPos (defaults: ${this.createState().startPos})`}
         />
       </>
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startAudioMixing, pauseAudioMixing } = this.state;
     return (
       <>

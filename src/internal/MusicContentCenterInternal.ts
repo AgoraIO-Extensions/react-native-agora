@@ -4,40 +4,26 @@ import {
   IMusicContentCenterEventHandler,
   IMusicPlayer,
   Music,
+  MusicCollection,
 } from '../IAgoraMusicContentCenter';
-
 import { IMusicContentCenterEvent } from '../extension/IAgoraMusicContentCenterExtension';
-
 import {
   IMusicContentCenterImpl,
   IMusicPlayerImpl,
   MusicCollectionImpl,
-  processIMusicContentCenterEventHandler,
 } from '../impl/IAgoraMusicContentCenterImpl';
-
 import IAgoraMusicContentCenterTI from '../ti/IAgoraMusicContentCenter-ti';
 const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
+import {
+  DeviceEventEmitter,
+  EVENT_TYPE,
+  EventProcessor,
+} from './IrisApiEngine';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
-
-import { EmitterSubscription } from './emitter/EventEmitter';
-import { DeviceEventEmitter, EVENT_TYPE } from './IrisApiEngine';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   static _event_handlers: IMusicContentCenterEventHandler[] = [];
-  private _events: Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  > = new Map<
-    any,
-    {
-      eventType: string;
-      subscription: EmitterSubscription;
-    }
-  >();
 
   _addListenerPreCheck<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType
@@ -57,53 +43,41 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   addListener<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType,
     listener: IMusicContentCenterEvent[EventType]
-  ): EmitterSubscription {
+  ): void {
     this._addListenerPreCheck(eventType);
-    const callback = (...data: any[]) => {
-      if (data[0] !== EVENT_TYPE.IMusicContentCenter) {
+    const callback = (eventProcessor: EventProcessor<any>, data: any) => {
+      if (eventProcessor.type(data) !== EVENT_TYPE.IMusicContentCenter) {
         return;
       }
-      processIMusicContentCenterEventHandler(
-        { [eventType]: listener },
-        eventType,
-        data[1]
-      );
+      eventProcessor.func.map((it) => {
+        it({ [eventType]: listener }, eventType, data);
+      });
     };
-    const subscription = DeviceEventEmitter.addListener(eventType, callback);
-    this._events.set(listener, { eventType, subscription });
-    return subscription;
+    // @ts-ignore
+    listener!.agoraCallback = callback;
+    DeviceEventEmitter.addListener(eventType, callback);
   }
 
   removeListener<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType,
-    listener: IMusicContentCenterEvent[EventType]
+    listener?: IMusicContentCenterEvent[EventType]
   ) {
-    if (!this._events.has(listener)) return;
-    DeviceEventEmitter.removeSubscription(
-      this._events.get(listener)!.subscription
+    DeviceEventEmitter.removeListener(
+      eventType,
+      // @ts-ignore
+      listener?.agoraCallback ?? listener
     );
-    this._events.delete(listener);
   }
 
   removeAllListeners<EventType extends keyof IMusicContentCenterEvent>(
     eventType?: EventType
   ) {
-    if (eventType === undefined) {
-      this._events.forEach((value) => {
-        DeviceEventEmitter.removeAllListeners(value.eventType);
-      });
-      this._events.clear();
-    } else {
-      DeviceEventEmitter.removeAllListeners(eventType);
-      this._events.forEach((value, key) => {
-        if (value.eventType === eventType) {
-          this._events.delete(key);
-        }
-      });
-    }
+    DeviceEventEmitter.removeAllListeners(eventType);
   }
 
-  registerEventHandler(eventHandler: IMusicContentCenterEventHandler): number {
+  override registerEventHandler(
+    eventHandler: IMusicContentCenterEventHandler
+  ): number {
     if (
       !MusicContentCenterInternal._event_handlers.find(
         (value) => value === eventHandler
@@ -114,17 +88,18 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     return super.registerEventHandler(eventHandler);
   }
 
-  unregisterEventHandler(): number {
+  override unregisterEventHandler(): number {
     MusicContentCenterInternal._event_handlers = [];
     return super.unregisterEventHandler();
   }
 
-  release() {
+  override release() {
     MusicContentCenterInternal._event_handlers = [];
+    this.removeAllListeners();
     super.release();
   }
 
-  createMusicPlayer(): IMusicPlayer {
+  override createMusicPlayer(): IMusicPlayer {
     // @ts-ignore
     const mediaPlayerId = super.createMusicPlayer() as number;
     return new MusicPlayerInternal(mediaPlayerId);
@@ -139,11 +114,11 @@ class _MusicPlayerInternal extends IMusicPlayerImpl {
     this._mediaPlayerId = mediaPlayerId;
   }
 
-  getMediaPlayerId(): number {
+  override getMediaPlayerId(): number {
     return this._mediaPlayerId;
   }
 
-  protected getApiTypeFromOpenWithSongCode(
+  protected override getApiTypeFromOpenWithSongCode(
     songCode: number,
     startPos = 0
   ): string {
@@ -168,39 +143,68 @@ export class MusicPlayerInternal
   }
 }
 
-interface _MusicCollection {
+class _MusicCollection extends MusicCollection {
   count: number;
   music: Music[];
   page: number;
   pageSize: number;
   total: number;
-}
 
-export class MusicCollectionInternal extends MusicCollectionImpl {
-  private readonly _musicCollection: _MusicCollection;
-
-  constructor(musicCollection: _MusicCollection) {
+  constructor(collection: any | _MusicCollection) {
     super();
-    this._musicCollection = musicCollection;
+    this.count = collection.count;
+    this.music = collection.music;
+    this.page = collection.page;
+    this.pageSize = collection.pageSize;
+    this.total = collection.total;
   }
 
   getCount(): number {
-    return this._musicCollection.count;
+    return this.count;
   }
 
   getMusic(index: number): Music {
-    return this._musicCollection.music[index] ?? {};
+    return this.music[index] ?? {};
   }
 
   getPage(): number {
-    return this._musicCollection.page;
+    return this.page;
   }
 
   getPageSize(): number {
-    return this._musicCollection.pageSize;
+    return this.pageSize;
   }
 
   getTotal(): number {
-    return this._musicCollection.total;
+    return this.total;
+  }
+}
+
+export class MusicCollectionInternal extends MusicCollectionImpl {
+  private readonly _musicCollection: MusicCollection;
+
+  constructor(musicCollection: MusicCollection) {
+    super();
+    this._musicCollection = new _MusicCollection(musicCollection);
+  }
+
+  override getCount(): number {
+    return this._musicCollection.getCount();
+  }
+
+  override getMusic(index: number): Music {
+    return this._musicCollection.getMusic(index);
+  }
+
+  override getPage(): number {
+    return this._musicCollection.getPage();
+  }
+
+  override getPageSize(): number {
+    return this._musicCollection.getPageSize();
+  }
+
+  override getTotal(): number {
+    return this._musicCollection.getTotal();
   }
 }

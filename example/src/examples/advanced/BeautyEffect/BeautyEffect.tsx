@@ -1,14 +1,11 @@
-import React from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
+import React, { ReactElement } from 'react';
 import {
   ChannelProfileType,
   ClientRoleType,
-  createAgoraRtcEngine,
   IRtcEngineEventHandler,
   LighteningContrastLevel,
+  createAgoraRtcEngine,
 } from 'react-native-agora';
-
-import Config from '../../../config/agora.config';
 
 import {
   BaseComponent,
@@ -20,7 +17,9 @@ import {
   AgoraDropdown,
   AgoraSlider,
 } from '../../../components/ui';
+import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
+import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
   lighteningContrastLevel: LighteningContrastLevel;
@@ -66,23 +65,18 @@ export default class BeautyEffect
     this.engine = createAgoraRtcEngine();
     this.engine.initialize({
       appId,
+      logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
 
-    if (Platform.OS === 'android') {
-      // Need granted the microphone and camera permission
-      await PermissionsAndroid.requestMultiple([
-        'android.permission.RECORD_AUDIO',
-        'android.permission.CAMERA',
-      ]);
-    }
+    // Need granted the microphone and camera permission
+    await askMediaAccess([
+      'android.permission.RECORD_AUDIO',
+      'android.permission.CAMERA',
+    ]);
 
-    // Must call after initialize and before joinChannel
-    if (Platform.OS === 'android') {
-      this.engine?.loadExtensionProvider('agora_clear_vision_extension');
-    }
     this.engine?.enableExtension(
       'agora_video_filters_clear_vision',
       'clear_vision',
@@ -169,7 +163,7 @@ export default class BeautyEffect
     this.engine?.release();
   }
 
-  protected renderConfiguration(): React.ReactNode {
+  protected renderConfiguration(): ReactElement | undefined {
     const {
       lighteningContrastLevel,
       lighteningLevel,
@@ -239,12 +233,11 @@ export default class BeautyEffect
             });
           }}
         />
-        <AgoraDivider />
       </>
     );
   }
 
-  protected renderAction(): React.ReactNode {
+  protected renderAction(): ReactElement | undefined {
     const { startPreview, joinChannelSuccess, enableBeautyEffect } = this.state;
     return (
       <>

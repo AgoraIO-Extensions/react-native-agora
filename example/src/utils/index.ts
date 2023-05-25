@@ -1,11 +1,12 @@
-import { AgoraDropdownItem } from '../components/ui';
 import { Platform } from 'react-native';
 import {
-  copyFileAssets,
-  exists,
   ExternalCachesDirectoryPath,
   MainBundlePath,
+  copyFileAssets,
+  exists,
 } from 'react-native-fs';
+
+import { AgoraDropdownItem } from '../components/ui';
 
 export const objectToItems = (object: any): AgoraDropdownItem[] => {
   return Object.keys(object).map((value) => {
@@ -35,7 +36,7 @@ export const enumToItems = (enumType: any): AgoraDropdownItem[] => {
   }));
 };
 
-export function getAssetPath(fileName: string): string {
+export function getResourcePath(fileName: string): string {
   if (Platform.OS === 'android') {
     return `/assets/${fileName}`;
   }
