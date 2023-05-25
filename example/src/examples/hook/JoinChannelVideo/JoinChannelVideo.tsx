@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import {
   ClientRoleType,
@@ -154,7 +154,7 @@ export default function JoinChannelVideo() {
     />
   );
 
-  function renderVideo(user: VideoCanvas): ReactElement {
+  function renderVideo(user: VideoCanvas): ReactElement | undefined {
     return renderByTextureView ? (
       <RtcTextureView
         style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
@@ -169,7 +169,7 @@ export default function JoinChannelVideo() {
     );
   }
 
-  function renderConfiguration(): ReactNode {
+  function renderConfiguration(): ReactElement | undefined {
     return (
       <>
         <AgoraSwitch
@@ -212,7 +212,7 @@ export default function JoinChannelVideo() {
     );
   }
 
-  function renderAction(): ReactNode {
+  function renderAction(): ReactElement | undefined {
     return (
       <>
         <AgoraButton

@@ -12,8 +12,8 @@ export interface BaseRenderUsersProps {
   startPreview?: boolean;
   joinChannelSuccess: boolean;
   remoteUsers: number[];
-  renderUser?: (user: VideoCanvas) => ReactElement;
-  renderVideo?: (user: VideoCanvas) => ReactElement;
+  renderUser?: (user: VideoCanvas) => ReactElement | undefined;
+  renderVideo?: (user: VideoCanvas) => ReactElement | undefined;
 }
 
 function BaseRenderUsers({
@@ -58,7 +58,7 @@ function BaseRenderUsers({
             renderUser({
               uid: item,
               sourceType: VideoSourceType.VideoSourceRemote,
-            })
+            })!
           }
         />
       ) : undefined}

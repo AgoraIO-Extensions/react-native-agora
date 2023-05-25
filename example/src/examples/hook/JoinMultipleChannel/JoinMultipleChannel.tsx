@@ -1,10 +1,4 @@
-import React, {
-  ReactElement,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   ClientRoleType,
   RemoteVideoState,
@@ -262,7 +256,12 @@ export default function JoinMultipleChannel() {
 
     const engineCopy = engine.current;
     return () => {
-      engineCopy.removeAllListeners();
+      engineCopy.removeListener('onJoinChannelSuccess', onJoinChannelSuccess);
+      engineCopy.removeListener('onLeaveChannel', onLeaveChannel);
+      engineCopy.removeListener(
+        'onRemoteVideoStateChanged',
+        onRemoteVideoStateChanged
+      );
     };
   }, [engine, onJoinChannelSuccess, onLeaveChannel, onRemoteVideoStateChanged]);
 
@@ -275,7 +274,7 @@ export default function JoinMultipleChannel() {
     />
   );
 
-  function renderChannel(): ReactNode {
+  function renderChannel(): ReactElement | undefined {
     return (
       <>
         <AgoraTextInput
@@ -326,19 +325,19 @@ export default function JoinMultipleChannel() {
     );
   }
 
-  function renderUsers(): ReactNode {
+  function renderUsers(): ReactElement | undefined {
     return (
       <>
         {startPreview || joinChannelSuccess || joinChannelSuccess2 ? (
           <AgoraList
             data={[0, ...remoteUsers, ...remoteUsers2]}
-            renderItem={({ item }) => {
-              return renderVideo(
+            renderItem={({ item }) =>
+              renderVideo(
                 { uid: item },
                 remoteUsers2.indexOf(item) === -1 ? channelId : channelId2,
                 remoteUsers2.indexOf(item) === -1 ? uid : uid2
-              );
-            }}
+              )!
+            }
           />
         ) : undefined}
       </>
@@ -349,7 +348,7 @@ export default function JoinMultipleChannel() {
     user: VideoCanvas,
     channelId?: string,
     localUid?: number
-  ): ReactElement {
+  ): ReactElement | undefined {
     return (
       <AgoraCard title={`${channelId} - ${user.uid}`}>
         <RtcSurfaceView
@@ -361,7 +360,7 @@ export default function JoinMultipleChannel() {
     );
   }
 
-  function renderAction(): ReactNode {
+  function renderAction(): ReactElement | undefined {
     return (
       <>
         <AgoraButton

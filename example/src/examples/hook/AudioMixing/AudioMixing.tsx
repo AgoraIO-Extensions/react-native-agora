@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   AudioMixingReasonType,
   AudioMixingStateType,
@@ -122,40 +122,57 @@ export default function AudioMixing() {
     engine.current.leaveChannel();
   };
 
+  const onAudioMixingStateChanged = useCallback(
+    (state: AudioMixingStateType, reason: AudioMixingReasonType) => {
+      log.info('onAudioMixingStateChanged', 'state', state, 'reason', reason);
+      switch (state) {
+        case AudioMixingStateType.AudioMixingStatePlaying:
+          setStartAudioMixing(true);
+          setPauseAudioMixing(false);
+          break;
+        case AudioMixingStateType.AudioMixingStatePaused:
+          setPauseAudioMixing(true);
+          break;
+        case AudioMixingStateType.AudioMixingStateStopped:
+        case AudioMixingStateType.AudioMixingStateFailed:
+          setStartAudioMixing(false);
+          break;
+      }
+    },
+    []
+  );
+
+  const onAudioMixingFinished = useCallback(() => {
+    log.info('AudioMixingFinished');
+  }, []);
+
+  const onAudioRoutingChanged = useCallback((routing: number) => {
+    log.info('onAudioRoutingChanged', 'routing', routing);
+  }, []);
+
   useEffect(() => {
     engine.current.addListener(
       'onAudioMixingStateChanged',
-      (state: AudioMixingStateType, reason: AudioMixingReasonType) => {
-        log.info('onAudioMixingStateChanged', 'state', state, 'reason', reason);
-        switch (state) {
-          case AudioMixingStateType.AudioMixingStatePlaying:
-            setStartAudioMixing(true);
-            setPauseAudioMixing(false);
-            break;
-          case AudioMixingStateType.AudioMixingStatePaused:
-            setPauseAudioMixing(true);
-            break;
-          case AudioMixingStateType.AudioMixingStateStopped:
-          case AudioMixingStateType.AudioMixingStateFailed:
-            setStartAudioMixing(false);
-            break;
-        }
-      }
+      onAudioMixingStateChanged
     );
-
-    engine.current.addListener('onAudioMixingFinished', () => {
-      log.info('AudioMixingFinished');
-    });
-
-    engine.current.addListener('onAudioRoutingChanged', (routing: number) => {
-      log.info('onAudioRoutingChanged', 'routing', routing);
-    });
+    engine.current.addListener('onAudioMixingFinished', onAudioMixingFinished);
+    engine.current.addListener('onAudioRoutingChanged', onAudioRoutingChanged);
 
     const engineCopy = engine.current;
     return () => {
-      engineCopy.removeAllListeners();
+      engineCopy.removeListener(
+        'onAudioMixingStateChanged',
+        onAudioMixingStateChanged
+      );
+      engineCopy.removeListener('onAudioMixingFinished', onAudioMixingFinished);
+      engineCopy.removeListener('onAudioRoutingChanged', onAudioRoutingChanged);
     };
-  }, [engine]);
+  }, [
+    engine,
+    onAudioMixingFinished,
+    onAudioMixingStateChanged,
+    onAudioRoutingChanged,
+  ]);
 
   return (
     <BaseComponent
@@ -174,7 +191,7 @@ export default function AudioMixing() {
     />
   );
 
-  function renderConfiguration(): ReactNode {
+  function renderConfiguration(): ReactElement | undefined {
     return (
       <>
         <AgoraTextInput
@@ -212,7 +229,7 @@ export default function AudioMixing() {
     );
   }
 
-  function renderAction(): ReactNode {
+  function renderAction(): ReactElement | undefined {
     return (
       <>
         <AgoraButton

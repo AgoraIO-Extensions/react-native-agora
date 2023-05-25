@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { ClientRoleType } from 'react-native-agora';
 
 import { AgoraButton, AgoraTextInput } from '../../../components/ui';
@@ -83,7 +83,7 @@ export default function StringUid() {
 
     const engineCopy = engine.current;
     return () => {
-      engineCopy.removeAllListeners();
+      engineCopy.removeListener('onLocalUserRegistered', onLocalUserRegistered);
     };
   }, [engine, onLocalUserRegistered]);
 
@@ -111,7 +111,7 @@ export default function StringUid() {
     />
   );
 
-  function renderConfiguration(): ReactNode {
+  function renderConfiguration(): ReactElement | undefined {
     return (
       <>
         <AgoraTextInput
@@ -126,7 +126,7 @@ export default function StringUid() {
     );
   }
 
-  function renderAction(): ReactNode {
+  function renderAction(): ReactElement | undefined {
     return (
       <>
         <AgoraButton

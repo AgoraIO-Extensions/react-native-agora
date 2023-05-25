@@ -1,10 +1,4 @@
-import React, {
-  ReactElement,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import {
   ClientRoleType,
@@ -217,104 +211,130 @@ export default function ScreenShare() {
     engine.current.leaveChannel();
   };
 
+  const onJoinChannelSuccess = useCallback(
+    (connection: RtcConnection, elapsed: number) => {
+      if (connection.localUid === uid2) {
+        log.info(
+          'onJoinChannelSuccess',
+          'connection',
+          connection,
+          'elapsed',
+          elapsed
+        );
+        setPublishScreenCapture(true);
+        return;
+      }
+    },
+    [uid2]
+  );
+
+  const onLeaveChannel = useCallback(
+    (connection: RtcConnection, stats: RtcStats) => {
+      log.info('onLeaveChannel', 'connection', connection, 'stats', stats);
+      if (connection.localUid === uid2) {
+        setPublishScreenCapture(false);
+        return;
+      }
+    },
+    [uid2]
+  );
+
+  const onUserJoined = useCallback(
+    (connection: RtcConnection, remoteUid: number, elapsed: number) => {
+      if (connection.localUid === uid2 || remoteUid === uid2) {
+        // ⚠️ mute the streams from screen sharing
+        engine.current.muteRemoteAudioStream(uid2, true);
+        engine.current.muteRemoteVideoStream(uid2, true);
+        return;
+      }
+    },
+    [engine, uid2]
+  );
+
+  const onUserOffline = useCallback(
+    (
+      connection: RtcConnection,
+      remoteUid: number,
+      reason: UserOfflineReasonType
+    ) => {
+      if (connection.localUid === uid2 || remoteUid === uid2) return;
+    },
+    [uid2]
+  );
+
+  const onLocalVideoStateChanged = useCallback(
+    (
+      source: VideoSourceType,
+      state: LocalVideoStreamState,
+      error: LocalVideoStreamError
+    ) => {
+      log.info(
+        'onLocalVideoStateChanged',
+        'source',
+        source,
+        'state',
+        state,
+        'error',
+        error
+      );
+      if (source === VideoSourceType.VideoSourceScreen) {
+        switch (state) {
+          case LocalVideoStreamState.LocalVideoStreamStateStopped:
+          case LocalVideoStreamState.LocalVideoStreamStateFailed:
+            break;
+          case LocalVideoStreamState.LocalVideoStreamStateCapturing:
+          case LocalVideoStreamState.LocalVideoStreamStateEncoding:
+            setStartScreenCapture(true);
+            break;
+        }
+      }
+    },
+    []
+  );
+
+  const onPermissionError = useCallback(
+    (permissionType: PermissionType) => {
+      log.info('onPermissionError', 'permissionType', permissionType);
+      // ⚠️ You should call stopScreenCapture if received the event with permissionType ScreenCapture,
+      // otherwise you can not startScreenCapture again
+      stopScreenCapture();
+      setStartScreenCapture(false);
+    },
+    [stopScreenCapture]
+  );
+
   useEffect(() => {
-    engine.current.addListener(
-      'onJoinChannelSuccess',
-      (connection: RtcConnection, elapsed: number) => {
-        if (connection.localUid === uid2) {
-          log.info(
-            'onJoinChannelSuccess',
-            'connection',
-            connection,
-            'elapsed',
-            elapsed
-          );
-          setPublishScreenCapture(true);
-          return;
-        }
-      }
-    );
-
-    engine.current.addListener(
-      'onLeaveChannel',
-      (connection: RtcConnection, stats: RtcStats) => {
-        log.info('onLeaveChannel', 'connection', connection, 'stats', stats);
-        if (connection.localUid === uid2) {
-          setPublishScreenCapture(false);
-          return;
-        }
-      }
-    );
-
-    engine.current.addListener(
-      'onUserJoined',
-      (connection: RtcConnection, remoteUid: number, elapsed: number) => {
-        if (connection.localUid === uid2 || remoteUid === uid2) {
-          // ⚠️ mute the streams from screen sharing
-          engine.current.muteRemoteAudioStream(uid2, true);
-          engine.current.muteRemoteVideoStream(uid2, true);
-          return;
-        }
-      }
-    );
-
-    engine.current.addListener(
-      'onUserOffline',
-      (
-        connection: RtcConnection,
-        remoteUid: number,
-        reason: UserOfflineReasonType
-      ) => {
-        if (connection.localUid === uid2 || remoteUid === uid2) return;
-      }
-    );
-
-    engine.current.addListener(
-      'onPermissionError',
-      (permissionType: PermissionType) => {
-        log.info('onPermissionError', 'permissionType', permissionType);
-        // ⚠️ You should call stopScreenCapture if received the event with permissionType ScreenCapture,
-        // otherwise you can not startScreenCapture again
-        stopScreenCapture();
-        setStartScreenCapture(false);
-      }
-    );
-
+    engine.current.addListener('onJoinChannelSuccess', onJoinChannelSuccess);
+    engine.current.addListener('onLeaveChannel', onLeaveChannel);
+    engine.current.addListener('onUserJoined', onUserJoined);
+    engine.current.addListener('onUserOffline', onUserOffline);
     engine.current.addListener(
       'onLocalVideoStateChanged',
-      (
-        source: VideoSourceType,
-        state: LocalVideoStreamState,
-        error: LocalVideoStreamError
-      ) => {
-        log.info(
-          'onLocalVideoStateChanged',
-          'source',
-          source,
-          'state',
-          state,
-          'error',
-          error
-        );
-        if (source === VideoSourceType.VideoSourceScreen) {
-          switch (state) {
-            case LocalVideoStreamState.LocalVideoStreamStateStopped:
-            case LocalVideoStreamState.LocalVideoStreamStateFailed:
-              break;
-            case LocalVideoStreamState.LocalVideoStreamStateCapturing:
-            case LocalVideoStreamState.LocalVideoStreamStateEncoding:
-              setStartScreenCapture(true);
-              break;
-          }
-        }
-      }
+      onLocalVideoStateChanged
     );
+    engine.current.addListener('onPermissionError', onPermissionError);
 
     const engineCopy = engine.current;
     return () => {
-      engineCopy.removeAllListeners();
+      engineCopy.removeListener('onJoinChannelSuccess', onJoinChannelSuccess);
+      engineCopy.removeListener('onLeaveChannel', onLeaveChannel);
+      engineCopy.removeListener('onUserJoined', onUserJoined);
+      engineCopy.removeListener('onUserOffline', onUserOffline);
+      engineCopy.removeListener(
+        'onLocalVideoStateChanged',
+        onLocalVideoStateChanged
+      );
+      engineCopy.removeListener('onPermissionError', onPermissionError);
     };
-  }, [engine, stopScreenCapture, uid2]);
+  }, [
+    engine,
+    onJoinChannelSuccess,
+    onLeaveChannel,
+    onLocalVideoStateChanged,
+    onUserJoined,
+    onUserOffline,
+    onPermissionError,
+  ]);
 
   return (
     <BaseComponent
@@ -334,7 +354,7 @@ export default function ScreenShare() {
     />
   );
 
-  function renderUsers(): ReactNode {
+  function renderUsers(): ReactElement | undefined {
     return (
       <>
         <BaseRenderUsers
@@ -357,7 +377,7 @@ export default function ScreenShare() {
     );
   }
 
-  function renderVideo(user: VideoCanvas): ReactElement {
+  function renderVideo(user: VideoCanvas): ReactElement | undefined {
     return (
       <RtcSurfaceView
         style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
@@ -367,7 +387,7 @@ export default function ScreenShare() {
     );
   }
 
-  function renderConfiguration(): ReactNode {
+  function renderConfiguration(): ReactElement | undefined {
     return (
       <>
         <AgoraTextInput
@@ -483,7 +503,7 @@ export default function ScreenShare() {
     );
   }
 
-  function renderAction(): ReactNode {
+  function renderAction(): ReactElement | undefined {
     return (
       <>
         <AgoraButton
