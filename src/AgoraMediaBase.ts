@@ -1063,11 +1063,11 @@ export enum ExternalVideoSourceType {
 }
 
 /**
- * The format of the recording file.
+ * @ignore
  */
 export enum MediaRecorderContainerFormat {
   /**
-   * 1: (Default) MP4.
+   * @ignore
    */
   FormatMp4 = 1,
 }
@@ -1183,13 +1183,7 @@ export class RecorderInfo {
  */
 export interface IMediaRecorderObserver {
   /**
-   * Occurs when the recording state changes.
-   * When the recording state changes, the SDK triggers this callback to report the current recording state and the reason for the change.
-   *
-   * @param channelId The channel name.
-   * @param uid The user ID.
-   * @param state The current recording state. See RecorderState .
-   * @param error The reason for the state change. See RecorderErrorCode .
+   * @ignore
    */
   onRecorderStateChanged?(
     channelId: string,
@@ -1199,12 +1193,7 @@ export interface IMediaRecorderObserver {
   ): void;
 
   /**
-   * Occurs when the recording information is updated.
-   * After you successfully enable the audio and video recording, the SDK periodically triggers this callback based on the value of recorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
-   *
-   * @param channelId The channel name.
-   * @param uid The user ID.
-   * @param info The information about the file that is recorded. See RecorderInfo .
+   * @ignore
    */
   onRecorderInfoUpdated?(
     channelId: string,

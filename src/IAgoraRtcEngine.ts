@@ -5258,11 +5258,11 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * Sets whether to enable the AI ​​noise reduction function and set the noise reduction mode.
-   * You can call this method to enable AI noise reduction function. Once enabled, the SDK automatically detects and reduces stationary and non-stationary noise from your audio on the premise of ensuring the quality of human voice. Stationary noise refers to noise signal with constant average statistical properties and negligibly small fluctuations of level within the period of observation. Common sources of stationary noises are:Television;Air conditioner;Machinery, etc.Non-stationary noise refers to noise signal with huge fluctuations of level within the period of observation. Common sources of non-stationary noises are:Thunder;Explosion;Cracking, etc.
+   * Sets whether to enable the AI ​​noise suppression function and set the noise suppression mode.
+   * You can call this method to enable AI noise suppression function. Once enabled, the SDK automatically detects and reduces stationary and non-stationary noise from your audio on the premise of ensuring the quality of human voice. Stationary noise refers to noise signal with constant average statistical properties and negligibly small fluctuations of level within the period of observation. Common sources of stationary noises are:Television;Air conditioner;Machinery, etc.Non-stationary noise refers to noise signal with huge fluctuations of level within the period of observation. Common sources of non-stationary noises are:Thunder;Explosion;Cracking, etc.
    *
-   * @param enabled Whether to enable the AI noise reduction function:true: Enable the AI noise reduction.false: (Default) Disable the AI noise reduction.
-   * @param mode The AI noise reduction modes. See AudioAinsMode .
+   * @param enabled Whether to enable the AI noise suppression function:true: Enable the AI noise suppression.false: (Default) Disable the AI noise suppression.
+   * @param mode The AI noise suppression modes. See AudioAinsMode .
    *
    * @returns
    * 0: Success.< 0: Failure.
