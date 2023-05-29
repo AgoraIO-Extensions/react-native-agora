@@ -26,7 +26,8 @@
     "!**/__mocks__",
     "!**/.*",
     "!**/*.xcframework",
-    "!ios/AgoraRtcWrapper.podspec"
+    "!ios/AgoraRtcWrapper.podspec",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "test": "jest",
