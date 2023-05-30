@@ -20,6 +20,6 @@ runs:
         target-path: ${{ inputs.target-path }}
         config: fmt_config/fmt_ts.yaml
         language: ts
-        base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/main/rn_ng_json_template_en.json
+        base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/rn_ng_json_template_en.json
         export-file-path: src/index.ts
         github-token: ${{ inputs.github-token }}
