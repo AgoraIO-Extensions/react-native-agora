@@ -12,7 +12,7 @@ class RtcTextureView(
   context: Context
 ) : FrameLayout(context) {
   private var texture: TextureView
-  private var canvas: VideoCanvas
+  private var canvas: VideoCanvas? = null
   private var channel: WeakReference<RtcChannel>? = null
 
   init {
@@ -21,24 +21,26 @@ class RtcTextureView(
     } catch (e: UnsatisfiedLinkError) {
       throw RuntimeException("Please init RtcEngine first!")
     }
-    canvas = VideoCanvas(texture)
     addView(texture)
   }
 
   fun setData(engine: RtcEngine, channel: RtcChannel?, uid: Number) {
     this.channel = if (channel != null) WeakReference(channel) else null
-    canvas.channelId = this.channel?.get()?.channelId()
-    canvas.uid = uid.toNativeUInt()
+    canvas = canvas ?: VideoCanvas(texture)
+    canvas?.channelId = this.channel?.get()?.channelId()
+    canvas?.uid = uid.toNativeUInt()
     setupVideoCanvas(engine)
   }
 
   fun resetVideoCanvas(engine: RtcEngine) {
-    val canvas =
-      VideoCanvas(null, canvas.renderMode, canvas.channelId, canvas.uid, canvas.mirrorMode)
-    if (canvas.uid == 0) {
-      engine.setupLocalVideo(canvas)
-    } else {
-      engine.setupRemoteVideo(canvas)
+    canvas?.let {
+      val canvas =
+        VideoCanvas(null, it.renderMode, it.channelId, it.uid, it.mirrorMode)
+      if (canvas.uid == 0) {
+        engine.setupLocalVideo(canvas)
+      } else {
+        engine.setupRemoteVideo(canvas)
+      }
     }
   }
 
@@ -47,33 +49,37 @@ class RtcTextureView(
     texture = RtcEngine.CreateTextureView(context.applicationContext)
     addView(texture)
     texture.layout(0, 0, width, height)
-    canvas.view = texture
-    if (canvas.uid == 0) {
-      engine.setupLocalVideo(canvas)
-    } else {
-      engine.setupRemoteVideo(canvas)
+    canvas?.let { canvas ->
+      canvas.view = texture
+      if (canvas.uid == 0) {
+        engine.setupLocalVideo(canvas)
+      } else {
+        engine.setupRemoteVideo(canvas)
+      }
     }
   }
 
   fun setRenderMode(engine: RtcEngine, @Annotations.AgoraVideoRenderMode renderMode: Int) {
-    canvas.renderMode = renderMode
+    canvas?.renderMode = renderMode
     setupRenderMode(engine)
   }
 
   fun setMirrorMode(engine: RtcEngine, @Annotations.AgoraVideoMirrorMode mirrorMode: Int) {
-    canvas.mirrorMode = mirrorMode
+    canvas?.mirrorMode = mirrorMode
     setupRenderMode(engine)
   }
 
   private fun setupRenderMode(engine: RtcEngine) {
-    if (canvas.uid == 0) {
-      engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
-    } else {
-      channel?.get()?.let {
-        it.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
-        return@setupRenderMode
+    canvas?.let { canvas ->
+      if (canvas.uid == 0) {
+        engine.setLocalRenderMode(canvas.renderMode, canvas.mirrorMode)
+      } else {
+        channel?.get()?.let {
+          it.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
+          return@setupRenderMode
+        }
+        engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
       }
-      engine.setRemoteRenderMode(canvas.uid, canvas.renderMode, canvas.mirrorMode)
     }
   }
 

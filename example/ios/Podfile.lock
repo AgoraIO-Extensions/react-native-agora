@@ -624,7 +624,7 @@ PODS:
   - React-jsinspector (0.68.2)
   - React-logger (0.68.2):
     - glog
-  - react-native-agora (3.7.1):
+  - react-native-agora (3.7.2-rc.1):
     - AgoraRtcEngine_Special_iOS (= 3.7.2.4)
     - React-Core
   - react-native-safe-area-context (3.4.1):
@@ -939,7 +939,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b7b553412f2ec768fe6c8f27cd6bafdb9d8719e6
   React-jsinspector: c5989c77cb89ae6a69561095a61cce56a44ae8e8
   React-logger: a0833912d93b36b791b7a521672d8ee89107aff1
-  react-native-agora: a1446a62fd8f0fd652f9b774a0394099c40db241
+  react-native-agora: bffc8d8b2251e5636fb9a7984b2b9c2c92e799f2
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-slider: cecabb58ecffad671d2ad3ccc58c7f4d2d029e95
   React-perflogger: a18b4f0bd933b8b24ecf9f3c54f9bf65180f3fe6
