@@ -8,9 +8,11 @@ on:
   push:
     branches:
       - main
+      - 3.x
   pull_request:
     branches:
       - main
+      - 3.x
       - release/*
 
 jobs:
