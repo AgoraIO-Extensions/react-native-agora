@@ -1,14 +1,18 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy TD
+name: TypeDoc
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on new releases
+  release:
+    types: [published]
+  pull_request:
+    branches: [main]
   push:
-    branches: ["main"]
+    branches: [main]
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -27,9 +31,24 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
-      - name: Build DocC
+      - name: Build TypeDoc
         run: |
           yarn install && yarn && yarn run doc
+      - name: Zip It Up 🤐
+        run: |
+          zip -r react-native-agora-docs.zip docs
+      - name: Upload Artifact ⬆️
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-native-agora-docs.zip
+          path: react-native-agora-docs.zip
+      - name: Upload Doc Archive to GitHub release ⬆️
+        if: github.event.release
+        uses: svenstaro/upload-release-action@2.6.0
+        with:
+          file: react-native-agora-docs.zip
+          asset_name: react-native-agora-docs.zip
+          tag: ${{ github.ref_name }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
