@@ -1,5 +1,6 @@
 package io.agora.rtc.base
 
+import android.util.Base64
 import androidx.annotation.IntRange
 import io.agora.rtc.IRtcChannelEventHandler
 import io.agora.rtc.IRtcEngineEventHandler
@@ -319,7 +320,8 @@ class RtcChannelEventHandler(
       rtcChannel,
       uid.toUInt().toLong(),
       streamId,
-      data?.let { String(it, Charsets.UTF_8) })
+      Base64.encodeToString(data, Base64.DEFAULT)
+    )
   }
 
   override fun onStreamMessageError(

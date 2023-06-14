@@ -1,5 +1,6 @@
 package io.agora.rtc.base
 
+import android.util.Base64
 import io.agora.rtc.IMetadataObserver
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
@@ -479,7 +480,7 @@ class RtcChannelManager(
 
   override fun sendMetadata(params: Map<String, *>, callback: Callback) {
     callback.resolve(mediaObserverMap[params["channelId"] as String]) {
-      it.addMetadata(params["metadata"] as String)
+      it.addMetadata(Base64.decode(params["metadata"] as String, Base64.DEFAULT))
       Unit
     }
   }
@@ -541,7 +542,7 @@ class RtcChannelManager(
     callback.code(
       RtcChannelManager[params["channelId"] as String]?.sendStreamMessage(
         (params["streamId"] as Number).toInt(),
-        (params["message"] as String).toByteArray()
+        Base64.decode((params["message"] as String), Base64.DEFAULT)
       )
     )
   }

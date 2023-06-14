@@ -414,7 +414,7 @@ extension RtcEngineEventHandler: AgoraRtcEngineDelegate, AgoraMediaRecorderDeleg
     }
 
     public func rtcEngine(_: AgoraRtcEngineKit, receiveStreamMessageFromUid uid: UInt, streamId: Int, data: Data) {
-        callback(RtcEngineEvents.StreamMessage, uid, streamId, String(data: data, encoding: .utf8))
+        callback(RtcEngineEvents.StreamMessage, uid, streamId, data.base64EncodedString(options: .endLineWithLineFeed))
     }
 
     public func rtcEngine(_: AgoraRtcEngineKit, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {

@@ -1061,7 +1061,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func sendMetadata(_ params: NSDictionary, _ callback: Callback) {
         callback.resolve(mediaObserver) {
-            $0.addMetadata(params["metadata"] as! String)
+            $0.addMetadata(Data(base64Encoded: (params["metadata"] as! String), options: .ignoreUnknownCharacters)!)
         }
     }
 
@@ -1209,7 +1209,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
+        callback.code(engine?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: Data(base64Encoded: (params["message"] as! String), options: .ignoreUnknownCharacters)!))
     }
 
     @objc func setVoiceBeautifierParameters(_ params: NSDictionary, _ callback: Callback) {

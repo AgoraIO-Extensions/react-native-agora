@@ -1,6 +1,7 @@
 package io.agora.rtc.base
 
 import android.content.Context
+import android.util.Base64
 import io.agora.rtc.*
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.mediaio.AgoraDefaultSource
@@ -1369,7 +1370,7 @@ open class RtcEngineManager(
 
   override fun sendMetadata(params: Map<String, *>, callback: Callback) {
     callback.resolve(mediaObserver) {
-      it.addMetadata(params["metadata"] as String)
+      it.addMetadata(Base64.decode(params["metadata"] as String, Base64.DEFAULT))
     }
   }
 
@@ -1526,7 +1527,7 @@ open class RtcEngineManager(
     callback.code(
       engine?.sendStreamMessage(
         (params["streamId"] as Number).toInt(),
-        (params["message"] as String).toByteArray()
+        Base64.decode((params["message"] as String), Base64.DEFAULT)
       )
     )
   }

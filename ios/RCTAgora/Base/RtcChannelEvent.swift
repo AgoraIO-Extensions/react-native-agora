@@ -214,7 +214,7 @@ extension RtcChannelEventHandler: AgoraRtcChannelDelegate {
     }
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, receiveStreamMessageFromUid uid: UInt, streamId: Int, data: Data) {
-        callback(RtcChannelEvents.StreamMessage, rtcChannel, uid, streamId, String(data: data, encoding: .utf8))
+        callback(RtcChannelEvents.StreamMessage, rtcChannel, uid, streamId, data.base64EncodedString(options: .endLineWithLineFeed))
     }
 
     public func rtcChannel(_ rtcChannel: AgoraRtcChannel, didOccurStreamMessageErrorFromUid uid: UInt, streamId: Int, error: Int, missed: Int, cached: Int) {
