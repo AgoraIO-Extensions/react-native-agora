@@ -150,7 +150,7 @@ export default class RtcChannel implements RtcChannelInterface {
         if (event === 'StreamMessage') {
           data[3] = Buffer.from(data[3], 'base64');
         } else if (event === 'MetadataReceived') {
-          data[0] = Buffer.from(data[0], 'base64'); 
+          data[0] = Buffer.from(data[0], 'base64');
         }
         // @ts-ignore
         listener(...data);
@@ -854,7 +854,9 @@ export default class RtcChannel implements RtcChannelInterface {
    * @param metadata The metadata to be sent.
    */
   sendMetadata(metadata: Uint8Array): Promise<void> {
-    return this._callMethod('sendMetadata', { metadata: base64.fromByteArray(metadata) });
+    return this._callMethod('sendMetadata', {
+      metadata: base64.fromByteArray(metadata),
+    });
   }
 
   /**
