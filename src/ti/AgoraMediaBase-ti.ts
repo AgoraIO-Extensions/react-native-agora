@@ -9,31 +9,31 @@ export const IAudioPcmFrameSink = t.iface([], {
 });
 
 export const IAudioFrameObserverBase = t.iface([], {
-  "onRecordAudioFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
-  "onPlaybackAudioFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
-  "onMixedAudioFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
-  "onEarMonitoringAudioFrame": t.opt(t.func("boolean", t.param("audioFrame", "AudioFrame"))),
+  "onRecordAudioFrame": t.opt(t.func("void", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
+  "onPlaybackAudioFrame": t.opt(t.func("void", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
+  "onMixedAudioFrame": t.opt(t.func("void", t.param("channelId", "string"), t.param("audioFrame", "AudioFrame"))),
+  "onEarMonitoringAudioFrame": t.opt(t.func("void", t.param("audioFrame", "AudioFrame"))),
 });
 
 export const IAudioFrameObserver = t.iface(["IAudioFrameObserverBase"], {
-  "onPlaybackAudioFrameBeforeMixing": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("uid", "number"), t.param("audioFrame", "AudioFrame"))),
+  "onPlaybackAudioFrameBeforeMixing": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("audioFrame", "AudioFrame"))),
 });
 
 export const IAudioSpectrumObserver = t.iface([], {
-  "onLocalAudioSpectrum": t.opt(t.func("boolean", t.param("data", "AudioSpectrumData"))),
-  "onRemoteAudioSpectrum": t.opt(t.func("boolean", t.param("spectrums", t.array("UserAudioSpectrumInfo")), t.param("spectrumNumber", "number"))),
+  "onLocalAudioSpectrum": t.opt(t.func("void", t.param("data", "AudioSpectrumData"))),
+  "onRemoteAudioSpectrum": t.opt(t.func("void", t.param("spectrums", t.array("UserAudioSpectrumInfo")), t.param("spectrumNumber", "number"))),
 });
 
 export const IVideoEncodedFrameObserver = t.iface([], {
-  "onEncodedVideoFrameReceived": t.opt(t.func("boolean", t.param("uid", "number"), t.param("imageBuffer", "Uint8Array"), t.param("length", "number"), t.param("videoEncodedFrameInfo", "EncodedVideoFrameInfo"))),
+  "onEncodedVideoFrameReceived": t.opt(t.func("void", t.param("uid", "number"), t.param("imageBuffer", "Uint8Array"), t.param("length", "number"), t.param("videoEncodedFrameInfo", "EncodedVideoFrameInfo"))),
 });
 
 export const IVideoFrameObserver = t.iface([], {
-  "onCaptureVideoFrame": t.opt(t.func("boolean", t.param("sourceType", "VideoSourceType"), t.param("videoFrame", "VideoFrame"))),
-  "onPreEncodeVideoFrame": t.opt(t.func("boolean", t.param("sourceType", "VideoSourceType"), t.param("videoFrame", "VideoFrame"))),
-  "onMediaPlayerVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"), t.param("mediaPlayerId", "number"))),
-  "onRenderVideoFrame": t.opt(t.func("boolean", t.param("channelId", "string"), t.param("remoteUid", "number"), t.param("videoFrame", "VideoFrame"))),
-  "onTranscodedVideoFrame": t.opt(t.func("boolean", t.param("videoFrame", "VideoFrame"))),
+  "onCaptureVideoFrame": t.opt(t.func("void", t.param("sourceType", "VideoSourceType"), t.param("videoFrame", "VideoFrame"))),
+  "onPreEncodeVideoFrame": t.opt(t.func("void", t.param("sourceType", "VideoSourceType"), t.param("videoFrame", "VideoFrame"))),
+  "onMediaPlayerVideoFrame": t.opt(t.func("void", t.param("videoFrame", "VideoFrame"), t.param("mediaPlayerId", "number"))),
+  "onRenderVideoFrame": t.opt(t.func("void", t.param("channelId", "string"), t.param("remoteUid", "number"), t.param("videoFrame", "VideoFrame"))),
+  "onTranscodedVideoFrame": t.opt(t.func("void", t.param("videoFrame", "VideoFrame"))),
 });
 
 export const IMediaRecorderObserver = t.iface([], {
