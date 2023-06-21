@@ -159,6 +159,7 @@ export enum WarnCodeType {
 
 /**
  * Error codes.
+ *
  * An error code indicates that the SDK encountered an unrecoverable error that requires application intervention. For example, an error is returned when the camera fails to open, and the app needs to inform the user that the camera cannot be used.
  */
 export enum ErrorCodeType {
@@ -259,7 +260,7 @@ export enum ErrorCodeType {
    */
   ErrNoServerResources = 103,
   /**
-   * 109: The current token has expired. Apply for a new token on the server and call renewToken .Deprecated:This enumerator is deprecated. Use ConnectionChangedTokenExpired(9) in the onConnectionStateChanged callback instead.
+   * 109: The current token has expired. Apply for a new token on the server and call renewToken.Deprecated:This enumerator is deprecated. Use ConnectionChangedTokenExpired(9) in the onConnectionStateChanged callback instead.
    */
   ErrTokenExpired = 109,
   /**
@@ -757,7 +758,7 @@ export enum DegradationPreference {
    */
   MaintainFramerate = 1,
   /**
-   * 2: Reduces the video frame rate and video resolution simultaneously during video encoding under limited bandwidth. The MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged .
+   * 2: Reduces the video frame rate and video resolution simultaneously during video encoding under limited bandwidth. The MaintainBalanced has a lower reduction than MaintainQuality and MaintainFramerate, and this preference is suitable for scenarios where both smoothness and video quality are a priority.The resolution of the video sent may change, so remote users need to handle this issue. See onVideoSizeChanged.
    */
   MaintainBalanced = 2,
   /**
@@ -800,6 +801,32 @@ export enum ScreenCaptureFramerateCapability {
    * 2: The device supports the frame rate of up to 60 fps.
    */
   ScreenCaptureFramerateCapability60Fps = 2,
+}
+
+/**
+ * @ignore
+ */
+export enum VideoCodecCapabilityLevel {
+  /**
+   * @ignore
+   */
+  CodecCapabilityLevelUnspecified = -1,
+  /**
+   * @ignore
+   */
+  CodecCapabilityLevelBasicSupport = 5,
+  /**
+   * @ignore
+   */
+  CodecCapabilityLevel1080p30fps = 10,
+  /**
+   * @ignore
+   */
+  CodecCapabilityLevel1080p60fps = 20,
+  /**
+   * @ignore
+   */
+  CodecCapabilityLevel4k60fps = 30,
 }
 
 /**
@@ -973,11 +1000,11 @@ export enum AudioEncodingType {
  */
 export enum WatermarkFitMode {
   /**
-   * Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions . The settings in WatermarkRatio are invalid.
+   * Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
    */
   FitModeCoverPosition = 0,
   /**
-   * Use the value you set in WatermarkRatio . The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
+   * Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
    */
   FitModeUseImageRatio = 1,
 }
@@ -1001,7 +1028,7 @@ export class EncodedAudioFrameAdvancedSettings {
  */
 export class EncodedAudioFrameInfo {
   /**
-   * Audio Codec type: AudioCodecType .
+   * Audio Codec type: AudioCodecType.
    */
   codec?: AudioCodecType;
   /**
@@ -1085,7 +1112,7 @@ export enum VideoStreamType {
  */
 export class VideoSubscriptionOptions {
   /**
-   * The video stream type that you want to subscribe to. The default value is VideoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType .
+   * The video stream type that you want to subscribe to. The default value is VideoStreamHigh, indicating that the high-quality video streams are subscribed. See VideoStreamType.
    */
   type?: VideoStreamType;
   /**
@@ -1099,7 +1126,7 @@ export class VideoSubscriptionOptions {
  */
 export class EncodedVideoFrameInfo {
   /**
-   * The codec type of the local video stream. See VideoCodecType . The default value is VideoCodecH264 (2).
+   * The codec type of the local video stream. See VideoCodecType. The default value is VideoCodecH264 (2).
    */
   codecType?: VideoCodecType;
   /**
@@ -1115,11 +1142,11 @@ export class EncodedVideoFrameInfo {
    */
   framesPerSecond?: number;
   /**
-   * The video frame type. See VideoFrameType .
+   * The video frame type. See VideoFrameType.
    */
   frameType?: VideoFrameType;
   /**
-   * The rotation information of the video frame. See VideoOrientation .
+   * The rotation information of the video frame. See VideoOrientation.
    */
   rotation?: VideoOrientation;
   /**
@@ -1139,7 +1166,7 @@ export class EncodedVideoFrameInfo {
    */
   uid?: number;
   /**
-   * The type of video streams. See VideoStreamType .
+   * The type of video streams. See VideoStreamType.
    */
   streamType?: VideoStreamType;
 }
@@ -1181,11 +1208,11 @@ export enum EncodingPreference {
  */
 export class AdvanceOptions {
   /**
-   * Video encoder preference. See EncodingPreference .
+   * Video encoder preference. See EncodingPreference.
    */
   encodingPreference?: EncodingPreference;
   /**
-   * Compression preference for video encoding. See CompressionPreference .
+   * Compression preference for video encoding. See CompressionPreference.
    */
   compressionPreference?: CompressionPreference;
 }
@@ -1235,17 +1262,35 @@ export enum CodecCapMask {
 }
 
 /**
+ * @ignore
+ */
+export class CodecCapLevels {
+  /**
+   * @ignore
+   */
+  hwDecodingLevel?: VideoCodecCapabilityLevel;
+  /**
+   * @ignore
+   */
+  swDecodingLevel?: VideoCodecCapabilityLevel;
+}
+
+/**
  * The codec capability of the device.
  */
 export class CodecCapInfo {
   /**
-   * The video codec types. See VideoCodecType .
+   * The video codec types. See VideoCodecType.
    */
   codecType?: VideoCodecType;
   /**
-   * The bit mask of the codec type. See CodecCapMask .
+   * The bit mask of the codec type. See CodecCapMask.
    */
   codecCapMask?: number;
+  /**
+   * @ignore
+   */
+  codecLevels?: CodecCapLevels;
 }
 
 /**
@@ -1253,15 +1298,15 @@ export class CodecCapInfo {
  */
 export class VideoEncoderConfiguration {
   /**
-   * The codec type of the local video stream. See VideoCodecType .
+   * The codec type of the local video stream. See VideoCodecType.
    */
   codecType?: VideoCodecType;
   /**
-   * The dimensions of the encoded video (px). See VideoDimensions . This parameter measures the video encoding quality in the format of length × width. The default value is 960 × 540. You can set a custom value.
+   * The dimensions of the encoded video (px). See VideoDimensions. This parameter measures the video encoding quality in the format of length × width. The default value is 960 × 540. You can set a custom value.
    */
   dimensions?: VideoDimensions;
   /**
-   * The frame rate (fps) of the encoding video frame. The default value is 15. See FrameRate .
+   * The frame rate (fps) of the encoding video frame. The default value is 15. See FrameRate.
    */
   frameRate?: number;
   /**
@@ -1273,25 +1318,26 @@ export class VideoEncoderConfiguration {
    */
   minBitrate?: number;
   /**
-   * The orientation mode of the encoded video. See OrientationMode .
+   * The orientation mode of the encoded video. See OrientationMode.
    */
   orientationMode?: OrientationMode;
   /**
-   * Video degradation preference under limited bandwidth. See DegradationPreference .
+   * Video degradation preference under limited bandwidth. See DegradationPreference.
    */
   degradationPreference?: DegradationPreference;
   /**
-   * Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType .By default, the video is not mirrored.
+   * Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See VideoMirrorModeType.By default, the video is not mirrored.
    */
   mirrorMode?: VideoMirrorModeType;
   /**
-   * Advanced options for video encoding. See AdvanceOptions .
+   * Advanced options for video encoding. See AdvanceOptions.
    */
   advanceOptions?: AdvanceOptions;
 }
 
 /**
  * The configurations for the data stream.
+ *
  * The following table shows the SDK behaviors under different parameter settings:
  */
 export class DataStreamConfig {
@@ -1328,7 +1374,7 @@ export enum SimulcastStreamMode {
  */
 export class SimulcastStreamConfig {
   /**
-   * The video dimension. See VideoDimensions . The default value is 160 × 120.
+   * The video dimension. See VideoDimensions. The default value is 160 × 120.
    */
   dimensions?: VideoDimensions;
   /**
@@ -1365,7 +1411,8 @@ export class Rectangle {
 
 /**
  * The position and size of the watermark on the screen.
- * The position and size of the watermark on the screen are determined by xRatio, yRatio, and widthRatio:(xRatio, yRatio) refers to the coordinates of the upper left corner of the watermark, which determines the distance from the upper left corner of the watermark to the upper left corner of the screen.The widthRatio determines the width of the watermark.
+ *
+ * The position and size of the watermark on the screen are determined by xRatio , yRatio , and widthRatio : ( xRatio , yRatio ) refers to the coordinates of the upper left corner of the watermark, which determines the distance from the upper left corner of the watermark to the upper left corner of the screen. The widthRatio determines the width of the watermark.
  */
 export class WatermarkRatio {
   /**
@@ -1391,19 +1438,19 @@ export class WatermarkOptions {
    */
   visibleInPreview?: boolean;
   /**
-   * When the adaptation mode of the watermark is FitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See Rectangle .
+   * When the adaptation mode of the watermark is FitModeCoverPosition, it is used to set the area of the watermark image in landscape mode. See Rectangle.
    */
   positionInLandscapeMode?: Rectangle;
   /**
-   * When the adaptation mode of the watermark is FitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See Rectangle .
+   * When the adaptation mode of the watermark is FitModeCoverPosition, it is used to set the area of the watermark image in portrait mode. See Rectangle.
    */
   positionInPortraitMode?: Rectangle;
   /**
-   * When the watermark adaptation mode is FitModeUseImageRatio, this parameter is used to set the watermark coordinates. See WatermarkRatio .
+   * When the watermark adaptation mode is FitModeUseImageRatio, this parameter is used to set the watermark coordinates. See WatermarkRatio.
    */
   watermarkRatio?: WatermarkRatio;
   /**
-   * The adaptation mode of the watermark. See WatermarkFitMode .
+   * The adaptation mode of the watermark. See WatermarkFitMode.
    */
   mode?: WatermarkFitMode;
 }
@@ -1597,7 +1644,7 @@ export enum AudienceLatencyLevelType {
  */
 export class ClientRoleOptions {
   /**
-   * The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType .
+   * The latency level of an audience member in interactive live streaming. See AudienceLatencyLevelType.
    */
   audienceLatencyLevel?: AudienceLatencyLevelType;
 }
@@ -1643,19 +1690,19 @@ export enum ExperiencePoorReason {
 }
 
 /**
- * AI noise reduction modes.
+ * AI noise suppression modes.
  */
 export enum AudioAinsMode {
   /**
-   * 0: (Default) Balance mode. This mode allows for a balanced performance on noice reduction and time delay.
+   * 0: (Default) Balance mode. This mode allows for a balanced performance on noice suppression and time delay.
    */
   AinsModeBalanced = 0,
   /**
-   * 1: Aggressive mode. In scenarios where high performance on noise reduction is required, such as live streaming outdoor events, This mode reduces nosies more dramatically, but may sometimes affect the original character of the audio.
+   * 1: Aggressive mode. In scenarios where high performance on noise suppression is required, such as live streaming outdoor events, this mode reduces nosie more dramatically, but may sometimes affect the original character of the audio.
    */
   AinsModeAggressive = 1,
   /**
-   * 2: Aggressive mode with low latency. The noise reduction delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise reduction with low latency, such as sing together online in real time.
+   * 2: Aggressive mode with low latency. The noise suppression delay of this mode is about only half of that of the balance and aggressive modes. It is suitable for scenarios that have high requirements on noise suppression with low latency, such as sing together online in real time.
    */
   AinsModeUltralowlatency = 2,
 }
@@ -1795,7 +1842,7 @@ export enum VideoApplicationScenarioType {
    */
   ApplicationScenarioGeneral = 0,
   /**
-   * If set to ApplicationScenarioMeeting (1), the SDK automatically enables the following strategies:In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.If someone subscribes to the high-quality stream, the SDK resets the high-quality stream to the VideoEncoderConfiguration configuration used in the most recent calling of setVideoEncoderConfiguration . If no configuration has been set by the user previously, the following values are used:Resolution: 960 × 540Frame rate: 15 fpsBitrate: 1000 KbpsThe SDK monitors the number of subscribers to the low-quality video stream in real time and dynamically enables or disables it based on the number of subscribers.If the user has called setDualStreamMode to set that never send low-quality video stream (DisableSimulcastStream), the dynamic adjustment of the low-quality stream in meeting scenarios will not take effect.If nobody subscribes to the low-quality stream, the SDK automatically disables it to save upstream bandwidth.If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:Resolution: 480 × 272Frame rate: 15 fpsBitrate: 500 Kbps1: The meeting scenario.
+   * If set to ApplicationScenarioMeeting (1), the SDK automatically enables the following strategies:In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.If someone subscribes to the high-quality stream, the SDK resets the high-quality stream to the VideoEncoderConfiguration configuration used in the most recent calling of setVideoEncoderConfiguration. If no configuration has been set by the user previously, the following values are used:Resolution: 960 × 540Frame rate: 15 fpsBitrate: 1000 KbpsThe SDK monitors the number of subscribers to the low-quality video stream in real time and dynamically enables or disables it based on the number of subscribers.If the user has called setDualStreamMode to set that never send low-quality video stream (DisableSimulcastStream), the dynamic adjustment of the low-quality stream in meeting scenarios will not take effect.If nobody subscribes to the low-quality stream, the SDK automatically disables it to save upstream bandwidth.If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:Resolution: 480 × 272Frame rate: 15 fpsBitrate: 500 Kbps1: The meeting scenario.
    */
   ApplicationScenarioMeeting = 1,
 }
@@ -2249,7 +2296,7 @@ export class AudioVolumeInfo {
    */
   volume?: number;
   /**
-   * Voice activity status of the local user.0: The local user is not speaking.1: The local user is speaking.The vad parameter does not report the voice activity status of remote users. In a remote user's callback, the value of vad is always 1.To use this parameter, you must set reportVad to true when calling enableAudioVolumeIndication .
+   * Voice activity status of the local user.0: The local user is not speaking.1: The local user is speaking.The vad parameter does not report the voice activity status of remote users. In a remote user's callback, the value of vad is always 1.To use this parameter, you must set reportVad to true when calling enableAudioVolumeIndication.
    */
   vad?: number;
   /**
@@ -2260,6 +2307,7 @@ export class AudioVolumeInfo {
 
 /**
  * The audio device information.
+ *
  * This class is for Android only.
  */
 export class DeviceInfo {
@@ -2509,6 +2557,7 @@ export enum RtmpStreamingEvent {
 
 /**
  * Image properties.
+ *
  * This class sets the properties of the watermark and background images in the live video.
  */
 export class RtcImage {
@@ -2544,6 +2593,7 @@ export class RtcImage {
 
 /**
  * The configuration for advanced features of the RTMP or RTMPS streaming with transcoding.
+ *
  * If you want to enable the advanced features of streaming with transcoding, contact .
  */
 export class LiveStreamAdvancedFeature {
@@ -2574,7 +2624,7 @@ export enum ConnectionStateType {
    */
   ConnectionStateConnected = 3,
   /**
-   * 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.If the SDK cannot rejoin the channel within 10 seconds, it triggers onConnectionLost , stays in the ConnectionStateReconnecting state, and keeps rejoining the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the onConnectionStateChanged callback, switches to the ConnectionStateFailed state, and stops rejoining the channel.
+   * 4: The SDK keeps reconnecting to the Agora edge server. The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.If the SDK cannot rejoin the channel within 10 seconds, it triggers onConnectionLost, stays in the ConnectionStateReconnecting state, and keeps rejoining the channel.If the SDK fails to rejoin the channel 20 minutes after being disconnected from the Agora edge server, the SDK triggers the onConnectionStateChanged callback, switches to the ConnectionStateFailed state, and stops rejoining the channel.
    */
   ConnectionStateReconnecting = 4,
   /**
@@ -2592,11 +2642,11 @@ export class TranscodingUser {
    */
   uid?: number;
   /**
-   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding .
+   * The x coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, width], where width is the width set in LiveTranscoding.
    */
   x?: number;
   /**
-   * The y coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, height], where height is the height set in LiveTranscoding .
+   * The y coordinate (pixel) of the host's video on the output video frame (taking the upper left corner of the video frame as the origin). The value range is [0, height], where height is the height set in LiveTranscoding.
    */
   y?: number;
   /**
@@ -2658,7 +2708,7 @@ export class LiveTranscoding {
    */
   backgroundColor?: number;
   /**
-   * Video codec profile types for Media Push. See VideoCodecTypeForStream .
+   * Video codec profile types for Media Push. See VideoCodecTypeForStream.
    */
   videoCodecType?: VideoCodecTypeForStream;
   /**
@@ -2666,7 +2716,7 @@ export class LiveTranscoding {
    */
   userCount?: number;
   /**
-   * Manages the user layout configuration in the Media Push. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser .
+   * Manages the user layout configuration in the Media Push. Agora supports a maximum of 17 transcoding users in a Media Push channel. See TranscodingUser.
    */
   transcodingUsers?: TranscodingUser[];
   /**
@@ -2678,7 +2728,7 @@ export class LiveTranscoding {
    */
   metadata?: string;
   /**
-   * The watermark on the live video. The image format needs to be PNG. See RtcImage .You can add one watermark, or add multiple watermarks using an array. This parameter is used with watermarkCount.
+   * The watermark on the live video. The image format needs to be PNG. See RtcImage.You can add one watermark, or add multiple watermarks using an array. This parameter is used with watermarkCount.
    */
   watermark?: RtcImage[];
   /**
@@ -2686,7 +2736,7 @@ export class LiveTranscoding {
    */
   watermarkCount?: number;
   /**
-   * The number of background images on the live video. The image format needs to be PNG. See RtcImage .You can add a background image or use an array to add multiple background images. This parameter is used with backgroundImageCount.
+   * The number of background images on the live video. The image format needs to be PNG. See RtcImage.You can add a background image or use an array to add multiple background images. This parameter is used with backgroundImageCount.
    */
   backgroundImage?: RtcImage[];
   /**
@@ -2694,7 +2744,7 @@ export class LiveTranscoding {
    */
   backgroundImageCount?: number;
   /**
-   * The audio sampling rate (Hz) of the output media stream. See AudioSampleRateType .
+   * The audio sampling rate (Hz) of the output media stream. See AudioSampleRateType.
    */
   audioSampleRate?: AudioSampleRateType;
   /**
@@ -2706,11 +2756,11 @@ export class LiveTranscoding {
    */
   audioChannels?: number;
   /**
-   * Audio codec profile type for Media Push. See AudioCodecProfileType .
+   * Audio codec profile type for Media Push. See AudioCodecProfileType.
    */
   audioCodecProfile?: AudioCodecProfileType;
   /**
-   * Advanced features of the Media Push with transcoding. See LiveStreamAdvancedFeature .
+   * Advanced features of the Media Push with transcoding. See LiveStreamAdvancedFeature.
    */
   advancedFeatures?: LiveStreamAdvancedFeature[];
   /**
@@ -2724,7 +2774,7 @@ export class LiveTranscoding {
  */
 export class TranscodingVideoStream {
   /**
-   * The video source type for local video mixing. See VideoSourceType .
+   * The video source type for local video mixing. See VideoSourceType.
    */
   sourceType?: VideoSourceType;
   /**
@@ -2778,11 +2828,11 @@ export class LocalTranscoderConfiguration {
    */
   streamCount?: number;
   /**
-   * The video streams for local video mixing. See TranscodingVideoStream .
+   * The video streams for local video mixing. See TranscodingVideoStream.
    */
   videoInputStreams?: TranscodingVideoStream[];
   /**
-   * The encoding configuration of the mixed video stream after the local video mixing. See VideoEncoderConfiguration .
+   * The encoding configuration of the mixed video stream after the local video mixing. See VideoEncoderConfiguration.
    */
   videoOutputConfiguration?: VideoEncoderConfiguration;
   /**
@@ -2888,15 +2938,15 @@ export class LastmileProbeOneWayResult {
  */
 export class LastmileProbeResult {
   /**
-   * The status of the last-mile network tests. See LastmileProbeResultState .
+   * The status of the last-mile network tests. See LastmileProbeResultState.
    */
   state?: LastmileProbeResultState;
   /**
-   * Results of the uplink last-mile network test. See LastmileProbeOneWayResult .
+   * Results of the uplink last-mile network test. See LastmileProbeOneWayResult.
    */
   uplinkReport?: LastmileProbeOneWayResult;
   /**
-   * Results of the downlink last-mile network test. See LastmileProbeOneWayResult .
+   * Results of the downlink last-mile network test. See LastmileProbeOneWayResult.
    */
   downlinkReport?: LastmileProbeOneWayResult;
   /**
@@ -3140,27 +3190,31 @@ export class VideoCanvas {
    */
   uid?: number;
   /**
-   * The rendering mode of the video. See RenderModeType .
+   * @ignore
+   */
+  backgroundColor?: number;
+  /**
+   * The rendering mode of the video. See RenderModeType.
    */
   renderMode?: RenderModeType;
   /**
-   * The mirror mode of the view. See VideoMirrorModeType .For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.For the remote user: The mirror mode is disabled by default.
+   * The mirror mode of the view. See VideoMirrorModeType.For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.For the remote user: The mirror mode is disabled by default.
    */
   mirrorMode?: VideoMirrorModeType;
   /**
-   * Setting mode of the view. See VideoViewSetupMode .
+   * Setting mode of the view. See VideoViewSetupMode.
    */
   setupMode?: VideoViewSetupMode;
   /**
-   * The type of the video source. See VideoSourceType .
+   * The type of the video source. See VideoSourceType.
    */
   sourceType?: VideoSourceType;
   /**
-   * The ID of the media player. You can get the Device ID by calling getMediaPlayerId .
+   * The ID of the media player. You can get the Device ID by calling getMediaPlayerId.
    */
   mediaPlayerId?: number;
   /**
-   * (Optional) Display area of the video frame, see Rectangle . width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
+   * (Optional) Display area of the video frame, see Rectangle. width and height represent the video pixel width and height of the area. The default value is null (width or height is 0), which means that the actual resolution of the video frame is displayed.
    */
   cropArea?: Rectangle;
   /**
@@ -3192,7 +3246,7 @@ export enum LighteningContrastLevel {
  */
 export class BeautyOptions {
   /**
-   * The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark. See LighteningContrastLevel .
+   * The contrast level, used with the lighteningLevel parameter. The larger the value, the greater the contrast between light and dark. See LighteningContrastLevel.
    */
   lighteningContrastLevel?: LighteningContrastLevel;
   /**
@@ -3246,11 +3300,11 @@ export enum LowLightEnhanceLevel {
  */
 export class LowlightEnhanceOptions {
   /**
-   * The low-light enhancement mode. See LowLightEnhanceMode .
+   * The low-light enhancement mode. See LowLightEnhanceMode.
    */
   mode?: LowLightEnhanceMode;
   /**
-   * The low-light enhancement level. See LowLightEnhanceLevel .
+   * The low-light enhancement level. See LowLightEnhanceLevel.
    */
   level?: LowLightEnhanceLevel;
 }
@@ -3364,7 +3418,7 @@ export enum BackgroundBlurDegree {
  */
 export class VirtualBackgroundSource {
   /**
-   * The custom background. See BackgroundSourceType .
+   * The custom background. See BackgroundSourceType.
    */
   background_source_type?: BackgroundSourceType;
   /**
@@ -3376,7 +3430,7 @@ export class VirtualBackgroundSource {
    */
   source?: string;
   /**
-   * The degree of blurring applied to the custom background image. See BackgroundBlurDegree .This parameter takes effect only when the type of the custom background image is BackgroundBlur.
+   * The degree of blurring applied to the custom background image. See BackgroundBlurDegree.This parameter takes effect only when the type of the custom background image is BackgroundBlur.
    */
   blur_degree?: BackgroundBlurDegree;
 }
@@ -3400,7 +3454,7 @@ export enum SegModelType {
  */
 export class SegmentationProperty {
   /**
-   * The type of algorithms to user for background processing. See SegModelType .
+   * The type of algorithms to user for background processing. See SegModelType.
    */
   modelType?: SegModelType;
   /**
@@ -3458,7 +3512,7 @@ export enum VoiceBeautifierPreset {
    */
   ChatBeautifierVitality = 0x01010300,
   /**
-   * Singing beautifier effect.If you call setVoiceBeautifierPreset (SingingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.If you call setVoiceBeautifierParameters (SingingBeautifier, param1, param2), you can beautify a male or female-sounding voice and add a reverberation effect.
+   * Singing beautifier effect.If you call setVoiceBeautifierPreset(SingingBeautifier), you can beautify a male-sounding voice and add a reverberation effect that sounds like singing in a small room. Agora recommends using this enumerator to process a male-sounding voice; otherwise, you might experience vocal distortion.If you call setVoiceBeautifierParameters(SingingBeautifier, param1, param2), you can beautify a male or female-sounding voice and add a reverberation effect.
    */
   SingingBeautifier = 0x01020100,
   /**
@@ -3494,13 +3548,14 @@ export enum VoiceBeautifierPreset {
    */
   TimbreTransformationRinging = 0x01030800,
   /**
-   * A ultra-high quality voice, which makes the audio clearer and restores more details.To achieve better audio effect quality, Agora recommends that you set the profile of to AudioProfileMusicHighQuality(4) or AudioProfileMusicHighQualityStereo(5) and scenario to AudioScenarioGameStreaming(3) before calling setVoiceBeautifierPreset .If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
+   * A ultra-high quality voice, which makes the audio clearer and restores more details.To achieve better audio effect quality, Agora recommends that you set the profile of to AudioProfileMusicHighQuality(4) or AudioProfileMusicHighQualityStereo(5) and scenario to AudioScenarioGameStreaming(3) before calling setVoiceBeautifierPreset.If you have an audio capturing device that can already restore audio details to a high degree, Agora recommends that you do not enable ultra-high quality; otherwise, the SDK may over-restore audio details, and you may not hear the anticipated voice effect.
    */
   UltraHighQualityVoice = 0x01040100,
 }
 
 /**
  * Preset audio effects.
+ *
  * To get better audio effects, Agora recommends calling setAudioProfile and setting the profile parameter as recommended below before using the preset audio effects.
  */
 export enum AudioEffectPreset {
@@ -3743,7 +3798,7 @@ export enum AudioRecordingQualityType {
 }
 
 /**
- * Recording content. Set in startAudioRecording .
+ * Recording content. Set in startAudioRecording.
  */
 export enum AudioFileRecordingType {
   /**
@@ -3795,11 +3850,11 @@ export class AudioRecordingConfiguration {
    */
   sampleRate?: number;
   /**
-   * The recording content. See AudioFileRecordingType .
+   * The recording content. See AudioFileRecordingType.
    */
   fileRecordingType?: AudioFileRecordingType;
   /**
-   * Recording quality. See AudioRecordingQualityType .Note: This parameter applies to AAC files only.
+   * Recording quality. See AudioRecordingQualityType.Note: This parameter applies to AAC files only.
    */
   quality?: AudioRecordingQualityType;
   /**
@@ -3813,11 +3868,11 @@ export class AudioRecordingConfiguration {
  */
 export class AudioEncodedFrameObserverConfig {
   /**
-   * Audio profile. See AudioEncodedFrameObserverPosition .
+   * Audio profile. See AudioEncodedFrameObserverPosition.
    */
   postionType?: AudioEncodedFrameObserverPosition;
   /**
-   * Audio encoding type. See AudioEncodingType .
+   * Audio encoding type. See AudioEncodingType.
    */
   encodingType?: AudioEncodingType;
 }
@@ -3828,14 +3883,15 @@ export class AudioEncodedFrameObserverConfig {
 export interface IAudioEncodedFrameObserver {
   /**
    * Gets the encoded audio data of the local user.
-   * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionRecord, you can get the encoded audio data of the local user from this callback.
+   *
+   * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionRecord , you can get the encoded audio data of the local user from this callback.
    *
    * @param channels The number of channels.
    *  1: Mono.
    *  2: Stereo. If the channel uses stereo, the data is interleaved.
    * @param frameBuffer The audio buffer.
    * @param length The data length (byte).
-   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
+   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo.
    */
   onRecordAudioEncodedFrame?(
     frameBuffer: Uint8Array,
@@ -3845,14 +3901,17 @@ export interface IAudioEncodedFrameObserver {
 
   /**
    * Gets the encoded audio data of all remote users.
-   * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionPlayback, you can get encoded audio data of all remote users through this callback.
+   *
+   * After calling registerAudioEncodedFrameObserver and setting the encoded audio as AudioEncodedFrameObserverPositionPlayback , you can get encoded audio data of all remote users through this callback.
    *
    * @param samplesPerSec Recording sample rate (Hz).
-   * @param channels The number of channels.1: Mono.2: Stereo. If the channel uses stereo, the data is interleaved.
+   * @param channels The number of channels.
+   *  1: Mono.
+   *  2: Stereo. If the channel uses stereo, the data is interleaved.
    * @param samplesPerChannel The number of samples per channel in the audio frame.
    * @param frameBuffer The audio buffer.
    * @param length The data length (byte).
-   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
+   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo.
    */
   onPlaybackAudioEncodedFrame?(
     frameBuffer: Uint8Array,
@@ -3862,7 +3921,8 @@ export interface IAudioEncodedFrameObserver {
 
   /**
    * Gets the mixed and encoded audio data of the local and all remote users.
-   * After calling registerAudioEncodedFrameObserver and setting the audio profile as AudioEncodedFrameObserverPositionMixed, you can get the mixed and encoded audio data of the local and all remote users through this callback.
+   *
+   * After calling registerAudioEncodedFrameObserver and setting the audio profile as AudioEncodedFrameObserverPositionMixed , you can get the mixed and encoded audio data of the local and all remote users through this callback.
    *
    * @param samplesPerSec Recording sample rate (Hz).
    * @param channels The number of channels.
@@ -3871,7 +3931,7 @@ export interface IAudioEncodedFrameObserver {
    * @param samplesPerChannel The number of samples per channel in the audio frame.
    * @param frameBuffer The audio buffer.
    * @param length The data length (byte).
-   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo .
+   * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo.
    */
   onMixedAudioEncodedFrame?(
     frameBuffer: Uint8Array,
@@ -4077,7 +4137,7 @@ export enum ChannelMediaRelayEvent {
  */
 export enum ChannelMediaRelayState {
   /**
-   * 0: The initial state. After you successfully stop the channel media relay by calling stopChannelMediaRelay , the onChannelMediaRelayStateChanged callback returns this state.
+   * 0: The initial state. After you successfully stop the channel media relay by calling stopChannelMediaRelay, the onChannelMediaRelayStateChanged callback returns this state.
    */
   RelayStateIdle = 0,
   /**
@@ -4117,7 +4177,7 @@ export class ChannelMediaInfo {
  */
 export class ChannelMediaRelayConfiguration {
   /**
-   * The information of the source channel. See ChannelMediaInfo . It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.uid: The unique user ID to identify the relay stream in the source channel. Agora recommends leaving the default value of 0 unchanged.
+   * The information of the source channel. See ChannelMediaInfo. It contains the following members:channelName: The name of the source channel. The default value is NULL, which means the SDK applies the name of the current channel.token: The token for joining the source channel. This token is generated with the channelName and uid you set in srcInfo.If you have not enabled the App Certificate, set this parameter as the default value NULL, which means the SDK applies the App ID.If you have enabled the App Certificate, you must use the token generated with the channelName and uid, and the uid must be set as 0.uid: The unique user ID to identify the relay stream in the source channel. Agora recommends leaving the default value of 0 unchanged.
    */
   srcInfo?: ChannelMediaInfo;
   /**
@@ -4190,6 +4250,7 @@ export class DownlinkNetworkInfo {
 
 /**
  * The built-in encryption mode.
+ *
  * Agora recommends using Aes128Gcm2 or Aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
  */
 export enum EncryptionMode {
@@ -4236,7 +4297,7 @@ export enum EncryptionMode {
  */
 export class EncryptionConfig {
   /**
-   * The built-in encryption mode. See EncryptionMode . Agora recommends using Aes128Gcm2 or Aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
+   * The built-in encryption mode. See EncryptionMode. Agora recommends using Aes128Gcm2 or Aes256Gcm2 encrypted mode. These two modes support the use of salt for higher security.
    */
   encryptionMode?: EncryptionMode;
   /**
@@ -4322,7 +4383,7 @@ export enum StreamSubscribeState {
    */
   SubStateIdle = 0,
   /**
-   * 1: Fails to subscribe to the remote stream. Possible reasons:The remote user:Calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media stream.Calls disableAudio or disableVideo to disable the local audio or video module.Calls enableLocalAudio (false) or enableLocalVideo (false) to disable local audio or video capture.The role of the remote user is audience.The local user calls the following methods to stop receiving remote streams:Call muteRemoteAudioStream (true) or muteAllRemoteAudioStreams (true) to stop receiving the remote audio stream.Call muteRemoteVideoStream (true) or muteAllRemoteVideoStreams (true) to stop receiving the remote video stream.
+   * 1: Fails to subscribe to the remote stream. Possible reasons:The remote user:Calls muteLocalAudioStream(true) or muteLocalVideoStream(true) to stop sending local media stream.Calls disableAudio or disableVideo to disable the local audio or video module.Calls enableLocalAudio(false) or enableLocalVideo(false) to disable local audio or video capture.The role of the remote user is audience.The local user calls the following methods to stop receiving remote streams:Call muteRemoteAudioStream(true) or muteAllRemoteAudioStreams(true) to stop receiving the remote audio stream.Call muteRemoteVideoStream(true) or muteAllRemoteVideoStreams(true) to stop receiving the remote video stream.
    */
   SubStateNoSubscribed = 1,
   /**
@@ -4344,7 +4405,7 @@ export enum StreamPublishState {
    */
   PubStateIdle = 0,
   /**
-   * 1: Fails to publish the local stream. Possible reasons:The local user calls muteLocalAudioStream (true) or muteLocalVideoStream (true) to stop sending local media streams.The local user calls disableAudio or disableVideo to disable the local audio or video module.The local user calls enableLocalAudio (false) or enableLocalVideo (false) to disable the local audio or video capture.The role of the local user is audience.
+   * 1: Fails to publish the local stream. Possible reasons:The local user calls muteLocalAudioStream(true) or muteLocalVideoStream(true) to stop sending local media streams.The local user calls disableAudio or disableVideo to disable the local audio or video module.The local user calls enableLocalAudio(false) or enableLocalVideo(false) to disable the local audio or video capture.The role of the local user is audience.
    */
   PubStateNoPublished = 1,
   /**
@@ -4396,7 +4457,7 @@ export class UserInfo {
    */
   uid?: number;
   /**
-   * User account. The maximum data length is MaxUserAccountLengthType .
+   * User account. The maximum data length is MaxUserAccountLengthType.
    */
   userAccount?: string;
 }
@@ -4473,7 +4534,8 @@ export class ScreenVideoParameters {
 
 /**
  * The audio configuration for the shared screen stream.
- * Only available where captureAudio is true.
+ *
+ * Only available where captureAudio is true .
  */
 export class ScreenAudioParameters {
   /**
@@ -4499,7 +4561,7 @@ export class ScreenCaptureParameters2 {
    */
   captureAudio?: boolean;
   /**
-   * The audio configuration for the shared screen stream. See ScreenAudioParameters .This parameter only takes effect when captureAudio is true.
+   * The audio configuration for the shared screen stream. See ScreenAudioParameters.This parameter only takes effect when captureAudio is true.
    */
   audioParams?: ScreenAudioParameters;
   /**
@@ -4507,7 +4569,7 @@ export class ScreenCaptureParameters2 {
    */
   captureVideo?: boolean;
   /**
-   * The video configuration for the shared screen stream. See ScreenVideoParameters .This parameter only takes effect when captureVideo is true.
+   * The video configuration for the shared screen stream. See ScreenVideoParameters.This parameter only takes effect when captureVideo is true.
    */
   videoParams?: ScreenVideoParameters;
 }
@@ -4535,7 +4597,7 @@ export class VideoRenderingTracingInfo {
    */
   elapsedTime?: number;
   /**
-   * The time interval from calling startMediaRenderingTracing to calling joinChannel . The unit is milliseconds. A negative number means to call joinChannel after calling startMediaRenderingTracing.
+   * The time interval from calling startMediaRenderingTracing to calling joinChannel. The unit is milliseconds. A negative number means to call joinChannel after calling startMediaRenderingTracing.
    */
   start2JoinChannel?: number;
   /**
@@ -4589,6 +4651,86 @@ export class RecorderStreamInfo {
 }
 
 /**
+ * @ignore
+ */
+export enum LocalProxyMode {
+  /**
+   * @ignore
+   */
+  ConnectivityFirst = 0,
+  /**
+   * @ignore
+   */
+  LocalOnly = 1,
+}
+
+/**
+ * @ignore
+ */
+export class LogUploadServerInfo {
+  /**
+   * @ignore
+   */
+  serverDomain?: string;
+  /**
+   * @ignore
+   */
+  serverPath?: string;
+  /**
+   * @ignore
+   */
+  serverPort?: number;
+  /**
+   * @ignore
+   */
+  serverHttps?: boolean;
+}
+
+/**
+ * @ignore
+ */
+export class AdvancedConfigInfo {
+  /**
+   * @ignore
+   */
+  logUploadServer?: LogUploadServerInfo;
+}
+
+/**
+ * @ignore
+ */
+export class LocalAccessPointConfiguration {
+  /**
+   * @ignore
+   */
+  ipList?: string[];
+  /**
+   * @ignore
+   */
+  ipListSize?: number;
+  /**
+   * @ignore
+   */
+  domainList?: string[];
+  /**
+   * @ignore
+   */
+  domainListSize?: number;
+  /**
+   * @ignore
+   */
+  verifyDomainName?: string;
+  /**
+   * @ignore
+   */
+  mode?: LocalProxyMode;
+  /**
+   * @ignore
+   */
+  advancedConfig?: AdvancedConfigInfo;
+}
+
+/**
  * The spatial audio parameters.
  */
 export class SpatialAudioParams {
@@ -4621,7 +4763,7 @@ export class SpatialAudioParams {
    */
   speaker_attenuation?: number;
   /**
-   * Whether to enable the Doppler effect: When there is a relative displacement between the sound source and the receiver of the sound source, the tone heard by the receiver changes.true: Enable the Doppler effect.false: (Default) Disable the Doppler effect.This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, cohosting, or online KTV).When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo , updateSelfPosition , and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
+   * Whether to enable the Doppler effect: When there is a relative displacement between the sound source and the receiver of the sound source, the tone heard by the receiver changes.true: Enable the Doppler effect.false: (Default) Disable the Doppler effect.This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, cohosting, or online KTV).When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo, updateSelfPosition, and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
    */
   enable_doppler?: boolean;
 }

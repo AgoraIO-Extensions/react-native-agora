@@ -31,6 +31,7 @@ const instance = new RtcEngineExInternal();
 
 /**
  * Creates one IRtcEngine object.
+ *
  * Currently, the Agora RTC SDK v4.x supports creating only one IRtcEngine object for each app.
  *
  * @returns
@@ -42,7 +43,8 @@ export function createAgoraRtcEngine(): IRtcEngine {
 
 /**
  * Gets one IMediaPlayerCacheManager instance.
- * When you successfully call this method, the SDK returns a media player cache manager instance. The cache manager is a singleton pattern. Therefore, multiple calls to this method returns the same instance.Make sure the IRtcEngine is initialized before you call this method.
+ *
+ * When you successfully call this method, the SDK returns a media player cache manager instance. The cache manager is a singleton pattern. Therefore, multiple calls to this method returns the same instance. Make sure the IRtcEngine is initialized before you call this method.
  *
  * @returns
  * The IMediaPlayerCacheManager instance.
