@@ -7,16 +7,16 @@ import AgoraRtcSurfaceViewNativeComponent from './specs/AgoraRtcSurfaceViewNativ
 import AgoraRtcTextureViewNativeComponent from './specs/AgoraRtcTextureViewNativeComponent';
 
 /**
- * A common property for RtcSurfaceView and RtcTextureView .
+ * A common property for RtcSurfaceView and RtcTextureView.
  */
 export interface RtcRendererViewProps extends ViewProps {
   /**
-   * The local video view and settings. See VideoCanvas .
+   * The local video view and settings. See VideoCanvas.
    */
   canvas: VideoCanvas;
 
   /**
-   * The connection infomation. See RtcConnection .
+   * The connection infomation. See RtcConnection.
    */
   connection?: RtcConnection;
 }
@@ -38,7 +38,8 @@ export interface RtcSurfaceViewProps extends RtcRendererViewProps {
 
 /**
  * The RtcSurfaceView class.
- * This class is used for rendering.Android: This class corresponds to the native SurfaceView.iOS: This class corresponds to the native UIView.To ensure the rendering of the image, before calling this component, you should proceed based on whether you are joining a channel:Not joining a channel: First call startPreview , and then call enableVideo .Joining a channel: First ensure capture is enabled, and then call enableVideo .
+ *
+ * This class is used for rendering. Android: This class corresponds to the native SurfaceView. iOS: This class corresponds to the native UIView. To ensure the rendering of the image, before calling this component, you should proceed based on whether you are joining a channel: Not joining a channel: First call startPreview , and then call enableVideo . Joining a channel: First ensure capture is enabled, and then call enableVideo .
  */
 export class RtcSurfaceView extends IAgoraRtcRenderView<RtcSurfaceViewProps> {
   /**
@@ -51,7 +52,8 @@ export class RtcSurfaceView extends IAgoraRtcRenderView<RtcSurfaceViewProps> {
 
 /**
  * The RtcTextureView class.
- * This class is used for rendering and corresponds to the Android native TextureView.This class is only available for the Android platform.To ensure the rendering of the image, before calling this component, you should proceed based on whether you are joining a channel:Not joining a channel: First call startPreview , and then call enableVideo .Joining a channel: First ensure capture is enabled, and then call enableVideo .
+ *
+ * This class is used for rendering and corresponds to the Android native TextureView. This class is only available for the Android platform. To ensure the rendering of the image, before calling this component, you should proceed based on whether you are joining a channel: Not joining a channel: First call startPreview , and then call enableVideo . Joining a channel: First ensure capture is enabled, and then call enableVideo .
  */
 export class RtcTextureView extends IAgoraRtcRenderView<RtcRendererViewProps> {
   /**

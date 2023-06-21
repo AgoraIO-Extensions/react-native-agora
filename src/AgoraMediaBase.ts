@@ -274,7 +274,7 @@ export enum ContentInspectType {
  */
 export class ContentInspectModule {
   /**
-   * Types of functional module. See ContentInspectType .
+   * Types of functional module. See ContentInspectType.
    */
   type?: ContentInspectType;
   /**
@@ -292,7 +292,7 @@ export class ContentInspectConfig {
    */
   extraInfo?: string;
   /**
-   * Functional module. See ContentInspectModule .A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
+   * Functional module. See ContentInspectModule.A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32].A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
    */
   modules?: ContentInspectModule[];
   /**
@@ -508,11 +508,11 @@ export enum VideoBufferType {
  */
 export class ExternalVideoFrame {
   /**
-   * The video type. See VideoBufferType .
+   * The video type. See VideoBufferType.
    */
   type?: VideoBufferType;
   /**
-   * The pixel format. See VideoPixelFormat .
+   * The pixel format. See VideoPixelFormat.
    */
   format?: VideoPixelFormat;
   /**
@@ -579,11 +579,12 @@ export class ExternalVideoFrame {
 
 /**
  * Configurations of the video frame.
+ *
  * Note that the buffer provides a pointer to a pointer. This interface cannot modify the pointer of the buffer, but it can modify the content of the buffer.
  */
 export class VideoFrame {
   /**
-   * The pixel format. See VideoPixelFormat .
+   * The pixel format. See VideoPixelFormat.
    */
   type?: VideoPixelFormat;
   /**
@@ -694,11 +695,13 @@ export enum VideoModulePosition {
 
 /**
  * This class is used to get raw PCM audio.
+ *
  * You can inherit this class and implement the onFrame callback to get raw PCM audio.
  */
 export interface IAudioPcmFrameSink {
   /**
    * Occurs each time the player receives an audio frame.
+   *
    * After registering the audio frame observer, the callback occurs every time the player receives an audio frame, reporting the detailed information of the audio frame.
    *
    * @param frame The audio frame information. See AudioPcmFrame.
@@ -721,7 +724,7 @@ export enum AudioFrameType {
  */
 export class AudioFrame {
   /**
-   * The type of the audio frame. See AudioFrameType .
+   * The type of the audio frame. See AudioFrameType.
    */
   type?: AudioFrameType;
   /**
@@ -752,6 +755,10 @@ export class AudioFrame {
    * Reserved for future use.
    */
   avsync_type?: number;
+  /**
+   * @ignore
+   */
+  presentationMs?: number;
 }
 
 /**
@@ -786,7 +793,8 @@ export enum AudioFramePosition {
 
 /**
  * Audio data format.
- * The SDK sets the audio data format in the following callbacks according to AudioParams. onRecordAudioFrame onPlaybackAudioFrame onMixedAudioFrame The SDK calculates the sampling interval through the samplesPerCall, sampleRate, and channel parameters in AudioParams, and triggers the onRecordAudioFrame, onPlaybackAudioFrame, onMixedAudioFrame, and onEarMonitoringAudioFrame callbacks according to the sampling interval.Sample interval (sec) = samplePerCall/(sampleRate × channel).Ensure that the sample interval ≥ 0.01 (s).
+ *
+ * The SDK sets the audio data format in the following callbacks according to AudioParams . onRecordAudioFrame onPlaybackAudioFrame onMixedAudioFrame The SDK calculates the sampling interval through the samplesPerCall , sampleRate , and channel parameters in AudioParams , and triggers the onRecordAudioFrame , onPlaybackAudioFrame , onMixedAudioFrame , and onEarMonitoringAudioFrame callbacks according to the sampling interval. Sample interval (sec) = samplePerCall /( sampleRate × channel ) . Ensure that the sample interval ≥ 0.01 (s).
  */
 export class AudioParams {
   /**
@@ -798,7 +806,7 @@ export class AudioParams {
    */
   channels?: number;
   /**
-   * The use mode of the audio data. See RawAudioFrameOpModeType .
+   * The use mode of the audio data. See RawAudioFrameOpModeType.
    */
   mode?: RawAudioFrameOpModeType;
   /**
@@ -813,50 +821,54 @@ export class AudioParams {
 export interface IAudioFrameObserverBase {
   /**
    * Gets the captured audio frame.
+   *
    * To ensure that the data format of captured audio frame is as expected, Agora recommends that you set the audio data format as follows: After calling setRecordingAudioFrameParameters to set the audio data format, call registerAudioFrameObserver to register the audio observer object, the SDK will calculate the sampling interval according to the parameters set in this method, and triggers the onRecordAudioFrame callback according to the sampling interval.
    *
    * @param channelId The channel ID.
-   * @param audioFrame The raw audio data. See AudioFrame .
+   * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
    * Reserved for future use.
    */
-  onRecordAudioFrame?(channelId: string, audioFrame: AudioFrame): boolean;
+  onRecordAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
   /**
    * Gets the raw audio frame for playback.
+   *
    * To ensure that the data format of audio frame for playback is as expected, Agora recommends that you set the audio data format as follows: After calling setPlaybackAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onPlaybackAudioFrame callback according to the sampling interval.
    *
    * @param channelId The channel ID.
-   * @param audioFrame The raw audio data. See AudioFrame .
+   * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
    * Reserved for future use.
    */
-  onPlaybackAudioFrame?(channelId: string, audioFrame: AudioFrame): boolean;
+  onPlaybackAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
   /**
    * Retrieves the mixed captured and playback audio frame.
+   *
    * To ensure that the data format of mixed captured and playback audio frame meets the expectations, Agora recommends that you set the data format as follows: After calling setMixedAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onMixedAudioFrame callback according to the sampling interval.
    *
    * @param channelId The channel ID.
-   * @param audioFrame The raw audio data. See AudioFrame .
+   * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
    * Reserved for future use.
    */
-  onMixedAudioFrame?(channelId: string, audioFrame: AudioFrame): boolean;
+  onMixedAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
   /**
    * Gets the in-ear monitoring audio frame.
+   *
    * In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.
    *
-   * @param audioFrame The raw audio data. See AudioFrame .
+   * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
    * Reserved for future use.
    */
-  onEarMonitoringAudioFrame?(audioFrame: AudioFrame): boolean;
+  onEarMonitoringAudioFrame?(audioFrame: AudioFrame): void;
 }
 
 /**
@@ -868,7 +880,7 @@ export interface IAudioFrameObserver extends IAudioFrameObserverBase {
    *
    * @param channelId The channel ID.
    * @param uid The user ID of the specified user.
-   * @param audioFrame The raw audio data. See AudioFrame .
+   * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
    * Reserved for future use.
@@ -877,7 +889,7 @@ export interface IAudioFrameObserver extends IAudioFrameObserverBase {
     channelId: string,
     uid: number,
     audioFrame: AudioFrame
-  ): boolean;
+  ): void;
 }
 
 /**
@@ -914,29 +926,31 @@ export class UserAudioSpectrumInfo {
 export interface IAudioSpectrumObserver {
   /**
    * Gets the statistics of a local audio spectrum.
+   *
    * After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
    *
-   * @param data The audio spectrum data of the local user. See AudioSpectrumData .
+   * @param data The audio spectrum data of the local user. See AudioSpectrumData.
    *
    * @returns
-   * Whether the spectrum data is received:true: Spectrum data is received.false: No spectrum data is received.
+   * Whether the spectrum data is received: true : Spectrum data is received. false : No spectrum data is received.
    */
-  onLocalAudioSpectrum?(data: AudioSpectrumData): boolean;
+  onLocalAudioSpectrum?(data: AudioSpectrumData): void;
 
   /**
    * Gets the remote audio spectrum.
+   *
    * After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
    *
-   * @param spectrums The audio spectrum information of the remote user, see UserAudioSpectrumInfo . The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+   * @param spectrums The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
    * @param spectrumNumber The number of remote users.
    *
    * @returns
-   * Whether the spectrum data is received:true: Spectrum data is received.false: No spectrum data is received.
+   * Whether the spectrum data is received: true : Spectrum data is received. false : No spectrum data is received.
    */
   onRemoteAudioSpectrum?(
     spectrums: UserAudioSpectrumInfo[],
     spectrumNumber: number
-  ): boolean;
+  ): void;
 }
 
 /**
@@ -945,12 +959,13 @@ export interface IAudioSpectrumObserver {
 export interface IVideoEncodedFrameObserver {
   /**
    * Reports that the receiver has received the to-be-decoded video frame sent by the remote end.
-   * If you call the setRemoteVideoSubscriptionOptions method and set encodedFrameOnly to true, the SDK triggers this callback locally to report the received encoded video frame information.
+   *
+   * If you call the setRemoteVideoSubscriptionOptions method and set encodedFrameOnly to true , the SDK triggers this callback locally to report the received encoded video frame information.
    *
    * @param uid The user ID of the remote user.
    * @param imageBuffer The encoded video image buffer.
    * @param length The data length of the video image.
-   * @param videoEncodedFrameInfo For the information of the encoded video frame, see EncodedVideoFrameInfo .
+   * @param videoEncodedFrameInfo For the information of the encoded video frame, see EncodedVideoFrameInfo.
    *
    * @returns
    * Reserved for future use.
@@ -960,7 +975,7 @@ export interface IVideoEncodedFrameObserver {
     imageBuffer: Uint8Array,
     length: number,
     videoEncodedFrameInfo: EncodedVideoFrameInfo
-  ): boolean;
+  ): void;
 }
 
 /**
@@ -982,70 +997,70 @@ export enum VideoFrameProcessMode {
  */
 export interface IVideoFrameObserver {
   /**
-   * Occurs each time the SDK receives a video frame captured by the local camera.
-   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by the local camera. You can then pre-process the data according to your scenarios.Once the pre-processing is complete, you can directly modify videoFrame in this callback, and set the return value to true to send the modified video data to the SDK.The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
+   * Occurs each time the SDK receives a video frame captured by local devices.
    *
-   * @param sourceType The type of the video source. See VideoSourceType .
-   * @param videoFrame The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffer
+   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by local devices. You can then pre-process the data according to your scenarios. Once the pre-processing is complete, you can directly modify videoFrame in this callback, and set the return value to true to send the modified video data to the SDK. The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified. If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
+   *
+   * @param sourceType Video source types, including cameras, screens, or media player. See VideoSourceType.
+   * @param videoFrame The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffer
    *
    * @returns
-   * When the video processing mode is ProcessModeReadOnly:true: Reserved for future use.false: Reserved for future use.When the video processing mode is ProcessModeReadWrite:true: Sets the SDK to receive the video frame.false: Sets the SDK to discard the video frame.
+   * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use. When the video processing mode is ProcessModeReadWrite : true : Sets the SDK to receive the video frame. false : Sets the SDK to discard the video frame.
    */
   onCaptureVideoFrame?(
     sourceType: VideoSourceType,
     videoFrame: VideoFrame
-  ): boolean;
+  ): void;
 
   /**
    * Occurs each time the SDK receives a video frame before encoding.
-   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios.After processing, you can send the processed video data back to the SDK in this callback.The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
    *
-   * @param sourceType The type of the video source. See VideoSourceType .
-   * @param videoFrame The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:
+   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios. After processing, you can send the processed video data back to the SDK in this callback. The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
+   *
+   * @param sourceType The type of the video source. See VideoSourceType.
+   * @param videoFrame The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:
    *  Android: texture
    *  iOS: cvPixelBuffer
    *
    * @returns
-   * When the video processing mode is ProcessModeReadOnly:
-   *  true: Reserved for future use.
-   *  false: Reserved for future use. When the video processing mode is ProcessModeReadWrite:
-   *  true: Sets the SDK to receive the video frame.
-   *  false: Sets the SDK to discard the video frame.
+   * When the video processing mode is ProcessModeReadOnly :
+   *  true : Reserved for future use.
+   *  false : Reserved for future use. When the video processing mode is ProcessModeReadWrite :
+   *  true : Sets the SDK to receive the video frame.
+   *  false : Sets the SDK to discard the video frame.
    */
   onPreEncodeVideoFrame?(
     sourceType: VideoSourceType,
     videoFrame: VideoFrame
-  ): boolean;
+  ): void;
 
   /**
    * @ignore
    */
-  onMediaPlayerVideoFrame?(
-    videoFrame: VideoFrame,
-    mediaPlayerId: number
-  ): boolean;
+  onMediaPlayerVideoFrame?(videoFrame: VideoFrame, mediaPlayerId: number): void;
 
   /**
    * Occurs each time the SDK receives a video frame sent by the remote user.
-   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
+   *
+   * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios. If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
    *
    * @param channelId The channel ID.
    * @param remoteUid The user ID of the remote user who sends the current video frame.
-   * @param videoFrame The video frame. See VideoFrame .The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffer
+   * @param videoFrame The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffer
    *
    * @returns
-   * When the video processing mode is ProcessModeReadOnly:true: Reserved for future use.false: Reserved for future use.When the video processing mode is ProcessModeReadWrite:true: Sets the SDK to receive the video frame.false: Sets the SDK to discard the video frame.
+   * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use. When the video processing mode is ProcessModeReadWrite : true : Sets the SDK to receive the video frame. false : Sets the SDK to discard the video frame.
    */
   onRenderVideoFrame?(
     channelId: string,
     remoteUid: number,
     videoFrame: VideoFrame
-  ): boolean;
+  ): void;
 
   /**
    * @ignore
    */
-  onTranscodedVideoFrame?(videoFrame: VideoFrame): boolean;
+  onTranscodedVideoFrame?(videoFrame: VideoFrame): void;
 }
 
 /**
@@ -1063,11 +1078,11 @@ export enum ExternalVideoSourceType {
 }
 
 /**
- * The format of the recording file.
+ * @ignore
  */
 export enum MediaRecorderContainerFormat {
   /**
-   * 1: (Default) MP4.
+   * @ignore
    */
   FormatMp4 = 1,
 }
@@ -1183,13 +1198,7 @@ export class RecorderInfo {
  */
 export interface IMediaRecorderObserver {
   /**
-   * Occurs when the recording state changes.
-   * When the recording state changes, the SDK triggers this callback to report the current recording state and the reason for the change.
-   *
-   * @param channelId The channel name.
-   * @param uid The user ID.
-   * @param state The current recording state. See RecorderState .
-   * @param error The reason for the state change. See RecorderErrorCode .
+   * @ignore
    */
   onRecorderStateChanged?(
     channelId: string,
@@ -1199,12 +1208,7 @@ export interface IMediaRecorderObserver {
   ): void;
 
   /**
-   * Occurs when the recording information is updated.
-   * After you successfully enable the audio and video recording, the SDK periodically triggers this callback based on the value of recorderInfoUpdateInterval set in MediaRecorderConfiguration . This callback reports the file name, duration, and size of the current recording file.
-   *
-   * @param channelId The channel name.
-   * @param uid The user ID.
-   * @param info The information about the file that is recorded. See RecorderInfo .
+   * @ignore
    */
   onRecorderInfoUpdated?(
     channelId: string,

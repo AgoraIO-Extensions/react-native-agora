@@ -76,7 +76,7 @@ export class LogConfig {
    */
   fileSizeInKB?: number;
   /**
-   * The output level of the SDK log file. See LogLevel .For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
+   * The output level of the SDK log file. See LogLevel.For example, if you set the log level to WARN, the SDK outputs the logs within levels FATAL, ERROR, and WARN.
    */
   level?: LogLevel;
 }

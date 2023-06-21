@@ -261,6 +261,7 @@ export interface IMusicContentCenterEventHandler {
    */
   onLyricResult?(
     requestId: string,
+    songCode: number,
     lyricUrl: string,
     errorCode: MusicContentCenterStatusCode
   ): void;
@@ -268,7 +269,18 @@ export interface IMusicContentCenterEventHandler {
   /**
    * @ignore
    */
+  onSongSimpleInfoResult?(
+    requestId: string,
+    songCode: number,
+    simpleInfo: string,
+    errorCode: MusicContentCenterStatusCode
+  ): void;
+
+  /**
+   * @ignore
+   */
   onPreLoadEvent?(
+    requestId: string,
     songCode: number,
     percent: number,
     lyricUrl: string,
@@ -364,17 +376,16 @@ export abstract class IMusicContentCenter {
    * @ignore
    */
   abstract searchMusic(
-    requestId: string,
     keyWord: string,
     page: number,
     pageSize: number,
     jsonOption?: string
-  ): number;
+  ): string;
 
   /**
    * @ignore
    */
-  abstract preload(songCode: number, jsonOption?: string): number;
+  abstract preload(songCode: number): string;
 
   /**
    * @ignore
@@ -389,10 +400,20 @@ export abstract class IMusicContentCenter {
   /**
    * @ignore
    */
-  abstract isPreloaded(songCode: number): number;
+  abstract isPreloaded(songCode: number): boolean;
 
   /**
    * @ignore
    */
   abstract getLyric(songCode: number, lyricType?: number): string;
+
+  /**
+   * @ignore
+   */
+  abstract getSongSimpleInfo(songCode: number): string;
+
+  /**
+   * @ignore
+   */
+  abstract getInternalSongCode(songCode: number, jsonOption: string): number;
 }

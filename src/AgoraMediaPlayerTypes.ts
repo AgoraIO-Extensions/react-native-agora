@@ -270,7 +270,7 @@ export class PlayerStreamInfo {
    */
   streamIndex?: number;
   /**
-   * The type of the media stream. See MediaStreamType .
+   * The type of the media stream. See MediaStreamType.
    */
   streamType?: MediaStreamType;
   /**
@@ -314,7 +314,7 @@ export class PlayerStreamInfo {
    */
   audioBitsPerSample?: number;
   /**
-   * The total duration (s) of the media stream.
+   * The total duration (ms) of the media stream.
    */
   duration?: number;
 }
@@ -378,7 +378,7 @@ export class PlayerUpdatedInfo {
    */
   deviceId?: string;
   /**
-   * The statistics about the media file being cached.If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics .
+   * The statistics about the media file being cached.If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
    */
   cacheStatistics?: CacheStatistics;
 }
@@ -404,7 +404,7 @@ export class MediaSource {
    */
   autoPlay?: boolean;
   /**
-   * Whether to cache the media file when it is being played:true:Enables caching.false: (Default) Disables caching.Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics .
+   * Whether to cache the media file when it is being played:true:Enables caching.false: (Default) Disables caching.Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
    */
   enableCache?: boolean;
   /**

@@ -120,7 +120,7 @@ export function processIMusicContentCenterEventHandler(
         handler.onMusicChartsResult(
           jsonParams.requestId,
           jsonParams.result,
-          jsonParams.error_code
+          jsonParams.errorCode
         );
       }
       break;
@@ -130,7 +130,7 @@ export function processIMusicContentCenterEventHandler(
         handler.onMusicCollectionResult(
           jsonParams.requestId,
           jsonParams.result,
-          jsonParams.error_code
+          jsonParams.errorCode
         );
       }
       break;
@@ -139,8 +139,20 @@ export function processIMusicContentCenterEventHandler(
       if (handler.onLyricResult !== undefined) {
         handler.onLyricResult(
           jsonParams.requestId,
+          jsonParams.songCode,
           jsonParams.lyricUrl,
-          jsonParams.error_code
+          jsonParams.errorCode
+        );
+      }
+      break;
+
+    case 'onSongSimpleInfoResult':
+      if (handler.onSongSimpleInfoResult !== undefined) {
+        handler.onSongSimpleInfoResult(
+          jsonParams.requestId,
+          jsonParams.songCode,
+          jsonParams.simpleInfo,
+          jsonParams.errorCode
         );
       }
       break;
@@ -148,11 +160,12 @@ export function processIMusicContentCenterEventHandler(
     case 'onPreLoadEvent':
       if (handler.onPreLoadEvent !== undefined) {
         handler.onPreLoadEvent(
+          jsonParams.requestId,
           jsonParams.songCode,
           jsonParams.percent,
           jsonParams.lyricUrl,
           jsonParams.status,
-          jsonParams.error_code
+          jsonParams.errorCode
         );
       }
       break;
@@ -328,28 +341,24 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   searchMusic(
-    requestId: string,
     keyWord: string,
     page: number,
     pageSize: number,
     jsonOption?: string
-  ): number {
+  ): string {
     const apiType = this.getApiTypeFromSearchMusic(
-      requestId,
       keyWord,
       page,
       pageSize,
       jsonOption
     );
     const jsonParams = {
-      requestId: requestId,
       keyWord: keyWord,
       page: page,
       pageSize: pageSize,
       jsonOption: jsonOption,
       toJSON: () => {
         return {
-          requestId: requestId,
           keyWord: keyWord,
           page: page,
           pageSize: pageSize,
@@ -358,11 +367,11 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const requestId = jsonResults.requestId;
+    return requestId;
   }
 
   protected getApiTypeFromSearchMusic(
-    requestId: string,
     keyWord: string,
     page: number,
     pageSize: number,
@@ -371,26 +380,22 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     return 'MusicContentCenter_searchMusic';
   }
 
-  preload(songCode: number, jsonOption?: string): number {
-    const apiType = this.getApiTypeFromPreload(songCode, jsonOption);
+  preload(songCode: number): string {
+    const apiType = this.getApiTypeFromPreload(songCode);
     const jsonParams = {
       songCode: songCode,
-      jsonOption: jsonOption,
       toJSON: () => {
         return {
           songCode: songCode,
-          jsonOption: jsonOption,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const requestId = jsonResults.requestId;
+    return requestId;
   }
 
-  protected getApiTypeFromPreload(
-    songCode: number,
-    jsonOption?: string
-  ): string {
+  protected getApiTypeFromPreload(songCode: number): string {
     return 'MusicContentCenter_preload';
   }
 
@@ -428,7 +433,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     return 'MusicContentCenter_getCaches';
   }
 
-  isPreloaded(songCode: number): number {
+  isPreloaded(songCode: number): boolean {
     const apiType = this.getApiTypeFromIsPreloaded(songCode);
     const jsonParams = {
       songCode: songCode,
@@ -468,6 +473,52 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     lyricType: number = 0
   ): string {
     return 'MusicContentCenter_getLyric';
+  }
+
+  getSongSimpleInfo(songCode: number): string {
+    const apiType = this.getApiTypeFromGetSongSimpleInfo(songCode);
+    const jsonParams = {
+      songCode: songCode,
+      toJSON: () => {
+        return {
+          songCode: songCode,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const requestId = jsonResults.requestId;
+    return requestId;
+  }
+
+  protected getApiTypeFromGetSongSimpleInfo(songCode: number): string {
+    return 'MusicContentCenter_getSongSimpleInfo';
+  }
+
+  getInternalSongCode(songCode: number, jsonOption: string): number {
+    const apiType = this.getApiTypeFromGetInternalSongCode(
+      songCode,
+      jsonOption
+    );
+    const jsonParams = {
+      songCode: songCode,
+      jsonOption: jsonOption,
+      toJSON: () => {
+        return {
+          songCode: songCode,
+          jsonOption: jsonOption,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const internalSongCode = jsonResults.internalSongCode;
+    return internalSongCode;
+  }
+
+  protected getApiTypeFromGetInternalSongCode(
+    songCode: number,
+    jsonOption: string
+  ): string {
+    return 'MusicContentCenter_getInternalSongCode';
   }
 }
 
