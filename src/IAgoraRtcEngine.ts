@@ -61,7 +61,6 @@ import {
   RtmpStreamPublishErrorType,
   RtmpStreamPublishState,
   RtmpStreamingEvent,
-  ScreenCaptureFramerateCapability,
   ScreenCaptureParameters,
   ScreenCaptureParameters2,
   ScreenScenarioType,
@@ -3472,9 +3471,7 @@ export abstract class IRtcEngine {
    *
    * This method mixes the specified local or online audio file with the audio from the microphone, or replaces the microphone's audio with the specified local or remote audio file. A successful method call triggers the onAudioMixingStateChanged ( AudioMixingStatePlaying ) callback. When the audio mixing file playback finishes, the SDK triggers the onAudioMixingStateChanged ( AudioMixingStateStopped ) callback on the local client. For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK support . You can call this method either before or after joining a channel. If you need to call startAudioMixing multiple times, ensure that the time interval between calling this method is more than 500 ms. If the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL, the SDK reports 701. On Android, there are following considerations: To use this method, ensure that the Android device is v4.2 or later, and the API version is v16 or later. If you need to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address. If you call this method on an emulator, ensure that the music file is in the /sdcard/ directory and the format is MP3.
    *
-   * @param filePath File path:
-   *  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441
-   *  iOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
+   * @param filePath File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441iOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
    * @param loopback Whether to only play music files on the local client:true: Only play music files on the local client so that only the local user can hear the music.false: Publish music files to remote clients so that both the local user and remote users can hear the music.
    * @param cycle The number of times the music file plays.≥ 0: The number of playback times. For example, 0 means that the SDK does not play the music file while 1 means that the SDK plays once.-1: Play the audio file in an infinite loop.
    * @param startPos The playback position (ms) of the music file.
@@ -3841,9 +3838,7 @@ export abstract class IRtcEngine {
    *
    * Call this method after joining a channel.
    *
-   * @param filePath File path:
-   *  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441
-   *  iOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
+   * @param filePath File path:Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example: content://com.android.providers.media.documents/document/audio%3A14441iOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
    *
    * @returns
    * The total duration (ms) of the specified audio effect file, if the method call succeeds. < 0: Failure.
@@ -4398,10 +4393,7 @@ export abstract class IRtcEngine {
    *
    * This method adjusts the playback volume that is the mixed volume of all remote users. You can call this method either before or after joining a channel.
    *
-   * @param volume The volume of the user. The value range is [0,400].
-   *  0: Mute.If you only need to mute the audio signal, Agora recommends that you use muteRecordingSignal instead.
-   *  100: (Default) The original volume.
-   *  400: Four times the original volume (amplifying the audio signals by four times).
+   * @param volume The volume of the user. The value range is [0,400].0: Mute.If you only need to mute the audio signal, Agora recommends that you use muteRecordingSignal instead.100: (Default) The original volume.400: Four times the original volume (amplifying the audio signals by four times).
    *
    * @returns
    * 0: Success. < 0: Failure.
@@ -4936,9 +4928,7 @@ export abstract class IRtcEngine {
    * @param contentHint The content hint for screen sharing. See VideoContentHint.
    *
    * @returns
-   * 0: Success. < 0: Failure.
-   *  -2: The parameter is invalid.
-   *  -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
+   * 0: Success. < 0: Failure. -2: The parameter is invalid. -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
    */
   abstract setScreenCaptureContentHint(contentHint: VideoContentHint): number;
 
@@ -4948,7 +4938,9 @@ export abstract class IRtcEngine {
    * Call this method after starting screen sharing or window sharing.
    *
    * @returns
-   * 0: Success. < 0: Failure. -2: The parameter is invalid. -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
+   * 0: Success. < 0: Failure.
+   *  -2: The parameter is invalid.
+   *  -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
    */
   abstract updateScreenCaptureRegion(regionRect: Rectangle): number;
 
@@ -4960,9 +4952,7 @@ export abstract class IRtcEngine {
    * @param captureParams The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See
    *
    * @returns
-   * 0: Success. < 0: Failure.
-   *  -2: The parameter is invalid.
-   *  -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
+   * 0: Success. < 0: Failure. -2: The parameter is invalid. -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
    */
   abstract updateScreenCaptureParameters(
     captureParams: ScreenCaptureParameters
@@ -5006,7 +4996,7 @@ export abstract class IRtcEngine {
    * @returns
    * The highest frame rate supported by the device, if the method is called successfully. See ScreenCaptureFramerateCapability . < 0: Failure.
    */
-  abstract queryScreenCaptureCapability(): ScreenCaptureFramerateCapability;
+  abstract queryScreenCaptureCapability(): number;
 
   /**
    * Sets the screen sharing scenario.
@@ -5828,7 +5818,7 @@ export abstract class IRtcEngine {
    * @returns
    * ≥ 0: The method call is successful, and the local network connection type is returned. 0: The SDK disconnects from the network. 1: The network type is LAN. 2: The network type is Wi-Fi (including hotspots). 3: The network type is mobile 2G. 4: The network type is mobile 3G. 5: The network type is mobile 4G. 6: The network type is mobile 5G. < 0: The method call failed with an error code. -1: The network type is unknown.
    */
-  abstract getNetworkType(): NetworkType;
+  abstract getNetworkType(): number;
 
   /**
    * Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.

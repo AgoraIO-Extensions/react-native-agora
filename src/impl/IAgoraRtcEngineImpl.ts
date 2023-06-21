@@ -26,10 +26,8 @@ import {
   LocalAccessPointConfiguration,
   LocalTranscoderConfiguration,
   LowlightEnhanceOptions,
-  NetworkType,
   RecorderStreamInfo,
   Rectangle,
-  ScreenCaptureFramerateCapability,
   ScreenCaptureParameters,
   ScreenCaptureParameters2,
   ScreenScenarioType,
@@ -5153,7 +5151,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_updateScreenCapture';
   }
 
-  queryScreenCaptureCapability(): ScreenCaptureFramerateCapability {
+  queryScreenCaptureCapability(): number {
     const apiType = this.getApiTypeFromQueryScreenCaptureCapability();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
@@ -6647,7 +6645,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_enableWirelessAccelerate';
   }
 
-  getNetworkType(): NetworkType {
+  getNetworkType(): number {
     const apiType = this.getApiTypeFromGetNetworkType();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);

@@ -189,9 +189,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *
    * A successful call of this method triggers the onUserMuteVideo callback on the remote client. This method does not affect any ongoing video recording, because it does not disable the camera.
    *
-   * @param mute Whether to stop publishing the local video stream.
-   *  true: Stop publishing the local video stream.
-   *  false: (Default) Publish the local video stream.
+   * @param mute Whether to stop publishing the local video stream.true: Stop publishing the local video stream.false: (Default) Publish the local video stream.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -223,7 +221,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *
    * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the video streams of all remote users.true: Stop subscribing to the video streams of all remote users.false: (Default) Subscribe to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users.
+   *  true: Stop subscribing to the video streams of all remote users.
+   *  false: (Default) Subscribe to the audio streams of all remote users by default.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -239,7 +239,8 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *
    * You can call this method to specify the audio streams of a user that you do not want to subscribe to. You can call this method either before or after joining a channel. The blocklist is not affected by the setting in muteRemoteAudioStream , muteAllRemoteAudioStreams , and autoSubscribeAudio in ChannelMediaOptions . Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel. If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
    *
-   * @param uidList The user ID list of users that you do not want to subscribe to.If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
+   * @param uidList The user ID list of users that you do not want to subscribe to.
+   *  If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
    * @param uidNumber The number of users in the user ID list.
    * @param connection The connection information. See RtcConnection.
    *
@@ -705,9 +706,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *
    * After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side. You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream: High-quality video stream: High bitrate, high resolution. Low-quality video stream: Low bitrate, low resolution. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
    *
-   * @param enabled Whether to enable dual-stream mode:
-   *  true: Enable dual-stream mode.
-   *  false: (Default) Disable dual-stream mode.
+   * @param enabled Whether to enable dual-stream mode:true: Enable dual-stream mode.false: (Default) Disable dual-stream mode.
    * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig.
    * @param connection The connection information. See RtcConnection.
    *
