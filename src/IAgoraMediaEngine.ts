@@ -97,7 +97,7 @@ export abstract class IMediaEngine {
    * @returns
    * The AudioFrame instance, if the method call succeeds. An error code, if the call fails,.
    */
-  abstract pullAudioFrame(): AudioFrame;
+  abstract pullAudioFrame(frame: AudioFrame): number;
 
   /**
    * Configures the external video source.

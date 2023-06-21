@@ -96,15 +96,21 @@ export class IMediaEngineImpl implements IMediaEngine {
     return 'MediaEngine_pushAudioFrame';
   }
 
-  pullAudioFrame(): AudioFrame {
-    const apiType = this.getApiTypeFromPullAudioFrame();
-    const jsonParams = {};
+  pullAudioFrame(frame: AudioFrame): number {
+    const apiType = this.getApiTypeFromPullAudioFrame(frame);
+    const jsonParams = {
+      frame: frame,
+      toJSON: () => {
+        return {
+          frame: frame,
+        };
+      },
+    };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    const frame = jsonResults.frame;
-    return frame;
+    return jsonResults.result;
   }
 
-  protected getApiTypeFromPullAudioFrame(): string {
+  protected getApiTypeFromPullAudioFrame(frame: AudioFrame): string {
     return 'MediaEngine_pullAudioFrame';
   }
 

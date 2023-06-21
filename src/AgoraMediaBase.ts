@@ -1046,10 +1046,16 @@ export interface IVideoFrameObserver {
    *
    * @param channelId The channel ID.
    * @param remoteUid The user ID of the remote user who sends the current video frame.
-   * @param videoFrame The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:Android: textureiOS: cvPixelBuffer
+   * @param videoFrame The video frame. See VideoFrame.The default value of the video frame data format obtained through this callback is as follows:
+   *  Android: texture
+   *  iOS: cvPixelBuffer
    *
    * @returns
-   * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use. When the video processing mode is ProcessModeReadWrite : true : Sets the SDK to receive the video frame. false : Sets the SDK to discard the video frame.
+   * When the video processing mode is ProcessModeReadOnly :
+   *  true : Reserved for future use.
+   *  false : Reserved for future use. When the video processing mode is ProcessModeReadWrite :
+   *  true : Sets the SDK to receive the video frame.
+   *  false : Sets the SDK to discard the video frame.
    */
   onRenderVideoFrame?(
     channelId: string,
