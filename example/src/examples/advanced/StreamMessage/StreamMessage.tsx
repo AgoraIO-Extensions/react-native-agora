@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 
+import { Buffer } from 'buffer';
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
@@ -102,12 +103,16 @@ export default class StreamMessage extends Component<{}, State, any> {
     });
     this._engine?.addListener('StreamMessage', (uid, streamId, data) => {
       console.info('UserOffline', uid, streamId, data);
-      Alert.alert(`Receive from uid:${uid}`, `StreamId ${streamId}:${data}`, [
-        {
-          text: 'Ok',
-          onPress: () => {},
-        },
-      ]);
+      Alert.alert(
+        `Receive from uid:${uid}`,
+        `StreamId ${streamId}:${data.toString()}`,
+        [
+          {
+            text: 'Ok',
+            onPress: () => {},
+          },
+        ]
+      );
     });
     this._engine?.addListener(
       'StreamMessageError',
@@ -210,7 +215,7 @@ export default class StreamMessage extends Component<{}, State, any> {
       new DataStreamConfig(true, true)
     );
 
-    await this._engine?.sendStreamMessage(streamId!, message);
+    await this._engine?.sendStreamMessage(streamId!, Buffer.from(message));
     this.setState({ message: '' });
   };
 }

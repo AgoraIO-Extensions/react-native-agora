@@ -365,7 +365,7 @@ export type StreamMessageCallback =
    * @param streamId Stream ID.
    * @param data Data received by the local user.
    */
-  (uid: number, streamId: number, data: string) => void;
+  (uid: number, streamId: number, data: Uint8Array) => void;
 export type StreamMessageErrorCallback =
   /**
    * @param uid User ID of the remote user sending the data stream.

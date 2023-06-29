@@ -337,7 +337,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
 
     @objc func sendMetadata(_ params: NSDictionary, _ callback: Callback) {
         callback.resolve(mediaObserverMap[params["channelId"] as! String]) {
-            $0.addMetadata(params["metadata"] as! String)
+            $0.addMetadata(Data(base64Encoded: (params["metadata"] as! String), options: .ignoreUnknownCharacters)!)
         }
     }
 
@@ -386,7 +386,7 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
     }
 
     @objc func sendStreamMessage(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(self[params["channelId"] as! String]?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: (params["message"] as! String).data(using: .utf8)!))
+        callback.code(self[params["channelId"] as! String]?.sendStreamMessage((params["streamId"] as! NSNumber).intValue, data: Data(base64Encoded: (params["message"] as! String), options: .ignoreUnknownCharacters)!))
     }
 
     @objc func enableRemoteSuperResolution(_ params: NSDictionary, _ callback: Callback) {

@@ -3,6 +3,8 @@ import {
   NativeEventEmitter,
   NativeModules,
 } from 'react-native';
+import { Buffer } from 'buffer';
+import base64 from 'base64-js';
 
 import type {
   ChannelMediaOptions,
@@ -145,6 +147,11 @@ export default class RtcChannel implements RtcChannelInterface {
     const callback = (res: any) => {
       const { channelId, data } = res;
       if (channelId === this.channelId) {
+        if (event === 'StreamMessage') {
+          data[3] = Buffer.from(data[3], 'base64');
+        } else if (event === 'MetadataReceived') {
+          data[0] = Buffer.from(data[0], 'base64');
+        }
         // @ts-ignore
         listener(...data);
       }
@@ -846,8 +853,10 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * @param metadata The metadata to be sent.
    */
-  sendMetadata(metadata: string): Promise<void> {
-    return this._callMethod('sendMetadata', { metadata });
+  sendMetadata(metadata: Uint8Array): Promise<void> {
+    return this._callMethod('sendMetadata', {
+      metadata: base64.fromByteArray(metadata),
+    });
   }
 
   /**
@@ -1067,8 +1076,11 @@ export default class RtcChannel implements RtcChannelInterface {
    *
    * @param message The message data.
    */
-  sendStreamMessage(streamId: number, message: string): Promise<void> {
-    return this._callMethod('sendStreamMessage', { streamId, message });
+  sendStreamMessage(streamId: number, message: Uint8Array): Promise<void> {
+    return this._callMethod('sendStreamMessage', {
+      streamId,
+      message: base64.fromByteArray(message),
+    });
   }
 
   /**
@@ -1438,7 +1450,7 @@ interface RtcMediaMetadataInterface {
 
   setMaxMetadataSize(size: number): Promise<void>;
 
-  sendMetadata(metadata: string): Promise<void>;
+  sendMetadata(metadata: Uint8Array): Promise<void>;
 }
 
 /**
@@ -1472,5 +1484,5 @@ interface RtcStreamMessageInterface {
 
   createDataStreamWithConfig(config: DataStreamConfig): Promise<number>;
 
-  sendStreamMessage(streamId: number, message: string): Promise<void>;
+  sendStreamMessage(streamId: number, message: Uint8Array): Promise<void>;
 }

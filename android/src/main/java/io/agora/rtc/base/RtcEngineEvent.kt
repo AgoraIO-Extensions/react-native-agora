@@ -1,6 +1,7 @@
 package io.agora.rtc.base
 
 import android.graphics.Rect
+import android.util.Base64
 import androidx.annotation.IntRange
 import io.agora.rtc.AgoraMediaRecorder
 import io.agora.rtc.Constants
@@ -478,7 +479,8 @@ class RtcEngineEventHandler(
       RtcEngineEvents.StreamMessage,
       uid.toUInt().toLong(),
       streamId,
-      data?.let { String(it, Charsets.UTF_8) })
+      Base64.encodeToString(data, Base64.DEFAULT)
+    )
   }
 
   override fun onStreamMessageError(

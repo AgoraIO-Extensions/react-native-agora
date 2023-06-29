@@ -1,7 +1,8 @@
 name: Build API Example
-run-name: ${{ github.actor }} triggered this job
+
 on:
   workflow_dispatch:
+
 jobs:
   build-android:
     runs-on: ubuntu-latest
@@ -13,8 +14,7 @@ jobs:
 
       - name: SetupExample
         run: |
-          yarn install --frozen-lockfile
-        working-directory: example
+          yarn example install --frozen-lockfile
 
       - name: Modify APP ID
         run: |
@@ -31,7 +31,7 @@ jobs:
         with:
           name: AgoraRtcExample
           path: |
-            example/android/**/*.apk
+            example/android/app/build/outputs/apk/release/*.apk
 
   build-ios:
     runs-on: macos-latest
@@ -43,14 +43,23 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: example/ios/Pods
+          path: |
+            **/Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pods-
+            ${{ runner.os }}-pods
+
+      - uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 1024M
+          key: ${{ runner.os }}-ccache
+          restore-keys: |
+            ${{ runner.os }}-ccache
 
       - name: SetupExample
         run: |
-          yarn
+          yarn example install --frozen-lockfile
+          yarn example pods
 
       - name: Modify APP ID
         run: |
@@ -86,10 +95,6 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
-      - uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          max-size: 5G
 
       - name: Fastlane build
         env:
