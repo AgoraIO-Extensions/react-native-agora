@@ -1,5 +1,18 @@
 
 
+## [3.7.2-rc.3](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.7.2-rc.1...v3.7.2-rc.3) (2023-06-29)
+
+
+### Bug Fixes
+
+* CSD-56669 ([03d9168](https://github.com/AgoraIO-Community/react-native-agora/commit/03d9168f1849566d6ba626eb6ae27b2d6f79ee48))
+* enableFaceDetection not working ([956a2f9](https://github.com/AgoraIO-Community/react-native-agora/commit/956a2f91f10a878f33a6c15d9d8b64a5fe95a019))
+
+
+### Features
+
+* support Uint8Array for stream message and metadata ([#664](https://github.com/AgoraIO-Community/react-native-agora/issues/664)) ([b4a122f](https://github.com/AgoraIO-Community/react-native-agora/commit/b4a122fc0f02b59480df98a111102e864d05ad2d))
+
 ## [3.7.2-rc.1](https://github.com/AgoraIO-Community/react-native-agora/compare/v3.7.1...v3.7.2-rc.1) (2023-04-24)
 
 
