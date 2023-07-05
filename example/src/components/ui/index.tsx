@@ -42,11 +42,8 @@ export const AgoraView = (props: ViewProps & { horizontal?: boolean }) => {
     <>
       <View
         {...others}
-        style={[
-          { pointerEvents: 'box-none' },
-          style,
-          !!horizontal && AgoraStyle.row,
-        ]}
+        style={[style, !!horizontal && AgoraStyle.row]}
+        pointerEvents={'box-none'}
       />
     </>
   );
