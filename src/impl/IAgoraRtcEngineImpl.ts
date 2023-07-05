@@ -262,7 +262,7 @@ export function processIRtcEngineEventHandler(
     case 'onFirstLocalVideoFramePublished':
       if (handler.onFirstLocalVideoFramePublished !== undefined) {
         handler.onFirstLocalVideoFramePublished(
-          jsonParams.connection,
+          jsonParams.source,
           jsonParams.elapsed
         );
       }
@@ -411,7 +411,7 @@ export function processIRtcEngineEventHandler(
 
     case 'onLocalVideoStats':
       if (handler.onLocalVideoStats !== undefined) {
-        handler.onLocalVideoStats(jsonParams.connection, jsonParams.stats);
+        handler.onLocalVideoStats(jsonParams.source, jsonParams.stats);
       }
       break;
 
