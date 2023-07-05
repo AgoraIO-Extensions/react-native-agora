@@ -27,7 +27,10 @@ function BaseRenderUsers({
       return video;
     }
     return (
-      <AgoraCard title={`${user.uid} - ${user.sourceType}`}>
+      <AgoraCard
+        key={`${user.uid} - ${user.sourceType}`}
+        title={`${user.uid} - ${user.sourceType}`}
+      >
         {enableVideo ? <>{video}</> : undefined}
       </AgoraCard>
     );

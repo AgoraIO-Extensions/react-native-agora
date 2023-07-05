@@ -251,7 +251,12 @@ export abstract class BaseComponent<
     return user.uid === 0 ? (
       video
     ) : (
-      <AgoraCard title={`${user.uid} - ${user.sourceType}`}>{video}</AgoraCard>
+      <AgoraCard
+        key={`${user.uid} - ${user.sourceType}`}
+        title={`${user.uid} - ${user.sourceType}`}
+      >
+        {video}
+      </AgoraCard>
     );
   }
 
