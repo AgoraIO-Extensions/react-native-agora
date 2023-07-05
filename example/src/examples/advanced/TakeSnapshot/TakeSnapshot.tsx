@@ -183,7 +183,7 @@ export default class TakeSnapshot
           items={arrayToItems([0, ...remoteUsers])}
           value={targetUid}
           onValueChange={(value) => {
-            this.setState({ targetUid: value });
+            this.setState({ targetUid: value, takeSnapshot: false });
           }}
         />
         {takeSnapshot ? (
