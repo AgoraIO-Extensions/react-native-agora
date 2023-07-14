@@ -698,7 +698,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Starts relaying media streams across channels or updates channels for media relay.
    *
-   * The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:
+   * The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels. This feature supports relaying media streams to a maximum of six destination channels. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:
    *  If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), it means that the SDK starts relaying media streams from the source channel to the destination channel.
    *  If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.
    *  Call this method after joining the channel.
@@ -714,8 +714,8 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  < 0: Failure.
    *  -1: A general error occurs (no specified reason).
    *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not an host.
-   *  -8: Internal state error. Probably because the user is not an audience member.
+   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
+   *  -8: Internal state error. Probably because the user is not a broadcaster.
    */
   abstract startOrUpdateChannelMediaRelayEx(
     configuration: ChannelMediaRelayConfiguration,
@@ -742,8 +742,8 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  < 0: Failure.
    *  -1: A general error occurs (no specified reason).
    *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not an host.
-   *  -8: Internal state error. Probably because the user is not an audience member.
+   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
+   *  -8: Internal state error. Probably because the user is not a broadcaster.
    */
   abstract startChannelMediaRelayEx(
     configuration: ChannelMediaRelayConfiguration,

@@ -4730,13 +4730,13 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_isCameraExposureSupported';
   }
 
-  setCameraExposureFactor(value: number): number {
-    const apiType = this.getApiTypeFromSetCameraExposureFactor(value);
+  setCameraExposureFactor(factor: number): number {
+    const apiType = this.getApiTypeFromSetCameraExposureFactor(factor);
     const jsonParams = {
-      value: value,
+      factor: factor,
       toJSON: () => {
         return {
-          value: value,
+          factor: factor,
         };
       },
     };
@@ -4744,7 +4744,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromSetCameraExposureFactor(value: number): string {
+  protected getApiTypeFromSetCameraExposureFactor(factor: number): string {
     return 'RtcEngine_setCameraExposureFactor';
   }
 
