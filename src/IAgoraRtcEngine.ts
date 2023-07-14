@@ -1044,7 +1044,7 @@ export class ChannelMediaOptions {
    */
   publishCameraTrack?: boolean;
   /**
-   * Whether to publish the video captured by the second camera: true : Publish the video captured by the second camera. false : (Default) Do not publish the video captured by the second camera.
+   * Whether to publish the video captured by the second camera: true : Publish the video captured by the second camera. false : Do not publish the video captured by the second camera.
    */
   publishSecondaryCameraTrack?: boolean;
   /**
@@ -1068,7 +1068,7 @@ export class ChannelMediaOptions {
    */
   publishScreenCaptureAudio?: boolean;
   /**
-   * Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen.
+   * @ignore
    */
   publishScreenTrack?: boolean;
   /**
@@ -1234,7 +1234,7 @@ export class LeaveChannelOptions {
 }
 
 /**
- * IRtcEngineEventHandler The SDK uses the interface to send event notifications to your app. Your app can get those notifications through methods that inherit this interface.
+ * The SDK uses the IRtcEngineEventHandler interface to send event notifications to your app. Your app can get those notifications through methods that inherit this interface.
  */
 export interface IRtcEngineEventHandler {
   /**
@@ -2871,7 +2871,33 @@ export abstract class IRtcEngine {
   abstract queryCodecCapability(): { codecInfo: CodecCapInfo[]; size: number };
 
   /**
-   * @ignore
+   * Preloads a channel with token, channelId uid
+   *
+   * When audience members need to switch between different channels frequently, calling the method can help shortening the time of joining a channel, thus reducing the time it takes for audience members to hear and see the host. As it may take a while for the SDK to preload a channel, Agora recommends that you call this method as soon as possible after obtaining the channel name and user ID to join a channel.
+   *  When calling this method, ensure you set the user role as audience and do not set the audio scenario as AudioScenarioChorus, otherwise, this method does not take effect.
+   *  You also need to make sure that the channel name, user ID and token passed in for preloading are the same as the values passed in when joinning the channel, otherwise, this method does not take effect.
+   *  One IRtcEngine instance supports preloading 20 channels at most. When exceeding this limit, the latest 20 preloaded channels take effect.
+   *  Failing to preload a channel does not mean that you can't join a channel, nor will it increase the time of joining a channel. If you join a preloaded channel, leave it and want to rejoin the same channel, you do not need to call this method unless the token for preloading the channel expires.
+   *
+   * @param token The token generated on your server for authentication. When the token for preloading channels expires, you can update the token based on the number of channels you preload.
+   *  When preloading one channel, calling this method to pass in the new token.
+   *  When preloading more than one channels:
+   *  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token.
+   *  If you use different tokens to preload different channels, call this method to pass in your user ID, channel name and the new token.
+   * @param channelId The channel name that you want to preload. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
+   *  All lowercase English letters: a to z.
+   *  All uppercase English letters: A to Z.
+   *  All numeric characters: 0 to 9.
+   *  Space
+   *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+   * @param uid The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   *  -2: The parameter is invalid. For example, the token is invalid. You need to pass in a valid parameter and join the channel again.
+   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
+   *  -102: The channel name is invalid. You need to pass in a valid channel name and join the channel again.
    */
   abstract preloadChannel(
     token: string,
@@ -2880,7 +2906,38 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * @ignore
+   * Preloads a channel with token, channelId userAccount.
+   *
+   * When audience members need to switch between different channels frequently, calling the method can help shortening the time of joining a channel, thus reducing the time it takes for audience members to hear and see the host. As it may take a while for the SDK to preload a channel, Agora recommends that you call this method as soon as possible after obtaining the channel name and user ID to join a channel. If you join a preloaded channel, leave it and want to rejoin the same channel, you do not need to call this method unless the token for preloading the channel expires.
+   *  Failing to preload a channel does not mean that you can't join a channel, nor will it increase the time of joining a channel.
+   *  One IRtcEngine instance supports preloading 20 channels at most. When exceeding this limit, the latest 20 preloaded channels take effect.
+   *  When calling this method, ensure you set the user role as audience and do not set the audio scenario as AudioScenarioChorus, otherwise, this method does not take effect.
+   *  You also need to make sure that the User Account, channel ID and token passed in for preloading are the same as the values passed in when joining the channel, otherwise, this method does not take effect.
+   *
+   * @param token The token generated on your server for authentication. When the token for preloading channels expires, you can update the token based on the number of channels you preload.
+   *  When preloading one channel, calling this method to pass in the new token.
+   *  When preloading more than one channels:
+   *  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token.
+   *  If you use different tokens to preload different channels, call this method to pass in your user ID, channel name and the new token.
+   * @param channelId The channel name that you want to preload. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
+   *  All lowercase English letters: a to z.
+   *  All uppercase English letters: A to Z.
+   *  All numeric characters: 0 to 9.
+   *  Space
+   *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+   * @param userAccount The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as NULL. Supported characters are (89 in total):
+   *  The 26 lowercase English letters: a to z.
+   *  The 26 uppercase English letters: A to Z.
+   *  All numeric characters: 0 to 9.
+   *  Space
+   *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "= ", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   *  -2: The parameter is invalid. For example, an invalid token or User Account is used. You need to pass in a valid parameter and join the channel again.
+   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
+   *  -102: The channel name is invalid. You need to pass in a valid channel name and join the channel again.
    */
   abstract preloadChannelWithUserAccount(
     token: string,
@@ -2889,7 +2946,17 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * @ignore
+   * Updates the wildcard token for preloading channels.
+   *
+   * You need to maintain the life cycle of the wildcard token by yourself. When the token expires, you need to generate a new wildcard token and then call this method to pass in the new token.
+   *
+   * @param token The new token.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   *  -2: The parameter is invalid. For example, the token is invalid. You need to pass in a valid parameter and join the channel again.
+   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
    */
   abstract updatePreloadChannelToken(token: string): number;
 
@@ -3101,10 +3168,11 @@ export abstract class IRtcEngine {
   /**
    * Enables the local video preview and specifies the video source for the preview.
    *
-   * You can call this method to enable local video preview. Before calling this method, ensure that you do the following:
-   *  Call enableVideo to enable the video.
+   * You can call this method to enable local video preview. Call this method after the following:
+   *  Call enableVideo to enable the video module.
    *  The local preview enables the mirror mode by default.
    *  After the local video preview is enabled, if you call leaveChannel to exit the channel, the local preview remains until you call stopPreview to disable it.
+   *  The video source type set in this method needs to be consistent with the video source type of VideoCanvas you set in setupLocalVideo.
    *
    * @param sourceType The type of the video source. See VideoSourceType.
    *
@@ -3122,7 +3190,8 @@ export abstract class IRtcEngine {
    * @param sourceType The type of the video source. See VideoSourceType.
    *
    * @returns
-   * < 0: Failure.
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract stopPreview(sourceType?: VideoSourceType): number;
 
@@ -5144,7 +5213,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports camera zoom.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, false will be returned because it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * true : The device supports camera zoom. false : The device does not support camera zoom.
@@ -5154,7 +5223,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device camera supports face detection.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, false will be returned because it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *  This method is for Android and iOS only.
    *
    * @returns
@@ -5165,7 +5234,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports camera flash.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, false will be returned because it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *  The app enables the front camera by default. If your front camera does not support enabling the flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
    *  On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
    *
@@ -5177,7 +5246,7 @@ export abstract class IRtcEngine {
   /**
    * Check whether the device supports the manual focus function.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, false will be returned because it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * true : The device supports the manual focus function. false : The device does not support the manual focus function.
@@ -5187,7 +5256,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports the face auto-focus function.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, false will be returned because it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * true : The device supports the face auto-focus function. false : The device does not support the face auto-focus function.
@@ -5197,7 +5266,7 @@ export abstract class IRtcEngine {
   /**
    * Sets the camera zoom ratio.
    *
-   * This method must be called after the camera is turned on, such as calling after startPreview and enableVideo.
+   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @param factor The camera zoom ratio. The value ranges between 1.0 and the maximum zoom supported by the device. You can get the maximum zoom ratio supported by the device by calling the getCameraMaxZoomFactor method.
    *
@@ -5213,7 +5282,7 @@ export abstract class IRtcEngine {
    * You can call this method either before or after joining a channel. Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following:
    *  The width and height of the local video.
    *  The position of the human face in the local view.
-   *  The distance between the human face and the screen. This method needs to be called after the camera is started (for example, by calling startPreview or enableVideo).
+   *  The distance between the human face and the screen. This method needs to be called after the camera is started (for example, by calling startPreview or enableVideo ).
    *
    * @param enabled Whether to enable face detection for the local user: true : Enable face detection. false : (Default) Disable face detection.
    *
@@ -5226,7 +5295,7 @@ export abstract class IRtcEngine {
   /**
    * Gets the maximum zoom ratio supported by the camera.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * The maximum zoom factor.
@@ -5236,7 +5305,8 @@ export abstract class IRtcEngine {
   /**
    * Sets the camera manual focus position.
    *
-   * This method must be called after the camera is turned on, such as calling after startPreview and enableVideo. After a successful method call, the SDK triggers the onCameraFocusAreaChanged callback.
+   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  After a successful method call, the SDK triggers the onCameraFocusAreaChanged callback.
    *
    * @param positionX The horizontal coordinate of the touchpoint in the view.
    * @param positionY The vertical coordinate of the touchpoint in the view.
@@ -5253,7 +5323,8 @@ export abstract class IRtcEngine {
   /**
    * Enables the camera flash.
    *
-   * This method must be called after the camera is turned on, such as calling after startPreview and enableVideo.
+   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  This method is for Android and iOS only.
    *
    * @param isOn Whether to turn on the camera flash: true : Turn on the flash. false : (Default) Turn off the flash.
    *
@@ -5267,7 +5338,7 @@ export abstract class IRtcEngine {
    * Enables the camera auto-face focus function.
    *
    * By default, the SDK disables face autofocus on Android and enables face autofocus on iOS. To set face autofocus, call this method.
-   *  This method must be called after the camera is turned on, such as calling after startPreview and enableVideo.
+   *  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @param enabled Whether to enable face autofocus: true : Enable the camera auto-face focus function. false : Disable face autofocus.
    *
@@ -5280,7 +5351,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports manual exposure.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, false will be returned because it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * true : The device supports manual exposure. false : The device does not support manual exposure.
@@ -5290,7 +5361,8 @@ export abstract class IRtcEngine {
   /**
    * Sets the camera exposure position.
    *
-   * This method must be called after the camera is turned on, such as calling after startPreview and enableVideo. After a successful method call, the SDK triggers the onCameraExposureAreaChanged callback.
+   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  After a successful method call, the SDK triggers the onCameraExposureAreaChanged callback.
    *
    * @param positionXinView The horizontal coordinate of the touchpoint in the view.
    * @param positionYinView The vertical coordinate of the touchpoint in the view.
@@ -5305,19 +5377,37 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * @ignore
+   * Queries whether the current camera supports adjusting exposure value.
+   *
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  Before calling setCameraExposureFactor, Agora recoomends that you call this method to query whether the current camera supports adjusting the exposure value.
+   *  By calling this method, you adjust the exposure value of the currently active camera, that is, the camera specified when calling setCameraCapturerConfiguration.
+   *
+   * @returns
+   * true : Success. false : Failure.
    */
   abstract isCameraExposureSupported(): boolean;
 
   /**
-   * @ignore
+   * Sets the camera exposure value.
+   *
+   * Insufficient or excessive lighting in the shooting environment can affect the image quality of video capture. To achieve optimal video quality, you can use this method to adjust the camera's exposure value.
+   *  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  Before calling this method, Agora recommends calling isCameraExposureSupported to check whether the current camera supports adjusting the exposure value.
+   *  By calling this method, you adjust the exposure value of the currently active camera, that is, the camera specified when calling setCameraCapturerConfiguration.
+   *
+   * @param factor The camera exposure value. The default value is 0, which means using the default exposure of the camera. The larger the value, the greater the exposure. When the video image is overexposed, you can reduce the exposure value; when the video image is underexposed and the dark details are lost, you can increase the exposure value. If the exposure value you specified is beyond the range supported by the device, the SDK will automatically adjust it to the actual supported range of the device. On Android, the value range is [-20.0, 20.0]. On iOS, the value range is [-8.0, 8.0].
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
-  abstract setCameraExposureFactor(value: number): number;
+  abstract setCameraExposureFactor(factor: number): number;
 
   /**
    * Checks whether the device supports auto exposure.
    *
-   * This method must be called after the camera is turned on, that is, after and joinChannel have been called; otherwise, false will be returned because it cannot query the properties of the camera.
+   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *  This method applies to iOS only.
    *
    * @returns
@@ -5328,8 +5418,8 @@ export abstract class IRtcEngine {
   /**
    * Sets whether to enable auto exposure.
    *
-   * This method applies to iOS only.
-   *  This method must be called after the camera is turned on, such as calling after startPreview and enableVideo.
+   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  This method applies to iOS only.
    *
    * @param enabled Whether to enable auto exposure: true : Enable auto exposure. false : Disable auto exposure.
    *
@@ -5378,7 +5468,24 @@ export abstract class IRtcEngine {
   abstract isSpeakerphoneEnabled(): boolean;
 
   /**
-   * @ignore
+   * Selects the audio playback route in communication audio mode.
+   *
+   * This method is used to switch the audio route from Bluetooth headphones to earpiece, wired headphones or speakers in communication audio mode (). After the method is called successfully, the SDK will trigger the onAudioRoutingChanged callback to report the modified route.
+   *  This method is for Android only.
+   *  Using this method and the setEnableSpeakerphone method at the same time may cause conflicts. Agora recommends that you use the setRouteInCommunicationMode method alone.
+   *
+   * @param route The audio playback route you want to use:
+   *  -1: The default audio route.
+   *  0: Headphones with microphone.
+   *  1: Handset.
+   *  2: Headphones without microphone.
+   *  3: Device's built-in speaker.
+   *  4: (Not supported yet) External speakers.
+   *  5: Bluetooth headphones.
+   *  6: USB device.
+   *
+   * @returns
+   * Without practical meaning.
    */
   abstract setRouteInCommunicationMode(route: number): number;
 
@@ -5772,7 +5879,8 @@ export abstract class IRtcEngine {
   /**
    * Sets the rotation angle of the captured video.
    *
-   * This method must be called after the camera is turned on, such as calling after startPreview and enableVideo. When the video capture device does not have the gravity sensing function, you can call this method to manually adjust the rotation angle of the captured video.
+   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  When the video capture device does not have the gravity sensing function, you can call this method to manually adjust the rotation angle of the captured video.
    *
    * @param type The video source type. See VideoSourceType.
    * @param orientation The clockwise rotation angle. See VideoOrientation.
@@ -6201,7 +6309,7 @@ export abstract class IRtcEngine {
   /**
    * Starts relaying media streams across channels or updates channels for media relay.
    *
-   * The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:
+   * The first successful call to this method starts relaying media streams from the source channel to the destination channels. To relay the media stream to other channels, or exit one of the current media relays, you can call this method again to update the destination channels. This feature supports relaying media streams to a maximum of six destination channels. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback, and this callback returns the state of the media stream relay. Common states are as follows:
    *  If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), it means that the SDK starts relaying media streams from the source channel to the destination channel.
    *  If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.
    *  Call this method after joining the channel.
@@ -6216,8 +6324,8 @@ export abstract class IRtcEngine {
    *  < 0: Failure.
    *  -1: A general error occurs (no specified reason).
    *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not an host.
-   *  -8: Internal state error. Probably because the user is not an audience member.
+   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
+   *  -8: Internal state error. Probably because the user is not a broadcaster.
    */
   abstract startOrUpdateChannelMediaRelay(
     configuration: ChannelMediaRelayConfiguration
@@ -6242,8 +6350,8 @@ export abstract class IRtcEngine {
    *  < 0: Failure.
    *  -1: A general error occurs (no specified reason).
    *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not an host.
-   *  -8: Internal state error. Probably because the user is not an audience member.
+   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
+   *  -8: Internal state error. Probably because the user is not a broadcaster.
    */
   abstract startChannelMediaRelay(
     configuration: ChannelMediaRelayConfiguration

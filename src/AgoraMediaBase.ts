@@ -270,7 +270,7 @@ export enum ContentInspectType {
 }
 
 /**
- * ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
+ * A ContentInspectModule structure used to configure the frequency of video screenshot and upload.
  */
 export class ContentInspectModule {
   /**
@@ -839,7 +839,7 @@ export interface IAudioFrameObserverBase {
    * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
-   * Reserved for future use.
+   * Without practical meaning.
    */
   onRecordAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
@@ -852,7 +852,7 @@ export interface IAudioFrameObserverBase {
    * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
-   * Reserved for future use.
+   * Without practical meaning.
    */
   onPlaybackAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
@@ -865,7 +865,7 @@ export interface IAudioFrameObserverBase {
    * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
-   * Reserved for future use.
+   * Without practical meaning.
    */
   onMixedAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
@@ -877,7 +877,7 @@ export interface IAudioFrameObserverBase {
    * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
-   * Reserved for future use.
+   * Without practical meaning.
    */
   onEarMonitoringAudioFrame?(audioFrame: AudioFrame): void;
 }
@@ -894,7 +894,7 @@ export interface IAudioFrameObserver extends IAudioFrameObserverBase {
    * @param audioFrame The raw audio data. See AudioFrame.
    *
    * @returns
-   * Reserved for future use.
+   * Without practical meaning.
    */
   onPlaybackAudioFrameBeforeMixing?(
     channelId: string,
@@ -979,7 +979,7 @@ export interface IVideoEncodedFrameObserver {
    * @param videoEncodedFrameInfo For the information of the encoded video frame, see EncodedVideoFrameInfo.
    *
    * @returns
-   * Reserved for future use.
+   * Without practical meaning.
    */
   onEncodedVideoFrameReceived?(
     uid: number,

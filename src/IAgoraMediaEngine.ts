@@ -45,7 +45,7 @@ export abstract class IMediaEngine {
    *
    * Call this method to register an audio frame observer object (register a callback). When you need the SDK to trigger onMixedAudioFrame, onRecordAudioFrame, onPlaybackAudioFrame or onEarMonitoringAudioFrame callback, you need to use this method to register the callbacks. Ensure that you call this method before joining a channel.
    *
-   * @param observer The observer object instance. See IAudioFrameObserver. Agora recommends calling this method after receiving onLeaveChannel to release the audio observer object.
+   * @param observer The observer instance. See IAudioFrameObserver. Agora recommends calling this method after receiving onLeaveChannel to release the audio observer object.
    *
    * @returns
    * 0: Success.
@@ -68,7 +68,7 @@ export abstract class IMediaEngine {
    *  When network conditions deteriorate, the video resolution decreases incrementally.
    *  If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes. After registering the raw video observer, you can use the obtained raw video data in various video pre-processing scenarios, such as implementing virtual backgrounds and image enhacement scenarios by yourself, Agora provides some open source sample projects on GitHub for your reference.
    *
-   * @param observer The observer object instance. See IVideoFrameObserver.
+   * @param observer The observer instance. See IVideoFrameObserver.
    *
    * @returns
    * 0: Success.
