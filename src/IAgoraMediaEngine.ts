@@ -151,12 +151,11 @@ export abstract class IMediaEngine {
   /**
    * Sets the external audio source parameters.
    *
-   * Call this method before joining a channel.
+   * Deprecated: This method is deprecated, use createCustomAudioTrack instead. Call this method before joining a channel.
    *
    * @param enabled Whether to enable the external audio source: true : Enable the external audio source. false : (Default) Disable the external audio source.
    * @param sampleRate The sample rate (Hz) of the external audio source which can be set as 8000, 16000, 32000, 44100, or 48000.
    * @param channels The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
-   * @param sourceNumber The number of external audio sources. The value of this parameter should be larger than 0. The SDK creates a corresponding number of custom audio tracks based on this parameter value and names the audio tracks starting from 0. In ChannelMediaOptions, you can set publishCustomAudioSourceId to the audio track ID you want to publish.
    * @param localPlayback Whether to play the external audio source: true : Play the external audio source. false : (Default) Do not play the external source.
    * @param publish Whether to publish audio to the remote users: true : (Default) Publish audio to the remote users. false : Do not publish audio to the remote users.
    *
@@ -173,14 +172,14 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * Creates a customized audio track.
+   * Creates a custom audio track.
    *
-   * When you need to publish multiple custom captured audios in the channel, you can refer to the following steps:
+   * To publish a custom audio source to multiple channels, see the following steps:
    *  Call this method to create a custom audio track and get the audio track ID.
    *  In ChannelMediaOptions of each channel, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
-   *  If you call pushAudioFrame trackId as the audio track ID set in step 2, you can publish the corresponding custom audio source in multiple channels.
+   *  If you call pushAudioFrame, and specify trackId as the audio track ID set in step 2, you can publish the corresponding custom audio source in multiple channels.
    *
-   * @param trackType The type of the custom audio track. See AudioTrackType.
+   * @param trackType The type of the custom audio track. See AudioTrackType. If AudioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
    * @param config The configuration of the custom audio track. See AudioTrackConfig.
    *
    * @returns

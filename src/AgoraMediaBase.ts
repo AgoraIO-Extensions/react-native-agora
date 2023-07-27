@@ -162,11 +162,11 @@ export class AudioParameters {
  */
 export enum RawAudioFrameOpModeType {
   /**
-   * 0: Read-only mode,
+   * 0: Read-only mode, For example, when users acquire the data with the Agora SDK, then start the media push.
    */
   RawAudioFrameOpModeReadOnly = 0,
   /**
-   * 2: Read and write mode,
+   * 2: Read and write mode, For example, when users have their own audio-effect processing module and perform some voice preprocessing, such as a voice change.
    */
   RawAudioFrameOpModeReadWrite = 2,
 }

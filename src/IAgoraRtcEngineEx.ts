@@ -877,7 +877,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *
    * This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path. The SDK has not taken the snapshot when the method call returns. After a successful method call, the SDK triggers the onSnapshotTaken callback to report whether the snapshot is successfully taken, as well as the details for that snapshot.
    *  Call this method after the joinChannelEx method.
-   *  This method takes a snapshot of the published video stream specified in ChannelMediaOptions.
+   *  When used for local video snapshots, this method takes a snapshot for the video streams specified in ChannelMediaOptions.
    *  If the user's video has been preprocessed, for example, watermarked or beautified, the resulting snapshot includes the pre-processing effect.
    *
    * @param connection The connection information. See RtcConnection.
