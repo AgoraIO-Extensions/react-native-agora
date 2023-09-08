@@ -402,6 +402,14 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     return 'RtcEngineEx_createDataStreamEx2';
   }
 
+  protected override getApiTypeFromPreloadChannelWithUserAccount(
+    token: string,
+    channelId: string,
+    userAccount: string
+  ): string {
+    return 'RtcEngine_preloadChannel2';
+  }
+
   override getAudioDeviceManager(): IAudioDeviceManager {
     throw 'Not support';
   }

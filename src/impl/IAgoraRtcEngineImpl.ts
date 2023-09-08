@@ -23,6 +23,7 @@ import {
   IAudioEncodedFrameObserver,
   LastmileProbeConfig,
   LiveTranscoding,
+  LocalAccessPointConfiguration,
   LocalTranscoderConfiguration,
   LowlightEnhanceOptions,
   RecorderStreamInfo,
@@ -80,7 +81,6 @@ import {
   IVideoDeviceManager,
   ImageTrackOptions,
   LeaveChannelOptions,
-  LocalAccessPointConfiguration,
   Metadata,
   MetadataType,
   PriorityType,
@@ -262,7 +262,7 @@ export function processIRtcEngineEventHandler(
     case 'onFirstLocalVideoFramePublished':
       if (handler.onFirstLocalVideoFramePublished !== undefined) {
         handler.onFirstLocalVideoFramePublished(
-          jsonParams.connection,
+          jsonParams.source,
           jsonParams.elapsed
         );
       }
@@ -411,7 +411,7 @@ export function processIRtcEngineEventHandler(
 
     case 'onLocalVideoStats':
       if (handler.onLocalVideoStats !== undefined) {
-        handler.onLocalVideoStats(jsonParams.connection, jsonParams.stats);
+        handler.onLocalVideoStats(jsonParams.source, jsonParams.stats);
       }
       break;
 
@@ -1175,6 +1175,84 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromQueryCodecCapability(): string {
     return 'RtcEngine_queryCodecCapability';
+  }
+
+  preloadChannel(token: string, channelId: string, uid: number): number {
+    const apiType = this.getApiTypeFromPreloadChannel(token, channelId, uid);
+    const jsonParams = {
+      token: token,
+      channelId: channelId,
+      uid: uid,
+      toJSON: () => {
+        return {
+          token: token,
+          channelId: channelId,
+          uid: uid,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromPreloadChannel(
+    token: string,
+    channelId: string,
+    uid: number
+  ): string {
+    return 'RtcEngine_preloadChannel';
+  }
+
+  preloadChannelWithUserAccount(
+    token: string,
+    channelId: string,
+    userAccount: string
+  ): number {
+    const apiType = this.getApiTypeFromPreloadChannelWithUserAccount(
+      token,
+      channelId,
+      userAccount
+    );
+    const jsonParams = {
+      token: token,
+      channelId: channelId,
+      userAccount: userAccount,
+      toJSON: () => {
+        return {
+          token: token,
+          channelId: channelId,
+          userAccount: userAccount,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromPreloadChannelWithUserAccount(
+    token: string,
+    channelId: string,
+    userAccount: string
+  ): string {
+    return 'RtcEngine_preloadChannelWithUserAccount';
+  }
+
+  updatePreloadChannelToken(token: string): number {
+    const apiType = this.getApiTypeFromUpdatePreloadChannelToken(token);
+    const jsonParams = {
+      token: token,
+      toJSON: () => {
+        return {
+          token: token,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromUpdatePreloadChannelToken(token: string): string {
+    return 'RtcEngine_updatePreloadChannelToken';
   }
 
   joinChannel(
@@ -3424,21 +3502,15 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setLogFileSize';
   }
 
-  uploadLogFile(requestId: string): number {
-    const apiType = this.getApiTypeFromUploadLogFile(requestId);
-    const jsonParams = {
-      requestId: requestId,
-      toJSON: () => {
-        return {
-          requestId: requestId,
-        };
-      },
-    };
+  uploadLogFile(): string {
+    const apiType = this.getApiTypeFromUploadLogFile();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const requestId = jsonResults.requestId;
+    return requestId;
   }
 
-  protected getApiTypeFromUploadLogFile(requestId: string): string {
+  protected getApiTypeFromUploadLogFile(): string {
     return 'RtcEngine_uploadLogFile';
   }
 
@@ -4647,6 +4719,35 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setCameraExposurePosition';
   }
 
+  isCameraExposureSupported(): boolean {
+    const apiType = this.getApiTypeFromIsCameraExposureSupported();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromIsCameraExposureSupported(): string {
+    return 'RtcEngine_isCameraExposureSupported';
+  }
+
+  setCameraExposureFactor(factor: number): number {
+    const apiType = this.getApiTypeFromSetCameraExposureFactor(factor);
+    const jsonParams = {
+      factor: factor,
+      toJSON: () => {
+        return {
+          factor: factor,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetCameraExposureFactor(factor: number): string {
+    return 'RtcEngine_setCameraExposureFactor';
+  }
+
   isCameraAutoExposureFaceModeSupported(): boolean {
     const apiType = this.getApiTypeFromIsCameraAutoExposureFaceModeSupported();
     const jsonParams = {};
@@ -4727,6 +4828,24 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromIsSpeakerphoneEnabled(): string {
     return 'RtcEngine_isSpeakerphoneEnabled';
+  }
+
+  setRouteInCommunicationMode(route: number): number {
+    const apiType = this.getApiTypeFromSetRouteInCommunicationMode(route);
+    const jsonParams = {
+      route: route,
+      toJSON: () => {
+        return {
+          route: route,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetRouteInCommunicationMode(route: number): string {
+    return 'RtcEngine_setRouteInCommunicationMode';
   }
 
   getScreenCaptureSources(

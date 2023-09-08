@@ -601,7 +601,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExampleTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgoraRtcNgExample.app/AgoraRtcNgExample";
@@ -628,7 +628,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExampleTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgoraRtcNgExample.app/AgoraRtcNgExample";
@@ -657,7 +657,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -691,7 +691,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -868,7 +868,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample.ScreenShare;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample.ScreenShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SKIP_INSTALL = YES;
@@ -905,7 +905,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.agora.org.reactjs.native.example.AgoraRtcNgExample.ScreenShare;
+				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample.ScreenShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SKIP_INSTALL = YES;

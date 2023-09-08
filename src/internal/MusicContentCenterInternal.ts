@@ -104,6 +104,10 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     const mediaPlayerId = super.createMusicPlayer() as number;
     return new MusicPlayerInternal(mediaPlayerId);
   }
+
+  protected override getApiTypeFromPreload(songCode: number): string {
+    return 'MusicContentCenter_preload2';
+  }
 }
 
 class _MusicPlayerInternal extends IMusicPlayerImpl {
