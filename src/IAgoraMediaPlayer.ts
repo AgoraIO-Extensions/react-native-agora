@@ -96,7 +96,7 @@ export abstract class IMediaPlayer {
   /**
    * Seeks to a new playback position.
    *
-   * fter successfully calling this method, you will receive the onPlayerEvent callback, reporting the result of the seek operation to the new playback position. To play the media file from a specific position, do the following:
+   * After successfully calling this method, you will receive the onPlayerEvent callback, reporting the result of the seek operation to the new playback position. To play the media file from a specific position, do the following:
    *  Call this method to seek to the position you want to begin playback.
    *  Call the play method to play the media file.
    *
@@ -180,7 +180,7 @@ export abstract class IMediaPlayer {
    *
    * Call this method after calling open.
    *
-   * @param speed The playback speed. Agora recommends that you limit this value to between 50 and 400, defined as follows:
+   * @param speed The playback speed. Agora recommends that you limit this value to a range between 50 and 400, which is defined as follows:
    *  50: Half the original speed.
    *  100: The original speed.
    *  400: 4 times the original speed.
