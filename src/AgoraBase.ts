@@ -1947,7 +1947,7 @@ export enum LocalAudioStreamError {
    */
   LocalAudioStreamErrorDeviceNoPermission = 2,
   /**
-   * @ignore
+   * 3: The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
    */
   LocalAudioStreamErrorDeviceBusy = 3,
   /**
@@ -3094,7 +3094,7 @@ export enum ConnectionChangedReasonType {
    */
   ConnectionChangedClientIpAddressChanged = 13,
   /**
-   * 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The connection state changes to .
+   * 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The SDK tries to reconnect to the server automatically.
    */
   ConnectionChangedKeepAliveTimeout = 14,
   /**
