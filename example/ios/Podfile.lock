@@ -1,6 +1,6 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.2.2-dev.4)
-  - AgoraRtcEngine_iOS_Preview (4.2.2-dev.4)
+  - AgoraIrisRTC_iOS (4.2.3-dev.2)
+  - AgoraRtcEngine_iOS_Preview (4.2.3-dev.2)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -331,9 +331,9 @@ PODS:
   - React-jsinspector (0.71.4)
   - React-logger (0.71.4):
     - glog
-  - react-native-agora (4.2.2-dev.4):
-    - AgoraIrisRTC_iOS (= 4.2.2-dev.4)
-    - AgoraRtcEngine_iOS_Preview (= 4.2.2-dev.4)
+  - react-native-agora (4.2.3-dev.2):
+    - AgoraIrisRTC_iOS (= 4.2.3-dev.2)
+    - AgoraRtcEngine_iOS_Preview (= 4.2.3-dev.2)
     - React-Core
   - react-native-agora-rawdata (0.1.0):
     - React-Core
@@ -450,7 +450,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS_Preview (= 4.2.2-dev.4)
+  - AgoraRtcEngine_iOS_Preview (= 4.2.3-dev.2)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -635,11 +635,11 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: 15a59931aee94804beb18c9bff4dd6710236c339
-  AgoraRtcEngine_iOS_Preview: f0f030ce1b12eba8f2e31ad5f2204d1c6f043c87
+  AgoraIrisRTC_iOS: db6e0c749b45805ec134c4e249d72418c49303cb
+  AgoraRtcEngine_iOS_Preview: 8ede933821362eea2f602b9afe5fe693f08ca7e7
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
+  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 446e84642979fff0ba57f3c804c2228a473aeac2
   FBReactNativeSpec: 241709e132e3bf1526c1c4f00bc5384dd39dfba9
   Flipper: 26fc4b7382499f1281eb8cb921e5c3ad6de91fe0
@@ -652,7 +652,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
+  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: a1f157c49ea579c28b0296bda8530e980c45bdb3
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -670,7 +670,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d6b7fa9260aa3cb40afee0507e3bc1d17ecaa6f2
   React-jsinspector: 1f51e775819199d3fe9410e69ee8d4c4161c7b06
   React-logger: 0d58569ec51d30d1792c5e86a8e3b78d24b582c6
-  react-native-agora: 1b70878f3e45e5722375e4fd96a003805e5f7360
+  react-native-agora: 932ba9d4ed99d582030c233cf205b9a642f631ef
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
@@ -698,6 +698,6 @@ SPEC CHECKSUMS:
   Yoga: 79dd7410de6f8ad73a77c868d3d368843f0c93e0
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: ace48d273b09f8372014d04729c257393e530b48
+PODFILE CHECKSUM: 9d5331f8a64841aba9a91eea5a3e5623f5ee7e98
 
 COCOAPODS: 1.12.0
