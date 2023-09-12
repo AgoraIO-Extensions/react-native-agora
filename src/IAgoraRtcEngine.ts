@@ -1216,6 +1216,20 @@ export enum ProxyType {
 }
 
 /**
+ * @ignore
+ */
+export enum FeatureType {
+  /**
+   * @ignore
+   */
+  VideoVirtualBackground = 1,
+  /**
+   * @ignore
+   */
+  VideoBeautyEffect = 2,
+}
+
+/**
  * The options for leaving a channel.
  */
 export class LeaveChannelOptions {
@@ -6725,6 +6739,11 @@ export abstract class IRtcEngine {
    * The Unix timestamp (ms) of the current NTP time.
    */
   abstract getNtpWallTimeInMs(): number;
+
+  /**
+   * @ignore
+   */
+  abstract isFeatureAvailableOnDevice(type: FeatureType): boolean;
 
   /**
    * Gets the IAudioDeviceManager object to manage audio devices.

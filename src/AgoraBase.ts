@@ -438,6 +438,10 @@ export enum ErrorCodeType {
    * 1501: Permission to access the camera is not granted. Check whether permission to access the camera permission is granted.
    */
   ErrVdmCameraNotAuthorized = 1501,
+  /**
+   * @ignore
+   */
+  ErrAdmApplicationLoopback = 2007,
 }
 
 /**
@@ -2078,6 +2082,26 @@ export enum LocalVideoStreamError {
    * @ignore
    */
   LocalVideoStreamErrorScreenCaptureNoPermission = 22,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCapturePaused = 23,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureResumed = 24,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureWindowHidden = 25,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureWindowRecoverFromHidden = 26,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureWindowRecoverFromMinimized = 27,
 }
 
 /**
@@ -3125,6 +3149,10 @@ export enum ConnectionChangedReasonType {
    * @ignore
    */
   ConnectionChangedLicenseValidationFailure = 21,
+  /**
+   * @ignore
+   */
+  ConnectionChangedCertificationVeryfyFailure = 22,
 }
 
 /**
@@ -3235,6 +3263,10 @@ export enum NetworkType {
    * 5: The network type is mobile 4G.
    */
   NetworkTypeMobile4g = 5,
+  /**
+   * @ignore
+   */
+  NetworkTypeMobile5g = 6,
 }
 
 /**

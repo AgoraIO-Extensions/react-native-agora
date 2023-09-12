@@ -16,7 +16,7 @@ import {
   VideoSubscriptionOptions,
   WatermarkOptions,
 } from './AgoraBase';
-import { RenderModeType } from './AgoraMediaBase';
+import { ContentInspectConfig, RenderModeType } from './AgoraMediaBase';
 import {
   ChannelMediaOptions,
   IRtcEngine,
@@ -893,6 +893,15 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection,
     uid: number,
     filePath: string
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract enableContentInspectEx(
+    enabled: boolean,
+    config: ContentInspectConfig,
+    connection: RtcConnection
   ): number;
 
   /**
