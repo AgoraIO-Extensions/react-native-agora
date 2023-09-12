@@ -15,7 +15,7 @@ import {
   VideoSubscriptionOptions,
   WatermarkOptions,
 } from '../AgoraBase';
-import { RenderModeType } from '../AgoraMediaBase';
+import { ContentInspectConfig, RenderModeType } from '../AgoraMediaBase';
 import {
   ChannelMediaOptions,
   LeaveChannelOptions,
@@ -1492,6 +1492,40 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     filePath: string
   ): string {
     return 'RtcEngineEx_takeSnapshotEx';
+  }
+
+  enableContentInspectEx(
+    enabled: boolean,
+    config: ContentInspectConfig,
+    connection: RtcConnection
+  ): number {
+    const apiType = this.getApiTypeFromEnableContentInspectEx(
+      enabled,
+      config,
+      connection
+    );
+    const jsonParams = {
+      enabled: enabled,
+      config: config,
+      connection: connection,
+      toJSON: () => {
+        return {
+          enabled: enabled,
+          config: config,
+          connection: connection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromEnableContentInspectEx(
+    enabled: boolean,
+    config: ContentInspectConfig,
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_enableContentInspectEx';
   }
 
   startMediaRenderingTracingEx(connection: RtcConnection): number {

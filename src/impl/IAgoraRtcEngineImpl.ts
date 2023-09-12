@@ -74,6 +74,7 @@ import {
   ChannelMediaOptions,
   CloudProxyType,
   DirectCdnStreamingMediaOptions,
+  FeatureType,
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
   IRtcEngine,
@@ -6705,6 +6706,26 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromGetNtpWallTimeInMs(): string {
     return 'RtcEngine_getNtpWallTimeInMs';
+  }
+
+  isFeatureAvailableOnDevice(type: FeatureType): boolean {
+    const apiType = this.getApiTypeFromIsFeatureAvailableOnDevice(type);
+    const jsonParams = {
+      type: type,
+      toJSON: () => {
+        return {
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromIsFeatureAvailableOnDevice(
+    type: FeatureType
+  ): string {
+    return 'RtcEngine_isFeatureAvailableOnDevice';
   }
 
   getAudioDeviceManager(): IAudioDeviceManager {
