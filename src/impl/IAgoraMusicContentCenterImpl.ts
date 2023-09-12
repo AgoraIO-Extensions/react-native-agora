@@ -200,41 +200,27 @@ export class IMusicPlayerImpl extends IMediaPlayerImpl implements IMusicPlayer {
 
 // @ts-ignore
 export class IMusicContentCenterImpl implements IMusicContentCenter {
-  initialize(configuration: MusicContentCenterConfiguration): number {
-    const apiType = this.getApiTypeFromInitialize(configuration);
-    const jsonParams = {
-      configuration: configuration,
-      toJSON: () => {
-        return {
-          configuration: configuration,
-        };
-      },
-    };
+  initialize(): MusicContentCenterConfiguration {
+    const apiType = this.getApiTypeFromInitialize();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const configuration = jsonResults.configuration;
+    return configuration;
   }
 
-  protected getApiTypeFromInitialize(
-    configuration: MusicContentCenterConfiguration
-  ): string {
+  protected getApiTypeFromInitialize(): string {
     return 'MusicContentCenter_initialize';
   }
 
-  renewToken(token: string): number {
-    const apiType = this.getApiTypeFromRenewToken(token);
-    const jsonParams = {
-      token: token,
-      toJSON: () => {
-        return {
-          token: token,
-        };
-      },
-    };
+  renewToken(): string {
+    const apiType = this.getApiTypeFromRenewToken();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const token = jsonResults.token;
+    return token;
   }
 
-  protected getApiTypeFromRenewToken(token: string): string {
+  protected getApiTypeFromRenewToken(): string {
     return 'MusicContentCenter_renewToken';
   }
 
@@ -303,80 +289,69 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   getMusicCollectionByMusicChartId(
     musicChartId: number,
     page: number,
-    pageSize: number,
-    jsonOption?: string
-  ): string {
+    pageSize: number
+  ): { requestId: string; jsonOption: string } {
     const apiType = this.getApiTypeFromGetMusicCollectionByMusicChartId(
       musicChartId,
       page,
-      pageSize,
-      jsonOption
+      pageSize
     );
     const jsonParams = {
       musicChartId: musicChartId,
       page: page,
       pageSize: pageSize,
-      jsonOption: jsonOption,
       toJSON: () => {
         return {
           musicChartId: musicChartId,
           page: page,
           pageSize: pageSize,
-          jsonOption: jsonOption,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const requestId = jsonResults.requestId;
-    return requestId;
+    const jsonOption = jsonResults.jsonOption;
+    return {
+      requestId,
+      jsonOption,
+    };
   }
 
   protected getApiTypeFromGetMusicCollectionByMusicChartId(
     musicChartId: number,
     page: number,
-    pageSize: number,
-    jsonOption?: string
+    pageSize: number
   ): string {
     return 'MusicContentCenter_getMusicCollectionByMusicChartId';
   }
 
   searchMusic(
-    keyWord: string,
     page: number,
-    pageSize: number,
-    jsonOption?: string
-  ): string {
-    const apiType = this.getApiTypeFromSearchMusic(
-      keyWord,
-      page,
-      pageSize,
-      jsonOption
-    );
+    pageSize: number
+  ): { requestId: string; keyWord: string; jsonOption: string } {
+    const apiType = this.getApiTypeFromSearchMusic(page, pageSize);
     const jsonParams = {
-      keyWord: keyWord,
       page: page,
       pageSize: pageSize,
-      jsonOption: jsonOption,
       toJSON: () => {
         return {
-          keyWord: keyWord,
           page: page,
           pageSize: pageSize,
-          jsonOption: jsonOption,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const requestId = jsonResults.requestId;
-    return requestId;
+    const keyWord = jsonResults.keyWord;
+    const jsonOption = jsonResults.jsonOption;
+    return {
+      requestId,
+      keyWord,
+      jsonOption,
+    };
   }
 
-  protected getApiTypeFromSearchMusic(
-    keyWord: string,
-    page: number,
-    pageSize: number,
-    jsonOption?: string
-  ): string {
+  protected getApiTypeFromSearchMusic(page: number, pageSize: number): string {
     return 'MusicContentCenter_searchMusic';
   }
 
@@ -494,30 +469,29 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     return 'MusicContentCenter_getSongSimpleInfo';
   }
 
-  getInternalSongCode(songCode: number, jsonOption: string): number {
-    const apiType = this.getApiTypeFromGetInternalSongCode(
-      songCode,
-      jsonOption
-    );
+  getInternalSongCode(songCode: number): {
+    jsonOption: string;
+    internalSongCode: number;
+  } {
+    const apiType = this.getApiTypeFromGetInternalSongCode(songCode);
     const jsonParams = {
       songCode: songCode,
-      jsonOption: jsonOption,
       toJSON: () => {
         return {
           songCode: songCode,
-          jsonOption: jsonOption,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const jsonOption = jsonResults.jsonOption;
     const internalSongCode = jsonResults.internalSongCode;
-    return internalSongCode;
+    return {
+      jsonOption,
+      internalSongCode,
+    };
   }
 
-  protected getApiTypeFromGetInternalSongCode(
-    songCode: number,
-    jsonOption: string
-  ): string {
+  protected getApiTypeFromGetInternalSongCode(songCode: number): string {
     return 'MusicContentCenter_getInternalSongCode';
   }
 }

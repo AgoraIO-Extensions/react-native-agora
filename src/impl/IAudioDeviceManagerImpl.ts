@@ -25,21 +25,15 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return 'AudioDeviceManager_enumerateRecordingDevices';
   }
 
-  setPlaybackDevice(deviceId: string): number {
-    const apiType = this.getApiTypeFromSetPlaybackDevice(deviceId);
-    const jsonParams = {
-      deviceId: deviceId,
-      toJSON: () => {
-        return {
-          deviceId: deviceId,
-        };
-      },
-    };
+  setPlaybackDevice(): string {
+    const apiType = this.getApiTypeFromSetPlaybackDevice();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const deviceId = jsonResults.deviceId;
+    return deviceId;
   }
 
-  protected getApiTypeFromSetPlaybackDevice(deviceId: string): string {
+  protected getApiTypeFromSetPlaybackDevice(): string {
     return 'AudioDeviceManager_setPlaybackDevice';
   }
 
@@ -96,21 +90,15 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return 'AudioDeviceManager_getPlaybackDeviceVolume';
   }
 
-  setRecordingDevice(deviceId: string): number {
-    const apiType = this.getApiTypeFromSetRecordingDevice(deviceId);
-    const jsonParams = {
-      deviceId: deviceId,
-      toJSON: () => {
-        return {
-          deviceId: deviceId,
-        };
-      },
-    };
+  setRecordingDevice(): string {
+    const apiType = this.getApiTypeFromSetRecordingDevice();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const deviceId = jsonResults.deviceId;
+    return deviceId;
   }
 
-  protected getApiTypeFromSetRecordingDevice(deviceId: string): string {
+  protected getApiTypeFromSetRecordingDevice(): string {
     return 'AudioDeviceManager_setRecordingDevice';
   }
 
@@ -167,21 +155,15 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return 'AudioDeviceManager_getRecordingDeviceVolume';
   }
 
-  setLoopbackDevice(deviceId: string): number {
-    const apiType = this.getApiTypeFromSetLoopbackDevice(deviceId);
-    const jsonParams = {
-      deviceId: deviceId,
-      toJSON: () => {
-        return {
-          deviceId: deviceId,
-        };
-      },
-    };
+  setLoopbackDevice(): string {
+    const apiType = this.getApiTypeFromSetLoopbackDevice();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const deviceId = jsonResults.deviceId;
+    return deviceId;
   }
 
-  protected getApiTypeFromSetLoopbackDevice(deviceId: string): string {
+  protected getApiTypeFromSetLoopbackDevice(): string {
     return 'AudioDeviceManager_setLoopbackDevice';
   }
 
@@ -257,24 +239,15 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return 'AudioDeviceManager_getRecordingDeviceMute';
   }
 
-  startPlaybackDeviceTest(testAudioFilePath: string): number {
-    const apiType =
-      this.getApiTypeFromStartPlaybackDeviceTest(testAudioFilePath);
-    const jsonParams = {
-      testAudioFilePath: testAudioFilePath,
-      toJSON: () => {
-        return {
-          testAudioFilePath: testAudioFilePath,
-        };
-      },
-    };
+  startPlaybackDeviceTest(): string {
+    const apiType = this.getApiTypeFromStartPlaybackDeviceTest();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const testAudioFilePath = jsonResults.testAudioFilePath;
+    return testAudioFilePath;
   }
 
-  protected getApiTypeFromStartPlaybackDeviceTest(
-    testAudioFilePath: string
-  ): string {
+  protected getApiTypeFromStartPlaybackDeviceTest(): string {
     return 'AudioDeviceManager_startPlaybackDeviceTest';
   }
 

@@ -40,20 +40,12 @@ export abstract class IMediaPlayer {
    * 0: Success.
    *  < 0: Failure.
    */
-  abstract open(url: string, startPos: number): number;
+  abstract open(startPos: number): string;
 
   /**
-   * Opens a media file and configures the playback scenarios.
-   *
-   * This method supports opening media files of different sources, including a custom media source, and allows you to configure the playback scenarios.
-   *
-   * @param source Media resources. See MediaSource.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * @ignore
    */
-  abstract openWithMediaSource(source: MediaSource): number;
+  abstract openWithMediaSource(): MediaSource;
 
   /**
    * Plays the media file.
@@ -207,28 +199,17 @@ export abstract class IMediaPlayer {
   /**
    * @ignore
    */
-  abstract setPlayerOptionInInt(key: string, value: number): number;
-
-  /**
-   * Sets the private options for the media player.
-   *
-   * The media player supports setting private options by key and value. Under normal circumstances, you do not need to know the private option settings, and just use the default option settings.
-   *  Ensure that you call this method before open.
-   *  If you need to push streams with SEI into the CDN, call setPlayerOptionInString ("sei_data_with_uuid", 1); otherwise, the loss of SEI might occurs.
-   *
-   * @param key The key of the option.
-   * @param value The value of the key.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract setPlayerOptionInString(key: string, value: string): number;
+  abstract setPlayerOptionInInt(value: number): string;
 
   /**
    * @ignore
    */
-  abstract takeScreenshot(filename: string): number;
+  abstract setPlayerOptionInString(): { key: string; value: string };
+
+  /**
+   * @ignore
+   */
+  abstract takeScreenshot(): string;
 
   /**
    * @ignore
@@ -238,7 +219,7 @@ export abstract class IMediaPlayer {
   /**
    * @ignore
    */
-  abstract setExternalSubtitle(url: string): number;
+  abstract setExternalSubtitle(): string;
 
   /**
    * Gets current playback state.
@@ -461,7 +442,7 @@ export abstract class IMediaPlayer {
   /**
    * @ignore
    */
-  abstract openWithAgoraCDNSrc(src: string, startPos: number): number;
+  abstract openWithAgoraCDNSrc(startPos: number): string;
 
   /**
    * @ignore
@@ -486,12 +467,12 @@ export abstract class IMediaPlayer {
   /**
    * @ignore
    */
-  abstract renewAgoraCDNSrcToken(token: string, ts: number): number;
+  abstract renewAgoraCDNSrcToken(ts: number): string;
 
   /**
    * @ignore
    */
-  abstract switchAgoraCDNSrc(src: string, syncPts?: boolean): number;
+  abstract switchAgoraCDNSrc(syncPts?: boolean): string;
 
   /**
    * Switches the media resource being played.
@@ -511,7 +492,7 @@ export abstract class IMediaPlayer {
    * @returns
    * < 0: Failure.
    */
-  abstract switchSrc(src: string, syncPts?: boolean): number;
+  abstract switchSrc(syncPts?: boolean): string;
 
   /**
    * Preloads a media resource.
@@ -525,44 +506,22 @@ export abstract class IMediaPlayer {
    * 0: Success.
    *  < 0: Failure.
    */
-  abstract preloadSrc(src: string, startPos: number): number;
+  abstract preloadSrc(startPos: number): string;
 
   /**
-   * Plays preloaded media resources.
-   *
-   * After calling the preloadSrc method to preload the media resource into the playlist, you can call this method to play the preloaded media resource. After calling this method, if you receive the onPlayerSourceStateChanged callback which reports the PlayerStatePlaying state, the playback is successful. If you want to change the preloaded media resource to be played, you can call this method again and specify the URL of the new media resource that you want to preload. If you want to replay the media resource, you need to call preloadSrc to preload the media resource to the playlist again before playing. If you want to clear the playlist, call the stop method. If you call this method when playback is paused, this method does not take effect until playback is resumed.
-   *
-   * @param src The URL of the media resource in the playlist must be consistent with the src set by the preloadSrc method; otherwise, the media resource cannot be played.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * @ignore
    */
-  abstract playPreloadedSrc(src: string): number;
+  abstract playPreloadedSrc(): string;
 
   /**
-   * Unloads media resources that are preloaded.
-   *
-   * This method cannot release the media resource being played.
-   *
-   * @param src The URL of the media resource.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * @ignore
    */
-  abstract unloadSrc(src: string): number;
+  abstract unloadSrc(): string;
 
   /**
-   * Enables or disables the spatial audio effect for the media player.
-   *
-   * After successfully setting the spatial audio effect parameters of the media player, the SDK enables the spatial audio effect for the media player, and the local user can hear the media resources with a sense of space. If you need to disable the spatial audio effect for the media player, set the params parameter to null.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * @ignore
    */
-  abstract setSpatialAudioParams(params: SpatialAudioParams): number;
+  abstract setSpatialAudioParams(): SpatialAudioParams;
 
   /**
    * @ignore
@@ -597,30 +556,14 @@ export abstract class IMediaPlayerCacheManager {
   abstract removeOldCache(): number;
 
   /**
-   * Deletes a cached media file.
-   *
-   * The cached media file currently being played will not be deleted.
-   *
-   * @param uri The URI (Uniform Resource Identifier) of the media file to be deleted.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   * @ignore
    */
-  abstract removeCacheByUri(uri: string): number;
+  abstract removeCacheByUri(): string;
 
   /**
-   * Sets the storage path for the media files that you want to cache.
-   *
-   * Make sure IRtcEngine is initialized before you call this method.
-   *
-   * @param path The absolute path of the media files to be cached. Ensure that the directory for the media files exists and is writable.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   * @ignore
    */
-  abstract setCacheDir(path: string): number;
+  abstract setCacheDir(): string;
 
   /**
    * Sets the maximum number of media files that can be cached.
@@ -707,11 +650,7 @@ export abstract class IMediaPlayerCacheManager {
  */
 export interface IMediaPlayerVideoFrameObserver {
   /**
-   * Occurs each time the player receives a video frame.
-   *
-   * After registering the video frame observer, the callback occurs every time the player receives a video frame, reporting the detailed information of the video frame.
-   *
-   * @param frame Video frame information. See VideoFrame.
+   * @ignore
    */
-  onFrame?(frame: VideoFrame): void;
+  onFrame?(): VideoFrame;
 }

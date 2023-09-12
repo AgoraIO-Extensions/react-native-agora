@@ -43,11 +43,7 @@ export interface IMediaPlayerSourceObserver {
    * @param elapsedTime The time (ms) when the event occurs.
    * @param message Information about the event.
    */
-  onPlayerEvent?(
-    eventCode: MediaPlayerEvent,
-    elapsedTime: number,
-    message: string
-  ): void;
+  onPlayerEvent?(eventCode: MediaPlayerEvent, elapsedTime: number): string;
 
   /**
    * Occurs when the media metadata is received.
@@ -76,7 +72,7 @@ export interface IMediaPlayerSourceObserver {
    * @param src The URL of the media resource.
    * @param event Events that occur when media resources are preloaded. See PlayerPreloadEvent.
    */
-  onPreloadEvent?(src: string, event: PlayerPreloadEvent): void;
+  onPreloadEvent?(event: PlayerPreloadEvent): string;
 
   /**
    * @ignore
@@ -89,21 +85,14 @@ export interface IMediaPlayerSourceObserver {
   onAgoraCDNTokenWillExpire?(): void;
 
   /**
-   * Occurs when the video bitrate of the media resource changes.
-   *
-   * @param from Information about the video bitrate of the media resource being played. See SrcInfo.
-   * @param to Information about the changed video bitrate of media resource being played. See SrcInfo.
+   * @ignore
    */
-  onPlayerSrcInfoChanged?(from: SrcInfo, to: SrcInfo): void;
+  onPlayerSrcInfoChanged?(): { from: SrcInfo; to: SrcInfo };
 
   /**
-   * Occurs when information related to the media player changes.
-   *
-   * When the information about the media player changes, the SDK triggers this callback. You can use this callback for troubleshooting.
-   *
-   * @param info Information related to the media player. See PlayerUpdatedInfo.
+   * @ignore
    */
-  onPlayerInfoUpdated?(info: PlayerUpdatedInfo): void;
+  onPlayerInfoUpdated?(): PlayerUpdatedInfo;
 
   /**
    * Reports the volume of the media player.

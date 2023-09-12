@@ -5,9 +5,18 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const IAudioEncodedFrameObserver = t.iface([], {
-  "onRecordAudioEncodedFrame": t.opt(t.func("void", t.param("frameBuffer", "Uint8Array"), t.param("length", "number"), t.param("audioEncodedFrameInfo", "EncodedAudioFrameInfo"))),
-  "onPlaybackAudioEncodedFrame": t.opt(t.func("void", t.param("frameBuffer", "Uint8Array"), t.param("length", "number"), t.param("audioEncodedFrameInfo", "EncodedAudioFrameInfo"))),
-  "onMixedAudioEncodedFrame": t.opt(t.func("void", t.param("frameBuffer", "Uint8Array"), t.param("length", "number"), t.param("audioEncodedFrameInfo", "EncodedAudioFrameInfo"))),
+  "onRecordAudioEncodedFrame": t.opt(t.func(t.iface([], {
+    "frameBuffer": "Uint8Array",
+    "audioEncodedFrameInfo": "EncodedAudioFrameInfo",
+  }), t.param("length", "number"))),
+  "onPlaybackAudioEncodedFrame": t.opt(t.func(t.iface([], {
+    "frameBuffer": "Uint8Array",
+    "audioEncodedFrameInfo": "EncodedAudioFrameInfo",
+  }), t.param("length", "number"))),
+  "onMixedAudioEncodedFrame": t.opt(t.func(t.iface([], {
+    "frameBuffer": "Uint8Array",
+    "audioEncodedFrameInfo": "EncodedAudioFrameInfo",
+  }), t.param("length", "number"))),
 });
 
 const exportedTypeSuite: t.ITypeSuite = {

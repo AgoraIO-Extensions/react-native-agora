@@ -16,7 +16,7 @@ export abstract class IMediaRecorder {
   /**
    * @ignore
    */
-  abstract startRecording(config: MediaRecorderConfiguration): number;
+  abstract startRecording(): MediaRecorderConfiguration;
 
   /**
    * @ignore

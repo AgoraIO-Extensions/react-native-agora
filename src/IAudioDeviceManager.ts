@@ -28,7 +28,7 @@ export abstract class IAudioDeviceManager {
   /**
    * @ignore
    */
-  abstract setPlaybackDevice(deviceId: string): number;
+  abstract setPlaybackDevice(): string;
 
   /**
    * @ignore
@@ -53,7 +53,7 @@ export abstract class IAudioDeviceManager {
   /**
    * @ignore
    */
-  abstract setRecordingDevice(deviceId: string): number;
+  abstract setRecordingDevice(): string;
 
   /**
    * @ignore
@@ -78,7 +78,7 @@ export abstract class IAudioDeviceManager {
   /**
    * @ignore
    */
-  abstract setLoopbackDevice(deviceId: string): number;
+  abstract setLoopbackDevice(): string;
 
   /**
    * @ignore
@@ -108,7 +108,7 @@ export abstract class IAudioDeviceManager {
   /**
    * @ignore
    */
-  abstract startPlaybackDeviceTest(testAudioFilePath: string): number;
+  abstract startPlaybackDeviceTest(): string;
 
   /**
    * @ignore

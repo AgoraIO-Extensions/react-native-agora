@@ -197,31 +197,30 @@ export class IMediaEngineImpl implements IMediaEngine {
     return 'MediaEngine_setExternalAudioSource';
   }
 
-  createCustomAudioTrack(
-    trackType: AudioTrackType,
-    config: AudioTrackConfig
-  ): number {
-    const apiType = this.getApiTypeFromCreateCustomAudioTrack(
-      trackType,
-      config
-    );
+  createCustomAudioTrack(trackType: AudioTrackType): {
+    config: AudioTrackConfig;
+    result: number;
+  } {
+    const apiType = this.getApiTypeFromCreateCustomAudioTrack(trackType);
     const jsonParams = {
       trackType: trackType,
-      config: config,
       toJSON: () => {
         return {
           trackType: trackType,
-          config: config,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const config = jsonResults.config;
+    const result = jsonResults.result;
+    return {
+      config,
+      result,
+    };
   }
 
   protected getApiTypeFromCreateCustomAudioTrack(
-    trackType: AudioTrackType,
-    config: AudioTrackConfig
+    trackType: AudioTrackType
   ): string {
     return 'MediaEngine_createCustomAudioTrack';
   }
@@ -328,38 +327,34 @@ export class IMediaEngineImpl implements IMediaEngine {
   }
 
   pushEncodedVideoImage(
-    imageBuffer: Uint8Array,
     length: number,
-    videoEncodedFrameInfo: EncodedVideoFrameInfo,
     videoTrackId: number = 0
-  ): number {
+  ): { imageBuffer: Uint8Array; videoEncodedFrameInfo: EncodedVideoFrameInfo } {
     const apiType = this.getApiTypeFromPushEncodedVideoImage(
-      imageBuffer,
       length,
-      videoEncodedFrameInfo,
       videoTrackId
     );
     const jsonParams = {
-      imageBuffer: imageBuffer,
       length: length,
-      videoEncodedFrameInfo: videoEncodedFrameInfo,
       videoTrackId: videoTrackId,
       toJSON: () => {
         return {
           length: length,
-          videoEncodedFrameInfo: videoEncodedFrameInfo,
           videoTrackId: videoTrackId,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const imageBuffer = jsonResults.imageBuffer;
+    const videoEncodedFrameInfo = jsonResults.videoEncodedFrameInfo;
+    return {
+      imageBuffer,
+      videoEncodedFrameInfo,
+    };
   }
 
   protected getApiTypeFromPushEncodedVideoImage(
-    imageBuffer: Uint8Array,
     length: number,
-    videoEncodedFrameInfo: EncodedVideoFrameInfo,
     videoTrackId: number = 0
   ): string {
     return 'MediaEngine_pushEncodedVideoImage';

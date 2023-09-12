@@ -24,23 +24,15 @@ export class IMediaRecorderImpl implements IMediaRecorder {
     return 'MediaRecorder_setMediaRecorderObserver';
   }
 
-  startRecording(config: MediaRecorderConfiguration): number {
-    const apiType = this.getApiTypeFromStartRecording(config);
-    const jsonParams = {
-      config: config,
-      toJSON: () => {
-        return {
-          config: config,
-        };
-      },
-    };
+  startRecording(): MediaRecorderConfiguration {
+    const apiType = this.getApiTypeFromStartRecording();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const config = jsonResults.config;
+    return config;
   }
 
-  protected getApiTypeFromStartRecording(
-    config: MediaRecorderConfiguration
-  ): string {
+  protected getApiTypeFromStartRecording(): string {
     return 'MediaRecorder_startRecording';
   }
 

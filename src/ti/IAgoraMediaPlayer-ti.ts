@@ -5,7 +5,7 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const IMediaPlayerVideoFrameObserver = t.iface([], {
-  "onFrame": t.opt(t.func("void", t.param("frame", "VideoFrame"))),
+  "onFrame": t.opt(t.func("VideoFrame")),
 });
 
 const exportedTypeSuite: t.ITypeSuite = {

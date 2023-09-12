@@ -380,7 +380,7 @@ export class PlayerUpdatedInfo {
   /**
    * The statistics about the media file being cached. If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
    */
-  cacheStatistics?: CacheStatistics;
+  cacheStatistics?: CacheStatistics[];
 }
 
 /**

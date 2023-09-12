@@ -55,6 +55,10 @@ export enum MusicContentCenterStatusCode {
    * @ignore
    */
   KMusicContentCenterStatusErrMusicDecryption = 6,
+  /**
+   * @ignore
+   */
+  KMusicContentCenterStatusErrHttpInternalError = 7,
 }
 
 /**
@@ -242,51 +246,40 @@ export interface IMusicContentCenterEventHandler {
    * @ignore
    */
   onMusicChartsResult?(
-    requestId: string,
     result: MusicChartInfo[],
     errorCode: MusicContentCenterStatusCode
-  ): void;
+  ): string;
 
-  /**
-   * @ignore
-   */
-  onMusicCollectionResult?(
-    requestId: string,
-    result: MusicCollection,
-    errorCode: MusicContentCenterStatusCode
-  ): void;
+  onMusicCollectionResult?(errorCode: MusicContentCenterStatusCode): {
+    requestId: string;
+    result: MusicCollection;
+  };
 
   /**
    * @ignore
    */
   onLyricResult?(
-    requestId: string,
     songCode: number,
-    lyricUrl: string,
     errorCode: MusicContentCenterStatusCode
-  ): void;
+  ): { requestId: string; lyricUrl: string };
 
   /**
    * @ignore
    */
   onSongSimpleInfoResult?(
-    requestId: string,
     songCode: number,
-    simpleInfo: string,
     errorCode: MusicContentCenterStatusCode
-  ): void;
+  ): { requestId: string; simpleInfo: string };
 
   /**
    * @ignore
    */
   onPreLoadEvent?(
-    requestId: string,
     songCode: number,
     percent: number,
-    lyricUrl: string,
     status: PreloadStatusCode,
     errorCode: MusicContentCenterStatusCode
-  ): void;
+  ): { requestId: string; lyricUrl: string };
 }
 
 /**
@@ -309,6 +302,10 @@ export class MusicContentCenterConfiguration {
    * @ignore
    */
   maxCacheSize?: number;
+  /**
+   * @ignore
+   */
+  mccDomain?: string;
 }
 
 /**
@@ -328,92 +325,47 @@ export abstract class IMusicContentCenter {
   /**
    * @ignore
    */
-  abstract initialize(configuration: MusicContentCenterConfiguration): number;
+  abstract initialize(): MusicContentCenterConfiguration;
 
-  /**
-   * @ignore
-   */
-  abstract renewToken(token: string): number;
+  abstract renewToken(): string;
 
-  /**
-   * @ignore
-   */
   abstract release(): void;
 
-  /**
-   * @ignore
-   */
   abstract registerEventHandler(
     eventHandler: IMusicContentCenterEventHandler
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract unregisterEventHandler(): number;
 
-  /**
-   * @ignore
-   */
   abstract createMusicPlayer(): IMusicPlayer;
 
-  /**
-   * @ignore
-   */
   abstract getMusicCharts(): string;
 
-  /**
-   * @ignore
-   */
   abstract getMusicCollectionByMusicChartId(
     musicChartId: number,
     page: number,
-    pageSize: number,
-    jsonOption?: string
-  ): string;
+    pageSize: number
+  ): { requestId: string; jsonOption: string };
 
-  /**
-   * @ignore
-   */
   abstract searchMusic(
-    keyWord: string,
     page: number,
-    pageSize: number,
-    jsonOption?: string
-  ): string;
+    pageSize: number
+  ): { requestId: string; keyWord: string; jsonOption: string };
 
-  /**
-   * @ignore
-   */
   abstract preload(songCode: number): string;
 
-  /**
-   * @ignore
-   */
   abstract removeCache(songCode: number): number;
 
-  /**
-   * @ignore
-   */
   abstract getCaches(): { cacheInfo: MusicCacheInfo[]; cacheInfoSize: number };
 
-  /**
-   * @ignore
-   */
   abstract isPreloaded(songCode: number): boolean;
 
-  /**
-   * @ignore
-   */
   abstract getLyric(songCode: number, lyricType?: number): string;
 
-  /**
-   * @ignore
-   */
   abstract getSongSimpleInfo(songCode: number): string;
 
-  /**
-   * @ignore
-   */
-  abstract getInternalSongCode(songCode: number, jsonOption: string): number;
+  abstract getInternalSongCode(songCode: number): {
+    jsonOption: string;
+    internalSongCode: number;
+  };
 }

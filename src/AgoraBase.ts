@@ -438,6 +438,10 @@ export enum ErrorCodeType {
    * 1501: Permission to access the camera is not granted. Check whether permission to access the camera permission is granted.
    */
   ErrVdmCameraNotAuthorized = 1501,
+  /**
+   * @ignore
+   */
+  ErrAdmApplicationLoopback = 2007,
 }
 
 /**
@@ -1947,7 +1951,7 @@ export enum LocalAudioStreamError {
    */
   LocalAudioStreamErrorDeviceNoPermission = 2,
   /**
-   * @ignore
+   * 3: The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
    */
   LocalAudioStreamErrorDeviceBusy = 3,
   /**
@@ -2078,6 +2082,26 @@ export enum LocalVideoStreamError {
    * @ignore
    */
   LocalVideoStreamErrorScreenCaptureNoPermission = 22,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCapturePaused = 23,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureResumed = 24,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureWindowHidden = 25,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureWindowRecoverFromHidden = 26,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamErrorScreenCaptureWindowRecoverFromMinimized = 27,
 }
 
 /**
@@ -3094,7 +3118,7 @@ export enum ConnectionChangedReasonType {
    */
   ConnectionChangedClientIpAddressChanged = 13,
   /**
-   * 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The connection state changes to .
+   * 14: Timeout for the keep-alive of the connection between the SDK and the Agora edge server. The SDK tries to reconnect to the server automatically.
    */
   ConnectionChangedKeepAliveTimeout = 14,
   /**
@@ -3125,6 +3149,10 @@ export enum ConnectionChangedReasonType {
    * @ignore
    */
   ConnectionChangedLicenseValidationFailure = 21,
+  /**
+   * @ignore
+   */
+  ConnectionChangedCertificationVeryfyFailure = 22,
 }
 
 /**
@@ -3235,6 +3263,10 @@ export enum NetworkType {
    * 5: The network type is mobile 4G.
    */
   NetworkTypeMobile4g = 5,
+  /**
+   * @ignore
+   */
+  NetworkTypeMobile5g = 6,
 }
 
 /**
@@ -3987,11 +4019,10 @@ export interface IAudioEncodedFrameObserver {
    * @param length The data length (byte).
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo.
    */
-  onRecordAudioEncodedFrame?(
-    frameBuffer: Uint8Array,
-    length: number,
-    audioEncodedFrameInfo: EncodedAudioFrameInfo
-  ): void;
+  onRecordAudioEncodedFrame?(length: number): {
+    frameBuffer: Uint8Array;
+    audioEncodedFrameInfo: EncodedAudioFrameInfo;
+  };
 
   /**
    * Gets the encoded audio data of all remote users.
@@ -4007,11 +4038,10 @@ export interface IAudioEncodedFrameObserver {
    * @param length The data length (byte).
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo.
    */
-  onPlaybackAudioEncodedFrame?(
-    frameBuffer: Uint8Array,
-    length: number,
-    audioEncodedFrameInfo: EncodedAudioFrameInfo
-  ): void;
+  onPlaybackAudioEncodedFrame?(length: number): {
+    frameBuffer: Uint8Array;
+    audioEncodedFrameInfo: EncodedAudioFrameInfo;
+  };
 
   /**
    * Gets the mixed and encoded audio data of the local and all remote users.
@@ -4027,11 +4057,10 @@ export interface IAudioEncodedFrameObserver {
    * @param length The data length (byte).
    * @param audioEncodedFrameInfo Audio information after encoding. See EncodedAudioFrameInfo.
    */
-  onMixedAudioEncodedFrame?(
-    frameBuffer: Uint8Array,
-    length: number,
-    audioEncodedFrameInfo: EncodedAudioFrameInfo
-  ): void;
+  onMixedAudioEncodedFrame?(length: number): {
+    frameBuffer: Uint8Array;
+    audioEncodedFrameInfo: EncodedAudioFrameInfo;
+  };
 }
 
 /**

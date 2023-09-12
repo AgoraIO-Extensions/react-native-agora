@@ -15,7 +15,7 @@ import {
   VideoSubscriptionOptions,
   WatermarkOptions,
 } from '../AgoraBase';
-import { RenderModeType } from '../AgoraMediaBase';
+import { ContentInspectConfig, RenderModeType } from '../AgoraMediaBase';
 import {
   ChannelMediaOptions,
   LeaveChannelOptions,
@@ -27,519 +27,399 @@ import { IRtcEngineImpl } from './IAgoraRtcEngineImpl';
 
 // @ts-ignore
 export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
-  joinChannelEx(
-    token: string,
-    connection: RtcConnection,
-    options: ChannelMediaOptions
-  ): number {
-    const apiType = this.getApiTypeFromJoinChannelEx(
+  joinChannelEx(): {
+    token: string;
+    connection: RtcConnection;
+    options: ChannelMediaOptions;
+  } {
+    const apiType = this.getApiTypeFromJoinChannelEx();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const token = jsonResults.token;
+    const connection = jsonResults.connection;
+    const options = jsonResults.options;
+    return {
       token,
       connection,
-      options
-    );
-    const jsonParams = {
-      token: token,
-      connection: connection,
-      options: options,
-      toJSON: () => {
-        return {
-          token: token,
-          connection: connection,
-          options: options,
-        };
-      },
+      options,
     };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
   }
 
-  protected getApiTypeFromJoinChannelEx(
-    token: string,
-    connection: RtcConnection,
-    options: ChannelMediaOptions
-  ): string {
+  protected getApiTypeFromJoinChannelEx(): string {
     return 'RtcEngineEx_joinChannelEx';
   }
 
-  leaveChannelEx(
-    connection: RtcConnection,
-    options?: LeaveChannelOptions
-  ): number {
-    const apiType = this.getApiTypeFromLeaveChannelEx(connection, options);
-    const jsonParams = {
-      connection: connection,
-      options: options,
-      toJSON: () => {
-        return {
-          connection: connection,
-          options: options,
-        };
-      },
-    };
+  leaveChannelEx(): {
+    connection: RtcConnection;
+    options: LeaveChannelOptions;
+  } {
+    const apiType = this.getApiTypeFromLeaveChannelEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    const options = jsonResults.options;
+    return {
+      connection,
+      options,
+    };
   }
 
-  protected getApiTypeFromLeaveChannelEx(
-    connection: RtcConnection,
-    options?: LeaveChannelOptions
-  ): string {
+  protected getApiTypeFromLeaveChannelEx(): string {
     return 'RtcEngineEx_leaveChannelEx';
   }
 
-  updateChannelMediaOptionsEx(
-    options: ChannelMediaOptions,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromUpdateChannelMediaOptionsEx(
-      options,
-      connection
-    );
-    const jsonParams = {
-      options: options,
-      connection: connection,
-      toJSON: () => {
-        return {
-          options: options,
-          connection: connection,
-        };
-      },
-    };
+  updateChannelMediaOptionsEx(): {
+    options: ChannelMediaOptions;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromUpdateChannelMediaOptionsEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const options = jsonResults.options;
+    const connection = jsonResults.connection;
+    return {
+      options,
+      connection,
+    };
   }
 
-  protected getApiTypeFromUpdateChannelMediaOptionsEx(
-    options: ChannelMediaOptions,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromUpdateChannelMediaOptionsEx(): string {
     return 'RtcEngineEx_updateChannelMediaOptionsEx';
   }
 
-  setVideoEncoderConfigurationEx(
-    config: VideoEncoderConfiguration,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromSetVideoEncoderConfigurationEx(
-      config,
-      connection
-    );
-    const jsonParams = {
-      config: config,
-      connection: connection,
-      toJSON: () => {
-        return {
-          config: config,
-          connection: connection,
-        };
-      },
-    };
+  setVideoEncoderConfigurationEx(): {
+    config: VideoEncoderConfiguration;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromSetVideoEncoderConfigurationEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const config = jsonResults.config;
+    const connection = jsonResults.connection;
+    return {
+      config,
+      connection,
+    };
   }
 
-  protected getApiTypeFromSetVideoEncoderConfigurationEx(
-    config: VideoEncoderConfiguration,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromSetVideoEncoderConfigurationEx(): string {
     return 'RtcEngineEx_setVideoEncoderConfigurationEx';
   }
 
-  setupRemoteVideoEx(canvas: VideoCanvas, connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromSetupRemoteVideoEx(canvas, connection);
-    const jsonParams = {
-      canvas: canvas,
-      connection: connection,
-      toJSON: () => {
-        return {
-          canvas: canvas,
-          connection: connection,
-        };
-      },
-    };
+  setupRemoteVideoEx(): { canvas: VideoCanvas; connection: RtcConnection } {
+    const apiType = this.getApiTypeFromSetupRemoteVideoEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const canvas = jsonResults.canvas;
+    const connection = jsonResults.connection;
+    return {
+      canvas,
+      connection,
+    };
   }
 
-  protected getApiTypeFromSetupRemoteVideoEx(
-    canvas: VideoCanvas,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromSetupRemoteVideoEx(): string {
     return 'RtcEngineEx_setupRemoteVideoEx';
   }
 
-  muteRemoteAudioStreamEx(
-    uid: number,
-    mute: boolean,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromMuteRemoteAudioStreamEx(
-      uid,
-      mute,
-      connection
-    );
+  muteRemoteAudioStreamEx(uid: number, mute: boolean): RtcConnection {
+    const apiType = this.getApiTypeFromMuteRemoteAudioStreamEx(uid, mute);
     const jsonParams = {
       uid: uid,
       mute: mute,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
           mute: mute,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromMuteRemoteAudioStreamEx(
     uid: number,
-    mute: boolean,
-    connection: RtcConnection
+    mute: boolean
   ): string {
     return 'RtcEngineEx_muteRemoteAudioStreamEx';
   }
 
-  muteRemoteVideoStreamEx(
-    uid: number,
-    mute: boolean,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromMuteRemoteVideoStreamEx(
-      uid,
-      mute,
-      connection
-    );
+  muteRemoteVideoStreamEx(uid: number, mute: boolean): RtcConnection {
+    const apiType = this.getApiTypeFromMuteRemoteVideoStreamEx(uid, mute);
     const jsonParams = {
       uid: uid,
       mute: mute,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
           mute: mute,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromMuteRemoteVideoStreamEx(
     uid: number,
-    mute: boolean,
-    connection: RtcConnection
+    mute: boolean
   ): string {
     return 'RtcEngineEx_muteRemoteVideoStreamEx';
   }
 
   setRemoteVideoStreamTypeEx(
     uid: number,
-    streamType: VideoStreamType,
-    connection: RtcConnection
-  ): number {
+    streamType: VideoStreamType
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSetRemoteVideoStreamTypeEx(
       uid,
-      streamType,
-      connection
+      streamType
     );
     const jsonParams = {
       uid: uid,
       streamType: streamType,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
           streamType: streamType,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetRemoteVideoStreamTypeEx(
     uid: number,
-    streamType: VideoStreamType,
-    connection: RtcConnection
+    streamType: VideoStreamType
   ): string {
     return 'RtcEngineEx_setRemoteVideoStreamTypeEx';
   }
 
-  muteLocalAudioStreamEx(mute: boolean, connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromMuteLocalAudioStreamEx(mute, connection);
+  muteLocalAudioStreamEx(mute: boolean): RtcConnection {
+    const apiType = this.getApiTypeFromMuteLocalAudioStreamEx(mute);
     const jsonParams = {
       mute: mute,
-      connection: connection,
       toJSON: () => {
         return {
           mute: mute,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromMuteLocalAudioStreamEx(
-    mute: boolean,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromMuteLocalAudioStreamEx(mute: boolean): string {
     return 'RtcEngineEx_muteLocalAudioStreamEx';
   }
 
-  muteLocalVideoStreamEx(mute: boolean, connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromMuteLocalVideoStreamEx(mute, connection);
+  muteLocalVideoStreamEx(mute: boolean): RtcConnection {
+    const apiType = this.getApiTypeFromMuteLocalVideoStreamEx(mute);
     const jsonParams = {
       mute: mute,
-      connection: connection,
       toJSON: () => {
         return {
           mute: mute,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromMuteLocalVideoStreamEx(
-    mute: boolean,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromMuteLocalVideoStreamEx(mute: boolean): string {
     return 'RtcEngineEx_muteLocalVideoStreamEx';
   }
 
-  muteAllRemoteAudioStreamsEx(
-    mute: boolean,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromMuteAllRemoteAudioStreamsEx(
-      mute,
-      connection
-    );
+  muteAllRemoteAudioStreamsEx(mute: boolean): RtcConnection {
+    const apiType = this.getApiTypeFromMuteAllRemoteAudioStreamsEx(mute);
     const jsonParams = {
       mute: mute,
-      connection: connection,
       toJSON: () => {
         return {
           mute: mute,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromMuteAllRemoteAudioStreamsEx(
-    mute: boolean,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromMuteAllRemoteAudioStreamsEx(mute: boolean): string {
     return 'RtcEngineEx_muteAllRemoteAudioStreamsEx';
   }
 
-  muteAllRemoteVideoStreamsEx(
-    mute: boolean,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromMuteAllRemoteVideoStreamsEx(
-      mute,
-      connection
-    );
+  muteAllRemoteVideoStreamsEx(mute: boolean): RtcConnection {
+    const apiType = this.getApiTypeFromMuteAllRemoteVideoStreamsEx(mute);
     const jsonParams = {
       mute: mute,
-      connection: connection,
       toJSON: () => {
         return {
           mute: mute,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromMuteAllRemoteVideoStreamsEx(
-    mute: boolean,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromMuteAllRemoteVideoStreamsEx(mute: boolean): string {
     return 'RtcEngineEx_muteAllRemoteVideoStreamsEx';
   }
 
   setSubscribeAudioBlocklistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
-  ): number {
+    uidNumber: number
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSetSubscribeAudioBlocklistEx(
       uidList,
-      uidNumber,
-      connection
+      uidNumber
     );
     const jsonParams = {
       uidList: uidList,
       uidNumber: uidNumber,
-      connection: connection,
       toJSON: () => {
         return {
           uidList: uidList,
           uidNumber: uidNumber,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetSubscribeAudioBlocklistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
+    uidNumber: number
   ): string {
     return 'RtcEngineEx_setSubscribeAudioBlocklistEx';
   }
 
   setSubscribeAudioAllowlistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
-  ): number {
+    uidNumber: number
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSetSubscribeAudioAllowlistEx(
       uidList,
-      uidNumber,
-      connection
+      uidNumber
     );
     const jsonParams = {
       uidList: uidList,
       uidNumber: uidNumber,
-      connection: connection,
       toJSON: () => {
         return {
           uidList: uidList,
           uidNumber: uidNumber,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetSubscribeAudioAllowlistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
+    uidNumber: number
   ): string {
     return 'RtcEngineEx_setSubscribeAudioAllowlistEx';
   }
 
   setSubscribeVideoBlocklistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
-  ): number {
+    uidNumber: number
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSetSubscribeVideoBlocklistEx(
       uidList,
-      uidNumber,
-      connection
+      uidNumber
     );
     const jsonParams = {
       uidList: uidList,
       uidNumber: uidNumber,
-      connection: connection,
       toJSON: () => {
         return {
           uidList: uidList,
           uidNumber: uidNumber,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetSubscribeVideoBlocklistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
+    uidNumber: number
   ): string {
     return 'RtcEngineEx_setSubscribeVideoBlocklistEx';
   }
 
   setSubscribeVideoAllowlistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
-  ): number {
+    uidNumber: number
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSetSubscribeVideoAllowlistEx(
       uidList,
-      uidNumber,
-      connection
+      uidNumber
     );
     const jsonParams = {
       uidList: uidList,
       uidNumber: uidNumber,
-      connection: connection,
       toJSON: () => {
         return {
           uidList: uidList,
           uidNumber: uidNumber,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetSubscribeVideoAllowlistEx(
     uidList: number[],
-    uidNumber: number,
-    connection: RtcConnection
+    uidNumber: number
   ): string {
     return 'RtcEngineEx_setSubscribeVideoAllowlistEx';
   }
 
-  setRemoteVideoSubscriptionOptionsEx(
-    uid: number,
-    options: VideoSubscriptionOptions,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromSetRemoteVideoSubscriptionOptionsEx(
-      uid,
-      options,
-      connection
-    );
+  setRemoteVideoSubscriptionOptionsEx(uid: number): {
+    options: VideoSubscriptionOptions;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromSetRemoteVideoSubscriptionOptionsEx(uid);
     const jsonParams = {
       uid: uid,
-      options: options,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
-          options: options,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const options = jsonResults.options;
+    const connection = jsonResults.connection;
+    return {
+      options,
+      connection,
+    };
   }
 
   protected getApiTypeFromSetRemoteVideoSubscriptionOptionsEx(
-    uid: number,
-    options: VideoSubscriptionOptions,
-    connection: RtcConnection
+    uid: number
   ): string {
     return 'RtcEngineEx_setRemoteVideoSubscriptionOptionsEx';
   }
@@ -547,72 +427,58 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   setRemoteVoicePositionEx(
     uid: number,
     pan: number,
-    gain: number,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromSetRemoteVoicePositionEx(
-      uid,
-      pan,
-      gain,
-      connection
-    );
+    gain: number
+  ): RtcConnection {
+    const apiType = this.getApiTypeFromSetRemoteVoicePositionEx(uid, pan, gain);
     const jsonParams = {
       uid: uid,
       pan: pan,
       gain: gain,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
           pan: pan,
           gain: gain,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetRemoteVoicePositionEx(
     uid: number,
     pan: number,
-    gain: number,
-    connection: RtcConnection
+    gain: number
   ): string {
     return 'RtcEngineEx_setRemoteVoicePositionEx';
   }
 
-  setRemoteUserSpatialAudioParamsEx(
-    uid: number,
-    params: SpatialAudioParams,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromSetRemoteUserSpatialAudioParamsEx(
-      uid,
-      params,
-      connection
-    );
+  setRemoteUserSpatialAudioParamsEx(uid: number): {
+    params: SpatialAudioParams;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromSetRemoteUserSpatialAudioParamsEx(uid);
     const jsonParams = {
       uid: uid,
-      params: params,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
-          params: params,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const params = jsonResults.params;
+    const connection = jsonResults.connection;
+    return {
+      params,
+      connection,
+    };
   }
 
   protected getApiTypeFromSetRemoteUserSpatialAudioParamsEx(
-    uid: number,
-    params: SpatialAudioParams,
-    connection: RtcConnection
+    uid: number
   ): string {
     return 'RtcEngineEx_setRemoteUserSpatialAudioParamsEx';
   }
@@ -620,803 +486,607 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   setRemoteRenderModeEx(
     uid: number,
     renderMode: RenderModeType,
-    mirrorMode: VideoMirrorModeType,
-    connection: RtcConnection
-  ): number {
+    mirrorMode: VideoMirrorModeType
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSetRemoteRenderModeEx(
       uid,
       renderMode,
-      mirrorMode,
-      connection
+      mirrorMode
     );
     const jsonParams = {
       uid: uid,
       renderMode: renderMode,
       mirrorMode: mirrorMode,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
           renderMode: renderMode,
           mirrorMode: mirrorMode,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetRemoteRenderModeEx(
     uid: number,
     renderMode: RenderModeType,
-    mirrorMode: VideoMirrorModeType,
-    connection: RtcConnection
+    mirrorMode: VideoMirrorModeType
   ): string {
     return 'RtcEngineEx_setRemoteRenderModeEx';
   }
 
-  enableLoopbackRecordingEx(
-    connection: RtcConnection,
-    enabled: boolean,
-    deviceName?: string
-  ): number {
-    const apiType = this.getApiTypeFromEnableLoopbackRecordingEx(
-      connection,
-      enabled,
-      deviceName
-    );
+  enableLoopbackRecordingEx(enabled: boolean): {
+    connection: RtcConnection;
+    deviceName: string;
+  } {
+    const apiType = this.getApiTypeFromEnableLoopbackRecordingEx(enabled);
     const jsonParams = {
-      connection: connection,
       enabled: enabled,
-      deviceName: deviceName,
       toJSON: () => {
         return {
-          connection: connection,
           enabled: enabled,
-          deviceName: deviceName,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    const deviceName = jsonResults.deviceName;
+    return {
+      connection,
+      deviceName,
+    };
   }
 
-  protected getApiTypeFromEnableLoopbackRecordingEx(
-    connection: RtcConnection,
-    enabled: boolean,
-    deviceName?: string
-  ): string {
+  protected getApiTypeFromEnableLoopbackRecordingEx(enabled: boolean): string {
     return 'RtcEngineEx_enableLoopbackRecordingEx';
   }
 
-  adjustRecordingSignalVolumeEx(
-    volume: number,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromAdjustRecordingSignalVolumeEx(
-      volume,
-      connection
-    );
+  adjustRecordingSignalVolumeEx(volume: number): RtcConnection {
+    const apiType = this.getApiTypeFromAdjustRecordingSignalVolumeEx(volume);
     const jsonParams = {
       volume: volume,
-      connection: connection,
       toJSON: () => {
         return {
           volume: volume,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromAdjustRecordingSignalVolumeEx(
-    volume: number,
-    connection: RtcConnection
+    volume: number
   ): string {
     return 'RtcEngineEx_adjustRecordingSignalVolumeEx';
   }
 
-  muteRecordingSignalEx(mute: boolean, connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromMuteRecordingSignalEx(mute, connection);
+  muteRecordingSignalEx(mute: boolean): RtcConnection {
+    const apiType = this.getApiTypeFromMuteRecordingSignalEx(mute);
     const jsonParams = {
       mute: mute,
-      connection: connection,
       toJSON: () => {
         return {
           mute: mute,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromMuteRecordingSignalEx(
-    mute: boolean,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromMuteRecordingSignalEx(mute: boolean): string {
     return 'RtcEngineEx_muteRecordingSignalEx';
   }
 
-  adjustUserPlaybackSignalVolumeEx(
-    uid: number,
-    volume: number,
-    connection: RtcConnection
-  ): number {
+  adjustUserPlaybackSignalVolumeEx(uid: number, volume: number): RtcConnection {
     const apiType = this.getApiTypeFromAdjustUserPlaybackSignalVolumeEx(
       uid,
-      volume,
-      connection
+      volume
     );
     const jsonParams = {
       uid: uid,
       volume: volume,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
           volume: volume,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromAdjustUserPlaybackSignalVolumeEx(
     uid: number,
-    volume: number,
-    connection: RtcConnection
+    volume: number
   ): string {
     return 'RtcEngineEx_adjustUserPlaybackSignalVolumeEx';
   }
 
-  getConnectionStateEx(connection: RtcConnection): ConnectionStateType {
-    const apiType = this.getApiTypeFromGetConnectionStateEx(connection);
-    const jsonParams = {
-      connection: connection,
-      toJSON: () => {
-        return {
-          connection: connection,
-        };
-      },
-    };
+  getConnectionStateEx(): {
+    connection: RtcConnection;
+    result: ConnectionStateType;
+  } {
+    const apiType = this.getApiTypeFromGetConnectionStateEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    const result = jsonResults.result;
+    return {
+      connection,
+      result,
+    };
   }
 
-  protected getApiTypeFromGetConnectionStateEx(
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromGetConnectionStateEx(): string {
     return 'RtcEngineEx_getConnectionStateEx';
   }
 
-  enableEncryptionEx(
-    connection: RtcConnection,
-    enabled: boolean,
-    config: EncryptionConfig
-  ): number {
-    const apiType = this.getApiTypeFromEnableEncryptionEx(
-      connection,
-      enabled,
-      config
-    );
+  enableEncryptionEx(enabled: boolean): {
+    connection: RtcConnection;
+    config: EncryptionConfig;
+  } {
+    const apiType = this.getApiTypeFromEnableEncryptionEx(enabled);
     const jsonParams = {
-      connection: connection,
       enabled: enabled,
-      config: config,
       toJSON: () => {
         return {
-          connection: connection,
           enabled: enabled,
-          config: config,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    const config = jsonResults.config;
+    return {
+      connection,
+      config,
+    };
   }
 
-  protected getApiTypeFromEnableEncryptionEx(
-    connection: RtcConnection,
-    enabled: boolean,
-    config: EncryptionConfig
-  ): string {
+  protected getApiTypeFromEnableEncryptionEx(enabled: boolean): string {
     return 'RtcEngineEx_enableEncryptionEx';
   }
 
-  createDataStreamEx(
-    config: DataStreamConfig,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromCreateDataStreamEx(config, connection);
+  createDataStreamEx(config: DataStreamConfig): {
+    streamId: number;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromCreateDataStreamEx(config);
     const jsonParams = {
       config: config,
-      connection: connection,
       toJSON: () => {
         return {
           config: config,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const streamId = jsonResults.streamId;
-    return streamId;
+    const connection = jsonResults.connection;
+    return {
+      streamId,
+      connection,
+    };
   }
 
-  protected getApiTypeFromCreateDataStreamEx(
-    config: DataStreamConfig,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromCreateDataStreamEx(config: DataStreamConfig): string {
     return 'RtcEngineEx_createDataStreamEx';
   }
 
   sendStreamMessageEx(
     streamId: number,
     data: Uint8Array,
-    length: number,
-    connection: RtcConnection
-  ): number {
+    length: number
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSendStreamMessageEx(
       streamId,
       data,
-      length,
-      connection
+      length
     );
     const jsonParams = {
       streamId: streamId,
       data: data,
       length: length,
-      connection: connection,
       toJSON: () => {
         return {
           streamId: streamId,
           length: length,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSendStreamMessageEx(
     streamId: number,
     data: Uint8Array,
-    length: number,
-    connection: RtcConnection
+    length: number
   ): string {
     return 'RtcEngineEx_sendStreamMessageEx';
   }
 
-  addVideoWatermarkEx(
-    watermarkUrl: string,
-    options: WatermarkOptions,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromAddVideoWatermarkEx(
+  addVideoWatermarkEx(): {
+    watermarkUrl: string;
+    options: WatermarkOptions;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromAddVideoWatermarkEx();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const watermarkUrl = jsonResults.watermarkUrl;
+    const options = jsonResults.options;
+    const connection = jsonResults.connection;
+    return {
       watermarkUrl,
       options,
-      connection
-    );
-    const jsonParams = {
-      watermarkUrl: watermarkUrl,
-      options: options,
-      connection: connection,
-      toJSON: () => {
-        return {
-          watermarkUrl: watermarkUrl,
-          options: options,
-          connection: connection,
-        };
-      },
+      connection,
     };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
   }
 
-  protected getApiTypeFromAddVideoWatermarkEx(
-    watermarkUrl: string,
-    options: WatermarkOptions,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromAddVideoWatermarkEx(): string {
     return 'RtcEngineEx_addVideoWatermarkEx';
   }
 
-  clearVideoWatermarkEx(connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromClearVideoWatermarkEx(connection);
+  clearVideoWatermarkEx(): RtcConnection {
+    const apiType = this.getApiTypeFromClearVideoWatermarkEx();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const connection = jsonResults.connection;
+    return connection;
+  }
+
+  protected getApiTypeFromClearVideoWatermarkEx(): string {
+    return 'RtcEngineEx_clearVideoWatermarkEx';
+  }
+
+  sendCustomReportMessageEx(value: number): {
+    id: string;
+    category: string;
+    event: string;
+    label: string;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromSendCustomReportMessageEx(value);
     const jsonParams = {
-      connection: connection,
+      value: value,
       toJSON: () => {
         return {
-          connection: connection,
+          value: value,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromClearVideoWatermarkEx(
-    connection: RtcConnection
-  ): string {
-    return 'RtcEngineEx_clearVideoWatermarkEx';
-  }
-
-  sendCustomReportMessageEx(
-    id: string,
-    category: string,
-    event: string,
-    label: string,
-    value: number,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromSendCustomReportMessageEx(
+    const id = jsonResults.id;
+    const category = jsonResults.category;
+    const event = jsonResults.event;
+    const label = jsonResults.label;
+    const connection = jsonResults.connection;
+    return {
       id,
       category,
       event,
       label,
-      value,
-      connection
-    );
-    const jsonParams = {
-      id: id,
-      category: category,
-      event: event,
-      label: label,
-      value: value,
-      connection: connection,
-      toJSON: () => {
-        return {
-          id: id,
-          category: category,
-          event: event,
-          label: label,
-          value: value,
-          connection: connection,
-        };
-      },
+      connection,
     };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
   }
 
-  protected getApiTypeFromSendCustomReportMessageEx(
-    id: string,
-    category: string,
-    event: string,
-    label: string,
-    value: number,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromSendCustomReportMessageEx(value: number): string {
     return 'RtcEngineEx_sendCustomReportMessageEx';
   }
 
   enableAudioVolumeIndicationEx(
     interval: number,
     smooth: number,
-    reportVad: boolean,
-    connection: RtcConnection
-  ): number {
+    reportVad: boolean
+  ): RtcConnection {
     const apiType = this.getApiTypeFromEnableAudioVolumeIndicationEx(
       interval,
       smooth,
-      reportVad,
-      connection
+      reportVad
     );
     const jsonParams = {
       interval: interval,
       smooth: smooth,
       reportVad: reportVad,
-      connection: connection,
       toJSON: () => {
         return {
           interval: interval,
           smooth: smooth,
           reportVad: reportVad,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromEnableAudioVolumeIndicationEx(
     interval: number,
     smooth: number,
-    reportVad: boolean,
-    connection: RtcConnection
+    reportVad: boolean
   ): string {
     return 'RtcEngineEx_enableAudioVolumeIndicationEx';
   }
 
-  startRtmpStreamWithoutTranscodingEx(
-    url: string,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromStartRtmpStreamWithoutTranscodingEx(
-      url,
-      connection
-    );
-    const jsonParams = {
-      url: url,
-      connection: connection,
-      toJSON: () => {
-        return {
-          url: url,
-          connection: connection,
-        };
-      },
-    };
+  startRtmpStreamWithoutTranscodingEx(): {
+    url: string;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromStartRtmpStreamWithoutTranscodingEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const url = jsonResults.url;
+    const connection = jsonResults.connection;
+    return {
+      url,
+      connection,
+    };
   }
 
-  protected getApiTypeFromStartRtmpStreamWithoutTranscodingEx(
-    url: string,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromStartRtmpStreamWithoutTranscodingEx(): string {
     return 'RtcEngineEx_startRtmpStreamWithoutTranscodingEx';
   }
 
-  startRtmpStreamWithTranscodingEx(
-    url: string,
-    transcoding: LiveTranscoding,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromStartRtmpStreamWithTranscodingEx(
+  startRtmpStreamWithTranscodingEx(): {
+    url: string;
+    transcoding: LiveTranscoding;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromStartRtmpStreamWithTranscodingEx();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const url = jsonResults.url;
+    const transcoding = jsonResults.transcoding;
+    const connection = jsonResults.connection;
+    return {
       url,
       transcoding,
-      connection
-    );
-    const jsonParams = {
-      url: url,
-      transcoding: transcoding,
-      connection: connection,
-      toJSON: () => {
-        return {
-          url: url,
-          transcoding: transcoding,
-          connection: connection,
-        };
-      },
+      connection,
     };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
   }
 
-  protected getApiTypeFromStartRtmpStreamWithTranscodingEx(
-    url: string,
-    transcoding: LiveTranscoding,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromStartRtmpStreamWithTranscodingEx(): string {
     return 'RtcEngineEx_startRtmpStreamWithTranscodingEx';
   }
 
-  updateRtmpTranscodingEx(
-    transcoding: LiveTranscoding,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromUpdateRtmpTranscodingEx(
-      transcoding,
-      connection
-    );
-    const jsonParams = {
-      transcoding: transcoding,
-      connection: connection,
-      toJSON: () => {
-        return {
-          transcoding: transcoding,
-          connection: connection,
-        };
-      },
-    };
+  updateRtmpTranscodingEx(): {
+    transcoding: LiveTranscoding;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromUpdateRtmpTranscodingEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const transcoding = jsonResults.transcoding;
+    const connection = jsonResults.connection;
+    return {
+      transcoding,
+      connection,
+    };
   }
 
-  protected getApiTypeFromUpdateRtmpTranscodingEx(
-    transcoding: LiveTranscoding,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromUpdateRtmpTranscodingEx(): string {
     return 'RtcEngineEx_updateRtmpTranscodingEx';
   }
 
-  stopRtmpStreamEx(url: string, connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromStopRtmpStreamEx(url, connection);
-    const jsonParams = {
-      url: url,
-      connection: connection,
-      toJSON: () => {
-        return {
-          url: url,
-          connection: connection,
-        };
-      },
-    };
+  stopRtmpStreamEx(): { url: string; connection: RtcConnection } {
+    const apiType = this.getApiTypeFromStopRtmpStreamEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const url = jsonResults.url;
+    const connection = jsonResults.connection;
+    return {
+      url,
+      connection,
+    };
   }
 
-  protected getApiTypeFromStopRtmpStreamEx(
-    url: string,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromStopRtmpStreamEx(): string {
     return 'RtcEngineEx_stopRtmpStreamEx';
   }
 
-  startOrUpdateChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromStartOrUpdateChannelMediaRelayEx(
-      configuration,
-      connection
-    );
-    const jsonParams = {
-      configuration: configuration,
-      connection: connection,
-      toJSON: () => {
-        return {
-          configuration: configuration,
-          connection: connection,
-        };
-      },
-    };
+  startOrUpdateChannelMediaRelayEx(): {
+    configuration: ChannelMediaRelayConfiguration;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromStartOrUpdateChannelMediaRelayEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const configuration = jsonResults.configuration;
+    const connection = jsonResults.connection;
+    return {
+      configuration,
+      connection,
+    };
   }
 
-  protected getApiTypeFromStartOrUpdateChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromStartOrUpdateChannelMediaRelayEx(): string {
     return 'RtcEngineEx_startOrUpdateChannelMediaRelayEx';
   }
 
-  startChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromStartChannelMediaRelayEx(
-      configuration,
-      connection
-    );
-    const jsonParams = {
-      configuration: configuration,
-      connection: connection,
-      toJSON: () => {
-        return {
-          configuration: configuration,
-          connection: connection,
-        };
-      },
-    };
+  startChannelMediaRelayEx(): {
+    configuration: ChannelMediaRelayConfiguration;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromStartChannelMediaRelayEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const configuration = jsonResults.configuration;
+    const connection = jsonResults.connection;
+    return {
+      configuration,
+      connection,
+    };
   }
 
-  protected getApiTypeFromStartChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromStartChannelMediaRelayEx(): string {
     return 'RtcEngineEx_startChannelMediaRelayEx';
   }
 
-  updateChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromUpdateChannelMediaRelayEx(
-      configuration,
-      connection
-    );
-    const jsonParams = {
-      configuration: configuration,
-      connection: connection,
-      toJSON: () => {
-        return {
-          configuration: configuration,
-          connection: connection,
-        };
-      },
-    };
+  updateChannelMediaRelayEx(): {
+    configuration: ChannelMediaRelayConfiguration;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromUpdateChannelMediaRelayEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const configuration = jsonResults.configuration;
+    const connection = jsonResults.connection;
+    return {
+      configuration,
+      connection,
+    };
   }
 
-  protected getApiTypeFromUpdateChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromUpdateChannelMediaRelayEx(): string {
     return 'RtcEngineEx_updateChannelMediaRelayEx';
   }
 
-  stopChannelMediaRelayEx(connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromStopChannelMediaRelayEx(connection);
-    const jsonParams = {
-      connection: connection,
-      toJSON: () => {
-        return {
-          connection: connection,
-        };
-      },
-    };
+  stopChannelMediaRelayEx(): RtcConnection {
+    const apiType = this.getApiTypeFromStopChannelMediaRelayEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromStopChannelMediaRelayEx(
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromStopChannelMediaRelayEx(): string {
     return 'RtcEngineEx_stopChannelMediaRelayEx';
   }
 
-  pauseAllChannelMediaRelayEx(connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromPauseAllChannelMediaRelayEx(connection);
-    const jsonParams = {
-      connection: connection,
-      toJSON: () => {
-        return {
-          connection: connection,
-        };
-      },
-    };
+  pauseAllChannelMediaRelayEx(): RtcConnection {
+    const apiType = this.getApiTypeFromPauseAllChannelMediaRelayEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromPauseAllChannelMediaRelayEx(
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromPauseAllChannelMediaRelayEx(): string {
     return 'RtcEngineEx_pauseAllChannelMediaRelayEx';
   }
 
-  resumeAllChannelMediaRelayEx(connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromResumeAllChannelMediaRelayEx(connection);
-    const jsonParams = {
-      connection: connection,
-      toJSON: () => {
-        return {
-          connection: connection,
-        };
-      },
-    };
+  resumeAllChannelMediaRelayEx(): RtcConnection {
+    const apiType = this.getApiTypeFromResumeAllChannelMediaRelayEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
-  protected getApiTypeFromResumeAllChannelMediaRelayEx(
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromResumeAllChannelMediaRelayEx(): string {
     return 'RtcEngineEx_resumeAllChannelMediaRelayEx';
   }
 
-  getUserInfoByUserAccountEx(
-    userAccount: string,
-    connection: RtcConnection
-  ): UserInfo {
-    const apiType = this.getApiTypeFromGetUserInfoByUserAccountEx(
-      userAccount,
-      connection
-    );
-    const jsonParams = {
-      userAccount: userAccount,
-      connection: connection,
-      toJSON: () => {
-        return {
-          userAccount: userAccount,
-          connection: connection,
-        };
-      },
-    };
+  getUserInfoByUserAccountEx(): {
+    userAccount: string;
+    userInfo: UserInfo;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromGetUserInfoByUserAccountEx();
+    const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const userAccount = jsonResults.userAccount;
     const userInfo = jsonResults.userInfo;
-    return userInfo;
+    const connection = jsonResults.connection;
+    return {
+      userAccount,
+      userInfo,
+      connection,
+    };
   }
 
-  protected getApiTypeFromGetUserInfoByUserAccountEx(
-    userAccount: string,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromGetUserInfoByUserAccountEx(): string {
     return 'RtcEngineEx_getUserInfoByUserAccountEx';
   }
 
-  getUserInfoByUidEx(uid: number, connection: RtcConnection): UserInfo {
-    const apiType = this.getApiTypeFromGetUserInfoByUidEx(uid, connection);
+  getUserInfoByUidEx(uid: number): {
+    userInfo: UserInfo;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromGetUserInfoByUidEx(uid);
     const jsonParams = {
       uid: uid,
-      connection: connection,
       toJSON: () => {
         return {
           uid: uid,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     const userInfo = jsonResults.userInfo;
-    return userInfo;
+    const connection = jsonResults.connection;
+    return {
+      userInfo,
+      connection,
+    };
   }
 
-  protected getApiTypeFromGetUserInfoByUidEx(
-    uid: number,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromGetUserInfoByUidEx(uid: number): string {
     return 'RtcEngineEx_getUserInfoByUidEx';
   }
 
-  enableDualStreamModeEx(
-    enabled: boolean,
-    streamConfig: SimulcastStreamConfig,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromEnableDualStreamModeEx(
-      enabled,
-      streamConfig,
-      connection
-    );
+  enableDualStreamModeEx(enabled: boolean): {
+    streamConfig: SimulcastStreamConfig;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromEnableDualStreamModeEx(enabled);
     const jsonParams = {
       enabled: enabled,
-      streamConfig: streamConfig,
-      connection: connection,
       toJSON: () => {
         return {
           enabled: enabled,
-          streamConfig: streamConfig,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const streamConfig = jsonResults.streamConfig;
+    const connection = jsonResults.connection;
+    return {
+      streamConfig,
+      connection,
+    };
   }
 
-  protected getApiTypeFromEnableDualStreamModeEx(
-    enabled: boolean,
-    streamConfig: SimulcastStreamConfig,
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromEnableDualStreamModeEx(enabled: boolean): string {
     return 'RtcEngineEx_enableDualStreamModeEx';
   }
 
-  setDualStreamModeEx(
-    mode: SimulcastStreamMode,
-    streamConfig: SimulcastStreamConfig,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromSetDualStreamModeEx(
-      mode,
-      streamConfig,
-      connection
-    );
+  setDualStreamModeEx(mode: SimulcastStreamMode): {
+    streamConfig: SimulcastStreamConfig;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromSetDualStreamModeEx(mode);
     const jsonParams = {
       mode: mode,
-      streamConfig: streamConfig,
-      connection: connection,
       toJSON: () => {
         return {
           mode: mode,
-          streamConfig: streamConfig,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const streamConfig = jsonResults.streamConfig;
+    const connection = jsonResults.connection;
+    return {
+      streamConfig,
+      connection,
+    };
   }
 
   protected getApiTypeFromSetDualStreamModeEx(
-    mode: SimulcastStreamMode,
-    streamConfig: SimulcastStreamConfig,
-    connection: RtcConnection
+    mode: SimulcastStreamMode
   ): string {
     return 'RtcEngineEx_setDualStreamModeEx';
   }
@@ -1424,93 +1094,96 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   setHighPriorityUserListEx(
     uidList: number[],
     uidNum: number,
-    option: StreamFallbackOptions,
-    connection: RtcConnection
-  ): number {
+    option: StreamFallbackOptions
+  ): RtcConnection {
     const apiType = this.getApiTypeFromSetHighPriorityUserListEx(
       uidList,
       uidNum,
-      option,
-      connection
+      option
     );
     const jsonParams = {
       uidList: uidList,
       uidNum: uidNum,
       option: option,
-      connection: connection,
       toJSON: () => {
         return {
           uidList: uidList,
           uidNum: uidNum,
           option: option,
-          connection: connection,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    return connection;
   }
 
   protected getApiTypeFromSetHighPriorityUserListEx(
     uidList: number[],
     uidNum: number,
-    option: StreamFallbackOptions,
-    connection: RtcConnection
+    option: StreamFallbackOptions
   ): string {
     return 'RtcEngineEx_setHighPriorityUserListEx';
   }
 
-  takeSnapshotEx(
-    connection: RtcConnection,
-    uid: number,
-    filePath: string
-  ): number {
-    const apiType = this.getApiTypeFromTakeSnapshotEx(
-      connection,
-      uid,
-      filePath
-    );
+  takeSnapshotEx(uid: number): { connection: RtcConnection; filePath: string } {
+    const apiType = this.getApiTypeFromTakeSnapshotEx(uid);
     const jsonParams = {
-      connection: connection,
       uid: uid,
-      filePath: filePath,
       toJSON: () => {
         return {
-          connection: connection,
           uid: uid,
-          filePath: filePath,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const connection = jsonResults.connection;
+    const filePath = jsonResults.filePath;
+    return {
+      connection,
+      filePath,
+    };
   }
 
-  protected getApiTypeFromTakeSnapshotEx(
-    connection: RtcConnection,
-    uid: number,
-    filePath: string
-  ): string {
+  protected getApiTypeFromTakeSnapshotEx(uid: number): string {
     return 'RtcEngineEx_takeSnapshotEx';
   }
 
-  startMediaRenderingTracingEx(connection: RtcConnection): number {
-    const apiType = this.getApiTypeFromStartMediaRenderingTracingEx(connection);
+  enableContentInspectEx(enabled: boolean): {
+    config: ContentInspectConfig;
+    connection: RtcConnection;
+  } {
+    const apiType = this.getApiTypeFromEnableContentInspectEx(enabled);
     const jsonParams = {
-      connection: connection,
+      enabled: enabled,
       toJSON: () => {
         return {
-          connection: connection,
+          enabled: enabled,
         };
       },
     };
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
+    const config = jsonResults.config;
+    const connection = jsonResults.connection;
+    return {
+      config,
+      connection,
+    };
   }
 
-  protected getApiTypeFromStartMediaRenderingTracingEx(
-    connection: RtcConnection
-  ): string {
+  protected getApiTypeFromEnableContentInspectEx(enabled: boolean): string {
+    return 'RtcEngineEx_enableContentInspectEx';
+  }
+
+  startMediaRenderingTracingEx(): RtcConnection {
+    const apiType = this.getApiTypeFromStartMediaRenderingTracingEx();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const connection = jsonResults.connection;
+    return connection;
+  }
+
+  protected getApiTypeFromStartMediaRenderingTracingEx(): string {
     return 'RtcEngineEx_startMediaRenderingTracingEx';
   }
 }

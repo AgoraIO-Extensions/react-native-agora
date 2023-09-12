@@ -141,9 +141,8 @@ export abstract class IBaseSpatialAudioEngine {
     position: number[],
     axisForward: number[],
     axisRight: number[],
-    axisUp: number[],
-    connection: RtcConnection
-  ): number;
+    axisUp: number[]
+  ): RtcConnection;
 
   /**
    * Updates the spatial position of the media player.
@@ -157,15 +156,12 @@ export abstract class IBaseSpatialAudioEngine {
    * 0: Success.
    *  < 0: Failure.
    */
-  abstract updatePlayerPositionInfo(
-    playerId: number,
-    positionInfo: RemoteVoicePositionInfo
-  ): number;
+  abstract updatePlayerPositionInfo(playerId: number): RemoteVoicePositionInfo;
 
   /**
    * @ignore
    */
-  abstract setParameters(params: string): number;
+  abstract setParameters(): string;
 
   /**
    * Stops or resumes publishing the local audio stream.
@@ -273,31 +269,12 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
    */
   abstract initialize(): number;
 
-  /**
-   * Updates the spatial position of the specified remote user.
-   *
-   * After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user. Call this method after joinChannel.
-   *
-   * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   * @param posInfo The spatial position of the remote user. See RemoteVoicePositionInfo.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract updateRemotePosition(
-    uid: number,
-    posInfo: RemoteVoicePositionInfo
-  ): number;
+  abstract updateRemotePosition(uid: number): RemoteVoicePositionInfo;
 
-  /**
-   * @ignore
-   */
-  abstract updateRemotePositionEx(
-    uid: number,
-    posInfo: RemoteVoicePositionInfo,
-    connection: RtcConnection
-  ): number;
+  abstract updateRemotePositionEx(uid: number): {
+    posInfo: RemoteVoicePositionInfo;
+    connection: RtcConnection;
+  };
 
   /**
    * Removes the spatial position of the specified remote user.
@@ -315,10 +292,7 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
   /**
    * @ignore
    */
-  abstract removeRemotePositionEx(
-    uid: number,
-    connection: RtcConnection
-  ): number;
+  abstract removeRemotePositionEx(uid: number): RtcConnection;
 
   /**
    * Removes the spatial positions of all remote users.
@@ -334,7 +308,7 @@ export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
   /**
    * @ignore
    */
-  abstract clearRemotePositionsEx(connection: RtcConnection): number;
+  abstract clearRemotePositionsEx(): RtcConnection;
 
   /**
    * Sets the sound attenuation effect for the specified user.
