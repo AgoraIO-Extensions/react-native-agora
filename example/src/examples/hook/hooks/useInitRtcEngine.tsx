@@ -12,7 +12,10 @@ import Config from '../../../config/agora.config';
 import * as log from '../../../utils/log';
 import { askMediaAccess } from '../../../utils/permissions';
 
-const useInitRtcEngine = (enableVideo: boolean) => {
+const useInitRtcEngine = (
+  enableVideo: boolean,
+  listenUserJoinOrLeave: boolean = true
+) => {
   const [appId] = useState(Config.appId);
   const [channelId, setChannelId] = useState(Config.channelId);
   const [token] = useState(Config.token);
@@ -159,16 +162,20 @@ const useInitRtcEngine = (enableVideo: boolean) => {
     engine.current.addListener('onError', onError);
     engine.current.addListener('onJoinChannelSuccess', onJoinChannelSuccess);
     engine.current.addListener('onLeaveChannel', onLeaveChannel);
-    engine.current.addListener('onUserJoined', onUserJoined);
-    engine.current.addListener('onUserOffline', onUserOffline);
+    if (listenUserJoinOrLeave) {
+      engine.current.addListener('onUserJoined', onUserJoined);
+      engine.current.addListener('onUserOffline', onUserOffline);
+    }
 
     const engineCopy = engine.current;
     return () => {
       engineCopy.removeListener('onError', onError);
       engineCopy.removeListener('onJoinChannelSuccess', onJoinChannelSuccess);
       engineCopy.removeListener('onLeaveChannel', onLeaveChannel);
-      engineCopy.removeListener('onUserJoined', onUserJoined);
-      engineCopy.removeListener('onUserOffline', onUserOffline);
+      if (listenUserJoinOrLeave) {
+        engineCopy.removeListener('onUserJoined', onUserJoined);
+        engineCopy.removeListener('onUserOffline', onUserOffline);
+      }
     };
   }, [
     engine,
@@ -178,6 +185,7 @@ const useInitRtcEngine = (enableVideo: boolean) => {
     onLeaveChannel,
     onUserJoined,
     onUserOffline,
+    listenUserJoinOrLeave,
   ]);
 
   return {

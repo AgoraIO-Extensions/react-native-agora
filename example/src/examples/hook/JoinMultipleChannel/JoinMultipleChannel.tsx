@@ -37,7 +37,7 @@ export default function JoinMultipleChannel() {
     /**
      * Step 1: initRtcEngine
      */
-    useInitRtcEngine(enableVideo);
+    useInitRtcEngine(enableVideo, false);
 
   const [channelId2, setChannelId2] = useState<string>('');
   const [token2] = useState<string>('');
