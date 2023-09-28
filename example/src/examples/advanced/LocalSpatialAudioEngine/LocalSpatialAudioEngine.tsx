@@ -218,8 +218,10 @@ export default class LocalSpatialAudioEngine
               style={AgoraStyle.fullSize}
               onChangeText={(text) => {
                 if (isNaN(+text)) return;
-                position[index] = +text;
-                this.setState({ position });
+                this.setState((preState) => {
+                  preState.position[index] = +text;
+                  return { position: preState.position };
+                });
               }}
               numberKeyboard={true}
               placeholder={`position (defaults: ${
@@ -236,8 +238,10 @@ export default class LocalSpatialAudioEngine
               style={AgoraStyle.fullSize}
               onChangeText={(text) => {
                 if (isNaN(+text)) return;
-                axisForward[index] = +text;
-                this.setState({ axisForward });
+                this.setState((preState) => {
+                  preState.axisForward[index] = +text;
+                  return { axisForward: preState.axisForward };
+                });
               }}
               numberKeyboard={true}
               placeholder={`axisForward (defaults: ${
@@ -254,8 +258,10 @@ export default class LocalSpatialAudioEngine
               style={AgoraStyle.fullSize}
               onChangeText={(text) => {
                 if (isNaN(+text)) return;
-                axisRight[index] = +text;
-                this.setState({ axisRight });
+                this.setState((preState) => {
+                  preState.axisRight[index] = +text;
+                  return { axisRight: preState.axisRight };
+                });
               }}
               numberKeyboard={true}
               placeholder={`axisRight (defaults: ${
@@ -272,8 +278,10 @@ export default class LocalSpatialAudioEngine
               style={AgoraStyle.fullSize}
               onChangeText={(text) => {
                 if (isNaN(+text)) return;
-                axisUp[index] = +text;
-                this.setState({ axisUp });
+                this.setState((preState) => {
+                  preState.axisUp[index] = +text;
+                  return { axisUp: preState.axisUp };
+                });
               }}
               numberKeyboard={true}
               placeholder={`axisUp (defaults: ${

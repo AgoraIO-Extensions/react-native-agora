@@ -212,7 +212,7 @@ export default function AudioMixing() {
         <AgoraTextInput
           onChangeText={(text) => {
             if (isNaN(+text)) return;
-            setCycle(text === '' ? cycle : +text);
+            setCycle((prev) => (text === '' ? prev : +text));
           }}
           numberKeyboard={true}
           placeholder={`cycle (defaults: ${cycle})`}
@@ -220,7 +220,7 @@ export default function AudioMixing() {
         <AgoraTextInput
           onChangeText={(text) => {
             if (isNaN(+text)) return;
-            setStartPos(text === '' ? startPos : +text);
+            setStartPos((prev) => (text === '' ? prev : +text));
           }}
           numberKeyboard={true}
           placeholder={`startPos (defaults: ${startPos})`}

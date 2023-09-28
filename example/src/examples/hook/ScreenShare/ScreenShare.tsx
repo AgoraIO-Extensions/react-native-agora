@@ -394,7 +394,7 @@ export default function ScreenShare() {
           editable={!publishScreenCapture}
           onChangeText={(text) => {
             if (isNaN(+text)) return;
-            setUid2(text === '' ? uid2 : +text);
+            setUid2((prev) => (text === '' ? prev : +text));
           }}
           numberKeyboard={true}
           placeholder={`uid2 (must > 0)`}
@@ -415,7 +415,7 @@ export default function ScreenShare() {
                 <AgoraTextInput
                   onChangeText={(text) => {
                     if (isNaN(+text)) return;
-                    setSampleRate(text === '' ? sampleRate : +text);
+                    setSampleRate((prev) => (text === '' ? prev : +text));
                   }}
                   numberKeyboard={true}
                   placeholder={`sampleRate (defaults: ${sampleRate})`}
@@ -423,7 +423,7 @@ export default function ScreenShare() {
                 <AgoraTextInput
                   onChangeText={(text) => {
                     if (isNaN(+text)) return;
-                    setChannels(text === '' ? channels : +text);
+                    setChannels((prev) => (text === '' ? prev : +text));
                   }}
                   numberKeyboard={true}
                   placeholder={`channels (defaults: ${channels})`}
@@ -458,7 +458,7 @@ export default function ScreenShare() {
                 style={AgoraStyle.fullSize}
                 onChangeText={(text) => {
                   if (isNaN(+text)) return;
-                  setWidth(text === '' ? width : +text);
+                  setWidth((prev) => (text === '' ? prev : +text));
                 }}
                 numberKeyboard={true}
                 placeholder={`width (defaults: ${width})`}
@@ -467,7 +467,7 @@ export default function ScreenShare() {
                 style={AgoraStyle.fullSize}
                 onChangeText={(text) => {
                   if (isNaN(+text)) return;
-                  setHeight(text === '' ? height : +text);
+                  setHeight((prev) => (text === '' ? prev : +text));
                 }}
                 numberKeyboard={true}
                 placeholder={`height (defaults: ${height})`}
@@ -476,7 +476,7 @@ export default function ScreenShare() {
             <AgoraTextInput
               onChangeText={(text) => {
                 if (isNaN(+text)) return;
-                setFrameRate(text === '' ? frameRate : +text);
+                setFrameRate((prev) => (text === '' ? prev : +text));
               }}
               numberKeyboard={true}
               placeholder={`frameRate (defaults: ${frameRate})`}
@@ -484,7 +484,7 @@ export default function ScreenShare() {
             <AgoraTextInput
               onChangeText={(text) => {
                 if (isNaN(+text)) return;
-                setBitrate(text === '' ? bitrate : +text);
+                setBitrate((prev) => (text === '' ? prev : +text));
               }}
               numberKeyboard={true}
               placeholder={`bitrate (defaults: ${bitrate})`}

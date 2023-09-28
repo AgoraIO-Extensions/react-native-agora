@@ -139,10 +139,10 @@ export abstract class BaseComponent<
       'elapsed',
       elapsed
     );
-    const { remoteUsers } = this.state;
-    if (remoteUsers === undefined) return;
-    this.setState({
-      remoteUsers: [...remoteUsers!, remoteUid],
+    this.setState((preState) => {
+      return {
+        remoteUsers: [...(preState.remoteUsers ?? []), remoteUid],
+      };
     });
   }
 
@@ -160,10 +160,10 @@ export abstract class BaseComponent<
       'reason',
       reason
     );
-    const { remoteUsers } = this.state;
-    if (remoteUsers === undefined) return;
-    this.setState({
-      remoteUsers: remoteUsers!.filter((value) => value !== remoteUid),
+    this.setState((preState) => {
+      return {
+        remoteUsers: preState.remoteUsers?.filter((uid) => uid !== remoteUid),
+      };
     });
   }
 

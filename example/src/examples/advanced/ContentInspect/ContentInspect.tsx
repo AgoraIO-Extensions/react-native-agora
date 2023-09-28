@@ -176,17 +176,24 @@ export default class ContentInspect
                 this.error('interval is invalid');
                 return;
               }
-              this.setState({
-                modules: [...modules, { type, interval }],
+              this.setState((preState) => {
+                return {
+                  modules: [
+                    ...preState.modules,
+                    { type: preState.type, interval: preState.interval },
+                  ],
+                };
               });
             }}
           />
           <AgoraButton
             title={'Remove'}
             onPress={() => {
-              modules.pop();
-              this.setState({
-                modules: modules,
+              this.setState((preState) => {
+                preState.modules.pop();
+                return {
+                  modules: preState.modules,
+                };
               });
             }}
           />

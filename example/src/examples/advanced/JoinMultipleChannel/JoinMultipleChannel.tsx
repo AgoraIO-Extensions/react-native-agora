@@ -328,28 +328,39 @@ export default class JoinMultipleChannel
       'elapsed',
       elapsed
     );
-    const { channelId, channelId2, uid, uid2, remoteUsers, remoteUsers2 } =
-      this.state;
+    const { channelId, channelId2, uid, uid2 } = this.state;
     if (state === RemoteVideoState.RemoteVideoStateStarting) {
       if (connection.channelId === channelId && connection.localUid === uid) {
-        this.setState({ remoteUsers: [...remoteUsers, remoteUid] });
-      } else if (
-        connection.channelId === channelId2 &&
-        connection.localUid === uid2
-      ) {
-        this.setState({ remoteUsers2: [...remoteUsers2, remoteUid] });
-      }
-    } else if (state === RemoteVideoState.RemoteVideoStateStopped) {
-      if (connection.channelId === channelId && connection.localUid === uid) {
-        this.setState({
-          remoteUsers: remoteUsers.filter((value) => value !== remoteUid),
+        this.setState((preState) => {
+          return { remoteUsers: [...preState.remoteUsers, remoteUid] };
         });
       } else if (
         connection.channelId === channelId2 &&
         connection.localUid === uid2
       ) {
-        this.setState({
-          remoteUsers2: remoteUsers2.filter((value) => value !== remoteUid),
+        this.setState((preState) => {
+          return { remoteUsers2: [...preState.remoteUsers2, remoteUid] };
+        });
+      }
+    } else if (state === RemoteVideoState.RemoteVideoStateStopped) {
+      if (connection.channelId === channelId && connection.localUid === uid) {
+        this.setState((preState) => {
+          return {
+            remoteUsers: preState.remoteUsers.filter(
+              (value) => value !== remoteUid
+            ),
+          };
+        });
+      } else if (
+        connection.channelId === channelId2 &&
+        connection.localUid === uid2
+      ) {
+        this.setState((preState) => {
+          return {
+            remoteUsers2: preState.remoteUsers2.filter(
+              (value) => value !== remoteUid
+            ),
+          };
         });
       }
     }
