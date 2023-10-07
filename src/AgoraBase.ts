@@ -1971,7 +1971,7 @@ export enum LocalAudioStreamError {
    */
   LocalAudioStreamErrorNoPlayoutDevice = 7,
   /**
-   * @ignore
+   * 8: The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
    */
   LocalAudioStreamErrorInterrupted = 8,
   /**
@@ -2035,11 +2035,11 @@ export enum LocalVideoStreamError {
    */
   LocalVideoStreamErrorEncodeFailure = 5,
   /**
-   * 6: (For iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+   * 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
    */
   LocalVideoStreamErrorCaptureInbackground = 6,
   /**
-   * 7: (For iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+   * 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
    */
   LocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
   /**
@@ -2775,7 +2775,7 @@ export class LiveTranscoding {
    */
   height?: number;
   /**
-   * Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps.
+   * Bitrate of the output video stream for Media Push in Kbps. The default value is 400 Kbps. Set this member according to the table. If you set a bitrate beyond the proper range, the SDK automatically adapts it to a value within the range.
    */
   videoBitrate?: number;
   /**
@@ -3264,7 +3264,7 @@ export enum NetworkType {
    */
   NetworkTypeMobile4g = 5,
   /**
-   * @ignore
+   * 6: The network type is mobile 5G.
    */
   NetworkTypeMobile5g = 6,
 }
@@ -3956,7 +3956,7 @@ export enum AudioEncodedFrameObserverPosition {
  */
 export class AudioRecordingConfiguration {
   /**
-   * The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.mp4. Ensure that the directory for the log files exists and is writable.
+   * The absolute path (including the filename extensions) of the recording file. For example: C:\music\audio.aac. Ensure that the directory for the log files exists and is writable.
    */
   filePath?: string;
   /**

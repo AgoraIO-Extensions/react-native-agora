@@ -1216,15 +1216,15 @@ export enum ProxyType {
 }
 
 /**
- * @ignore
+ * The type of the advanced feature.
  */
 export enum FeatureType {
   /**
-   * @ignore
+   * 1: Virtual background.
    */
   VideoVirtualBackground = 1,
   /**
-   * @ignore
+   * 2: Image enhancement.
    */
   VideoBeautyEffect = 2,
 }
@@ -3253,7 +3253,8 @@ export abstract class IRtcEngine {
    *
    * Enables or disables image enhancement, and sets the options.
    *  Call this method before calling enableVideo or startPreview.
-   *  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   *  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device.
    *
    * @param enabled Whether to enable the image enhancement function: true : Enable the image enhancement function. false : (Default) Disable the image enhancement function.
    * @param options The image enhancement options. See BeautyOptions.
@@ -3263,7 +3264,10 @@ export abstract class IRtcEngine {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. ErrNotSupported (4): The current device version is below Android 5.0, and this operation is not supported.
+   *  < 0: Failure.
+   *  -4: The current device does not support this feature. Possible reasons include:
+   *  The current device capabilities do not meet the requirements for image enhancement. Agora recommends you replace it with a high-performance device.
+   *  The current device version is lower than Android 5.0 and does not support this feature. Agora recommends you replace the device or upgrade the operating system.
    */
   abstract setBeautyEffectOptions(
     enabled: boolean,
@@ -3280,7 +3284,7 @@ export abstract class IRtcEngine {
    *  Both this method and setExtensionProperty can turn on low-light enhancement:
    *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
    *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
    *
    * @param enabled Whether to enable low-light enhancement function: true : Enable low-light enhancement function. false : (Default) Disable low-light enhancement function.
    * @param options The low-light enhancement options. See LowlightEnhanceOptions.
@@ -3305,7 +3309,7 @@ export abstract class IRtcEngine {
    *  Both this method and setExtensionProperty can turn on video noise reduction function:
    *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
    *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
    *
    * @param enabled Whether to enable video noise reduction: true : Enable video noise reduction. false : (Default) Disable video noise reduction.
    * @param options The video noise reduction options. See VideoDenoiserOptions.
@@ -3330,7 +3334,7 @@ export abstract class IRtcEngine {
    *  Both this method and setExtensionProperty can enable color enhancement:
    *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
    *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the video enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
    *
    * @param enabled Whether to enable color enhancement: true Enable color enhancement. false : (Default) Disable color enhancement.
    * @param options The color enhancement options. See ColorEnhanceOptions.
@@ -3350,7 +3354,7 @@ export abstract class IRtcEngine {
    * Enables/Disables the virtual background.
    *
    * The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method before calling enableVideo or startPreview.
-   *  This feature requires high performance devices. Agora recommends that you implement it on devices equipped with the following chips:
+   *  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device. Agora recommends you use virtual background on devices with the following processors:
    *  Snapdragon 700 series 750G and later
    *  Snapdragon 800 series 835 and later
    *  Dimensity 700 series 720 and later
@@ -3377,9 +3381,7 @@ export abstract class IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
-   *  -1: The custom background image does not exist. Check the value of source in VirtualBackgroundSource.
-   *  -2: The color format of the custom background image is invalid. Check the value of color in VirtualBackgroundSource.
-   *  -3: The device does not support virtual background.
+   *  -4: The device capabilities do not meet the requirements for the virtual background feature. Agora recommends you try it on devices with higher performance.
    */
   abstract enableVirtualBackground(
     enabled: boolean,
@@ -3484,7 +3486,7 @@ export abstract class IRtcEngine {
   /**
    * Enables or disables the local audio capture.
    *
-   * The audio function is enabled by default when users joining a channel. This method disables or re-enables the local audio function to stop or restart local audio capturing. This method does not affect receiving or playing the remote audio streams, and enableLocalAudio (false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel. Once the local audio function is disabled or re-enabled, the SDK triggers the onLocalAudioStateChanged callback, which reports LocalAudioStreamStateStopped (0) or LocalAudioStreamStateRecording (1).
+   * The audio function is enabled by default when users joining a channel. This method disables or re-enables the local audio function to stop or restart local audio capturing. This method does not affect receiving the remote audio streams, and enableLocalAudio (false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel. Once the local audio function is disabled or re-enabled, the SDK triggers the onLocalAudioStateChanged callback, which reports LocalAudioStreamStateStopped (0) or LocalAudioStreamStateRecording (1).
    *  The difference between this method and muteLocalAudioStream are as follow: enableLocalAudio : Disables or re-enables the local audio capturing and processing. If you disable or re-enable local audio capturing using the enableLocalAudio method, the local user might hear a pause in the remote audio playback. muteLocalAudioStream : Sends or stops sending the local audio streams.
    *  You can call this method either before or after joining a channel. Calling it before joining a channel only sets the device state, and it takes effect immediately after you join the channel.
    *
@@ -3651,7 +3653,7 @@ export abstract class IRtcEngine {
   /**
    * Sets the default stream type of subscrption for remote video streams.
    *
-   * By default, the SDK enables the low-quality video stream auto mode on the sending end (it does not actively send the low-quality video stream). The host identity receiver can initiate a low-quality video stream application at the receiving end by calling this method (the call to this method by the audience receiver does not take effect). After receiving the application, the sending end automatically switches to the low-quality video stream mode. Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
+   * By default, the SDK enables the low-quality video stream auto mode on the sending end (it does not actively send the low-quality video stream). The host identity receiver can initiate a low-quality video stream application at the receiving end by calling this method (the call to this method by the audience receiver does not take effect). After receiving the application, the sending end automatically switches to the low-quality video stream mode. Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
    *  Call this method before joining a channel. The SDK does not support changing the default subscribed video stream type after joining a channel.
    *  If you call both this method and setRemoteVideoStreamType, the SDK applies the settings in the setRemoteVideoStreamType method.
    *
@@ -4035,7 +4037,7 @@ export abstract class IRtcEngine {
    * Sets the channel mode of the current audio file.
    *
    * In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.
-   *  Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
+   *  You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
    *  This method only applies to stereo audio files.
    *
    * @param mode The channel mode. See AudioMixingDualMonoMode.
@@ -5623,7 +5625,7 @@ export abstract class IRtcEngine {
    *
    * This method applies to Android and iOS only.
    *  On the iOS platform, screen sharing is only available on iOS 12.0 and later.
-   *  The billing for the screen sharing stream is based on the dimensions in ScreenVideoParameters. When you do not pass in a value, Agora bills you at 1280 × 720; when you pass a value in, Agora bills you at that value.
+   *  The billing for the screen sharing stream is based on the dimensions in ScreenVideoParameters. When you do not pass in a value, Agora bills you at 1280 × 720; when you pass a value in, Agora bills you at that value. For billing details, see.
    *  If you are using the custom audio source instead of the SDK to capture audio, Agora recommends you add the keep-alive processing logic to your application to avoid screen sharing stopping when the application goes to the background.
    *  This feature requires high-performance device, and Agora recommends that you use it on iPhone X and later models.
    *  This method relies on the iOS screen sharing dynamic library AgoraReplayKitExtension.xcframework. If the dynamic library is deleted, screen sharing cannot be enabled normally.
@@ -6555,11 +6557,10 @@ export abstract class IRtcEngine {
   /**
    * Enables or disables video screenshot and upload.
    *
-   * When video screenshot and upload function is enabled, the SDK takes screenshots and upload videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service. Before calling this method, ensure that the video screenshot upload service has been activated. Before calling this method, ensure that Video content moderation service has been activated.
-   *  This method relies on the video screenshot and upload dynamic library libagora_content_inspect_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   * When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service. Before calling this method, ensure that you have contacted to activate the video screenshot upload service.
    *
    * @param enabled Whether to enable video screenshot and upload : true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-   * @param config Configuration of video screenshot and upload. See ContentInspectConfig.
+   * @param config Configuration of video screenshot and upload. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(ContentInspectSupervise ContentInspectImageModeration), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
    *
    * @returns
    * 0: Success.
@@ -6588,7 +6589,16 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * @ignore
+   * Adjusts the volume of the custom audio track played locally.
+   *
+   * Ensure you have called the createCustomAudioTrack method to create a custom audio track before calling this method. If you want to change the volume of the audio to be played locally, you need to call this method again.
+   *
+   * @param trackId The audio track ID. Set this parameter to the custom audio track ID returned in createCustomAudioTrack.
+   * @param volume The volume of the audio source. The value can range from 0 to 100. 0 means mute; 100 means the original volume.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract adjustCustomAudioPlayoutVolume(
     trackId: number,
@@ -6741,7 +6751,14 @@ export abstract class IRtcEngine {
   abstract getNtpWallTimeInMs(): number;
 
   /**
-   * @ignore
+   * Checks whether the device supports the specified advanced feature.
+   *
+   * Checks whether the capabilities of the current device meet the requirements for advanced features such as virtual background and image enhancement.
+   *
+   * @param type The type of the advanced feature, see FeatureType.
+   *
+   * @returns
+   * true : The current device supports the specified feature. false : The current device does not support the specified feature.
    */
   abstract isFeatureAvailableOnDevice(type: FeatureType): boolean;
 
