@@ -2944,10 +2944,6 @@ export class LocalTranscoderConfiguration {
  */
 export enum VideoTranscoderError {
   /**
-   * @ignore
-   */
-  VtErrOk = 0,
-  /**
    * 1: The selected video source has not started video capture. You need to create a video track for it and start video capture.
    */
   VtErrVideoSourceNotReady = 1,
