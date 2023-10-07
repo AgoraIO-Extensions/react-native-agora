@@ -286,7 +286,7 @@ export abstract class IMediaEngine {
   abstract unregisterVideoFrameObserver(observer: IVideoFrameObserver): number;
 
   /**
-   * Unregisters a receiver object for the encoded video image.
+   * Unregisters a receiver object for the encoded video frame.
    *
    * @param observer The video observer, reporting the reception of each video frame. See IVideoEncodedFrameObserver.
    *

@@ -260,7 +260,7 @@ export enum ContentInspectType {
    */
   ContentInspectInvalid = 0,
   /**
-   * 1: Video content moderation. SDK takes screenshots, inspects video content of the video stream in the channel, and uploads the screenshots and moderation results.
+   * @ignore
    */
   ContentInspectModeration = 1,
   /**
@@ -268,7 +268,7 @@ export enum ContentInspectType {
    */
   ContentInspectSupervision = 2,
   /**
-   * @ignore
+   * 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
    */
   ContentInspectImageModeration = 3,
 }
@@ -296,7 +296,7 @@ export class ContentInspectConfig {
    */
   extraInfo?: string;
   /**
-   * @ignore
+   * (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to ContentInspectImageModeration. If you want to use it, contact.
    */
   serverConfig?: string;
   /**
@@ -414,7 +414,7 @@ export enum VideoPixelFormat {
    */
   VideoPixelRgba = 4,
   /**
-   * 8: The format is NV12.
+   * @ignore
    */
   VideoPixelNv12 = 8,
   /**
