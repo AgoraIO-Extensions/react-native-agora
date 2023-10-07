@@ -264,7 +264,7 @@ export enum ContentInspectType {
    */
   ContentInspectModeration = 1,
   /**
-   * @ignore
+   * 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
    */
   ContentInspectSupervision = 2,
   /**
