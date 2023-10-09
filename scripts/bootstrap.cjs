@@ -6,10 +6,6 @@ module.exports = {
     return {
       hooks: {
         afterAllInstalled(project, options) {
-          if (process.env.POD_INSTALL === '0') {
-            return;
-          }
-
           if (
             options &&
             (options.mode === 'update-lockfile' ||
