@@ -1,13 +1,13 @@
 {
-  "name": "AgoraRtcNgExample",
+  "name": "react-native-agora-example",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "pods": "pod-install --quiet",
-    "install": "yarn patch-package"
+    "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
+    "build:ios": "cd ios && xcodebuild -workspace AgoraExample.xcworkspace -scheme AgoraExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
     "@react-native-community/slider": "^4.4.2",
@@ -17,7 +17,7 @@
     "@rneui/base": "^4.0.0-rc.7",
     "@rneui/themed": "^4.0.0-rc.7",
     "react": "18.2.0",
-    "react-native": "0.71.4",
+    "react-native": "0.72.5",
     "react-native-agora-rawdata": "git+https://github.com/AgoraLibrary/react-native-agora-rawdata.git#7fa07cc6308808f5f7e1c2e56502835471323707",
     "react-native-chart-kit": "^6.12.0",
     "react-native-color-picker": "^0.6.0",
@@ -34,10 +34,14 @@
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "babel-plugin-module-resolver": "^4.1.0",
+    "@react-native/metro-config": "^0.72.11",
+    "babel-plugin-module-resolver": "^5.0.0",
     "detox": "^20.6.0",
     "jest": "^29.5.0",
-    "metro-react-native-babel-preset": "0.73.8",
-    "patch-package": "^6.5.1"
+    "metro-react-native-babel-preset": "0.76.8",
+    "pod-install": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }
