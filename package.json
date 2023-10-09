@@ -33,11 +33,10 @@
     "example": "yarn workspace react-native-agora-example",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "lint": "eslint \"**/*.{cjs,js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "release": "release-it",
-    "ts_interface_builder": "yarn ts-interface-builder src/*.ts -o src/ti/",
     "doc": "typedoc src --out ./docs --exclude \"example/**\""
   },
   "keywords": [
