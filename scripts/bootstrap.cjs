@@ -43,7 +43,7 @@ module.exports = {
               }
             ).status !== 0
           ) {
-            throw new Error('Failed to run pod-install');
+            throw new Error('Failed to run ts-interface-builder');
           }
         },
       },

@@ -8,8 +8,8 @@
     "start": "react-native start",
     "build:android": "cd android && ./gradlew assembleRelease --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
     "build:ios": "cd ios && fastlane gym --export_method \"development\" --export_options \"{\\\"compileBitcode\\\":false}\" CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
-    "detex:android": "detox build --configuration android.emu.release",
-    "detex:ios": "detox build --configuration ios.sim.release"
+    "detox:android": "detox build --configuration android.emu.release",
+    "detox:ios": "detox build --configuration ios.sim.release"
   },
   "dependencies": {
     "@react-native-community/slider": "^4.4.2",
