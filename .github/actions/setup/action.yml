@@ -24,5 +24,4 @@ runs:
     - name: Install dependencies
       run: |
         yarn install --immutable
-        yarn patch-package
       shell: bash
