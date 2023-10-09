@@ -22,6 +22,6 @@ runs:
           ${{ runner.os }}-yarn-ng-
 
     - name: Install dependencies
-      run: |
-        yarn install --immutable
+      if: steps.yarn-cache.outputs.cache-hit != 'true'
+      run: yarn install --immutable
       shell: bash

@@ -54,6 +54,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Modify APP ID
+        run: |
+          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
+          mv tmp agora.config.ts
+        working-directory: example/src/config
+
       - name: Build example for Android
         run: |
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
