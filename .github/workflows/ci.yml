@@ -110,7 +110,7 @@ jobs:
       - name: Install Detox dependencies
         shell: bash
         run: |
-          npm i -D detox-cli react-native-cli
+          npm i -g detox-cli react-native-cli
 
       - name: Modify APP ID
         run: |
@@ -184,7 +184,7 @@ jobs:
       - name: Install Detox dependencies
         shell: bash
         run: |
-          npm i -D detox-cli react-native-cli
+          npm i -g detox-cli react-native-cli
           brew tap wix/brew
           brew install applesimutils
 
