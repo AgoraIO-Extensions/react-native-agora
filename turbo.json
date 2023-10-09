@@ -29,6 +29,16 @@
         "!example/ios/Pods"
       ],
       "outputs": []
+    },
+    "detox:android": {
+      "dependsOn": [
+        "build:android"
+      ]
+    },
+    "detox:ios": {
+      "dependsOn": [
+        "build:ios"
+      ]
     }
   }
 }
