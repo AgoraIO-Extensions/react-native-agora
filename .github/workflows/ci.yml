@@ -72,9 +72,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-android-newArch_${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-android-newArch_${{ matrix.newArch }}-
+            ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-
 
       - name: Check turborepo cache for Android
         run: |
@@ -151,9 +151,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-ios-newArch_${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-ios-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-ios-newArch_${{ matrix.newArch }}-
+            ${{ runner.os }}-turborepo-ios-detox-${{ matrix.newArch }}-
 
       - name: Check turborepo cache for iOS
         run: |
@@ -170,9 +170,9 @@ jobs:
         with:
           path: |
             **/ios/Pods
-          key: ${{ runner.os }}-cocoapods-${{ hashFiles('example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-cocoapod-${{ matrix.newArch }}-${{ hashFiles('example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cocoapods-
+            ${{ runner.os }}-cocoapods-${{ matrix.newArch }}-
 
       - name: Install cocoapods
         if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'

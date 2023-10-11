@@ -65,8 +65,7 @@
         "!example/ios/Pods"
       ],
       "outputs": [
-        "example/ios/AgoraRtcNgExample.ipa",
-        "example/ios/AgoraRtcNgExample.app.dSYM"
+        "example/ios/build/Build/Products/Release-iphonesimulator/AgoraRtcNgExample.app"
       ]
     }
   }
