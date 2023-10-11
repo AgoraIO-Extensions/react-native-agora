@@ -19,9 +19,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-android-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-android-newArch_false-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-android-
+            ${{ runner.os }}-turborepo-android-newArch_false-
 
       - name: Check turborepo cache for Android
         run: |
@@ -86,9 +86,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-ios-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-ios-newArch_0-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-ios-
+            ${{ runner.os }}-turborepo-ios-newArch_0-
 
       - name: Check turborepo cache for iOS
         run: |
@@ -113,8 +113,6 @@ jobs:
         if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'
         run: |
           yarn pod-install example/ios
-        env:
-          NO_FLIPPER: 1
 
       - name: Modify APP ID
         run: |

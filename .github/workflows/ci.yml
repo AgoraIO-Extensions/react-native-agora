@@ -72,9 +72,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-android-detox-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-android-newArch_${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-android-detox-
+            ${{ runner.os }}-turborepo-android-newArch_${{ matrix.newArch }}-
 
       - name: Check turborepo cache for Android
         run: |
@@ -103,9 +103,9 @@ jobs:
           path: |
             ~/.gradle/wrapper
             ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-detox-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-detox-
+            ${{ runner.os }}-gradle-
 
       - name: Install Detox dependencies
         shell: bash
@@ -151,9 +151,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-ios-detox-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-ios-newArch_${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-ios-detox-
+            ${{ runner.os }}-turborepo-ios-newArch_${{ matrix.newArch }}-
 
       - name: Check turborepo cache for iOS
         run: |
@@ -170,16 +170,14 @@ jobs:
         with:
           path: |
             **/ios/Pods
-          key: ${{ runner.os }}-cocoapods-detox-${{ hashFiles('example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-cocoapods-${{ hashFiles('example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cocoapods-detox-
+            ${{ runner.os }}-cocoapods-
 
       - name: Install cocoapods
         if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'
         run: |
           yarn pod-install example/ios
-        env:
-          NO_FLIPPER: 1
 
       - name: Install Detox dependencies
         shell: bash
