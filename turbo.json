@@ -15,7 +15,7 @@
         "!example/android/app/build"
       ],
       "outputs": [
-        "example/android/app/build/outputs/apk/release/app-release.apk"
+        "example/android/app/build/outputs/apk/*"
       ]
     },
     "build:ios": {
@@ -31,8 +31,8 @@
         "!example/ios/Pods"
       ],
       "outputs": [
-        "example/ios/AgoraRtcNgExample.ipa",
-        "example/ios/AgoraRtcNgExample.app.dSYM"
+        "example/ios/*.ipa",
+        "example/ios/*.app.dSYM"
       ]
     },
     "detox:android": {
@@ -49,7 +49,7 @@
         "!example/android/app/build"
       ],
       "outputs": [
-        "example/android/app/build/outputs/apk/release/app-release.apk"
+        "example/android/app/build/outputs/apk/**"
       ]
     },
     "detox:ios": {
@@ -65,7 +65,7 @@
         "!example/ios/Pods"
       ],
       "outputs": [
-        "example/ios/build/Build/Products/Release-iphonesimulator/AgoraRtcNgExample.app"
+        "example/ios/build/Build/Products/**"
       ]
     }
   }
