@@ -124,6 +124,8 @@ jobs:
           yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
       - name: Run e2e tests
+        # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
+        if: ${{ matrix.newArch == false }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
@@ -202,6 +204,8 @@ jobs:
           model: 'iPhone 14'
 
       - name: Run e2e tests
+        # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
+        if: ${{ matrix.newArch == 0 }}
         working-directory: example
         run: |
           detox clean-framework-cache
