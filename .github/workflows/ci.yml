@@ -150,6 +150,12 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Setup gem
+        run: |
+          gem install bundler
+          bundle install
+        working-directory: example
+
       - name: Cache turborepo for iOS
         uses: actions/cache@v3
         with:
