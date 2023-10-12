@@ -61,6 +61,7 @@ jobs:
     env:
       TURBO_CACHE_DIR: .turbo/android
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
+      turbo_cache_hit: 0
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -139,6 +140,7 @@ jobs:
     env:
       TURBO_CACHE_DIR: .turbo/ios
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
+      turbo_cache_hit: 0
     steps:
       - name: Checkout
         uses: actions/checkout@v3
