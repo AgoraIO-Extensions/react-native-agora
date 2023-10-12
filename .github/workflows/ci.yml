@@ -150,11 +150,10 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Setup gem
+      - name: Setup cocoapods
         run: |
-          gem install bundler
-          bundle install
-        working-directory: example
+          gem install cocoapods -v 1.13.0
+          gem install activesupport -v 7.0.8
 
       - name: Cache turborepo for iOS
         uses: actions/cache@v3
