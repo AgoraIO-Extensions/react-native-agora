@@ -122,7 +122,7 @@ jobs:
           name: lock
           path: |
             example/ios/Podfile.lock
-            exmaple/ios/Pods/Manifest.lock
+            example/ios/Pods/Manifest.lock
 
       - name: Modify APP ID
         run: |
