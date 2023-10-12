@@ -116,6 +116,14 @@ jobs:
         run: |
           yarn pod-install example/ios
 
+      - name: Upload Podfile.lock & Manifest.lock
+        uses: actions/upload-artifact@v3
+        with:
+          name: lock
+          path: |
+            example/ios/Podfile.lock
+            exmaple/ios/Pods/Manifest.lock
+
       - name: Modify APP ID
         run: |
           sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
