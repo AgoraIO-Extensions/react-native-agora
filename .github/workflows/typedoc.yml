@@ -29,9 +29,10 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Build TypeDoc
-        run: |
-          yarn install && yarn && yarn run doc
+        run: yarn doc
       - name: Zip It Up 🤐
         run: |
           zip -r react-native-agora-docs.zip docs

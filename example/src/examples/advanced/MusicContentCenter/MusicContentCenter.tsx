@@ -481,8 +481,8 @@ export default class MusicContentCenter
         ) : undefined}
         {songCode >= 0 ? (
           <AgoraButton
-            disabled={open}
-            title={`openWithSongCode`}
+            disabled={open || !preload}
+            title={preload ? `openWithSongCode` : `preloading...`}
             onPress={this.openWithSongCode}
           />
         ) : undefined}

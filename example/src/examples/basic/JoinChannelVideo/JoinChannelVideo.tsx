@@ -122,9 +122,10 @@ export default class JoinChannelVideo
    * Step 3 (Optional): switchCamera
    */
   switchCamera = () => {
-    const { switchCamera } = this.state;
     this.engine?.switchCamera();
-    this.setState({ switchCamera: !switchCamera });
+    this.setState((preState) => {
+      return { switchCamera: !preState.switchCamera };
+    });
   };
 
   /**

@@ -1,6 +1,6 @@
 {
   "name": "react-native-agora",
-  "version": "4.2.2-dev.4",
+  "version": "4.2.3",
   "description": "Agora RTC SDK For React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -30,15 +30,13 @@
     "CHANGELOG.md"
   ],
   "scripts": {
+    "example": "yarn workspace react-native-agora-example",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepack": "bob build",
+    "lint": "eslint \"**/*.{cjs,js,ts,tsx}\"",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "prepare": "bob build",
     "release": "release-it",
-    "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn install && yarn patch-package && yarn ts_interface_builder && yarn example pods",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
-    "ts_interface_builder": "yarn ts-interface-builder src/*.ts -o src/ti/",
     "doc": "typedoc src --out ./docs --exclude \"example/**\""
   },
   "keywords": [
@@ -58,8 +56,8 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
-    "@evilmartians/lefthook": "^1.2.2",
-    "@react-native-community/eslint-config": "^3.0.2",
+    "@evilmartians/lefthook": "^1.5.0",
+    "@react-native/eslint-config": "^0.72.2",
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^28.1.2",
     "@types/json-bigint": "^1.0.1",
@@ -77,12 +75,13 @@
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
     "react": "18.2.0",
-    "react-native": "0.71.4",
+    "react-native": "0.72.5",
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
     "ts-interface-builder": "^0.3.3",
+    "turbo": "^1.10.7",
     "typedoc": "^0.24.1",
-    "typescript": "^4.5.2"
+    "typescript": "^5.0.2"
   },
   "resolutions": {
     "@types/react": "17.0.21"
@@ -91,10 +90,13 @@
     "react": "*",
     "react-native": "*"
   },
+  "workspaces": [
+    "example"
+  ],
+  "packageManager": "yarn@3.6.1",
   "engines": {
-    "node": ">= 16.0.0"
+    "node": ">= 18.0.0"
   },
-  "packageManager": "^yarn@1.22.15",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [

@@ -2,6 +2,11 @@ name: Generate codes
 
 on:
   workflow_dispatch:
+    inputs:
+      terra-ref:
+        description: The terra repo ref
+        required: true
+        default: "main"
 
 jobs:
   generate-codes:
@@ -19,6 +24,7 @@ jobs:
           LLVM_DOWNLOAD_URL: |
             https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz
         with:
+          terra-ref: ${{ inputs.terra-ref }}
           target-path: ${{ github.workspace }}
           config: ci/config/terra_config.yaml
           output-dir: src

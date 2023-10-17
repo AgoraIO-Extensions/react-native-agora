@@ -15,12 +15,15 @@ runs:
       with:
         path: |
           **/node_modules
-        key: ${{ runner.os }}-yarn-ng-${{ hashFiles('**/yarn.lock') }}
+          .yarn/install-state.gz
+        key: ${{ runner.os }}-yarn-ng-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/package.json') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-ng
+          ${{ runner.os }}-yarn-ng-${{ hashFiles('**/yarn.lock') }}
+          ${{ runner.os }}-yarn-ng-
 
     - name: Install dependencies
-      run: |
-        yarn install --frozen-lockfile
-        yarn patch-package
+      env:
+        POD_INSTALL: 0
+      if: steps.yarn-cache.outputs.cache-hit != 'true'
+      run: yarn install --immutable
       shell: bash

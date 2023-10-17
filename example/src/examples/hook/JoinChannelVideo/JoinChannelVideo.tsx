@@ -41,7 +41,7 @@ export default function JoinChannelVideo() {
      * Step 1: initRtcEngine
      */
     useInitRtcEngine(enableVideo);
-  const [switchCamera, setSwitchCamera] = useState(false);
+  const [_, setSwitchCamera] = useState(false);
   const [renderByTextureView, setRenderByTextureView] = useState(false);
   const [setupMode, setSetupMode] = useState(
     VideoViewSetupMode.VideoViewSetupReplace
@@ -77,7 +77,7 @@ export default function JoinChannelVideo() {
    */
   const _switchCamera = () => {
     engine.current.switchCamera();
-    setSwitchCamera(!switchCamera);
+    setSwitchCamera((prev) => !prev);
   };
 
   /**
