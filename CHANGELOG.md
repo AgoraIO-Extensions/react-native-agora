@@ -1,5 +1,13 @@
 
 
+## [4.2.4](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.3...v4.2.4) (2023-10-24)
+
+
+### Bug Fixes
+
+* can not upload to app store because of `CFBundleShortVersionString` not correct ([#716](https://github.com/AgoraIO-Extensions/react-native-agora/issues/716)) ([a358f0c](https://github.com/AgoraIO-Extensions/react-native-agora/commit/a358f0cd210f9c3faa0b8dbb85707ff08333f527))
+* example crash NMS-16331 ([#714](https://github.com/AgoraIO-Extensions/react-native-agora/issues/714)) ([f819293](https://github.com/AgoraIO-Extensions/react-native-agora/commit/f819293b9e123448e541cf40ded3edb19b805833)), closes [#716](https://github.com/AgoraIO-Extensions/react-native-agora/issues/716)
+
 ## [4.2.3](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.1...v4.2.3) (2023-10-17)
 
 
