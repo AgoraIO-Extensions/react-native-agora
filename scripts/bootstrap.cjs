@@ -27,6 +27,18 @@ module.exports = {
           }
 
           if (
+            child_process.spawnSync('yarn', ['example', 'patch-package'], {
+              cwd: project.cwd,
+              env: process.env,
+              stdio: 'inherit',
+              encoding: 'utf-8',
+              shell: true,
+            }).status !== 0
+          ) {
+            throw new Error('Failed to run patch-package');
+          }
+
+          if (
             child_process.spawnSync(
               'yarn',
               ['ts-interface-builder', 'src/*.ts', '-o', 'src/ti/'],
