@@ -13523,7 +13523,7 @@ __metadata:
     pod-install: ^0.1.0
     react: 18.2.0
     react-native: 0.72.5
-    react-native-agora-rawdata: "github:AgoraLibrary/react-native-agora-rawdata#15ecaa324f74a228a7cc2ba4686893e76954e0f8"
+    react-native-agora-rawdata: "github:AgoraLibrary/react-native-agora-rawdata"
     react-native-chart-kit: ^6.12.0
     react-native-color-picker: ^0.6.0
     react-native-fs: ^2.20.0
@@ -13537,7 +13537,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"react-native-agora-rawdata@github:AgoraLibrary/react-native-agora-rawdata#15ecaa324f74a228a7cc2ba4686893e76954e0f8":
+"react-native-agora-rawdata@github:AgoraLibrary/react-native-agora-rawdata":
   version: 0.1.0
   resolution: "react-native-agora-rawdata@https://github.com/AgoraLibrary/react-native-agora-rawdata.git#commit=15ecaa324f74a228a7cc2ba4686893e76954e0f8"
   peerDependencies:
