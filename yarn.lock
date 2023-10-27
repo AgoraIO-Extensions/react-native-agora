@@ -13539,12 +13539,12 @@ __metadata:
 
 "react-native-agora-rawdata@github:AgoraLibrary/react-native-agora-rawdata":
   version: 0.1.0
-  resolution: "react-native-agora-rawdata@https://github.com/AgoraLibrary/react-native-agora-rawdata.git#commit=7fa07cc6308808f5f7e1c2e56502835471323707"
+  resolution: "react-native-agora-rawdata@https://github.com/AgoraLibrary/react-native-agora-rawdata.git#commit=15ecaa324f74a228a7cc2ba4686893e76954e0f8"
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-agora: ">=4.1.0"
-  checksum: bc6259546e34ac7083f27a87e50bb1a9383ce40b64ead8cc7d4ddd247f92102a28213c225d29aea8086bc98453dcc885cf8d4737aff176fb09b1bcd77c29721b
+  checksum: 557b7de05b8f9d8a8237d1034d3cc9487de00d0d4047f834ff981be0e58c065dc813922199a2721a2c174afd25bc6b501614cc1696f1c6c9a1f56347afb6879a
   languageName: node
   linkType: hard
 
