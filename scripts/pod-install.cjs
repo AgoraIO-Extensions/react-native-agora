@@ -6,6 +6,10 @@ module.exports = {
     return {
       hooks: {
         afterAllInstalled(project, options) {
+          if (process.platform !== 'darwin') {
+            return;
+          }
+
           if (process.env.POD_INSTALL === '0') {
             return;
           }

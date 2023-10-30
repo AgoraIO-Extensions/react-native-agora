@@ -16,8 +16,6 @@ module.exports = {
 
           if (
             child_process.spawnSync('yarn', ['patch-package'], {
-              cwd: project.cwd,
-              env: process.env,
               stdio: 'inherit',
               encoding: 'utf-8',
               shell: true,
@@ -28,14 +26,12 @@ module.exports = {
 
           if (
             child_process.spawnSync('yarn', ['example', 'patch-package'], {
-              cwd: project.cwd,
-              env: process.env,
               stdio: 'inherit',
               encoding: 'utf-8',
               shell: true,
             }).status !== 0
           ) {
-            throw new Error('Failed to run patch-package');
+            throw new Error('Failed to run patch-package at example');
           }
 
           if (
@@ -43,8 +39,6 @@ module.exports = {
               'yarn',
               ['ts-interface-builder', 'src/*.ts', '-o', 'src/ti/'],
               {
-                cwd: project.cwd,
-                env: process.env,
                 stdio: 'inherit',
                 encoding: 'utf-8',
                 shell: true,
