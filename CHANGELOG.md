@@ -1,5 +1,13 @@
 
 
+## [4.2.5](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.4...v4.2.5) (2023-10-30)
+
+
+### Bug Fixes
+
+* typescript definitions broken [#718](https://github.com/AgoraIO-Extensions/react-native-agora/issues/718) ([#719](https://github.com/AgoraIO-Extensions/react-native-agora/issues/719)) ([11c6b3d](https://github.com/AgoraIO-Extensions/react-native-agora/commit/11c6b3d5b626b91a589b8cf75ef26e0a18ca5ed2))
+* yarn failed on windows ([#720](https://github.com/AgoraIO-Extensions/react-native-agora/issues/720)) ([f2e2496](https://github.com/AgoraIO-Extensions/react-native-agora/commit/f2e2496e042637a2252fd675e55176538f6296e2))
+
 ## [4.2.4](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.3...v4.2.4) (2023-10-24)
 
 
