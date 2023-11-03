@@ -1,5 +1,12 @@
 
 
+## [4.2.3-build.1-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.5...v4.2.3-build.1-rc.1) (2023-11-03)
+
+
+### Features
+
+* support native 4.2.3.1 ([#721](https://github.com/AgoraIO-Extensions/react-native-agora/issues/721)) ([866bdf3](https://github.com/AgoraIO-Extensions/react-native-agora/commit/866bdf3b53359a73fb605aa5ba9e91a253cdcde0))
+
 ## [4.2.5](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.4...v4.2.5) (2023-10-30)
 
 
