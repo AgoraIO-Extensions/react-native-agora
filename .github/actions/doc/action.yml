@@ -10,6 +10,9 @@ inputs:
   target-repo:
     description: Relative path under GITHUB_WORKSPACE to the repository.
 
+  target-branch:
+    description: Sets the pull request base branch.
+
 runs:
   using: composite
   steps:
@@ -18,6 +21,7 @@ runs:
       with:
         github-token: ${{ inputs.github-token }}
         target-repo: ${{ inputs.target-repo }}
+        target-branch: ${{ inputs.target-branch }}
         config: fmt_config/fmt_ts.yaml
         language: ts
         base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/rn_ng_json_template_en.json
