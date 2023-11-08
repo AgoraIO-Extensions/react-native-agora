@@ -1,0 +1,29 @@
+name: Update dependencies
+
+on:
+  workflow_dispatch:
+    inputs:
+      dependencies-content:
+        description: The content of dependencies
+        required: true
+        type: string
+
+jobs:
+  generate-codes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Update dependencies
+        uses: AgoraIO-Extensions/actions/.github/actions/dep@main
+        with:
+          dependencies-content: ${{ inputs.dependencies-content }}
+          github-token: ${{ secrets.GH_TOKEN }}
+          target-path: |
+            android/build.gradle
+            example/ios/Podfile
+            react-native-agora.podspec
