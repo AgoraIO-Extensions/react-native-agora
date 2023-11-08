@@ -7,31 +7,6 @@ on:
         description: The content of dependencies
         required: true
         type: string
-        default: |
-          打包助手 11-7 16:49
-          Iris: Artifactory: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/mac/iris_4.2.6-build.1_DCG_Mac_Video_20231107_0433.zip PrivateArtifactory: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/mac/iris_4.2.6-build.1_DCG_Mac_Video_20231107_0433_private.zip CDN: https://download.agora.io/sdk/release/iris_4.2.6-build.1_DCG_Mac_Video_20231107_0433.zip Cocoapods: pod 'AgoraIrisRTC_macOS', '4.2.6-build.1'
-          
-          打包助手 11-7 16:51
-          Iris: Artifactory: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/ios/iris_4.2.6-build.1_DCG_iOS_Video_20231107_0433.zip PrivateArtifactory: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/ios/iris_4.2.6-build.1_DCG_iOS_Video_20231107_0433_private.zip CDN: https://download.agora.io/sdk/release/iris_4.2.6-build.1_DCG_iOS_Video_20231107_0433.zip Cocoapods: pod 'AgoraIrisRTC_iOS', '4.2.6-build.1'
-          
-          打包助手 11-7 16:52
-          Iris: Artifactory: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/android/iris_4.2.6-build.1_DCG_Android_Video_20231107_0433.zip PrivateArtifactory: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/android/iris_4.2.6-build.1_DCG_Android_Video_20231107_0433_private.zip CDN: https://download.agora.io/sdk/release/iris_4.2.6-build.1_DCG_Android_Video_20231107_0433.zip Maven: implementation 'io.agora.rtc:iris-rtc:4.2.6-build.1'
-          
-          打包助手 11-7 16:52
-          Iris: Artifactory: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/windows/iris_4.2.6-build.1_DCG_Windows_Video_20231107_0433.zip Private: https://artifactory-api.bj2.agoralab.co/artifactory/CSDC_repo/EP/4.2.6/20231107/windows/iris_4.2.6-build.1_DCG_Windows_Video_20231107_0433_private.zip CDN: https://download.agora.io/sdk/release/iris_4.2.6-build.1_DCG_Windows_Video_20231107_0433.zip
-          
-          打包助手 11-7 16:52
-          Packages: implementation 'io.agora.rtc:agora-full-preview:4.2.6-build.1'
-          
-          打包助手 11-7 16:52
-          Packages: implementation 'io.agora.rtc:full-screen-sharing-special:4.2.6-build.1'
-          
-          打包助手 11-7 16:52
-          Packages: pod 'AgoraRtcEngine_iOS_Preview', '4.2.6-build.1'
-          
-          打包助手 11-7 16:52
-          Packages: pod 'AgoraRtcEngine_macOS_Preview', '4.2.6-build.1'
-        
 
 jobs:
   update-dependencies:
@@ -69,6 +44,8 @@ jobs:
           pull-request-title: |
             [AUTO] Update dependencies
           pull-request-body: |
-            dependencies content: ${{ steps.dep.outputs.matches }}
+            Dependencies content:
+
+            ${{ steps.dep.outputs.matches }}
           github-token: ${{ secrets.GH_TOKEN }}
           
