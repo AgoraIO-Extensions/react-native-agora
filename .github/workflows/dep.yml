@@ -34,8 +34,8 @@ on:
         
 
 jobs:
-  generate-codes:
-    runs-on: ubuntu-latest
+  update-dependencies:
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
