@@ -38,7 +38,7 @@ jobs:
 
       - name: Generate ts interface
         run: |
-          yarn ts_interface_builder
+          yarn
 
       - name: Generate comments
         uses: ./.github/actions/doc
