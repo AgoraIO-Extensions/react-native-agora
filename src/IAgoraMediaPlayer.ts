@@ -23,7 +23,7 @@ export abstract class IMediaPlayer {
    * Gets the ID of the media player.
    *
    * @returns
-   * ≥ 0: Success. The ID of the media player.
+   * Success. The ID of the media player.
    *  < 0: Failure.
    */
   abstract getMediaPlayerId(): number;
