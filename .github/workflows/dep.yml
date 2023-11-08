@@ -44,6 +44,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Update dependencies
+        id: dep
         uses: AgoraIO-Extensions/actions/.github/actions/dep@main
         with:
           dependencies-content: ${{ inputs.dependencies-content }}          
