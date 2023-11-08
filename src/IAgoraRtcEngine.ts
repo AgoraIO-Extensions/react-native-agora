@@ -1166,9 +1166,7 @@ export class ChannelMediaOptions {
    */
   publishRhythmPlayerTrack?: boolean;
   /**
-   * Whether to enable interactive mode: true : Enable interactive mode. Once this mode is enabled and the user role is set as audience, the user can receive remote video streams with low latency. false :Do not enable interactive mode. If this mode is disabled, the user receives the remote video streams in default settings.
-   *  This parameter only applies to scenarios involving cohosting across channels. The cohosts need to call the joinChannelEx method to join the other host's channel as an audience member, and set isInteractiveAudience to true.
-   *  This parameter takes effect only when the user role is ClientRoleAudience.
+   * test
    */
   isInteractiveAudience?: boolean;
   /**
