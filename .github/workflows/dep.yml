@@ -21,9 +21,11 @@ jobs:
       - name: Update dependencies
         uses: AgoraIO-Extensions/actions/.github/actions/dep@main
         with:
-          dependencies-content: ${{ inputs.dependencies-content }}
-          github-token: ${{ secrets.GH_TOKEN }}
-          target-path: |
+          dependencies-content: ${{ inputs.dependencies-content }}          
+          target-files: |
             android/build.gradle
             example/ios/Podfile
             react-native-agora.podspec
+          target-path: ${{ github.workspace }}
+          github-token: ${{ secrets.GH_TOKEN }}
+          
