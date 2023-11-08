@@ -26,3 +26,6 @@ runs:
         language: ts
         base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/rn_ng_json_template_en.json
         export-file-path: src/index.ts
+        pre-pr-command: |
+          rm -rf terra
+          yarn lint --fix
