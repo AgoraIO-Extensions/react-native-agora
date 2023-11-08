@@ -9,6 +9,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Update git config
+        run: |
+          git config core.fileMode false
+        shell: bash
     
       - name: Generate comments
         uses: ./.github/actions/doc
