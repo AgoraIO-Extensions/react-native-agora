@@ -1168,7 +1168,7 @@ export class ChannelMediaOptions {
   /**
    * test
    */
-  isInteractiveAudience?: boolean;
+  isInteractiveAudience?: any;
   /**
    * The video track ID returned by calling the createCustomVideoTrack method. The default value is 0.
    */
