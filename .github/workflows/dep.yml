@@ -35,7 +35,7 @@ on:
 
 jobs:
   generate-codes:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,5 +52,22 @@ jobs:
             example/ios/Podfile
             react-native-agora.podspec
           target-path: ${{ github.workspace }}
+          github-token: ${{ secrets.GH_TOKEN }}
+
+      - name: Update example
+        run: |
+          yarn pod-install example/ios
+
+      - name: Create pull request
+        uses: AgoraIO-Extensions/actions/.github/actions/pr@main
+        with:
+          target-repo: ${{ github.workspace }}
+          target-branch: ${{ github.ref_name }}
+          target-branch-name-surffix: |
+            dep-update
+          pull-request-title: |
+            [AUTO] Update dependencies
+          pull-request-body: |
+            dependencies content: ${{ steps.dep.outputs.matches }}
           github-token: ${{ secrets.GH_TOKEN }}
           
