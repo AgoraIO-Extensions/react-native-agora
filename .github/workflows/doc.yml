@@ -14,3 +14,4 @@ jobs:
         uses: ./.github/actions/doc
         with:
           github-token: ${{ secrets.GH_TOKEN }}
+          target-repo: ${{ github.repository }}

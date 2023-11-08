@@ -1,13 +1,14 @@
 name: Doc
-description: Generate comments
+description: Generate comments.
 
 inputs:
-  target-path:
-    description: The path to generate comments, if set, will skip clone & pr
-    default: ""
   github-token:
-    description: The github token
+    description: >
+      GITHUB_TOKEN (permissions contents: write and pull-requests: write) or a repo scoped Personal Access Token (PAT).
     required: true
+
+  target-repo:
+    description: Relative path under GITHUB_WORKSPACE to the repository.
 
 runs:
   using: composite
@@ -15,11 +16,9 @@ runs:
     - name: Generate comments
       uses: AgoraIO-Extensions/actions/.github/actions/doc@main
       with:
-        target-repo: ${{ github.repository }}
-        target-branch: ${{ github.ref_name }}
-        target-path: ${{ inputs.target-path }}
+        github-token: ${{ inputs.github-token }}
+        target-repo: ${{ inputs.target-repo }}
         config: fmt_config/fmt_ts.yaml
         language: ts
         base-template-url: https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/rn_ng_json_template_en.json
         export-file-path: src/index.ts
-        github-token: ${{ inputs.github-token }}
