@@ -23,7 +23,7 @@ runs:
 
     - name: Install dependencies
       env:
-        POD_INSTALL: 0
+        POD_INSTALL: "0"
       if: steps.yarn-cache.outputs.cache-hit != 'true'
       run: yarn install --immutable
       shell: bash

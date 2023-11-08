@@ -19,17 +19,17 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Generate codes
+        id: terra
         uses: AgoraIO-Extensions/actions/.github/actions/terra@main
         env:
           LLVM_DOWNLOAD_URL: |
             https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz
         with:
+          github-token: ${{ secrets.GH_TOKEN }}
           terra-ref: ${{ inputs.terra-ref }}
-          target-path: ${{ github.workspace }}
           config: ci/config/terra_config.yaml
           output-dir: src
           export-file-path: src/index.ts
-          github-token: ${{ secrets.GH_TOKEN }}
 
       - name: Format codes
         run: |
@@ -38,22 +38,25 @@ jobs:
 
       - name: Generate ts interface
         run: |
-          yarn ts_interface_builder
+          yarn
 
       - name: Generate comments
         uses: ./.github/actions/doc
         with:
-          target-path: ${{ github.workspace }}
           github-token: ${{ secrets.GH_TOKEN }}
+          target-path: ${{ github.workspace }}
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main
         with:
+          github-token: ${{ secrets.GH_TOKEN }}
           target-repo: ${{ github.workspace }}
           target-branch: ${{ github.ref_name }}
-          target-branch-name-surffix: |
-            terra-update
+          target-branch-name-surffix: terra-update
           pull-request-title: |
-            [AUTO] Generate code by terra
+            [AUTO] Generate codes by terra
+          pull-request-body: |
+            Terra configuration:
+
+            ${{ steps.terra.outputs.configuration }}
           add-paths: src
-          github-token: ${{ secrets.GH_TOKEN }}

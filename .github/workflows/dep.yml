@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  generate-codes:
+  update-dependencies:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,11 +19,30 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Update dependencies
+        id: dep
         uses: AgoraIO-Extensions/actions/.github/actions/dep@main
         with:
-          dependencies-content: ${{ inputs.dependencies-content }}
           github-token: ${{ secrets.GH_TOKEN }}
-          target-path: |
+          dependencies-content: ${{ inputs.dependencies-content }}          
+          target-files: |
             android/build.gradle
             example/ios/Podfile
             react-native-agora.podspec
+
+      - name: Update example
+        run: |
+          yarn pod-install example/ios
+
+      - name: Create pull request
+        uses: AgoraIO-Extensions/actions/.github/actions/pr@main
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          target-repo: ${{ github.workspace }}
+          target-branch: ${{ github.ref_name }}
+          target-branch-name-surffix: dep-update
+          pull-request-title: |
+            [AUTO] Update dependencies
+          pull-request-body: |
+            Dependencies content: 
+            
+            ${{ steps.dep.outputs.matches }}
