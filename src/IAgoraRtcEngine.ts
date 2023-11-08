@@ -374,7 +374,7 @@ export enum PriorityType {
  */
 export class LocalVideoStats {
   /**
-   * The user ID of the local user.
+   * The ID of the local user.
    */
   uid?: number;
   /**
@@ -1166,7 +1166,9 @@ export class ChannelMediaOptions {
    */
   publishRhythmPlayerTrack?: boolean;
   /**
-   * test
+   * Whether to enable interactive mode: true : Enable interactive mode. Once this mode is enabled and the user role is set as audience, the user can receive remote video streams with low latency. false :Do not enable interactive mode. If this mode is disabled, the user receives the remote video streams in default settings.
+   *  This parameter only applies to scenarios involving cohosting across channels. The cohosts need to call the joinChannelEx method to join the other host's channel as an audience member, and set isInteractiveAudience to true.
+   *  This parameter takes effect only when the user role is ClientRoleAudience.
    */
   isInteractiveAudience?: any;
   /**
@@ -1391,7 +1393,7 @@ export interface IRtcEngineEventHandler {
   /**
    * Occurs when the playback of the local music file finishes.
    *
-   * Deprecated: Please use onAudioMixingStateChanged instead. After you call startAudioMixing to play a local music file, this callback occurs when the playback finishes. If the call startAudioMixing fails, the error code WARN_AUDIO_MIXING_OPEN_ERROR is returned.
+   * Deprecated: Use onAudioMixingStateChanged instead. After you call startAudioMixing to play a local music file, this callback occurs when the playback finishes. If the call of startAudioMixing fails, the error code WARN_AUDIO_MIXING_OPEN_ERROR is returned.
    */
   onAudioMixingFinished?(): void;
 
@@ -1400,7 +1402,7 @@ export interface IRtcEngineEventHandler {
    *
    * This callback occurs when the local audio effect file finishes playing.
    *
-   * @param soundId The audio effect ID. The ID of each audio effect file is unique.
+   * @param soundId The ID of the audio effect. The ID of each audio effect file is unique.
    */
   onAudioEffectFinished?(soundId: number): void;
 
@@ -1738,7 +1740,7 @@ export interface IRtcEngineEventHandler {
   /**
    * Occurs when the camera turns on and is ready to capture the video.
    *
-   * Deprecated: Please use LocalVideoStreamStateCapturing (1) in onLocalVideoStateChanged instead. This callback indicates that the camera has been successfully turned on and you can start to capture video.
+   * Deprecated: Use LocalVideoStreamStateCapturing (1) in onLocalVideoStateChanged instead. This callback indicates that the camera has been successfully turned on and you can start to capture video.
    */
   onCameraReady?(): void;
 
@@ -2095,13 +2097,7 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * Reports the volume change of the audio device or app.
-   *
-   * Occurs when the volume on the playback device, audio capture device, or the volume in the application changes.
-   *
-   * @param deviceType The device type. See MediaDeviceType.
-   * @param volume The volume value. The range is [0, 255].
-   * @param muted Whether the audio device is muted: true : The audio device is muted. false : The audio device is not muted.
+   * @ignore
    */
   onAudioDeviceVolumeChanged?(
     deviceType: MediaDeviceType,
@@ -2343,9 +2339,9 @@ export interface IRtcEngineEventHandler {
    * Occurs when the video subscribing state changes.
    *
    * @param channel The channel name.
-   * @param uid The ID of the remote user.
-   * @param oldState The previous subscribing status, see StreamSubscribeState for details.
-   * @param newState The current subscribing status, see StreamSubscribeState for details.
+   * @param uid The user ID of the remote user.
+   * @param oldState The previous subscribing status. See StreamSubscribeState.
+   * @param newState The current subscribing status. See StreamSubscribeState.
    * @param elapseSinceLastState The time elapsed (ms) from the previous state to the current state.
    */
   onVideoSubscribeStateChanged?(
@@ -2624,16 +2620,16 @@ export enum MaxMetadataSizeType {
 export class Metadata {
   /**
    * The user ID.
-   *  For the recipient:the ID of the remote user who sent the Metadata.
-   *  Ignore it for sender.
+   *  For the recipient: The ID of the remote user who sent the Metadata.
+   *  For the sender: Ignore it.
    */
   uid?: number;
   /**
-   * Buffer size for received or sent Metadata.
+   * The buffer size of the sent or received Metadata.
    */
   size?: number;
   /**
-   * The buffer address of the received or sent Metadata.
+   * The buffer address of the sent or received Metadata.
    */
   buffer?: Uint8Array;
   /**
@@ -4304,7 +4300,7 @@ export abstract class IRtcEngine {
   /**
    * Retrieves the playback position of the audio effect file.
    *
-   * Call this method after the playEffect method.
+   * Call this method after playEffect.
    *
    * @param soundId The audio effect ID. The ID of each audio effect file is unique.
    *
@@ -6809,7 +6805,7 @@ export abstract class IRtcEngine {
    *
    * If the metadata is sent successfully, the SDK triggers the onMetadataReceived callback on the receiver.
    *
-   * @param metadata Media metadata See Metadata.
+   * @param metadata Media metadata. See Metadata.
    * @param sourceType The type of the video source. See VideoSourceType.
    *
    * @returns
