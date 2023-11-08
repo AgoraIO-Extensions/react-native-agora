@@ -2,9 +2,12 @@ name: Build API Example
 
 on:
   workflow_dispatch:
+  pull_request:
+    types: [labeled, synchronize]
 
 jobs:
   build-android:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:dep-update') }}
     runs-on: ubuntu-latest
     env:
       TURBO_CACHE_DIR: .turbo/android
@@ -73,6 +76,7 @@ jobs:
             example/android/app/build/outputs/apk/release/*.apk
 
   build-ios:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:dep-update') }}
     runs-on: macos-latest
     env:
       TURBO_CACHE_DIR: .turbo/ios
