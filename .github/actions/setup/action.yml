@@ -9,7 +9,12 @@ runs:
       with:
         node-version-file: .nvmrc
 
-    - name: Setup cocoapods
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+
+    - name: Setup Cocoapods
       if: ${{ runner.os == 'macOS' }}
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
