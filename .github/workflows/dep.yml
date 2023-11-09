@@ -47,7 +47,7 @@ jobs:
             
             ${{ steps.dep.outputs.matches }}
 
-  uodate-pod:
+  update-pod:
     runs-on: macos-latest
     needs: update-dependencies
     steps:
