@@ -29,18 +29,24 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
+
       - name: Setup
         uses: ./.github/actions/setup
+
       - name: Build TypeDoc
         run: yarn doc
+
       - name: Zip It Up 🤐
         run: |
           zip -r react-native-agora-docs.zip docs
+
       - name: Upload Artifact ⬆️
         uses: actions/upload-artifact@v3
         with:
           name: react-native-agora-docs.zip
           path: react-native-agora-docs.zip
+          if-no-files-found: error
+
       - name: Upload Doc Archive to GitHub release ⬆️
         if: github.event.release
         uses: svenstaro/upload-release-action@2.6.0
@@ -48,11 +54,13 @@ jobs:
           file: react-native-agora-docs.zip
           asset_name: react-native-agora-docs.zip
           tag: ${{ github.ref_name }}
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
           # Upload docs directory
           path: 'docs'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
