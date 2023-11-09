@@ -46,3 +46,28 @@ jobs:
             Dependencies content: 
             
             ${{ steps.dep.outputs.matches }}
+
+  uodate-pod:
+    runs-on: macos-latest
+    needs: update-dependencies
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Update Podfile.lock
+        run: |
+          pod update
+        working-directory: example/ios
+      
+      - name: Commit changes
+        run: |
+          git config --global user.email "${{ secrets.GIT_EMAIL }}"
+          git config --global user.name "${{ secrets.GIT_USERNAME }}"
+          git add example
+          git commit -m "chore(example): update Podfile.lock by new dependencies"
+          git push
