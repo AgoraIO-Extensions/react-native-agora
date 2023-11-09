@@ -78,6 +78,7 @@ jobs:
           name: AgoraRtcNgExample
           path: |
             example/android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
 
   build-ios:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:dep-update') }}
@@ -174,6 +175,7 @@ jobs:
           name: AgoraRtcNgExample
           path: |
             example/ios/*.ipa
+          if-no-files-found: error
 
       - name: Upload dSYM
         uses: actions/upload-artifact@v3
@@ -181,6 +183,7 @@ jobs:
           name: AgoraRtcNgExampleSymbol
           path: |
             example/ios/*.dSYM.zip
+          if-no-files-found: error
 
   notification:
     runs-on: ubuntu-latest
