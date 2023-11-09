@@ -9,6 +9,13 @@ runs:
       with:
         node-version-file: .nvmrc
 
+    - name: Setup cocoapods
+      if: ${{ runner.os == 'macOS' }}
+      run: |
+        gem install cocoapods -v 1.13.0
+        gem install activesupport -v 7.0.8
+      shell: bash
+
     - name: Cache dependencies
       id: yarn-cache
       uses: actions/cache@v3
