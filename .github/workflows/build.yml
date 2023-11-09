@@ -92,6 +92,10 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+      
+      - name: Setup fastlane
+        run: |
+          brew install fastlane
 
       - name: Cache turborepo for iOS
         uses: actions/cache@v3
