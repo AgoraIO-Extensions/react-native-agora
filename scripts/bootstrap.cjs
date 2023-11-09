@@ -35,15 +35,11 @@ module.exports = {
           }
 
           if (
-            child_process.spawnSync(
-              'yarn',
-              ['ts-interface-builder', 'src/*.ts', '-o', 'src/ti/'],
-              {
-                stdio: 'inherit',
-                encoding: 'utf-8',
-                shell: true,
-              }
-            ).status !== 0
+            child_process.spawnSync('yarn', ['build:ts-interface'], {
+              stdio: 'inherit',
+              encoding: 'utf-8',
+              shell: true,
+            }).status !== 0
           ) {
             throw new Error('Failed to run ts-interface-builder');
           }
