@@ -68,7 +68,9 @@ def supportsNamespace() {
 android {
   if (supportsNamespace()) {
     namespace "io.agora.rtc.ng.react"
-
+    buildFeatures {
+      buildConfig true
+    }
     sourceSets {
       main {
         manifest.srcFile "src/main/AndroidManifestNew.xml"
