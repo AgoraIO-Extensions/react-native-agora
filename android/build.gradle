@@ -87,6 +87,8 @@ android {
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     buildConfigField "String", "CODEGEN_MODULE_REGISTRATION", (isNewArchitectureEnabled() && registrationCompat ? "\"${codegenViewModuleName}_registration\"" : "null")
 
+    consumerProguardFiles 'consumer-rules.pro'
+
     if (isNewArchitectureEnabled() && registrationCompat) {
       def reactAndroidProject = project(':ReactAndroid')
       externalNativeBuild {
