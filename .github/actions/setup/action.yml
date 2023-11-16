@@ -20,6 +20,11 @@ runs:
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
         version: 1.13.0
+    
+    - name: Setup activesupport
+      run:
+        gem install activesupport -v 7.0.8
+      shell: bash
 
     - name: Cache dependencies
       id: yarn-cache
