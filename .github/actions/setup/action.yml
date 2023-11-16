@@ -22,6 +22,7 @@ runs:
         version: 1.13.0
     
     - name: Setup activesupport
+      if: ${{ runner.os == 'macOS' }}
       run:
         gem install activesupport -v 7.0.8
       shell: bash
