@@ -189,4 +189,4 @@ jobs:
     needs: [ build-android, build-ios ]
     steps:
       - run: |
-          curl -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${{ secrets.WECHAT_KEY }}" -d '{"msgtype":"text","text":{"content":"ReactNative:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'
+          curl -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${{ secrets.WECHAT_KEY }}" -d '{"msgtype":"text","text":{"content":"ReactNative Example:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nDownload Link:\nhttps://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'
