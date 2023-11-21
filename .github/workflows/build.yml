@@ -18,7 +18,7 @@ jobs:
       turbo_cache_hit: 0
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -78,6 +78,7 @@ jobs:
           name: AgoraRtcNgExample
           path: |
             example/android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
 
   build-ios:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'ci:dep-update') }}
@@ -87,15 +88,14 @@ jobs:
       turbo_cache_hit: 0
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
-
-      - name: Setup cocoapods
+      
+      - name: Setup fastlane
         run: |
-          gem install cocoapods -v 1.13.0
-          gem install activesupport -v 7.0.8
+          brew install fastlane
 
       - name: Cache turborepo for iOS
         uses: actions/cache@v3
@@ -174,6 +174,7 @@ jobs:
           name: AgoraRtcNgExample
           path: |
             example/ios/*.ipa
+          if-no-files-found: error
 
       - name: Upload dSYM
         uses: actions/upload-artifact@v3
@@ -181,10 +182,11 @@ jobs:
           name: AgoraRtcNgExampleSymbol
           path: |
             example/ios/*.dSYM.zip
+          if-no-files-found: error
 
   notification:
     runs-on: ubuntu-latest
     needs: [ build-android, build-ios ]
     steps:
       - run: |
-          curl -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${{ secrets.WECHAT_KEY }}" -d '{"msgtype":"text","text":{"content":"ReactNative:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'
+          curl -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${{ secrets.WECHAT_KEY }}" -d '{"msgtype":"text","text":{"content":"ReactNative Example:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nDownload Link:\nhttps://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'

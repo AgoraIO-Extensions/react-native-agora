@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.platform }}-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -39,7 +39,7 @@ jobs:
     runs-on: ${{ matrix.platform }}-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -54,7 +54,7 @@ jobs:
     runs-on: ${{ matrix.platform }}-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -73,7 +73,7 @@ jobs:
       turbo_cache_hit: 0
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -154,15 +154,10 @@ jobs:
       turbo_cache_hit: 0
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
-
-      - name: Setup cocoapods
-        run: |
-          gem install cocoapods -v 1.13.0
-          gem install activesupport -v 7.0.8
 
       - name: Cache turborepo for iOS
         uses: actions/cache@v3
