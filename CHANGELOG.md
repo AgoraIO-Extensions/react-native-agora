@@ -1,5 +1,17 @@
 
 
+## [4.2.6](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.5...v4.2.6) (2023-11-21)
+
+
+### Bug Fixes
+
+* proguard issue [#739](https://github.com/AgoraIO-Extensions/react-native-agora/issues/739) ([0c5f0d0](https://github.com/AgoraIO-Extensions/react-native-agora/commit/0c5f0d000f72cb4294c76bf46b59826536e82341))
+
+
+### Features
+
+* support native 4.2.6 ([#735](https://github.com/AgoraIO-Extensions/react-native-agora/issues/735)) ([40634a2](https://github.com/AgoraIO-Extensions/react-native-agora/commit/40634a2f708e163814de7f580d34eebed72632f9)), closes [#733](https://github.com/AgoraIO-Extensions/react-native-agora/issues/733)
+
 ## [4.2.5](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.4...v4.2.5) (2023-10-30)
 
 
