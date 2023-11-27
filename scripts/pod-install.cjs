@@ -10,6 +10,9 @@ module.exports = {
             return;
           }
 
+          if (process.env.PWD.includes('scripts/terra')) {
+            return;
+          }
           if (process.env.POD_INSTALL === '0') {
             return;
           }

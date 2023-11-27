@@ -1,0 +1,11 @@
+{
+  "out": "./docs",
+  "name": "react-native-agora",
+  "includeVersion": true,
+  "hideGenerator": true,
+  "includes": "./src",
+  "exclude": ["**/scripts/terra/**/*"],
+  "compilerOptions": {
+    "noUnusedLocals": false
+  }
+}

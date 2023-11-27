@@ -14,6 +14,9 @@ module.exports = {
             return;
           }
 
+          if (process.env.PWD.includes('scripts/terra')) {
+            return;
+          }
           if (
             child_process.spawnSync('yarn', ['patch-package'], {
               stdio: 'inherit',
