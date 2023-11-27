@@ -1293,7 +1293,7 @@ export interface IRtcEngineEventHandler {
   /**
    * Reports an error during SDK runtime.
    *
-   * This callback indicates that an error (concerning network or media) occurs during SDK runtime. In most cases, the SDK cannot fix the issue and resume running. The SDK requires the application to take action or informs the user about the issue.
+   * This callback indicates that an error (concerning network or media) occurs during SDK runtime. In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.
    *
    * @param err Error code. See ErrorCodeType.
    * @param msg The error message.
@@ -1351,7 +1351,7 @@ export interface IRtcEngineEventHandler {
   /**
    * Occurs when a user leaves a channel.
    *
-   * This callback notifies the app that the user leaves the channel by calling leaveChannel. From this callback, the app can get information such as the call duration and quality statistics.
+   * This callback notifies the app that the user leaves the channel by calling leaveChannel. From this callback, the app can get information such as the call duration and statistics.
    *
    * @param connection The connection information. See RtcConnection.
    * @param stats The statistics of the call. See RtcStats.
@@ -1526,7 +1526,7 @@ export interface IRtcEngineEventHandler {
    * @param uid The ID of the user whose video size or rotation changes. (The uid for the local user is 0. The video is the local user's video preview).
    * @param width The width (pixels) of the video stream.
    * @param height The height (pixels) of the video stream.
-   * @param rotation The rotation information. The value range is [0,360).
+   * @param rotation The rotation information. The value range is [0,360). On the iOS platform, the parameter value is always 0.
    */
   onVideoSizeChanged?(
     connection: RtcConnection,
@@ -2983,7 +2983,7 @@ export abstract class IRtcEngine {
    *  All numeric characters: 0 to 9.
    *  Space
    *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-   * @param uid The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
+   * @param uid The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your app must record and maintain the returned user ID, because the SDK does not do so.
    * @param options The channel media options. See ChannelMediaOptions.
    *
    * @returns
@@ -3035,8 +3035,7 @@ export abstract class IRtcEngine {
   /**
    * Renews the token.
    *
-   * The SDK triggers the onTokenPrivilegeWillExpire callback.
-   *  The onConnectionStateChanged callback reports ConnectionChangedTokenExpired (9).
+   * The SDK triggers the onTokenPrivilegeWillExpire callback. onConnectionStateChanged The ConnectionChangedTokenExpired callback reports (9).
    *
    * @param token The new token.
    *
@@ -3127,7 +3126,7 @@ export abstract class IRtcEngine {
    *  Call stopCameraCapture.
    *  Call this method with enabled set to false. You can call this method before and after startPreview to enable multi-camera capture:
    *  If it is enabled before startPreview, the local video preview shows the image captured by the two cameras at the same time.
-   *  If it is enabled after startPreview, the SDK stops the current camera capture first, and then enables the primary camera and the second camera. The local video preview appears black for a short time, and then automatically returns to normal. When using this function, ensure that the system version is 13.0 or later. The minimum iOS device types that support multi-camera capture are as follows:
+   *  If it is enabled after startPreview, the SDK stops the current camera capture first, and then enables the primary camera and the second camera. The local video preview appears black for a short time, and then automatically returns to normal. This method applies to iOS only. When using this function, ensure that the system version is 13.0 or later. The minimum iOS device types that support multi-camera capture are as follows:
    *  iPhone XR
    *  iPhone XS
    *  iPhone XS Max
@@ -3230,7 +3229,7 @@ export abstract class IRtcEngine {
   /**
    * Sets the video encoder configuration.
    *
-   * Sets the encoder configuration for the local video. Call this method before joining a channel. Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.
+   * Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found. Call this method before joining a channel. Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.
    *
    * @param config Video profile. See VideoEncoderConfiguration.
    *
@@ -3417,6 +3416,9 @@ export abstract class IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
+   *  -1: A general error occurs (no specified reason).
+   *  -4: Video application scenarios are not supported. Possible reasons include that you use the Voice SDK instead of the Video SDK.
+   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
    */
   abstract setVideoScenario(scenarioType: VideoApplicationScenarioType): number;
 
@@ -4850,7 +4852,7 @@ export abstract class IRtcEngine {
    * Sets the audio data format reported by onPlaybackAudioFrameBeforeMixing.
    *
    * @param sampleRate The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
-   * @param channel The number of channels of the external audio source, which can be set as 1 (Mono) or 2 (Stereo).
+   * @param channel The number of channels of the audio data, which can be set as 1 (Mono) or 2 (Stereo).
    *
    * @returns
    * 0: Success.
@@ -5166,7 +5168,7 @@ export abstract class IRtcEngine {
   /**
    * Sets the camera capture configuration.
    *
-   * This method must be called after the camera is turned on, such as calling after startPreview and enableVideo.
+   * Call this method before enabling local camera capture, such as before calling startPreview and joinChannel.
    *
    * @param config The camera capture configuration. See CameraCapturerConfiguration.
    *
@@ -5249,7 +5251,7 @@ export abstract class IRtcEngine {
    * Checks whether the device supports camera flash.
    *
    * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  The app enables the front camera by default. If your front camera does not support enabling the flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
+   *  The app enables the front camera by default. If your front camera does not support flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
    *  On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
    *
    * @returns
