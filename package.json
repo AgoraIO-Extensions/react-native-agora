@@ -82,7 +82,7 @@
     "ts-interface-builder": "^0.3.3",
     "turbo": "^1.10.7",
     "typedoc": "^0.24.1",
-    "typescript": "^5.0.2"
+    "typescript": "5.0.2"
   },
   "resolutions": {
     "@types/react": "17.0.21"
