@@ -17,7 +17,7 @@ parsers:
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/include/IAgoraParameter.h'
       customHeaders:
         - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.2.3/custom_headers/*.h'
-      language: dart
+      language: ts
       legacyRenders:
         - TsInterfaceRender
         - TsImplRender
