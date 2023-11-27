@@ -1,11 +1,3 @@
-[allowlist]
-description = "file allow lists"
-paths = [
-    '''gitleaks.toml''',
-    '''plugin-(.*?)-tool.cjs''',
-    '''yarn-(.*?)(.cjs)''',
-]
-
 # ----- BEGIN Agora AppId -----
 [[rules]]
 id = "agora-appid"
