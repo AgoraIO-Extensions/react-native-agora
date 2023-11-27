@@ -1,5 +1,5 @@
 [allowlist]
-description = "gh pages build file allow lists"
+description = "file allow lists"
 paths = [
     '''gitleaks.toml''',
     '''plugin-(.*?)-tool.cjs''',
