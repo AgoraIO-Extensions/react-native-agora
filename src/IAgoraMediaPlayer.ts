@@ -154,7 +154,7 @@ export abstract class IMediaPlayer {
    *
    * Call this method after calling getStreamCount.
    *
-   * @param index The index of the media stream.
+   * @param index The index of the media stream. This parameter must be less than the return value of getStreamCount.
    *
    * @returns
    * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo.

@@ -1513,11 +1513,11 @@ export class RtcStats {
    */
   rxVideoBytes?: number;
   /**
-   * Video transmission bitrate (Kbps), represented by an instantaneous value.
+   * The actual bitrate (Kbps) while sending the local video stream.
    */
   txKBitRate?: number;
   /**
-   * The receiving bitrate (Kbps), represented by an instantaneous value.
+   * The receiving bitrate (Kbps).
    */
   rxKBitRate?: number;
   /**
