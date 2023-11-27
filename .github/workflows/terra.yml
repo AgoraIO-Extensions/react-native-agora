@@ -2,11 +2,6 @@ name: Generate codes
 
 on:
   workflow_dispatch:
-    inputs:
-      terra-ref:
-        description: The terra repo ref
-        required: true
-        default: "main"
 
 jobs:
   generate-codes:
@@ -14,6 +9,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup
         uses: ./.github/actions/setup
