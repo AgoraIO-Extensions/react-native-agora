@@ -59,12 +59,12 @@ __metadata:
 
 "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main":
   version: 1.0.2
-  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=c30f5a3e3e27e19daf85f7531d67060ef4000c06"
+  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=7ebe3a884732283f075c5d818708b2eede7252da"
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     mustache: ^4.2.0
-  checksum: 1a182cff654d7ad78e0eefb42c339e4bc3f9c6c6c5dc09ef48b0057397ff85969cfa9c2f276891abe57e6fdbfdc1ac0b9969546c7fd85cebd3f0576e3475d737
+  checksum: 6f593f923c6fdf43213dad842239fef7e21a48d28d6221413e2c9f363c342fe6bfd7cf4bad47b38d2542f23bb115a69a9090c8bd1ca6a4742fd73d69d8691ce6
   languageName: node
   linkType: hard
 

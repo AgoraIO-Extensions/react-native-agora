@@ -7,7 +7,7 @@ PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
 
 npm exec terra -- run \
     --config ${PROJECT_ROOT}/scripts/terra/terra_config_main.yaml  \
-    --output-dir=${PROJECT_ROOT}/lib/src
+    --output-dir=${PROJECT_ROOT}/src
 
 cd ${PROJECT_ROOT}
 
