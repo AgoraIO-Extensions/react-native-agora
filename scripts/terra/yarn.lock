@@ -5,31 +5,31 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@agoraio-extensions/cxx-parser@git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=cxx-parser":
+"@agoraio-extensions/cxx-parser@git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser":
   version: 0.1.9
-  resolution: "@agoraio-extensions/cxx-parser@git@github.com:AgoraIO-Extensions/terra.git#workspace=cxx-parser&commit=46525905533e5fcda345de979c90a7a0d88a468e"
+  resolution: "@agoraio-extensions/cxx-parser@git@github.com:AgoraIO-Extensions/terra.git#workspace=cxx-parser&commit=b6d59859e4a771a417f177ec0c6775aea4a454e6"
   dependencies:
     glob: ^10.3.4
     yaml: ^2.1.3
   peerDependencies:
     "@agoraio-extensions/terra-core": "*"
-  checksum: 36b6cdd9d82022967a95f8637686c8e0534f16a6af138d17855e6c6eafa9c10ade09650ec4a6023e2565cd6fcf7ab5f8c349ee7a65fa6322b23b49178d9972c5
+  checksum: 5e7582b554089bae61ba09e490d28cc3f2083e7f87462735391682fe01ab3798448462b6939854e69aadd7f51e1c43b5907fb86c777dcb27fbb9a9436ab21794
   languageName: node
   linkType: hard
 
-"@agoraio-extensions/terra-core@git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=terra-core":
+"@agoraio-extensions/terra-core@git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core":
   version: 0.1.5
-  resolution: "@agoraio-extensions/terra-core@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra-core&commit=46525905533e5fcda345de979c90a7a0d88a468e"
+  resolution: "@agoraio-extensions/terra-core@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra-core&commit=b6d59859e4a771a417f177ec0c6775aea4a454e6"
   checksum: d2eb31c6602d86c632e0b8466e8d1ae6f2cd0a7c10f14f2d3ed7a250e5474c154f455d934345d9e5d03b874f0f6cff0dfca9df0078de498d60ce216a92afe902
   languageName: node
   linkType: hard
 
-"@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=dev/change-system_fake":
+"@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=main":
   version: 0.1.5
-  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#commit=c7bf71c444717839c6507ab63be79a1e458b558e"
+  resolution: "@agoraio-extensions/terra-legacy-cxx-parser@git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#commit=a245a52c16b13f3ac642377dbbcf41fef56e994b"
   dependencies:
-    "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=cxx-parser"
-    "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=terra-core"
+    "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
+    "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     "@types/jest": ^29.5.1
     "@types/node": ^20.5.9
     glob: ^10.3.4
@@ -38,13 +38,13 @@ __metadata:
     ts-node: ^10.9.1
     typescript: ^5.1.6
     yaml: ^2.1.3
-  checksum: 30a0c37b35373586a0cd4ddac73e9ec94ac2b0355c34d8e20f87b932d264abffb488b9be80a2da98789c9fc4a504b1f46a307bab75583e74c1e1aa6b9a840a2b
+  checksum: fd306d33379a696f8d745b9362a7731f535c3a2ee508ca12258bd392f35dd51291d155026628e3c875a24116e079a5ce8462344e1df1f79465a02182ee91eb63
   languageName: node
   linkType: hard
 
-"@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=terra":
+"@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra":
   version: 0.1.5
-  resolution: "@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra&commit=46525905533e5fcda345de979c90a7a0d88a468e"
+  resolution: "@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra&commit=b6d59859e4a771a417f177ec0c6775aea4a454e6"
   dependencies:
     commander: ^9.4.1
     mustache: ^4.2.0
@@ -57,14 +57,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=dev/change-system_fake":
+"@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main":
   version: 1.0.2
-  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=110aafd479f31da11b2dd774318c1a4f8c32cdbe"
+  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=c30f5a3e3e27e19daf85f7531d67060ef4000c06"
   dependencies:
-    "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=cxx-parser"
-    "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=terra-core"
+    "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
+    "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     mustache: ^4.2.0
-  checksum: 17e46febd8979c8fa45565a2fd8d8f7900b10ec2c0bd8262e78fe2cf1d617f4def295f5cd5495d7cce24c1b685f9f458ed6eec942d9a98e05136ccdf7a4ce158
+  checksum: 1a182cff654d7ad78e0eefb42c339e4bc3f9c6c6c5dc09ef48b0057397ff85969cfa9c2f276891abe57e6fdbfdc1ac0b9969546c7fd85cebd3f0576e3475d737
   languageName: node
   linkType: hard
 
@@ -3447,10 +3447,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "terra@workspace:."
   dependencies:
-    "@agoraio-extensions/terra": "git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=terra"
-    "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=dev/change-system_fake&workspace=terra-core"
-    "@agoraio-extensions/terra-legacy-cxx-parser": "git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=dev/change-system_fake"
-    "@agoraio-extensions/terra_shared_configs": "git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=dev/change-system_fake"
+    "@agoraio-extensions/terra": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra"
+    "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
+    "@agoraio-extensions/terra-legacy-cxx-parser": "git@github.com:AgoraIO-Extensions/terra-legacy-cxx-parser.git#head=main"
+    "@agoraio-extensions/terra_shared_configs": "git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main"
     "@types/node": ^20.6.0
     ts-node: ^10.9.1
     typescript: ^5.1.6
