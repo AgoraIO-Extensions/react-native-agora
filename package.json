@@ -37,7 +37,7 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "release": "release-it",
-    "doc": "typedoc src --exclude \"example/**\"",
+    "doc": "typedoc src --out ./docs --exclude \"example/**\"",
     "build:ts-interface": "ts-interface-builder src/*.ts -o src/ti/"
   },
   "keywords": [
@@ -82,7 +82,7 @@
     "ts-interface-builder": "^0.3.3",
     "turbo": "^1.10.7",
     "typedoc": "^0.24.1",
-    "typescript": "5.0.2"
+    "typescript": "^5.0.2"
   },
   "resolutions": {
     "@types/react": "17.0.21"
