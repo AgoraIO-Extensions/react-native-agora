@@ -7,19 +7,19 @@ __metadata:
 
 "@agoraio-extensions/cxx-parser@git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser":
   version: 0.1.9
-  resolution: "@agoraio-extensions/cxx-parser@git@github.com:AgoraIO-Extensions/terra.git#workspace=cxx-parser&commit=b6d59859e4a771a417f177ec0c6775aea4a454e6"
+  resolution: "@agoraio-extensions/cxx-parser@git@github.com:AgoraIO-Extensions/terra.git#workspace=cxx-parser&commit=5dd8149d5ab9f3b472b7715916b6217f9745f066"
   dependencies:
     glob: ^10.3.4
     yaml: ^2.1.3
   peerDependencies:
     "@agoraio-extensions/terra-core": "*"
-  checksum: 5e7582b554089bae61ba09e490d28cc3f2083e7f87462735391682fe01ab3798448462b6939854e69aadd7f51e1c43b5907fb86c777dcb27fbb9a9436ab21794
+  checksum: 24550ee0972f0c08d08daad72e5ec795af9951e9fcaf4c5884e3765c1ea135beaa06d5b763ab1db98e1d04e58c0707222ae7b1d346f5000cea3aacda2a2263c9
   languageName: node
   linkType: hard
 
 "@agoraio-extensions/terra-core@git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core":
   version: 0.1.5
-  resolution: "@agoraio-extensions/terra-core@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra-core&commit=b6d59859e4a771a417f177ec0c6775aea4a454e6"
+  resolution: "@agoraio-extensions/terra-core@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra-core&commit=5dd8149d5ab9f3b472b7715916b6217f9745f066"
   checksum: d2eb31c6602d86c632e0b8466e8d1ae6f2cd0a7c10f14f2d3ed7a250e5474c154f455d934345d9e5d03b874f0f6cff0dfca9df0078de498d60ce216a92afe902
   languageName: node
   linkType: hard
@@ -44,7 +44,7 @@ __metadata:
 
 "@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra":
   version: 0.1.5
-  resolution: "@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra&commit=b6d59859e4a771a417f177ec0c6775aea4a454e6"
+  resolution: "@agoraio-extensions/terra@git@github.com:AgoraIO-Extensions/terra.git#workspace=terra&commit=5dd8149d5ab9f3b472b7715916b6217f9745f066"
   dependencies:
     commander: ^9.4.1
     mustache: ^4.2.0
@@ -59,12 +59,12 @@ __metadata:
 
 "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main":
   version: 1.0.2
-  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=7ebe3a884732283f075c5d818708b2eede7252da"
+  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=ea5b0574dace3a434ad87dbeac2d43a5b62ef636"
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     mustache: ^4.2.0
-  checksum: 6f593f923c6fdf43213dad842239fef7e21a48d28d6221413e2c9f363c342fe6bfd7cf4bad47b38d2542f23bb115a69a9090c8bd1ca6a4742fd73d69d8691ce6
+  checksum: a79ebc5477515e39da4b78fe5bd5b316175c079f551cb0051f19da1c88798d4f0730635c7fc536ad32c706d8c0b333484f870f90b8c42a44689a029dcb27ffc0
   languageName: node
   linkType: hard
 
@@ -1269,22 +1269,22 @@ __metadata:
   linkType: hard
 
 "cacache@npm:^18.0.0":
-  version: 18.0.0
-  resolution: "cacache@npm:18.0.0"
+  version: 18.0.1
+  resolution: "cacache@npm:18.0.1"
   dependencies:
     "@npmcli/fs": ^3.1.0
     fs-minipass: ^3.0.0
     glob: ^10.2.2
     lru-cache: ^10.0.1
     minipass: ^7.0.3
-    minipass-collect: ^1.0.2
+    minipass-collect: ^2.0.1
     minipass-flush: ^1.0.5
     minipass-pipeline: ^1.2.4
     p-map: ^4.0.0
     ssri: ^10.0.0
     tar: ^6.1.11
     unique-filename: ^3.0.0
-  checksum: 2cd6bf15551abd4165acb3a4d1ef0593b3aa2fd6853ae16b5bb62199c2faecf27d36555a9545c0e07dd03347ec052e782923bdcece724a24611986aafb53e152
+  checksum: 5a0b3b2ea451a0379814dc1d3c81af48c7c6db15cd8f7d72e028501ae0036a599a99bbac9687bfec307afb2760808d1c7708e9477c8c70d2b166e7d80b162a23
   languageName: node
   linkType: hard
 
@@ -1545,9 +1545,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.535":
-  version: 1.4.594
-  resolution: "electron-to-chromium@npm:1.4.594"
-  checksum: 7bda826be726f789489538d2e5b0355d84ceeb7f5e600d43edfae25ecca13e10b9cd566e4accfa2eb9919bdc410ba6c0a772174f1cbbc4b31b1f5cbb99e01eaf
+  version: 1.4.595
+  resolution: "electron-to-chromium@npm:1.4.595"
+  checksum: 02f13c7c247883a2e15290360261c8ab9903b4c3dfd977ba9cbd998ba111a9cb2e6bf05e1147ae2a2b141012c476cab5f0b9480d7f53a56d9ba274d46c76ea06
   languageName: node
   linkType: hard
 
@@ -2743,12 +2743,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minipass-collect@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "minipass-collect@npm:1.0.2"
+"minipass-collect@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "minipass-collect@npm:2.0.1"
   dependencies:
-    minipass: ^3.0.0
-  checksum: 14df761028f3e47293aee72888f2657695ec66bd7d09cae7ad558da30415fdc4752bbfee66287dcc6fd5e6a2fa3466d6c484dc1cbd986525d9393b9523d97f10
+    minipass: ^7.0.3
+  checksum: b251bceea62090f67a6cced7a446a36f4cd61ee2d5cea9aee7fff79ba8030e416327a1c5aa2908dc22629d06214b46d88fdab8c51ac76bacbf5703851b5ad342
   languageName: node
   linkType: hard
 
