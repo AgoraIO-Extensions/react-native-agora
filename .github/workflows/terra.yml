@@ -16,16 +16,16 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://${{ secrets.GH_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
-
-      - name: Generate
-        run: |
-          yarn
-          export LLVM_DOWNLOAD_URL=https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz
-          sh build.sh
-        working-directory: scripts/terra
+      - name: Generate code and comment by terra
+        uses: AgoraIO-Extensions/actions/.github/actions/generate@main
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          generate-code: true
+          generate-comment: true
+          generate-code-command: |
+            sh generate-code.sh
+          generate-comment-command: |
+            sh generate-comment.sh
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main
@@ -36,4 +36,4 @@ jobs:
           target-branch-name-surffix: terra-update
           pull-request-title: |
             [AUTO] Generate codes by terra
-          add-paths: src
+          add-paths: ts
