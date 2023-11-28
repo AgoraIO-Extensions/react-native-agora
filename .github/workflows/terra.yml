@@ -36,4 +36,4 @@ jobs:
           target-branch-name-surffix: terra-update
           pull-request-title: |
             [AUTO] Generate codes by terra
-          add-paths: ts
+          add-paths: src

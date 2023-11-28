@@ -38,4 +38,4 @@ jobs:
             Doc source:
 
             https://github.com/AgoraIO/agora_doc_source/releases/download/master-build/rn_ng_json_template_en.json
-          add-paths: ts
+          add-paths: src
