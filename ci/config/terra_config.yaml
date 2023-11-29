@@ -1,7 +1,0 @@
-include: shared:rtc_4.2.3/shared_configs.yaml
-
-language: ts
-
-legacy_renders:
-  - TsInterfaceRender
-  - TsImplRender
