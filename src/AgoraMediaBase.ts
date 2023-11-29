@@ -127,6 +127,10 @@ export enum AudioRoute {
    * @ignore
    */
   RouteAirplay = 9,
+  /**
+   * @ignore
+   */
+  RouteBluetoothSpeaker = 10,
 }
 
 /**
@@ -295,10 +299,6 @@ export class ContentInspectConfig {
    * Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
    */
   extraInfo?: string;
-  /**
-   * (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to ContentInspectImageModeration. If you want to use it, contact.
-   */
-  serverConfig?: string;
   /**
    * Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
    */
@@ -481,6 +481,26 @@ export enum CameraVideoSourceType {
    * @ignore
    */
   VideoSourceUnspecified = 2,
+}
+
+/**
+ * @ignore
+ */
+export enum MetaInfoKey {
+  /**
+   * @ignore
+   */
+  KeyFaceCapture = 0,
+}
+
+/**
+ * @ignore
+ */
+export abstract class IVideoFrameMetaInfo {
+  /**
+   * @ignore
+   */
+  abstract getMetaInfoStr(key: MetaInfoKey): string;
 }
 
 /**
@@ -671,6 +691,10 @@ export class VideoFrame {
    * @ignore
    */
   pixelBuffer?: Uint8Array;
+  /**
+   * @ignore
+   */
+  metaInfo?: IVideoFrameMetaInfo;
 }
 
 /**
@@ -707,6 +731,10 @@ export enum VideoModulePosition {
    * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
    */
   PositionPreEncoder = 1 << 2,
+  /**
+   * @ignore
+   */
+  PositionPostCapturerOrigin = 1 << 3,
 }
 
 /**
@@ -777,6 +805,10 @@ export class AudioFrame {
    * @ignore
    */
   presentationMs?: number;
+  /**
+   * @ignore
+   */
+  audioTrackNumber?: number;
 }
 
 /**
@@ -1158,29 +1190,29 @@ export enum RecorderState {
 }
 
 /**
- * The reason for the state change.
+ * @ignore
  */
-export enum RecorderErrorCode {
+export enum RecorderReasonCode {
   /**
-   * 0: No error.
+   * @ignore
    */
-  RecorderErrorNone = 0,
+  RecorderReasonNone = 0,
   /**
-   * 1: The SDK fails to write the recorded data to a file.
+   * @ignore
    */
-  RecorderErrorWriteFailed = 1,
+  RecorderReasonWriteFailed = 1,
   /**
-   * 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
+   * @ignore
    */
-  RecorderErrorNoStream = 2,
+  RecorderReasonNoStream = 2,
   /**
-   * 3: The recording duration exceeds the upper limit.
+   * @ignore
    */
-  RecorderErrorOverMaxDuration = 3,
+  RecorderReasonOverMaxDuration = 3,
   /**
-   * 4: The recording configuration changes.
+   * @ignore
    */
-  RecorderErrorConfigChanged = 4,
+  RecorderReasonConfigChanged = 4,
 }
 
 /**
@@ -1238,7 +1270,7 @@ export interface IMediaRecorderObserver {
     channelId: string,
     uid: number,
     state: RecorderState,
-    error: RecorderErrorCode
+    reason: RecorderReasonCode
   ): void;
 
   /**

@@ -1,5 +1,9 @@
 import './extension/AgoraBaseExtension';
-import { RenderModeType, VideoSourceType } from './AgoraMediaBase';
+import {
+  RenderModeType,
+  VideoModulePosition,
+  VideoSourceType,
+} from './AgoraMediaBase';
 
 /**
  * The channel profile.
@@ -438,10 +442,6 @@ export enum ErrorCodeType {
    * 1501: Permission to access the camera is not granted. Check whether permission to access the camera permission is granted.
    */
   ErrVdmCameraNotAuthorized = 1501,
-  /**
-   * @ignore
-   */
-  ErrAdmApplicationLoopback = 2007,
 }
 
 /**
@@ -573,7 +573,7 @@ export enum InterfaceIdType {
   /**
    * @ignore
    */
-  AgoraIidMetachatService = 14,
+  AgoraIidMetaService = 14,
   /**
    * @ignore
    */
@@ -1143,9 +1143,23 @@ export class VideoSubscriptionOptions {
 }
 
 /**
+ * The maximum length of the user account.
+ */
+export enum MaxUserAccountLengthType {
+  /**
+   * The maximum length of the user account is 256 bytes.
+   */
+  MaxUserAccountLength = 256,
+}
+
+/**
  * Information about externally encoded video frames.
  */
 export class EncodedVideoFrameInfo {
+  /**
+   * The user ID to push the externally encoded video frame.
+   */
+  uid?: number;
   /**
    * The codec type of the local video stream. See VideoCodecType. The default value is VideoCodecH264 (2).
    */
@@ -1182,10 +1196,6 @@ export class EncodedVideoFrameInfo {
    * @ignore
    */
   decodeTimeMs?: number;
-  /**
-   * The user ID to push the externally encoded video frame.
-   */
-  uid?: number;
   /**
    * The type of video streams. See VideoStreamType.
    */
@@ -1891,6 +1901,28 @@ export enum VideoApplicationScenarioType {
 }
 
 /**
+ * @ignore
+ */
+export enum VideoQoePreferenceType {
+  /**
+   * @ignore
+   */
+  VideoQoePreferenceBalance = 1,
+  /**
+   * @ignore
+   */
+  VideoQoePreferenceDelayFirst = 2,
+  /**
+   * @ignore
+   */
+  VideoQoePreferencePictureQualityFirst = 3,
+  /**
+   * @ignore
+   */
+  VideoQoePreferenceFluencyFirst = 4,
+}
+
+/**
  * The brightness level of the video image captured by the local camera.
  */
 export enum CaptureBrightnessLevelType {
@@ -1935,53 +1967,53 @@ export enum LocalAudioStreamState {
 }
 
 /**
- * Local audio state error codes.
+ * @ignore
  */
-export enum LocalAudioStreamError {
-  /**
-   * 0: The local audio is normal.
-   */
-  LocalAudioStreamErrorOk = 0,
-  /**
-   * 1: No specified reason for the local audio failure. Remind your users to try to rejoin the channel.
-   */
-  LocalAudioStreamErrorFailure = 1,
-  /**
-   * 2: No permission to use the local audio capturing device. Remind your users to grant permission. Deprecated: This enumerator is deprecated. Please use RecordAudio in the onPermissionError callback instead.
-   */
-  LocalAudioStreamErrorDeviceNoPermission = 2,
-  /**
-   * 3: The local audio capture device is already in use. Remind your users to check whether another application occupies the microphone. Local audio capture automatically resumes after the microphone is idle for about five seconds. You can also try to rejoin the channel after the microphone is idle.
-   */
-  LocalAudioStreamErrorDeviceBusy = 3,
-  /**
-   * 4: The local audio capture fails.
-   */
-  LocalAudioStreamErrorRecordFailure = 4,
-  /**
-   * 5: The local audio encoding fails.
-   */
-  LocalAudioStreamErrorEncodeFailure = 5,
+export enum LocalAudioStreamReason {
   /**
    * @ignore
    */
-  LocalAudioStreamErrorNoRecordingDevice = 6,
+  LocalAudioStreamReasonOk = 0,
   /**
    * @ignore
    */
-  LocalAudioStreamErrorNoPlayoutDevice = 7,
-  /**
-   * 8: The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
-   */
-  LocalAudioStreamErrorInterrupted = 8,
+  LocalAudioStreamReasonFailure = 1,
   /**
    * @ignore
    */
-  LocalAudioStreamErrorRecordInvalidId = 9,
+  LocalAudioStreamReasonDeviceNoPermission = 2,
   /**
    * @ignore
    */
-  LocalAudioStreamErrorPlayoutInvalidId = 10,
+  LocalAudioStreamReasonDeviceBusy = 3,
+  /**
+   * @ignore
+   */
+  LocalAudioStreamReasonRecordFailure = 4,
+  /**
+   * @ignore
+   */
+  LocalAudioStreamReasonEncodeFailure = 5,
+  /**
+   * @ignore
+   */
+  LocalAudioStreamReasonNoRecordingDevice = 6,
+  /**
+   * @ignore
+   */
+  LocalAudioStreamReasonNoPlayoutDevice = 7,
+  /**
+   * @ignore
+   */
+  LocalAudioStreamReasonInterrupted = 8,
+  /**
+   * @ignore
+   */
+  LocalAudioStreamReasonRecordInvalidId = 9,
+  /**
+   * @ignore
+   */
+  LocalAudioStreamReasonPlayoutInvalidId = 10,
 }
 
 /**
@@ -2007,101 +2039,105 @@ export enum LocalVideoStreamState {
 }
 
 /**
- * Local video state error codes.
+ * @ignore
  */
-export enum LocalVideoStreamError {
-  /**
-   * 0: The local video is normal.
-   */
-  LocalVideoStreamErrorOk = 0,
-  /**
-   * 1: No specified reason for the local video failure.
-   */
-  LocalVideoStreamErrorFailure = 1,
-  /**
-   * 2: No permission to use the local video capturing device. Remind the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use CAMERA in the onPermissionError callback instead.
-   */
-  LocalVideoStreamErrorDeviceNoPermission = 2,
-  /**
-   * 3: The local video capturing device is in use. Remind the user to check whether another application occupies the camera.
-   */
-  LocalVideoStreamErrorDeviceBusy = 3,
-  /**
-   * 4: The local video capture fails. Remind your user to check whether the video capture device is working properly, whether the camera is occupied by another application, or try to rejoin the channel.
-   */
-  LocalVideoStreamErrorCaptureFailure = 4,
-  /**
-   * 5: The local video encoding fails.
-   */
-  LocalVideoStreamErrorEncodeFailure = 5,
-  /**
-   * 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
-   */
-  LocalVideoStreamErrorCaptureInbackground = 6,
-  /**
-   * 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
-   */
-  LocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
-  /**
-   * 8: Fails to find a local video capture device. Remind the user to check whether the camera is connected to the device properly or the camera is working properly, and then to rejoin the channel.
-   */
-  LocalVideoStreamErrorDeviceNotFound = 8,
+export enum LocalVideoStreamReason {
   /**
    * @ignore
    */
-  LocalVideoStreamErrorDeviceDisconnected = 9,
+  LocalVideoStreamReasonOk = 0,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorDeviceInvalidId = 10,
+  LocalVideoStreamReasonFailure = 1,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorDeviceSystemPressure = 101,
+  LocalVideoStreamReasonDeviceNoPermission = 2,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureWindowMinimized = 11,
+  LocalVideoStreamReasonDeviceBusy = 3,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureWindowClosed = 12,
+  LocalVideoStreamReasonCaptureFailure = 4,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureWindowOccluded = 13,
+  LocalVideoStreamReasonCodecNotSupport = 5,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureWindowNotSupported = 20,
+  LocalVideoStreamReasonCaptureInbackground = 6,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureFailure = 21,
+  LocalVideoStreamReasonCaptureMultipleForegroundApps = 7,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureNoPermission = 22,
+  LocalVideoStreamReasonDeviceNotFound = 8,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCapturePaused = 23,
+  LocalVideoStreamReasonDeviceDisconnected = 9,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureResumed = 24,
+  LocalVideoStreamReasonDeviceInvalidId = 10,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureWindowHidden = 25,
+  LocalVideoStreamReasonDeviceSystemPressure = 101,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureWindowRecoverFromHidden = 26,
+  LocalVideoStreamReasonScreenCaptureWindowMinimized = 11,
   /**
    * @ignore
    */
-  LocalVideoStreamErrorScreenCaptureWindowRecoverFromMinimized = 27,
+  LocalVideoStreamReasonScreenCaptureWindowClosed = 12,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureWindowOccluded = 13,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureWindowNotSupported = 20,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureFailure = 21,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureNoPermission = 22,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureAutoFallback = 24,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureWindowHidden = 25,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureWindowRecoverFromHidden = 26,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureWindowRecoverFromMinimized = 27,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCapturePaused = 28,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureResumed = 29,
 }
 
 /**
@@ -2496,6 +2532,18 @@ export class LocalAudioStats {
    * The delay of the audio device module when playing or recording audio.
    */
   audioDeviceDelay?: number;
+  /**
+   * @ignore
+   */
+  audioPlayoutDelay?: number;
+  /**
+   * @ignore
+   */
+  earMonitorDelay?: number;
+  /**
+   * @ignore
+   */
+  aecEstimatedDelay?: number;
 }
 
 /**
@@ -2531,77 +2579,77 @@ export enum RtmpStreamPublishState {
 }
 
 /**
- * Error codes of the RTMP or RTMPS streaming.
+ * @ignore
  */
-export enum RtmpStreamPublishErrorType {
-  /**
-   * 0: The RTMP or RTMPS streaming has not started or has ended.
-   */
-  RtmpStreamPublishErrorOk = 0,
-  /**
-   * 1: Invalid argument used. Check the parameter setting.
-   */
-  RtmpStreamPublishErrorInvalidArgument = 1,
-  /**
-   * 2: The RTMP or RTMPS streaming is encrypted and cannot be published.
-   */
-  RtmpStreamPublishErrorEncryptedStreamNotAllowed = 2,
-  /**
-   * 3: Timeout for the RTMP or RTMPS streaming.
-   */
-  RtmpStreamPublishErrorConnectionTimeout = 3,
-  /**
-   * 4: An error occurs in Agora's streaming server.
-   */
-  RtmpStreamPublishErrorInternalServerError = 4,
-  /**
-   * 5: An error occurs in the CDN server.
-   */
-  RtmpStreamPublishErrorRtmpServerError = 5,
-  /**
-   * 6: The RTMP or RTMPS streaming publishes too frequently.
-   */
-  RtmpStreamPublishErrorTooOften = 6,
-  /**
-   * 7: The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
-   */
-  RtmpStreamPublishErrorReachLimit = 7,
-  /**
-   * 8: The host manipulates other hosts' URLs. For example, the host updates or stops other hosts' streams. Check your app logic.
-   */
-  RtmpStreamPublishErrorNotAuthorized = 8,
-  /**
-   * 9: Agora's server fails to find the RTMP or RTMPS streaming.
-   */
-  RtmpStreamPublishErrorStreamNotFound = 9,
-  /**
-   * 10: The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct.
-   */
-  RtmpStreamPublishErrorFormatNotSupported = 10,
-  /**
-   * 11: The user role is not host, so the user cannot use the CDN live streaming function. Check your application code logic.
-   */
-  RtmpStreamPublishErrorNotBroadcaster = 11,
-  /**
-   * 13: The updateRtmpTranscoding method is called to update the transcoding configuration in a scenario where there is streaming without transcoding. Check your application code logic.
-   */
-  RtmpStreamPublishErrorTranscodingNoMixStream = 13,
-  /**
-   * 14: Errors occurred in the host's network.
-   */
-  RtmpStreamPublishErrorNetDown = 14,
+export enum RtmpStreamPublishReason {
   /**
    * @ignore
    */
-  RtmpStreamPublishErrorInvalidAppid = 15,
+  RtmpStreamPublishReasonOk = 0,
   /**
-   * 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
+   * @ignore
    */
-  RtmpStreamPublishErrorInvalidPrivilege = 16,
+  RtmpStreamPublishReasonInvalidArgument = 1,
   /**
-   * 100: The streaming has been stopped normally. After you stop the Media Push, the SDK returns this value.
+   * @ignore
    */
-  RtmpStreamUnpublishErrorOk = 100,
+  RtmpStreamPublishReasonEncryptedStreamNotAllowed = 2,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonConnectionTimeout = 3,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonInternalServerError = 4,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonRtmpServerError = 5,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonTooOften = 6,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonReachLimit = 7,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonNotAuthorized = 8,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonStreamNotFound = 9,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonFormatNotSupported = 10,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonNotBroadcaster = 11,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonTranscodingNoMixStream = 13,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonNetDown = 14,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonInvalidAppid = 15,
+  /**
+   * @ignore
+   */
+  RtmpStreamPublishReasonInvalidPrivilege = 16,
+  /**
+   * @ignore
+   */
+  RtmpStreamUnpublishReasonOk = 100,
 }
 
 /**
@@ -3149,6 +3197,14 @@ export enum ConnectionChangedReasonType {
    * @ignore
    */
   ConnectionChangedCertificationVeryfyFailure = 22,
+  /**
+   * @ignore
+   */
+  ConnectionChangedStreamChannelNotAvailable = 23,
+  /**
+   * @ignore
+   */
+  ConnectionChangedInconsistentAppid = 24,
 }
 
 /**
@@ -3288,13 +3344,17 @@ export enum VideoViewSetupMode {
  */
 export class VideoCanvas {
   /**
-   * The video display window.
-   */
-  view?: any;
-  /**
    * The user ID.
    */
   uid?: number;
+  /**
+   * @ignore
+   */
+  subviewUid?: number;
+  /**
+   * The video display window.
+   */
+  view?: any;
   /**
    * The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
    */
@@ -3329,6 +3389,10 @@ export class VideoCanvas {
    * @ignore
    */
   enableAlphaMask?: boolean;
+  /**
+   * @ignore
+   */
+  position?: VideoModulePosition;
 }
 
 /**
@@ -4185,76 +4249,6 @@ export enum ChannelMediaRelayError {
 }
 
 /**
- * The event code of channel media relay.
- */
-export enum ChannelMediaRelayEvent {
-  /**
-   * 0: The user disconnects from the server due to a poor network connection.
-   */
-  RelayEventNetworkDisconnected = 0,
-  /**
-   * 1: The user is connected to the server.
-   */
-  RelayEventNetworkConnected = 1,
-  /**
-   * 2: The user joins the source channel.
-   */
-  RelayEventPacketJoinedSrcChannel = 2,
-  /**
-   * 3: The user joins the target channel.
-   */
-  RelayEventPacketJoinedDestChannel = 3,
-  /**
-   * 4: The SDK starts relaying the media stream to the target channel.
-   */
-  RelayEventPacketSentToDestChannel = 4,
-  /**
-   * 5: The server receives the audio stream from the source channel.
-   */
-  RelayEventPacketReceivedVideoFromSrc = 5,
-  /**
-   * 6: The server receives the audio stream from the source channel.
-   */
-  RelayEventPacketReceivedAudioFromSrc = 6,
-  /**
-   * 7: The target channel is updated.
-   */
-  RelayEventPacketUpdateDestChannel = 7,
-  /**
-   * @ignore
-   */
-  RelayEventPacketUpdateDestChannelRefused = 8,
-  /**
-   * 9: The target channel does not change, which means that the target channel fails to be updated.
-   */
-  RelayEventPacketUpdateDestChannelNotChange = 9,
-  /**
-   * 10: The target channel name is NULL.
-   */
-  RelayEventPacketUpdateDestChannelIsNull = 10,
-  /**
-   * 11: The video profile is sent to the server.
-   */
-  RelayEventVideoProfileUpdate = 11,
-  /**
-   * 12: The SDK successfully pauses relaying the media stream to target channels.
-   */
-  RelayEventPauseSendPacketToDestChannelSuccess = 12,
-  /**
-   * 13: The SDK fails to pause relaying the media stream to target channels.
-   */
-  RelayEventPauseSendPacketToDestChannelFailed = 13,
-  /**
-   * 14: The SDK successfully resumes relaying the media stream to target channels.
-   */
-  RelayEventResumeSendPacketToDestChannelSuccess = 14,
-  /**
-   * 15: The SDK fails to resume relaying the media stream to target channels.
-   */
-  RelayEventResumeSendPacketToDestChannelFailed = 15,
-}
-
-/**
  * The state code of the channel media relay.
  */
 export enum ChannelMediaRelayState {
@@ -4281,6 +4275,10 @@ export enum ChannelMediaRelayState {
  */
 export class ChannelMediaInfo {
   /**
+   * The user ID.
+   */
+  uid?: number;
+  /**
    * The channel name.
    */
   channelName?: string;
@@ -4288,10 +4286,6 @@ export class ChannelMediaInfo {
    * The token that enables the user to join the channel.
    */
   token?: string;
-  /**
-   * The user ID.
-   */
-  uid?: number;
 }
 
 /**
@@ -4333,7 +4327,7 @@ export class PeerDownlinkInfo {
   /**
    * @ignore
    */
-  uid?: string;
+  userId?: string;
   /**
    * @ignore
    */
@@ -4488,16 +4482,6 @@ export enum PermissionType {
    * (For Android only) 2: Permission for screen sharing.
    */
   ScreenCapture = 2,
-}
-
-/**
- * The maximum length of the user account.
- */
-export enum MaxUserAccountLengthType {
-  /**
-   * The maximum length of the user account is 256 bytes.
-   */
-  MaxUserAccountLength = 256,
 }
 
 /**
@@ -4791,20 +4775,6 @@ export enum ConfigFetchType {
 /**
  * @ignore
  */
-export class RecorderStreamInfo {
-  /**
-   * @ignore
-   */
-  channelId?: string;
-  /**
-   * @ignore
-   */
-  uid?: number;
-}
-
-/**
- * @ignore
- */
 export enum LocalProxyMode {
   /**
    * @ignore
@@ -4883,6 +4853,20 @@ export class LocalAccessPointConfiguration {
 }
 
 /**
+ * @ignore
+ */
+export class RecorderStreamInfo {
+  /**
+   * @ignore
+   */
+  channelId?: string;
+  /**
+   * @ignore
+   */
+  uid?: number;
+}
+
+/**
  * The spatial audio parameters.
  */
 export class SpatialAudioParams {
@@ -4934,4 +4918,42 @@ export class SpatialAudioParams {
    *  When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo, updateSelfPosition, and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
    */
   enable_doppler?: boolean;
+}
+
+/**
+ * @ignore
+ */
+export class VideoLayout {
+  /**
+   * @ignore
+   */
+  channelId?: string;
+  /**
+   * @ignore
+   */
+  uid?: number;
+  /**
+   * @ignore
+   */
+  strUid?: string;
+  /**
+   * @ignore
+   */
+  x?: number;
+  /**
+   * @ignore
+   */
+  y?: number;
+  /**
+   * @ignore
+   */
+  width?: number;
+  /**
+   * @ignore
+   */
+  height?: number;
+  /**
+   * @ignore
+   */
+  videoState?: number;
 }

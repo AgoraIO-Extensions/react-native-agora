@@ -8,13 +8,16 @@ export function processIMediaPlayerSourceObserver(
   switch (event) {
     case 'onPlayerSourceStateChanged':
       if (handler.onPlayerSourceStateChanged !== undefined) {
-        handler.onPlayerSourceStateChanged(jsonParams.state, jsonParams.ec);
+        handler.onPlayerSourceStateChanged(jsonParams.state, jsonParams.reason);
       }
       break;
 
     case 'onPositionChanged':
       if (handler.onPositionChanged !== undefined) {
-        handler.onPositionChanged(jsonParams.position_ms);
+        handler.onPositionChanged(
+          jsonParams.positionMs,
+          jsonParams.timestampMs
+        );
       }
       break;
 
@@ -67,6 +70,18 @@ export function processIMediaPlayerSourceObserver(
     case 'onPlayerInfoUpdated':
       if (handler.onPlayerInfoUpdated !== undefined) {
         handler.onPlayerInfoUpdated(jsonParams.info);
+      }
+      break;
+
+    case 'onPlayerCacheStats':
+      if (handler.onPlayerCacheStats !== undefined) {
+        handler.onPlayerCacheStats(jsonParams.stats);
+      }
+      break;
+
+    case 'onPlayerPlaybackStats':
+      if (handler.onPlayerPlaybackStats !== undefined) {
+        handler.onPlayerPlaybackStats(jsonParams.stats);
       }
       break;
 

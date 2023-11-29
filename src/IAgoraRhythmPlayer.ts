@@ -26,29 +26,29 @@ export enum RhythmPlayerStateType {
 }
 
 /**
- * Virtual Metronome error message.
+ * @ignore
  */
-export enum RhythmPlayerErrorType {
+export enum RhythmPlayerReason {
   /**
-   * (0): The beat files are played normally without errors.
+   * @ignore
    */
-  RhythmPlayerErrorOk = 0,
+  RhythmPlayerReasonOk = 0,
   /**
-   * 1: A general error; no specific reason.
+   * @ignore
    */
-  RhythmPlayerErrorFailed = 1,
+  RhythmPlayerReasonFailed = 1,
   /**
-   * 801: There is an error when opening the beat files.
+   * @ignore
    */
-  RhythmPlayerErrorCanNotOpen = 801,
+  RhythmPlayerReasonCanNotOpen = 801,
   /**
-   * 802: There is an error when playing the beat files.
+   * @ignore
    */
-  RhythmPlayerErrorCanNotPlay = 802,
+  RhythmPlayerReasonCanNotPlay = 802,
   /**
-   * (803): The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
+   * @ignore
    */
-  RhythmPlayerErrorFileOverDurationLimit = 803,
+  RhythmPlayerReasonFileOverDurationLimit = 803,
 }
 
 /**
