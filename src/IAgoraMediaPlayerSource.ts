@@ -1,8 +1,10 @@
 import './extension/IAgoraMediaPlayerSourceExtension';
 import {
-  MediaPlayerError,
+  CacheStatistics,
   MediaPlayerEvent,
+  MediaPlayerReason,
   MediaPlayerState,
+  PlayerPlaybackStats,
   PlayerPreloadEvent,
   PlayerUpdatedInfo,
   SrcInfo,
@@ -22,7 +24,7 @@ export interface IMediaPlayerSourceObserver {
    */
   onPlayerSourceStateChanged?(
     state: MediaPlayerState,
-    ec: MediaPlayerError
+    reason: MediaPlayerReason
   ): void;
 
   /**
@@ -32,7 +34,7 @@ export interface IMediaPlayerSourceObserver {
    *
    * @param position The playback position (ms) of media files.
    */
-  onPositionChanged?(positionMs: number): void;
+  onPositionChanged?(positionMs: number, timestampMs: number): void;
 
   /**
    * Reports the player events.
@@ -104,6 +106,16 @@ export interface IMediaPlayerSourceObserver {
    * @param info Information related to the media player. See PlayerUpdatedInfo.
    */
   onPlayerInfoUpdated?(info: PlayerUpdatedInfo): void;
+
+  /**
+   * @ignore
+   */
+  onPlayerCacheStats?(stats: CacheStatistics): void;
+
+  /**
+   * @ignore
+   */
+  onPlayerPlaybackStats?(stats: PlayerPlaybackStats): void;
 
   /**
    * Reports the volume of the media player.

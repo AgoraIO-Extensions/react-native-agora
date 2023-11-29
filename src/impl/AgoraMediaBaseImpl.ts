@@ -5,8 +5,30 @@ import {
   IAudioSpectrumObserver,
   IMediaRecorderObserver,
   IVideoEncodedFrameObserver,
+  IVideoFrameMetaInfo,
   IVideoFrameObserver,
+  MetaInfoKey,
 } from '../AgoraMediaBase';
+// @ts-ignore
+export class IVideoFrameMetaInfoImpl implements IVideoFrameMetaInfo {
+  getMetaInfoStr(key: MetaInfoKey): string {
+    const apiType = this.getApiTypeFromGetMetaInfoStr(key);
+    const jsonParams = {
+      key: key,
+      toJSON: () => {
+        return {
+          key: key,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetMetaInfoStr(key: MetaInfoKey): string {
+    return 'VideoFrameMetaInfo_getMetaInfoStr';
+  }
+}
 
 export function processIAudioPcmFrameSink(
   handler: IAudioPcmFrameSink,
@@ -180,7 +202,7 @@ export function processIMediaRecorderObserver(
           jsonParams.channelId,
           jsonParams.uid,
           jsonParams.state,
-          jsonParams.error
+          jsonParams.reason
         );
       }
       break;
@@ -196,3 +218,5 @@ export function processIMediaRecorderObserver(
       break;
   }
 }
+
+import { callIrisApi } from '../internal/IrisApiEngine';

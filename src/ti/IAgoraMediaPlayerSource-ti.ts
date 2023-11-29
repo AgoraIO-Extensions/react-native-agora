@@ -5,8 +5,8 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const IMediaPlayerSourceObserver = t.iface([], {
-  "onPlayerSourceStateChanged": t.opt(t.func("void", t.param("state", "MediaPlayerState"), t.param("ec", "MediaPlayerError"))),
-  "onPositionChanged": t.opt(t.func("void", t.param("positionMs", "number"))),
+  "onPlayerSourceStateChanged": t.opt(t.func("void", t.param("state", "MediaPlayerState"), t.param("reason", "MediaPlayerReason"))),
+  "onPositionChanged": t.opt(t.func("void", t.param("positionMs", "number"), t.param("timestampMs", "number"))),
   "onPlayerEvent": t.opt(t.func("void", t.param("eventCode", "MediaPlayerEvent"), t.param("elapsedTime", "number"), t.param("message", "string"))),
   "onMetaData": t.opt(t.func("void", t.param("data", "Uint8Array"), t.param("length", "number"))),
   "onPlayBufferUpdated": t.opt(t.func("void", t.param("playCachedBuffer", "number"))),
@@ -15,6 +15,8 @@ export const IMediaPlayerSourceObserver = t.iface([], {
   "onAgoraCDNTokenWillExpire": t.opt(t.func("void")),
   "onPlayerSrcInfoChanged": t.opt(t.func("void", t.param("from", "SrcInfo"), t.param("to", "SrcInfo"))),
   "onPlayerInfoUpdated": t.opt(t.func("void", t.param("info", "PlayerUpdatedInfo"))),
+  "onPlayerCacheStats": t.opt(t.func("void", t.param("stats", "CacheStatistics"))),
+  "onPlayerPlaybackStats": t.opt(t.func("void", t.param("stats", "PlayerPlaybackStats"))),
   "onAudioVolumeIndication": t.opt(t.func("void", t.param("volume", "number"))),
 });
 

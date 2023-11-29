@@ -258,6 +258,35 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return 'MediaPlayer_selectAudioTrack';
   }
 
+  selectMultiAudioTrack(
+    playoutTrackIndex: number,
+    publishTrackIndex: number
+  ): number {
+    const apiType = this.getApiTypeFromSelectMultiAudioTrack(
+      playoutTrackIndex,
+      publishTrackIndex
+    );
+    const jsonParams = {
+      playoutTrackIndex: playoutTrackIndex,
+      publishTrackIndex: publishTrackIndex,
+      toJSON: () => {
+        return {
+          playoutTrackIndex: playoutTrackIndex,
+          publishTrackIndex: publishTrackIndex,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSelectMultiAudioTrack(
+    playoutTrackIndex: number,
+    publishTrackIndex: number
+  ): string {
+    return 'MediaPlayer_selectMultiAudioTrack';
+  }
+
   setPlayerOptionInInt(key: string, value: number): number {
     const apiType = this.getApiTypeFromSetPlayerOptionInInt(key, value);
     const jsonParams = {

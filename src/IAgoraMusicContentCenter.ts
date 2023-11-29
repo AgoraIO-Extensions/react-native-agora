@@ -34,31 +34,31 @@ export enum MusicContentCenterStatusCode {
   /**
    * @ignore
    */
-  KMusicContentCenterStatusErr = 1,
+  KMusicContentCenterStatusError = 1,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusErrGateway = 2,
+  KMusicContentCenterStatusGateway = 2,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusErrPermissionAndResource = 3,
+  KMusicContentCenterStatusPermissionAndResource = 3,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusErrInternalDataParse = 4,
+  KMusicContentCenterStatusInternalDataParse = 4,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusErrMusicLoading = 5,
+  KMusicContentCenterStatusMusicLoading = 5,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusErrMusicDecryption = 6,
+  KMusicContentCenterStatusMusicDecryption = 6,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusErrHttpInternalError = 7,
+  KMusicContentCenterStatusHttpInternalError = 7,
 }
 
 /**
@@ -248,7 +248,7 @@ export interface IMusicContentCenterEventHandler {
   onMusicChartsResult?(
     requestId: string,
     result: MusicChartInfo[],
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode
   ): void;
 
   /**
@@ -257,7 +257,7 @@ export interface IMusicContentCenterEventHandler {
   onMusicCollectionResult?(
     requestId: string,
     result: MusicCollection,
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode
   ): void;
 
   /**
@@ -267,7 +267,7 @@ export interface IMusicContentCenterEventHandler {
     requestId: string,
     songCode: number,
     lyricUrl: string,
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode
   ): void;
 
   /**
@@ -277,7 +277,7 @@ export interface IMusicContentCenterEventHandler {
     requestId: string,
     songCode: number,
     simpleInfo: string,
-    errorCode: MusicContentCenterStatusCode
+    status: MusicContentCenterStatusCode
   ): void;
 
   /**
@@ -288,8 +288,8 @@ export interface IMusicContentCenterEventHandler {
     songCode: number,
     percent: number,
     lyricUrl: string,
-    status: PreloadStatusCode,
-    errorCode: MusicContentCenterStatusCode
+    preloadStatus: PreloadStatusCode,
+    mccStatus: MusicContentCenterStatusCode
   ): void;
 }
 

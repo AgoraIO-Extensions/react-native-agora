@@ -1181,64 +1181,6 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_startOrUpdateChannelMediaRelayEx';
   }
 
-  startChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromStartChannelMediaRelayEx(
-      configuration,
-      connection
-    );
-    const jsonParams = {
-      configuration: configuration,
-      connection: connection,
-      toJSON: () => {
-        return {
-          configuration: configuration,
-          connection: connection,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromStartChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): string {
-    return 'RtcEngineEx_startChannelMediaRelayEx';
-  }
-
-  updateChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): number {
-    const apiType = this.getApiTypeFromUpdateChannelMediaRelayEx(
-      configuration,
-      connection
-    );
-    const jsonParams = {
-      configuration: configuration,
-      connection: connection,
-      toJSON: () => {
-        return {
-          configuration: configuration,
-          connection: connection,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromUpdateChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): string {
-    return 'RtcEngineEx_updateChannelMediaRelayEx';
-  }
-
   stopChannelMediaRelayEx(connection: RtcConnection): number {
     const apiType = this.getApiTypeFromStopChannelMediaRelayEx(connection);
     const jsonParams = {
@@ -1546,6 +1488,29 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     connection: RtcConnection
   ): string {
     return 'RtcEngineEx_startMediaRenderingTracingEx';
+  }
+
+  setParametersEx(connection: RtcConnection, parameters: string): number {
+    const apiType = this.getApiTypeFromSetParametersEx(connection, parameters);
+    const jsonParams = {
+      connection: connection,
+      parameters: parameters,
+      toJSON: () => {
+        return {
+          connection: connection,
+          parameters: parameters,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetParametersEx(
+    connection: RtcConnection,
+    parameters: string
+  ): string {
+    return 'RtcEngineEx_setParametersEx';
   }
 }
 

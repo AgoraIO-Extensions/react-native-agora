@@ -14,7 +14,6 @@ import {
   CaptureBrightnessLevelType,
   ChannelMediaRelayConfiguration,
   ChannelMediaRelayError,
-  ChannelMediaRelayEvent,
   ChannelMediaRelayState,
   ChannelProfileType,
   ClientRoleChangeFailedReason,
@@ -40,10 +39,10 @@ import {
   LiveTranscoding,
   LocalAccessPointConfiguration,
   LocalAudioStats,
-  LocalAudioStreamError,
+  LocalAudioStreamReason,
   LocalAudioStreamState,
   LocalTranscoderConfiguration,
-  LocalVideoStreamError,
+  LocalVideoStreamReason,
   LocalVideoStreamState,
   LowlightEnhanceOptions,
   MediaTraceEvent,
@@ -58,7 +57,7 @@ import {
   RemoteVideoState,
   RemoteVideoStateReason,
   RtcStats,
-  RtmpStreamPublishErrorType,
+  RtmpStreamPublishReason,
   RtmpStreamPublishState,
   RtmpStreamingEvent,
   ScreenCaptureParameters,
@@ -84,8 +83,10 @@ import {
   VideoDenoiserOptions,
   VideoEncoderConfiguration,
   VideoFormat,
+  VideoLayout,
   VideoMirrorModeType,
   VideoOrientation,
+  VideoQoePreferenceType,
   VideoRenderingTracingInfo,
   VideoStreamType,
   VideoSubscriptionOptions,
@@ -114,7 +115,7 @@ import { IMediaRecorder } from './IAgoraMediaRecorder';
 import { IMusicContentCenter } from './IAgoraMusicContentCenter';
 import {
   AgoraRhythmPlayerConfig,
-  RhythmPlayerErrorType,
+  RhythmPlayerReason,
   RhythmPlayerStateType,
 } from './IAgoraRhythmPlayer';
 import { RtcConnection } from './IAgoraRtcEngineEx';
@@ -1112,6 +1113,10 @@ export class ChannelMediaOptions {
    */
   publishTranscodedVideoTrack?: boolean;
   /**
+   * @ignore
+   */
+  publishMixedAudioTrack?: boolean;
+  /**
    * Whether to automatically subscribe to all remote audio streams when the user joins a channel: true : Subscribe to all remote audio streams. false : Do not automatically subscribe to any remote audio streams.
    */
   autoSubscribeAudio?: boolean;
@@ -1553,7 +1558,7 @@ export interface IRtcEngineEventHandler {
   onLocalVideoStateChanged?(
     source: VideoSourceType,
     state: LocalVideoStreamState,
-    error: LocalVideoStreamError
+    reason: LocalVideoStreamReason
   ): void;
 
   /**
@@ -1698,16 +1703,6 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * Reports the statistics of the local audio stream.
-   *
-   * The SDK triggers this callback once every two seconds.
-   *
-   * @param connection The connection information. See RtcConnection.
-   * @param stats Local audio statistics. See LocalAudioStats.
-   */
-  onLocalAudioStats?(connection: RtcConnection, stats: LocalAudioStats): void;
-
-  /**
    * Reports the transport-layer statistics of each remote audio stream.
    *
    * The SDK triggers this callback once every two seconds for each remote user who is sending audio streams. If a channel includes multiple remote users, the SDK triggers this callback as many times.
@@ -1716,6 +1711,16 @@ export interface IRtcEngineEventHandler {
    * @param stats The statistics of the received remote audio streams. See RemoteAudioStats.
    */
   onRemoteAudioStats?(connection: RtcConnection, stats: RemoteAudioStats): void;
+
+  /**
+   * Reports the statistics of the local audio stream.
+   *
+   * The SDK triggers this callback once every two seconds.
+   *
+   * @param connection The connection information. See RtcConnection.
+   * @param stats Local audio statistics. See LocalAudioStats.
+   */
+  onLocalAudioStats?(connection: RtcConnection, stats: LocalAudioStats): void;
 
   /**
    * Reports the statistics of the local video stream.
@@ -1832,7 +1837,7 @@ export interface IRtcEngineEventHandler {
    */
   onRhythmPlayerStateChanged?(
     state: RhythmPlayerStateType,
-    errorCode: RhythmPlayerErrorType
+    reason: RhythmPlayerReason
   ): void;
 
   /**
@@ -1952,21 +1957,6 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * Occurs when the SDK receives the first audio frame from a specific remote user.
-   *
-   * Deprecated: Use onRemoteAudioStateChanged instead.
-   *
-   * @param connection The connection information. See RtcConnection.
-   * @param userId The user ID of the remote user.
-   * @param elapsed The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
-   */
-  onFirstRemoteAudioFrame?(
-    connection: RtcConnection,
-    userId: number,
-    elapsed: number
-  ): void;
-
-  /**
    * Occurs when the SDK decodes the first remote audio frame for playback.
    *
    * Deprecated: Use onRemoteAudioStateChanged instead. The SDK triggers this callback under one of the following circumstances:
@@ -1988,6 +1978,21 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
+   * Occurs when the SDK receives the first audio frame from a specific remote user.
+   *
+   * Deprecated: Use onRemoteAudioStateChanged instead.
+   *
+   * @param connection The connection information. See RtcConnection.
+   * @param userId The user ID of the remote user.
+   * @param elapsed The time elapsed (ms) from the local user calling joinChannel until the SDK triggers this callback.
+   */
+  onFirstRemoteAudioFrame?(
+    connection: RtcConnection,
+    userId: number,
+    elapsed: number
+  ): void;
+
+  /**
    * Occurs when the local audio stream state changes.
    *
    * When the state of the local audio stream changes (including the state of the audio capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local audio stream, and allows you to troubleshoot issues when audio exceptions occur. When the state is LocalAudioStreamStateFailed (3), you can view the error information in the error parameter.
@@ -1999,7 +2004,7 @@ export interface IRtcEngineEventHandler {
   onLocalAudioStateChanged?(
     connection: RtcConnection,
     state: LocalAudioStreamState,
-    error: LocalAudioStreamError
+    reason: LocalAudioStreamReason
   ): void;
 
   /**
@@ -2117,7 +2122,7 @@ export interface IRtcEngineEventHandler {
   onRtmpStreamingStateChanged?(
     url: string,
     state: RtmpStreamPublishState,
-    errCode: RtmpStreamPublishErrorType
+    reason: RtmpStreamPublishReason
   ): void;
 
   /**
@@ -2161,15 +2166,6 @@ export interface IRtcEngineEventHandler {
     state: ChannelMediaRelayState,
     code: ChannelMediaRelayError
   ): void;
-
-  /**
-   * Reports events during the media stream relay.
-   *
-   * Deprecated: This callback is deprecated.
-   *
-   * @param code The event code of channel media relay. See ChannelMediaRelayEvent.
-   */
-  onChannelMediaRelayEvent?(code: ChannelMediaRelayEvent): void;
 
   /**
    * @ignore
@@ -2311,6 +2307,45 @@ export interface IRtcEngineEventHandler {
   /**
    * @ignore
    */
+  onUserAccountUpdated?(
+    connection: RtcConnection,
+    remoteUid: number,
+    remoteUserAccount: string
+  ): void;
+
+  /**
+   * Video frame rendering event callback.
+   *
+   * After calling the startMediaRenderingTracing method or joining the channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
+   *
+   * @param connection The connection information. See RtcConnection.
+   * @param uid The user ID.
+   * @param currentEvent The current video frame rendering event. See MediaTraceEvent.
+   * @param tracingInfo The indicators during the video frame rendering process. Developers need to reduce the value of indicators as much as possible in order to improve the efficiency of the first video frame rendering. See VideoRenderingTracingInfo.
+   */
+  onVideoRenderingTracingResult?(
+    connection: RtcConnection,
+    uid: number,
+    currentEvent: MediaTraceEvent,
+    tracingInfo: VideoRenderingTracingInfo
+  ): void;
+
+  /**
+   * Occurs when there's an error during the local video mixing.
+   *
+   * When you fail to call startLocalVideoTranscoder or updateLocalTranscoderConfiguration, the SDK triggers this callback to report the reason.
+   *
+   * @param stream The video streams that cannot be mixed during video mixing. See TranscodingVideoStream.
+   * @param error The reason for local video mixing error. See VideoTranscoderError.
+   */
+  onLocalVideoTranscoderError?(
+    stream: TranscodingVideoStream,
+    error: VideoTranscoderError
+  ): void;
+
+  /**
+   * @ignore
+   */
   onUploadLogResult?(
     connection: RtcConnection,
     requestId: string,
@@ -2385,6 +2420,18 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
+   * @ignore
+   */
+  onTranscodedStreamLayoutInfo?(
+    connection: RtcConnection,
+    uid: number,
+    width: number,
+    height: number,
+    layoutCount: number,
+    layoutlist: VideoLayout[]
+  ): void;
+
+  /**
    * The event callback of the extension.
    *
    * To listen for events while the extension is running, you need to register this callback.
@@ -2441,41 +2488,7 @@ export interface IRtcEngineEventHandler {
   /**
    * @ignore
    */
-  onUserAccountUpdated?(
-    connection: RtcConnection,
-    remoteUid: number,
-    userAccount: string
-  ): void;
-
-  /**
-   * Occurs when there's an error during the local video mixing.
-   *
-   * When you fail to call startLocalVideoTranscoder or updateLocalTranscoderConfiguration, the SDK triggers this callback to report the reason.
-   *
-   * @param stream The video streams that cannot be mixed during video mixing. See TranscodingVideoStream.
-   * @param error The reason for local video mixing error. See VideoTranscoderError.
-   */
-  onLocalVideoTranscoderError?(
-    stream: TranscodingVideoStream,
-    error: VideoTranscoderError
-  ): void;
-
-  /**
-   * Video frame rendering event callback.
-   *
-   * After calling the startMediaRenderingTracing method or joining the channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
-   *
-   * @param connection The connection information. See RtcConnection.
-   * @param uid The user ID.
-   * @param currentEvent The current video frame rendering event. See MediaTraceEvent.
-   * @param tracingInfo The indicators during the video frame rendering process. Developers need to reduce the value of indicators as much as possible in order to improve the efficiency of the first video frame rendering. See VideoRenderingTracingInfo.
-   */
-  onVideoRenderingTracingResult?(
-    connection: RtcConnection,
-    uid: number,
-    currentEvent: MediaTraceEvent,
-    tracingInfo: VideoRenderingTracingInfo
-  ): void;
+  onSetRtmFlagResult?(connection: RtcConnection, code: number): void;
 }
 
 /**
@@ -2651,33 +2664,33 @@ export interface IMetadataObserver {
 }
 
 /**
- * The CDN streaming error.
+ * @ignore
  */
-export enum DirectCdnStreamingError {
+export enum DirectCdnStreamingReason {
   /**
-   * 0: No error.
+   * @ignore
    */
-  DirectCdnStreamingErrorOk = 0,
+  DirectCdnStreamingReasonOk = 0,
   /**
-   * 1: A general error; no specific reason. You can try to push the media stream again.
+   * @ignore
    */
-  DirectCdnStreamingErrorFailed = 1,
+  DirectCdnStreamingReasonFailed = 1,
   /**
-   * 2: An error occurs when pushing audio streams. For example, the local audio capture device is not working properly, is occupied by another process, or does not get the permission required.
+   * @ignore
    */
-  DirectCdnStreamingErrorAudioPublication = 2,
+  DirectCdnStreamingReasonAudioPublication = 2,
   /**
-   * 3: An error occurs when pushing video streams. For example, the local video capture device is not working properly, is occupied by another process, or does not get the permission required.
+   * @ignore
    */
-  DirectCdnStreamingErrorVideoPublication = 3,
+  DirectCdnStreamingReasonVideoPublication = 3,
   /**
-   * 4: Fails to connect to the CDN.
+   * @ignore
    */
-  DirectCdnStreamingErrorNetConnect = 4,
+  DirectCdnStreamingReasonNetConnect = 4,
   /**
-   * 5: The URL is already being used. Use a new URL for streaming.
+   * @ignore
    */
-  DirectCdnStreamingErrorBadName = 5,
+  DirectCdnStreamingReasonBadName = 5,
 }
 
 /**
@@ -2747,7 +2760,7 @@ export interface IDirectCdnStreamingEventHandler {
    */
   onDirectCdnStreamingStateChanged?(
     state: DirectCdnStreamingState,
-    error: DirectCdnStreamingError,
+    reason: DirectCdnStreamingReason,
     message: string
   ): void;
 
@@ -2877,6 +2890,11 @@ export abstract class IRtcEngine {
    *  If the call timeouts, please modify the call logic and do not invoke the method in the main thread.
    */
   abstract queryCodecCapability(): { codecInfo: CodecCapInfo[]; size: number };
+
+  /**
+   * @ignore
+   */
+  abstract queryDeviceScore(): number;
 
   /**
    * Preloads a channel with token, channelId, and uid.
@@ -3423,6 +3441,11 @@ export abstract class IRtcEngine {
   abstract setVideoScenario(scenarioType: VideoApplicationScenarioType): number;
 
   /**
+   * @ignore
+   */
+  abstract setVideoQoEPreference(qoePreference: VideoQoePreferenceType): number;
+
+  /**
    * Enables the audio module.
    *
    * The audio mode is enabled by default.
@@ -3592,6 +3615,21 @@ export abstract class IRtcEngine {
   abstract setDefaultMuteAllRemoteVideoStreams(mute: boolean): number;
 
   /**
+   * Sets the default stream type of subscrption for remote video streams.
+   *
+   * By default, the SDK enables the low-quality video stream auto mode on the sending end (it does not actively send the low-quality video stream). The host identity receiver can initiate a low-quality video stream application at the receiving end by calling this method (the call to this method by the audience receiver does not take effect). After receiving the application, the sending end automatically switches to the low-quality video stream mode. Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
+   *  Call this method before joining a channel. The SDK does not support changing the default subscribed video stream type after joining a channel.
+   *  If you call both this method and setRemoteVideoStreamType, the SDK applies the settings in the setRemoteVideoStreamType method.
+   *
+   * @param streamType The default video-stream type. See VideoStreamType.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   */
+  abstract setRemoteDefaultVideoStreamType(streamType: VideoStreamType): number;
+
+  /**
    * Stops or resumes subscribing to the video stream of a specified user.
    *
    * Call this method after joining a channel.
@@ -3645,21 +3683,6 @@ export abstract class IRtcEngine {
     uid: number,
     options: VideoSubscriptionOptions
   ): number;
-
-  /**
-   * Sets the default stream type of subscrption for remote video streams.
-   *
-   * By default, the SDK enables the low-quality video stream auto mode on the sending end (it does not actively send the low-quality video stream). The host identity receiver can initiate a low-quality video stream application at the receiving end by calling this method (the call to this method by the audience receiver does not take effect). After receiving the application, the sending end automatically switches to the low-quality video stream mode. Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamMode (false), the receiver can choose to receive either the high-quality video stream or the low-video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream.
-   *  Call this method before joining a channel. The SDK does not support changing the default subscribed video stream type after joining a channel.
-   *  If you call both this method and setRemoteVideoStreamType, the SDK applies the settings in the setRemoteVideoStreamType method.
-   *
-   * @param streamType The default video-stream type. See VideoStreamType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract setRemoteDefaultVideoStreamType(streamType: VideoStreamType): number;
 
   /**
    * Set the blocklist of subscriptions for audio streams.
@@ -4997,6 +5020,78 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
+   * Enables or disables extensions.
+   *
+   * To call this method, call it immediately after initializing the IRtcEngine object.
+   *  If you want to enable multiple extensions, you need to call this method multiple times.
+   *  The data processing order of different extensions in the SDK is determined by the order in which the extensions are enabled. That is, the extension that is enabled first will process the data first.
+   *
+   * @param provider The name of the extension provider.
+   * @param extension The name of the extension.
+   * @param enable Whether to enable the extension: true : Enable the extension. false : Disable the extension.
+   * @param type Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  The default value is UnknownMediaSource.
+   *  If you want to use the second camera to capture video, set this parameter to SecondaryCameraSource.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   *  -3: The extension library is not loaded. Agora recommends that you check the storage location or the name of the dynamic library.
+   */
+  abstract enableExtension(
+    provider: string,
+    extension: string,
+    enable?: boolean,
+    type?: MediaSourceType
+  ): number;
+
+  /**
+   * Sets the properties of the extension.
+   *
+   * After enabling the extension, you can call this method to set the properties of the extension.
+   *
+   * @param provider The name of the extension provider.
+   * @param extension The name of the extension.
+   * @param key The key of the extension.
+   * @param value The value of the extension key.
+   * @param type Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  The default value is UnknownMediaSource.
+   *  If you want to use the second camera to capture video, set this parameter to SecondaryCameraSource.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   */
+  abstract setExtensionProperty(
+    provider: string,
+    extension: string,
+    key: string,
+    value: string,
+    type?: MediaSourceType
+  ): number;
+
+  /**
+   * Gets detailed information on the extensions.
+   *
+   * @param provider The name of the extension provider.
+   * @param extension The name of the extension.
+   * @param key The key of the extension.
+   * @param bufLen Maximum length of the JSON string indicating the extension property. The maximum value is 512 bytes.
+   * @param type Source type of the extension. See MediaSourceType.
+   *
+   * @returns
+   * The extension information, if the method call succeeds.
+   *  An empty string, if the method call fails.
+   */
+  abstract getExtensionProperty(
+    provider: string,
+    extension: string,
+    key: string,
+    bufLen: number,
+    type?: MediaSourceType
+  ): string;
+
+  /**
    * @ignore
    */
   abstract enableLoopbackRecording(
@@ -5092,78 +5187,6 @@ export abstract class IRtcEngine {
     extension: string,
     type?: MediaSourceType
   ): number;
-
-  /**
-   * Enables or disables extensions.
-   *
-   * To call this method, call it immediately after initializing the IRtcEngine object.
-   *  If you want to enable multiple extensions, you need to call this method multiple times.
-   *  The data processing order of different extensions in the SDK is determined by the order in which the extensions are enabled. That is, the extension that is enabled first will process the data first.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param enable Whether to enable the extension: true : Enable the extension. false : Disable the extension.
-   * @param type Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
-   *  The default value is UnknownMediaSource.
-   *  If you want to use the second camera to capture video, set this parameter to SecondaryCameraSource.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -3: The extension library is not loaded. Agora recommends that you check the storage location or the name of the dynamic library.
-   */
-  abstract enableExtension(
-    provider: string,
-    extension: string,
-    enable?: boolean,
-    type?: MediaSourceType
-  ): number;
-
-  /**
-   * Sets the properties of the extension.
-   *
-   * After enabling the extension, you can call this method to set the properties of the extension.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param key The key of the extension.
-   * @param value The value of the extension key.
-   * @param type Type of media source. See MediaSourceType. In this method, this parameter supports only the following two settings:
-   *  The default value is UnknownMediaSource.
-   *  If you want to use the second camera to capture video, set this parameter to SecondaryCameraSource.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract setExtensionProperty(
-    provider: string,
-    extension: string,
-    key: string,
-    value: string,
-    type?: MediaSourceType
-  ): number;
-
-  /**
-   * Gets detailed information on the extensions.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param key The key of the extension.
-   * @param bufLen Maximum length of the JSON string indicating the extension property. The maximum value is 512 bytes.
-   * @param type Source type of the extension. See MediaSourceType.
-   *
-   * @returns
-   * The extension information, if the method call succeeds.
-   *  An empty string, if the method call fails.
-   */
-  abstract getExtensionProperty(
-    provider: string,
-    extension: string,
-    key: string,
-    bufLen: number,
-    type?: MediaSourceType
-  ): string;
 
   /**
    * Sets the camera capture configuration.
@@ -5807,19 +5830,6 @@ export abstract class IRtcEngine {
   abstract updateRtmpTranscoding(transcoding: LiveTranscoding): number;
 
   /**
-   * Stops pushing media streams to a CDN.
-   *
-   * Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
-   *
-   * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract stopRtmpStream(url: string): number;
-
-  /**
    * Starts the local video mixing.
    *
    * After calling this method, you can merge multiple video streams into one video stream locally. For example, you can merge the video streams captured by the camera, screen sharing, media player, remote video, video files, images, etc. into one video stream, and then publish the mixed video stream to the channel.
@@ -5855,6 +5865,19 @@ export abstract class IRtcEngine {
   abstract updateLocalTranscoderConfiguration(
     config: LocalTranscoderConfiguration
   ): number;
+
+  /**
+   * Stops pushing media streams to a CDN.
+   *
+   * Agora recommends that you use the server-side Media Push function. You can call this method to stop the live stream on the specified CDN address. This method can stop pushing media streams to only one CDN address at a time, so if you need to stop pushing streams to multiple addresses, call this method multiple times. After you call this method, the SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of the streaming.
+   *
+   * @param url The address of Media Push. The format is RTMP or RTMPS. The character length cannot exceed 1024 bytes. Special characters such as Chinese characters are not supported.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   */
+  abstract stopRtmpStream(url: string): number;
 
   /**
    * Stops the local video mixing.
@@ -6160,7 +6183,7 @@ export abstract class IRtcEngine {
    */
   abstract startAudioFrameDump(
     channelId: string,
-    userId: number,
+    uid: number,
     location: string,
     uuid: string,
     passwd: string,
@@ -6173,7 +6196,7 @@ export abstract class IRtcEngine {
    */
   abstract stopAudioFrameDump(
     channelId: string,
-    userId: number,
+    uid: number,
     location: string
   ): number;
 
@@ -6342,47 +6365,6 @@ export abstract class IRtcEngine {
    *  -8: Internal state error. Probably because the user is not a broadcaster.
    */
   abstract startOrUpdateChannelMediaRelay(
-    configuration: ChannelMediaRelayConfiguration
-  ): number;
-
-  /**
-   * Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-   *
-   * Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelay instead. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), and the onChannelMediaRelayEvent callback returns RelayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.
-   *  Call this method after joining the channel.
-   *  This method takes effect only when you are a host in a live streaming channel.
-   *  After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelay method to quit the current relay.
-   *  The relaying media streams across channels function needs to be enabled by contacting.
-   *  Agora does not support string user accounts in this API.
-   *
-   * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
-   *  -8: Internal state error. Probably because the user is not a broadcaster.
-   */
-  abstract startChannelMediaRelay(
-    configuration: ChannelMediaRelayConfiguration
-  ): number;
-
-  /**
-   * Updates the channels for media stream relay.
-   *
-   * Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelay instead. After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method. After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the RelayEventPacketUpdateDestChannel (7) state code. Call the method after successfully calling the startChannelMediaRelay method and receiving onChannelMediaRelayStateChanged (RelayStateRunning, RelayOk); otherwise, the method call fails.
-   *
-   * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract updateChannelMediaRelay(
     configuration: ChannelMediaRelayConfiguration
   ): number;
 

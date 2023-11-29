@@ -722,51 +722,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-   *
-   * Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), and the onChannelMediaRelayEvent callback returns RelayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.
-   *  Call this method after joining the channel.
-   *  This method takes effect only when you are a host in a live streaming channel.
-   *  After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.
-   *  The relaying media streams across channels function needs to be enabled by contacting.
-   *  Agora does not support string user accounts in this API.
-   *
-   * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-   * @param connection The connection information. See RtcConnection.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
-   *  -8: Internal state error. Probably because the user is not a broadcaster.
-   */
-  abstract startChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): number;
-
-  /**
-   * Updates the channels for media stream relay.
-   *
-   * Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method. After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the RelayEventPacketUpdateDestChannel (7) state code. Call the method after successfully calling the startChannelMediaRelayEx method and receiving onChannelMediaRelayStateChanged (RelayStateRunning, RelayOk); otherwise, the method call fails.
-   *
-   * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-   * @param connection The connection information. See RtcConnection.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract updateChannelMediaRelayEx(
-    configuration: ChannelMediaRelayConfiguration,
-    connection: RtcConnection
-  ): number;
-
-  /**
    * Stops the media stream relay. Once the relay stops, the host quits all the target channels.
    *
    * After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged callback. If the callback reports RelayStateIdle (0) and RelayOk (0), the host successfully stops the relay. If the method call fails, the SDK triggers the onChannelMediaRelayStateChanged callback with the RelayErrorServerNoResponse (2) or RelayErrorServerConnectionLost (8) status code. You can call the leaveChannel method to leave the channel, and the media stream relay automatically stops.
@@ -927,4 +882,12 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  < 0: Failure.
    */
   abstract startMediaRenderingTracingEx(connection: RtcConnection): number;
+
+  /**
+   * @ignore
+   */
+  abstract setParametersEx(
+    connection: RtcConnection,
+    parameters: string
+  ): number;
 }

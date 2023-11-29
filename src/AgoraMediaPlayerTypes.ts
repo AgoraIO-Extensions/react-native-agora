@@ -70,81 +70,81 @@ export enum MediaPlayerState {
 }
 
 /**
- * Error codes of the media player.
+ * @ignore
  */
-export enum MediaPlayerError {
-  /**
-   * 0: No error.
-   */
-  PlayerErrorNone = 0,
-  /**
-   * -1: Invalid arguments.
-   */
-  PlayerErrorInvalidArguments = -1,
-  /**
-   * -2: Internal error.
-   */
-  PlayerErrorInternal = -2,
-  /**
-   * -3: No resource.
-   */
-  PlayerErrorNoResource = -3,
-  /**
-   * -4: Invalid media resource.
-   */
-  PlayerErrorInvalidMediaSource = -4,
-  /**
-   * -5: The media stream type is unknown.
-   */
-  PlayerErrorUnknownStreamType = -5,
-  /**
-   * -6: The object is not initialized.
-   */
-  PlayerErrorObjNotInitialized = -6,
-  /**
-   * -7: The codec is not supported.
-   */
-  PlayerErrorCodecNotSupported = -7,
-  /**
-   * -8: Invalid renderer.
-   */
-  PlayerErrorVideoRenderFailed = -8,
-  /**
-   * -9: An error with the internal state of the player occurs.
-   */
-  PlayerErrorInvalidState = -9,
-  /**
-   * -10: The URL of the media resource cannot be found.
-   */
-  PlayerErrorUrlNotFound = -10,
-  /**
-   * -11: Invalid connection between the player and the Agora Server.
-   */
-  PlayerErrorInvalidConnectionState = -11,
-  /**
-   * -12: The playback buffer is insufficient.
-   */
-  PlayerErrorSrcBufferUnderflow = -12,
-  /**
-   * -13: The playback is interrupted.
-   */
-  PlayerErrorInterrupted = -13,
-  /**
-   * -14: The SDK does not support the method being called.
-   */
-  PlayerErrorNotSupported = -14,
-  /**
-   * -15: The authentication information of the media resource is expired.
-   */
-  PlayerErrorTokenExpired = -15,
+export enum MediaPlayerReason {
   /**
    * @ignore
    */
-  PlayerErrorIpExpired = -16,
+  PlayerReasonNone = 0,
   /**
-   * -17: An unknown error.
+   * @ignore
    */
-  PlayerErrorUnknown = -17,
+  PlayerReasonInvalidArguments = -1,
+  /**
+   * @ignore
+   */
+  PlayerReasonInternal = -2,
+  /**
+   * @ignore
+   */
+  PlayerReasonNoResource = -3,
+  /**
+   * @ignore
+   */
+  PlayerReasonInvalidMediaSource = -4,
+  /**
+   * @ignore
+   */
+  PlayerReasonUnknownStreamType = -5,
+  /**
+   * @ignore
+   */
+  PlayerReasonObjNotInitialized = -6,
+  /**
+   * @ignore
+   */
+  PlayerReasonCodecNotSupported = -7,
+  /**
+   * @ignore
+   */
+  PlayerReasonVideoRenderFailed = -8,
+  /**
+   * @ignore
+   */
+  PlayerReasonInvalidState = -9,
+  /**
+   * @ignore
+   */
+  PlayerReasonUrlNotFound = -10,
+  /**
+   * @ignore
+   */
+  PlayerReasonInvalidConnectionState = -11,
+  /**
+   * @ignore
+   */
+  PlayerReasonSrcBufferUnderflow = -12,
+  /**
+   * @ignore
+   */
+  PlayerReasonInterrupted = -13,
+  /**
+   * @ignore
+   */
+  PlayerReasonNotSupported = -14,
+  /**
+   * @ignore
+   */
+  PlayerReasonTokenExpired = -15,
+  /**
+   * @ignore
+   */
+  PlayerReasonIpExpired = -16,
+  /**
+   * @ignore
+   */
+  PlayerReasonUnknown = -17,
 }
 
 /**
@@ -366,21 +366,59 @@ export class CacheStatistics {
 }
 
 /**
+ * @ignore
+ */
+export class PlayerPlaybackStats {
+  /**
+   * @ignore
+   */
+  videoFps?: number;
+  /**
+   * @ignore
+   */
+  videoBitrateInKbps?: number;
+  /**
+   * @ignore
+   */
+  audioBitrateInKbps?: number;
+  /**
+   * @ignore
+   */
+  totalBitrateInKbps?: number;
+}
+
+/**
  * Information related to the media player.
  */
 export class PlayerUpdatedInfo {
   /**
-   * The ID of a media player.
+   * @ignore
    */
-  playerId?: string;
+  internalPlayerUuid?: string;
   /**
    * The ID of a deivce.
    */
   deviceId?: string;
   /**
-   * The statistics about the media file being cached. If you call the openWithMediaSource method and set enableCache as true, the statistics about the media file being cached is updated every second after the media file is played. See CacheStatistics.
+   * @ignore
    */
-  cacheStatistics?: CacheStatistics;
+  videoHeight?: number;
+  /**
+   * @ignore
+   */
+  videoWidth?: number;
+  /**
+   * @ignore
+   */
+  audioSampleRate?: number;
+  /**
+   * @ignore
+   */
+  audioChannels?: number;
+  /**
+   * @ignore
+   */
+  audioBitsPerSample?: number;
 }
 
 /**
@@ -410,6 +448,10 @@ export class MediaSource {
    *  If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
    */
   enableCache?: boolean;
+  /**
+   * @ignore
+   */
+  enableMultiAudioTrack?: boolean;
   /**
    * Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service: true : The media resource to be played is a live or on-demand video distributed through Media Broadcast service. false : (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service. If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
    */
