@@ -1027,13 +1027,13 @@ export interface IVideoFrameObserver {
    * Occurs each time the SDK receives a video frame captured by local devices.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by local devices. You can then pre-process the data according to your scenarios. Once the pre-processing is complete, you can directly modify videoFrame in this callback, and set the return value to true to send the modified video data to the SDK.
-   *  The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.
+   *  The video data that this callback gets has not been pre-processed such as watermarking, cropping, and rotating.
    *  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
    *
    * @param sourceType Video source types, including cameras, screens, or media player. See VideoSourceType.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: texture
-   *  iOS: cvPixelBuffer
+   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+   *  iOS: I420 or CVPixelBufferRef
    *
    * @returns
    * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
@@ -1052,8 +1052,8 @@ export interface IVideoFrameObserver {
    *
    * @param sourceType The type of the video source. See VideoSourceType.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: texture
-   *  iOS: cvPixelBuffer
+   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+   *  iOS: I420 or CVPixelBufferRef
    *
    * @returns
    * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
@@ -1078,8 +1078,8 @@ export interface IVideoFrameObserver {
    * @param channelId The channel ID.
    * @param remoteUid The user ID of the remote user who sends the current video frame.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: texture
-   *  iOS: cvPixelBuffer
+   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+   *  iOS: I420 or CVPixelBufferRef
    *
    * @returns
    * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
