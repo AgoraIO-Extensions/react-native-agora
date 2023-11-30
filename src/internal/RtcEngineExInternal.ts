@@ -325,6 +325,10 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     return 'RtcEngine_startPreview2';
   }
 
+  protected override getApiTypeFromStartPreviewWithoutSourceType(): string {
+    return 'RtcEngine_startPreview';
+  }
+
   protected override getApiTypeFromStopPreview(
     sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary
   ): string {
