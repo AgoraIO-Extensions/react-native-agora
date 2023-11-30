@@ -2,7 +2,7 @@
 #import <React/RCTUIManager.h>
 #import "RCTBridge.h"
 #import "AgoraRtcNg.h"
-#import <AgoraRtcWrapper/iris_rtc_engine.h>
+#import <AgoraRtcWrapper/iris_rtc_base.h>
 
 @interface AgoraRtcSurfaceViewManager : RCTViewManager
 @end

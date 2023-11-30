@@ -4,8 +4,8 @@ import {
   IMusicContentCenter,
   IMusicContentCenterEventHandler,
   IMusicPlayer,
-  MediaPlayerError,
   MediaPlayerEvent,
+  MediaPlayerReason,
   MediaPlayerState,
   Music,
   MusicChartInfo,
@@ -304,7 +304,7 @@ export default class MusicContentCenter
     this.info('onLyricResult', requestId, songCode, lyricUrl, errorCode);
   }
 
-  onPlayerSourceStateChanged(state: MediaPlayerState, ec: MediaPlayerError) {
+  onPlayerSourceStateChanged(state: MediaPlayerState, ec: MediaPlayerReason) {
     this.info('onPlayerSourceStateChanged', 'state', state, 'ec', ec);
     switch (state) {
       case MediaPlayerState.PlayerStateIdle:

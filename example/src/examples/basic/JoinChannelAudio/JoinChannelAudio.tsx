@@ -5,7 +5,7 @@ import {
   EarMonitoringFilterType,
   ErrorCodeType,
   IRtcEngineEventHandler,
-  LocalAudioStreamError,
+  LocalAudioStreamReason,
   LocalAudioStreamState,
   MediaDeviceType,
   RtcConnection,
@@ -286,7 +286,7 @@ export default class JoinChannelAudio
   onLocalAudioStateChanged(
     connection: RtcConnection,
     state: LocalAudioStreamState,
-    error: LocalAudioStreamError
+    error: LocalAudioStreamReason
   ) {
     this.info(
       'onLocalAudioStateChanged',

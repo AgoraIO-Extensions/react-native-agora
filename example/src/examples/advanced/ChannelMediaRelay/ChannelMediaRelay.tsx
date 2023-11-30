@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
   ChannelMediaRelayError,
-  ChannelMediaRelayEvent,
   ChannelMediaRelayState,
   ChannelProfileType,
   ClientRoleType,
@@ -101,41 +100,14 @@ export default class ChannelMediaRelay
   /**
    * Step 3-1: startChannelMediaRelay
    */
-  startChannelMediaRelay = () => {
+  startOrUpdateChannelMediaRelay = () => {
     const { channelId, token, uid, destChannelNames } = this.state;
     if (destChannelNames.length <= 0) {
       this.error('destChannelNames is invalid');
       return;
     }
 
-    this.engine?.startChannelMediaRelay({
-      // Configure src info
-      // Set channel name defaults to current
-      // Set uid defaults to local
-      srcInfo: { channelName: channelId, uid, token },
-      // Configure dest infos
-      destInfos: destChannelNames.map((value) => {
-        return {
-          channelName: value,
-          uid: 0,
-          token: '',
-        };
-      }),
-      destCount: destChannelNames.length,
-    });
-  };
-
-  /**
-   * Step 3-2 (Optional): updateChannelMediaRelay
-   */
-  updateChannelMediaRelay = () => {
-    const { channelId, token, uid, destChannelNames } = this.state;
-    if (destChannelNames.length <= 0) {
-      this.error('destChannelNames is invalid');
-      return;
-    }
-
-    this.engine?.updateChannelMediaRelay({
+    this.engine?.startOrUpdateChannelMediaRelay({
       // Configure src info
       // Set channel name defaults to current
       // Set uid defaults to local
@@ -213,10 +185,6 @@ export default class ChannelMediaRelay
     }
   }
 
-  onChannelMediaRelayEvent(code: ChannelMediaRelayEvent) {
-    this.info('onChannelMediaRelayEvent', 'code', code);
-  }
-
   protected renderConfiguration(): ReactElement | undefined {
     const { destChannelNames } = this.state;
     return (
@@ -249,13 +217,13 @@ export default class ChannelMediaRelay
           onPress={
             startChannelMediaRelay
               ? this.stopChannelMediaRelay
-              : this.startChannelMediaRelay
+              : this.startOrUpdateChannelMediaRelay
           }
         />
         <AgoraButton
           disabled={!startChannelMediaRelay}
           title={`updateChannelMediaRelay`}
-          onPress={this.updateChannelMediaRelay}
+          onPress={this.startOrUpdateChannelMediaRelay}
         />
         <AgoraButton
           disabled={!startChannelMediaRelay}

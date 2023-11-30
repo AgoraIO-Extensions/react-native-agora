@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import {
   ClientRoleType,
-  LocalVideoStreamError,
+  LocalVideoStreamReason,
   LocalVideoStreamState,
   PermissionType,
   RenderModeType,
@@ -266,7 +266,7 @@ export default function ScreenShare() {
     (
       source: VideoSourceType,
       state: LocalVideoStreamState,
-      error: LocalVideoStreamError
+      error: LocalVideoStreamReason
     ) => {
       log.info(
         'onLocalVideoStateChanged',

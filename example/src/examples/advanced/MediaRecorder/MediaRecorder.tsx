@@ -8,8 +8,8 @@ import {
   IRtcEngineEventHandler,
   MediaRecorderContainerFormat,
   MediaRecorderStreamType,
-  RecorderErrorCode,
   RecorderInfo,
+  RecorderReasonCode,
   RecorderState,
   createAgoraRtcEngine,
 } from 'react-native-agora';
@@ -209,7 +209,7 @@ export default class MediaRecorder
     channelId: string,
     uid: number,
     state: RecorderState,
-    error: RecorderErrorCode
+    error: RecorderReasonCode
   ) {
     this.info(
       'onRecorderStateChanged',

@@ -52,6 +52,7 @@ import {
 } from '../impl/IAgoraRtcEngineImpl';
 import AgoraRtcNg from '../specs';
 
+import { VideoFrameMetaInfoInternal } from './AgoraMediaBaseInternal';
 import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
@@ -173,6 +174,8 @@ export const EVENT_PROCESSORS: EventProcessors = {
         data.videoFrame.vBuffer = buffers[2];
         data.videoFrame.metadata_buffer = buffers[3];
         data.videoFrame.alphaBuffer = buffers[4];
+        let metaInfo = data.videoFrame.metaInfo;
+        data.videoFrame.metaInfo = new VideoFrameMetaInfoInternal(metaInfo);
       }
     },
     handlers: () => MediaEngineInternal._video_frame_observers,
@@ -265,6 +268,8 @@ export const EVENT_PROCESSORS: EventProcessors = {
         data.frame.vBuffer = buffers[2];
         data.frame.metadata_buffer = buffers[3];
         data.frame.alphaBuffer = buffers[4];
+        let metaInfo = data.frame.metaInfo;
+        data.frame.metaInfo = new VideoFrameMetaInfoInternal(metaInfo);
       }
     },
     handlers: (data: any) =>
