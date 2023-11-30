@@ -3206,6 +3206,11 @@ export abstract class IRtcEngine {
   abstract startPreview(sourceType?: VideoSourceType): number;
 
   /**
+   * @ignore
+   */
+  abstract startPreviewWithoutSourceType(): number;
+
+  /**
    * Stops the local video preview.
    *
    * After calling startPreview to start the preview, if you want to close the local video preview, call this method. Call this method before joining a channel or after leaving a channel.
