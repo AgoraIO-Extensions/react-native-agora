@@ -226,7 +226,7 @@ export abstract class ILocalSpatialAudioEngine {
   /**
    * @ignore
    */
-  abstract setZones(zones: SpatialAudioZone, zoneCount: number): number;
+  abstract setZones(zones: SpatialAudioZone[], zoneCount: number): number;
 
   /**
    * @ignore

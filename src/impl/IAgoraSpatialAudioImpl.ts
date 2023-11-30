@@ -423,7 +423,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     return 'LocalSpatialAudioEngine_setRemoteAudioAttenuation';
   }
 
-  setZones(zones: SpatialAudioZone, zoneCount: number): number {
+  setZones(zones: SpatialAudioZone[], zoneCount: number): number {
     const apiType = this.getApiTypeFromSetZones(zones, zoneCount);
     const jsonParams = {
       zones: zones,
@@ -440,7 +440,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromSetZones(
-    zones: SpatialAudioZone,
+    zones: SpatialAudioZone[],
     zoneCount: number
   ): string {
     return 'LocalSpatialAudioEngine_setZones';
