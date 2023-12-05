@@ -300,6 +300,10 @@ export class ContentInspectConfig {
    */
   extraInfo?: string;
   /**
+   * (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to ContentInspectImageModeration. If you want to use it, contact.
+   */
+  serverConfig?: string;
+  /**
    * Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
    */
   modules?: ContentInspectModule[];

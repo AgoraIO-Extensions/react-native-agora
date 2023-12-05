@@ -2837,17 +2837,6 @@ export class ExtensionInfo {
  */
 export abstract class IRtcEngine {
   /**
-   * Releases the IRtcEngine instance.
-   *
-   * This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations. After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new IRtcEngine instance.
-   *  This method can be called synchronously. You need to wait for the resource of IRtcEngine to be released before performing other operations (for example, create a new IRtcEngine object). Therefore, Agora recommends calling this method in the child thread to avoid blocking the main thread.
-   *  Besides, Agora does not recommend you calling release in any callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock.
-   *
-   * @param sync Whether the method is called synchronously: true : Synchronous call. false : Asynchronous call. Currently this method only supports synchronous calls. Do not set this parameter to this value.
-   */
-  abstract release(sync?: boolean): void;
-
-  /**
    * Before calling other APIs, you must call createAgoraRtcEngine and initialize to create and initialize the IRtcEngine object.
    *  The SDK supports creating only one IRtcEngine instance for an app.
    *
@@ -6744,6 +6733,17 @@ export abstract class IRtcEngine {
    * true : The current device supports the specified feature. false : The current device does not support the specified feature.
    */
   abstract isFeatureAvailableOnDevice(type: FeatureType): boolean;
+
+  /**
+   * Releases the IRtcEngine instance.
+   *
+   * This method releases all resources used by the Agora SDK. Use this method for apps in which users occasionally make voice or video calls. When users do not make calls, you can free up resources for other operations. After a successful method call, you can no longer use any method or callback in the SDK anymore. If you want to use the real-time communication functions again, you must call createAgoraRtcEngine and initialize to create a new IRtcEngine instance.
+   *  This method can be called synchronously. You need to wait for the resource of IRtcEngine to be released before performing other operations (for example, create a new IRtcEngine object). Therefore, Agora recommends calling this method in the child thread to avoid blocking the main thread.
+   *  Besides, Agora does not recommend you calling release in any callback of the SDK. Otherwise, the SDK cannot release the resources until the callbacks return results, which may result in a deadlock.
+   *
+   * @param sync Whether the method is called synchronously: true : Synchronous call. false : Asynchronous call. Currently this method only supports synchronous calls. Do not set this parameter to this value.
+   */
+  abstract release(sync?: boolean): void;
 
   /**
    * Gets the IAudioDeviceManager object to manage audio devices.
