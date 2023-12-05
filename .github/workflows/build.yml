@@ -112,6 +112,7 @@ jobs:
             ${{ runner.os }}-turborepo-ios-
 
       - name: Check turborepo cache for iOS
+        if: ${{ !inputs.force }}
         run: |
           TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'build:ios').cache.status")
 
@@ -131,7 +132,7 @@ jobs:
             ${{ runner.os }}-cocoapods-0-
 
       - name: Install cocoapods
-        if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'
+        if: ${{ inputs.force }} || (env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true')
         run: |
           yarn pod-install example/ios
 
