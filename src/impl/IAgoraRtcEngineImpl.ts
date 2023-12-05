@@ -1109,23 +1109,6 @@ export function processIDirectCdnStreamingEventHandler(
 
 // @ts-ignore
 export class IRtcEngineImpl implements IRtcEngine {
-  release(sync: boolean = false): void {
-    const apiType = this.getApiTypeFromRelease(sync);
-    const jsonParams = {
-      sync: sync,
-      toJSON: () => {
-        return {
-          sync: sync,
-        };
-      },
-    };
-    callIrisApi.call(this, apiType, jsonParams);
-  }
-
-  protected getApiTypeFromRelease(sync: boolean = false): string {
-    return 'RtcEngine_release';
-  }
-
   initialize(context: RtcEngineContext): number {
     const apiType = this.getApiTypeFromInitialize(context);
     const jsonParams = {
@@ -6731,6 +6714,23 @@ export class IRtcEngineImpl implements IRtcEngine {
     type: FeatureType
   ): string {
     return 'RtcEngine_isFeatureAvailableOnDevice';
+  }
+
+  release(sync: boolean = false): void {
+    const apiType = this.getApiTypeFromRelease(sync);
+    const jsonParams = {
+      sync: sync,
+      toJSON: () => {
+        return {
+          sync: sync,
+        };
+      },
+    };
+    callIrisApi.call(this, apiType, jsonParams);
+  }
+
+  protected getApiTypeFromRelease(sync: boolean = false): string {
+    return 'RtcEngine_release';
   }
 
   getAudioDeviceManager(): IAudioDeviceManager {
