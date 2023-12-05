@@ -12,6 +12,11 @@ on:
         required: false
         type: boolean
         default: false
+      build_ios:
+        description: 'build iOS'
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   build-android:
