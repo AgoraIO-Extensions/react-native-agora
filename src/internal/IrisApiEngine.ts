@@ -502,7 +502,9 @@ export function callIrisApi(funcName: string, params: any): any {
           break;
         case 'RtcEngine_destroyMediaRecorder':
           // @ts-ignore
-          params.nativeHandle = (this as MediaRecorderInternal).nativeHandle;
+          params.nativeHandle = (
+            params.mediaRecorder as MediaRecorderInternal
+          ).nativeHandle;
           params.toJSON = function () {
             return { nativeHandle: params.nativeHandle };
           };
