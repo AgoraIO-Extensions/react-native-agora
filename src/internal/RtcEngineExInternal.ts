@@ -94,7 +94,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     MediaPlayerInternal._video_frame_observers.clear();
     MediaPlayerInternal._audio_spectrum_observers.clear();
     MediaRecorderInternal._observers.clear();
-    H265TranscoderInternal._h265_transcoder_observers = [];
+    this._h265_transcoder.release();
     this.removeAllListeners();
     super.release(sync);
   }

@@ -30,5 +30,10 @@ declare module '../IAgoraH265Transcoder' {
     removeAllListeners<EventType extends keyof IH265TranscoderEvent>(
       eventType?: EventType
     ): void;
+
+    /**
+     * @ignore
+     */
+    release(): void;
   }
 }

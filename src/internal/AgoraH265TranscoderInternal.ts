@@ -17,6 +17,11 @@ import {
 export class H265TranscoderInternal extends IH265TranscoderImpl {
   static _h265_transcoder_observers: IH265TranscoderObserver[] = [];
 
+  release() {
+    H265TranscoderInternal._h265_transcoder_observers = [];
+    this.removeAllListeners();
+  }
+
   _addListenerPreCheck<EventType extends keyof IH265TranscoderEvent>(
     eventType: EventType
   ): boolean {
