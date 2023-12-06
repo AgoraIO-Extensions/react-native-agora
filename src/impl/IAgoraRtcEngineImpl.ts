@@ -61,6 +61,7 @@ import {
   RenderModeType,
   VideoSourceType,
 } from '../AgoraMediaBase';
+import { IH265Transcoder } from '../IAgoraH265Transcoder';
 import { LogFilterType, LogLevel } from '../IAgoraLog';
 import { AudioMixingDualMonoMode, IMediaEngine } from '../IAgoraMediaEngine';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
@@ -6786,6 +6787,17 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromGetLocalSpatialAudioEngine(): string {
     return 'RtcEngine_getLocalSpatialAudioEngine';
+  }
+
+  getH265Transcoder(): IH265Transcoder {
+    const apiType = this.getApiTypeFromGetH265Transcoder();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromGetH265Transcoder(): string {
+    return 'RtcEngine_getH265Transcoder';
   }
 
   sendMetaData(metadata: Metadata, sourceType: VideoSourceType): number {

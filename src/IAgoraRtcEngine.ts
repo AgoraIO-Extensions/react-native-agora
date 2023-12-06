@@ -108,6 +108,7 @@ import {
   RenderModeType,
   VideoSourceType,
 } from './AgoraMediaBase';
+import { IH265Transcoder } from './IAgoraH265Transcoder';
 import { LogConfig, LogFilterType, LogLevel } from './IAgoraLog';
 import { AudioMixingDualMonoMode, IMediaEngine } from './IAgoraMediaEngine';
 import { IMediaPlayer } from './IAgoraMediaPlayer';
@@ -6788,6 +6789,11 @@ export abstract class IRtcEngine {
    * One ILocalSpatialAudioEngine object.
    */
   abstract getLocalSpatialAudioEngine(): ILocalSpatialAudioEngine;
+
+  /**
+   * @ignore
+   */
+  abstract getH265Transcoder(): IH265Transcoder;
 
   /**
    * Sends media metadata.

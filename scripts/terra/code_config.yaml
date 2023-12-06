@@ -12,7 +12,6 @@ parsers:
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/time_utils.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/AgoraOptional.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/AgoraRefPtr.h'
-          - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraH265Transcoder.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraMediaComponentFactory.h'
           - '@agoraio-extensions/terra_shared_configs:headers/rtc_4.3.0/include/IAgoraParameter.h'
       customHeaders:
