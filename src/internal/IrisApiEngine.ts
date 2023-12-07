@@ -517,7 +517,7 @@ export function callIrisApi(funcName: string, params: any): any {
       params: JSON.stringify(params),
       buffers,
     });
-    if (ret !== undefined && ret !== null && ret !== '') {
+    if (ret !== undefined && ret !== null && ret !== '' && ret !== 'null') {
       const retObj = JSON.parse(ret);
       if (isDebuggable()) {
         if (typeof retObj.result === 'number' && retObj.result < 0) {
