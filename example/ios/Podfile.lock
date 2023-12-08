@@ -1,5 +1,5 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.3.0-dev.10)
+  - AgoraIrisRTC_iOS (4.3.0-dev.11)
   - AgoraRtcEngine_iOS_Preview (4.3.0-dev.9)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
@@ -378,7 +378,7 @@ PODS:
   - React-logger (0.72.5):
     - glog
   - react-native-agora (4.2.6):
-    - AgoraIrisRTC_iOS (= 4.3.0-dev.10)
+    - AgoraIrisRTC_iOS (= 4.3.0-dev.11)
     - AgoraRtcEngine_iOS_Preview (= 4.3.0-dev.9)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -718,7 +718,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: a825ecf9063c7ef3b0599912019e7e24945ee8cc
+  AgoraIrisRTC_iOS: 73cd7e1eeb4d8fa3125bc4f917c13deb3e119d24
   AgoraRtcEngine_iOS_Preview: 77fa8deb0c7ff3ac7ed37a039284688ad5af8353
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -753,7 +753,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: ff70a72027dea5cc7d71cfcc6fad7f599f63987a
   React-jsinspector: aef73cbd43b70675f572214d10fa438c89bf11ba
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
-  react-native-agora: 367987033a4124be1041fdc52a580544338c8735
+  react-native-agora: f6ac99157284ba22e4e42474b395db56c7982175
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
