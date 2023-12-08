@@ -218,6 +218,10 @@ export default class EncodedVideoFrame
     );
   }
 
+  protected override renderUser(): undefined {
+    return undefined;
+  }
+
   protected renderAction(): ReactElement | undefined {
     const { joinChannelSuccess } = this.state;
     return (
