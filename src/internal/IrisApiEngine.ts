@@ -392,6 +392,11 @@ function handleEvent({ event, data, buffers }: any) {
     _event = _event.replace(/Ex$/g, '');
   }
 
+  // for new IrisType, but this is temporary
+  if (_event.includes('_')) {
+    _event = _event.substring(0, _event.indexOf('_'));
+  }
+
   const _buffers: Uint8Array[] = (buffers as string[])?.map((value) => {
     return Buffer.from(value, 'base64');
   });
@@ -421,16 +426,13 @@ export function callIrisApi(funcName: string, params: any): any {
 
     if (funcName.startsWith('MediaEngine_')) {
       switch (funcName) {
-        case 'MediaEngine_pushAudioFrame':
-        case 'MediaEngine_pushCaptureAudioFrame':
-        case 'MediaEngine_pushReverseAudioFrame':
-        case 'MediaEngine_pushDirectAudioFrame':
+        case 'MediaEngine_pushAudioFrame_c71f4ab':
           // frame.buffer
           buffers.push(
             base64.fromByteArray(params.frame.buffer ?? Buffer.from(''))
           );
           break;
-        case 'MediaEngine_pushVideoFrame':
+        case 'MediaEngine_pushVideoFrame_4e544e2':
           // frame.buffer
           buffers.push(
             base64.fromByteArray(params.frame.buffer ?? Buffer.from(''))
@@ -446,7 +448,7 @@ export function callIrisApi(funcName: string, params: any): any {
           // frame.d3d11_texture_2d
           buffers.push(base64.fromByteArray(Buffer.from('')));
           break;
-        case 'MediaEngine_pushEncodedVideoImage':
+        case 'MediaEngine_pushEncodedVideoImage_e71452b':
           // imageBuffer
           buffers.push(
             base64.fromByteArray(params.imageBuffer ?? Buffer.from(''))
@@ -472,7 +474,7 @@ export function callIrisApi(funcName: string, params: any): any {
       };
     } else if (funcName.startsWith('RtcEngine_')) {
       switch (funcName) {
-        case 'RtcEngine_initialize':
+        case 'RtcEngine_initialize_0320339':
           AgoraRtcNg.newIrisApiEngine();
           break;
         case 'RtcEngine_release':
@@ -489,18 +491,18 @@ export function callIrisApi(funcName: string, params: any): any {
             base64.fromByteArray(params.metadata.buffer ?? Buffer.from(''))
           );
           break;
-        case 'RtcEngine_sendStreamMessage':
-        case 'RtcEngine_sendStreamMessageEx':
+        case 'RtcEngine_sendStreamMessage_8715a45':
+        case 'RtcEngineEx_sendStreamMessageEx_0c34857':
           // data
           buffers.push(base64.fromByteArray(params.data ?? Buffer.from('')));
           break;
-        case 'RtcEngine_destroyMediaPlayer':
+        case 'RtcEngine_destroyMediaPlayer_328a49b':
           params.mediaPlayerId = params.media_player.getMediaPlayerId();
           params.toJSON = function () {
             return { playerId: params.mediaPlayerId };
           };
           break;
-        case 'RtcEngine_destroyMediaRecorder':
+        case 'RtcEngine_destroyMediaRecorder_95cdef5':
           // @ts-ignore
           params.nativeHandle = (
             params.mediaRecorder as MediaRecorderInternal

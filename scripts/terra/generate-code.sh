@@ -7,6 +7,7 @@ PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
 
 rm -rf node_modules
 rm -rf .terra
+yarn
 
 npm exec terra -- run \
     --config ${PROJECT_ROOT}/scripts/terra/config/types_config.yaml  \
