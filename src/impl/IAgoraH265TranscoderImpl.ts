@@ -57,7 +57,7 @@ export class IH265TranscoderImpl implements IH265Transcoder {
     channel: string,
     uid: number
   ): string {
-    return 'H265Transcoder_enableTranscode';
+    return 'H265Transcoder_enableTranscode_a0779eb';
   }
 
   queryChannel(token: string, channel: string, uid: number): number {
@@ -83,7 +83,7 @@ export class IH265TranscoderImpl implements IH265Transcoder {
     channel: string,
     uid: number
   ): string {
-    return 'H265Transcoder_queryChannel';
+    return 'H265Transcoder_queryChannel_a0779eb';
   }
 
   triggerTranscode(token: string, channel: string, uid: number): number {
@@ -109,7 +109,7 @@ export class IH265TranscoderImpl implements IH265Transcoder {
     channel: string,
     uid: number
   ): string {
-    return 'H265Transcoder_triggerTranscode';
+    return 'H265Transcoder_triggerTranscode_a0779eb';
   }
 
   registerTranscoderObserver(observer: IH265TranscoderObserver): number {
@@ -127,7 +127,7 @@ export class IH265TranscoderImpl implements IH265Transcoder {
   protected getApiTypeFromRegisterTranscoderObserver(
     observer: IH265TranscoderObserver
   ): string {
-    return 'H265Transcoder_registerTranscoderObserver';
+    return 'H265Transcoder_registerTranscoderObserver_e1ee996';
   }
 
   unregisterTranscoderObserver(observer: IH265TranscoderObserver): number {
@@ -145,7 +145,7 @@ export class IH265TranscoderImpl implements IH265Transcoder {
   protected getApiTypeFromUnregisterTranscoderObserver(
     observer: IH265TranscoderObserver
   ): string {
-    return 'H265Transcoder_unregisterTranscoderObserver';
+    return 'H265Transcoder_unregisterTranscoderObserver_e1ee996';
   }
 }
 

@@ -21,7 +21,7 @@ export class IMediaRecorderImpl implements IMediaRecorder {
   protected getApiTypeFromSetMediaRecorderObserver(
     callback: IMediaRecorderObserver
   ): string {
-    return 'MediaRecorder_setMediaRecorderObserver';
+    return 'MediaRecorder_setMediaRecorderObserver_e1f7340';
   }
 
   startRecording(config: MediaRecorderConfiguration): number {
@@ -41,7 +41,7 @@ export class IMediaRecorderImpl implements IMediaRecorder {
   protected getApiTypeFromStartRecording(
     config: MediaRecorderConfiguration
   ): string {
-    return 'MediaRecorder_startRecording';
+    return 'MediaRecorder_startRecording_94480b3';
   }
 
   stopRecording(): number {

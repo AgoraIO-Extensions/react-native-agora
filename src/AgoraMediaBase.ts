@@ -108,9 +108,9 @@ export enum AudioRoute {
    */
   RouteLoudspeaker = 4,
   /**
-   * @ignore
+   * 5: The audio route is a Bluetooth device using the HFP protocol.
    */
-  RouteHeadsetbluetooth = 5,
+  RouteBluetoothDeviceHfp = 5,
   /**
    * @ignore
    */
@@ -128,9 +128,9 @@ export enum AudioRoute {
    */
   RouteAirplay = 9,
   /**
-   * @ignore
+   * 10: The audio route is a Bluetooth device using the A2DP protocol.
    */
-  RouteBluetoothSpeaker = 10,
+  RouteBluetoothDeviceA2dp = 10,
 }
 
 /**
@@ -192,7 +192,7 @@ export enum MediaSourceType {
    */
   PrimaryCameraSource = 2,
   /**
-   * 3: The secondary camera.
+   * 3: A secondary camera.
    */
   SecondaryCameraSource = 3,
   /**
@@ -204,7 +204,7 @@ export enum MediaSourceType {
    */
   SecondaryScreenSource = 5,
   /**
-   * @ignore
+   * 6. Custom video source.
    */
   CustomVideoSource = 6,
   /**
@@ -696,7 +696,7 @@ export class VideoFrame {
    */
   pixelBuffer?: Uint8Array;
   /**
-   * @ignore
+   * The meta information in the video frame. To use this parameter, please.
    */
   metaInfo?: IVideoFrameMetaInfo;
 }
@@ -724,7 +724,7 @@ export enum MediaPlayerSourceType {
  */
 export enum VideoModulePosition {
   /**
-   * 1: The post-capturer position, which corresponds to the video data in the onCaptureVideoFrame callback.
+   * 1: The location of the locally collected video data after preprocessing corresponds to the onCaptureVideoFrame callback. The observed video here has the effect of video pre-processing, which can be verified by enabling image enhancement, virtual background, or watermark.
    */
   PositionPostCapturer = 1 << 0,
   /**
@@ -732,11 +732,13 @@ export enum VideoModulePosition {
    */
   PositionPreRenderer = 1 << 1,
   /**
-   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
+   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback. The observed video here has the effects of video pre-processing and encoding pre-processing.
+   *  To verify the pre-processing effects of the video, you can enable image enhancement, virtual background, or watermark.
+   *  To verify the pre-encoding processing effect, you can set a lower frame rate (for example, 5 fps).
    */
   PositionPreEncoder = 1 << 2,
   /**
-   * @ignore
+   * 8: The position after local video capture and before pre-processing. The observed video here does not have pre-processing effects, which can be verified by enabling image enhancement, virtual background, or watermarks.
    */
   PositionPostCapturerOrigin = 1 << 3,
 }
@@ -1180,7 +1182,7 @@ export enum MediaRecorderStreamType {
  */
 export enum RecorderState {
   /**
-   * -1: An error occurs during the recording. See RecorderErrorCode for the reason.
+   * -1: An error occurs during the recording. See RecorderReasonCode for the reason.
    */
   RecorderStateError = -1,
   /**
@@ -1194,11 +1196,11 @@ export enum RecorderState {
 }
 
 /**
- * @ignore
+ * The reason for the state change.
  */
 export enum RecorderReasonCode {
   /**
-   * @ignore
+   * 0: No error.
    */
   RecorderReasonNone = 0,
   /**
