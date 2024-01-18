@@ -1,4 +1,5 @@
 import './extension/AgoraMediaPlayerTypesExtension';
+
 /**
  * The playback state.
  */
@@ -70,71 +71,71 @@ export enum MediaPlayerState {
 }
 
 /**
- * @ignore
+ * Reasons for the changes in the media player status.
  */
 export enum MediaPlayerReason {
   /**
-   * @ignore
+   * 0: No error.
    */
   PlayerReasonNone = 0,
   /**
-   * @ignore
+   * -1: Invalid arguments.
    */
   PlayerReasonInvalidArguments = -1,
   /**
-   * @ignore
+   * -2: Internal error.
    */
   PlayerReasonInternal = -2,
   /**
-   * @ignore
+   * -3: No resource.
    */
   PlayerReasonNoResource = -3,
   /**
-   * @ignore
+   * -4: Invalid media resource.
    */
   PlayerReasonInvalidMediaSource = -4,
   /**
-   * @ignore
+   * -5: The media stream type is unknown.
    */
   PlayerReasonUnknownStreamType = -5,
   /**
-   * @ignore
+   * -6: The object is not initialized.
    */
   PlayerReasonObjNotInitialized = -6,
   /**
-   * @ignore
+   * -7: The codec is not supported.
    */
   PlayerReasonCodecNotSupported = -7,
   /**
-   * @ignore
+   * -8: Invalid renderer.
    */
   PlayerReasonVideoRenderFailed = -8,
   /**
-   * @ignore
+   * -9: An error with the internal state of the player occurs.
    */
   PlayerReasonInvalidState = -9,
   /**
-   * @ignore
+   * -10: The URL of the media resource cannot be found.
    */
   PlayerReasonUrlNotFound = -10,
   /**
-   * @ignore
+   * -11: Invalid connection between the player and the Agora Server.
    */
   PlayerReasonInvalidConnectionState = -11,
   /**
-   * @ignore
+   * -12: The playback buffer is insufficient.
    */
   PlayerReasonSrcBufferUnderflow = -12,
   /**
-   * @ignore
+   * -13: The playback is interrupted.
    */
   PlayerReasonInterrupted = -13,
   /**
-   * @ignore
+   * -14: The SDK does not support the method being called.
    */
   PlayerReasonNotSupported = -14,
   /**
-   * @ignore
+   * -15: The authentication information of the media resource is expired.
    */
   PlayerReasonTokenExpired = -15,
   /**
@@ -142,7 +143,7 @@ export enum MediaPlayerReason {
    */
   PlayerReasonIpExpired = -16,
   /**
-   * @ignore
+   * -17: An unknown error.
    */
   PlayerReasonUnknown = -17,
 }
@@ -366,23 +367,23 @@ export class CacheStatistics {
 }
 
 /**
- * @ignore
+ * The information of the media file being played.
  */
 export class PlayerPlaybackStats {
   /**
-   * @ignore
+   * The frame rate (fps) of the video.
    */
   videoFps?: number;
   /**
-   * @ignore
+   * The bitrate (kbps) of the video.
    */
   videoBitrateInKbps?: number;
   /**
-   * @ignore
+   * The bitrate (kbps) of the audio.
    */
   audioBitrateInKbps?: number;
   /**
-   * @ignore
+   * The total bitrate (kbps) of the media stream.
    */
   totalBitrateInKbps?: number;
 }
@@ -400,23 +401,23 @@ export class PlayerUpdatedInfo {
    */
   deviceId?: string;
   /**
-   * @ignore
+   * Height (pixel) of the video.
    */
   videoHeight?: number;
   /**
-   * @ignore
+   * Width (pixel) of the video.
    */
   videoWidth?: number;
   /**
-   * @ignore
+   * Audio sample rate (Hz).
    */
   audioSampleRate?: number;
   /**
-   * @ignore
+   * The number of audio channels.
    */
   audioChannels?: number;
   /**
-   * @ignore
+   * The number of bits per audio sample point.
    */
   audioBitsPerSample?: number;
 }
@@ -449,7 +450,7 @@ export class MediaSource {
    */
   enableCache?: boolean;
   /**
-   * @ignore
+   * Whether to allow the selection of different audio tracks when playing this media file: true : Allow to select different audio tracks. false : (Default) Do not allow to select different audio tracks. If you need to set different audio tracks for local playback and publishing to the channel, you need to set this parameter to true, and then call the selectMultiAudioTrack method to select the audio track.
    */
   enableMultiAudioTrack?: boolean;
   /**

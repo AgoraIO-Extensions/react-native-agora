@@ -20,7 +20,7 @@ export interface IMediaPlayerSourceObserver {
    * When the state of the media player changes, the SDK triggers this callback to report the current playback state.
    *
    * @param state The playback state. See MediaPlayerState.
-   * @param ec The error code. See MediaPlayerError.
+   * @param reason The reason for the changes in the media player status. See MediaPlayerReason.
    */
   onPlayerSourceStateChanged?(
     state: MediaPlayerState,
@@ -28,11 +28,12 @@ export interface IMediaPlayerSourceObserver {
   ): void;
 
   /**
-   * Reports current playback progress.
+   * Reports the playback progress of the media file.
    *
    * When playing media files, the SDK triggers this callback every two second to report current playback progress.
    *
-   * @param position The playback position (ms) of media files.
+   * @param positionMs The playback position (ms) of media files.
+   * @param timeStampMs The NTP timestamp (ms) of the current playback progress.
    */
   onPositionChanged?(positionMs: number, timestampMs: number): void;
 
@@ -108,12 +109,20 @@ export interface IMediaPlayerSourceObserver {
   onPlayerInfoUpdated?(info: PlayerUpdatedInfo): void;
 
   /**
-   * @ignore
+   * Reports the statistics of the media file being cached.
+   *
+   * After you call the openWithMediaSource method and set enableCache as true, the SDK triggers this callback once per second to report the statistics of the media file being cached.
+   *
+   * @param stats The statistics of the media file being cached. See CacheStatistics.
    */
   onPlayerCacheStats?(stats: CacheStatistics): void;
 
   /**
-   * @ignore
+   * The statistics of the media file being played.
+   *
+   * The SDK triggers this callback once per second to report the statistics of the media file being played.
+   *
+   * @param stats The statistics of the media file. See PlayerPlaybackStats.
    */
   onPlayerPlaybackStats?(stats: PlayerPlaybackStats): void;
 

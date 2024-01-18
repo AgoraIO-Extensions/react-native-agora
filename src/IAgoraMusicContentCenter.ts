@@ -4,61 +4,61 @@ import { IMediaPlayer } from './IAgoraMediaPlayer';
 /**
  * @ignore
  */
-export enum PreloadStatusCode {
+export enum PreloadState {
   /**
    * @ignore
    */
-  KPreloadStatusCompleted = 0,
+  KPreloadStateCompleted = 0,
   /**
    * @ignore
    */
-  KPreloadStatusFailed = 1,
+  KPreloadStateFailed = 1,
   /**
    * @ignore
    */
-  KPreloadStatusPreloading = 2,
+  KPreloadStatePreloading = 2,
   /**
    * @ignore
    */
-  KPreloadStatusRemoved = 3,
+  KPreloadStateRemoved = 3,
 }
 
 /**
  * @ignore
  */
-export enum MusicContentCenterStatusCode {
+export enum MusicContentCenterStateReason {
   /**
    * @ignore
    */
-  KMusicContentCenterStatusOk = 0,
+  KMusicContentCenterReasonOk = 0,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusError = 1,
+  KMusicContentCenterReasonError = 1,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusGateway = 2,
+  KMusicContentCenterReasonGateway = 2,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusPermissionAndResource = 3,
+  KMusicContentCenterReasonPermissionAndResource = 3,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusInternalDataParse = 4,
+  KMusicContentCenterReasonInternalDataParse = 4,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusMusicLoading = 5,
+  KMusicContentCenterReasonMusicLoading = 5,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusMusicDecryption = 6,
+  KMusicContentCenterReasonMusicDecryption = 6,
   /**
    * @ignore
    */
-  KMusicContentCenterStatusHttpInternalError = 7,
+  KMusicContentCenterReasonHttpInternalError = 7,
 }
 
 /**
@@ -248,7 +248,7 @@ export interface IMusicContentCenterEventHandler {
   onMusicChartsResult?(
     requestId: string,
     result: MusicChartInfo[],
-    status: MusicContentCenterStatusCode
+    reason: MusicContentCenterStateReason
   ): void;
 
   /**
@@ -257,7 +257,7 @@ export interface IMusicContentCenterEventHandler {
   onMusicCollectionResult?(
     requestId: string,
     result: MusicCollection,
-    status: MusicContentCenterStatusCode
+    reason: MusicContentCenterStateReason
   ): void;
 
   /**
@@ -267,7 +267,7 @@ export interface IMusicContentCenterEventHandler {
     requestId: string,
     songCode: number,
     lyricUrl: string,
-    status: MusicContentCenterStatusCode
+    reason: MusicContentCenterStateReason
   ): void;
 
   /**
@@ -277,7 +277,7 @@ export interface IMusicContentCenterEventHandler {
     requestId: string,
     songCode: number,
     simpleInfo: string,
-    status: MusicContentCenterStatusCode
+    reason: MusicContentCenterStateReason
   ): void;
 
   /**
@@ -288,8 +288,8 @@ export interface IMusicContentCenterEventHandler {
     songCode: number,
     percent: number,
     lyricUrl: string,
-    preloadStatus: PreloadStatusCode,
-    mccStatus: MusicContentCenterStatusCode
+    state: PreloadState,
+    reason: MusicContentCenterStateReason
   ): void;
 }
 

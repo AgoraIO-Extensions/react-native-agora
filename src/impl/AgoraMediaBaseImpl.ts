@@ -26,7 +26,7 @@ export class IVideoFrameMetaInfoImpl implements IVideoFrameMetaInfo {
   }
 
   protected getApiTypeFromGetMetaInfoStr(key: MetaInfoKey): string {
-    return 'VideoFrameMetaInfo_getMetaInfoStr';
+    return 'VideoFrameMetaInfo_getMetaInfoStr_c81192f';
   }
 }
 

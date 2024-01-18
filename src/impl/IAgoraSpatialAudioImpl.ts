@@ -25,7 +25,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromInitialize(): string {
-    return 'LocalSpatialAudioEngine_initialize';
+    return 'LocalSpatialAudioEngine_initialize_cf94fbf';
   }
 
   updateRemotePosition(uid: number, posInfo: RemoteVoicePositionInfo): number {
@@ -48,7 +48,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     uid: number,
     posInfo: RemoteVoicePositionInfo
   ): string {
-    return 'LocalSpatialAudioEngine_updateRemotePosition';
+    return 'LocalSpatialAudioEngine_updateRemotePosition_adc0909';
   }
 
   updateRemotePositionEx(
@@ -82,7 +82,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     posInfo: RemoteVoicePositionInfo,
     connection: RtcConnection
   ): string {
-    return 'LocalSpatialAudioEngine_updateRemotePositionEx';
+    return 'LocalSpatialAudioEngine_updateRemotePositionEx_f0252d9';
   }
 
   removeRemotePosition(uid: number): number {
@@ -100,7 +100,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromRemoveRemotePosition(uid: number): string {
-    return 'LocalSpatialAudioEngine_removeRemotePosition';
+    return 'LocalSpatialAudioEngine_removeRemotePosition_c8d091a';
   }
 
   removeRemotePositionEx(uid: number, connection: RtcConnection): number {
@@ -123,7 +123,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     uid: number,
     connection: RtcConnection
   ): string {
-    return 'LocalSpatialAudioEngine_removeRemotePositionEx';
+    return 'LocalSpatialAudioEngine_removeRemotePositionEx_58a9850';
   }
 
   clearRemotePositionsEx(connection: RtcConnection): number {
@@ -143,7 +143,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   protected getApiTypeFromClearRemotePositionsEx(
     connection: RtcConnection
   ): string {
-    return 'LocalSpatialAudioEngine_clearRemotePositionsEx';
+    return 'LocalSpatialAudioEngine_clearRemotePositionsEx_c81e1a4';
   }
 
   updateSelfPositionEx(
@@ -187,7 +187,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     axisUp: number[],
     connection: RtcConnection
   ): string {
-    return 'LocalSpatialAudioEngine_updateSelfPositionEx';
+    return 'LocalSpatialAudioEngine_updateSelfPositionEx_502183a';
   }
 
   setMaxAudioRecvCount(maxCount: number): number {
@@ -205,7 +205,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromSetMaxAudioRecvCount(maxCount: number): string {
-    return 'LocalSpatialAudioEngine_setMaxAudioRecvCount';
+    return 'LocalSpatialAudioEngine_setMaxAudioRecvCount_46f8ab7';
   }
 
   setAudioRecvRange(range: number): number {
@@ -223,7 +223,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromSetAudioRecvRange(range: number): string {
-    return 'LocalSpatialAudioEngine_setAudioRecvRange';
+    return 'LocalSpatialAudioEngine_setAudioRecvRange_685e803';
   }
 
   setDistanceUnit(unit: number): number {
@@ -241,7 +241,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromSetDistanceUnit(unit: number): string {
-    return 'LocalSpatialAudioEngine_setDistanceUnit';
+    return 'LocalSpatialAudioEngine_setDistanceUnit_685e803';
   }
 
   updateSelfPosition(
@@ -280,7 +280,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     axisRight: number[],
     axisUp: number[]
   ): string {
-    return 'LocalSpatialAudioEngine_updateSelfPosition';
+    return 'LocalSpatialAudioEngine_updateSelfPosition_9c9930f';
   }
 
   updatePlayerPositionInfo(
@@ -309,7 +309,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     playerId: number,
     positionInfo: RemoteVoicePositionInfo
   ): string {
-    return 'LocalSpatialAudioEngine_updatePlayerPositionInfo';
+    return 'LocalSpatialAudioEngine_updatePlayerPositionInfo_b37c59d';
   }
 
   setParameters(params: string): number {
@@ -327,7 +327,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromSetParameters(params: string): string {
-    return 'LocalSpatialAudioEngine_setParameters';
+    return 'LocalSpatialAudioEngine_setParameters_3a2037f';
   }
 
   muteLocalAudioStream(mute: boolean): number {
@@ -345,7 +345,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromMuteLocalAudioStream(mute: boolean): string {
-    return 'LocalSpatialAudioEngine_muteLocalAudioStream';
+    return 'LocalSpatialAudioEngine_muteLocalAudioStream_5039d15';
   }
 
   muteAllRemoteAudioStreams(mute: boolean): number {
@@ -363,7 +363,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 
   protected getApiTypeFromMuteAllRemoteAudioStreams(mute: boolean): string {
-    return 'LocalSpatialAudioEngine_muteAllRemoteAudioStreams';
+    return 'LocalSpatialAudioEngine_muteAllRemoteAudioStreams_5039d15';
   }
 
   muteRemoteAudioStream(uid: number, mute: boolean): number {
@@ -386,7 +386,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     uid: number,
     mute: boolean
   ): string {
-    return 'LocalSpatialAudioEngine_muteRemoteAudioStream';
+    return 'LocalSpatialAudioEngine_muteRemoteAudioStream_dbdc15a';
   }
 
   setRemoteAudioAttenuation(
@@ -420,7 +420,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     attenuation: number,
     forceSet: boolean
   ): string {
-    return 'LocalSpatialAudioEngine_setRemoteAudioAttenuation';
+    return 'LocalSpatialAudioEngine_setRemoteAudioAttenuation_74c3e98';
   }
 
   setZones(zones: SpatialAudioZone[], zoneCount: number): number {
@@ -443,7 +443,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     zones: SpatialAudioZone[],
     zoneCount: number
   ): string {
-    return 'LocalSpatialAudioEngine_setZones';
+    return 'LocalSpatialAudioEngine_setZones_414a27e';
   }
 
   setPlayerAttenuation(
@@ -477,7 +477,7 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     attenuation: number,
     forceSet: boolean
   ): string {
-    return 'LocalSpatialAudioEngine_setPlayerAttenuation';
+    return 'LocalSpatialAudioEngine_setPlayerAttenuation_a15bc51';
   }
 
   clearRemotePositions(): number {

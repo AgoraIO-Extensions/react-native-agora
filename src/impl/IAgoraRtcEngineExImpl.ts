@@ -58,7 +58,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     connection: RtcConnection,
     options: ChannelMediaOptions
   ): string {
-    return 'RtcEngineEx_joinChannelEx';
+    return 'RtcEngineEx_joinChannelEx_a3cd08c';
   }
 
   leaveChannelEx(
@@ -113,7 +113,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     options: ChannelMediaOptions,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_updateChannelMediaOptionsEx';
+    return 'RtcEngineEx_updateChannelMediaOptionsEx_457bb35';
   }
 
   setVideoEncoderConfigurationEx(
@@ -142,7 +142,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     config: VideoEncoderConfiguration,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setVideoEncoderConfigurationEx';
+    return 'RtcEngineEx_setVideoEncoderConfigurationEx_4670c1e';
   }
 
   setupRemoteVideoEx(canvas: VideoCanvas, connection: RtcConnection): number {
@@ -165,7 +165,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     canvas: VideoCanvas,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setupRemoteVideoEx';
+    return 'RtcEngineEx_setupRemoteVideoEx_522a409';
   }
 
   muteRemoteAudioStreamEx(
@@ -199,7 +199,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mute: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_muteRemoteAudioStreamEx';
+    return 'RtcEngineEx_muteRemoteAudioStreamEx_6d93082';
   }
 
   muteRemoteVideoStreamEx(
@@ -233,7 +233,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mute: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_muteRemoteVideoStreamEx';
+    return 'RtcEngineEx_muteRemoteVideoStreamEx_6d93082';
   }
 
   setRemoteVideoStreamTypeEx(
@@ -267,7 +267,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     streamType: VideoStreamType,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setRemoteVideoStreamTypeEx';
+    return 'RtcEngineEx_setRemoteVideoStreamTypeEx_01dc428';
   }
 
   muteLocalAudioStreamEx(mute: boolean, connection: RtcConnection): number {
@@ -290,7 +290,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mute: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_muteLocalAudioStreamEx';
+    return 'RtcEngineEx_muteLocalAudioStreamEx_3cf17a4';
   }
 
   muteLocalVideoStreamEx(mute: boolean, connection: RtcConnection): number {
@@ -313,7 +313,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mute: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_muteLocalVideoStreamEx';
+    return 'RtcEngineEx_muteLocalVideoStreamEx_3cf17a4';
   }
 
   muteAllRemoteAudioStreamsEx(
@@ -342,7 +342,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mute: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_muteAllRemoteAudioStreamsEx';
+    return 'RtcEngineEx_muteAllRemoteAudioStreamsEx_3cf17a4';
   }
 
   muteAllRemoteVideoStreamsEx(
@@ -371,7 +371,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mute: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_muteAllRemoteVideoStreamsEx';
+    return 'RtcEngineEx_muteAllRemoteVideoStreamsEx_3cf17a4';
   }
 
   setSubscribeAudioBlocklistEx(
@@ -405,7 +405,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     uidNumber: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setSubscribeAudioBlocklistEx';
+    return 'RtcEngineEx_setSubscribeAudioBlocklistEx_9f1e85c';
   }
 
   setSubscribeAudioAllowlistEx(
@@ -439,7 +439,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     uidNumber: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setSubscribeAudioAllowlistEx';
+    return 'RtcEngineEx_setSubscribeAudioAllowlistEx_9f1e85c';
   }
 
   setSubscribeVideoBlocklistEx(
@@ -473,7 +473,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     uidNumber: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setSubscribeVideoBlocklistEx';
+    return 'RtcEngineEx_setSubscribeVideoBlocklistEx_9f1e85c';
   }
 
   setSubscribeVideoAllowlistEx(
@@ -507,7 +507,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     uidNumber: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setSubscribeVideoAllowlistEx';
+    return 'RtcEngineEx_setSubscribeVideoAllowlistEx_9f1e85c';
   }
 
   setRemoteVideoSubscriptionOptionsEx(
@@ -541,7 +541,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     options: VideoSubscriptionOptions,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setRemoteVideoSubscriptionOptionsEx';
+    return 'RtcEngineEx_setRemoteVideoSubscriptionOptionsEx_3cd36bc';
   }
 
   setRemoteVoicePositionEx(
@@ -580,7 +580,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     gain: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setRemoteVoicePositionEx';
+    return 'RtcEngineEx_setRemoteVoicePositionEx_fc0471c';
   }
 
   setRemoteUserSpatialAudioParamsEx(
@@ -614,7 +614,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     params: SpatialAudioParams,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setRemoteUserSpatialAudioParamsEx';
+    return 'RtcEngineEx_setRemoteUserSpatialAudioParamsEx_40ca9fb';
   }
 
   setRemoteRenderModeEx(
@@ -653,7 +653,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mirrorMode: VideoMirrorModeType,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setRemoteRenderModeEx';
+    return 'RtcEngineEx_setRemoteRenderModeEx_a72fe4e';
   }
 
   enableLoopbackRecordingEx(
@@ -687,7 +687,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     enabled: boolean,
     deviceName?: string
   ): string {
-    return 'RtcEngineEx_enableLoopbackRecordingEx';
+    return 'RtcEngineEx_enableLoopbackRecordingEx_4f41542';
   }
 
   adjustRecordingSignalVolumeEx(
@@ -716,7 +716,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     volume: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_adjustRecordingSignalVolumeEx';
+    return 'RtcEngineEx_adjustRecordingSignalVolumeEx_e84d10e';
   }
 
   muteRecordingSignalEx(mute: boolean, connection: RtcConnection): number {
@@ -739,7 +739,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     mute: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_muteRecordingSignalEx';
+    return 'RtcEngineEx_muteRecordingSignalEx_3cf17a4';
   }
 
   adjustUserPlaybackSignalVolumeEx(
@@ -773,7 +773,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     volume: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_adjustUserPlaybackSignalVolumeEx';
+    return 'RtcEngineEx_adjustUserPlaybackSignalVolumeEx_adbd29c';
   }
 
   getConnectionStateEx(connection: RtcConnection): ConnectionStateType {
@@ -793,7 +793,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   protected getApiTypeFromGetConnectionStateEx(
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_getConnectionStateEx';
+    return 'RtcEngineEx_getConnectionStateEx_c81e1a4';
   }
 
   enableEncryptionEx(
@@ -827,7 +827,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     enabled: boolean,
     config: EncryptionConfig
   ): string {
-    return 'RtcEngineEx_enableEncryptionEx';
+    return 'RtcEngineEx_enableEncryptionEx_10cd872';
   }
 
   createDataStreamEx(
@@ -892,7 +892,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     length: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_sendStreamMessageEx';
+    return 'RtcEngineEx_sendStreamMessageEx_0c34857';
   }
 
   addVideoWatermarkEx(
@@ -926,7 +926,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     options: WatermarkOptions,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_addVideoWatermarkEx';
+    return 'RtcEngineEx_addVideoWatermarkEx_ad7daa3';
   }
 
   clearVideoWatermarkEx(connection: RtcConnection): number {
@@ -946,7 +946,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   protected getApiTypeFromClearVideoWatermarkEx(
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_clearVideoWatermarkEx';
+    return 'RtcEngineEx_clearVideoWatermarkEx_c81e1a4';
   }
 
   sendCustomReportMessageEx(
@@ -995,7 +995,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     value: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_sendCustomReportMessageEx';
+    return 'RtcEngineEx_sendCustomReportMessageEx_833b8a5';
   }
 
   enableAudioVolumeIndicationEx(
@@ -1034,7 +1034,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     reportVad: boolean,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_enableAudioVolumeIndicationEx';
+    return 'RtcEngineEx_enableAudioVolumeIndicationEx_ac84f2a';
   }
 
   startRtmpStreamWithoutTranscodingEx(
@@ -1063,7 +1063,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     url: string,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_startRtmpStreamWithoutTranscodingEx';
+    return 'RtcEngineEx_startRtmpStreamWithoutTranscodingEx_e405325';
   }
 
   startRtmpStreamWithTranscodingEx(
@@ -1097,7 +1097,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     transcoding: LiveTranscoding,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_startRtmpStreamWithTranscodingEx';
+    return 'RtcEngineEx_startRtmpStreamWithTranscodingEx_ab121b5';
   }
 
   updateRtmpTranscodingEx(
@@ -1126,7 +1126,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     transcoding: LiveTranscoding,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_updateRtmpTranscodingEx';
+    return 'RtcEngineEx_updateRtmpTranscodingEx_77f3ee8';
   }
 
   stopRtmpStreamEx(url: string, connection: RtcConnection): number {
@@ -1149,7 +1149,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     url: string,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_stopRtmpStreamEx';
+    return 'RtcEngineEx_stopRtmpStreamEx_e405325';
   }
 
   startOrUpdateChannelMediaRelayEx(
@@ -1178,7 +1178,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     configuration: ChannelMediaRelayConfiguration,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_startOrUpdateChannelMediaRelayEx';
+    return 'RtcEngineEx_startOrUpdateChannelMediaRelayEx_4ad39a8';
   }
 
   stopChannelMediaRelayEx(connection: RtcConnection): number {
@@ -1198,7 +1198,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   protected getApiTypeFromStopChannelMediaRelayEx(
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_stopChannelMediaRelayEx';
+    return 'RtcEngineEx_stopChannelMediaRelayEx_c81e1a4';
   }
 
   pauseAllChannelMediaRelayEx(connection: RtcConnection): number {
@@ -1218,7 +1218,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   protected getApiTypeFromPauseAllChannelMediaRelayEx(
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_pauseAllChannelMediaRelayEx';
+    return 'RtcEngineEx_pauseAllChannelMediaRelayEx_c81e1a4';
   }
 
   resumeAllChannelMediaRelayEx(connection: RtcConnection): number {
@@ -1238,7 +1238,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   protected getApiTypeFromResumeAllChannelMediaRelayEx(
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_resumeAllChannelMediaRelayEx';
+    return 'RtcEngineEx_resumeAllChannelMediaRelayEx_c81e1a4';
   }
 
   getUserInfoByUserAccountEx(
@@ -1268,7 +1268,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     userAccount: string,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_getUserInfoByUserAccountEx';
+    return 'RtcEngineEx_getUserInfoByUserAccountEx_ca39cc6';
   }
 
   getUserInfoByUidEx(uid: number, connection: RtcConnection): UserInfo {
@@ -1292,7 +1292,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     uid: number,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_getUserInfoByUidEx';
+    return 'RtcEngineEx_getUserInfoByUidEx_1e78da1';
   }
 
   enableDualStreamModeEx(
@@ -1326,7 +1326,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     streamConfig: SimulcastStreamConfig,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_enableDualStreamModeEx';
+    return 'RtcEngineEx_enableDualStreamModeEx_4b18f41';
   }
 
   setDualStreamModeEx(
@@ -1360,7 +1360,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     streamConfig: SimulcastStreamConfig,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setDualStreamModeEx';
+    return 'RtcEngineEx_setDualStreamModeEx_622d0f3';
   }
 
   setHighPriorityUserListEx(
@@ -1399,7 +1399,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     option: StreamFallbackOptions,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_setHighPriorityUserListEx';
+    return 'RtcEngineEx_setHighPriorityUserListEx_8736b5c';
   }
 
   takeSnapshotEx(
@@ -1433,7 +1433,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     uid: number,
     filePath: string
   ): string {
-    return 'RtcEngineEx_takeSnapshotEx';
+    return 'RtcEngineEx_takeSnapshotEx_de1c015';
   }
 
   enableContentInspectEx(
@@ -1467,7 +1467,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     config: ContentInspectConfig,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_enableContentInspectEx';
+    return 'RtcEngineEx_enableContentInspectEx_c4e7f69';
   }
 
   startMediaRenderingTracingEx(connection: RtcConnection): number {
@@ -1487,7 +1487,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
   protected getApiTypeFromStartMediaRenderingTracingEx(
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_startMediaRenderingTracingEx';
+    return 'RtcEngineEx_startMediaRenderingTracingEx_c81e1a4';
   }
 
   setParametersEx(connection: RtcConnection, parameters: string): number {
@@ -1510,7 +1510,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     connection: RtcConnection,
     parameters: string
   ): string {
-    return 'RtcEngineEx_setParametersEx';
+    return 'RtcEngineEx_setParametersEx_8225ea3';
   }
 }
 

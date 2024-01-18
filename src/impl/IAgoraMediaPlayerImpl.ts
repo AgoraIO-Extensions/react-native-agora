@@ -48,7 +48,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromOpen(url: string, startPos: number): string {
-    return 'MediaPlayer_open';
+    return 'MediaPlayer_open_e43f201';
   }
 
   openWithMediaSource(source: MediaSource): number {
@@ -66,7 +66,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromOpenWithMediaSource(source: MediaSource): string {
-    return 'MediaPlayer_openWithMediaSource';
+    return 'MediaPlayer_openWithMediaSource_3c11499';
   }
 
   play(): number {
@@ -128,7 +128,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSeek(newPos: number): string {
-    return 'MediaPlayer_seek';
+    return 'MediaPlayer_seek_f631116';
   }
 
   setAudioPitch(pitch: number): number {
@@ -146,7 +146,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSetAudioPitch(pitch: number): string {
-    return 'MediaPlayer_setAudioPitch';
+    return 'MediaPlayer_setAudioPitch_46f8ab7';
   }
 
   getDuration(): number {
@@ -158,7 +158,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromGetDuration(): string {
-    return 'MediaPlayer_getDuration';
+    return 'MediaPlayer_getDuration_b12f121';
   }
 
   getPlayPosition(): number {
@@ -170,7 +170,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromGetPlayPosition(): string {
-    return 'MediaPlayer_getPlayPosition';
+    return 'MediaPlayer_getPlayPosition_b12f121';
   }
 
   getStreamCount(): number {
@@ -182,7 +182,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromGetStreamCount(): string {
-    return 'MediaPlayer_getStreamCount';
+    return 'MediaPlayer_getStreamCount_b12f121';
   }
 
   getStreamInfo(index: number): PlayerStreamInfo {
@@ -201,7 +201,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromGetStreamInfo(index: number): string {
-    return 'MediaPlayer_getStreamInfo';
+    return 'MediaPlayer_getStreamInfo_0fa63fa';
   }
 
   setLoopCount(loopCount: number): number {
@@ -219,7 +219,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSetLoopCount(loopCount: number): string {
-    return 'MediaPlayer_setLoopCount';
+    return 'MediaPlayer_setLoopCount_46f8ab7';
   }
 
   setPlaybackSpeed(speed: number): number {
@@ -237,7 +237,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSetPlaybackSpeed(speed: number): string {
-    return 'MediaPlayer_setPlaybackSpeed';
+    return 'MediaPlayer_setPlaybackSpeed_46f8ab7';
   }
 
   selectAudioTrack(index: number): number {
@@ -255,7 +255,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSelectAudioTrack(index: number): string {
-    return 'MediaPlayer_selectAudioTrack';
+    return 'MediaPlayer_selectAudioTrack_46f8ab7';
   }
 
   selectMultiAudioTrack(
@@ -284,53 +284,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     playoutTrackIndex: number,
     publishTrackIndex: number
   ): string {
-    return 'MediaPlayer_selectMultiAudioTrack';
-  }
-
-  setPlayerOptionInInt(key: string, value: number): number {
-    const apiType = this.getApiTypeFromSetPlayerOptionInInt(key, value);
-    const jsonParams = {
-      key: key,
-      value: value,
-      toJSON: () => {
-        return {
-          key: key,
-          value: value,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetPlayerOptionInInt(
-    key: string,
-    value: number
-  ): string {
-    return 'MediaPlayer_setPlayerOptionInInt';
-  }
-
-  setPlayerOptionInString(key: string, value: string): number {
-    const apiType = this.getApiTypeFromSetPlayerOptionInString(key, value);
-    const jsonParams = {
-      key: key,
-      value: value,
-      toJSON: () => {
-        return {
-          key: key,
-          value: value,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetPlayerOptionInString(
-    key: string,
-    value: string
-  ): string {
-    return 'MediaPlayer_setPlayerOptionInString';
+    return 'MediaPlayer_selectMultiAudioTrack_4e92b3c';
   }
 
   takeScreenshot(filename: string): number {
@@ -348,7 +302,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromTakeScreenshot(filename: string): string {
-    return 'MediaPlayer_takeScreenshot';
+    return 'MediaPlayer_takeScreenshot_3a2037f';
   }
 
   selectInternalSubtitle(index: number): number {
@@ -366,7 +320,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSelectInternalSubtitle(index: number): string {
-    return 'MediaPlayer_selectInternalSubtitle';
+    return 'MediaPlayer_selectInternalSubtitle_46f8ab7';
   }
 
   setExternalSubtitle(url: string): number {
@@ -384,7 +338,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSetExternalSubtitle(url: string): string {
-    return 'MediaPlayer_setExternalSubtitle';
+    return 'MediaPlayer_setExternalSubtitle_3a2037f';
   }
 
   getState(): MediaPlayerState {
@@ -413,7 +367,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromMute(muted: boolean): string {
-    return 'MediaPlayer_mute';
+    return 'MediaPlayer_mute_5039d15';
   }
 
   getMute(): boolean {
@@ -425,7 +379,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromGetMute(): string {
-    return 'MediaPlayer_getMute';
+    return 'MediaPlayer_getMute_c93e9d4';
   }
 
   adjustPlayoutVolume(volume: number): number {
@@ -443,7 +397,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromAdjustPlayoutVolume(volume: number): string {
-    return 'MediaPlayer_adjustPlayoutVolume';
+    return 'MediaPlayer_adjustPlayoutVolume_46f8ab7';
   }
 
   getPlayoutVolume(): number {
@@ -455,7 +409,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromGetPlayoutVolume(): string {
-    return 'MediaPlayer_getPlayoutVolume';
+    return 'MediaPlayer_getPlayoutVolume_9cfaa7e';
   }
 
   adjustPublishSignalVolume(volume: number): number {
@@ -473,7 +427,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromAdjustPublishSignalVolume(volume: number): string {
-    return 'MediaPlayer_adjustPublishSignalVolume';
+    return 'MediaPlayer_adjustPublishSignalVolume_46f8ab7';
   }
 
   getPublishSignalVolume(): number {
@@ -485,7 +439,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromGetPublishSignalVolume(): string {
-    return 'MediaPlayer_getPublishSignalVolume';
+    return 'MediaPlayer_getPublishSignalVolume_9cfaa7e';
   }
 
   setView(view: any): number {
@@ -503,7 +457,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSetView(view: any): string {
-    return 'MediaPlayer_setView';
+    return 'MediaPlayer_setView_cb1a81f';
   }
 
   setRenderMode(renderMode: RenderModeType): number {
@@ -521,7 +475,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSetRenderMode(renderMode: RenderModeType): string {
-    return 'MediaPlayer_setRenderMode';
+    return 'MediaPlayer_setRenderMode_bedb5ae';
   }
 
   registerPlayerSourceObserver(observer: IMediaPlayerSourceObserver): number {
@@ -539,7 +493,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   protected getApiTypeFromRegisterPlayerSourceObserver(
     observer: IMediaPlayerSourceObserver
   ): string {
-    return 'MediaPlayer_registerPlayerSourceObserver';
+    return 'MediaPlayer_registerPlayerSourceObserver_15621d7';
   }
 
   unregisterPlayerSourceObserver(observer: IMediaPlayerSourceObserver): number {
@@ -557,7 +511,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   protected getApiTypeFromUnregisterPlayerSourceObserver(
     observer: IMediaPlayerSourceObserver
   ): string {
-    return 'MediaPlayer_unregisterPlayerSourceObserver';
+    return 'MediaPlayer_unregisterPlayerSourceObserver_15621d7';
   }
 
   registerAudioFrameObserver(
@@ -603,7 +557,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   protected getApiTypeFromUnregisterAudioFrameObserver(
     observer: IAudioPcmFrameSink
   ): string {
-    return 'MediaPlayer_unregisterAudioFrameObserver';
+    return 'MediaPlayer_unregisterAudioFrameObserver_89ab9b5';
   }
 
   registerVideoFrameObserver(observer: IMediaPlayerVideoFrameObserver): number {
@@ -669,7 +623,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     observer: IAudioSpectrumObserver,
     intervalInMS: number
   ): string {
-    return 'MediaPlayer_registerMediaPlayerAudioSpectrumObserver';
+    return 'MediaPlayer_registerMediaPlayerAudioSpectrumObserver_226bb48';
   }
 
   unregisterMediaPlayerAudioSpectrumObserver(
@@ -690,7 +644,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   protected getApiTypeFromUnregisterMediaPlayerAudioSpectrumObserver(
     observer: IAudioSpectrumObserver
   ): string {
-    return 'MediaPlayer_unregisterMediaPlayerAudioSpectrumObserver';
+    return 'MediaPlayer_unregisterMediaPlayerAudioSpectrumObserver_09064ce';
   }
 
   setAudioDualMonoMode(mode: AudioDualMonoMode): number {
@@ -710,7 +664,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   protected getApiTypeFromSetAudioDualMonoMode(
     mode: AudioDualMonoMode
   ): string {
-    return 'MediaPlayer_setAudioDualMonoMode';
+    return 'MediaPlayer_setAudioDualMonoMode_30c9672';
   }
 
   getPlayerSdkVersion(): string {
@@ -755,7 +709,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     src: string,
     startPos: number
   ): string {
-    return 'MediaPlayer_openWithAgoraCDNSrc';
+    return 'MediaPlayer_openWithAgoraCDNSrc_e43f201';
   }
 
   getAgoraCDNLineCount(): number {
@@ -784,7 +738,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromSwitchAgoraCDNLineByIndex(index: number): string {
-    return 'MediaPlayer_switchAgoraCDNLineByIndex';
+    return 'MediaPlayer_switchAgoraCDNLineByIndex_46f8ab7';
   }
 
   getCurrentAgoraCDNIndex(): number {
@@ -813,7 +767,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromEnableAutoSwitchAgoraCDN(enable: boolean): string {
-    return 'MediaPlayer_enableAutoSwitchAgoraCDN';
+    return 'MediaPlayer_enableAutoSwitchAgoraCDN_5039d15';
   }
 
   renewAgoraCDNSrcToken(token: string, ts: number): number {
@@ -836,7 +790,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     token: string,
     ts: number
   ): string {
-    return 'MediaPlayer_renewAgoraCDNSrcToken';
+    return 'MediaPlayer_renewAgoraCDNSrcToken_e43f201';
   }
 
   switchAgoraCDNSrc(src: string, syncPts: boolean = false): number {
@@ -859,7 +813,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     src: string,
     syncPts: boolean = false
   ): string {
-    return 'MediaPlayer_switchAgoraCDNSrc';
+    return 'MediaPlayer_switchAgoraCDNSrc_7a174df';
   }
 
   switchSrc(src: string, syncPts: boolean = true): number {
@@ -882,7 +836,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     src: string,
     syncPts: boolean = true
   ): string {
-    return 'MediaPlayer_switchSrc';
+    return 'MediaPlayer_switchSrc_7a174df';
   }
 
   preloadSrc(src: string, startPos: number): number {
@@ -902,7 +856,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromPreloadSrc(src: string, startPos: number): string {
-    return 'MediaPlayer_preloadSrc';
+    return 'MediaPlayer_preloadSrc_e43f201';
   }
 
   playPreloadedSrc(src: string): number {
@@ -920,7 +874,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromPlayPreloadedSrc(src: string): string {
-    return 'MediaPlayer_playPreloadedSrc';
+    return 'MediaPlayer_playPreloadedSrc_3a2037f';
   }
 
   unloadSrc(src: string): number {
@@ -938,7 +892,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   }
 
   protected getApiTypeFromUnloadSrc(src: string): string {
-    return 'MediaPlayer_unloadSrc';
+    return 'MediaPlayer_unloadSrc_3a2037f';
   }
 
   setSpatialAudioParams(params: SpatialAudioParams): number {
@@ -958,7 +912,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
   protected getApiTypeFromSetSpatialAudioParams(
     params: SpatialAudioParams
   ): string {
-    return 'MediaPlayer_setSpatialAudioParams';
+    return 'MediaPlayer_setSpatialAudioParams_5035667';
   }
 
   setSoundPositionParams(pan: number, gain: number): number {
@@ -981,7 +935,53 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     pan: number,
     gain: number
   ): string {
-    return 'MediaPlayer_setSoundPositionParams';
+    return 'MediaPlayer_setSoundPositionParams_f282d50';
+  }
+
+  setPlayerOptionInInt(key: string, value: number): number {
+    const apiType = this.getApiTypeFromSetPlayerOptionInInt(key, value);
+    const jsonParams = {
+      key: key,
+      value: value,
+      toJSON: () => {
+        return {
+          key: key,
+          value: value,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetPlayerOptionInInt(
+    key: string,
+    value: number
+  ): string {
+    return 'MediaPlayer_setPlayerOptionInInt';
+  }
+
+  setPlayerOptionInString(key: string, value: string): number {
+    const apiType = this.getApiTypeFromSetPlayerOptionInString(key, value);
+    const jsonParams = {
+      key: key,
+      value: value,
+      toJSON: () => {
+        return {
+          key: key,
+          value: value,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetPlayerOptionInString(
+    key: string,
+    value: string
+  ): string {
+    return 'MediaPlayer_setPlayerOptionInString';
   }
 }
 
@@ -1024,7 +1024,7 @@ export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   }
 
   protected getApiTypeFromRemoveCacheByUri(uri: string): string {
-    return 'MediaPlayerCacheManager_removeCacheByUri';
+    return 'MediaPlayerCacheManager_removeCacheByUri_3a2037f';
   }
 
   setCacheDir(path: string): number {
@@ -1042,7 +1042,7 @@ export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   }
 
   protected getApiTypeFromSetCacheDir(path: string): string {
-    return 'MediaPlayerCacheManager_setCacheDir';
+    return 'MediaPlayerCacheManager_setCacheDir_3a2037f';
   }
 
   setMaxCacheFileCount(count: number): number {
@@ -1060,7 +1060,7 @@ export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   }
 
   protected getApiTypeFromSetMaxCacheFileCount(count: number): string {
-    return 'MediaPlayerCacheManager_setMaxCacheFileCount';
+    return 'MediaPlayerCacheManager_setMaxCacheFileCount_46f8ab7';
   }
 
   setMaxCacheFileSize(cacheSize: number): number {
@@ -1078,7 +1078,7 @@ export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   }
 
   protected getApiTypeFromSetMaxCacheFileSize(cacheSize: number): string {
-    return 'MediaPlayerCacheManager_setMaxCacheFileSize';
+    return 'MediaPlayerCacheManager_setMaxCacheFileSize_f631116';
   }
 
   enableAutoRemoveCache(enable: boolean): number {
@@ -1096,7 +1096,7 @@ export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   }
 
   protected getApiTypeFromEnableAutoRemoveCache(enable: boolean): string {
-    return 'MediaPlayerCacheManager_enableAutoRemoveCache';
+    return 'MediaPlayerCacheManager_enableAutoRemoveCache_5039d15';
   }
 
   getCacheDir(length: number): string {
@@ -1115,7 +1115,7 @@ export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
   }
 
   protected getApiTypeFromGetCacheDir(length: number): string {
-    return 'MediaPlayerCacheManager_getCacheDir';
+    return 'MediaPlayerCacheManager_getCacheDir_c9551e8';
   }
 
   getMaxCacheFileCount(): number {
