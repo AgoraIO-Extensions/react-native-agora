@@ -1207,7 +1207,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     channelId: string,
     uid: number
   ): string {
-    return 'RtcEngine_preloadChannel';
+    return 'RtcEngine_preloadChannel_a0779eb';
   }
 
   preloadChannelWithUserAccount(
@@ -1241,7 +1241,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     channelId: string,
     userAccount: string
   ): string {
-    return 'RtcEngine_preloadChannelWithUserAccount';
+    return 'RtcEngine_preloadChannelWithUserAccount_0e4f59e';
   }
 
   updatePreloadChannelToken(token: string): number {
@@ -1298,7 +1298,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     uid: number,
     options: ChannelMediaOptions
   ): string {
-    return 'RtcEngine_joinChannel';
+    return 'RtcEngine_joinChannel_cdbb747';
   }
 
   updateChannelMediaOptions(options: ChannelMediaOptions): number {
@@ -1336,7 +1336,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromLeaveChannel(options?: LeaveChannelOptions): string {
-    return 'RtcEngine_leaveChannel';
+    return 'RtcEngine_leaveChannel_2c0e3aa';
   }
 
   renewToken(token: string): number {
@@ -1397,7 +1397,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     role: ClientRoleType,
     options?: ClientRoleOptions
   ): string {
-    return 'RtcEngine_setClientRole';
+    return 'RtcEngine_setClientRole_b46cc48';
   }
 
   startEchoTest(config: EchoTestConfiguration): number {
@@ -1415,7 +1415,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromStartEchoTest(config: EchoTestConfiguration): string {
-    return 'RtcEngine_startEchoTest';
+    return 'RtcEngine_startEchoTest_16140d7';
   }
 
   stopEchoTest(): number {
@@ -1496,7 +1496,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromStartPreview(
     sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary
   ): string {
-    return 'RtcEngine_startPreview';
+    return 'RtcEngine_startPreview_4fd718e';
   }
 
   stopPreview(
@@ -1518,7 +1518,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromStopPreview(
     sourceType: VideoSourceType = VideoSourceType.VideoSourceCameraPrimary
   ): string {
-    return 'RtcEngine_stopPreview';
+    return 'RtcEngine_stopPreview_4fd718e';
   }
 
   startLastmileProbeTest(config: LastmileProbeConfig): number {
@@ -1868,7 +1868,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     profile: AudioProfileType,
     scenario: AudioScenarioType = AudioScenarioType.AudioScenarioDefault
   ): string {
-    return 'RtcEngine_setAudioProfile';
+    return 'RtcEngine_setAudioProfile_d944543';
   }
 
   setAudioScenario(scenario: AudioScenarioType): number {
@@ -2318,7 +2318,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromStartAudioRecording(
     config: AudioRecordingConfiguration
   ): string {
-    return 'RtcEngine_startAudioRecording';
+    return 'RtcEngine_startAudioRecording_e32bb3b';
   }
 
   registerAudioEncodedFrameObserver(
@@ -2463,7 +2463,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     cycle: number,
     startPos: number = 0
   ): string {
-    return 'RtcEngine_startAudioMixing';
+    return 'RtcEngine_startAudioMixing_1ee1b1e';
   }
 
   stopAudioMixing(): number {
@@ -3567,7 +3567,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     renderMode: RenderModeType,
     mirrorMode: VideoMirrorModeType = VideoMirrorModeType.VideoMirrorModeAuto
   ): string {
-    return 'RtcEngine_setLocalRenderMode';
+    return 'RtcEngine_setLocalRenderMode_cfb201b';
   }
 
   setRemoteRenderMode(
@@ -3650,7 +3650,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     enabled: boolean,
     streamConfig?: SimulcastStreamConfig
   ): string {
-    return 'RtcEngine_enableDualStreamMode';
+    return 'RtcEngine_enableDualStreamMode_9822d8a';
   }
 
   setDualStreamMode(
@@ -3676,7 +3676,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     mode: SimulcastStreamMode,
     streamConfig?: SimulcastStreamConfig
   ): string {
-    return 'RtcEngine_setDualStreamMode';
+    return 'RtcEngine_setDualStreamMode_b3a4f6c';
   }
 
   enableCustomAudioLocalPlayback(trackId: number, enabled: boolean): number {
@@ -4144,7 +4144,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     enable: boolean = true,
     type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): string {
-    return 'RtcEngine_enableExtension';
+    return 'RtcEngine_enableExtension_0b60a2c';
   }
 
   setExtensionProperty(
@@ -4188,7 +4188,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     value: string,
     type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): string {
-    return 'RtcEngine_setExtensionProperty';
+    return 'RtcEngine_setExtensionProperty_520ac55';
   }
 
   getExtensionProperty(
@@ -4233,7 +4233,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     bufLen: number,
     type: MediaSourceType = MediaSourceType.UnknownMediaSource
   ): string {
-    return 'RtcEngine_getExtensionProperty';
+    return 'RtcEngine_getExtensionProperty_38c9723';
   }
 
   enableLoopbackRecording(enabled: boolean, deviceName?: string): number {
@@ -5126,7 +5126,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromStartScreenCapture(
     captureParams: ScreenCaptureParameters2
   ): string {
-    return 'RtcEngine_startScreenCapture';
+    return 'RtcEngine_startScreenCapture_270da41';
   }
 
   updateScreenCapture(captureParams: ScreenCaptureParameters2): number {
@@ -5642,7 +5642,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromCreateDataStream(config: DataStreamConfig): string {
-    return 'RtcEngine_createDataStream';
+    return 'RtcEngine_createDataStream_5862815';
   }
 
   sendStreamMessage(
@@ -5698,7 +5698,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     watermarkUrl: string,
     options: WatermarkOptions
   ): string {
-    return 'RtcEngine_addVideoWatermark';
+    return 'RtcEngine_addVideoWatermark_7480410';
   }
 
   clearVideoWatermarks(): number {
@@ -6023,7 +6023,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     userAccount: string,
     options?: ChannelMediaOptions
   ): string {
-    return 'RtcEngine_joinChannelWithUserAccount';
+    return 'RtcEngine_joinChannelWithUserAccount_4685af9';
   }
 
   joinChannelWithUserAccountEx(

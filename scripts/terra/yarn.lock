@@ -39,16 +39,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#head=main":
-  version: 1.0.2
-  resolution: "@agoraio-extensions/terra_shared_configs@git@github.com:AgoraIO-Extensions/terra_shared_configs.git#commit=7220001a85053a26a55921a37abf6f51e6410af0"
+"@agoraio-extensions/terra_shared_configs@portal:/Users/guoxianzhe/agora/terra_shared_configs::locator=terra%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@agoraio-extensions/terra_shared_configs@portal:/Users/guoxianzhe/agora/terra_shared_configs::locator=terra%40workspace%3A."
   dependencies:
     "@agoraio-extensions/cxx-parser": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=cxx-parser"
     "@agoraio-extensions/terra-core": "git@github.com:AgoraIO-Extensions/terra.git#head=main&workspace=terra-core"
     mustache: "npm:^4.2.0"
-  checksum: 75837ec96cb3347407b52c9776f3e05f9f14b2dd33c049272fe8857165da484aad5674f832decd0ef3b9f22534b8c76856e86460049ebbdf17126d8101e15bb5
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@cspotcode/source-map-support@npm:^0.8.0":
   version: 0.8.1

@@ -10,8 +10,8 @@ import {
   Music,
   MusicChartInfo,
   MusicCollection,
-  MusicContentCenterStatusCode,
-  PreloadStatusCode,
+  MusicContentCenterStateReason,
+  PreloadState,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
@@ -251,7 +251,7 @@ export default class MusicContentCenter
   onMusicChartsResult(
     requestId: string,
     result: MusicChartInfo[],
-    errorCode: MusicContentCenterStatusCode
+    errorCode: MusicContentCenterStateReason
   ) {
     this.info('onMusicChartsResult', requestId, result, errorCode);
     this.setState({ musicChartInfos: result });
@@ -260,7 +260,7 @@ export default class MusicContentCenter
   onMusicCollectionResult(
     requestId: string,
     result: MusicCollection,
-    errorCode: MusicContentCenterStatusCode
+    errorCode: MusicContentCenterStateReason
   ) {
     this.info('onMusicCollectionResult', requestId, result, errorCode);
     this.setState({
@@ -276,8 +276,8 @@ export default class MusicContentCenter
     songCode: number,
     percent: number,
     lyricUrl: string,
-    status: PreloadStatusCode,
-    errorCode: MusicContentCenterStatusCode
+    status: PreloadState,
+    errorCode: MusicContentCenterStateReason
   ) {
     this.info(
       'onPreLoadEvent',
@@ -290,7 +290,7 @@ export default class MusicContentCenter
     );
     if (songCode === this.state.songCode) {
       this.setState({
-        preload: status === PreloadStatusCode.KPreloadStatusCompleted,
+        preload: status === PreloadState.KPreloadStateCompleted,
       });
     }
   }
@@ -299,7 +299,7 @@ export default class MusicContentCenter
     requestId: string,
     songCode: number,
     lyricUrl: string,
-    errorCode: MusicContentCenterStatusCode
+    errorCode: MusicContentCenterStateReason
   ) {
     this.info('onLyricResult', requestId, songCode, lyricUrl, errorCode);
   }

@@ -84,7 +84,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     connection: RtcConnection,
     options?: LeaveChannelOptions
   ): string {
-    return 'RtcEngineEx_leaveChannelEx';
+    return 'RtcEngineEx_leaveChannelEx_b03ee9a';
   }
 
   updateChannelMediaOptionsEx(
@@ -854,7 +854,7 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     config: DataStreamConfig,
     connection: RtcConnection
   ): string {
-    return 'RtcEngineEx_createDataStreamEx';
+    return 'RtcEngineEx_createDataStreamEx_9f641b6';
   }
 
   sendStreamMessageEx(

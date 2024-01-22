@@ -396,7 +396,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromPreload(songCode: number): string {
-    return 'MusicContentCenter_preload';
+    return 'MusicContentCenter_preload_d3baeab';
   }
 
   removeCache(songCode: number): number {

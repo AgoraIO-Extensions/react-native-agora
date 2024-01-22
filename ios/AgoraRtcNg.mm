@@ -183,6 +183,11 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
         std::smatch output;
         std::regex pattern = std::regex("^.*(Observer|Handler|Callback|Receiver|DirectCdnStreaming)$");
         std::string name = funcName.UTF8String;
+        size_t first_ = name.find('_');
+        size_t second_ = name.find('_', first_ + 1);
+        if (first_ != std::string::npos && second_ != std::string::npos) {
+          name = name.substr(first_ + 1, second_ - first_ - 1);
+        }
         if (std::regex_match(name, output, pattern)) {
             param.buffer = handler;
             param.buffer_count = 1;
