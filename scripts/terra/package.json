@@ -22,8 +22,5 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   },
-  "packageManager": "yarn@4.0.1",
-  "resolutions": {
-    "@agoraio-extensions/terra_shared_configs": "portal:/Users/guoxianzhe/agora/terra_shared_configs"
-  }
+  "packageManager": "yarn@4.0.1"
 }
