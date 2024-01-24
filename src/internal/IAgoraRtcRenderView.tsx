@@ -17,18 +17,18 @@ export default abstract class IAgoraRtcRenderView<
     const { canvas, connection } = this.props;
     if (canvas.sourceType === undefined) {
       if (canvas.uid) {
-        funcName = 'RtcEngine_setupRemoteVideo';
+        funcName = 'RtcEngine_setupRemoteVideo_acc9c38';
       } else {
-        funcName = 'RtcEngine_setupLocalVideo';
+        funcName = 'RtcEngine_setupLocalVideo_acc9c38';
       }
     } else if (canvas.sourceType === VideoSourceType.VideoSourceRemote) {
-      funcName = 'RtcEngine_setupRemoteVideo';
+      funcName = 'RtcEngine_setupRemoteVideo_acc9c38';
     } else {
-      funcName = 'RtcEngine_setupLocalVideo';
+      funcName = 'RtcEngine_setupLocalVideo_acc9c38';
     }
 
-    if (funcName === 'RtcEngine_setupRemoteVideo' && connection) {
-      funcName = 'RtcEngineEx_setupRemoteVideoEx';
+    if (funcName === 'RtcEngine_setupRemoteVideo_acc9c38' && connection) {
+      funcName = 'RtcEngineEx_setupRemoteVideoEx_522a409';
     }
     return funcName;
   }
