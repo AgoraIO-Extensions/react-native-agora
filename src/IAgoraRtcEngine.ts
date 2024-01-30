@@ -1511,7 +1511,6 @@ export interface IRtcEngineEventHandler {
    *  The remote user stops sending the video stream and re-sends it after 15 seconds. Reasons for such an interruption include:
    *  The remote user leaves the channel.
    *  The remote user drops offline.
-   *  The remote user calls muteLocalVideoStream to stop sending the video stream.
    *  The remote user calls disableVideo to disable video.
    *
    * @param connection The connection information. See RtcConnection.
@@ -4763,8 +4762,8 @@ export abstract class IRtcEngine {
    * The SDK defaults to enabling low-quality video stream adaptive mode (AutoSimulcastStream) on the sender side, which means the sender does not actively send low-quality video stream. The receiver can initiate a low-quality video stream request by calling setRemoteVideoStreamType, and the sender then automatically starts sending low-quality video stream upon receiving the request.
    *  If you want to modify this behavior, you can call this method and set mode to DisableSimulcastStream (never send low-quality video streams) or EnableSimulcastStream (always send low-quality video streams).
    *  If you want to restore the default behavior after making changes, you can call this method again with mode set to AutoSimulcastStream. The difference and connection between this method and enableDualStreamMode is as follows:
-   *  When calling this method and setting mode to DisableSimulcastStream, it has the same effect as calling and setting enabled to false.
-   *  When calling this method and setting mode to EnableSimulcastStream, it has the same effect as calling and setting enabled to true.
+   *  When calling this method and setting mode to DisableSimulcastStream, it has the same effect as calling enableDualStreamMode and setting enabled to false.
+   *  When calling this method and setting mode to EnableSimulcastStream, it has the same effect as calling enableDualStreamMode and setting enabled to true.
    *  Both methods can be called before and after joining a channel. If both methods are used, the settings in the method called later takes precedence.
    *
    * @param mode The mode in which the video stream is sent. See SimulcastStreamMode.
@@ -5016,15 +5015,7 @@ export abstract class IRtcEngine {
   abstract adjustUserPlaybackSignalVolume(uid: number, volume: number): number;
 
   /**
-   * Sets the fallback option for the published video stream based on the network conditions.
-   *
-   * An unstable network affects the audio and video quality in a video call or interactive live video streaming. If option is set as StreamFallbackOptionAudioOnly (2), the SDK disables the upstream video but enables audio only when the network conditions deteriorate and cannot support both video and audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the published video stream falls back to audio-only or when the audio-only stream switches back to the video, the SDK triggers the callback.
-   *  In stream push scenarios, set the local push fallback to StreamFallbackOptionAudioOnly (2) may result n some delay for remote CDN users to hear the sound. In this case, Agora recommends that you do not enable this option.
-   *  Ensure that you call this method before joining a channel.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * @ignore
    */
   abstract setLocalPublishFallbackOption(option: StreamFallbackOptions): number;
 
@@ -5987,8 +5978,7 @@ export abstract class IRtcEngine {
   /**
    * Adds event handlers
    *
-   * The SDK uses the IRtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this class have default (empty) implementations. Therefore, apps only need to inherits callbacks according to the scenarios. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method.
-   * Otherwise, the SDK may not work properly.
+   * The SDK uses the IRtcEngineEventHandler class to send callbacks to the app. The app inherits the methods of this class to receive these callbacks. All methods in this class have default (empty) implementations. Therefore, apps only need to inherits callbacks according to the scenarios. In the callbacks, avoid time-consuming tasks or calling APIs that can block the thread, such as the sendStreamMessage method. Otherwise, the SDK may not work properly.
    *
    * @param eventHandler Callback events to be added. See IRtcEngineEventHandler.
    *
@@ -6090,8 +6080,7 @@ export abstract class IRtcEngine {
    * Sends data stream messages to all users in a channel. The SDK has the following restrictions on this method:
    *  Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
    *  Each client can send up to 6 KB of data per second.
-   *  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
-   * A failed method call triggers the onStreamMessageError callback on the remote client.
+   *  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
    *  Ensure that you call createDataStream to create a data channel before calling this method.
    *  In live streaming scenarios, this method only applies to hosts.
    *
