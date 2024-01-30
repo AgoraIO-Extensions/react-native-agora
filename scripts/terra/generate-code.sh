@@ -5,10 +5,6 @@ set -x
 MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
 
-rm -rf node_modules
-rm -rf .terra
-yarn
-
 npm exec terra -- run \
     --config ${PROJECT_ROOT}/scripts/terra/config/types_config.yaml  \
     --output-dir=${PROJECT_ROOT}/src

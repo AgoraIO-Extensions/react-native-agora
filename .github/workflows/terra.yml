@@ -23,6 +23,7 @@ jobs:
           generate-code: true
           generate-comment: true
           generate-code-command: |
+            sh generate-prepare.sh
             sh generate-code.sh
           generate-comment-command: |
             sh generate-comment.sh
