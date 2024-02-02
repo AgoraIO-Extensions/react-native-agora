@@ -58,12 +58,11 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
-    "@react-native/eslint-config": "^0.72.2",
+    "@react-native/eslint-config": "^0.73.2",
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^28.1.2",
     "@types/json-bigint": "^1.0.1",
     "@types/react": "~17.0.21",
-    "@types/react-native": "0.70.0",
     "commitlint": "^17.0.2",
     "del-cli": "^5.0.0",
     "eslint": "^8.4.1",
@@ -72,11 +71,11 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.1",
-    "patch-package": "^6.5.0",
-    "pod-install": "^0.1.0",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "pod-install": "^0.2.0",
     "prettier": "^2.0.5",
     "react": "18.2.0",
-    "react-native": "0.72.5",
+    "react-native": "0.73.2",
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
     "ts-interface-builder": "^0.3.3",
@@ -85,7 +84,12 @@
     "typescript": "^5.0.2"
   },
   "resolutions": {
-    "@types/react": "17.0.21"
+    "@types/react": "17.0.21",
+    "eslint-plugin-auto-import@^0.1.1": "patch:eslint-plugin-auto-import@npm%3A0.1.1#./.yarn/patches/eslint-plugin-auto-import-npm-0.1.1-79fd8c84dd.patch",
+    "json-bigint@^1.0.0": "patch:json-bigint@npm%3A1.0.0#./.yarn/patches/json-bigint-npm-1.0.0-8e35bcb143.patch",
+    "eslint@^8.4.1": "patch:eslint@npm%3A8.56.0#./.yarn/patches/eslint-npm-8.56.0-6eec398a41.patch",
+    "ts-interface-builder@^0.3.3": "patch:ts-interface-builder@npm%3A0.3.3#./.yarn/patches/ts-interface-builder-npm-0.3.3-64253a8816.patch",
+    "react-native-color-picker@^0.6.0": "patch:react-native-color-picker@npm%3A0.6.0#./.yarn/patches/react-native-color-picker-npm-0.6.0-aaefc9686a.patch"
   },
   "peerDependencies": {
     "react": "*",

@@ -1,7 +1,7 @@
-diff --git a/node_modules/json-bigint/lib/parse.js b/node_modules/json-bigint/lib/parse.js
-index bb4e5eb..91ff283 100644
---- a/node_modules/json-bigint/lib/parse.js
-+++ b/node_modules/json-bigint/lib/parse.js
+diff --git a/lib/parse.js b/lib/parse.js
+index bb4e5ebf2e8717ae77b5147668685055c064c098..91ff283a35f0274b319d9c2cbd5da5548ca50dda 100644
+--- a/lib/parse.js
++++ b/lib/parse.js
 @@ -206,9 +206,9 @@ var json_parse = function (options) {
          error('Bad number');
        } else {

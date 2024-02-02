@@ -22,6 +22,7 @@ build/
 !default.perspectivev3
 xcuserdata
 *.xccheckout
+*.xcode.env.local
 *.moved-aside
 DerivedData
 *.hmap

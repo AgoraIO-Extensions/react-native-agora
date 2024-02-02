@@ -1,7 +1,7 @@
-diff --git a/node_modules/ts-interface-builder/dist/index.js b/node_modules/ts-interface-builder/dist/index.js
-index 7d82df1..a839205 100644
---- a/node_modules/ts-interface-builder/dist/index.js
-+++ b/node_modules/ts-interface-builder/dist/index.js
+diff --git a/dist/index.js b/dist/index.js
+index 7d82df112a40b76e795d02b43e9c210b842e0297..a839205abbfbc62f7deb2a5a211d11dd03df757d 100644
+--- a/dist/index.js
++++ b/dist/index.js
 @@ -116,7 +116,7 @@ class Compiler {
          const name = this.getName(node.name);
          const params = node.parameters.map(this.compileNode, this);
