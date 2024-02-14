@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* AgoraRtcNgExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AgoraRtcNgExampleTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-AgoraRtcNgExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-AgoraRtcNgExample.a */; };
+		0F7986283986992EB83F233E /* libPods-AgoraRtcNgExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DF127C5BA9BAFC41E9649BC /* libPods-AgoraRtcNgExample.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		51C0ADB2D05FD3E09BD14D10 /* libPods-ScreenShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995956B4E8573A01AC9C535 /* libPods-ScreenShare.a */; };
-		7699B88040F8A987B510C191 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */; };
+		13BABA192B7CAD8B002E8E1F /* effects in Resources */ = {isa = PBXBuildFile; fileRef = 13BABA182B7CAD8B002E8E1F /* effects */; };
+		48AB7DB3AED8F0E7AC7FF517 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ACA3AAE7DAFA8BDB41FDAD8 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		EA0B58B5F150010614AF3AAA /* libPods-ScreenShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CBD41918FA10D93FC79279B /* libPods-ScreenShare.a */; };
 		F5652807291BE31F00793068 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F56527FF291BE31E00793068 /* agora-logo.png */; };
 		F5652809291BE31F00793068 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652801291BE31E00793068 /* ding.mp3 */; };
 		F565280A291BE31F00793068 /* dang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652802291BE31E00793068 /* dang.mp3 */; };
@@ -59,22 +60,24 @@
 		00E356EE1AD99517003FC87E /* AgoraRtcNgExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AgoraRtcNgExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* AgoraRtcNgExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraRtcNgExampleTests.m; sourceTree = "<group>"; };
+		030D8EE73131BDD8DEA7AD27 /* Pods-AgoraRtcNgExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample.debug.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample.debug.xcconfig"; sourceTree = "<group>"; };
+		057A5E26AA71C78CC89119E3 /* Pods-AgoraRtcNgExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample.release.xcconfig"; sourceTree = "<group>"; };
+		136A977B2B7CC87C005608F4 /* BanubaFiltersAgoraExtension.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BanubaFiltersAgoraExtension.xcframework; path = Pods/BanubaFiltersAgoraExtension/BanubaFiltersAgoraExtension.xcframework; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AgoraRtcNgExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgoraRtcNgExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = AgoraRtcNgExample/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = AgoraRtcNgExample/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AgoraRtcNgExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AgoraRtcNgExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = AgoraRtcNgExample/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-AgoraRtcNgExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample.debug.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample.debug.xcconfig"; sourceTree = "<group>"; };
-		45F306609F451ADF48C3F8C6 /* Pods-ScreenShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.debug.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.debug.xcconfig"; sourceTree = "<group>"; };
-		4995956B4E8573A01AC9C535 /* libPods-ScreenShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ScreenShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5709B34CF0A7D63546082F79 /* Pods-AgoraRtcNgExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-AgoraRtcNgExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgoraRtcNgExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B4351393DA57450FBFEC119 /* Pods-ScreenShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.release.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.release.xcconfig"; sourceTree = "<group>"; };
+		13BABA182B7CAD8B002E8E1F /* effects */ = {isa = PBXFileReference; lastKnownFileType = folder; name = effects; path = ../effects; sourceTree = "<group>"; };
+		24A1EDEB700396651C66A4D6 /* Pods-ScreenShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.release.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.release.xcconfig"; sourceTree = "<group>"; };
+		5ACA3AAE7DAFA8BDB41FDAD8 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5DF127C5BA9BAFC41E9649BC /* libPods-AgoraRtcNgExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgoraRtcNgExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		650058F18E7F5CEFB46CBD22 /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		6CBD41918FA10D93FC79279B /* libPods-ScreenShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ScreenShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AgoraRtcNgExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		8BCDA85794325BBC8079D38C /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		8D8E7842CCEE733F964AD6E8 /* Pods-ScreenShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.debug.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F56527FF291BE31E00793068 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		F5652801291BE31E00793068 /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
@@ -93,7 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */,
+				48AB7DB3AED8F0E7AC7FF517 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,7 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-AgoraRtcNgExample.a in Frameworks */,
+				0F7986283986992EB83F233E /* libPods-AgoraRtcNgExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,7 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5652813291BE33F00793068 /* ReplayKit.framework in Frameworks */,
-				51C0ADB2D05FD3E09BD14D10 /* libPods-ScreenShare.a in Frameworks */,
+				EA0B58B5F150010614AF3AAA /* libPods-ScreenShare.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,12 +153,13 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				136A977B2B7CC87C005608F4 /* BanubaFiltersAgoraExtension.xcframework */,
 				F5652820291C0EE700793068 /* hermes.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-AgoraRtcNgExample.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */,
 				F5652812291BE33F00793068 /* ReplayKit.framework */,
-				4995956B4E8573A01AC9C535 /* libPods-ScreenShare.a */,
+				5DF127C5BA9BAFC41E9649BC /* libPods-AgoraRtcNgExample.a */,
+				5ACA3AAE7DAFA8BDB41FDAD8 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */,
+				6CBD41918FA10D93FC79279B /* libPods-ScreenShare.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -170,6 +174,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				13BABA182B7CAD8B002E8E1F /* effects */,
 				F56527FE291BE31E00793068 /* Resources */,
 				13B07FAE1A68108700A75B9A /* AgoraRtcNgExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -197,12 +202,12 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-AgoraRtcNgExample.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-AgoraRtcNgExample.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */,
-				45F306609F451ADF48C3F8C6 /* Pods-ScreenShare.debug.xcconfig */,
-				6B4351393DA57450FBFEC119 /* Pods-ScreenShare.release.xcconfig */,
+				030D8EE73131BDD8DEA7AD27 /* Pods-AgoraRtcNgExample.debug.xcconfig */,
+				057A5E26AA71C78CC89119E3 /* Pods-AgoraRtcNgExample.release.xcconfig */,
+				8BCDA85794325BBC8079D38C /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig */,
+				650058F18E7F5CEFB46CBD22 /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */,
+				8D8E7842CCEE733F964AD6E8 /* Pods-ScreenShare.debug.xcconfig */,
+				24A1EDEB700396651C66A4D6 /* Pods-ScreenShare.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -235,12 +240,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "AgoraRtcNgExampleTests" */;
 			buildPhases = (
-				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				79BFABFB452E4C6959F60161 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				35E70DCE3BD8845B8C737804 /* [CP] Embed Pods Frameworks */,
+				B3F4A0E8D3A9E6CEBDC209A3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -256,15 +261,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AgoraRtcNgExample" */;
 			buildPhases = (
-				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				86E3906F30642FAB147D3342 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				F565281F291BE33F00793068 /* Embed Foundation Extensions */,
+				92FC665149EB952F430D7277 /* [CP] Embed Pods Frameworks */,
+				FA643AF0B947EC1DB84EE8E4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -280,7 +285,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F565281C291BE33F00793068 /* Build configuration list for PBXNativeTarget "ScreenShare" */;
 			buildPhases = (
-				53D3553848E58A2E06B3DFA3 /* [CP] Check Pods Manifest.lock */,
+				3C49AB062FCA6DDB385A1A60 /* [CP] Check Pods Manifest.lock */,
 				F565280D291BE33F00793068 /* Sources */,
 				F565280E291BE33F00793068 /* Frameworks */,
 				F565280F291BE33F00793068 /* Resources */,
@@ -347,6 +352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5652809291BE31F00793068 /* ding.mp3 in Resources */,
+				13BABA192B7CAD8B002E8E1F /* effects in Resources */,
 				F57F54D62A03AEA8008DFB3C /* effect.mp3 in Resources */,
 				F565280A291BE31F00793068 /* dang.mp3 in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
@@ -381,24 +387,24 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
+		35E70DCE3BD8845B8C737804 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		53D3553848E58A2E06B3DFA3 /* [CP] Check Pods Manifest.lock */ = {
+		3C49AB062FCA6DDB385A1A60 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -420,7 +426,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
+		79BFABFB452E4C6959F60161 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -442,7 +448,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+		86E3906F30642FAB147D3342 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -464,41 +470,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
+		92FC665149EB952F430D7277 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
+		B3F4A0E8D3A9E6CEBDC209A3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -513,6 +502,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FA643AF0B947EC1DB84EE8E4 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -580,11 +586,12 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig */;
+			baseConfigurationReference = 8BCDA85794325BBC8079D38C /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = PV44H27855;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -603,19 +610,20 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgoraRtcNgExample.app/AgoraRtcNgExample";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */;
+			baseConfigurationReference = 650058F18E7F5CEFB46CBD22 /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = PV44H27855;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = AgoraRtcNgExampleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -630,21 +638,21 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgoraRtcNgExample.app/AgoraRtcNgExample";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-AgoraRtcNgExample.debug.xcconfig */;
+			baseConfigurationReference = 030D8EE73131BDD8DEA7AD27 /* Pods-AgoraRtcNgExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = PV44H27855;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AgoraRtcNgExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -659,7 +667,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
-				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -672,14 +680,14 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-AgoraRtcNgExample.release.xcconfig */;
+			baseConfigurationReference = 057A5E26AA71C78CC89119E3 /* Pods-AgoraRtcNgExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = PV44H27855;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = AgoraRtcNgExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -693,7 +701,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample;
 				PRODUCT_NAME = AgoraRtcNgExample;
-				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -753,7 +761,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -774,7 +790,11 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -827,7 +847,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -847,7 +875,11 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -857,7 +889,7 @@
 		};
 		F565281D291BE33F00793068 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 45F306609F451ADF48C3F8C6 /* Pods-ScreenShare.debug.xcconfig */;
+			baseConfigurationReference = 8D8E7842CCEE733F964AD6E8 /* Pods-ScreenShare.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -865,10 +897,11 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = PV44H27855;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ScreenShare/Info.plist;
@@ -885,7 +918,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample.ScreenShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -894,7 +927,7 @@
 		};
 		F565281E291BE33F00793068 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6B4351393DA57450FBFEC119 /* Pods-ScreenShare.release.xcconfig */;
+			baseConfigurationReference = 24A1EDEB700396651C66A4D6 /* Pods-ScreenShare.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -902,11 +935,12 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = PV44H27855;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ScreenShare/Info.plist;
@@ -922,7 +956,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.agora.AgoraRtcNgExample.ScreenShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

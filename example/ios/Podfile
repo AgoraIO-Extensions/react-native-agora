@@ -5,8 +5,11 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+platform :ios, 14
 prepare_react_native_project!
+
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/sdk-banuba/banuba-sdk-podspecs.git'
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -59,6 +62,8 @@ target 'AgoraRtcNgExample' do
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
+  pod 'BanubaSdk', '1.9.0'
+  pod 'BanubaFiltersAgoraExtension', '2.4.1'
 end
 
 target 'ScreenShare' do

@@ -33,6 +33,16 @@ import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
 import { askMediaAccess } from '../../../utils/permissions';
 
+const banubaClientToken = <#Place client token here#>
+
+const banubaExtprovider = 'Banuba';
+const banubaExtension = 'BanubaFilter';
+const loadEffect = 'load_effect';
+const unloadEffect = 'unload_effect';
+const setEffectsPath = 'set_effects_path';
+const setToken = 'set_banuba_license_token';
+const evelJs = 'eval_js';
+
 interface State extends BaseVideoComponentState {
   switchCamera: boolean;
   renderByTextureView: boolean;
@@ -83,12 +93,16 @@ export default class JoinChannelVideo
       'android.permission.CAMERA',
     ]);
 
+    this.intiBanuba();
+    this.loadEffect('Glasses');
+
     // Need to enable video on this case
     // If you only call `enableAudio`, only relay the audio stream to the target channel
     this.engine.enableVideo();
 
     // Start preview before joinChannel
     this.engine.startPreview();
+
     this.setState({ startPreview: true });
   }
 
@@ -199,6 +213,56 @@ export default class JoinChannelVideo
     );
   }
 
+    /*
+   * Extension events
+   */
+
+    onExtensionErrored(
+      provider: string,
+      extName: string,
+      error: number,
+      msg: string
+    ) {
+      this.info(
+        'onExtensionErrored',
+        'provider',
+        provider,
+        'extName',
+        extName,
+        'error',
+        error,
+        'msg',
+        msg
+      );
+    }
+  
+    onExtensionEvent(
+      provider: string,
+      extName: string,
+      key: string,
+      value: string
+    ) {
+      this.info(
+        'onExtensionEvent',
+        'provider',
+        provider,
+        'extName',
+        extName,
+        'key',
+        key,
+        'value',
+        value
+      );
+    }
+  
+    onExtensionStarted(provider: string, extName: string) {
+      this.info('onExtensionStarted', 'provider', provider, 'extName', extName);
+    }
+  
+    onExtensionStopped(provider: string, extName: string) {
+      this.info('onExtensionStopped', 'provider', provider, 'extName', extName);
+    }
+
   protected renderUsers(): ReactElement | undefined {
     return super.renderUsers();
   }
@@ -274,6 +338,46 @@ export default class JoinChannelVideo
           onPress={this.switchCamera}
         />
       </>
+    );
+  }
+
+  /*
+   * Banuba integration
+   */
+
+  protected enableExtension() {
+    if (Platform.OS === 'android') {
+      this.engine?.loadExtensionProvider(`banuba`);
+      this.engine?.loadExtensionProvider(`banuba-plugin`);
+    }
+    const result =
+      this.engine?.enableExtension(banubaExtprovider, banubaExtension, true) ??
+      -1;
+    if (result < 0) {
+      throw new Error('Failed to load Banuba extention library');
+    }
+  }
+  
+  protected disableExtension() {
+    this.engine?.enableExtension(banubaExtprovider, banubaExtension, false);
+  }
+  
+  protected intiBanuba() {
+    this.enableExtension();
+    this.engine?.setExtensionProperty(
+      banubaExtprovider,
+      banubaExtension,
+      setToken,
+      banubaClientToken
+    );
+  }
+
+  protected loadEffect(name: string) {
+    this.engine?.setExtensionProperty(
+      banubaExtprovider,
+      banubaExtension,
+      loadEffect,
+      'effects/' + name
     );
   }
 }
