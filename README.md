@@ -1,5 +1,5 @@
 This is forked Agora repository to demonstrate integration with [Banuba SDK](https://docs.banuba.com).
-Integration is made in 
+Integration was made in 
 [JoinChannelVideo](https://github.com/Banuba/banuba-react-native-agora/tree/main/example/src/examples/basic/JoinChannelVideo).
 Intial changes was made in [this commit](https://github.com/AgoraIO-Extensions/react-native-agora/compare/main...Banuba:banuba-react-native-agora:main). 
 
