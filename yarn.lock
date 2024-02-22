@@ -12574,7 +12574,6 @@ __metadata:
     react-native-gesture-handler: ^2.9.0
     react-native-image-tool: "github:LichKing-2234/react-native-image-tools"
     react-native-picker-select: ^8.0.4
-    react-native-safe-area-context: ^4.5.0
     react-native-screens: ^3.20.0
     react-native-svg: ^13.8.0
     react-native-vector-icons: ^9.2.0
@@ -12760,16 +12759,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 34aa4e7ff09e537d5c8fb5b5bc98470c0723d7c0fff8954e39de371cdfa5ae3aa4af636ea44d508751f5dcaca6f80ee363fffd9c34a1bd8d8f7a9d8a23d82d15
-  languageName: node
-  linkType: hard
-
-"react-native-safe-area-context@npm:^4.5.0":
-  version: 4.9.0
-  resolution: "react-native-safe-area-context@npm:4.9.0"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 120aefb77766a37e81c5a844d7e1493afea35461c30df5ca903c6b6e2fc6694e2496d433550a2eda872ef8384a36ecf8529a617cb19acbeebd37d78d7aa7b17e
   languageName: node
   linkType: hard
 

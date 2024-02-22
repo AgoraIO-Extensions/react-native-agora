@@ -416,8 +416,6 @@ PODS:
     - React-Core
   - react-native-image-tools (0.8.1):
     - React
-  - react-native-safe-area-context (4.9.0):
-    - React-Core
   - react-native-slider (4.5.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -600,7 +598,6 @@ DEPENDENCIES:
   - react-native-agora (from `../..`)
   - react-native-agora-rawdata (from `../node_modules/react-native-agora-rawdata`)
   - react-native-image-tools (from `../node_modules/react-native-image-tool`)
-  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -695,8 +692,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-agora-rawdata"
   react-native-image-tools:
     :path: "../node_modules/react-native-image-tool"
-  react-native-safe-area-context:
-    :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   React-NativeModulesApple:
@@ -787,7 +782,6 @@ SPEC CHECKSUMS:
   react-native-agora: d485857dafe397d26f2ba2355b4b7db98508bc17
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
-  react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-slider: cc89964e1432fa31aa9db7a0fa9b21e26b5d5152
   React-NativeModulesApple: c3e696ff867e4bc212266cbdf7e862e48a0166fd
   React-perflogger: 43287389ea08993c300897a46f95cfac04bb6c1a
