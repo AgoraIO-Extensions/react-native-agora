@@ -8,7 +8,7 @@
 
 #import "RCTFabricComponentsPlugins.h"
 #import "AgoraRtcNg.h"
-#import <AgoraRtcWrapper/iris_rtc_base.h>
+#import <AgoraRtcWrapper/iris_engine_base.h>
 
 using namespace facebook::react;
 
