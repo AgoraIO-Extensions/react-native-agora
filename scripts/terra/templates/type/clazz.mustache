@@ -1,0 +1,23 @@
+
+{{#user_data.isCallback}}
+
+{{{comment}}}
+export interface {{name}} {{#base_clazzs}}extends {{.}}{{/base_clazzs}}{
+{{#methods}}
+  {{{comment}}}
+
+  {{name}}?({{#parameters}}{{name}}: {{{type.name}}},{{/parameters}}): {{#return_type}}{{{name}}}{{/return_type}};
+{{/methods}}
+}
+{{/user_data.isCallback}}
+{{^user_data.isCallback}}
+
+{{{comment}}}
+export abstract class {{name}} {{#base_clazzs}}extends {{.}}{{/base_clazzs}}{
+{{#methods}}
+  {{{comment}}}
+
+  abstract {{name}}({{user_data.input}}): {{{user_data.output}}};
+{{/methods}}
+}
+{{/user_data.isCallback}}

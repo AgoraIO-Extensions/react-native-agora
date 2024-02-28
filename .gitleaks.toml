@@ -2,7 +2,7 @@
 description = "file allow lists"
 paths = [
     '''gitleaks.toml''',
-    '''plugin-(.*?)-tool.cjs''',
+    '''plugin-(.*?)-tools.cjs''',
     '''yarn-(.*?)(.cjs)''',
 ]
 

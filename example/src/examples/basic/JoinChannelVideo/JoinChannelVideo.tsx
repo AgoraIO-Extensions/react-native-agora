@@ -5,7 +5,7 @@ import {
   ClientRoleType,
   ErrorCodeType,
   IRtcEngineEventHandler,
-  LocalVideoStreamError,
+  LocalVideoStreamReason,
   LocalVideoStreamState,
   RtcConnection,
   RtcStats,
@@ -186,7 +186,7 @@ export default class JoinChannelVideo
   onLocalVideoStateChanged(
     source: VideoSourceType,
     state: LocalVideoStreamState,
-    error: LocalVideoStreamError
+    error: LocalVideoStreamReason
   ) {
     this.info(
       'onLocalVideoStateChanged',

@@ -3,7 +3,7 @@ import {
   ChannelProfileType,
   ClientRoleType,
   IRtcEngineEventHandler,
-  RhythmPlayerErrorType,
+  RhythmPlayerReason,
   RhythmPlayerStateType,
   RtcConnection,
   RtcStats,
@@ -173,7 +173,7 @@ export default class RhythmPlayer
 
   onRhythmPlayerStateChanged(
     state: RhythmPlayerStateType,
-    errorCode: RhythmPlayerErrorType
+    errorCode: RhythmPlayerReason
   ) {
     this.info(
       'onRhythmPlayerStateChanged',

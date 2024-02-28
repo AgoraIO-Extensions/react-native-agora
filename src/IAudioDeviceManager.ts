@@ -106,12 +106,28 @@ export abstract class IAudioDeviceManager {
   abstract getRecordingDeviceMute(): boolean;
 
   /**
-   * @ignore
+   * Starts the audio playback device test.
+   *
+   * This method tests whether the audio device for local playback works properly. Once a user starts the test, the SDK plays an audio file specified by the user. If the user can hear the audio, the playback device works properly. After calling this method, the SDK triggers the onAudioVolumeIndication callback every 100 ms, reporting uid = 1 and the volume information of the playback device. The difference between this method and the startEchoTest method is that the former checks if the local audio playback device is working properly, while the latter can check the audio and video devices and network conditions. Ensure that you call this method before joining a channel. After the test is completed, call stopPlaybackDeviceTest to stop the test before joining a channel.
+   *
+   * @param testAudioFilePath The path of the audio file. The data format is string in UTF-8.
+   *  Supported file formats: wav, mp3, m4a, and aac.
+   *  Supported file sample rates: 8000, 16000, 32000, 44100, and 48000 Hz.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract startPlaybackDeviceTest(testAudioFilePath: string): number;
 
   /**
-   * @ignore
+   * Stops the audio playback device test.
+   *
+   * This method stops the audio playback device test. You must call this method to stop the test after calling the startPlaybackDeviceTest method. Ensure that you call this method before joining a channel.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract stopPlaybackDeviceTest(): number;
 

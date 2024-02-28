@@ -1,4 +1,3 @@
-
 renderers:
   - name: IrisDocRenderer
     package: '@agoraio-extensions/terra_shared_configs'

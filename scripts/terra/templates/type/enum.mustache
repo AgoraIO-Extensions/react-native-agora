@@ -1,0 +1,10 @@
+
+{{#name}}
+{{{comment}}}
+export enum {{name}} {
+{{#enum_constants}}
+  {{{comment}}}
+  {{name}} = {{{value}}},
+{{/enum_constants}}
+}
+{{/name}}

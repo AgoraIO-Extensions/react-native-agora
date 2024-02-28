@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import {
   ClientRoleType,
-  LocalVideoStreamError,
+  LocalVideoStreamReason,
   LocalVideoStreamState,
   RtcSurfaceView,
   RtcTextureView,
@@ -108,7 +108,7 @@ export default function JoinChannelVideo() {
       (
         source: VideoSourceType,
         state: LocalVideoStreamState,
-        error: LocalVideoStreamError
+        error: LocalVideoStreamReason
       ) => {
         log.info(
           'onLocalVideoStateChanged',

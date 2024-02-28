@@ -1,80 +1,81 @@
 import './extension/IAgoraMediaStreamingSourceExtension';
-/* enum_streamingsrcerr */
+
+/* enum_StreamingSrcErr */
 export enum StreamingSrcErr {
-  /* enum_streamingsrcerr_StreamingSrcErrNone */
+  /* enum_StreamingSrcErr_StreamingSrcErrNone */
   StreamingSrcErrNone = 0,
-  /* enum_streamingsrcerr_StreamingSrcErrUnknown */
+  /* enum_StreamingSrcErr_StreamingSrcErrUnknown */
   StreamingSrcErrUnknown = 1,
-  /* enum_streamingsrcerr_StreamingSrcErrInvalidParam */
+  /* enum_StreamingSrcErr_StreamingSrcErrInvalidParam */
   StreamingSrcErrInvalidParam = 2,
-  /* enum_streamingsrcerr_StreamingSrcErrBadState */
+  /* enum_StreamingSrcErr_StreamingSrcErrBadState */
   StreamingSrcErrBadState = 3,
-  /* enum_streamingsrcerr_StreamingSrcErrNoMem */
+  /* enum_StreamingSrcErr_StreamingSrcErrNoMem */
   StreamingSrcErrNoMem = 4,
-  /* enum_streamingsrcerr_StreamingSrcErrBufferOverflow */
+  /* enum_StreamingSrcErr_StreamingSrcErrBufferOverflow */
   StreamingSrcErrBufferOverflow = 5,
-  /* enum_streamingsrcerr_StreamingSrcErrBufferUnderflow */
+  /* enum_StreamingSrcErr_StreamingSrcErrBufferUnderflow */
   StreamingSrcErrBufferUnderflow = 6,
-  /* enum_streamingsrcerr_StreamingSrcErrNotFound */
+  /* enum_StreamingSrcErr_StreamingSrcErrNotFound */
   StreamingSrcErrNotFound = 7,
-  /* enum_streamingsrcerr_StreamingSrcErrTimeout */
+  /* enum_StreamingSrcErr_StreamingSrcErrTimeout */
   StreamingSrcErrTimeout = 8,
-  /* enum_streamingsrcerr_StreamingSrcErrExpired */
+  /* enum_StreamingSrcErr_StreamingSrcErrExpired */
   StreamingSrcErrExpired = 9,
-  /* enum_streamingsrcerr_StreamingSrcErrUnsupported */
+  /* enum_StreamingSrcErr_StreamingSrcErrUnsupported */
   StreamingSrcErrUnsupported = 10,
-  /* enum_streamingsrcerr_StreamingSrcErrNotExist */
+  /* enum_StreamingSrcErr_StreamingSrcErrNotExist */
   StreamingSrcErrNotExist = 11,
-  /* enum_streamingsrcerr_StreamingSrcErrExist */
+  /* enum_StreamingSrcErr_StreamingSrcErrExist */
   StreamingSrcErrExist = 12,
-  /* enum_streamingsrcerr_StreamingSrcErrOpen */
+  /* enum_StreamingSrcErr_StreamingSrcErrOpen */
   StreamingSrcErrOpen = 13,
-  /* enum_streamingsrcerr_StreamingSrcErrClose */
+  /* enum_StreamingSrcErr_StreamingSrcErrClose */
   StreamingSrcErrClose = 14,
-  /* enum_streamingsrcerr_StreamingSrcErrRead */
+  /* enum_StreamingSrcErr_StreamingSrcErrRead */
   StreamingSrcErrRead = 15,
-  /* enum_streamingsrcerr_StreamingSrcErrWrite */
+  /* enum_StreamingSrcErr_StreamingSrcErrWrite */
   StreamingSrcErrWrite = 16,
-  /* enum_streamingsrcerr_StreamingSrcErrSeek */
+  /* enum_StreamingSrcErr_StreamingSrcErrSeek */
   StreamingSrcErrSeek = 17,
-  /* enum_streamingsrcerr_StreamingSrcErrEof */
+  /* enum_StreamingSrcErr_StreamingSrcErrEof */
   StreamingSrcErrEof = 18,
-  /* enum_streamingsrcerr_StreamingSrcErrCodecopen */
+  /* enum_StreamingSrcErr_StreamingSrcErrCodecopen */
   StreamingSrcErrCodecopen = 19,
-  /* enum_streamingsrcerr_StreamingSrcErrCodecclose */
+  /* enum_StreamingSrcErr_StreamingSrcErrCodecclose */
   StreamingSrcErrCodecclose = 20,
-  /* enum_streamingsrcerr_StreamingSrcErrCodecproc */
+  /* enum_StreamingSrcErr_StreamingSrcErrCodecproc */
   StreamingSrcErrCodecproc = 21,
 }
 
-/* enum_streamingsrcstate */
+/* enum_StreamingSrcState */
 export enum StreamingSrcState {
-  /* enum_streamingsrcstate_StreamingSrcStateClosed */
+  /* enum_StreamingSrcState_StreamingSrcStateClosed */
   StreamingSrcStateClosed = 0,
-  /* enum_streamingsrcstate_StreamingSrcStateOpening */
+  /* enum_StreamingSrcState_StreamingSrcStateOpening */
   StreamingSrcStateOpening = 1,
-  /* enum_streamingsrcstate_StreamingSrcStateIdle */
+  /* enum_StreamingSrcState_StreamingSrcStateIdle */
   StreamingSrcStateIdle = 2,
-  /* enum_streamingsrcstate_StreamingSrcStatePlaying */
+  /* enum_StreamingSrcState_StreamingSrcStatePlaying */
   StreamingSrcStatePlaying = 3,
-  /* enum_streamingsrcstate_StreamingSrcStateSeeking */
+  /* enum_StreamingSrcState_StreamingSrcStateSeeking */
   StreamingSrcStateSeeking = 4,
-  /* enum_streamingsrcstate_StreamingSrcStateEof */
+  /* enum_StreamingSrcState_StreamingSrcStateEof */
   StreamingSrcStateEof = 5,
-  /* enum_streamingsrcstate_StreamingSrcStateError */
+  /* enum_StreamingSrcState_StreamingSrcStateError */
   StreamingSrcStateError = 6,
 }
 
-/* class_inputseidata */
+/* class_InputSeiData */
 export class InputSeiData {
-  /* class_inputseidata_type */
+  /* class_InputSeiData_type */
   type?: number;
-  /* class_inputseidata_timestamp */
+  /* class_InputSeiData_timestamp */
   timestamp?: number;
-  /* class_inputseidata_frame_index */
+  /* class_InputSeiData_frame_index */
   frame_index?: number;
-  /* class_inputseidata_private_data */
+  /* class_InputSeiData_private_data */
   private_data?: Uint8Array;
-  /* class_inputseidata_data_size */
+  /* class_InputSeiData_data_size */
   data_size?: number;
 }

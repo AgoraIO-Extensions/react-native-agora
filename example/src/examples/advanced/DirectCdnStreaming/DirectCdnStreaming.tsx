@@ -3,7 +3,7 @@ import {
   ChannelProfileType,
   ClientRoleType,
   DegradationPreference,
-  DirectCdnStreamingError,
+  DirectCdnStreamingReason,
   DirectCdnStreamingState,
   DirectCdnStreamingStats,
   IDirectCdnStreamingEventHandler,
@@ -214,7 +214,7 @@ export default class DirectCdnStreaming
 
   onDirectCdnStreamingStateChanged(
     state: DirectCdnStreamingState,
-    error: DirectCdnStreamingError,
+    error: DirectCdnStreamingReason,
     message: string
   ) {
     this.info(
