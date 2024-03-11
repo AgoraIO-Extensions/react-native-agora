@@ -134,7 +134,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * Returns the current playback progress (ms) if the call succeeds.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract getPlayPosition(): number;
 
@@ -145,7 +145,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * The number of the media streams in the media resource if the method call succeeds.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract getStreamCount(): number;
 
@@ -154,11 +154,11 @@ export abstract class IMediaPlayer {
    *
    * Call this method after calling getStreamCount.
    *
-   * @param index The index of the media stream.
+   * @param index The index of the media stream. This parameter must be less than the return value of getStreamCount.
    *
    * @returns
    * If the call succeeds, returns the detailed information of the media stream. See PlayerStreamInfo.
-   *  If the call fails, returns NULL.
+   *  If the call fails, returns null.
    */
   abstract getStreamInfo(index: number): PlayerStreamInfo;
 
@@ -205,12 +205,47 @@ export abstract class IMediaPlayer {
   abstract selectAudioTrack(index: number): number;
 
   /**
-   * @ignore
+   * Selects the audio tracks that you want to play on your local device and publish to the channel respectively.
+   *
+   * You can call this method to determine the audio track to be played on your local device and published to the channel. Before calling this method, you need to open the media file with the openWithMediaSource method and set enableMultiAudioTrack in MediaSource as true.
+   *
+   * @param playoutTrackIndex The index of audio tracks for local playback. You can obtain the index through getStreamInfo.
+   * @param publishTrackIndex The index of audio tracks to be published in the channel. You can obtain the index through getStreamInfo.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   */
+  abstract selectMultiAudioTrack(
+    playoutTrackIndex: number,
+    publishTrackIndex: number
+  ): number;
+
+  /**
+   * Set media player options for providing technical previews or special customization features.
+   *
+   * The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together. Ensure that you call this method before open or openWithMediaSource.
+   *
+   * @param key The key of the option.
+   * @param value The value of the key.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract setPlayerOptionInInt(key: string, value: number): number;
 
   /**
-   * @ignore
+   * Set media player options for providing technical previews or special customization features.
+   *
+   * Ensure that you call this method before open or openWithMediaSource. The media player supports setting options through key and value. In general, you don't need to know about the option settings. You can use the default option settings of the media player. The difference between this method and setPlayerOptionInInt is that the value parameter of this method is of type String, while the value of setPlayerOptionInInt is of type String. These two methods cannot be used together.
+   *
+   * @param key The key of the option.
+   * @param value The value of the key.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract setPlayerOptionInString(key: string, value: string): number;
 
@@ -496,9 +531,6 @@ export abstract class IMediaPlayer {
    *
    * @param src The URL of the media resource.
    * @param syncPts Whether to synchronize the playback position (ms) before and after the switch: true : Synchronize the playback position before and after the switch. false : (Default) Do not synchronize the playback position before and after the switch. Make sure to set this parameter as false if you need to play live streams, or the switch fails. If you need to play on-demand streams, you can set the value of this parameter according to your scenarios.
-   *
-   * @returns
-   * < 0: Failure.
    */
   abstract switchSrc(src: string, syncPts?: boolean): number;
 
@@ -570,7 +602,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract removeAllCaches(): number;
 
@@ -581,7 +613,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract removeOldCache(): number;
 
@@ -594,7 +626,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract removeCacheByUri(uri: string): number;
 
@@ -607,7 +639,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract setCacheDir(path: string): number;
 
@@ -618,7 +650,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract setMaxCacheFileCount(count: number): number;
 
@@ -629,7 +661,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract setMaxCacheFileSize(cacheSize: number): number;
 
@@ -642,7 +674,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract enableAutoRemoveCache(enable: boolean): number;
 
@@ -655,7 +687,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * The call succeeds, and the SDK returns the storage path of the cached media files.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract getCacheDir(length: number): string;
 
@@ -666,7 +698,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * > 0: The call succeeds and returns the maximum number of media files that can be cached.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract getMaxCacheFileCount(): number;
 
@@ -677,7 +709,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * > 0: The call succeeds and returns the maximum size (in bytes) of the aggregate storage space for cached media files.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract getMaxCacheFileSize(): number;
 
@@ -686,7 +718,7 @@ export abstract class IMediaPlayerCacheManager {
    *
    * @returns
    * ≥ 0: The call succeeds and returns the number of media files that are cached.
-   *  < 0: Failure. See MediaPlayerError.
+   *  < 0: Failure. See MediaPlayerReason.
    */
   abstract getCacheFileCount(): number;
 }

@@ -127,6 +127,14 @@ export enum AudioRoute {
    * @ignore
    */
   RouteAirplay = 9,
+  /**
+   * @ignore
+   */
+  RouteVirtual = 10,
+  /**
+   * @ignore
+   */
+  RouteContinuity = 11,
 }
 
 /**
@@ -172,6 +180,32 @@ export enum RawAudioFrameOpModeType {
 }
 
 /**
+ * The AudioDeviceInfo class that contains the ID and device name of the audio devices.
+ */
+export class AudioDeviceInfo {
+  /**
+   * The device name.
+   */
+  deviceName?: string;
+  /**
+   * The device ID.
+   */
+  deviceId?: string;
+  /**
+   * @ignore
+   */
+  isCurrentSelected?: boolean;
+  /**
+   * @ignore
+   */
+  isPlayoutDevice?: boolean;
+  /**
+   * @ignore
+   */
+  routing?: AudioRoute;
+}
+
+/**
  * Media source type.
  */
 export enum MediaSourceType {
@@ -188,7 +222,7 @@ export enum MediaSourceType {
    */
   PrimaryCameraSource = 2,
   /**
-   * 3: The secondary camera.
+   * 3: A secondary camera.
    */
   SecondaryCameraSource = 3,
   /**
@@ -200,7 +234,7 @@ export enum MediaSourceType {
    */
   SecondaryScreenSource = 5,
   /**
-   * @ignore
+   * 6. Custom video source.
    */
   CustomVideoSource = 6,
   /**
@@ -486,6 +520,26 @@ export enum CameraVideoSourceType {
 /**
  * @ignore
  */
+export enum MetaInfoKey {
+  /**
+   * @ignore
+   */
+  KeyFaceCapture = 0,
+}
+
+/**
+ * @ignore
+ */
+export abstract class IVideoFrameMetaInfo {
+  /**
+   * @ignore
+   */
+  abstract getMetaInfoStr(key: MetaInfoKey): string;
+}
+
+/**
+ * @ignore
+ */
 export enum EglContextType {
   /**
    * @ignore
@@ -671,6 +725,10 @@ export class VideoFrame {
    * @ignore
    */
   pixelBuffer?: Uint8Array;
+  /**
+   * The meta information in the video frame. To use this parameter, please.
+   */
+  metaInfo?: IVideoFrameMetaInfo;
 }
 
 /**
@@ -696,7 +754,7 @@ export enum MediaPlayerSourceType {
  */
 export enum VideoModulePosition {
   /**
-   * 1: The post-capturer position, which corresponds to the video data in the onCaptureVideoFrame callback.
+   * 1: The location of the locally collected video data after preprocessing corresponds to the onCaptureVideoFrame callback. The observed video here has the effect of video pre-processing, which can be verified by enabling image enhancement, virtual background, or watermark.
    */
   PositionPostCapturer = 1 << 0,
   /**
@@ -704,7 +762,9 @@ export enum VideoModulePosition {
    */
   PositionPreRenderer = 1 << 1,
   /**
-   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
+   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback. The observed video here has the effects of video pre-processing and encoding pre-processing.
+   *  To verify the pre-processing effects of the video, you can enable image enhancement, virtual background, or watermark.
+   *  To verify the pre-encoding processing effect, you can set a lower frame rate (for example, 5 fps).
    */
   PositionPreEncoder = 1 << 2,
 }
@@ -777,6 +837,14 @@ export class AudioFrame {
    * @ignore
    */
   presentationMs?: number;
+  /**
+   * @ignore
+   */
+  audioTrackNumber?: number;
+  /**
+   * @ignore
+   */
+  rtpTimestamp?: number;
 }
 
 /**
@@ -1027,13 +1095,13 @@ export interface IVideoFrameObserver {
    * Occurs each time the SDK receives a video frame captured by local devices.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data captured by local devices. You can then pre-process the data according to your scenarios. Once the pre-processing is complete, you can directly modify videoFrame in this callback, and set the return value to true to send the modified video data to the SDK.
-   *  The video data that this callback gets has not been pre-processed, and is not watermarked, cropped, rotated or beautified.
+   *  The video data that this callback gets has not been pre-processed such as watermarking, cropping, and rotating.
    *  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
    *
    * @param sourceType Video source types, including cameras, screens, or media player. See VideoSourceType.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: texture
-   *  iOS: cvPixelBuffer
+   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+   *  iOS: I420 or CVPixelBufferRef
    *
    * @returns
    * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
@@ -1052,8 +1120,8 @@ export interface IVideoFrameObserver {
    *
    * @param sourceType The type of the video source. See VideoSourceType.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: texture
-   *  iOS: cvPixelBuffer
+   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+   *  iOS: I420 or CVPixelBufferRef
    *
    * @returns
    * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
@@ -1078,8 +1146,8 @@ export interface IVideoFrameObserver {
    * @param channelId The channel ID.
    * @param remoteUid The user ID of the remote user who sends the current video frame.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: texture
-   *  iOS: cvPixelBuffer
+   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
+   *  iOS: I420 or CVPixelBufferRef
    *
    * @returns
    * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
@@ -1144,7 +1212,7 @@ export enum MediaRecorderStreamType {
  */
 export enum RecorderState {
   /**
-   * -1: An error occurs during the recording. See RecorderErrorCode for the reason.
+   * -1: An error occurs during the recording. See RecorderReasonCode for the reason.
    */
   RecorderStateError = -1,
   /**
@@ -1158,27 +1226,27 @@ export enum RecorderState {
 }
 
 /**
- * The reason for the state change.
+ * @ignore
  */
 export enum RecorderErrorCode {
   /**
-   * 0: No error.
+   * @ignore
    */
   RecorderErrorNone = 0,
   /**
-   * 1: The SDK fails to write the recorded data to a file.
+   * @ignore
    */
   RecorderErrorWriteFailed = 1,
   /**
-   * 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
+   * @ignore
    */
   RecorderErrorNoStream = 2,
   /**
-   * 3: The recording duration exceeds the upper limit.
+   * @ignore
    */
   RecorderErrorOverMaxDuration = 3,
   /**
-   * 4: The recording configuration changes.
+   * @ignore
    */
   RecorderErrorConfigChanged = 4,
 }

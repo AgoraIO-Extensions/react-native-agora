@@ -207,7 +207,7 @@ export abstract class IBaseSpatialAudioEngine {
    *  If the user or media player is in the same sound insulation area, it is not affected by SpatialAudioZone, and the sound attenuation effect is determined by the attenuation parameter in setPlayerAttenuation or setRemoteAudioAttenuation. If you do not call setPlayerAttenuation or setRemoteAudioAttenuation, the default sound attenuation coefficient of the SDK is 0.5, which simulates the attenuation of the sound in the real environment.
    *  If the sound source and the receiver belong to two sound insulation areas, the receiver cannot hear the sound source. If this method is called multiple times, the last sound insulation area set takes effect.
    *
-   * @param zones Sound insulation area settings. See SpatialAudioZone.
+   * @param zones Sound insulation area settings. See SpatialAudioZone. When you set this parameter to null, it means clearing all sound insulation zones.
    * @param zoneCount The number of sound insulation areas.
    *
    * @returns
