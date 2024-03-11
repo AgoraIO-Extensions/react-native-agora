@@ -21,9 +21,13 @@ jest.mock('../specs', () => ({
 test('addListener', () => {
   const engine = createAgoraRtcEngine().getMediaEngine();
   const callback = jest.fn();
+  const callback2 = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback);
+  engine.addListener('onFaceInfo', callback2);
   emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
+  emitEvent('onFaceInfo', EVENT_PROCESSORS.IFaceInfoObserver, {});
   expect(callback).toBeCalledTimes(1);
+  expect(callback2).toBeCalledTimes(1);
 });
 
 test('addListenerWithSameEventTypeAndCallback', () => {
@@ -48,10 +52,15 @@ test('addListenerWithSameCallback', () => {
 test('removeListener', () => {
   const engine = createAgoraRtcEngine().getMediaEngine();
   const callback = jest.fn();
+  const callback2 = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback);
+  engine.addListener('onFaceInfo', callback2);
   engine.removeListener('onCaptureVideoFrame', callback);
+  engine.removeListener('onFaceInfo', callback2);
   emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
+  emitEvent('onFaceInfo', EVENT_PROCESSORS.IFaceInfoObserver, {});
   expect(callback).not.toBeCalled();
+  expect(callback2).not.toBeCalled();
 });
 
 test('removeListenerWithoutCallback', () => {
@@ -79,13 +88,17 @@ test('removeAllListeners', () => {
   const engine = createAgoraRtcEngine().getMediaEngine();
   const callback1 = jest.fn();
   const callback2 = jest.fn();
+  const callback3 = jest.fn();
   engine.addListener('onCaptureVideoFrame', callback1);
   engine.addListener('onRecordAudioFrame', callback2);
+  engine.addListener('onFaceInfo', callback3);
   engine.removeAllListeners();
   emitEvent('onCaptureVideoFrame', EVENT_PROCESSORS.IVideoFrameObserver, {});
   emitEvent('onRecordAudioFrame', EVENT_PROCESSORS.IAudioFrameObserver, {});
+  emitEvent('onFaceInfo', EVENT_PROCESSORS.IFaceInfoObserver, {});
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
+  expect(callback3).not.toBeCalled();
 });
 
 import { EVENT_PROCESSORS, emitEvent } from '../internal/IrisApiEngine';

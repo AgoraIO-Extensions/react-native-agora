@@ -74,6 +74,10 @@ export enum VideoSourceType {
    */
   VideoSourceScreenFourth = 14,
   /**
+   * @ignore
+   */
+  VideoSourceSpeechDriven = 15,
+  /**
    * 100: An unknown video source.
    */
   VideoSourceUnknown = 100,
@@ -231,6 +235,10 @@ export enum MediaSourceType {
    * @ignore
    */
   TranscodedVideoSource = 12,
+  /**
+   * @ignore
+   */
+  SpeechDrivenVideoSource = 13,
   /**
    * 100: Unknown media source.
    */
@@ -449,6 +457,10 @@ export enum VideoPixelFormat {
    * @ignore
    */
   VideoTextureId3d11texture2d = 17,
+  /**
+   * @ignore
+   */
+  VideoPixelI010 = 18,
 }
 
 /**
@@ -611,6 +623,10 @@ export class ExternalVideoFrame {
    * @ignore
    */
   alphaBuffer?: Uint8Array;
+  /**
+   * @ignore
+   */
+  fillAlphaBuffer?: boolean;
   /**
    * @ignore
    */
@@ -815,6 +831,10 @@ export class AudioFrame {
    * @ignore
    */
   audioTrackNumber?: number;
+  /**
+   * @ignore
+   */
+  rtpTimestamp?: number;
 }
 
 /**
@@ -1245,6 +1265,16 @@ export class MediaRecorderConfiguration {
    * @ignore
    */
   recorderInfoUpdateInterval?: number;
+}
+
+/**
+ * @ignore
+ */
+export interface IFaceInfoObserver {
+  /**
+   * @ignore
+   */
+  onFaceInfo?(outFaceInfo: string): void;
 }
 
 /**

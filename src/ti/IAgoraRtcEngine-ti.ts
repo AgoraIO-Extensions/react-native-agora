@@ -94,6 +94,7 @@ export const IRtcEngineEventHandler = t.iface([], {
   "onAudioPublishStateChanged": t.opt(t.func("void", t.param("channel", "string"), t.param("oldState", "StreamPublishState"), t.param("newState", "StreamPublishState"), t.param("elapseSinceLastState", "number"))),
   "onVideoPublishStateChanged": t.opt(t.func("void", t.param("source", "VideoSourceType"), t.param("channel", "string"), t.param("oldState", "StreamPublishState"), t.param("newState", "StreamPublishState"), t.param("elapseSinceLastState", "number"))),
   "onTranscodedStreamLayoutInfo": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("uid", "number"), t.param("width", "number"), t.param("height", "number"), t.param("layoutCount", "number"), t.param("layoutlist", t.array("VideoLayout")))),
+  "onAudioMetadataReceived": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("uid", "number"), t.param("metadata", "string"), t.param("length", "number"))),
   "onExtensionEvent": t.opt(t.func("void", t.param("provider", "string"), t.param("extension", "string"), t.param("key", "string"), t.param("value", "string"))),
   "onExtensionStarted": t.opt(t.func("void", t.param("provider", "string"), t.param("extension", "string"))),
   "onExtensionStopped": t.opt(t.func("void", t.param("provider", "string"), t.param("extension", "string"))),
