@@ -71,7 +71,7 @@ export const IRtcEngineEventHandler = t.iface([], {
   "onRtmpStreamingStateChanged": t.opt(t.func("void", t.param("url", "string"), t.param("state", "RtmpStreamPublishState"), t.param("errCode", "RtmpStreamPublishErrorType"))),
   "onRtmpStreamingEvent": t.opt(t.func("void", t.param("url", "string"), t.param("eventCode", "RtmpStreamingEvent"))),
   "onTranscodingUpdated": t.opt(t.func("void")),
-  "onAudioRoutingChanged": t.opt(t.func("void", t.param("routing", "number"))),
+  "onAudioRoutingChanged": t.opt(t.func("void", t.param("deviceType", "number"), t.param("routing", "number"))),
   "onChannelMediaRelayStateChanged": t.opt(t.func("void", t.param("state", "ChannelMediaRelayState"), t.param("code", "ChannelMediaRelayError"))),
   "onChannelMediaRelayEvent": t.opt(t.func("void", t.param("code", "ChannelMediaRelayEvent"))),
   "onLocalPublishFallbackToAudioOnly": t.opt(t.func("void", t.param("isFallbackOrRecover", "boolean"))),

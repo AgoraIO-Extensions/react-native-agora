@@ -1,4 +1,4 @@
-import { AudioDeviceInfo } from '../IAgoraRtcEngine';
+import { AudioDeviceInfo } from '../AgoraMediaBase';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
 
 // @ts-ignore

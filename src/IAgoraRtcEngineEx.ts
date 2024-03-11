@@ -50,7 +50,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * You can call this method multiple times to join more than one channel.
    *  If you are already in a channel, you cannot rejoin it with the same user ID.
    *  If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
-   *  Ensure that the app ID you use to generate the token is the same as the app ID used when creating the IRtcEngine instance.
+   *  Ensure that the App ID you use to generate the token is the same as the App ID used when creating the IRtcEngine instance.
    *
    * @param token The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
    * @param connection The connection information. See RtcConnection.
@@ -111,9 +111,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the encoder configuration for the local video.
+   * Sets the video encoder configuration.
    *
-   * Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
+   * Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found.
    *
    * @param config Video profile. See VideoEncoderConfiguration.
    * @param connection The connection information. See RtcConnection.
@@ -172,12 +172,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Sets the stream type of the remote video.
+   * Sets the video stream type to subscribe to.
    *
-   * Under limited network conditions, if the publisher has not disabled the dual-stream mode using enableDualStreamModeEx (false), the receiver can choose to receive either the high-quality video stream or the low-quality video stream. The high-quality video stream has a higher resolution and bitrate, and the low-quality video stream has a lower resolution and bitrate. By default, users receive the high-quality video stream. Call this method if you want to switch to the low-quality video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources. The aspect ratio of the low-quality video stream is the same as the high-quality video stream. Once the resolution of the high-quality video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-quality video stream. The SDK enables the low-quality video stream auto mode on the sender by default (not actively sending low-quality video streams). The host at the receiving end can call this method to initiate a low-quality video stream stream request on the receiving end, and the sender automatically switches to the low-quality video stream mode after receiving the request.
+   * The SDK will dynamically adjust the size of the corresponding video stream based on the size of the video window to save bandwidth and computing resources. The default aspect ratio of the low-quality video stream is the same as that of the high-quality video stream. According to the current aspect ratio of the high-quality video stream, the system will automatically allocate the resolution, frame rate, and bitrate of the low-quality video stream. The SDK defaults to enabling low-quality video stream adaptive mode (AutoSimulcastStream) on the sending end, which means the sender does not actively send low-quality video stream. The receiver with the role of the host can initiate a low-quality video stream request by calling this method, and upon receiving the request, the sending end automatically starts sending the low-quality video stream.
+   *  If the publisher has already called setDualStreamModeEx and set mode to DisableSimulcastStream (never send low-quality video stream), calling this method will not take effect, you should call setDualStreamModeEx again on the sending end and adjust the settings.
+   *  Calling this method on the receiving end of the audience role will not take effect.
    *
    * @param uid The user ID.
-   * @param streamType The video stream type: VideoStreamType.
+   * @param streamType The video stream type, see VideoStreamType.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -520,8 +522,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
    *  Up to 60 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
    *  Each client can send up to 30 KB of data per second.
-   *  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message.
-   * A failed method call triggers the onStreamMessageError callback on the remote client.
+   *  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
    *  Ensure that you call createDataStreamEx to create a data channel before calling this method.
    *  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
    *
@@ -600,7 +601,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *
    * @param interval Sets the time interval between two consecutive volume indications:
    *  ≤ 0: Disables the volume indication.
-   *  > 0: Time interval (ms) between two consecutive volume indications. The lowest value is 50.
+   *  > 0: Time interval (ms) between two consecutive volume indications. Ensure this parameter is set to a value greater than 10, otherwise you will not receive the onAudioVolumeIndication callback. Agora recommends that this value is set as greater than 100.
    * @param smooth The smoothing factor that sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
    * @param reportVad true : Enables the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user. false : (Default) Disables the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
    * @param connection The connection information. See RtcConnection.
@@ -629,9 +630,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
-   *  -2: The URL is null or the string length is 0.
+   *  -2: The URL or configuration of transcoding is invalid; check your URL and transcoding configurations.
    *  -7: The SDK is not initialized before calling this method.
-   *  -19: The Media Push URL is already in use, use another URL instead.
+   *  -19: The Media Push URL is already in use; use another URL instead.
    */
   abstract startRtmpStreamWithoutTranscodingEx(
     url: string,
@@ -654,9 +655,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
-   *  -2: The URL is null or the string length is 0.
+   *  -2: The URL or configuration of transcoding is invalid; check your URL and transcoding configurations.
    *  -7: The SDK is not initialized before calling this method.
-   *  -19: The Media Push URL is already in use, use another URL instead.
+   *  -19: The Media Push URL is already in use; use another URL instead.
    */
   abstract startRtmpStreamWithTranscodingEx(
     url: string,
@@ -823,10 +824,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *
    * After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side. You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:
    *  High-quality video stream: High bitrate, high resolution.
-   *  Low-quality video stream: Low bitrate, low resolution. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
+   *  Low-quality video stream: Low bitrate, low resolution. Deprecated: This method is deprecated as of v4.2.0. Use setDualStreamModeEx instead. This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
    *
    * @param enabled Whether to enable dual-stream mode: true : Enable dual-stream mode. false : (Default) Disable dual-stream mode.
-   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig.
+   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to DisableSimulcastStream, setting streamConfig will not take effect.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -842,13 +843,15 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Sets the dual-stream mode on the sender side.
    *
-   * The SDK enables the low-quality video stream auto mode on the sender by default, which is equivalent to calling this method and setting the mode to AutoSimulcastStream. If you want to modify this behavior, you can call this method and modify the mode to DisableSimulcastStream (never send low-quality video streams) or EnableSimulcastStream (always send low-quality video streams). The difference and connection between this method and enableDualStreamModeEx is as follows:
+   * The SDK defaults to enabling low-quality video stream adaptive mode (AutoSimulcastStream) on the sending end, which means the sender does not actively send low-quality video stream. The receiver with the role of the host can initiate a low-quality video stream request by calling setRemoteVideoStreamTypeEx, and upon receiving the request, the sending end automatically starts sending the low-quality video stream.
+   *  If you want to modify this behavior, you can call this method and set mode to DisableSimulcastStream (never send low-quality video streams) or EnableSimulcastStream (always send low-quality video streams).
+   *  If you want to restore the default behavior after making changes, you can call this method again with mode set to AutoSimulcastStream. The difference and connection between this method and enableDualStreamModeEx is as follows:
    *  When calling this method and setting mode to DisableSimulcastStream, it has the same effect as enableDualStreamModeEx (false).
    *  When calling this method and setting mode to EnableSimulcastStream, it has the same effect as enableDualStreamModeEx (true).
    *  Both methods can be called before and after joining a channel. If both methods are used, the settings in the method called later takes precedence.
    *
    * @param mode The mode in which the video stream is sent. See SimulcastStreamMode.
-   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig.
+   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to DisableSimulcastStream, setting streamConfig will not take effect.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -927,4 +930,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  < 0: Failure.
    */
   abstract startMediaRenderingTracingEx(connection: RtcConnection): number;
+
+  /**
+   * @ignore
+   */
+  abstract getCallIdEx(connection: RtcConnection): string;
 }
