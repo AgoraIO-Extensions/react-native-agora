@@ -79,6 +79,9 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   override release(sync: boolean = false) {
     this._media_engine.release();
     this._local_spatial_audio_engine.release();
+    RtcEngineExInternal._event_handlers.map((it) => {
+      super.unregisterEventHandler(it);
+    });
     RtcEngineExInternal._event_handlers = [];
     RtcEngineExInternal._direct_cdn_streaming_event_handler = [];
     RtcEngineExInternal._metadata_observer = [];
@@ -91,7 +94,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     MediaRecorderInternal._observers.clear();
     this._h265_transcoder.release();
     this.removeAllListeners();
-    this.unregisterEventHandler(this as IRtcEngineEventHandler);
     super.release(sync);
   }
 
