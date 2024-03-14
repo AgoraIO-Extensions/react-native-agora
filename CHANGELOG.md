@@ -1,5 +1,12 @@
 
 
+# [4.3.0-build.1-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.3.0...v4.3.0-build.1-rc.1) (2024-03-14)
+
+
+### Bug Fixes
+
+* fix crash issue when call engine.release without call unregisterEventhandler first ([15c424c](https://github.com/AgoraIO-Extensions/react-native-agora/commit/15c424c893d076a9662d2d1b979d545f32ab83e0))
+
 # [4.3.0](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.6...v4.3.0) (2024-02-28)
 
 
