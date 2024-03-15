@@ -34,11 +34,11 @@ jobs:
       - name: Dry Run Release
         if: ${{ inputs.dry-run }}
         run: |
-          yarn release ${{ inputs.increment }} -d --ci
+          yarn release ${{ inputs.increment }} -d --ci --npm.tag=latest
 
       - name: NPM Publish
         if: ${{ !inputs.dry-run }}
         run: |
           git config --global user.email "${{ secrets.GIT_EMAIL }}"
           git config --global user.name "${{ secrets.GIT_USERNAME }}"
-          yarn release ${{ inputs.increment }} --ci --npm.allowSameVersion
+          yarn release ${{ inputs.increment }} --ci --npm.allowSameVersion --npm.tag=latest
