@@ -20,6 +20,7 @@ import {
   EarMonitoringFilterType,
   EchoTestConfiguration,
   EncryptionConfig,
+  FocalLengthInfo,
   HeadphoneEqualizerPreset,
   IAudioEncodedFrameObserver,
   LastmileProbeConfig,
@@ -461,6 +462,18 @@ export function processIRtcEngineEventHandler(
           jsonParams.vecRectangle,
           jsonParams.vecDistance,
           jsonParams.numFaces
+        );
+      }
+      break;
+
+    case 'onCameraCapturerConfigurationChanged':
+      if (handler.onCameraCapturerConfigurationChanged !== undefined) {
+        handler.onCameraCapturerConfigurationChanged(
+          jsonParams.direction,
+          jsonParams.focalLengthType,
+          jsonParams.width,
+          jsonParams.height,
+          jsonParams.frameRate
         );
       }
       break;
@@ -5257,6 +5270,25 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromQueryScreenCaptureCapability(): string {
     return 'RtcEngine_queryScreenCaptureCapability';
+  }
+
+  queryCameraFocalLengthCapability(): {
+    focalLengthInfos: FocalLengthInfo;
+    size: number;
+  } {
+    const apiType = this.getApiTypeFromQueryCameraFocalLengthCapability();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const focalLengthInfos = jsonResults.focalLengthInfos;
+    const size = jsonResults.size;
+    return {
+      focalLengthInfos,
+      size,
+    };
+  }
+
+  protected getApiTypeFromQueryCameraFocalLengthCapability(): string {
+    return 'RtcEngine_queryCameraFocalLengthCapability_2dee6af';
   }
 
   setScreenCaptureScenario(screenScenario: ScreenScenarioType): number {

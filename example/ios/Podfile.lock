@@ -1,6 +1,6 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.3.1-dev.3)
-  - AgoraRtcEngine_iOS_Preview (4.3.1-dev.3)
+  - AgoraIrisRTC_iOS (4.3.1-dev.7)
+  - AgoraRtcEngine_iOS_Preview (4.3.1-dev.7)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -378,8 +378,8 @@ PODS:
   - React-logger (0.72.10):
     - glog
   - react-native-agora (4.3.0):
-    - AgoraIrisRTC_iOS (= 4.3.1-dev.3)
-    - AgoraRtcEngine_iOS_Preview (= 4.3.1-dev.3)
+    - AgoraIrisRTC_iOS (= 4.3.1-dev.7)
+    - AgoraRtcEngine_iOS_Preview (= 4.3.1-dev.7)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-agora-rawdata (0.1.0):
@@ -519,7 +519,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS_Preview (= 4.3.1-dev.3)
+  - AgoraRtcEngine_iOS_Preview (= 4.3.1-dev.7)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -717,8 +717,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: 1fd431484b2071de0c3ca981b6766693bfe321a5
-  AgoraRtcEngine_iOS_Preview: f10677f7de36fa54818acfeea494d490e89c5a4b
+  AgoraIrisRTC_iOS: b5c790e788a021b0e56984dc7db6eb067aa5e84d
+  AgoraRtcEngine_iOS_Preview: 4c98243791dc13c93cc68440ab83aca5b402efa0
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -752,7 +752,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 45ef2ec6dcde31b90469175ec76ddac77b91dfc3
   React-jsinspector: de0198127395fec3058140a20c045167f761bb16
   React-logger: dc3a2b174d79c2da635059212747d8d929b54e06
-  react-native-agora: 75cf8a3b4d13a19f650dd7782e35adcaa320613a
+  react-native-agora: 0ee62a48102aa1ea6877ae246a29c645a8f42d9b
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
@@ -784,6 +784,6 @@ SPEC CHECKSUMS:
   Yoga: d0003f849d2b5224c072cef6568b540d8bb15cd3
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 3228f6bd2b838f9b7e2700e14af910b463b2237a
+PODFILE CHECKSUM: 7b9ff2b2b79b6b415ea23aefe779ca799a0e5057
 
 COCOAPODS: 1.13.0
