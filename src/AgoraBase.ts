@@ -895,6 +895,28 @@ export enum VideoCodecType {
 /**
  * @ignore
  */
+export enum CameraFocalLengthType {
+  /**
+   * @ignore
+   */
+  CameraFocalLengthDefault = 0,
+  /**
+   * @ignore
+   */
+  CameraFocalLengthWideAngle = 1,
+  /**
+   * @ignore
+   */
+  CameraFocalLengthUrltraWide = 2,
+  /**
+   * @ignore
+   */
+  CameraFocalLengthTelephoto = 3,
+}
+
+/**
+ * @ignore
+ */
 export enum TCcMode {
   /**
    * @ignore
@@ -1328,6 +1350,20 @@ export class CodecCapInfo {
    * The level of the codec capability. See CodecCapLevels.
    */
   codecLevels?: CodecCapLevels;
+}
+
+/**
+ * @ignore
+ */
+export class FocalLengthInfo {
+  /**
+   * @ignore
+   */
+  cameraDirection?: number;
+  /**
+   * @ignore
+   */
+  focalLengthType?: CameraFocalLengthType;
 }
 
 /**
