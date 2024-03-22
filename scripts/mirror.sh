@@ -9,7 +9,13 @@ grep -q "$LINE" ${PROJECT_ROOT}/.yarnrc.yml || echo "$LINE\n$(cat ${PROJECT_ROOT
 
 echo ".yarnrc.yml updated"
 
-sed -i "" 's#"react-native-agora-rawdata": "github:AgoraLibrary/react-native-agora-rawdata"#"react-native-agora-rawdata": "git+https://gitee.com/agoraio-community/react-native-agora-rawdata.git"#g' ${PROJECT_ROOT}/example/package.json
-sed -i "" 's#"react-native-image-tool": "github:LichKing-2234/react-native-image-tools"#"react-native-image-tool": "git+https://gitee.com/agoraio-community/react-native-image-tools.git"#g' ${PROJECT_ROOT}/example/package.json
+old1='"react-native-agora-rawdata": "github:AgoraLibrary/react-native-agora-rawdata"'
+new1='"react-native-agora-rawdata": "git+https://gitee.com/agoraio-community/react-native-agora-rawdata.git"'
+
+old2='"react-native-image-tool": "github:LichKing-2234/react-native-image-tools"'
+new2='"react-native-image-tool": "git+https://gitee.com/agoraio-community/react-native-image-tools.git"'
+
+sed -i "" "s#${old1}#${new1}#g" ${PROJECT_ROOT}/example/package.json
+sed -i "" "s#${old2}#${new2}#g" ${PROJECT_ROOT}/example/package.json
 
 echo "example/package.json updated"
