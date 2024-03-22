@@ -5,11 +5,7 @@ MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 
 LINE="npmRegistryServer: https://registry.npmmirror.com"
-if ! grep -q "$LINE" ${PROJECT_ROOT}/.yarnrc.yml; then
-  sed -i "" "1i\\
-$LINE
-" ${PROJECT_ROOT}/.yarnrc.yml
-fi
+grep -q "$LINE" ${PROJECT_ROOT}/.yarnrc.yml || echo "$LINE\n$(cat ${PROJECT_ROOT}/.yarnrc.yml)" > ${PROJECT_ROOT}/.yarnrc.yml.tmp && mv ${PROJECT_ROOT}/.yarnrc.yml.tmp ${PROJECT_ROOT}/.yarnrc.yml
 
 echo ".yarnrc.yml updated"
 
