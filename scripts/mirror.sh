@@ -15,7 +15,7 @@ new1='"react-native-agora-rawdata": "git+https://gitee.com/agoraio-community/rea
 old2='"react-native-image-tool": "github:LichKing-2234/react-native-image-tools"'
 new2='"react-native-image-tool": "git+https://gitee.com/agoraio-community/react-native-image-tools.git"'
 
-sed -i "" "s#${old1}#${new1}#g" ${PROJECT_ROOT}/example/package.json
-sed -i "" "s#${old2}#${new2}#g" ${PROJECT_ROOT}/example/package.json
+sed "s#${old1}#${new1}#g" ${PROJECT_ROOT}/example/package.json > tmp && mv tmp ${PROJECT_ROOT}/example/package.json
+sed "s#${old2}#${new2}#g" ${PROJECT_ROOT}/example/package.json > tmp && mv tmp ${PROJECT_ROOT}/example/package.json
 
 echo "example/package.json updated"
