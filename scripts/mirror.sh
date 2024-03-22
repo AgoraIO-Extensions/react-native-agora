@@ -5,7 +5,7 @@ MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 
 LINE="npmRegistryServer: https://registry.npmmirror.com"
-grep -q "$LINE" ${PROJECT_ROOT}/.yarnrc.yml || echo "$LINE\n$(cat ${PROJECT_ROOT}/.yarnrc.yml)" > ${PROJECT_ROOT}/.yarnrc.yml.tmp && mv ${PROJECT_ROOT}/.yarnrc.yml.tmp ${PROJECT_ROOT}/.yarnrc.yml
+grep -q "$LINE" ${PROJECT_ROOT}/.yarnrc.yml || echo -e "$LINE\n$(cat ${PROJECT_ROOT}/.yarnrc.yml)" > ${PROJECT_ROOT}/.yarnrc.yml.tmp && mv ${PROJECT_ROOT}/.yarnrc.yml.tmp ${PROJECT_ROOT}/.yarnrc.yml
 
 echo ".yarnrc.yml updated"
 
