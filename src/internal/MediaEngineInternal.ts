@@ -2,6 +2,7 @@ import { createCheckers } from 'ts-interface-checker';
 
 import {
   IAudioFrameObserver,
+  IFaceInfoObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
@@ -20,6 +21,7 @@ export class MediaEngineInternal extends IMediaEngineImpl {
   static _audio_frame_observers: IAudioFrameObserver[] = [];
   static _video_frame_observers: IVideoFrameObserver[] = [];
   static _video_encoded_frame_observers: IVideoEncodedFrameObserver[] = [];
+  static _face_info_observers: IFaceInfoObserver[] = [];
 
   override registerAudioFrameObserver(observer: IAudioFrameObserver): number {
     if (
@@ -82,10 +84,30 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     return super.unregisterVideoEncodedFrameObserver(observer);
   }
 
+  override registerFaceInfoObserver(observer: IFaceInfoObserver): number {
+    if (
+      !MediaEngineInternal._face_info_observers.find(
+        (value) => value === observer
+      )
+    ) {
+      MediaEngineInternal._face_info_observers.push(observer);
+    }
+    return super.registerFaceInfoObserver(observer);
+  }
+
+  override unregisterFaceInfoObserver(observer: IFaceInfoObserver): number {
+    MediaEngineInternal._face_info_observers =
+      MediaEngineInternal._face_info_observers.filter(
+        (value) => value !== observer
+      );
+    return super.unregisterFaceInfoObserver(observer);
+  }
+
   override release() {
     MediaEngineInternal._audio_frame_observers = [];
     MediaEngineInternal._video_frame_observers = [];
     MediaEngineInternal._video_encoded_frame_observers = [];
+    MediaEngineInternal._face_info_observers = [];
     this.removeAllListeners();
     super.release();
   }
@@ -118,6 +140,15 @@ export class MediaEngineInternal extends IMediaEngineImpl {
     ) {
       if (MediaEngineInternal._video_encoded_frame_observers.length === 0) {
         this.registerVideoEncodedFrameObserver({});
+      }
+    }
+    if (
+      checkers.IFaceInfoObserver?.strictTest({
+        [eventType]: undefined,
+      })
+    ) {
+      if (MediaEngineInternal._face_info_observers.length === 0) {
+        this.registerFaceInfoObserver({});
       }
     }
     return true;

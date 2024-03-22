@@ -54,7 +54,7 @@ type ClazzMethodUserData = IrisApiIdParserUserData & {
 };
 
 export function impl(parseResult: ParseResult) {
-  let preParseResult = deepClone(parseResult, ['parent']);
+  let preParseResult = deepClone(parseResult, ['parent', 'outVariable']);
   let cxxfiles = parseResult.nodes as CXXFile[];
   //only render file which has clazz
   let view = cxxfiles

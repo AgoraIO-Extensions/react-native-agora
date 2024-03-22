@@ -36,6 +36,10 @@ export const IVideoFrameObserver = t.iface([], {
   "onTranscodedVideoFrame": t.opt(t.func("void", t.param("videoFrame", "VideoFrame"))),
 });
 
+export const IFaceInfoObserver = t.iface([], {
+  "onFaceInfo": t.opt(t.func("void", t.param("outFaceInfo", "string"))),
+});
+
 export const IMediaRecorderObserver = t.iface([], {
   "onRecorderStateChanged": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("state", "RecorderState"), t.param("reason", "RecorderReasonCode"))),
   "onRecorderInfoUpdated": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("info", "RecorderInfo"))),
@@ -48,6 +52,7 @@ const exportedTypeSuite: t.ITypeSuite = {
   IAudioSpectrumObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
+  IFaceInfoObserver,
   IMediaRecorderObserver,
 };
 export default exportedTypeSuite;

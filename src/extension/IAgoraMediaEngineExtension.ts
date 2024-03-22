@@ -1,12 +1,14 @@
 import {
   IAudioFrameObserver,
+  IFaceInfoObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
 
 export type IMediaEngineEvent = IAudioFrameObserver &
   IVideoFrameObserver &
-  IVideoEncodedFrameObserver;
+  IVideoEncodedFrameObserver &
+  IFaceInfoObserver;
 
 declare module '../IAgoraMediaEngine' {
   interface IMediaEngine {

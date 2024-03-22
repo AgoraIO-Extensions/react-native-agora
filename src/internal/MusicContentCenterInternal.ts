@@ -117,13 +117,6 @@ class _MusicPlayerInternal extends IMusicPlayerImpl {
   override getMediaPlayerId(): number {
     return this._mediaPlayerId;
   }
-
-  protected override getApiTypeFromOpenWithSongCode(
-    songCode: number,
-    startPos = 0
-  ): string {
-    return 'MusicPlayer_open_303b92e';
-  }
 }
 
 export class MusicPlayerInternal

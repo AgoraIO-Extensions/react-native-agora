@@ -194,7 +194,7 @@ export class IMusicPlayerImpl extends IMediaPlayerImpl implements IMusicPlayer {
     songCode: number,
     startPos: number = 0
   ): string {
-    return 'MusicPlayer_openWithSongCode';
+    return 'MusicPlayer_open_303b92e';
   }
 }
 

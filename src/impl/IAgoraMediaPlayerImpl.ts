@@ -958,7 +958,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     key: string,
     value: number
   ): string {
-    return 'MediaPlayer_setPlayerOptionInInt';
+    return 'MediaPlayer_setPlayerOption_4d05d29';
   }
 
   setPlayerOptionInString(key: string, value: string): number {
@@ -981,7 +981,7 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     key: string,
     value: string
   ): string {
-    return 'MediaPlayer_setPlayerOptionInString';
+    return 'MediaPlayer_setPlayerOption_ccad422';
   }
 }
 
