@@ -968,6 +968,18 @@ export enum AudioCodecType {
    * @ignore
    */
   AudioCodecLpcnet = 12,
+  /**
+   * @ignore
+   */
+  AudioCodecOpus4c = 13,
+  /**
+   * @ignore
+   */
+  AudioCodecOpus6c = 14,
+  /**
+   * @ignore
+   */
+  AudioCodecOpus8c = 15,
 }
 
 /**
@@ -3386,7 +3398,7 @@ export class VideoCanvas {
  */
 export enum LighteningContrastLevel {
   /**
-   * @ignore
+   * 0: Low contrast level.
    */
   LighteningContrastLow = 0,
   /**
@@ -4235,41 +4247,39 @@ export enum ChannelMediaRelayError {
 }
 
 /**
- * The event code of channel media relay.
- *
- * Deprecated This class is deprecated.
+ * @ignore
  */
 export enum ChannelMediaRelayEvent {
   /**
-   * 0: The user disconnects from the server due to a poor network connection.
+   * @ignore
    */
   RelayEventNetworkDisconnected = 0,
   /**
-   * 1: The user is connected to the server.
+   * @ignore
    */
   RelayEventNetworkConnected = 1,
   /**
-   * 2: The user joins the source channel.
+   * @ignore
    */
   RelayEventPacketJoinedSrcChannel = 2,
   /**
-   * 3: The user joins the target channel.
+   * @ignore
    */
   RelayEventPacketJoinedDestChannel = 3,
   /**
-   * 4: The SDK starts relaying the media stream to the target channel.
+   * @ignore
    */
   RelayEventPacketSentToDestChannel = 4,
   /**
-   * 5: The server receives the audio stream from the source channel.
+   * @ignore
    */
   RelayEventPacketReceivedVideoFromSrc = 5,
   /**
-   * 6: The server receives the audio stream from the source channel.
+   * @ignore
    */
   RelayEventPacketReceivedAudioFromSrc = 6,
   /**
-   * 7: The target channel is updated.
+   * @ignore
    */
   RelayEventPacketUpdateDestChannel = 7,
   /**
@@ -4277,31 +4287,31 @@ export enum ChannelMediaRelayEvent {
    */
   RelayEventPacketUpdateDestChannelRefused = 8,
   /**
-   * 9: The target channel does not change, which means that the target channel fails to be updated.
+   * @ignore
    */
   RelayEventPacketUpdateDestChannelNotChange = 9,
   /**
-   * 10: The target channel name is null.
+   * @ignore
    */
   RelayEventPacketUpdateDestChannelIsNull = 10,
   /**
-   * 11: The video profile is sent to the server.
+   * @ignore
    */
   RelayEventVideoProfileUpdate = 11,
   /**
-   * 12: The SDK successfully pauses relaying the media stream to target channels.
+   * @ignore
    */
   RelayEventPauseSendPacketToDestChannelSuccess = 12,
   /**
-   * 13: The SDK fails to pause relaying the media stream to target channels.
+   * @ignore
    */
   RelayEventPauseSendPacketToDestChannelFailed = 13,
   /**
-   * 14: The SDK successfully resumes relaying the media stream to target channels.
+   * @ignore
    */
   RelayEventResumeSendPacketToDestChannelSuccess = 14,
   /**
-   * 15: The SDK fails to resume relaying the media stream to target channels.
+   * @ignore
    */
   RelayEventResumeSendPacketToDestChannelFailed = 15,
 }

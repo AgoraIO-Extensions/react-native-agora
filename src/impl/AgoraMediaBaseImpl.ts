@@ -3,6 +3,7 @@ import {
   IAudioFrameObserverBase,
   IAudioPcmFrameSink,
   IAudioSpectrumObserver,
+  IFaceInfoObserver,
   IMediaRecorderObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameMetaInfo,
@@ -185,6 +186,20 @@ export function processIVideoFrameObserver(
     case 'onTranscodedVideoFrame':
       if (handler.onTranscodedVideoFrame !== undefined) {
         handler.onTranscodedVideoFrame(jsonParams.videoFrame);
+      }
+      break;
+  }
+}
+
+export function processIFaceInfoObserver(
+  handler: IFaceInfoObserver,
+  event: string,
+  jsonParams: any
+) {
+  switch (event) {
+    case 'onFaceInfo':
+      if (handler.onFaceInfo !== undefined) {
+        handler.onFaceInfo(jsonParams.outFaceInfo);
       }
       break;
   }

@@ -51,6 +51,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  If you are already in a channel, you cannot rejoin it with the same user ID.
    *  If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
    *  Ensure that the App ID you use to generate the token is the same as the App ID used when creating the IRtcEngine instance.
+   *  If you choose the Testing Mode (using an App ID for authentication) for your project and call this method to join a channel, you will automatically exit the channel after 24 hours.
    *
    * @param token The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
    * @param connection The connection information. See RtcConnection.
@@ -723,27 +724,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels.
-   *
-   * Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After a successful method call, the SDK triggers the onChannelMediaRelayStateChanged and onChannelMediaRelayEvent callbacks, and these callbacks return the state and events of the media stream relay.
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateRunning (2) and RelayOk (0), and the onChannelMediaRelayEvent callback returns RelayEventPacketSentToDestChannel (4), it means that the SDK starts relaying media streams between the source channel and the target channel.
-   *  If the onChannelMediaRelayStateChanged callback returns RelayStateFailure (3), an exception occurs during the media stream relay.
-   *  Call this method after joining the channel.
-   *  This method takes effect only when you are a host in a live streaming channel.
-   *  After a successful method call, if you want to call this method again, ensure that you call the stopChannelMediaRelayEx method to quit the current relay.
-   *  The relaying media streams across channels function needs to be enabled by contacting.
-   *  Agora does not support string user accounts in this API.
-   *
-   * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-   * @param connection The connection information. See RtcConnection.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
-   *  -8: Internal state error. Probably because the user is not a broadcaster.
+   * @ignore
    */
   abstract startChannelMediaRelayEx(
     configuration: ChannelMediaRelayConfiguration,
@@ -751,16 +732,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * Updates the channels for media stream relay.
-   *
-   * Deprecated: This method is deprecated. Use startOrUpdateChannelMediaRelayEx instead. After the media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call this method. After a successful method call, the SDK triggers the onChannelMediaRelayEvent callback with the RelayEventPacketUpdateDestChannel (7) state code. Call the method after successfully calling the startChannelMediaRelayEx method and receiving onChannelMediaRelayStateChanged (RelayStateRunning, RelayOk); otherwise, the method call fails.
-   *
-   * @param configuration The configuration of the media stream relay. See ChannelMediaRelayConfiguration.
-   * @param connection The connection information. See RtcConnection.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
+   * @ignore
    */
   abstract updateChannelMediaRelayEx(
     configuration: ChannelMediaRelayConfiguration,

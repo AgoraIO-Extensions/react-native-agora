@@ -10,6 +10,7 @@ import {
   ExternalVideoFrame,
   ExternalVideoSourceType,
   IAudioFrameObserver,
+  IFaceInfoObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from './AgoraMediaBase';
@@ -97,6 +98,11 @@ export abstract class IMediaEngine {
   abstract registerVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number;
+
+  /**
+   * @ignore
+   */
+  abstract registerFaceInfoObserver(observer: IFaceInfoObserver): number;
 
   /**
    * Pushes the external audio frame.
