@@ -3541,6 +3541,26 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_uploadLogFile';
   }
 
+  writeLog(level: LogLevel, fmt: string): number {
+    const apiType = this.getApiTypeFromWriteLog(level, fmt);
+    const jsonParams = {
+      level: level,
+      fmt: fmt,
+      toJSON: () => {
+        return {
+          level: level,
+          fmt: fmt,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromWriteLog(level: LogLevel, fmt: string): string {
+    return 'RtcEngine_writeLog';
+  }
+
   setLocalRenderMode(
     renderMode: RenderModeType,
     mirrorMode: VideoMirrorModeType = VideoMirrorModeType.VideoMirrorModeAuto

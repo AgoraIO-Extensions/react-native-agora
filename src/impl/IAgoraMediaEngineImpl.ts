@@ -9,6 +9,7 @@ import {
   ExternalVideoFrame,
   ExternalVideoSourceType,
   IAudioFrameObserver,
+  IFaceInfoObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
@@ -71,6 +72,24 @@ export class IMediaEngineImpl implements IMediaEngine {
     observer: IVideoEncodedFrameObserver
   ): string {
     return 'MediaEngine_registerVideoEncodedFrameObserver';
+  }
+
+  registerFaceInfoObserver(observer: IFaceInfoObserver): number {
+    const apiType = this.getApiTypeFromRegisterFaceInfoObserver(observer);
+    const jsonParams = {
+      observer: observer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromRegisterFaceInfoObserver(
+    observer: IFaceInfoObserver
+  ): string {
+    return 'MediaEngine_registerFaceInfoObserver';
   }
 
   pushAudioFrame(frame: AudioFrame, trackId: number = 0): number {
