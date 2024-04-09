@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
+  AudioScenarioType,
   ChannelProfileType,
   ClientRoleType,
   EarMonitoringFilterType,
@@ -78,6 +79,7 @@ export default class JoinChannelAudio
       logConfig: { filePath: Config.logFilePath },
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+      audioScenario: AudioScenarioType.AudioScenarioChatroom,
     });
     this.engine.registerEventHandler(this);
 
