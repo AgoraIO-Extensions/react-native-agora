@@ -1,5 +1,7 @@
 
 
+## [4.2.6-build.8-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.6-build.3-rc.1...v4.2.6-build.8-rc.1) (2024-04-10)
+
 ## [4.2.6-build.3-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.2.6...v4.2.6-build.3-rc.1) (2024-03-13)
 
 
