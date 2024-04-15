@@ -652,15 +652,15 @@ export class VideoFrame {
    */
   height?: number;
   /**
-   * For YUV data, the line span of the Y buffer; for RGBA data, the total data length.
+   * For YUV data, the line span of the Y buffer; for RGBA data, the total data length. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
    */
   yStride?: number;
   /**
-   * For YUV data, the line span of the U buffer; for RGBA data, the value is 0.
+   * For YUV data, the line span of the U buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
    */
   uStride?: number;
   /**
-   * For YUV data, the line span of the V buffer; for RGBA data, the value is 0.
+   * For YUV data, the line span of the V buffer; for RGBA data, the value is 0. When dealing with video data, it is necessary to process the offset between each line of pixel data based on this parameter, otherwise it may result in image distortion.
    */
   vStride?: number;
   /**
@@ -911,9 +911,6 @@ export interface IAudioFrameObserverBase {
    *
    * @param channelId The channel ID.
    * @param audioFrame The raw audio data. See AudioFrame.
-   *
-   * @returns
-   * Without practical meaning.
    */
   onRecordAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
@@ -924,9 +921,6 @@ export interface IAudioFrameObserverBase {
    *
    * @param channelId The channel ID.
    * @param audioFrame The raw audio data. See AudioFrame.
-   *
-   * @returns
-   * Without practical meaning.
    */
   onPlaybackAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
@@ -937,9 +931,6 @@ export interface IAudioFrameObserverBase {
    *
    * @param channelId The channel ID.
    * @param audioFrame The raw audio data. See AudioFrame.
-   *
-   * @returns
-   * Without practical meaning.
    */
   onMixedAudioFrame?(channelId: string, audioFrame: AudioFrame): void;
 
@@ -949,9 +940,6 @@ export interface IAudioFrameObserverBase {
    * In order to ensure that the obtained in-ear audio data meets the expectations, Agora recommends that you set the in-ear monitoring-ear audio data format as follows: After calling setEarMonitoringAudioFrameParameters to set the audio data format and registerAudioFrameObserver to register the audio frame observer object, the SDK calculates the sampling interval according to the parameters set in the methods, and triggers the onEarMonitoringAudioFrame callback according to the sampling interval.
    *
    * @param audioFrame The raw audio data. See AudioFrame.
-   *
-   * @returns
-   * Without practical meaning.
    */
   onEarMonitoringAudioFrame?(audioFrame: AudioFrame): void;
 }
@@ -966,9 +954,6 @@ export interface IAudioFrameObserver extends IAudioFrameObserverBase {
    * @param channelId The channel ID.
    * @param uid The user ID of the specified user.
    * @param audioFrame The raw audio data. See AudioFrame.
-   *
-   * @returns
-   * Without practical meaning.
    */
   onPlaybackAudioFrameBeforeMixing?(
     channelId: string,
@@ -1015,9 +1000,6 @@ export interface IAudioSpectrumObserver {
    * After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
    *
    * @param data The audio spectrum data of the local user. See AudioSpectrumData.
-   *
-   * @returns
-   * Whether the spectrum data is received: true : Spectrum data is received. false : No spectrum data is received.
    */
   onLocalAudioSpectrum?(data: AudioSpectrumData): void;
 
@@ -1028,9 +1010,6 @@ export interface IAudioSpectrumObserver {
    *
    * @param spectrums The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
    * @param spectrumNumber The number of remote users.
-   *
-   * @returns
-   * Whether the spectrum data is received: true : Spectrum data is received. false : No spectrum data is received.
    */
   onRemoteAudioSpectrum?(
     spectrums: UserAudioSpectrumInfo[],
@@ -1051,9 +1030,6 @@ export interface IVideoEncodedFrameObserver {
    * @param imageBuffer The encoded video image buffer.
    * @param length The data length of the video image.
    * @param videoEncodedFrameInfo For the information of the encoded video frame, see EncodedVideoFrameInfo.
-   *
-   * @returns
-   * Without practical meaning.
    */
   onEncodedVideoFrameReceived?(
     uid: number,
@@ -1092,10 +1068,6 @@ export interface IVideoFrameObserver {
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
    *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
    *  iOS: I420 or CVPixelBufferRef
-   *
-   * @returns
-   * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
-   *  When the video processing mode is ProcessModeReadWrite : true : Sets the SDK to receive the video frame. false : Sets the SDK to discard the video frame.
    */
   onCaptureVideoFrame?(
     sourceType: VideoSourceType,
@@ -1112,10 +1084,6 @@ export interface IVideoFrameObserver {
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
    *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
    *  iOS: I420 or CVPixelBufferRef
-   *
-   * @returns
-   * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
-   *  When the video processing mode is ProcessModeReadWrite : true : Sets the SDK to receive the video frame. false : Sets the SDK to discard the video frame.
    */
   onPreEncodeVideoFrame?(
     sourceType: VideoSourceType,
@@ -1138,10 +1106,6 @@ export interface IVideoFrameObserver {
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
    *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
    *  iOS: I420 or CVPixelBufferRef
-   *
-   * @returns
-   * When the video processing mode is ProcessModeReadOnly : true : Reserved for future use. false : Reserved for future use.
-   *  When the video processing mode is ProcessModeReadWrite : true : Sets the SDK to receive the video frame. false : Sets the SDK to discard the video frame.
    */
   onRenderVideoFrame?(
     channelId: string,

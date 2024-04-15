@@ -46,7 +46,6 @@ export const IRtcEngineEventHandler = t.iface([], {
   "onCameraFocusAreaChanged": t.opt(t.func("void", t.param("x", "number"), t.param("y", "number"), t.param("width", "number"), t.param("height", "number"))),
   "onCameraExposureAreaChanged": t.opt(t.func("void", t.param("x", "number"), t.param("y", "number"), t.param("width", "number"), t.param("height", "number"))),
   "onFacePositionChanged": t.opt(t.func("void", t.param("imageWidth", "number"), t.param("imageHeight", "number"), t.param("vecRectangle", t.array("Rectangle")), t.param("vecDistance", t.array("number")), t.param("numFaces", "number"))),
-  "onCameraCapturerConfigurationChanged": t.opt(t.func("void", t.param("direction", "number"), t.param("focalLengthType", "number"), t.param("width", "number"), t.param("height", "number"), t.param("frameRate", "number"))),
   "onVideoStopped": t.opt(t.func("void")),
   "onAudioMixingStateChanged": t.opt(t.func("void", t.param("state", "AudioMixingStateType"), t.param("reason", "AudioMixingReasonType"))),
   "onRhythmPlayerStateChanged": t.opt(t.func("void", t.param("state", "RhythmPlayerStateType"), t.param("reason", "RhythmPlayerReason"))),

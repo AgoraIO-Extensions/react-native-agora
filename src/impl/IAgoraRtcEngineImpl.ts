@@ -466,18 +466,6 @@ export function processIRtcEngineEventHandler(
       }
       break;
 
-    case 'onCameraCapturerConfigurationChanged':
-      if (handler.onCameraCapturerConfigurationChanged !== undefined) {
-        handler.onCameraCapturerConfigurationChanged(
-          jsonParams.direction,
-          jsonParams.focalLengthType,
-          jsonParams.width,
-          jsonParams.height,
-          jsonParams.frameRate
-        );
-      }
-      break;
-
     case 'onVideoStopped':
       if (handler.onVideoStopped !== undefined) {
         handler.onVideoStopped();
@@ -4958,19 +4946,19 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setRouteInCommunicationMode_46f8ab7';
   }
 
-  isSupportPortraitCenterStage(): boolean {
-    const apiType = this.getApiTypeFromIsSupportPortraitCenterStage();
+  isCameraCenterStageSupported(): boolean {
+    const apiType = this.getApiTypeFromIsCameraCenterStageSupported();
     const jsonParams = {};
     const jsonResults = callIrisApi.call(this, apiType, jsonParams);
     return jsonResults.result;
   }
 
-  protected getApiTypeFromIsSupportPortraitCenterStage(): string {
-    return 'RtcEngine_isSupportPortraitCenterStage';
+  protected getApiTypeFromIsCameraCenterStageSupported(): string {
+    return 'RtcEngine_isCameraCenterStageSupported';
   }
 
-  enablePortraitCenterStage(enabled: boolean): number {
-    const apiType = this.getApiTypeFromEnablePortraitCenterStage(enabled);
+  enableCameraCenterStage(enabled: boolean): number {
+    const apiType = this.getApiTypeFromEnableCameraCenterStage(enabled);
     const jsonParams = {
       enabled: enabled,
       toJSON: () => {
@@ -4983,8 +4971,8 @@ export class IRtcEngineImpl implements IRtcEngine {
     return jsonResults.result;
   }
 
-  protected getApiTypeFromEnablePortraitCenterStage(enabled: boolean): string {
-    return 'RtcEngine_enablePortraitCenterStage_5039d15';
+  protected getApiTypeFromEnableCameraCenterStage(enabled: boolean): string {
+    return 'RtcEngine_enableCameraCenterStage_5039d15';
   }
 
   getScreenCaptureSources(

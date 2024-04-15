@@ -51,6 +51,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  If you are already in a channel, you cannot rejoin it with the same user ID.
    *  If you want to join the same channel from different devices, ensure that the user IDs are different for all devices.
    *  Ensure that the App ID you use to generate the token is the same as the App ID used when creating the IRtcEngine instance.
+   *  If you choose the Testing Mode (using an App ID for authentication) for your project and call this method to join a channel, you will automatically exit the channel after 24 hours.
    *
    * @param token The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
    * @param connection The connection information. See RtcConnection.
