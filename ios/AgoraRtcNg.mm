@@ -181,7 +181,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi: (nonnull NSDictionary *)args)
     void *handler[1] = {self.eventHandler};
     if (bufferArray.count == 0) {
         std::smatch output;
-        std::regex pattern = std::regex("^.*(Observer|Handler|Callback|Receiver|DirectCdnStreaming)$");
+        std::regex pattern = std::regex("^.*_.*((EventHandler|Observer|startDirectCdnStreaming|"
+                       "Source|VideoFrameRenderer)(_[a-zA-Z0-9]*)?)$");
         std::string name = funcName.UTF8String;
         if (std::regex_match(name, output, pattern)) {
             param.buffer = handler;

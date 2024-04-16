@@ -3,8 +3,8 @@ import {
   IMediaPlayer,
   IMediaPlayerSourceObserver,
   IRtcEngineEventHandler,
-  MediaPlayerError,
   MediaPlayerEvent,
+  MediaPlayerReason,
   MediaPlayerState,
   VideoSourceType,
   createAgoraRtcEngine,
@@ -214,7 +214,7 @@ export default class MediaPlayer
     this.engine?.release();
   }
 
-  onPlayerSourceStateChanged(state: MediaPlayerState, ec: MediaPlayerError) {
+  onPlayerSourceStateChanged(state: MediaPlayerState, ec: MediaPlayerReason) {
     this.info('onPlayerSourceStateChanged', 'state', state, 'ec', ec);
     switch (state) {
       case MediaPlayerState.PlayerStateIdle:

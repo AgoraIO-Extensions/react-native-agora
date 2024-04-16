@@ -108,9 +108,9 @@ export enum AudioRoute {
    */
   RouteLoudspeaker = 4,
   /**
-   * @ignore
+   * 5: The audio route is a Bluetooth device using the HFP protocol.
    */
-  RouteHeadsetbluetooth = 5,
+  RouteBluetoothDeviceHfp = 5,
   /**
    * @ignore
    */
@@ -127,6 +127,10 @@ export enum AudioRoute {
    * @ignore
    */
   RouteAirplay = 9,
+  /**
+   * 10: The audio route is a Bluetooth device using the A2DP protocol.
+   */
+  RouteBluetoothDeviceA2dp = 10,
 }
 
 /**
@@ -188,7 +192,7 @@ export enum MediaSourceType {
    */
   PrimaryCameraSource = 2,
   /**
-   * 3: The secondary camera.
+   * 3: A secondary camera.
    */
   SecondaryCameraSource = 3,
   /**
@@ -200,7 +204,7 @@ export enum MediaSourceType {
    */
   SecondaryScreenSource = 5,
   /**
-   * @ignore
+   * 6. Custom video source.
    */
   CustomVideoSource = 6,
   /**
@@ -486,6 +490,26 @@ export enum CameraVideoSourceType {
 /**
  * @ignore
  */
+export enum MetaInfoKey {
+  /**
+   * @ignore
+   */
+  KeyFaceCapture = 0,
+}
+
+/**
+ * @ignore
+ */
+export abstract class IVideoFrameMetaInfo {
+  /**
+   * @ignore
+   */
+  abstract getMetaInfoStr(key: MetaInfoKey): string;
+}
+
+/**
+ * @ignore
+ */
 export enum EglContextType {
   /**
    * @ignore
@@ -671,6 +695,10 @@ export class VideoFrame {
    * @ignore
    */
   pixelBuffer?: Uint8Array;
+  /**
+   * The meta information in the video frame. To use this parameter, please.
+   */
+  metaInfo?: IVideoFrameMetaInfo;
 }
 
 /**
@@ -696,7 +724,7 @@ export enum MediaPlayerSourceType {
  */
 export enum VideoModulePosition {
   /**
-   * 1: The post-capturer position, which corresponds to the video data in the onCaptureVideoFrame callback.
+   * 1: The location of the locally collected video data after preprocessing corresponds to the onCaptureVideoFrame callback. The observed video here has the effect of video pre-processing, which can be verified by enabling image enhancement, virtual background, or watermark.
    */
   PositionPostCapturer = 1 << 0,
   /**
@@ -704,9 +732,15 @@ export enum VideoModulePosition {
    */
   PositionPreRenderer = 1 << 1,
   /**
-   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback.
+   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame callback. The observed video here has the effects of video pre-processing and encoding pre-processing.
+   *  To verify the pre-processing effects of the video, you can enable image enhancement, virtual background, or watermark.
+   *  To verify the pre-encoding processing effect, you can set a lower frame rate (for example, 5 fps).
    */
   PositionPreEncoder = 1 << 2,
+  /**
+   * 8: The position after local video capture and before pre-processing. The observed video here does not have pre-processing effects, which can be verified by enabling image enhancement, virtual background, or watermarks.
+   */
+  PositionPostCapturerOrigin = 1 << 3,
 }
 
 /**
@@ -777,6 +811,10 @@ export class AudioFrame {
    * @ignore
    */
   presentationMs?: number;
+  /**
+   * @ignore
+   */
+  audioTrackNumber?: number;
 }
 
 /**
@@ -1144,7 +1182,7 @@ export enum MediaRecorderStreamType {
  */
 export enum RecorderState {
   /**
-   * -1: An error occurs during the recording. See RecorderErrorCode for the reason.
+   * -1: An error occurs during the recording. See RecorderReasonCode for the reason.
    */
   RecorderStateError = -1,
   /**
@@ -1160,27 +1198,27 @@ export enum RecorderState {
 /**
  * The reason for the state change.
  */
-export enum RecorderErrorCode {
+export enum RecorderReasonCode {
   /**
    * 0: No error.
    */
-  RecorderErrorNone = 0,
+  RecorderReasonNone = 0,
   /**
-   * 1: The SDK fails to write the recorded data to a file.
+   * @ignore
    */
-  RecorderErrorWriteFailed = 1,
+  RecorderReasonWriteFailed = 1,
   /**
-   * 2: The SDK does not detect any audio and video streams, or audio and video streams are interrupted for more than five seconds during recording.
+   * @ignore
    */
-  RecorderErrorNoStream = 2,
+  RecorderReasonNoStream = 2,
   /**
-   * 3: The recording duration exceeds the upper limit.
+   * @ignore
    */
-  RecorderErrorOverMaxDuration = 3,
+  RecorderReasonOverMaxDuration = 3,
   /**
-   * 4: The recording configuration changes.
+   * @ignore
    */
-  RecorderErrorConfigChanged = 4,
+  RecorderReasonConfigChanged = 4,
 }
 
 /**
@@ -1238,7 +1276,7 @@ export interface IMediaRecorderObserver {
     channelId: string,
     uid: number,
     state: RecorderState,
-    error: RecorderErrorCode
+    reason: RecorderReasonCode
   ): void;
 
   /**

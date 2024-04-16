@@ -6,7 +6,7 @@ import {
   ClientRoleType,
   IRtcEngineEventHandler,
   LiveTranscoding,
-  RtmpStreamPublishErrorType,
+  RtmpStreamPublishReason,
   RtmpStreamPublishState,
   RtmpStreamingEvent,
   TranscodingUser,
@@ -293,7 +293,7 @@ export default class RTMPStreaming
   onRtmpStreamingStateChanged(
     url: string,
     state: RtmpStreamPublishState,
-    errCode: RtmpStreamPublishErrorType
+    errCode: RtmpStreamPublishReason
   ) {
     this.info(
       'onRtmpStreamingStateChanged',

@@ -5,11 +5,11 @@ import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
 export const IMusicContentCenterEventHandler = t.iface([], {
-  "onMusicChartsResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("result", t.array("MusicChartInfo")), t.param("errorCode", "MusicContentCenterStatusCode"))),
-  "onMusicCollectionResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("result", "MusicCollection"), t.param("errorCode", "MusicContentCenterStatusCode"))),
-  "onLyricResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("songCode", "number"), t.param("lyricUrl", "string"), t.param("errorCode", "MusicContentCenterStatusCode"))),
-  "onSongSimpleInfoResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("songCode", "number"), t.param("simpleInfo", "string"), t.param("errorCode", "MusicContentCenterStatusCode"))),
-  "onPreLoadEvent": t.opt(t.func("void", t.param("requestId", "string"), t.param("songCode", "number"), t.param("percent", "number"), t.param("lyricUrl", "string"), t.param("status", "PreloadStatusCode"), t.param("errorCode", "MusicContentCenterStatusCode"))),
+  "onMusicChartsResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("result", t.array("MusicChartInfo")), t.param("reason", "MusicContentCenterStateReason"))),
+  "onMusicCollectionResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("result", "MusicCollection"), t.param("reason", "MusicContentCenterStateReason"))),
+  "onLyricResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("songCode", "number"), t.param("lyricUrl", "string"), t.param("reason", "MusicContentCenterStateReason"))),
+  "onSongSimpleInfoResult": t.opt(t.func("void", t.param("requestId", "string"), t.param("songCode", "number"), t.param("simpleInfo", "string"), t.param("reason", "MusicContentCenterStateReason"))),
+  "onPreLoadEvent": t.opt(t.func("void", t.param("requestId", "string"), t.param("songCode", "number"), t.param("percent", "number"), t.param("lyricUrl", "string"), t.param("state", "PreloadState"), t.param("reason", "MusicContentCenterStateReason"))),
 });
 
 const exportedTypeSuite: t.ITypeSuite = {

@@ -3,7 +3,7 @@ import {
   ClientRoleType,
   EarMonitoringFilterType,
   ErrorCodeType,
-  LocalAudioStreamError,
+  LocalAudioStreamReason,
   LocalAudioStreamState,
   MediaDeviceType,
   RtcConnection,
@@ -208,7 +208,7 @@ export default function JoinChannelAudio() {
     (
       connection: RtcConnection,
       state: LocalAudioStreamState,
-      error: LocalAudioStreamError
+      error: LocalAudioStreamReason
     ) => {
       log.info(
         'onLocalAudioStateChanged',

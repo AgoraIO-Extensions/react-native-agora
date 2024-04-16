@@ -40,7 +40,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromSetPlaybackDevice(deviceId: string): string {
-    return 'AudioDeviceManager_setPlaybackDevice';
+    return 'AudioDeviceManager_setPlaybackDevice_4ad5f6e';
   }
 
   getPlaybackDevice(): string {
@@ -52,7 +52,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetPlaybackDevice(): string {
-    return 'AudioDeviceManager_getPlaybackDevice';
+    return 'AudioDeviceManager_getPlaybackDevice_73b9872';
   }
 
   getPlaybackDeviceInfo(): AudioDeviceInfo {
@@ -63,7 +63,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetPlaybackDeviceInfo(): string {
-    return 'AudioDeviceManager_getPlaybackDeviceInfo';
+    return 'AudioDeviceManager_getPlaybackDeviceInfo_5540658';
   }
 
   setPlaybackDeviceVolume(volume: number): number {
@@ -81,7 +81,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromSetPlaybackDeviceVolume(volume: number): string {
-    return 'AudioDeviceManager_setPlaybackDeviceVolume';
+    return 'AudioDeviceManager_setPlaybackDeviceVolume_46f8ab7';
   }
 
   getPlaybackDeviceVolume(): number {
@@ -93,7 +93,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetPlaybackDeviceVolume(): string {
-    return 'AudioDeviceManager_getPlaybackDeviceVolume';
+    return 'AudioDeviceManager_getPlaybackDeviceVolume_915cb25';
   }
 
   setRecordingDevice(deviceId: string): number {
@@ -111,7 +111,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromSetRecordingDevice(deviceId: string): string {
-    return 'AudioDeviceManager_setRecordingDevice';
+    return 'AudioDeviceManager_setRecordingDevice_4ad5f6e';
   }
 
   getRecordingDevice(): string {
@@ -123,7 +123,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetRecordingDevice(): string {
-    return 'AudioDeviceManager_getRecordingDevice';
+    return 'AudioDeviceManager_getRecordingDevice_73b9872';
   }
 
   getRecordingDeviceInfo(): AudioDeviceInfo {
@@ -134,7 +134,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetRecordingDeviceInfo(): string {
-    return 'AudioDeviceManager_getRecordingDeviceInfo';
+    return 'AudioDeviceManager_getRecordingDeviceInfo_5540658';
   }
 
   setRecordingDeviceVolume(volume: number): number {
@@ -152,7 +152,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromSetRecordingDeviceVolume(volume: number): string {
-    return 'AudioDeviceManager_setRecordingDeviceVolume';
+    return 'AudioDeviceManager_setRecordingDeviceVolume_46f8ab7';
   }
 
   getRecordingDeviceVolume(): number {
@@ -164,7 +164,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetRecordingDeviceVolume(): string {
-    return 'AudioDeviceManager_getRecordingDeviceVolume';
+    return 'AudioDeviceManager_getRecordingDeviceVolume_915cb25';
   }
 
   setLoopbackDevice(deviceId: string): number {
@@ -182,7 +182,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromSetLoopbackDevice(deviceId: string): string {
-    return 'AudioDeviceManager_setLoopbackDevice';
+    return 'AudioDeviceManager_setLoopbackDevice_4ad5f6e';
   }
 
   getLoopbackDevice(): string {
@@ -194,7 +194,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetLoopbackDevice(): string {
-    return 'AudioDeviceManager_getLoopbackDevice';
+    return 'AudioDeviceManager_getLoopbackDevice_73b9872';
   }
 
   setPlaybackDeviceMute(mute: boolean): number {
@@ -212,7 +212,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromSetPlaybackDeviceMute(mute: boolean): string {
-    return 'AudioDeviceManager_setPlaybackDeviceMute';
+    return 'AudioDeviceManager_setPlaybackDeviceMute_5039d15';
   }
 
   getPlaybackDeviceMute(): boolean {
@@ -224,7 +224,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetPlaybackDeviceMute(): string {
-    return 'AudioDeviceManager_getPlaybackDeviceMute';
+    return 'AudioDeviceManager_getPlaybackDeviceMute_d942327';
   }
 
   setRecordingDeviceMute(mute: boolean): number {
@@ -242,7 +242,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromSetRecordingDeviceMute(mute: boolean): string {
-    return 'AudioDeviceManager_setRecordingDeviceMute';
+    return 'AudioDeviceManager_setRecordingDeviceMute_5039d15';
   }
 
   getRecordingDeviceMute(): boolean {
@@ -254,7 +254,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromGetRecordingDeviceMute(): string {
-    return 'AudioDeviceManager_getRecordingDeviceMute';
+    return 'AudioDeviceManager_getRecordingDeviceMute_d942327';
   }
 
   startPlaybackDeviceTest(testAudioFilePath: string): number {
@@ -275,7 +275,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   protected getApiTypeFromStartPlaybackDeviceTest(
     testAudioFilePath: string
   ): string {
-    return 'AudioDeviceManager_startPlaybackDeviceTest';
+    return 'AudioDeviceManager_startPlaybackDeviceTest_3a2037f';
   }
 
   stopPlaybackDeviceTest(): number {
@@ -307,7 +307,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   protected getApiTypeFromStartRecordingDeviceTest(
     indicationInterval: number
   ): string {
-    return 'AudioDeviceManager_startRecordingDeviceTest';
+    return 'AudioDeviceManager_startRecordingDeviceTest_46f8ab7';
   }
 
   stopRecordingDeviceTest(): number {
@@ -339,7 +339,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   protected getApiTypeFromStartAudioDeviceLoopbackTest(
     indicationInterval: number
   ): string {
-    return 'AudioDeviceManager_startAudioDeviceLoopbackTest';
+    return 'AudioDeviceManager_startAudioDeviceLoopbackTest_46f8ab7';
   }
 
   stopAudioDeviceLoopbackTest(): number {
@@ -368,7 +368,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromFollowSystemPlaybackDevice(enable: boolean): string {
-    return 'AudioDeviceManager_followSystemPlaybackDevice';
+    return 'AudioDeviceManager_followSystemPlaybackDevice_5039d15';
   }
 
   followSystemRecordingDevice(enable: boolean): number {
@@ -386,7 +386,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromFollowSystemRecordingDevice(enable: boolean): string {
-    return 'AudioDeviceManager_followSystemRecordingDevice';
+    return 'AudioDeviceManager_followSystemRecordingDevice_5039d15';
   }
 
   followSystemLoopbackDevice(enable: boolean): number {
@@ -404,7 +404,7 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 
   protected getApiTypeFromFollowSystemLoopbackDevice(enable: boolean): string {
-    return 'AudioDeviceManager_followSystemLoopbackDevice';
+    return 'AudioDeviceManager_followSystemLoopbackDevice_5039d15';
   }
 
   release(): void {

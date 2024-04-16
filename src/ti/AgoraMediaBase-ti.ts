@@ -37,7 +37,7 @@ export const IVideoFrameObserver = t.iface([], {
 });
 
 export const IMediaRecorderObserver = t.iface([], {
-  "onRecorderStateChanged": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("state", "RecorderState"), t.param("error", "RecorderErrorCode"))),
+  "onRecorderStateChanged": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("state", "RecorderState"), t.param("reason", "RecorderReasonCode"))),
   "onRecorderInfoUpdated": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("info", "RecorderInfo"))),
 });
 

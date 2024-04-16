@@ -1,0 +1,56 @@
+{{#nodes}}
+{{#user_data.isCallback}}
+export function process{{name}}(handler: {{name}},
+  event: string,
+  jsonParams: any){
+  switch (event) {
+    {{#methods}}
+    case '{{name}}':
+      if (handler.{{name}} !== undefined) {
+        handler.{{name}}({{#parameters}}jsonParams.{{name}},{{/parameters}});
+      }
+      break;
+
+    {{/methods}}
+  }
+}
+
+{{/user_data.isCallback}}
+{{^user_data.isCallback}}
+// @ts-ignore
+export class {{name}}Impl {{#base_clazzs}}extends {{.}}Impl{{/base_clazzs}} implements {{name}}{
+
+{{#methods}}
+  {{name}}(
+    {{{user_data.input}}}
+    ): {{user_data.output}} {
+    const apiType = this.{{user_data.bindingFunctionName}}({{#user_data.input_map}}{{user_data.name}},{{/user_data.input_map}});
+    const jsonParams = {
+      {{#user_data.input_map}}
+      {{name}}: {{user_data.name}},
+      {{/user_data.input_map}}
+      {{#user_data.hasParameters}}
+       toJSON: () => {
+        return {
+         {{#user_data.input_map_fixed}}
+         {{name}}: {{user_data.name}},
+         {{/user_data.input_map_fixed}}
+        };
+      },
+      {{/user_data.hasParameters}}
+    };
+    {{{user_data.returnParam}}}
+  }
+
+  protected {{user_data.bindingFunctionName}}({{{user_data.input}}}): string {
+    return '{{user_data.IrisApiIdParser.value}}';
+  }
+
+{{/methods}}
+}
+
+{{/user_data.isCallback}}
+{{/nodes}}
+{{#user_data.renderFileEnd}}
+import { callIrisApi } from '../internal/IrisApiEngine';
+{{/user_data.renderFileEnd}}

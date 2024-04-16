@@ -5,7 +5,7 @@ import {
   ClientRoleType,
   IRtcEngineEventHandler,
   IRtcEngineEx,
-  LocalVideoStreamError,
+  LocalVideoStreamReason,
   LocalVideoStreamState,
   PermissionType,
   RenderModeType,
@@ -361,7 +361,7 @@ export default class ScreenShare
   onLocalVideoStateChanged(
     source: VideoSourceType,
     state: LocalVideoStreamState,
-    error: LocalVideoStreamError
+    error: LocalVideoStreamReason
   ) {
     this.info(
       'onLocalVideoStateChanged',

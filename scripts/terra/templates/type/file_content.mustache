@@ -1,0 +1,12 @@
+import './extension/{{user_data.fileName}}Extension';
+{{#nodes}}
+{{#user_data.isEnumz}}
+{{> enum}}
+{{/user_data.isEnumz}}
+{{#user_data.isStruct}}
+{{> struct}}
+{{/user_data.isStruct}}
+{{#user_data.isClazz}}
+{{> clazz}}
+{{/user_data.isClazz}}
+{{/nodes}}

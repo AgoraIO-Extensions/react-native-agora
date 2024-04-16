@@ -40,7 +40,7 @@ export class MusicChartCollectionImpl implements MusicChartCollection {
   }
 
   protected getApiTypeFromGet(index: number): string {
-    return 'MusicChartCollection_get';
+    return 'MusicChartCollection_get_46f8ab7';
   }
 }
 
@@ -105,7 +105,7 @@ export class MusicCollectionImpl implements MusicCollection {
   }
 
   protected getApiTypeFromGetMusic(index: number): string {
-    return 'MusicCollection_getMusic';
+    return 'MusicCollection_getMusic_8fcdcef';
   }
 }
 
@@ -120,7 +120,7 @@ export function processIMusicContentCenterEventHandler(
         handler.onMusicChartsResult(
           jsonParams.requestId,
           jsonParams.result,
-          jsonParams.errorCode
+          jsonParams.reason
         );
       }
       break;
@@ -130,7 +130,7 @@ export function processIMusicContentCenterEventHandler(
         handler.onMusicCollectionResult(
           jsonParams.requestId,
           jsonParams.result,
-          jsonParams.errorCode
+          jsonParams.reason
         );
       }
       break;
@@ -141,7 +141,7 @@ export function processIMusicContentCenterEventHandler(
           jsonParams.requestId,
           jsonParams.songCode,
           jsonParams.lyricUrl,
-          jsonParams.errorCode
+          jsonParams.reason
         );
       }
       break;
@@ -152,7 +152,7 @@ export function processIMusicContentCenterEventHandler(
           jsonParams.requestId,
           jsonParams.songCode,
           jsonParams.simpleInfo,
-          jsonParams.errorCode
+          jsonParams.reason
         );
       }
       break;
@@ -164,8 +164,8 @@ export function processIMusicContentCenterEventHandler(
           jsonParams.songCode,
           jsonParams.percent,
           jsonParams.lyricUrl,
-          jsonParams.status,
-          jsonParams.errorCode
+          jsonParams.state,
+          jsonParams.reason
         );
       }
       break;
@@ -217,7 +217,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   protected getApiTypeFromInitialize(
     configuration: MusicContentCenterConfiguration
   ): string {
-    return 'MusicContentCenter_initialize';
+    return 'MusicContentCenter_initialize_df70304';
   }
 
   renewToken(token: string): number {
@@ -235,7 +235,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromRenewToken(token: string): string {
-    return 'MusicContentCenter_renewToken';
+    return 'MusicContentCenter_renewToken_3a2037f';
   }
 
   release(): void {
@@ -263,7 +263,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   protected getApiTypeFromRegisterEventHandler(
     eventHandler: IMusicContentCenterEventHandler
   ): string {
-    return 'MusicContentCenter_registerEventHandler';
+    return 'MusicContentCenter_registerEventHandler_ae49451';
   }
 
   unregisterEventHandler(): number {
@@ -297,7 +297,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromGetMusicCharts(): string {
-    return 'MusicContentCenter_getMusicCharts';
+    return 'MusicContentCenter_getMusicCharts_66d4ecd';
   }
 
   getMusicCollectionByMusicChartId(
@@ -337,7 +337,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     pageSize: number,
     jsonOption?: string
   ): string {
-    return 'MusicContentCenter_getMusicCollectionByMusicChartId';
+    return 'MusicContentCenter_getMusicCollectionByMusicChartId_8cd0b4d';
   }
 
   searchMusic(
@@ -377,7 +377,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     pageSize: number,
     jsonOption?: string
   ): string {
-    return 'MusicContentCenter_searchMusic';
+    return 'MusicContentCenter_searchMusic_3f8cf09';
   }
 
   preload(songCode: number): string {
@@ -396,7 +396,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromPreload(songCode: number): string {
-    return 'MusicContentCenter_preload';
+    return 'MusicContentCenter_preload_d3baeab';
   }
 
   removeCache(songCode: number): number {
@@ -414,7 +414,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromRemoveCache(songCode: number): string {
-    return 'MusicContentCenter_removeCache';
+    return 'MusicContentCenter_removeCache_f631116';
   }
 
   getCaches(): { cacheInfo: MusicCacheInfo[]; cacheInfoSize: number } {
@@ -430,7 +430,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromGetCaches(): string {
-    return 'MusicContentCenter_getCaches';
+    return 'MusicContentCenter_getCaches_c4f9978';
   }
 
   isPreloaded(songCode: number): boolean {
@@ -448,7 +448,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromIsPreloaded(songCode: number): string {
-    return 'MusicContentCenter_isPreloaded';
+    return 'MusicContentCenter_isPreloaded_f631116';
   }
 
   getLyric(songCode: number, lyricType: number = 0): string {
@@ -472,7 +472,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     songCode: number,
     lyricType: number = 0
   ): string {
-    return 'MusicContentCenter_getLyric';
+    return 'MusicContentCenter_getLyric_5ab5efd';
   }
 
   getSongSimpleInfo(songCode: number): string {
@@ -491,7 +491,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
   }
 
   protected getApiTypeFromGetSongSimpleInfo(songCode: number): string {
-    return 'MusicContentCenter_getSongSimpleInfo';
+    return 'MusicContentCenter_getSongSimpleInfo_d3baeab';
   }
 
   getInternalSongCode(songCode: number, jsonOption: string): number {
@@ -518,7 +518,7 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     songCode: number,
     jsonOption: string
   ): string {
-    return 'MusicContentCenter_getInternalSongCode';
+    return 'MusicContentCenter_getInternalSongCode_3a3d1e7';
   }
 }
 
