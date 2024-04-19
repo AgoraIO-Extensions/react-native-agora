@@ -5261,7 +5261,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   queryCameraFocalLengthCapability(): {
-    focalLengthInfos: FocalLengthInfo;
+    focalLengthInfos: FocalLengthInfo[];
     size: number;
   } {
     const apiType = this.getApiTypeFromQueryCameraFocalLengthCapability();

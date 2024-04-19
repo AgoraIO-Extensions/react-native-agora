@@ -208,7 +208,7 @@ export enum MediaSourceType {
    */
   SecondaryScreenSource = 5,
   /**
-   * 6. Custom video source.
+   * 6: Custom video source.
    */
   CustomVideoSource = 6,
   /**
@@ -680,7 +680,7 @@ export class VideoFrame {
    */
   rotation?: number;
   /**
-   * The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. It is required.
+   * The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. This parameter is required.
    */
   renderTimeMs?: number;
   /**
@@ -798,7 +798,7 @@ export class AudioFrame {
    */
   samplesPerChannel?: number;
   /**
-   * The number of bytes per sample. The number of bytes per audio sample, which is usually 16-bit (2-byte).
+   * The number of bytes per sample. For PCM, this parameter is generally set to 16 bits (2 bytes).
    */
   bytesPerSample?: BytesPerSample;
   /**

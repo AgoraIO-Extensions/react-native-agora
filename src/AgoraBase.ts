@@ -319,7 +319,7 @@ export enum ErrorCodeType {
    */
   ErrSetClientRoleNotAuthorized = 119,
   /**
-   * 120: Decryption fails. The user might have entered an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
+   * 120: Media streams decryption fails. The user might use an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
    */
   ErrDecryptionFailed = 120,
   /**
@@ -1447,11 +1447,11 @@ export enum SimulcastStreamMode {
  */
 export class SimulcastStreamConfig {
   /**
-   * The video dimension. See VideoDimensions. The default value is 160 × 120.
+   * The video dimension. See VideoDimensions. The default value is 50% of the high-quality video stream.
    */
   dimensions?: VideoDimensions;
   /**
-   * Video receive bitrate (Kbps), represented by an instantaneous value. The default value is 65.
+   * Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
    */
   kBitrate?: number;
   /**
@@ -1860,15 +1860,15 @@ export enum AudioScenarioType {
  */
 export class VideoFormat {
   /**
-   * The width (px) of the video frame.
+   * The width (px) of the video frame. The default value is 960.
    */
   width?: number;
   /**
-   * The height (px) of the video frame.
+   * The height (px) of the video frame. The default value is 540.
    */
   height?: number;
   /**
-   * The video frame rate (fps).
+   * The video frame rate (fps). The default value is 15.
    */
   fps?: number;
 }
@@ -2073,7 +2073,7 @@ export enum LocalAudioStreamReason {
    */
   LocalAudioStreamReasonNoPlayoutDevice = 7,
   /**
-   * 8: The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
+   * 8: The local audio capture is interrupted by a system call, smart assistants, or alarm clock. Prompt your users to end the phone call, smart assistants, or alarm clock if the local audio capture is required.
    */
   LocalAudioStreamReasonInterrupted = 8,
   /**
@@ -2121,15 +2121,15 @@ export enum LocalVideoStreamReason {
    */
   LocalVideoStreamReasonFailure = 1,
   /**
-   * 2: No permission to use the local video capturing device. Remind the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use CAMERA in the onPermissionError callback instead.
+   * 2: No permission to use the local video capturing device. Prompt the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use CAMERA in the onPermissionError callback instead.
    */
   LocalVideoStreamReasonDeviceNoPermission = 2,
   /**
-   * 3: The local video capturing device is in use. Remind the user to check whether another application occupies the camera.
+   * 3: The local video capturing device is in use. Prompt the user to check if the camera is being used by another app, or try to rejoin the channel.
    */
   LocalVideoStreamReasonDeviceBusy = 3,
   /**
-   * 4: The local video capture fails. Remind your user to check whether the video capture device is working properly, whether the camera is occupied by another application, or try to rejoin the channel.
+   * 4: The local video capture fails. Prompt the user to check whether the video capture device is working properly, whether the camera is used by another app, or try to rejoin the channel.
    */
   LocalVideoStreamReasonCaptureFailure = 4,
   /**
@@ -2137,11 +2137,11 @@ export enum LocalVideoStreamReason {
    */
   LocalVideoStreamReasonCodecNotSupport = 5,
   /**
-   * 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+   * 6: (iOS only) The app is in the background. Prompt the user that video capture cannot be performed normally when the app is in the background.
    */
   LocalVideoStreamReasonCaptureInbackground = 6,
   /**
-   * 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+   * 7: (iOS only) The current app window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Prompt the user that the app cannot capture video properly when it is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
    */
   LocalVideoStreamReasonCaptureMultipleForegroundApps = 7,
   /**
@@ -3438,7 +3438,7 @@ export class VideoCanvas {
    */
   subviewUid?: number;
   /**
-   * The video display window.
+   * The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
    */
   view?: any;
   /**
@@ -3718,7 +3718,7 @@ export class SegmentationProperty {
    */
   modelType?: SegModelType;
   /**
-   * The range of accuracy for identifying green colors (different shades of green) in the view. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of green. When the value of this parameter is too large, the edge of the portrait and the green color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to SegModelGreen.
+   * The accuracy range for recognizing background colors in the image. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of pure color. When the value of this parameter is too large, the edge of the portrait and the pure color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to SegModelGreen.
    */
   greenCapacity?: number;
 }
@@ -4519,7 +4519,7 @@ export class EncryptionConfig {
    */
   encryptionKdfSalt?: number[];
   /**
-   * @ignore
+   * Whether to enable data stream encryption: true : Enable data stream encryption. false : (Default) Disable data stream encryption.
    */
   datastreamEncryptionEnabled?: boolean;
 }
@@ -4533,11 +4533,11 @@ export enum EncryptionErrorType {
    */
   EncryptionErrorInternalFailure = 0,
   /**
-   * 1: Decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+   * 1: Media stream decryption error. Ensure that the receiver and the sender use the same encryption mode and key.
    */
   EncryptionErrorDecryptionFailure = 1,
   /**
-   * 2: Encryption errors.
+   * 2: Media stream encryption error.
    */
   EncryptionErrorEncryptionFailure = 2,
   /**
@@ -4689,19 +4689,19 @@ export class UserInfo {
 }
 
 /**
- * The audio filter of in-ear monitoring.
+ * The audio filter types of in-ear monitoring.
  */
 export enum EarMonitoringFilterType {
   /**
-   * 1<<0: Do not add an audio filter to the in-ear monitor.
+   * 1<<0: No audio filter added to in-ear monitoring.
    */
   EarMonitoringFilterNone = 1 << 0,
   /**
-   * 1<<1: Add an audio filter to the in-ear monitor. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
+   * 1<<1: Add vocal effects audio filter to in-ear monitoring. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
    */
   EarMonitoringFilterBuiltInAudioFilters = 1 << 1,
   /**
-   * 1<<2: Enable noise suppression to the in-ear monitor.
+   * 1<<2: Add noise suppression audio filter to in-ear monitoring.
    */
   EarMonitoringFilterNoiseSuppression = 1 << 2,
   /**
