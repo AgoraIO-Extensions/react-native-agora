@@ -107,6 +107,10 @@ export abstract class IMediaEngine {
   /**
    * Pushes the external audio frame.
    *
+   * Before calling this method to push external audio data, perform the following steps:
+   *  Call createCustomAudioTrack to create a custom audio track and get the audio track ID.
+   *  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+   *
    * @param frame The external audio frame. See AudioFrame.
    * @param trackId The audio track ID. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
    *

@@ -551,7 +551,7 @@ export class RemoteAudioStats {
    */
   rxAudioBytes?: number;
   /**
-   * @ignore
+   * End-to-end audio delay (in milliseconds), which refers to the time from when the audio is captured by the remote user to when it is played by the local user.
    */
   e2eDelay?: number;
 }
@@ -823,11 +823,11 @@ export class PublisherConfiguration {
  */
 export enum CameraDirection {
   /**
-   * The rear camera.
+   * 0: The rear camera.
    */
   CameraRear = 0,
   /**
-   * The front camera.
+   * 1: (Default) The front camera.
    */
   CameraFront = 1,
 }
@@ -855,11 +855,15 @@ export enum CloudProxyType {
  */
 export class CameraCapturerConfiguration {
   /**
-   * This parameter applies to Android and iOS only. The camera direction. See CameraDirection.
+   * (Optional) The camera direction. See CameraDirection.
    */
   cameraDirection?: CameraDirection;
   /**
-   * @ignore
+   * (Optional) The camera focal length type.
+   *  To set the focal length type of the camera, it is only supported to specify the camera through cameraDirection, and not supported to specify it through cameraId.
+   *  For iOS devices equipped with multi-lens rear cameras, such as those featuring dual-camera (wide-angle and ultra-wide-angle) or triple-camera (wide-angle, ultra-wide-angle, and telephoto), you can use one of the following methods to capture video with an ultra-wide-angle perspective:
+   *  Method one: Set this parameter to (2) (ultra-wide lens).
+   *  Method two: Set this parameter to (0) (standard lens), then call setCameraZoomFactor to set the camera's zoom factor to a value less than 1.0, with the minimum setting being 0.5. The difference is that the size of the ultra-wide angle in method one is not adjustable, whereas method two supports adjusting the camera's zoom factor freely.
    */
   cameraFocalLengthType?: CameraFocalLengthType;
   /**
@@ -867,15 +871,19 @@ export class CameraCapturerConfiguration {
    */
   deviceId?: string;
   /**
-   * @ignore
+   * (Optional) The camera ID. The default value is the camera ID of the front camera. You can get the camera ID through the Android native system API, see and for details.
+   *  This parameter is for Android only.
+   *  This parameter and cameraDirection are mutually exclusive in specifying the camera; you can choose one based on your needs. The differences are as follows:
+   *  Specifying the camera via cameraDirection is more straightforward. You only need to indicate the camera direction (front or rear), without specifying a specific camera ID; the SDK will retrieve and confirm the actual camera ID through Android native system APIs.
+   *  Specifying via cameraId allows for more precise identification of a particular camera. For devices with multiple cameras, where cameraDirection cannot recognize or access all available cameras, it is recommended to use cameraId to specify the desired camera ID directly.
    */
   cameraId?: string;
   /**
-   * Whether to follow the video aspect ratio set in setVideoEncoderConfiguration : true : (Default) Follow the set video aspect ratio. The SDK crops the captured video according to the set video aspect ratio and synchronously changes the local preview screen and the video frame in onCaptureVideoFrame and onPreEncodeVideoFrame. false : Do not follow the system default audio playback device. The SDK does not change the aspect ratio of the captured video frame.
+   * (Optional) Whether to follow the video aspect ratio set in setVideoEncoderConfiguration : true : (Default) Follow the set video aspect ratio. The SDK crops the captured video according to the set video aspect ratio and synchronously changes the local preview screen and the video frame in onCaptureVideoFrame and onPreEncodeVideoFrame. false : Do not follow the system default audio playback device. The SDK does not change the aspect ratio of the captured video frame.
    */
   followEncodeDimensionRatio?: boolean;
   /**
-   * The format of the video frame. See VideoFormat.
+   * (Optional) The format of the video frame. See VideoFormat.
    */
   format?: VideoFormat;
 }
@@ -1065,11 +1073,11 @@ export class ChannelMediaOptions {
    */
   publishSecondaryCameraTrack?: boolean;
   /**
-   * @ignore
+   * Whether to publish the video captured by the third camera: true : Publish the video captured by the third camera. false : Do not publish the video captured by the third camera. This parameter is for Android only.
    */
   publishThirdCameraTrack?: boolean;
   /**
-   * @ignore
+   * Whether to publish the video captured by the fourth camera: true : Publish the video captured by the fourth camera. false : Do not publish the video captured by the fourth camera. This parameter is for Android only.
    */
   publishFourthCameraTrack?: boolean;
   /**
@@ -1169,7 +1177,7 @@ export class ChannelMediaOptions {
    */
   channelProfile?: ChannelProfileType;
   /**
-   * @ignore
+   * Delay (in milliseconds) for sending audio frames. You can use this parameter to set the delay of the audio frames that need to be sent, to ensure audio and video synchronization. To switch off the delay, set the value to 0.
    */
   audioDelayMs?: number;
   /**
@@ -1569,7 +1577,7 @@ export interface IRtcEngineEventHandler {
    * Occurs when the local video stream state changes.
    *
    * When the state of the local video stream changes (including the state of the video capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur. The SDK triggers the onLocalVideoStateChanged callback with the state code of LocalVideoStreamStateFailed and error code of LocalVideoStreamReasonCaptureFailure in the following situations:
-   *  The app switches to the background, and the system gets the camera resource.
+   *  The app goes to the background and the system revokes the camera permission.
    *  For Android 9 and later versions, after an app is in the background for a period, the system automatically revokes camera permissions.
    *  For Android 6 and later versions, if the camera is held by a third-party app for a certain duration and then released, the SDK triggers this callback and reports the onLocalVideoStateChanged (LocalVideoStreamStateCapturing, LocalVideoStreamReasonOk) callback.
    *  The camera starts normally, but does not output video frames for four consecutive seconds. When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers the onLocalVideoStateChanged callback with the state code of LocalVideoStreamStateCapturing and error code of LocalVideoStreamReasonCaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps. For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
@@ -5148,7 +5156,7 @@ export abstract class IRtcEngine {
    *  You can call this method either before or after joining a channel.
    *
    * @param enabled Enables or disables in-ear monitoring. true : Enables in-ear monitoring. false : (Default) Disables in-ear monitoring.
-   * @param includeAudioFilters The audio filter of in-ear monitoring: See EarMonitoringFilterType.
+   * @param includeAudioFilters The audio filter types of in-ear monitoring. See EarMonitoringFilterType.
    *
    * @returns
    * 0: Success.
@@ -5234,6 +5242,8 @@ export abstract class IRtcEngine {
    * Sets the camera capture configuration.
    *
    * Call this method before enabling local camera capture, such as before calling startPreview and joinChannel.
+   *  To adjust the camera focal length configuration, It is recommended to call first to check the device's focal length capabilities, and then configure based on the query results.
+   *  Due to limitations on some Android devices, even if you set the focal length type according to the results returned in, the settings may not take effect.
    *
    * @param config The camera capture configuration. See CameraCapturerConfiguration.
    *
@@ -5283,7 +5293,9 @@ export abstract class IRtcEngine {
   /**
    * Switches between front and rear cameras.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * You can call this method to dynamically switch cameras based on the actual camera availability during the app's runtime, without having to restart the video stream or reconfigure the video source.
+   *  This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   *  This method only switches the camera for the video stream captured by the first camera, that is, the video source set to VideoSourceCamera (0) when calling startCameraCapture.
    *
    * @returns
    * 0: Success.
@@ -5345,11 +5357,12 @@ export abstract class IRtcEngine {
   abstract isCameraAutoFocusFaceModeSupported(): boolean;
 
   /**
-   * Sets the camera zoom ratio.
+   * Sets the camera zoom factor.
    *
-   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * For iOS devices equipped with multi-lens rear cameras, such as those featuring dual-camera (wide-angle and ultra-wide-angle) or triple-camera (wide-angle, ultra-wide-angle, and telephoto), you can call setCameraCapturerConfiguration first to set the cameraFocalLengthType as (0) (standard lens). Then, adjust the camera zoom factor to a value less than 1.0. This configuration allows you to capture video with an ultra-wide-angle perspective.
+   *  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
-   * @param factor The camera zoom ratio. The value ranges between 1.0 and the maximum zoom supported by the device. You can get the maximum zoom ratio supported by the device by calling the getCameraMaxZoomFactor method.
+   * @param factor The camera zoom factor. For devices that do not support ultra-wide-angle, the value ranges from 1.0 to the maximum zoom factor; for devices that support ultra-wide-angle, the value ranges from 0.5 to the maximum zoom factor. You can get the maximum zoom factor supported by the device by calling the getCameraMaxZoomFactor method.
    *
    * @returns
    * The camera zoom factor value, if successful.
@@ -5405,7 +5418,6 @@ export abstract class IRtcEngine {
    * Enables the camera flash.
    *
    * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  This method is for Android and iOS only.
    *
    * @param isOn Whether to turn on the camera flash: true : Turn on the flash. false : (Default) Turn off the flash.
    *
@@ -5759,7 +5771,7 @@ export abstract class IRtcEngine {
    * @ignore
    */
   abstract queryCameraFocalLengthCapability(): {
-    focalLengthInfos: FocalLengthInfo;
+    focalLengthInfos: FocalLengthInfo[];
     size: number;
   };
 
@@ -5788,7 +5800,7 @@ export abstract class IRtcEngine {
   /**
    * Retrieves the call ID.
    *
-   * When a user joins a channel on a client, a callId is generated to identify the call from the client. Some methods, such as rate and complain, must be called after the call ends to submit feedback to the SDK. These methods require the callId parameter. Call this method after joining a channel.
+   * When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain. Call this method after joining a channel.
    *
    * @returns
    * The current call ID, if the method succeeds.
@@ -5954,7 +5966,8 @@ export abstract class IRtcEngine {
    * You can call this method to start capturing video from one or more cameras by specifying sourceType. On the iOS platform, if you want to enable multi-camera capture, you need to call enableMultiCamera and set enabled to true before calling this method.
    *
    * @param sourceType The type of the video source. See VideoSourceType.
-   *  On the mobile platforms, you can capture video from up to 2 cameras, provided the device has dual cameras or supports an external camera.
+   *  On iOS devices, you can capture video from up to 2 cameras, provided the device has multiple cameras or supports external cameras.
+   *  On Android devices, you can capture video from up to 4 cameras, provided the device has multiple cameras or supports external cameras.
    * @param config The configuration of the video capture. See CameraCapturerConfiguration. On the iOS platform, this parameter has no practical function. Use the config parameter in enableMultiCamera instead to set the video capture configuration.
    *
    * @returns
@@ -6089,7 +6102,7 @@ export abstract class IRtcEngine {
    *
    * In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel. All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again. If you enable the built-in encryption, you cannot use the Media Push function.
    *
-   * @param enabled Whether to enable built-in encryption: true : Enable the built-in encryption. false : Disable the built-in encryption.
+   * @param enabled Whether to enable built-in encryption: true : Enable the built-in encryption. false : (Default) Disable the built-in encryption.
    * @param config Built-in encryption configurations. See EncryptionConfig.
    *
    * @returns
