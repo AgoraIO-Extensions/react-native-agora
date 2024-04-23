@@ -327,7 +327,7 @@ export enum ErrorCodeType {
    */
   ErrInvalidUserId = 121,
   /**
-   * @ignore
+   * 122: Data streams decryption fails. The user might use an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
    */
   ErrDatastreamDecryptionFailed = 122,
   /**
@@ -893,15 +893,15 @@ export enum VideoCodecType {
 }
 
 /**
- * @ignore
+ * The camera focal length types.
  */
 export enum CameraFocalLengthType {
   /**
-   * @ignore
+   * 0: (Default) Standard lens.
    */
   CameraFocalLengthDefault = 0,
   /**
-   * @ignore
+   * 1: Wide-angle lens.
    */
   CameraFocalLengthWideAngle = 1,
   /**
@@ -909,7 +909,7 @@ export enum CameraFocalLengthType {
    */
   CameraFocalLengthUrltraWide = 2,
   /**
-   * @ignore
+   * 3: (For iOS only) Telephoto lens.
    */
   CameraFocalLengthTelephoto = 3,
 }
@@ -1353,15 +1353,15 @@ export class CodecCapInfo {
 }
 
 /**
- * @ignore
+ * Focal length information supported by the camera, including the camera direction and focal length type.
  */
 export class FocalLengthInfo {
   /**
-   * @ignore
+   * The camera direction. See CameraDirection.
    */
   cameraDirection?: number;
   /**
-   * @ignore
+   * The focal length type. See CameraFocalLengthType.
    */
   focalLengthType?: CameraFocalLengthType;
 }
@@ -1985,27 +1985,29 @@ export enum CaptureBrightnessLevelType {
 }
 
 /**
- * @ignore
+ * Camera stabilization modes.
+ *
+ * The camera stabilization effect increases in the order of 1 < 2 < 3, and the latency will also increase accordingly.
  */
 export enum CameraStabilizationMode {
   /**
-   * @ignore
+   * -1: (Default) Camera stabilization mode off.
    */
   CameraStabilizationModeOff = -1,
   /**
-   * @ignore
+   * 0: Automatic camera stabilization. The system automatically selects a stabilization mode based on the status of the camera. However, the latency is relatively high in this mode, so it is recommended not to use this enumeration.
    */
   CameraStabilizationModeAuto = 0,
   /**
-   * @ignore
+   * 1: (Recommended) Level 1 camera stabilization.
    */
   CameraStabilizationModeLevel1 = 1,
   /**
-   * @ignore
+   * 2: Level 2 camera stabilization.
    */
   CameraStabilizationModeLevel2 = 2,
   /**
-   * @ignore
+   * 3: Level 3 camera stabilization.
    */
   CameraStabilizationModeLevel3 = 3,
   /**
@@ -2157,11 +2159,13 @@ export enum LocalVideoStreamReason {
    */
   LocalVideoStreamReasonDeviceInvalidId = 10,
   /**
-   * @ignore
+   * 14: (Android only) Video capture is interrupted. Possible reasons include the following:
+   *  The camera is being used by another app. Prompt the user to check if the camera is being used by another app.
+   *  The current app has been switched to the background. You can use foreground services to notify the operating system and ensure that the app can still collect video when it switches to the background.
    */
   LocalVideoStreamReasonDeviceInterrupt = 14,
   /**
-   * @ignore
+   * 15: (Android only) The video capture device encounters an error. Prompt the user to close and restart the camera to restore functionality. If this operation does not solve the problem, check if the camera has a hardware failure.
    */
   LocalVideoStreamReasonDeviceFatalError = 15,
   /**
@@ -3864,7 +3868,7 @@ export enum AudioEffectPreset {
    */
   RoomAcousticsVirtualSurroundSound = 0x02010900,
   /**
-   * @ignore
+   * The audio effect of chorus. Agora recommends using this effect in chorus scenarios to enhance the sense of depth and dimension in the vocals.
    */
   RoomAcousticsChorus = 0x02010d00,
   /**
@@ -4541,11 +4545,11 @@ export enum EncryptionErrorType {
    */
   EncryptionErrorEncryptionFailure = 2,
   /**
-   * @ignore
+   * 3: Data stream decryption error. Ensure that the receiver and the sender use the same encryption mode and key.
    */
   EncryptionErrorDatastreamDecryptionFailure = 3,
   /**
-   * @ignore
+   * 4: Data stream encryption error.
    */
   EncryptionErrorDatastreamEncryptionFailure = 4,
 }
@@ -4705,7 +4709,7 @@ export enum EarMonitoringFilterType {
    */
   EarMonitoringFilterNoiseSuppression = 1 << 2,
   /**
-   * @ignore
+   * 1<<15: Reuse the audio filter that has been processed on the sending end for in-ear monitoring. This enumerator reduces CPU usage while increasing in-ear monitoring latency, which is suitable for latency-tolerant scenarios requiring low CPU consumption.
    */
   EarMonitoringFilterReusePostProcessingFilter = 1 << 15,
 }

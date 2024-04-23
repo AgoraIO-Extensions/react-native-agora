@@ -492,7 +492,17 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   abstract getConnectionStateEx(connection: RtcConnection): ConnectionStateType;
 
   /**
-   * @ignore
+   * Enables or disables the built-in encryption.
+   *
+   * All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again. In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.
+   *
+   * @param connection The connection information. See RtcConnection.
+   * @param enabled Whether to enable built-in encryption: true : Enable the built-in encryption. false : (Default) Disable the built-in encryption.
+   * @param config Built-in encryption configurations. See EncryptionConfig.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract enableEncryptionEx(
     connection: RtcConnection,
@@ -896,7 +906,15 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
-   * @ignore
+   * Gets the call ID with the connection ID.
+   *
+   * Call this method after joining a channel. When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
+   *
+   * @param connection The connection information. See RtcConnection.
+   *
+   * @returns
+   * The current call ID, if the method succeeds.
+   *  An empty string, if the method call fails.
    */
   abstract getCallIdEx(connection: RtcConnection): string;
 

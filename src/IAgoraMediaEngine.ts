@@ -100,7 +100,17 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * @ignore
+   * Registers a facial information observer.
+   *
+   * You can call this method to register the onFaceInfo callback to receive the facial information processed by Agora speech driven extension. When calling this method to register a facial information observer, you can register callbacks in the IFaceInfoObserver class as needed. After successfully registering the facial information observer, the SDK triggers the callback you have registered when it captures the facial information converted by the speech driven extension.
+   *  Ensure that you call this method before joining a channel.
+   *  Before calling this method, you need to make sure that the speech driven extension has been enabled by calling enableExtension.
+   *
+   * @param observer Facial information observer, see IFaceInfoObserver.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract registerFaceInfoObserver(observer: IFaceInfoObserver): number;
 
@@ -313,7 +323,13 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
-   * @ignore
+   * Unregisters a facial information observer.
+   *
+   * @param observer Facial information observer, see IFaceInfoObserver.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract unregisterFaceInfoObserver(observer: IFaceInfoObserver): number;
 }

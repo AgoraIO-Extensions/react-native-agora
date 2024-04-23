@@ -859,11 +859,11 @@ export class CameraCapturerConfiguration {
    */
   cameraDirection?: CameraDirection;
   /**
-   * (Optional) The camera focal length type.
+   * (Optional) The camera focal length type. See CameraFocalLengthType.
    *  To set the focal length type of the camera, it is only supported to specify the camera through cameraDirection, and not supported to specify it through cameraId.
    *  For iOS devices equipped with multi-lens rear cameras, such as those featuring dual-camera (wide-angle and ultra-wide-angle) or triple-camera (wide-angle, ultra-wide-angle, and telephoto), you can use one of the following methods to capture video with an ultra-wide-angle perspective:
-   *  Method one: Set this parameter to (2) (ultra-wide lens).
-   *  Method two: Set this parameter to (0) (standard lens), then call setCameraZoomFactor to set the camera's zoom factor to a value less than 1.0, with the minimum setting being 0.5. The difference is that the size of the ultra-wide angle in method one is not adjustable, whereas method two supports adjusting the camera's zoom factor freely.
+   *  Method one: Set this parameter to CameraFocalLengthUltraWide (2) (ultra-wide lens).
+   *  Method two: Set this parameter to CameraFocalLengthDefault (0) (standard lens), then call setCameraZoomFactor to set the camera's zoom factor to a value less than 1.0, with the minimum setting being 0.5. The difference is that the size of the ultra-wide angle in method one is not adjustable, whereas method two supports adjusting the camera's zoom factor freely.
    */
   cameraFocalLengthType?: CameraFocalLengthType;
   /**
@@ -1576,11 +1576,7 @@ export interface IRtcEngineEventHandler {
   /**
    * Occurs when the local video stream state changes.
    *
-   * When the state of the local video stream changes (including the state of the video capture and encoding), the SDK triggers this callback to report the current state. This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur. The SDK triggers the onLocalVideoStateChanged callback with the state code of LocalVideoStreamStateFailed and error code of LocalVideoStreamReasonCaptureFailure in the following situations:
-   *  The app goes to the background and the system revokes the camera permission.
-   *  For Android 9 and later versions, after an app is in the background for a period, the system automatically revokes camera permissions.
-   *  For Android 6 and later versions, if the camera is held by a third-party app for a certain duration and then released, the SDK triggers this callback and reports the onLocalVideoStateChanged (LocalVideoStreamStateCapturing, LocalVideoStreamReasonOk) callback.
-   *  The camera starts normally, but does not output video frames for four consecutive seconds. When the camera outputs the captured video frames, if the video frames are the same for 15 consecutive frames, the SDK triggers the onLocalVideoStateChanged callback with the state code of LocalVideoStreamStateCapturing and error code of LocalVideoStreamReasonCaptureFailure. Note that the video frame duplication detection is only available for video frames with a resolution greater than 200 × 200, a frame rate greater than or equal to 10 fps, and a bitrate less than 20 Kbps. For some device models, the SDK does not trigger this callback when the state of the local video changes while the local video capturing device is in use, so you have to make your own timeout judgment.
+   * When the status of the local video changes, the SDK triggers this callback to report the current local video state and the reason for the state change.
    *
    * @param source The type of the video source. See VideoSourceType.
    * @param state The state of the local video, see LocalVideoStreamState.
@@ -2906,131 +2902,28 @@ export abstract class IRtcEngine {
    */
   abstract initialize(context: RtcEngineContext): number;
 
-  /**
-   * Gets the SDK version.
-   *
-   * @returns
-   * One SDKBuildInfo object.
-   */
   abstract getVersion(): SDKBuildInfo;
 
-  /**
-   * Gets the warning or error description.
-   *
-   * @param code The error code or warning code reported by the SDK.
-   *
-   * @returns
-   * The specific error or warning description.
-   */
   abstract getErrorDescription(code: number): string;
 
-  /**
-   * Queries the current device's supported video codec capabilities.
-   *
-   * @returns
-   * If the call is successful, an object containing the following attributes is returned: codecInfo : The CodecCapInfo array, indicating the video codec capabillity of the device. size : The size of the CodecCapInfo array.
-   *  If the call timeouts, please modify the call logic and do not invoke the method in the main thread.
-   */
   abstract queryCodecCapability(): { codecInfo: CodecCapInfo[]; size: number };
 
-  /**
-   * Queries device score.
-   *
-   * @returns
-   * >0: The method call succeeeds, the value is the current device's score, the range is [0,100], the larger the value, the stronger the device capability. Most devices are rated between 60 and 100.
-   *  < 0: Failure.
-   */
   abstract queryDeviceScore(): number;
 
-  /**
-   * Preloads a channel with token, channelId, and uid.
-   *
-   * When audience members need to switch between different channels frequently, calling the method can help shortening the time of joining a channel, thus reducing the time it takes for audience members to hear and see the host. As it may take a while for the SDK to preload a channel, Agora recommends that you call this method as soon as possible after obtaining the channel name and user ID to join a channel.
-   *  When calling this method, ensure you set the user role as audience and do not set the audio scenario as AudioScenarioChorus, otherwise, this method does not take effect.
-   *  You also need to make sure that the channel name, user ID and token passed in for preloading are the same as the values passed in when joinning the channel, otherwise, this method does not take effect.
-   *  One IRtcEngine instance supports preloading 20 channels at most. When exceeding this limit, the latest 20 preloaded channels take effect.
-   *  Failing to preload a channel does not mean that you can't join a channel, nor will it increase the time of joining a channel. If you join a preloaded channel, leave it and want to rejoin the same channel, you do not need to call this method unless the token for preloading the channel expires.
-   *
-   * @param token The token generated on your server for authentication. When the token for preloading channels expires, you can update the token based on the number of channels you preload.
-   *  When preloading one channel, calling this method to pass in the new token.
-   *  When preloading more than one channels:
-   *  If you use a wildcard token for all preloaded channels, call updatePreloadChannelToken to update the token. When generating a wildcard token, ensure the user ID is not set as 0.
-   *  If you use different tokens to preload different channels, call this method to pass in your user ID, channel name and the new token.
-   * @param channelId The channel name that you want to preload. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
-   *  All lowercase English letters: a to z.
-   *  All uppercase English letters: A to Z.
-   *  All numeric characters: 0 to 9.
-   *  Space
-   *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-   * @param uid The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -102: The channel name is invalid. You need to pass in a valid channel name and join the channel again.
-   */
   abstract preloadChannel(
     token: string,
     channelId: string,
     uid: number
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract preloadChannelWithUserAccount(
     token: string,
     channelId: string,
     userAccount: string
   ): number;
 
-  /**
-   * Updates the wildcard token for preloading channels.
-   *
-   * You need to maintain the life cycle of the wildcard token by yourself. When the token expires, you need to generate a new wildcard token and then call this method to pass in the new token.
-   *
-   * @param token The new token.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid. For example, the token is invalid. You need to pass in a valid parameter and join the channel again.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   */
   abstract updatePreloadChannelToken(token: string): number;
 
-  /**
-   * Joins a channel with media options.
-   *
-   * This method enables users to join a channel. Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other. A successful call of this method triggers the following callbacks:
-   *  The local client: The onJoinChannelSuccess and onConnectionStateChanged callbacks.
-   *  The remote client: onUserJoined, if the user joining the channel is in the Communication profile or is a host in the Live-broadcasting profile. When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the onRejoinChannelSuccess callback on the local client.
-   *  This method allows users to join only one channel at a time.
-   *  Ensure that the app ID you use to generate the token is the same app ID that you pass in the initialize method; otherwise, you may fail to join the channel by token.
-   *  If you choose the Testing Mode (using an App ID for authentication) for your project and call this method to join a channel, you will automatically exit the channel after 24 hours.
-   *
-   * @param token The token generated on your server for authentication. If you need to join different channels at the same time or switch between channels, Agora recommends using a wildcard token so that you don't need to apply for a new token every time joining a channel.
-   * @param channelId The channel name. This parameter signifies the channel in which users engage in real-time audio and video interaction. Under the premise of the same App ID, users who fill in the same channel ID enter the same channel for audio and video interaction. The string length must be less than 64 bytes. Supported characters (89 characters in total):
-   *  All lowercase English letters: a to z.
-   *  All uppercase English letters: A to Z.
-   *  All numeric characters: 0 to 9.
-   *  Space
-   *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-   * @param uid The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and returns it in the onJoinChannelSuccess callback. Your app must record and maintain the returned user ID, because the SDK does not do so.
-   * @param options The channel media options. See ChannelMediaOptions.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
-   *  -3: Failes to initialize the IRtcEngine object. You need to reinitialize the IRtcEngine object.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -8: The internal state of the IRtcEngine object is wrong. The typical cause is that you call this method to join the channel without calling startEchoTest to stop the test after calling stopEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
-   *  -17: The request to join the channel is rejected. The typical cause is that the user is in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
-   *  -102: The channel name is invalid. You need to pass in a valid channelname in channelId to rejoin the channel.
-   *  -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
-   */
   abstract joinChannel(
     token: string,
     channelId: string,
@@ -3038,374 +2931,68 @@ export abstract class IRtcEngine {
     options: ChannelMediaOptions
   ): number;
 
-  /**
-   * Updates the channel media options after joining the channel.
-   *
-   * @param options The channel media options. See ChannelMediaOptions.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The value of a member in the ChannelMediaOptions structure is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -8: The internal state of the IRtcEngine object is wrong. The possible reason is that the user is not in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. If you receive the ConnectionStateDisconnected (1) or ConnectionStateFailed (5) state, the user is not in the channel. You need to call joinChannel to join a channel before calling this method.
-   */
   abstract updateChannelMediaOptions(options: ChannelMediaOptions): number;
 
-  /**
-   * Sets channel options and leaves the channel.
-   *
-   * If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-   *  If you have called joinChannelEx to join multiple channels, calling this method will leave the channels when calling joinChannel and joinChannelEx at the same time. This method will release all resources related to the session, leave the channel, that is, hang up or exit the call. This method can be called whether or not a call is currently in progress. After joining the channel, you must call this method or to end the call, otherwise, the next call cannot be started. Calling this method does not necessarily mean that the user has left the channel. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
-   *
-   * @param options The options for leaving the channel. See LeaveChannelOptions.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract leaveChannel(options?: LeaveChannelOptions): number;
 
-  /**
-   * Renews the token.
-   *
-   * The SDK triggers the onTokenPrivilegeWillExpire callback. onConnectionStateChanged The ConnectionChangedTokenExpired callback reports (9).
-   *
-   * @param token The new token.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid. For example, the token is invalid. You need to fill in a valid parameter.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   */
   abstract renewToken(token: string): number;
 
-  /**
-   * Sets the channel profile.
-   *
-   * After initializing the SDK, the default channel profile is the live streaming profile. You can call this method to set the channel profile. The Agora SDK differentiates channel profiles and applies optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call and prioritizes video quality for interactive live video streaming.
-   *  To ensure the quality of real-time communication, Agora recommends that all users in a channel use the same channel profile.
-   *  This method must be called and set before joinChannel, and cannot be set again after joining the channel.
-   *  The default audio route and video encoding bitrate are different in different channel profiles. See setDefaultAudioRouteToSpeakerphone and setVideoEncoderConfiguration.
-   *
-   * @param profile The channel profile. See ChannelProfileType.
-   *
-   * @returns
-   * 0(ERR_OK): Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid.
-   *  -7: The SDK is not initialized.
-   */
   abstract setChannelProfile(profile: ChannelProfileType): number;
 
-  /**
-   * Sets the user role and level in an interactive live streaming channel.
-   *
-   * In the interactive live streaming profile, the SDK sets the user role as audience by default. You can call this method to set the user role as host. You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
-   *  Calls muteLocalAudioStream and muteLocalVideoStream to change the publishing state.
-   *  Triggers onClientRoleChanged on the local client.
-   *  Triggers onUserJoined or onUserOffline on the remote client. This method applies to the interactive live streaming profile (the profile parameter of setChannelProfile is set as ChannelProfileLiveBroadcasting) only.
-   *
-   * @param role The user role in the interactive live streaming. See ClientRoleType.
-   * @param options The detailed options of a user, including the user level. See ClientRoleOptions.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   *  -2: The parameter is invalid.
-   *  -5: The request is rejected.
-   *  -7: The SDK is not initialized.
-   */
   abstract setClientRole(
     role: ClientRoleType,
     options?: ClientRoleOptions
   ): number;
 
-  /**
-   * Starts an audio device loopback test.
-   *
-   * To test whether the user's local sending and receiving streams are normal, you can call this method to perform an audio and video call loop test, which tests whether the audio and video devices and the user's upstream and downstream networks are working properly. After starting the test, the user needs to make a sound or face the camera. The audio or video is output after about two seconds. If the audio playback is normal, the audio device and the user's upstream and downstream networks are working properly; if the video playback is normal, the video device and the user's upstream and downstream networks are working properly.
-   *  You can call this method either before or after joining a channel. When calling in a channel, make sure that no audio or video stream is being published.
-   *  After calling this method, call stopEchoTest to end the test; otherwise, the user cannot perform the next audio and video call loop test and cannot join the channel.
-   *  In live streaming scenarios, this method only applies to hosts.
-   *
-   * @param config The configuration of the audio and video call loop test. See EchoTestConfiguration.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract startEchoTest(config: EchoTestConfiguration): number;
 
-  /**
-   * Stops the audio call test.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -5(ERR_REFUSED): Failed to stop the echo test. The echo test may not be running.
-   */
   abstract stopEchoTest(): number;
 
-  /**
-   * Enables or disables multi-camera capture.
-   *
-   * In scenarios where there are existing cameras to capture video, Agora recommends that you use the following steps to capture and publish video with multiple cameras:
-   *  Call this method to enable multi-channel camera capture.
-   *  Call startPreview to start the local video preview.
-   *  Call startCameraCapture, and set sourceType to start video capture with the second camera.
-   *  Call joinChannelEx, and set publishSecondaryCameraTrack to true to publish the video stream captured by the second camera in the channel. If you want to disable multi-channel camera capture, use the following steps:
-   *  Call stopCameraCapture.
-   *  Call this method with enabled set to false. You can call this method before and after startPreview to enable multi-camera capture:
-   *  If it is enabled before startPreview, the local video preview shows the image captured by the two cameras at the same time.
-   *  If it is enabled after startPreview, the SDK stops the current camera capture first, and then enables the primary camera and the second camera. The local video preview appears black for a short time, and then automatically returns to normal. This method applies to iOS only. When using this function, ensure that the system version is 13.0 or later. The minimum iOS device types that support multi-camera capture are as follows:
-   *  iPhone XR
-   *  iPhone XS
-   *  iPhone XS Max
-   *  iPad Pro 3rd generation and later
-   *
-   * @param enabled Whether to enable multi-camera video capture mode: true : Enable multi-camera capture mode; the SDK uses multiple cameras to capture video. false : Disable multi-camera capture mode; the SDK uses a single camera to capture video.
-   * @param config Capture configuration for the second camera. See CameraCapturerConfiguration.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableMultiCamera(
     enabled: boolean,
     config: CameraCapturerConfiguration
   ): number;
 
-  /**
-   * Enables the video module.
-   *
-   * Call this method either before joining a channel or during a call. If this method is called before joining a channel, the call starts in the video mode; if called during a call, the audio call switches to a video call. Call disableVideo to disable the video mode. A successful call of this method triggers the onRemoteVideoStateChanged callback on the remote client.
-   *  This method enables the internal engine and is valid after leaving the channel.
-   *  Calling this method will reset the entire engine, resulting in a slow response time. Instead of callling this method, you can independently control a specific video module based on your actual needs using the following methods: enableLocalVideo : Whether to enable the camera to create the local video stream. muteLocalVideoStream : Whether to publish the local video stream. muteRemoteVideoStream : Whether to subscribe to and play the remote video stream. muteAllRemoteVideoStreams : Whether to subscribe to and play all remote video streams.
-   *  A successful call of this method resets enableLocalVideo, muteRemoteVideoStream, and muteAllRemoteVideoStreams. Proceed it with caution.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableVideo(): number;
 
-  /**
-   * Disables the video module.
-   *
-   * This method can be called before joining a channel or during a call to disable the video module. If it is called before joining a channel, an audio call starts when you join the channel; if called during a call, a video call switches to an audio call. Call enableVideo to enable the video module. A successful call of this method triggers the onUserEnableVideo (false) callback on the remote client.
-   *  This method affects the internal engine and can be called after leaving the channel.
-   *  This method resets the internal engine and thus might takes some time to take effect. Agora recommends using the following APIs to control the video modules separately: enableLocalVideo : Whether to enable the camera to create the local video stream. muteLocalVideoStream : Whether to publish the local video stream. muteRemoteVideoStream : Whether to subscribe to and play the remote video stream. muteAllRemoteVideoStreams : Whether to subscribe to and play all remote video streams.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract disableVideo(): number;
 
-  /**
-   * Enables the local video preview and specifies the video source for the preview.
-   *
-   * You can call this method to enable local video preview. Call this method after the following:
-   *  Call enableVideo to enable the video module.
-   *  The local preview enables the mirror mode by default.
-   *  After the local video preview is enabled, if you call leaveChannel to exit the channel, the local preview remains until you call stopPreview to disable it.
-   *
-   * @param sourceType The type of the video source. See VideoSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract startPreview(sourceType?: VideoSourceType): number;
 
-  /**
-   * Stops the local video preview.
-   *
-   * After calling startPreview to start the preview, if you want to close the local video preview, call this method. Call this method before joining a channel or after leaving a channel.
-   *
-   * @param sourceType The type of the video source. See VideoSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract stopPreview(sourceType?: VideoSourceType): number;
 
-  /**
-   * Starts the last mile network probe test.
-   *
-   * This method starts the last-mile network probe test before joining a channel to get the uplink and downlink last mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT). Once this method is enabled, the SDK returns the following callbacks: onLastmileQuality : The SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions and is more closely linked to the user experience. onLastmileProbeResult : The SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective. This method must be called before joining the channel, and is used to judge and predict whether the current uplink network quality is good enough.
-   *  Do not call other methods before receiving the onLastmileQuality and onLastmileProbeResult callbacks. Otherwise, the callbacks may be interrupted.
-   *  A host should not call this method after joining a channel (when in a call).
-   *
-   * @param config The configurations of the last-mile network probe test. See LastmileProbeConfig.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract startLastmileProbeTest(config: LastmileProbeConfig): number;
 
-  /**
-   * Stops the last mile network probe test.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract stopLastmileProbeTest(): number;
 
-  /**
-   * Sets the video encoder configuration.
-   *
-   * Sets the encoder configuration for the local video. Each configuration profile corresponds to a set of video parameters, including the resolution, frame rate, and bitrate. The config specified in this method is the maximum value under ideal network conditions. If the video engine cannot render the video using the specified config due to unreliable network conditions, the parameters further down the list are considered until a successful configuration is found. Call this method before joining a channel. Agora recommends calling this method before enableVideo to reduce the time to render the first video frame.
-   *
-   * @param config Video profile. See VideoEncoderConfiguration.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setVideoEncoderConfiguration(
     config: VideoEncoderConfiguration
   ): number;
 
-  /**
-   * Sets the image enhancement options.
-   *
-   * Enables or disables image enhancement, and sets the options.
-   *  Call this method after calling enableVideo or startPreview.
-   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device.
-   *
-   * @param enabled Whether to enable the image enhancement function: true : Enable the image enhancement function. false : (Default) Disable the image enhancement function.
-   * @param options The image enhancement options. See BeautyOptions.
-   * @param type Source type of the extension. See MediaSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -4: The current device does not support this feature. Possible reasons include:
-   *  The current device capabilities do not meet the requirements for image enhancement. Agora recommends you replace it with a high-performance device.
-   *  The current device version is lower than Android 5.0 and does not support this feature. Agora recommends you replace the device or upgrade the operating system.
-   */
   abstract setBeautyEffectOptions(
     enabled: boolean,
     options: BeautyOptions,
     type?: MediaSourceType
   ): number;
 
-  /**
-   * Sets low-light enhancement.
-   *
-   * The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
-   *  Call this method after calling enableVideo.
-   *  Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.
-   *  Both this method and setExtensionProperty can turn on low-light enhancement:
-   *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-   *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param enabled Whether to enable low-light enhancement: true : Enable low-light enhancement. false : (Default) Disable low-light enhancement.
-   * @param options The low-light enhancement options. See LowlightEnhanceOptions.
-   * @param type The type of the video source. See MediaSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLowlightEnhanceOptions(
     enabled: boolean,
     options: LowlightEnhanceOptions,
     type?: MediaSourceType
   ): number;
 
-  /**
-   * Sets video noise reduction.
-   *
-   * Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding. You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.
-   *  Call this method after calling enableVideo.
-   *  Video noise reduction has certain requirements for equipment performance. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.
-   *  Both this method and setExtensionProperty can turn on video noise reduction function:
-   *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-   *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param enabled Whether to enable video noise reduction: true : Enable video noise reduction. false : (Default) Disable video noise reduction.
-   * @param options The video noise reduction options. See VideoDenoiserOptions.
-   * @param type The type of the video source. See MediaSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setVideoDenoiserOptions(
     enabled: boolean,
     options: VideoDenoiserOptions,
     type?: MediaSourceType
   ): number;
 
-  /**
-   * Sets color enhancement.
-   *
-   * The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
-   *  Call this method after calling enableVideo.
-   *  The color enhancement feature has certain performance requirements on devices. With color enhancement turned on, Agora recommends that you change the color enhancement level to one that consumes less performance or turn off color enhancement if your device is experiencing severe heat problems.
-   *  Both this method and setExtensionProperty can enable color enhancement:
-   *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-   *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param enabled Whether to enable color enhancement: true Enable color enhancement. false : (Default) Disable color enhancement.
-   * @param options The color enhancement options. See ColorEnhanceOptions.
-   * @param type The type of the video source. See MediaSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setColorEnhanceOptions(
     enabled: boolean,
     options: ColorEnhanceOptions,
     type?: MediaSourceType
   ): number;
 
-  /**
-   * Enables/Disables the virtual background.
-   *
-   * The virtual background feature enables the local user to replace their original background with a static image, dynamic video, blurred background, or portrait-background segmentation to achieve picture-in-picture effect. Once the virtual background feature is enabled, all users in the channel can see the custom background. Call this method after calling enableVideo or startPreview.
-   *  This feature has high requirements on device performance. When calling this method, the SDK automatically checks the capabilities of the current device. Agora recommends you use virtual background on devices with the following processors:
-   *  Snapdragon 700 series 750G and later
-   *  Snapdragon 800 series 835 and later
-   *  Dimensity 700 series 720 and later
-   *  Kirin 800 series 810 and later
-   *  Kirin 900 series 980 and later
-   *  Devices with an A9 chip and better, as follows:
-   *  iPhone 6S and later
-   *  iPad Air 3rd generation and later
-   *  iPad 5th generation and later
-   *  iPad Pro 1st generation and later
-   *  iPad mini 5th generation and later
-   *  Agora recommends that you use this feature in scenarios that meet the following conditions:
-   *  A high-definition camera device is used, and the environment is uniformly lit.
-   *  There are few objects in the captured video. Portraits are half-length and unobstructed. Ensure that the background is a solid color that is different from the color of the user's clothing.
-   *  This method relies on the virtual background dynamic library libagora_segmentation_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param enabled Whether to enable virtual background: true : Enable virtual background. false : Disable virtual background.
-   * @param backgroundSource The custom background. See VirtualBackgroundSource. To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
-   * @param segproperty Processing properties for background images. See SegmentationProperty.
-   * @param type The type of the video source. See MediaSourceType. In this method, this parameter supports only the following two settings:
-   *  The default value is PrimaryCameraSource.
-   *  If you want to use the second camera to capture video, set this parameter to SecondaryCameraSource.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -4: The device capabilities do not meet the requirements for the virtual background feature. Agora recommends you try it on devices with higher performance.
-   */
   abstract enableVirtualBackground(
     enabled: boolean,
     backgroundSource: VirtualBackgroundSource,
@@ -3413,499 +3000,100 @@ export abstract class IRtcEngine {
     type?: MediaSourceType
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract setupRemoteVideo(canvas: VideoCanvas): number;
 
-  /**
-   * @ignore
-   */
   abstract setupLocalVideo(canvas: VideoCanvas): number;
 
-  /**
-   * Sets video application scenarios.
-   *
-   * After successfully calling this method, the SDK will automatically enable the best practice strategies and adjust key performance metrics based on the specified scenario, to optimize the video experience. Ensure that you call this method before joining a channel.
-   *
-   * @param scenarioType The type of video application scenario. See VideoApplicationScenarioType. If set to ApplicationScenarioMeeting (1), the SDK automatically enables the following strategies:
-   *  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
-   *  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
-   *  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
-   *  If someone subscribes to the high-quality stream, the SDK resets the high-quality stream to the VideoEncoderConfiguration configuration used in the most recent calling of setVideoEncoderConfiguration. If no configuration has been set by the user previously, the following values are used:
-   *  Resolution: 960 × 540
-   *  Frame rate: 15 fps
-   *  Bitrate: 1000 Kbps
-   *  The SDK monitors the number of subscribers to the low-quality video stream in real time and dynamically enables or disables it based on the number of subscribers. If the user has called setDualStreamMode to set that never send low-quality video stream (DisableSimulcastStream), the dynamic adjustment of the low-quality stream in meeting scenarios will not take effect.
-   *  If nobody subscribes to the low-quality stream, the SDK automatically disables it to save upstream bandwidth.
-   *  If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:
-   *  Resolution: 480 × 272
-   *  Frame rate: 15 fps
-   *  Bitrate: 500 Kbps
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   *  -4: Video application scenarios are not supported. Possible reasons include that you use the Voice SDK instead of the Video SDK.
-   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   */
   abstract setVideoScenario(scenarioType: VideoApplicationScenarioType): number;
 
-  /**
-   * @ignore
-   */
   abstract setVideoQoEPreference(qoePreference: VideoQoePreferenceType): number;
 
-  /**
-   * Enables the audio module.
-   *
-   * The audio mode is enabled by default.
-   *  This method enables the internal engine and can be called anytime after initialization. It is still valid after one leaves channel.
-   *  Calling this method will reset the entire engine, resulting in a slow response time. Instead of callling this method, you can independently control a specific audio module based on your actual needs using the following methods: enableLocalAudio : Whether to enable the microphone to create the local audio stream. muteLocalAudioStream : Whether to publish the local audio stream. muteRemoteAudioStream : Whether to subscribe and play the remote audio stream. muteAllRemoteAudioStreams : Whether to subscribe to and play all remote audio streams.
-   *  A successful call of this method resets enableLocalAudio, muteRemoteAudioStream, and muteAllRemoteAudioStreams. Proceed it with caution.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableAudio(): number;
 
-  /**
-   * Disables the audio module.
-   *
-   * This method disables the internal engine and can be called anytime after initialization. It is still valid after one leaves channel.
-   *  This method resets the internal engine and takes some time to take effect. Agora recommends using the following API methods to control the audio modules separately: enableLocalAudio : Whether to enable the microphone to create the local audio stream. muteLocalAudioStream : Whether to publish the local audio stream. muteRemoteAudioStream : Whether to subscribe and play the remote audio stream. muteAllRemoteAudioStreams : Whether to subscribe to and play all remote audio streams.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract disableAudio(): number;
 
-  /**
-   * Sets the audio profile and audio scenario.
-   *
-   * You can call this method either before or after joining a channel.
-   *  Due to iOS system restrictions, some audio routes cannot be recognized in call volume mode. Therefore, if you need to use an external sound card, it is recommended to set the audio scenario to AudioScenarioGameStreaming (3). In this scenario, the SDK will switch to media volume to avoid this issue.
-   *  In scenarios requiring high-quality audio, such as online music tutoring, Agora recommends you set profile as AudioProfileMusicHighQuality (4) and scenario as AudioScenarioGameStreaming (3).
-   *
-   * @param profile The audio profile, including the sampling rate, bitrate, encoding mode, and the number of channels. See AudioProfileType.
-   * @param scenario The audio scenarios. Under different audio scenarios, the device uses different volume types. See AudioScenarioType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioProfile(
     profile: AudioProfileType,
     scenario?: AudioScenarioType
   ): number;
 
-  /**
-   * Sets audio scenarios.
-   *
-   * Due to iOS system restrictions, some audio routes cannot be recognized in call volume mode. Therefore, if you need to use an external sound card, it is recommended to set the audio scenario to AudioScenarioGameStreaming (3). In this scenario, the SDK will switch to media volume to avoid this issue.
-   *  You can call this method either before or after joining a channel.
-   *
-   * @param scenario The audio scenarios. Under different audio scenarios, the device uses different volume types. See AudioScenarioType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioScenario(scenario: AudioScenarioType): number;
 
-  /**
-   * Enables or disables the local audio capture.
-   *
-   * The audio function is enabled by default when users joining a channel. This method disables or re-enables the local audio function to stop or restart local audio capturing. This method does not affect receiving the remote audio streams, and enableLocalAudio (false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel. Once the local audio function is disabled or re-enabled, the SDK triggers the onLocalAudioStateChanged callback, which reports LocalAudioStreamStateStopped (0) or LocalAudioStreamStateRecording (1).
-   *  The difference between this method and muteLocalAudioStream are as follow: enableLocalAudio : Disables or re-enables the local audio capturing and processing. If you disable or re-enable local audio capturing using the enableLocalAudio method, the local user might hear a pause in the remote audio playback. muteLocalAudioStream : Sends or stops sending the local audio streams.
-   *  You can call this method either before or after joining a channel. Calling it before joining a channel only sets the device state, and it takes effect immediately after you join the channel.
-   *
-   * @param enabled true : (Default) Re-enable the local audio function, that is, to start the local audio capturing device (for example, the microphone). false : Disable the local audio function, that is, to stop local audio capturing.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableLocalAudio(enabled: boolean): number;
 
-  /**
-   * Stops or resumes publishing the local audio stream.
-   *
-   * This method does not affect any ongoing audio recording, because it does not disable the audio capture device. A successful call of this method triggers the onUserMuteAudio and onRemoteAudioStateChanged callbacks on the remote client.
-   *
-   * @param mute Whether to stop publishing the local audio stream: true : Stops publishing the local audio stream. false : (Default) Resumes publishing the local audio stream.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract muteLocalAudioStream(mute: boolean): number;
 
-  /**
-   * Stops or resumes subscribing to the audio streams of all remote users.
-   *
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
-   *  Call this method after joining a channel.
-   *  If you do not want to subscribe the audio streams of remote users before joining a channel, you can set autoSubscribeAudio as false when calling joinChannel.
-   *
-   * @param mute Whether to stop subscribing to the audio streams of all remote users: true : Stops subscribing to the audio streams of all remote users. false : (Default) Subscribes to the audio streams of all remote users by default.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract muteAllRemoteAudioStreams(mute: boolean): number;
 
-  /**
-   * @ignore
-   */
   abstract setDefaultMuteAllRemoteAudioStreams(mute: boolean): number;
 
-  /**
-   * Stops or resumes subscribing to the audio stream of a specified user.
-   *
-   * Call this method after joining a channel.
-   *
-   * @param uid The user ID of the specified user.
-   * @param mute Whether to subscribe to the specified remote user's audio stream. true : Stop subscribing to the audio stream of the specified user. false : (Default) Subscribe to the audio stream of the specified user.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract muteRemoteAudioStream(uid: number, mute: boolean): number;
 
-  /**
-   * Stops or resumes publishing the local video stream.
-   *
-   * A successful call of this method triggers the onUserMuteVideo callback on the remote client.
-   *  This method executes faster than the enableLocalVideo (false) method, which controls the sending of the local video stream.
-   *  This method does not affect any ongoing video recording, because it does not disable the camera.
-   *
-   * @param mute Whether to stop publishing the local video stream. true : Stop publishing the local video stream. false : (Default) Publish the local video stream.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract muteLocalVideoStream(mute: boolean): number;
 
-  /**
-   * Enables/Disables the local video capture.
-   *
-   * This method disables or re-enables the local video capture, and does not affect receiving the remote video stream. After calling enableVideo, the local video capture is enabled by default. If you call enableLocalVideo (false) to disable local video capture within the channel, it also simultaneously stops publishing the video stream within the channel. If you want to restart video catpure, you can call enableLocalVideo (true) and then call updateChannelMediaOptions to set the options parameter to publish the locally captured video stream in the channel. After the local video capturer is successfully disabled or re-enabled, the SDK triggers the onRemoteVideoStateChanged callback on the remote client.
-   *  You can call this method either before or after joining a channel.
-   *  This method enables the internal engine and is valid after leaving the channel.
-   *
-   * @param enabled Whether to enable the local video capture. true : (Default) Enable the local video capture. false : Disable the local video capture. Once the local video is disabled, the remote users cannot receive the video stream of the local user, while the local user can still receive the video streams of remote users. When set to false, this method does not require a local camera.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableLocalVideo(enabled: boolean): number;
 
-  /**
-   * Stops or resumes subscribing to the video streams of all remote users.
-   *
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
-   *  Call this method after joining a channel.
-   *  If you do not want to subscribe the video streams of remote users before joining a channel, you can call joinChannel and set autoSubscribeVideo as false.
-   *
-   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract muteAllRemoteVideoStreams(mute: boolean): number;
 
-  /**
-   * @ignore
-   */
   abstract setDefaultMuteAllRemoteVideoStreams(mute: boolean): number;
 
-  /**
-   * Sets the default video stream type to subscribe to.
-   *
-   * The SDK will dynamically adjust the size of the corresponding video stream based on the size of the video window to save bandwidth and computing resources. The default aspect ratio of the low-quality video stream is the same as that of the high-quality video stream. According to the current aspect ratio of the high-quality video stream, the system will automatically allocate the resolution, frame rate, and bitrate of the low-quality video stream. The SDK defaults to enabling low-quality video stream adaptive mode (AutoSimulcastStream) on the sending end, which means the sender does not actively send low-quality video stream. The receiver with the role of the host can initiate a low-quality video stream request by calling this method, and upon receiving the request, the sending end automatically starts sending the low-quality video stream.
-   *  Call this method before joining a channel. The SDK does not support changing the default subscribed video stream type after joining a channel.
-   *  If you call both this method and setRemoteVideoStreamType, the setting of setRemoteVideoStreamType takes effect.
-   *
-   * @param streamType The default video-stream type. See VideoStreamType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRemoteDefaultVideoStreamType(streamType: VideoStreamType): number;
 
-  /**
-   * Stops or resumes subscribing to the video stream of a specified user.
-   *
-   * Call this method after joining a channel.
-   *
-   * @param uid The user ID of the specified user.
-   * @param mute Whether to subscribe to the specified remote user's video stream. true : Stop subscribing to the video streams of the specified user. false : (Default) Subscribe to the video stream of the specified user.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract muteRemoteVideoStream(uid: number, mute: boolean): number;
 
-  /**
-   * Sets the video stream type to subscribe to.
-   *
-   * The SDK defaults to enabling low-quality video stream adaptive mode (AutoSimulcastStream) on the sending end, which means the sender does not actively send low-quality video stream. The receiver with the role of the host can initiate a low-quality video stream request by calling this method, and upon receiving the request, the sending end automatically starts sending the low-quality video stream. The SDK will dynamically adjust the size of the corresponding video stream based on the size of the video window to save bandwidth and computing resources. The default aspect ratio of the low-quality video stream is the same as that of the high-quality video stream. According to the current aspect ratio of the high-quality video stream, the system will automatically allocate the resolution, frame rate, and bitrate of the low-quality video stream.
-   *  You can call this method either before or after joining a channel.
-   *  If the publisher has already called setDualStreamMode and set mode to DisableSimulcastStream (never send low-quality video stream), calling this method will not take effect, you should call setDualStreamMode again on the sending end and adjust the settings.
-   *  Calling this method on the receiving end of the audience role will not take effect.
-   *  If you call both setRemoteVideoStreamType and setRemoteDefaultVideoStreamType, the settings in setRemoteVideoStreamType take effect.
-   *
-   * @param uid The user ID.
-   * @param streamType The video stream type, see VideoStreamType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRemoteVideoStreamType(
     uid: number,
     streamType: VideoStreamType
   ): number;
 
-  /**
-   * Options for subscribing to remote video streams.
-   *
-   * When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user.
-   *  If you only register one IVideoFrameObserver object, the SDK subscribes to the raw video data and encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-   *  If you only register one IVideoEncodedFrameObserver object, the SDK only subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to true).
-   *  If you register one IVideoFrameObserver object and one IVideoEncodedFrameObserver object successively, the SDK subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-   *  If you call this method first with the options parameter set, and then register one IVideoFrameObserver or IVideoEncodedFrameObserver object, you need to call this method again and set the options parameter as described in the above two items to get the desired results. Agora recommends the following steps:
-   *  Set autoSubscribeVideo to false when calling joinChannel to join a channel.
-   *  Call this method after receiving the onUserJoined callback to set the subscription options for the specified remote user's video stream.
-   *  Call the muteRemoteVideoStream method to resume subscribing to the video stream of the specified remote user. If you set encodedFrameOnly to true in the previous step, the SDK triggers the onEncodedVideoFrameReceived callback locally to report the received encoded video frame information.
-   *
-   * @param uid The user ID of the remote user.
-   * @param options The video subscription options. See VideoSubscriptionOptions.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRemoteVideoSubscriptionOptions(
     uid: number,
     options: VideoSubscriptionOptions
   ): number;
 
-  /**
-   * Set the blocklist of subscriptions for audio streams.
-   *
-   * You can call this method to specify the audio streams of a user that you do not want to subscribe to.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteAudioStream, muteAllRemoteAudioStreams, and autoSubscribeAudio in ChannelMediaOptions.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *
-   * @param uidList The user ID list of users that you do not want to subscribe to. If you want to specify the audio streams of a user that you do not want to subscribe to, add the user ID in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeAudioBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setSubscribeAudioBlocklist(
     uidList: number[],
     uidNumber: number
   ): number;
 
-  /**
-   * Sets the allowlist of subscriptions for audio streams.
-   *
-   * You can call this method to specify the audio streams of a user that you want to subscribe to.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  You can call this method either before or after joining a channel.
-   *  The allowlist is not affected by the setting in muteRemoteAudioStream, muteAllRemoteAudioStreams and autoSubscribeAudio in ChannelMediaOptions.
-   *  Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *
-   * @param uidList The user ID list of users that you want to subscribe to. If you want to specify the audio streams of a user for subscription, add the user ID in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeAudioAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setSubscribeAudioAllowlist(
     uidList: number[],
     uidNumber: number
   ): number;
 
-  /**
-   * Set the blocklist of subscriptions for video streams.
-   *
-   * You can call this method to specify the video streams of a user that you do not want to subscribe to.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the blocklist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The blocklist is not affected by the setting in muteRemoteVideoStream, muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions.
-   *
-   * @param uidList The user ID list of users that you do not want to subscribe to. If you want to specify the video streams of a user that you do not want to subscribe to, add the user ID of that user in this list. If you want to remove a user from the blocklist, you need to call the setSubscribeVideoBlocklist method to update the user ID list; this means you only add the uid of users that you do not want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setSubscribeVideoBlocklist(
     uidList: number[],
     uidNumber: number
   ): number;
 
-  /**
-   * Set the allowlist of subscriptions for video streams.
-   *
-   * You can call this method to specify the video streams of a user that you want to subscribe to.
-   *  If a user is added in the allowlist and blocklist at the same time, only the blocklist takes effect.
-   *  Once the allowlist of subscriptions is set, it is effective even if you leave the current channel and rejoin the channel.
-   *  You can call this method either before or after joining a channel.
-   *  The allowlist is not affected by the setting in muteRemoteVideoStream, muteAllRemoteVideoStreams and autoSubscribeAudio in ChannelMediaOptions.
-   *
-   * @param uidList The user ID list of users that you want to subscribe to. If you want to specify the video streams of a user for subscription, add the user ID of that user in this list. If you want to remove a user from the allowlist, you need to call the setSubscribeVideoAllowlist method to update the user ID list; this means you only add the uid of users that you want to subscribe to in the new user ID list.
-   * @param uidNumber The number of users in the user ID list.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setSubscribeVideoAllowlist(
     uidList: number[],
     uidNumber: number
   ): number;
 
-  /**
-   * Enables the reporting of users' volume indication.
-   *
-   * This method enables the SDK to regularly report the volume information to the app of the local user who sends a stream and remote users (three users at most) whose instantaneous volumes are the highest. Once you call this method and users send streams in the channel, the SDK triggers the onAudioVolumeIndication callback at the time interval set in this method. You can call this method either before or after joining a channel.
-   *
-   * @param interval Sets the time interval between two consecutive volume indications:
-   *  ≤ 0: Disables the volume indication.
-   *  > 0: Time interval (ms) between two consecutive volume indications. Ensure this parameter is set to a value greater than 10, otherwise you will not receive the onAudioVolumeIndication callback. Agora recommends that this value is set as greater than 100.
-   * @param smooth The smoothing factor that sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The recommended value is 3. The greater the value, the more sensitive the indicator.
-   * @param reportVad true : Enables the voice activity detection of the local user. Once it is enabled, the vad parameter of the onAudioVolumeIndication callback reports the voice activity status of the local user. false : (Default) Disables the voice activity detection of the local user. Once it is disabled, the vad parameter of the onAudioVolumeIndication callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableAudioVolumeIndication(
     interval: number,
     smooth: number,
     reportVad: boolean
   ): number;
 
-  /**
-   * Starts audio recording on the client and sets recording configurations.
-   *
-   * The Agora SDK allows recording during a call. After successfully calling this method, you can record the audio of users in the channel and get an audio recording file. Supported formats of the recording file are as follows:
-   *  WAV: High-fidelity files with typically larger file sizes. For example, if the sample rate is 32,000 Hz, the file size for 10-minute recording is approximately 73 MB.
-   *  AAC: Low-fidelity files with typically smaller file sizes. For example, if the sample rate is 32,000 Hz and the recording quality is AudioRecordingQualityMedium, the file size for 10-minute recording is approximately 2 MB. Once the user leaves the channel, the recording automatically stops. Call this method after joining a channel.
-   *
-   * @param config Recording configurations. See AudioRecordingConfiguration.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract startAudioRecording(config: AudioRecordingConfiguration): number;
 
-  /**
-   * Registers an encoded audio observer.
-   *
-   * Call this method after joining a channel.
-   *  You can call this method or startAudioRecording to set the recording type and quality of audio files, but Agora does not recommend using this method and startAudioRecording at the same time. Only the method called later will take effect.
-   *
-   * @returns
-   * One IAudioEncodedFrameObserver object.
-   */
   abstract registerAudioEncodedFrameObserver(
     config: AudioEncodedFrameObserverConfig,
     observer: IAudioEncodedFrameObserver
   ): number;
 
-  /**
-   * Stops the audio recording on the client.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract stopAudioRecording(): number;
 
-  /**
-   * Creates a media player instance.
-   *
-   * @returns
-   * The IMediaPlayer instance, if the method call succeeds.
-   *  An empty pointer, if the method call fails.
-   */
   abstract createMediaPlayer(): IMediaPlayer;
 
-  /**
-   * Destroys the media player instance.
-   *
-   * @param mediaPlayer One IMediaPlayer object.
-   *
-   * @returns
-   * ≥ 0: Success. Returns the ID of media player instance.
-   *  < 0: Failure.
-   */
   abstract destroyMediaPlayer(mediaPlayer: IMediaPlayer): number;
 
-  /**
-   * @ignore
-   */
   abstract createMediaRecorder(info: RecorderStreamInfo): IMediaRecorder;
 
-  /**
-   * @ignore
-   */
   abstract destroyMediaRecorder(mediaRecorder: IMediaRecorder): number;
 
-  /**
-   * Starts playing the music file.
-   *
-   * This method mixes the specified local or online audio file with the audio from the microphone, or replaces the microphone's audio with the specified local or remote audio file. A successful method call triggers the onAudioMixingStateChanged (AudioMixingStatePlaying) callback. When the audio mixing file playback finishes, the SDK triggers the onAudioMixingStateChanged (AudioMixingStateStopped) callback on the local client.
-   *  You can call this method either before or after joining a channel. If you need to call startAudioMixing multiple times, ensure that the time interval between calling this method is more than 500 ms.
-   *  If the local music file does not exist, the SDK does not support the file format, or the the SDK cannot access the music file URL, the SDK reports 701.
-   *  For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK support.
-   *  On Android, there are following considerations:
-   *  To use this method, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
-   *  If you need to play an online music file, Agora does not recommend using the redirected URL address. Some Android devices may fail to open a redirected URL address.
-   *  If you call this method on an emulator, ensure that the music file is in the /sdcard/ directory and the format is MP3.
-   *
-   * @param filePath File path:
-   *  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example : content://com.android.providers.media.documents/document/audio%3A14441
-   *  iOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
-   * @param loopback Whether to only play music files on the local client: true : Only play music files on the local client so that only the local user can hear the music. false : Publish music files to remote clients so that both the local user and remote users can hear the music.
-   * @param cycle The number of times the music file plays.
-   *  ≥ 0: The number of playback times. For example, 0 means that the SDK does not play the music file while 1 means that the SDK plays once.
-   *  -1: Play the audio file in an infinite loop.
-   * @param startPos The playback position (ms) of the music file.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   *  -2: The parameter is invalid.
-   *  -3: The SDK is not ready.
-   *  The audio module is disabled.
-   *  The program is not complete.
-   *  The initialization of IRtcEngine fails. Reinitialize the IRtcEngine.
-   */
   abstract startAudioMixing(
     filePath: string,
     loopback: boolean,
@@ -3913,264 +3101,48 @@ export abstract class IRtcEngine {
     startPos?: number
   ): number;
 
-  /**
-   * Stops playing and mixing the music file.
-   *
-   * This method stops the audio mixing. Call this method when you are in a channel.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract stopAudioMixing(): number;
 
-  /**
-   * Pauses playing and mixing the music file.
-   *
-   * Call this method after joining a channel.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract pauseAudioMixing(): number;
 
-  /**
-   * Resumes playing and mixing the music file.
-   *
-   * This method resumes playing and mixing the music file. Call this method when you are in a channel.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract resumeAudioMixing(): number;
 
-  /**
-   * Selects the audio track used during playback.
-   *
-   * After getting the track index of the audio file, you can call this method to specify any track to play. For example, if different tracks of a multi-track file store songs in different languages, you can call this method to set the playback language.
-   *  For the supported formats of audio files, see.
-   *  You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @param index The audio track you want to specify. The value range is [0, getAudioTrackCount ()].
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract selectAudioTrack(index: number): number;
 
-  /**
-   * Gets the index of audio tracks of the current music file.
-   *
-   * You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @returns
-   * The SDK returns the index of the audio tracks if the method call succeeds.
-   *  < 0: Failure.
-   */
   abstract getAudioTrackCount(): number;
 
-  /**
-   * Adjusts the volume during audio mixing.
-   *
-   * This method adjusts the audio mixing volume on both the local client and remote clients.
-   *  Call this method after startAudioMixing.
-   *
-   * @param volume Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract adjustAudioMixingVolume(volume: number): number;
 
-  /**
-   * Adjusts the volume of audio mixing for publishing.
-   *
-   * This method adjusts the volume of audio mixing for publishing (sending to other users). Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @param volume The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract adjustAudioMixingPublishVolume(volume: number): number;
 
-  /**
-   * Retrieves the audio mixing volume for publishing.
-   *
-   * This method helps troubleshoot audio volume‑related issues. You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @returns
-   * ≥ 0: The audio mixing volume, if this method call succeeds. The value range is [0,100].
-   *  < 0: Failure.
-   */
   abstract getAudioMixingPublishVolume(): number;
 
-  /**
-   * Adjusts the volume of audio mixing for local playback.
-   *
-   * Call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @param volume The volume of audio mixing for local playback. The value ranges between 0 and 100 (default). 100 represents the original volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract adjustAudioMixingPlayoutVolume(volume: number): number;
 
-  /**
-   * Retrieves the audio mixing volume for local playback.
-   *
-   * This method helps troubleshoot audio volume‑related issues. You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @returns
-   * ≥ 0: The audio mixing volume, if this method call succeeds. The value range is [0,100].
-   *  < 0: Failure.
-   */
   abstract getAudioMixingPlayoutVolume(): number;
 
-  /**
-   * Retrieves the duration (ms) of the music file.
-   *
-   * Retrieves the total duration (ms) of the audio. You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @returns
-   * ≥ 0: The audio mixing duration, if this method call succeeds.
-   *  < 0: Failure.
-   */
   abstract getAudioMixingDuration(): number;
 
-  /**
-   * Retrieves the playback position (ms) of the music file.
-   *
-   * Retrieves the playback position (ms) of the audio. You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *  If you need to call getAudioMixingCurrentPosition multiple times, ensure that the time interval between calling this method is more than 500 ms.
-   *
-   * @returns
-   * ≥ 0: The current playback position (ms) of the audio mixing, if this method call succeeds. 0 represents that the current music file does not start playing.
-   *  < 0: Failure.
-   */
   abstract getAudioMixingCurrentPosition(): number;
 
-  /**
-   * Sets the audio mixing position.
-   *
-   * Call this method to set the playback position of the music file to a different starting position (the default plays from the beginning). You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @param pos Integer. The playback position (ms).
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioMixingPosition(pos: number): number;
 
-  /**
-   * Sets the channel mode of the current audio file.
-   *
-   * In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode.
-   *  You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *  This method only applies to stereo audio files.
-   *
-   * @param mode The channel mode. See AudioMixingDualMonoMode.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioMixingDualMonoMode(mode: AudioMixingDualMonoMode): number;
 
-  /**
-   * Sets the pitch of the local music file.
-   *
-   * When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only. You need to call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged (AudioMixingStatePlaying) callback.
-   *
-   * @param pitch Sets the pitch of the local music file by the chromatic scale. The default value is 0, which means keeping the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioMixingPitch(pitch: number): number;
 
-  /**
-   * @ignore
-   */
   abstract setAudioMixingPlaybackSpeed(speed: number): number;
 
-  /**
-   * Retrieves the volume of the audio effects.
-   *
-   * The volume is an integer ranging from 0 to 100. The default value is 100, which means the original volume. Call this method after playEffect.
-   *
-   * @returns
-   * Volume of the audio effects, if this method call succeeds.
-   *  < 0: Failure.
-   */
   abstract getEffectsVolume(): number;
 
-  /**
-   * Sets the volume of the audio effects.
-   *
-   * Call this method after playEffect.
-   *
-   * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setEffectsVolume(volume: number): number;
 
-  /**
-   * Preloads a specified audio effect file into the memory.
-   *
-   * To ensure smooth communication, It is recommended that you limit the size of the audio effect file. You can call this method to preload the audio effect before calling joinChannel. For the audio file formats supported by this method, see What formats of audio files does the Agora RTC SDK support.
-   *
-   * @param soundId The audio effect ID. The ID of each audio effect file is unique.
-   * @param filePath File path:
-   *  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example : content://com.android.providers.media.documents/document/audio%3A14441
-   *  iOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
-   * @param startPos The playback position (ms) of the audio effect file.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract preloadEffect(
     soundId: number,
     filePath: string,
     startPos?: number
   ): number;
 
-  /**
-   * Plays the specified local or online audio effect file.
-   *
-   * If you use this method to play an online audio effect file, Agora recommends that you cache the online audio effect file to your local device, call preloadEffect to preload the cached audio effect file into memory, and then call this method to play the audio effect. Otherwise, you might encounter playback failures or no sound during playback due to loading timeouts or failures. To play multiple audio effect files at the same time, call this method multiple times with different soundId and filePath. To achieve the optimal user experience, Agora recommends that do not playing more than three audio files at the same time. After the playback of an audio effect file completes, the SDK triggers the onAudioEffectFinished callback.
-   *
-   * @param soundId The audio effect ID. The ID of each audio effect file is unique. If you have preloaded an audio effect into memory by calling preloadEffect, ensure that the value of this parameter is the same as that of soundId in preloadEffect.
-   * @param filePath The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example, C:\music\audio.mp4. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP. See supported audio formats. If you have preloaded an audio effect into memory by calling preloadEffect, ensure that the value of this parameter is the same as that of filePath in preloadEffect.
-   * @param loopCount The number of times the audio effect loops.
-   *  ≥ 0: The number of playback times. For example, 1 means looping one time, which means playing the audio effect two times in total.
-   *  -1: Play the audio file in an infinite loop.
-   * @param pitch The pitch of the audio effect. The value range is 0.5 to 2.0. The default value is 1.0, which means the original pitch. The lower the value, the lower the pitch.
-   * @param pan The spatial position of the audio effect. The value ranges between -1.0 and 1.0:
-   *  -1.0: The audio effect is heard on the left of the user.
-   *  0.0: The audio effect is heard in front of the user.
-   *  1.0: The audio effect is heard on the right of the user.
-   * @param gain The volume of the audio effect. The value range is 0.0 to 100.0. The default value is 100.0, which means the original volume. The smaller the value, the lower the volume.
-   * @param publish Whether to publish the audio effect to the remote users: true : Publish the audio effect to the remote users. Both the local user and remote users can hear the audio effect. false : Do not publish the audio effect to the remote users. Only the local user can hear the audio effect.
-   * @param startPos The playback position (ms) of the audio effect file.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract playEffect(
     soundId: number,
     filePath: string,
@@ -4182,27 +3154,6 @@ export abstract class IRtcEngine {
     startPos?: number
   ): number;
 
-  /**
-   * Plays all audio effect files.
-   *
-   * After calling preloadEffect multiple times to preload multiple audio effects into the memory, you can call this method to play all the specified audio effects for all users in the channel.
-   *
-   * @param loopCount The number of times the audio effect loops:
-   *  -1: Play the audio effect files in an indefinite loop until you call stopEffect or stopAllEffects.
-   *  0: Play the audio effect once.
-   *  1: Play the audio effect twice.
-   * @param pitch The pitch of the audio effect. The value ranges between 0.5 and 2.0. The default value is 1.0 (original pitch). The lower the value, the lower the pitch.
-   * @param pan The spatial position of the audio effect. The value ranges between -1.0 and 1.0:
-   *  -1.0: The audio effect shows on the left.
-   *  0: The audio effect shows ahead.
-   *  1.0: The audio effect shows on the right.
-   * @param gain The volume of the audio effect. The value range is [0, 100]. The default value is 100 (original volume). The smaller the value, the lower the volume.
-   * @param publish Whether to publish the audio effect to the remote users: true : Publish the audio effect to the remote users. Both the local user and remote users can hear the audio effect. false : (Default) Do not publish the audio effect to the remote users. Only the local user can hear the audio effect.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract playAllEffects(
     loopCount: number,
     pitch: number,
@@ -4211,627 +3162,129 @@ export abstract class IRtcEngine {
     publish?: boolean
   ): number;
 
-  /**
-   * Gets the volume of a specified audio effect file.
-   *
-   * @param soundId The ID of the audio effect file.
-   *
-   * @returns
-   * ≥ 0: Returns the volume of the specified audio effect, if the method call is successful. The value ranges between 0 and 100. 100 represents the original volume.
-   *  < 0: Failure.
-   */
   abstract getVolumeOfEffect(soundId: number): number;
 
-  /**
-   * Sets the volume of a specified audio effect.
-   *
-   * @param soundId The ID of the audio effect. The ID of each audio effect file is unique.
-   * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setVolumeOfEffect(soundId: number, volume: number): number;
 
-  /**
-   * Pauses a specified audio effect file.
-   *
-   * @param soundId The audio effect ID. The ID of each audio effect file is unique.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract pauseEffect(soundId: number): number;
 
-  /**
-   * Pauses all audio effects.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract pauseAllEffects(): number;
 
-  /**
-   * Resumes playing a specified audio effect.
-   *
-   * @param soundId The audio effect ID. The ID of each audio effect file is unique.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract resumeEffect(soundId: number): number;
 
-  /**
-   * Resumes playing all audio effect files.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract resumeAllEffects(): number;
 
-  /**
-   * Stops playing a specified audio effect.
-   *
-   * @param soundId The ID of the audio effect. Each audio effect has a unique ID.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract stopEffect(soundId: number): number;
 
-  /**
-   * Stops playing all audio effects.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract stopAllEffects(): number;
 
-  /**
-   * Releases a specified preloaded audio effect from the memory.
-   *
-   * @param soundId The ID of the audio effect. Each audio effect has a unique ID.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract unloadEffect(soundId: number): number;
 
-  /**
-   * Releases a specified preloaded audio effect from the memory.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract unloadAllEffects(): number;
 
-  /**
-   * Retrieves the duration of the audio effect file.
-   *
-   * Call this method after joining a channel.
-   *
-   * @param filePath File path:
-   *  Android: The file path, which needs to be accurate to the file name and suffix. Agora supports URL addresses, absolute paths, or file paths that start with /assets/. You might encounter permission issues if you use an absolute path to access a local file, so Agora recommends using a URI address instead. For example : content://com.android.providers.media.documents/document/audio%3A14441
-   *  iOS: The absolute path or URL address (including the suffixes of the filename) of the audio effect file. For example: /var/mobile/Containers/Data/audio.mp4.
-   *
-   * @returns
-   * The total duration (ms) of the specified audio effect file, if the method call succeeds.
-   *  < 0: Failure.
-   */
   abstract getEffectDuration(filePath: string): number;
 
-  /**
-   * Sets the playback position of an audio effect file.
-   *
-   * After a successful setting, the local audio effect file starts playing at the specified position. Call this method after playEffect.
-   *
-   * @param soundId The audio effect ID. The ID of each audio effect file is unique.
-   * @param pos The playback position (ms) of the audio effect file.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setEffectPosition(soundId: number, pos: number): number;
 
-  /**
-   * Retrieves the playback position of the audio effect file.
-   *
-   * Call this method after playEffect.
-   *
-   * @param soundId The audio effect ID. The ID of each audio effect file is unique.
-   *
-   * @returns
-   * The playback position (ms) of the specified audio effect file, if the method call succeeds.
-   *  < 0: Failure.
-   */
   abstract getEffectCurrentPosition(soundId: number): number;
 
-  /**
-   * Enables or disables stereo panning for remote users.
-   *
-   * Ensure that you call this method before joining a channel to enable stereo panning for remote users so that the local user can track the position of a remote user by calling setRemoteVoicePosition.
-   *
-   * @param enabled Whether to enable stereo panning for remote users: true : Enable stereo panning. false : Disable stereo panning.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableSoundPositionIndication(enabled: boolean): number;
 
-  /**
-   * Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
-   *
-   * This method sets the 2D position and volume of a remote user, so that the local user can easily hear and identify the remote user's position. When the local user calls this method to set the voice position of a remote user, the voice difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a sense of space. This method applies to massive multiplayer online games, such as Battle Royale games.
-   *  For this method to work, enable stereo panning for remote users by calling the enableSoundPositionIndication method before joining a channel.
-   *  For the best voice positioning, Agora recommends using a wired headset.
-   *  Call this method after joining a channel.
-   *
-   * @param uid The user ID of the remote user.
-   * @param pan The voice position of the remote user. The value ranges from -1.0 to 1.0:
-   *  0.0: (Default) The remote voice comes from the front.
-   *  -1.0: The remote voice comes from the left.
-   *  1.0: The remote voice comes from the right.
-   * @param gain The volume of the remote user. The value ranges from 0.0 to 100.0. The default value is 100.0 (the original volume of the remote user). The smaller the value, the lower the volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRemoteVoicePosition(
     uid: number,
     pan: number,
     gain: number
   ): number;
 
-  /**
-   * Enables or disables the spatial audio effect.
-   *
-   * After enabling the spatial audio effect, you can call setRemoteUserSpatialAudioParams to set the spatial audio effect parameters of the remote user.
-   *  You can call this method either before or after joining a channel.
-   *  This method relies on the spatial audio dynamic library libagora_spatial_audio_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param enabled Whether to enable the spatial audio effect: true : Enable the spatial audio effect. false : Disable the spatial audio effect.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableSpatialAudio(enabled: boolean): number;
 
-  /**
-   * Sets the spatial audio effect parameters of the remote user.
-   *
-   * Call this method after enableSpatialAudio. After successfully setting the spatial audio effect parameters of the remote user, the local user can hear the remote user with a sense of space.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRemoteUserSpatialAudioParams(
     uid: number,
     params: SpatialAudioParams
   ): number;
 
-  /**
-   * Sets a preset voice beautifier effect.
-   *
-   * Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting a voice beautifier effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. For better voice effects, Agora recommends that you call setAudioProfile and set scenario to AudioScenarioGameStreaming (3) and profile to AudioProfileMusicHighQuality (4) or AudioProfileMusicHighQualityStereo (5) before calling this method.
-   *  You can call this method either before or after joining a channel.
-   *  Do not set the profile parameter in setAudioProfile to AudioProfileSpeechStandard (1) or AudioProfileIot (6), or the method does not take effect.
-   *  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
-   *  After calling setVoiceBeautifierPreset, Agora does not recommend calling the following methods, otherwise the effect set by setVoiceBeautifierPreset will be overwritten: setAudioEffectPreset setAudioEffectParameters setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
-   *  This method relies on the voice beautifier dynamic library libagora_audio_beauty_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param preset The preset voice beautifier effect options: VoiceBeautifierPreset.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setVoiceBeautifierPreset(preset: VoiceBeautifierPreset): number;
 
-  /**
-   * Sets an SDK preset audio effect.
-   *
-   * Call this method to set an SDK preset audio effect for the local user who sends an audio stream. This audio effect does not change the gender characteristics of the original voice. After setting an audio effect, all users in the channel can hear the effect. To get better audio effect quality, Agora recommends setting the scenario parameter of setAudioProfile as AudioScenarioGameStreaming (3) before calling this method.
-   *  You can call this method either before or after joining a channel.
-   *  Do not set the profile parameter in setAudioProfile to AudioProfileSpeechStandard (1) AudioProfileIot or (6), or the method does not take effect.
-   *  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
-   *  If you call setAudioEffectPreset and set enumerators except for RoomAcoustics3dVoice or PitchCorrection, do not call setAudioEffectParameters; otherwise, setAudioEffectPreset is overridden.
-   *  After calling setAudioEffectPreset, Agora does not recommend you to call the following methods, otherwise the effect set by setAudioEffectPreset will be overwritten: setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
-   *  This method relies on the voice beautifier dynamic library libagora_audio_beauty_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param preset The options for SDK preset audio effects. See AudioEffectPreset.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioEffectPreset(preset: AudioEffectPreset): number;
 
-  /**
-   * Sets a preset voice beautifier effect.
-   *
-   * Call this method to set a preset voice beautifier effect for the local user who sends an audio stream. After setting an audio effect, all users in the channel can hear the effect. You can set different voice beautifier effects for different scenarios. To achieve better audio effect quality, Agora recommends that you call setAudioProfile and set the profile to AudioProfileMusicHighQuality (4) or AudioProfileMusicHighQualityStereo (5) and scenario to AudioScenarioGameStreaming (3) before calling this method.
-   *  You can call this method either before or after joining a channel.
-   *  Do not set the profile parameter in setAudioProfile to AudioProfileSpeechStandard (1) or AudioProfileIot (6), or the method does not take effect.
-   *  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
-   *  After calling setVoiceConversionPreset, Agora does not recommend you to call the following methods, otherwise the effect set by setVoiceConversionPreset will be overwritten: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setVoiceBeautifierParameters setLocalVoicePitch setLocalVoiceFormant setLocalVoiceEqualization setLocalVoiceReverb
-   *  This method relies on the voice beautifier dynamic library libagora_audio_beauty_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
-   *
-   * @param preset The options for the preset voice beautifier effects: VoiceConversionPreset.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setVoiceConversionPreset(preset: VoiceConversionPreset): number;
 
-  /**
-   * Sets parameters for SDK preset audio effects.
-   *
-   * Call this method to set the following parameters for the local user who sends an audio stream:
-   *  3D voice effect: Sets the cycle period of the 3D voice effect.
-   *  Pitch correction effect: Sets the basic mode and tonic pitch of the pitch correction effect. Different songs have different modes and tonic pitches. Agora recommends bounding this method with interface elements to enable users to adjust the pitch correction interactively. After setting the audio parameters, all users in the channel can hear the effect.
-   *  You can call this method either before or after joining a channel.
-   *  To get better audio effect quality, Agora recommends setting the scenario parameter of setAudioProfile as AudioScenarioGameStreaming (3) before calling this method.
-   *  Do not set the profile parameter in setAudioProfile to AudioProfileSpeechStandard (1) AudioProfileIot or (6), or the method does not take effect.
-   *  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
-   *  After calling setAudioEffectParameters, Agora does not recommend you to call the following methods, otherwise the effect set by setAudioEffectParameters will be overwritten: setAudioEffectPreset setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceBeautifierParameters setVoiceConversionPreset
-   *
-   * @param preset The options for SDK preset audio effects: RoomAcoustics3dVoice, 3D voice effect:
-   *  Call setAudioProfile and set the profile parameter in to AudioProfileMusicStandardStereo (3) or AudioProfileMusicHighQualityStereo (5) before setting this enumerator; otherwise, the enumerator setting does not take effect.
-   *  If the 3D voice effect is enabled, users need to use stereo audio playback devices to hear the anticipated voice effect. PitchCorrection, Pitch correction effect: To achieve better audio effect quality, Agora recommends setting the profile parameter in setAudioProfile to AudioProfileMusicHighQuality (4) or AudioProfileMusicHighQualityStereo (5) before setting this enumerator.
-   * @param param1 If you set preset to RoomAcoustics3dVoice, param1 sets the cycle period of the 3D voice effect. The value range is [1,60] and the unit is seconds. The default value is 10, indicating that the voice moves around you every 10 seconds.
-   *  If you set preset to PitchCorrection, param1 indicates the basic mode of the pitch correction effect: 1 : (Default) Natural major scale. 2 : Natural minor scale. 3 : Japanese pentatonic scale.
-   * @param param2 If you set preset to RoomAcoustics3dVoice , you need to set param2 to 0.
-   *  If you set preset to PitchCorrection, param2 indicates the tonic pitch of the pitch correction effect: 1 : A 2 : A# 3 : B 4 : (Default) C 5 : C# 6 : D 7 : D# 8 : E 9 : F 10 : F# 11 : G 12 : G#
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioEffectParameters(
     preset: AudioEffectPreset,
     param1: number,
     param2: number
   ): number;
 
-  /**
-   * Sets parameters for the preset voice beautifier effects.
-   *
-   * Call this method to set a gender characteristic and a reverberation effect for the singing beautifier effect. This method sets parameters for the local user who sends an audio stream. After setting the audio parameters, all users in the channel can hear the effect. For better voice effects, Agora recommends that you call setAudioProfile and set scenario to AudioScenarioGameStreaming (3) and profile to AudioProfileMusicHighQuality (4) or AudioProfileMusicHighQualityStereo (5) before calling this method.
-   *  You can call this method either before or after joining a channel.
-   *  Do not set the profile parameter in setAudioProfile to AudioProfileSpeechStandard (1) or AudioProfileIot (6), or the method does not take effect.
-   *  This method has the best effect on human voice processing, and Agora does not recommend calling this method to process audio data containing music.
-   *  After calling setVoiceBeautifierParameters, Agora does not recommend calling the following methods, otherwise the effect set by setVoiceBeautifierParameters will be overwritten: setAudioEffectPreset setAudioEffectParameters setVoiceBeautifierPreset setLocalVoicePitch setLocalVoiceEqualization setLocalVoiceReverb setVoiceConversionPreset
-   *
-   * @param preset The option for the preset audio effect: SINGING_BEAUTIFIER : The singing beautifier effect.
-   * @param param1 The gender characteristics options for the singing voice: 1 : A male-sounding voice. 2 : A female-sounding voice.
-   * @param param2 The reverberation effect options for the singing voice: 1 : The reverberation effect sounds like singing in a small room. 2 : The reverberation effect sounds like singing in a large room. 3 : The reverberation effect sounds like singing in a hall.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setVoiceBeautifierParameters(
     preset: VoiceBeautifierPreset,
     param1: number,
     param2: number
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract setVoiceConversionParameters(
     preset: VoiceConversionPreset,
     param1: number,
     param2: number
   ): number;
 
-  /**
-   * Changes the voice pitch of the local speaker.
-   *
-   * You can call this method either before or after joining a channel.
-   *
-   * @param pitch The local voice pitch. The value range is [0.5,2.0]. The lower the value, the lower the pitch. The default value is 1.0 (no change to the pitch).
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLocalVoicePitch(pitch: number): number;
 
-  /**
-   * Set the formant ratio to change the timbre of human voice.
-   *
-   * Formant ratio affects the timbre of voice. The smaller the value, the deeper the sound will be, and the larger, the sharper. You can call this method to set the formant ratio of local audio to change the timbre of human voice. After you set the formant ratio, all users in the channel can hear the changed voice. If you want to change the timbre and pitch of voice at the same time, Agora recommends using this method together with setLocalVoicePitch. You can call this method either before or after joining a channel.
-   *
-   * @param formantRatio The formant ratio. The value range is [-1.0, 1.0]. The default value is 0.0, which means do not change the timbre of the voice. Agora recommends setting this value within the range of [-0.4, 0.6]. Otherwise, the voice may be seriously distorted.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLocalVoiceFormant(formantRatio: number): number;
 
-  /**
-   * Sets the local voice equalization effect.
-   *
-   * You can call this method either before or after joining a channel.
-   *
-   * @param bandFrequency The band frequency. The value ranges between 0 and 9; representing the respective 10-band center frequencies of the voice effects, including 31, 62, 125, 250, 500, 1k, 2k, 4k, 8k, and 16k Hz. See AudioEqualizationBandFrequency.
-   * @param bandGain The gain of each band in dB. The value ranges between -15 and 15. The default value is 0.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLocalVoiceEqualization(
     bandFrequency: AudioEqualizationBandFrequency,
     bandGain: number
   ): number;
 
-  /**
-   * Sets the local voice reverberation.
-   *
-   * The SDK provides an easier-to-use method, setAudioEffectPreset, to directly implement preset reverb effects for such as pop, R&B, and KTV. You can call this method either before or after joining a channel.
-   *
-   * @param reverbKey The reverberation key. Agora provides five reverberation keys, see AudioReverbType.
-   * @param value The value of the reverberation key.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLocalVoiceReverb(
     reverbKey: AudioReverbType,
     value: number
   ): number;
 
-  /**
-   * Sets the preset headphone equalization effect.
-   *
-   * This method is mainly used in spatial audio effect scenarios. You can select the preset headphone equalizer to listen to the audio to achieve the expected audio experience. If the headphones you use already have a good equalization effect, you may not get a significant improvement when you call this method, and could even diminish the experience.
-   *
-   * @param preset The preset headphone equalization effect. See HeadphoneEqualizerPreset.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   */
   abstract setHeadphoneEQPreset(preset: HeadphoneEqualizerPreset): number;
 
-  /**
-   * Sets the low- and high-frequency parameters of the headphone equalizer.
-   *
-   * In a spatial audio effect scenario, if the preset headphone equalization effect is not achieved after calling the setHeadphoneEQPreset method, you can further adjust the headphone equalization effect by calling this method.
-   *
-   * @param lowGain The low-frequency parameters of the headphone equalizer. The value range is [-10,10]. The larger the value, the deeper the sound.
-   * @param highGain The high-frequency parameters of the headphone equalizer. The value range is [-10,10]. The larger the value, the sharper the sound.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -1: A general error occurs (no specified reason).
-   */
   abstract setHeadphoneEQParameters(lowGain: number, highGain: number): number;
 
-  /**
-   * Sets the log file.
-   *
-   * Deprecated: Use the mLogConfig parameter in initialize method instead. Specifies an SDK output log file. The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable. Ensure that you call initialize immediately after calling the IRtcEngine method, or the output log may not be complete.
-   *
-   * @param filePath The complete path of the log files. These log files are encoded in UTF-8.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLogFile(filePath: string): number;
 
-  /**
-   * Sets the log output level of the SDK.
-   *
-   * Deprecated: Use logConfig in initialize instead. This method sets the output log level of the SDK. You can use one or a combination of the log filter levels. The log level follows the sequence of LogFilterOff, LogFilterCritical, LogFilterError, LogFilterWarn, LogFilterInfo, and LogFilterDebug. Choose a level to see the logs preceding that level. If, for example, you set the log level to LogFilterWarn, you see the logs within levels LogFilterCritical, LogFilterError and LogFilterWarn.
-   *
-   * @param filter The output log level of the SDK. See LogFilterType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLogFilter(filter: LogFilterType): number;
 
-  /**
-   * Sets the output log level of the SDK.
-   *
-   * Deprecated: This method is deprecated. Use RtcEngineContext instead to set the log output level. Choose a level to see the logs preceding that level.
-   *
-   * @param level The log level: LogLevel.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLogLevel(level: LogLevel): number;
 
-  /**
-   * Sets the log file size.
-   *
-   * Deprecated: Use the logConfig parameter in initialize instead. By default, the SDK generates five SDK log files and five API call log files with the following rules:
-   *  The SDK log files are: agorasdk.log, agorasdk.1.log, agorasdk.2.log, agorasdk.3.log, and agorasdk.4.log.
-   *  The API call log files are: agoraapi.log, agoraapi.1.log, agoraapi.2.log, agoraapi.3.log, and agoraapi.4.log.
-   *  The default size of each SDK log file and API log file is 2,048 KB. These log files are encoded in UTF-8.
-   *  The SDK writes the latest logs in agorasdk.log or agoraapi.log.
-   *  When agorasdk.log is full, the SDK processes the log files in the following order:
-   *  Delete the agorasdk.4.log file (if any).
-   *  Rename agorasdk.3.log to agorasdk.4.log.
-   *  Rename agorasdk.2.log to agorasdk.3.log.
-   *  Rename agorasdk.1.log to agorasdk.2.log.
-   *  Create a new agorasdk.log file.
-   *  The overwrite rules for the agoraapi.log file are the same as for agorasdk.log. This method is used to set the size of the agorasdk.log file only and does not effect the agoraapi.log file.
-   *
-   * @param fileSizeInKBytes The size (KB) of an agorasdk.log file. The value range is [128,20480]. The default value is 2,048 KB. If you set fileSizeInKByte smaller than 128 KB, the SDK automatically adjusts it to 128 KB; if you set fileSizeInKByte greater than 20,480 KB, the SDK automatically adjusts it to 20,480 KB.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLogFileSize(fileSizeInKBytes: number): number;
 
-  /**
-   * @ignore
-   */
   abstract uploadLogFile(): string;
 
-  /**
-   * @ignore
-   */
   abstract writeLog(level: LogLevel, fmt: string): number;
 
-  /**
-   * Updates the display mode of the local video view.
-   *
-   * After initializing the local video view, you can call this method to update its rendering and mirror modes. It affects only the video view that the local user sees, not the published local video stream.
-   *  During a call, you can call this method as many times as necessary to update the display mode of the local video view.
-   *
-   * @param renderMode The local video display mode. See RenderModeType.
-   * @param mirrorMode The mirror mode of the local video view. See VideoMirrorModeType. If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLocalRenderMode(
     renderMode: RenderModeType,
     mirrorMode?: VideoMirrorModeType
   ): number;
 
-  /**
-   * Updates the display mode of the video view of a remote user.
-   *
-   * After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes. This method affects only the video view that the local user sees.
-   *  During a call, you can call this method as many times as necessary to update the display mode of the video view of a remote user.
-   *
-   * @param uid The user ID of the remote user.
-   * @param renderMode The rendering mode of the remote user view.
-   * @param mirrorMode The mirror mode of the remote user view. See VideoMirrorModeType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRemoteRenderMode(
     uid: number,
     renderMode: RenderModeType,
     mirrorMode: VideoMirrorModeType
   ): number;
 
-  /**
-   * Sets the local video mirror mode.
-   *
-   * Deprecated: This method is deprecated. Use setLocalRenderMode instead.
-   *
-   * @param mirrorMode The local video mirror mode. See VideoMirrorModeType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setLocalVideoMirrorMode(mirrorMode: VideoMirrorModeType): number;
 
-  /**
-   * Sets the dual-stream mode on the sender side and the low-quality video stream.
-   *
-   * Deprecated: This method is deprecated as of v4.2.0. Use setDualStreamMode instead. You can call this method to enable or disable the dual-stream mode on the publisher side. Dual streams are a pairing of a high-quality video stream and a low-quality video stream:
-   *  High-quality video stream: High bitrate, high resolution.
-   *  Low-quality video stream: Low bitrate, low resolution. After you enable dual-stream mode, you can call setRemoteVideoStreamType to choose to receive either the high-quality video stream or the low-quality video stream on the subscriber side.
-   *  This method is applicable to all types of streams from the sender, including but not limited to video streams collected from cameras, screen sharing streams, and custom-collected video streams.
-   *  If you need to enable dual video streams in a multi-channel scenario, you can call the enableDualStreamModeEx method.
-   *  You can call this method either before or after joining a channel.
-   *
-   * @param enabled Whether to enable dual-stream mode: true : Enable dual-stream mode. false : (Default) Disable dual-stream mode.
-   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to DisableSimulcastStream, setting streamConfig will not take effect.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableDualStreamMode(
     enabled: boolean,
     streamConfig?: SimulcastStreamConfig
   ): number;
 
-  /**
-   * Sets dual-stream mode configuration on the sender side.
-   *
-   * The SDK defaults to enabling low-quality video stream adaptive mode (AutoSimulcastStream) on the sender side, which means the sender does not actively send low-quality video stream. The receiving end with the role of the host can initiate a low-quality video stream request by calling setRemoteVideoStreamType, and upon receiving the request, the sending end automatically starts sending low-quality stream.
-   *  If you want to modify this behavior, you can call this method and set mode to DisableSimulcastStream (never send low-quality video streams) or EnableSimulcastStream (always send low-quality video streams).
-   *  If you want to restore the default behavior after making changes, you can call this method again with mode set to AutoSimulcastStream. The difference and connection between this method and enableDualStreamMode is as follows:
-   *  When calling this method and setting mode to DisableSimulcastStream, it has the same effect as calling enableDualStreamMode and setting enabled to false.
-   *  When calling this method and setting mode to EnableSimulcastStream, it has the same effect as calling enableDualStreamMode and setting enabled to true.
-   *  Both methods can be called before and after joining a channel. If both methods are used, the settings in the method called later takes precedence.
-   *
-   * @param mode The mode in which the video stream is sent. See SimulcastStreamMode.
-   * @param streamConfig The configuration of the low-quality video stream. See SimulcastStreamConfig. When setting mode to DisableSimulcastStream, setting streamConfig will not take effect.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setDualStreamMode(
     mode: SimulcastStreamMode,
     streamConfig?: SimulcastStreamConfig
   ): number;
 
-  /**
-   * Sets whether to enable the local playback of external audio source.
-   *
-   * Ensure you have called the createCustomAudioTrack method to create a custom audio track before calling this method. After calling this method to enable the local playback of external audio source, if you need to stop local playback, you can call this method again and set enabled to false. You can call adjustCustomAudioPlayoutVolume to adjust the local playback volume of the custom audio track.
-   *
-   * @param trackId The audio track ID. Set this parameter to the custom audio track ID returned in createCustomAudioTrack.
-   * @param enabled Whether to play the external audio source: true : Play the external audio source. false : (Default) Do not play the external source.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableCustomAudioLocalPlayback(
     trackId: number,
     enabled: boolean
   ): number;
 
-  /**
-   * Sets the format of the captured raw audio data.
-   *
-   * Sets the audio format for the onRecordAudioFrame callback.
-   *  Ensure that you call this method before joining a channel.
-   *  The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method. Sample interval (sec) = samplePerCall /(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s).
-   *
-   * @param sampleRate The sample rate returned in the onRecordAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
-   * @param channel The number of channels returned in the onRecordAudioFrame callback:
-   *  1: Mono.
-   *  2: Stereo.
-   * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType.
-   * @param samplesPerCall The number of data samples returned in the onRecordAudioFrame callback, such as 1024 for the Media Push.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRecordingAudioFrameParameters(
     sampleRate: number,
     channel: number,
@@ -4839,24 +3292,6 @@ export abstract class IRtcEngine {
     samplesPerCall: number
   ): number;
 
-  /**
-   * Sets the audio data format for playback.
-   *
-   * Sets the data format for the onPlaybackAudioFrame callback.
-   *  Ensure that you call this method before joining a channel.
-   *  The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method. Sample interval (sec) = samplePerCall /(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s). The SDK triggers the onPlaybackAudioFrame callback according to the sampling interval.
-   *
-   * @param sampleRate The sample rate returned in the onPlaybackAudioFrame callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
-   * @param channel The number of channels returned in the onPlaybackAudioFrame callback:
-   *  1: Mono.
-   *  2: Stereo.
-   * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType.
-   * @param samplesPerCall The number of data samples returned in the onPlaybackAudioFrame callback, such as 1024 for the Media Push.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setPlaybackAudioFrameParameters(
     sampleRate: number,
     channel: number,
@@ -4864,41 +3299,12 @@ export abstract class IRtcEngine {
     samplesPerCall: number
   ): number;
 
-  /**
-   * Sets the audio data format reported by onMixedAudioFrame.
-   *
-   * @param sampleRate The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
-   * @param channel The number of channels of the audio data, which can be set as 1(Mono) or 2(Stereo).
-   * @param samplesPerCall Sets the number of samples. In Media Push scenarios, set it as 1024.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setMixedAudioFrameParameters(
     sampleRate: number,
     channel: number,
     samplesPerCall: number
   ): number;
 
-  /**
-   * Sets the format of the in-ear monitoring raw audio data.
-   *
-   * This method is used to set the in-ear monitoring audio data format reported by the onEarMonitoringAudioFrame callback.
-   *  Before calling this method, you need to call enableInEarMonitoring, and set includeAudioFilters to EarMonitoringFilterBuiltInAudioFilters or EarMonitoringFilterNoiseSuppression.
-   *  The SDK calculates the sampling interval based on the samplesPerCall, sampleRate and channel parameters set in this method. Sample interval (sec) = samplePerCall /(sampleRate × channel). Ensure that the sample interval ≥ 0.01 (s). The SDK triggers the onEarMonitoringAudioFrame callback according to the sampling interval.
-   *
-   * @param sampleRate The sample rate of the audio data reported in the onEarMonitoringAudioFrame callback, which can be set as 8,000, 16,000, 32,000, 44,100, or 48,000 Hz.
-   * @param channel The number of audio channels reported in the onEarMonitoringAudioFrame callback.
-   *  1: Mono.
-   *  2: Stereo.
-   * @param mode The use mode of the audio frame. See RawAudioFrameOpModeType.
-   * @param samplesPerCall The number of data samples reported in the onEarMonitoringAudioFrame callback, such as 1,024 for the Media Push.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setEarMonitoringAudioFrameParameters(
     sampleRate: number,
     channel: number,
@@ -4906,179 +3312,43 @@ export abstract class IRtcEngine {
     samplesPerCall: number
   ): number;
 
-  /**
-   * Sets the audio data format reported by onPlaybackAudioFrameBeforeMixing.
-   *
-   * @param sampleRate The sample rate (Hz) of the audio data, which can be set as 8000, 16000, 32000, 44100, or 48000.
-   * @param channel The number of channels of the audio data, which can be set as 1 (Mono) or 2 (Stereo).
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setPlaybackAudioFrameBeforeMixingParameters(
     sampleRate: number,
     channel: number
   ): number;
 
-  /**
-   * Turns on audio spectrum monitoring.
-   *
-   * If you want to obtain the audio spectrum data of local or remote users, you can register the audio spectrum observer and enable audio spectrum monitoring. You can call this method either before or after joining a channel.
-   *
-   * @param intervalInMS The interval (in milliseconds) at which the SDK triggers the onLocalAudioSpectrum and onRemoteAudioSpectrum callbacks. The default value is 100. Do not set this parameter to a value less than 10, otherwise calling this method would fail.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: Invalid parameters.
-   */
   abstract enableAudioSpectrumMonitor(intervalInMS?: number): number;
 
-  /**
-   * Disables audio spectrum monitoring.
-   *
-   * After calling enableAudioSpectrumMonitor, if you want to disable audio spectrum monitoring, you can call this method. You can call this method either before or after joining a channel.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract disableAudioSpectrumMonitor(): number;
 
-  /**
-   * Register an audio spectrum observer.
-   *
-   * After successfully registering the audio spectrum observer and calling enableAudioSpectrumMonitor to enable the audio spectrum monitoring, the SDK reports the callback that you implement in the IAudioSpectrumObserver class according to the time interval you set. You can call this method either before or after joining a channel.
-   *
-   * @param observer The audio spectrum observer. See IAudioSpectrumObserver.
-   *
-   * @returns
-   * One IAudioSpectrumObserver object.
-   */
   abstract registerAudioSpectrumObserver(
     observer: IAudioSpectrumObserver
   ): number;
 
-  /**
-   * Unregisters the audio spectrum observer.
-   *
-   * After calling registerAudioSpectrumObserver, if you want to disable audio spectrum monitoring, you can call this method. You can call this method either before or after joining a channel.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract unregisterAudioSpectrumObserver(
     observer: IAudioSpectrumObserver
   ): number;
 
-  /**
-   * Adjusts the capturing signal volume.
-   *
-   * You can call this method either before or after joining a channel.
-   *
-   * @param volume The volume of the user. The value range is [0,400].
-   *  0: Mute. If you only need to mute the audio signal, Agora recommends that you use muteRecordingSignal instead.
-   *  100: (Default) The original volume.
-   *  400: Four times the original volume (amplifying the audio signals by four times).
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract adjustRecordingSignalVolume(volume: number): number;
 
-  /**
-   * Whether to mute the recording signal.
-   *
-   * @param mute true : The media file is muted. false : (Default) Do not mute the recording signal. If you have already called adjustRecordingSignalVolume to adjust the volume, then when you call this method and set it to true, the SDK will record the current volume and mute it. To restore the previous volume, call this method again and set it to false.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract muteRecordingSignal(mute: boolean): number;
 
-  /**
-   * Adjusts the playback signal volume of all remote users.
-   *
-   * This method adjusts the playback volume that is the mixed volume of all remote users.
-   *  You can call this method either before or after joining a channel.
-   *
-   * @param volume The volume of the user. The value range is [0,400].
-   *  0: Mute. If you only need to mute the audio signal, Agora recommends that you use muteRecordingSignal instead.
-   *  100: (Default) The original volume.
-   *  400: Four times the original volume (amplifying the audio signals by four times).
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract adjustPlaybackSignalVolume(volume: number): number;
 
-  /**
-   * Adjusts the playback signal volume of a specified remote user.
-   *
-   * You can call this method to adjust the playback volume of a specified remote user. To adjust the playback volume of different remote users, call the method as many times, once for each remote user.
-   *  Call this method after joining a channel.
-   *  The playback volume here refers to the mixed volume of a specified remote user.
-   *
-   * @param uid The user ID of the remote user.
-   * @param volume Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract adjustUserPlaybackSignalVolume(uid: number, volume: number): number;
 
-  /**
-   * @ignore
-   */
   abstract setLocalPublishFallbackOption(option: StreamFallbackOptions): number;
 
-  /**
-   * Sets the fallback option for the subscribed video stream based on the network conditions.
-   *
-   * An unstable network affects the audio and video quality in a video call or interactive live video streaming. If option is set as StreamFallbackOptionVideoStreamLow or StreamFallbackOptionAudioOnly, the SDK automatically switches the video from a high-quality stream to a low-quality stream or disables the video when the downlink network conditions cannot support both audio and video to guarantee the quality of the audio. Meanwhile, the SDK continuously monitors network quality and resumes subscribing to audio and video streams when the network quality improves. When the subscribed video stream falls back to an audio-only stream, or recovers from an audio-only stream to an audio-video stream, the SDK triggers the onRemoteSubscribeFallbackToAudioOnly callback. Ensure that you call this method before joining a channel.
-   *
-   * @param option Fallback options for the subscribed stream. See STREAM_FALLBACK_OPTIONS.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setRemoteSubscribeFallbackOption(
     option: StreamFallbackOptions
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract setHighPriorityUserList(
     uidList: number[],
     uidNum: number,
     option: StreamFallbackOptions
   ): number;
 
-  /**
-   * Enables or disables extensions.
-   *
-   * To call this method, call it immediately after initializing the IRtcEngine object.
-   *  If you want to enable multiple extensions, you need to call this method multiple times.
-   *  The data processing order of different extensions in the SDK is determined by the order in which the extensions are enabled. That is, the extension that is enabled first will process the data first.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param enable Whether to enable the extension: true : Enable the extension. false : Disable the extension.
-   * @param type Source type of the extension. See MediaSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -3: The extension library is not loaded. Agora recommends that you check the storage location or the name of the dynamic library.
-   */
   abstract enableExtension(
     provider: string,
     extension: string,
@@ -5086,21 +3356,6 @@ export abstract class IRtcEngine {
     type?: MediaSourceType
   ): number;
 
-  /**
-   * Sets the properties of the extension.
-   *
-   * After enabling the extension, you can call this method to set the properties of the extension.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param key The key of the extension.
-   * @param value The value of the extension key.
-   * @param type Source type of the extension. See MediaSourceType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setExtensionProperty(
     provider: string,
     extension: string,
@@ -5109,19 +3364,6 @@ export abstract class IRtcEngine {
     type?: MediaSourceType
   ): number;
 
-  /**
-   * Gets detailed information on the extensions.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param key The key of the extension.
-   * @param bufLen Maximum length of the JSON string indicating the extension property. The maximum value is 512 bytes.
-   * @param type Source type of the extension. See MediaSourceType.
-   *
-   * @returns
-   * The extension information, if the method call succeeds.
-   *  An empty string, if the method call fails.
-   */
   abstract getExtensionProperty(
     provider: string,
     extension: string,
@@ -5130,646 +3372,153 @@ export abstract class IRtcEngine {
     type?: MediaSourceType
   ): string;
 
-  /**
-   * @ignore
-   */
   abstract enableLoopbackRecording(
     enabled: boolean,
     deviceName?: string
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract adjustLoopbackSignalVolume(volume: number): number;
 
-  /**
-   * @ignore
-   */
   abstract getLoopbackRecordingVolume(): number;
 
-  /**
-   * Enables in-ear monitoring.
-   *
-   * This method enables or disables in-ear monitoring.
-   *  Users must use earphones (wired or Bluetooth) to hear the in-ear monitoring effect.
-   *  You can call this method either before or after joining a channel.
-   *
-   * @param enabled Enables or disables in-ear monitoring. true : Enables in-ear monitoring. false : (Default) Disables in-ear monitoring.
-   * @param includeAudioFilters The audio filter types of in-ear monitoring. See EarMonitoringFilterType.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  - 8: Make sure the current audio routing is Bluetooth or headset.
-   */
   abstract enableInEarMonitoring(
     enabled: boolean,
     includeAudioFilters: EarMonitoringFilterType
   ): number;
 
-  /**
-   * Sets the volume of the in-ear monitor.
-   *
-   * You can call this method either before or after joining a channel.
-   *
-   * @param volume The volume of the in-ear monitor. The value range is [0,400].
-   *  0: Mute.
-   *  100: (Default) The original volume.
-   *  400: Four times the original volume.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: Invalid parameter settings, such as in-ear monitoring volume exceeding the valid range (< 0 or > 400).
-   */
   abstract setInEarMonitoringVolume(volume: number): number;
 
-  /**
-   * Adds an extension to the SDK.
-   *
-   * This method is for Android only.
-   *
-   * @param path The extension library path and name. For example: /library/libagora_segmentation_extension.dll.
-   * @param unloadAfterUse Whether to uninstall the current extension when you no longer using it: true : Uninstall the extension when the IRtcEngine is destroyed. false : (Rcommended) Do not uninstall the extension until the process terminates.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract loadExtensionProvider(
     path: string,
     unloadAfterUse?: boolean
   ): number;
 
-  /**
-   * Sets the properties of the extension provider.
-   *
-   * You can call this method to set the attributes of the extension provider and initialize the relevant parameters according to the type of the provider. Call this method after enableExtension, and before enabling the audio (enableAudio / enableLocalAudio) or the video (enableVideo / enableLocalVideo).
-   *
-   * @param provider The name of the extension provider.
-   * @param key The key of the extension.
-   * @param value The value of the extension key.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setExtensionProviderProperty(
     provider: string,
     key: string,
     value: string
   ): number;
 
-  /**
-   * Registers an extension.
-   *
-   * After the extension is loaded, you can call this method to register the extension.
-   *  Before calling this method, you need to call loadExtensionProvider to load the extension first.
-   *  For extensions external to the SDK (such as those from Extensions Marketplace and SDK Extensions), you need to call this method before calling setExtensionProperty.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param type Source type of the extension. See MediaSourceType.
-   */
   abstract registerExtension(
     provider: string,
     extension: string,
     type?: MediaSourceType
   ): number;
 
-  /**
-   * Sets the camera capture configuration.
-   *
-   * Call this method before enabling local camera capture, such as before calling startPreview and joinChannel.
-   *  To adjust the camera focal length configuration, It is recommended to call first to check the device's focal length capabilities, and then configure based on the query results.
-   *  Due to limitations on some Android devices, even if you set the focal length type according to the results returned in, the settings may not take effect.
-   *
-   * @param config The camera capture configuration. See CameraCapturerConfiguration.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setCameraCapturerConfiguration(
     config: CameraCapturerConfiguration
   ): number;
 
-  /**
-   * Creates a custom video track.
-   *
-   * To publish a custom video source, see the following steps:
-   *  Call this method to create a video track and get the video track ID.
-   *  Call joinChannel to join the channel. In ChannelMediaOptions, set customVideoTrackId to the video track ID that you want to publish, and set publishCustomVideoTrack to true.
-   *  Call pushVideoFrame and specify videoTrackId as the video track ID set in step 2. You can then publish the corresponding custom video source in the channel.
-   *
-   * @returns
-   * If the method call is successful, the video track ID is returned as the unique identifier of the video track.
-   *  If the method call fails, a negative value is returned.
-   */
   abstract createCustomVideoTrack(): number;
 
-  /**
-   * @ignore
-   */
   abstract createCustomEncodedVideoTrack(senderOption: SenderOptions): number;
 
-  /**
-   * Destroys the specified video track.
-   *
-   * @param videoTrackId The video track ID returned by calling the createCustomVideoTrack method.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract destroyCustomVideoTrack(videoTrackId: number): number;
 
-  /**
-   * @ignore
-   */
   abstract destroyCustomEncodedVideoTrack(videoTrackId: number): number;
 
-  /**
-   * Switches between front and rear cameras.
-   *
-   * You can call this method to dynamically switch cameras based on the actual camera availability during the app's runtime, without having to restart the video stream or reconfigure the video source.
-   *  This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  This method only switches the camera for the video stream captured by the first camera, that is, the video source set to VideoSourceCamera (0) when calling startCameraCapture.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract switchCamera(): number;
 
-  /**
-   * Checks whether the device supports camera zoom.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @returns
-   * true : The device supports camera zoom. false : The device does not support camera zoom.
-   */
   abstract isCameraZoomSupported(): boolean;
 
-  /**
-   * Checks whether the device camera supports face detection.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  This method is for Android and iOS only.
-   *
-   * @returns
-   * true : The device camera supports face detection. false : The device camera does not support face detection.
-   */
   abstract isCameraFaceDetectSupported(): boolean;
 
-  /**
-   * Checks whether the device supports camera flash.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  The app enables the front camera by default. If your front camera does not support flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
-   *  On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
-   *
-   * @returns
-   * true : The device supports camera flash. false : The device does not support camera flash.
-   */
   abstract isCameraTorchSupported(): boolean;
 
-  /**
-   * Check whether the device supports the manual focus function.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @returns
-   * true : The device supports the manual focus function. false : The device does not support the manual focus function.
-   */
   abstract isCameraFocusSupported(): boolean;
 
-  /**
-   * Checks whether the device supports the face auto-focus function.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @returns
-   * true : The device supports the face auto-focus function. false : The device does not support the face auto-focus function.
-   */
   abstract isCameraAutoFocusFaceModeSupported(): boolean;
 
-  /**
-   * Sets the camera zoom factor.
-   *
-   * For iOS devices equipped with multi-lens rear cameras, such as those featuring dual-camera (wide-angle and ultra-wide-angle) or triple-camera (wide-angle, ultra-wide-angle, and telephoto), you can call setCameraCapturerConfiguration first to set the cameraFocalLengthType as (0) (standard lens). Then, adjust the camera zoom factor to a value less than 1.0. This configuration allows you to capture video with an ultra-wide-angle perspective.
-   *  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @param factor The camera zoom factor. For devices that do not support ultra-wide-angle, the value ranges from 1.0 to the maximum zoom factor; for devices that support ultra-wide-angle, the value ranges from 0.5 to the maximum zoom factor. You can get the maximum zoom factor supported by the device by calling the getCameraMaxZoomFactor method.
-   *
-   * @returns
-   * The camera zoom factor value, if successful.
-   *  < 0: if the method if failed.
-   */
   abstract setCameraZoomFactor(factor: number): number;
 
-  /**
-   * Enables or disables face detection for the local user.
-   *
-   * You can call this method either before or after joining a channel. Once face detection is enabled, the SDK triggers the onFacePositionChanged callback to report the face information of the local user, which includes the following:
-   *  The width and height of the local video.
-   *  The position of the human face in the local view.
-   *  The distance between the human face and the screen. This method needs to be called after the camera is started (for example, by calling startPreview or enableVideo ).
-   *
-   * @param enabled Whether to enable face detection for the local user: true : Enable face detection. false : (Default) Disable face detection.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract enableFaceDetection(enabled: boolean): number;
 
-  /**
-   * Gets the maximum zoom ratio supported by the camera.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @returns
-   * The maximum zoom factor.
-   */
   abstract getCameraMaxZoomFactor(): number;
 
-  /**
-   * Sets the camera manual focus position.
-   *
-   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  After a successful method call, the SDK triggers the onCameraFocusAreaChanged callback.
-   *
-   * @param positionX The horizontal coordinate of the touchpoint in the view.
-   * @param positionY The vertical coordinate of the touchpoint in the view.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setCameraFocusPositionInPreview(
     positionX: number,
     positionY: number
   ): number;
 
-  /**
-   * Enables the camera flash.
-   *
-   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @param isOn Whether to turn on the camera flash: true : Turn on the flash. false : (Default) Turn off the flash.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setCameraTorchOn(isOn: boolean): number;
 
-  /**
-   * Enables the camera auto-face focus function.
-   *
-   * By default, the SDK disables face autofocus on Android and enables face autofocus on iOS. To set face autofocus, call this method.
-   *  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @param enabled Whether to enable face autofocus: true : Enable the camera auto-face focus function. false : Disable face autofocus.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setCameraAutoFocusFaceModeEnabled(enabled: boolean): number;
 
-  /**
-   * Checks whether the device supports manual exposure.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *
-   * @returns
-   * true : The device supports manual exposure. false : The device does not support manual exposure.
-   */
   abstract isCameraExposurePositionSupported(): boolean;
 
-  /**
-   * Sets the camera exposure position.
-   *
-   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  After a successful method call, the SDK triggers the onCameraExposureAreaChanged callback.
-   *
-   * @param positionXinView The horizontal coordinate of the touchpoint in the view.
-   * @param positionYinView The vertical coordinate of the touchpoint in the view.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setCameraExposurePosition(
     positionXinView: number,
     positionYinView: number
   ): number;
 
-  /**
-   * Queries whether the current camera supports adjusting exposure value.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  Before calling setCameraExposureFactor, Agora recoomends that you call this method to query whether the current camera supports adjusting the exposure value.
-   *  By calling this method, you adjust the exposure value of the currently active camera, that is, the camera specified when calling setCameraCapturerConfiguration.
-   *
-   * @returns
-   * true : Success. false : Failure.
-   */
   abstract isCameraExposureSupported(): boolean;
 
-  /**
-   * Sets the camera exposure value.
-   *
-   * Insufficient or excessive lighting in the shooting environment can affect the image quality of video capture. To achieve optimal video quality, you can use this method to adjust the camera's exposure value.
-   *  You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  Before calling this method, Agora recommends calling isCameraExposureSupported to check whether the current camera supports adjusting the exposure value.
-   *  By calling this method, you adjust the exposure value of the currently active camera, that is, the camera specified when calling setCameraCapturerConfiguration.
-   *
-   * @param factor The camera exposure value. The default value is 0, which means using the default exposure of the camera. The larger the value, the greater the exposure. When the video image is overexposed, you can reduce the exposure value; when the video image is underexposed and the dark details are lost, you can increase the exposure value. If the exposure value you specified is beyond the range supported by the device, the SDK will automatically adjust it to the actual supported range of the device. On Android, the value range is [-20.0, 20.0]. On iOS, the value range is [-8.0, 8.0].
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setCameraExposureFactor(factor: number): number;
 
-  /**
-   * Checks whether the device supports auto exposure.
-   *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  This method applies to iOS only.
-   *
-   * @returns
-   * true : The device supports auto exposure. false : The device does not support auto exposure.
-   */
   abstract isCameraAutoExposureFaceModeSupported(): boolean;
 
-  /**
-   * Sets whether to enable auto exposure.
-   *
-   * You must call this method after enableVideo. The setting result will take effect after the camera is successfully turned on, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
-   *  This method applies to iOS only.
-   *
-   * @param enabled Whether to enable auto exposure: true : Enable auto exposure. false : Disable auto exposure.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setCameraAutoExposureFaceModeEnabled(enabled: boolean): number;
 
-  /**
-   * @ignore
-   */
   abstract setCameraStabilizationMode(mode: CameraStabilizationMode): number;
 
-  /**
-   * Sets the default audio playback route.
-   *
-   * Ensure that you call this method before joining a channel. If you need to change the audio route after joining a channel, call setEnableSpeakerphone. Most mobile phones have two audio routes: an earpiece at the top, and a speakerphone at the bottom. The earpiece plays at a lower volume, and the speakerphone at a higher volume. When setting the default audio route, you determine whether audio playback comes through the earpiece or speakerphone when no external audio device is connected. In different scenarios, the default audio routing of the system is also different. See the following:
-   *  Voice call: Earpiece.
-   *  Audio broadcast: Speakerphone.
-   *  Video call: Speakerphone.
-   *  Video broadcast: Speakerphone. You can call this method to change the default audio route. After a successful method call, the SDK triggers the onAudioRoutingChanged callback. The system audio route changes when an external audio device, such as a headphone or a Bluetooth audio device, is connected. See Audio Route for detailed change principles.
-   *
-   * @param defaultToSpeaker Whether to set the speakerphone as the default audio route: true : Set the speakerphone as the default audio route. false : Set the earpiece as the default audio route.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setDefaultAudioRouteToSpeakerphone(
     defaultToSpeaker: boolean
   ): number;
 
-  /**
-   * Enables/Disables the audio route to the speakerphone.
-   *
-   * If the default audio route of the SDK (see Set the Audio Route) or the setting in setDefaultAudioRouteToSpeakerphone cannot meet your requirements, you can call setEnableSpeakerphone to switch the current audio route. After a successful method call, the SDK triggers the onAudioRoutingChanged callback. This method only sets the audio route in the current channel and does not influence the default audio route. If the user leaves the current channel and joins another channel, the default audio route is used.
-   *  Call this method after joining a channel.
-   *  If the user uses an external audio playback device such as a Bluetooth or wired headset, this method does not take effect, and the SDK plays audio through the external device. When the user uses multiple external devices, the SDK plays audio through the last connected device.
-   *
-   * @param speakerOn Sets whether to enable the speakerphone or earpiece: true : Enable device state monitoring. The audio route is the speakerphone. false : Disable device state monitoring. The audio route is the earpiece.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setEnableSpeakerphone(speakerOn: boolean): number;
 
-  /**
-   * Checks whether the speakerphone is enabled.
-   *
-   * @returns
-   * true : The speakerphone is enabled, and the audio plays from the speakerphone. false : The speakerphone is not enabled, and the audio plays from devices other than the speakerphone. For example, the headset or earpiece.
-   */
   abstract isSpeakerphoneEnabled(): boolean;
 
-  /**
-   * Selects the audio playback route in communication audio mode.
-   *
-   * This method is used to switch the audio route from Bluetooth headphones to earpiece, wired headphones or speakers in communication audio mode (). After the method is called successfully, the SDK will trigger the onAudioRoutingChanged callback to report the modified route.
-   *  This method is for Android only.
-   *  Using this method and the setEnableSpeakerphone method at the same time may cause conflicts. Agora recommends that you use the setRouteInCommunicationMode method alone.
-   *
-   * @param route The audio playback route you want to use:
-   *  -1: The default audio route.
-   *  0: Headphones with microphone.
-   *  1: Handset.
-   *  2: Headphones without microphone.
-   *  3: Device's built-in speaker.
-   *  4: (Not supported yet) External speakers.
-   *  5: Bluetooth headphones.
-   *  6: USB device.
-   *
-   * @returns
-   * Without practical meaning.
-   */
   abstract setRouteInCommunicationMode(route: number): number;
 
-  /**
-   * @ignore
-   */
   abstract isCameraCenterStageSupported(): boolean;
 
-  /**
-   * @ignore
-   */
   abstract enableCameraCenterStage(enabled: boolean): number;
 
-  /**
-   * @ignore
-   */
   abstract getScreenCaptureSources(
     thumbSize: Size,
     iconSize: Size,
     includeScreen: boolean
   ): ScreenCaptureSourceInfo[];
 
-  /**
-   * Sets the operational permission of the SDK on the audio session.
-   *
-   * The SDK and the app can both configure the audio session by default. If you need to only use the app to configure the audio session, this method restricts the operational permission of the SDK on the audio session. You can call this method either before or after joining a channel. Once you call this method to restrict the operational permission of the SDK on the audio session, the restriction takes effect when the SDK needs to change the audio session.
-   *  This method is only available for iOS platforms.
-   *  This method does not restrict the operational permission of the app on the audio session.
-   *
-   * @param restriction The operational permission of the SDK on the audio session. See AudioSessionOperationRestriction. This parameter is in bit mask format, and each bit corresponds to a permission.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
   abstract setAudioSessionOperationRestriction(
     restriction: AudioSessionOperationRestriction
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract startScreenCaptureByDisplayId(
     displayId: number,
     regionRect: Rectangle,
     captureParams: ScreenCaptureParameters
   ): number;
 
-  /**
-   * @ignore
-   */
   abstract startScreenCaptureByScreenRect(
     screenRect: Rectangle,
     regionRect: Rectangle,
     captureParams: ScreenCaptureParameters
   ): number;
 
-  /**
-   * Gets the audio device information.
-   *
-   * After calling this method, you can get whether the audio device supports ultra-low-latency capture and playback.
-   *  You can call this method either before or after joining a channel.
-   *
-   * @returns
-   * The DeviceInfo object that identifies the audio device information.
-   *  Not null: Success.
-   *  Null: Failure.
-   */
   abstract getAudioDeviceInfo(): DeviceInfo;
 
-  /**
-   * @ignore
-   */
   abstract startScreenCaptureByWindowId(
     windowId: any,
     regionRect: Rectangle,
     captureParams: ScreenCaptureParameters
   ): number;
 
-  /**
-   * Sets the content hint for screen sharing.
-   *
-   * A content hint suggests the type of the content being shared, so that the SDK applies different optimization algorithms to different types of content. If you don't call this method, the default content hint is ContentHintNone. You can call this method either before or after you start screen sharing.
-   *
-   * @param contentHint The content hint for screen sharing. See VideoContentHint.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid.
-   *  -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
-   */
   abstract setScreenCaptureContentHint(contentHint: VideoContentHint): number;
 
-  /**
-   * Updates the screen capturing region.
-   *
-   * Call this method after starting screen sharing or window sharing.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid.
-   *  -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
-   */
   abstract updateScreenCaptureRegion(regionRect: Rectangle): number;
 
-  /**
-   * Updates the screen capturing parameters.
-   *
-   * Call this method after starting screen sharing or window sharing.
-   *
-   * @param captureParams The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid.
-   *  -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
-   */
   abstract updateScreenCaptureParameters(
     captureParams: ScreenCaptureParameters
   ): number;
 
-  /**
-   * Starts screen capture.
-   *
-   * This method applies to Android and iOS only.
-   *  On the iOS platform, screen sharing is only available on iOS 12.0 and later.
-   *  The billing for the screen sharing stream is based on the dimensions in ScreenVideoParameters. When you do not pass in a value, Agora bills you at 1280 × 720; when you pass a value in, Agora bills you at that value. For billing details, see.
-   *  If you are using the custom audio source instead of the SDK to capture audio, Agora recommends you add the keep-alive processing logic to your application to avoid screen sharing stopping when the application goes to the background.
-   *  This feature requires high-performance device, and Agora recommends that you use it on iPhone X and later models.
-   *  This method relies on the iOS screen sharing dynamic library AgoraReplayKitExtension.xcframework. If the dynamic library is deleted, screen sharing cannot be enabled normally.
-   *  On the Android platform, if the user has not granted the app screen capture permission, the SDK reports the onPermissionError (2) callback.
-   *  On Android 9 and later, to avoid the application being killed by the system after going to the background, Agora recommends you add the foreground service android.permission.FOREGROUND_SERVICE to the /app/Manifests/AndroidManifest.xml file.
-   *  Due to performance limitations, screen sharing is not supported on Android TV.
-   *  Due to system limitations, if you are using Huawei phones, do not adjust the video encoding resolution of the screen sharing stream during the screen sharing, or you could experience crashes.
-   *  Due to system limitations, some Xiaomi devices do not support capturing system audio during screen sharing.
-   *  To avoid system audio capture failure when screen sharing, Agora recommends that you set the audio application scenario to AudioScenarioGameStreaming by using the setAudioScenario method before joining the channel.
-   *
-   * @param captureParams The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2 (iOS platform): Empty parameter.
-   *  -2 (Android platform): The system version is too low. Ensure that the Android API level is not lower than 21.
-   *  -3 (Android platform): Unable to capture system audio. Ensure that the Android API level is not lower than 29.
-   */
   abstract startScreenCapture(captureParams: ScreenCaptureParameters2): number;
 
-  /**
-   * Updates the screen capturing parameters.
-   *
-   * If the system audio is not captured when screen sharing is enabled, and then you want to update the parameter configuration and publish the system audio, you can refer to the following steps:
-   *  Call this method, and set captureAudio to true.
-   *  Call updateChannelMediaOptions, and set publishScreenCaptureAudio to true to publish the audio captured by the screen.
-   *  This method applies to Android and iOS only.
-   *  On the iOS platform, screen sharing is only available on iOS 12.0 and later.
-   *
-   * @param captureParams The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   *  -2: The parameter is invalid.
-   *  -8: The screen sharing state is invalid. Probably because you have shared other screens or windows. Try calling stopScreenCapture to stop the current sharing and start sharing the screen again.
-   */
   abstract updateScreenCapture(captureParams: ScreenCaptureParameters2): number;
 
-  /**
-   * Queries the highest frame rate supported by the device during screen sharing.
-   *
-   * @returns
-   * The highest frame rate supported by the device, if the method is called successfully. See ScreenCaptureFramerateCapability.
-   *  < 0: Failure.
-   */
   abstract queryScreenCaptureCapability(): number;
 
-  /**
-   * @ignore
-   */
   abstract queryCameraFocalLengthCapability(): {
     focalLengthInfos: FocalLengthInfo[];
     size: number;
@@ -5903,11 +3652,6 @@ export abstract class IRtcEngine {
    * Starts the local video mixing.
    *
    * After calling this method, you can merge multiple video streams into one video stream locally. For example, you can merge the video streams captured by the camera, screen sharing, media player, remote video, video files, images, etc. into one video stream, and then publish the mixed video stream to the channel.
-   *  Local video mixing requires more CPU resources. Therefore, Agora recommends enabling this function on devices with higher performance.
-   *  If you need to mix locally captured video streams, the SDK supports the following capture combinations:
-   *  On Android and iOS platforms, it supports video streams captured by up to 2 cameras (the device itself needs to support dual cameras or supports external cameras) + 1 screen sharing stream.
-   *  If you need to mix the locally collected video streams, you need to call this method after startCameraCapture or startScreenCapture.
-   *  If you want to publish the mixed video stream to the channel, you need to set publishTranscodedVideoTrack in ChannelMediaOptions to true when calling joinChannel or updateChannelMediaOptions.
    *
    * @param config Configuration of the local video mixing, see LocalTranscoderConfiguration.
    *  The maximum resolution of each video stream participating in the local video mixing is 4096 × 2160. If this limit is exceeded, video mixing does not take effect.
@@ -7337,7 +5081,7 @@ export class VideoDeviceInfo {
 }
 
 /**
- * The AudioDeviceInfo class that contains the ID and device name of the audio devices.
+ * The AudioDeviceInfo class that contains the ID, name and type of the audio devices.
  */
 export class AudioDeviceInfo {
   /**
@@ -7345,7 +5089,7 @@ export class AudioDeviceInfo {
    */
   deviceId?: string;
   /**
-   * @ignore
+   * Output parameter; indicates the type of audio devices, such as built-in, USB and HDMI.
    */
   deviceTypeName?: string;
   /**
