@@ -34,6 +34,11 @@ export interface RtcSurfaceViewProps extends RtcRendererViewProps {
    * Controls whether to place the surface of the RtcSurfaceView on top of another RtcSurfaceView in the window (but still behind the window): true : Place it on top of another RtcSurfaceView in the window. false : Do not place it on top of another RtcSurfaceView in the window.
    */
   zOrderMediaOverlay?: boolean;
+  
+  /**
+   * Sets the corner radius of the SurfaceView's container. 
+   */
+  cornerRadius?: number; 
 }
 
 /**
