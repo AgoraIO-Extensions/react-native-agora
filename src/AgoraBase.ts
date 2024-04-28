@@ -905,9 +905,9 @@ export enum CameraFocalLengthType {
    */
   CameraFocalLengthWideAngle = 1,
   /**
-   * @ignore
+   * 2: Ultra-wide-angle lens.
    */
-  CameraFocalLengthUrltraWide = 2,
+  CameraFocalLengthUltraWide = 2,
   /**
    * 3: (For iOS only) Telephoto lens.
    */
