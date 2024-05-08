@@ -69,7 +69,7 @@ export enum LogFilterType {
  */
 export class LogConfig {
   /**
-   * The complete path of the log files. Ensure that the path for the log file exists and is writable. You can use this parameter to rename the log files. The default path is:
+   * The complete path of the log files. Agora recommends using the default log directory. If you need to modify the default directory, ensure that the directory you specify exists and is writable. The default log directory is:
    *  Android： /storage/emulated/0/Android/data/<packagename>/files/agorasdk.log.
    *  iOS： App Sandbox/Library/caches/agorasdk.log.
    */

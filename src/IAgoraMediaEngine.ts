@@ -10,6 +10,7 @@ import {
   ExternalVideoFrame,
   ExternalVideoSourceType,
   IAudioFrameObserver,
+  IFaceInfoObserver,
   IVideoEncodedFrameObserver,
   IVideoFrameObserver,
 } from './AgoraMediaBase';
@@ -99,7 +100,26 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
+   * Registers a facial information observer.
+   *
+   * You can call this method to register the onFaceInfo callback to receive the facial information processed by Agora speech driven extension. When calling this method to register a facial information observer, you can register callbacks in the IFaceInfoObserver class as needed. After successfully registering the facial information observer, the SDK triggers the callback you have registered when it captures the facial information converted by the speech driven extension.
+   *  Ensure that you call this method before joining a channel.
+   *  Before calling this method, you need to make sure that the speech driven extension has been enabled by calling enableExtension.
+   *
+   * @param observer Facial information observer, see IFaceInfoObserver.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   */
+  abstract registerFaceInfoObserver(observer: IFaceInfoObserver): number;
+
+  /**
    * Pushes the external audio frame.
+   *
+   * Before calling this method to push external audio data, perform the following steps:
+   *  Call createCustomAudioTrack to create a custom audio track and get the audio track ID.
+   *  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
    *
    * @param frame The external audio frame. See AudioFrame.
    * @param trackId The audio track ID. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
@@ -113,13 +133,12 @@ export abstract class IMediaEngine {
   /**
    * Pulls the remote audio data.
    *
-   * Before calling this method, you need to call setExternalAudioSink to notify the app to enable and set the external rendering. After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
-   *  This method only supports pulling data from custom audio source. If you need to pull the data captured by the SDK, do not call this method.
+   * Before calling this method, call setExternalAudioSink (enabled : true) to notify the app to enable and set the external audio rendering. After a successful call of this method, the app pulls the decoded and mixed audio data for playback.
    *  Call this method after joining a channel.
-   *  Once you enable the external audio sink, the app will not retrieve any audio data from the onPlaybackAudioFrame callback.
-   *  The difference between this method and the onPlaybackAudioFrame callback is as follows:
+   *  Both this method and onPlaybackAudioFrame callback can be used to get audio data after remote mixing. Note that after calling setExternalAudioSink to enable external audio rendering, the app no longer receives data from the onPlaybackAudioFrame callback. Therefore, you should choose between this method and the onPlaybackAudioFrame callback based on your actual business requirements. The specific distinctions between them are as follows:
+   *  After calling this method, the app automatically pulls the audio data from the SDK. By setting the audio data parameters, the SDK adjusts the frame buffer to help the app handle latency, effectively avoiding audio playback jitter.
    *  The SDK sends the audio data to the app through the onPlaybackAudioFrame callback. Any delay in processing the audio frames may result in audio jitter.
-   *  After a successful method call, the app automatically pulls the audio data from the SDK. After setting the audio data parameters, the SDK adjusts the frame buffer and avoids problems caused by jitter in the external audio playback.
+   *  This method is only used for retrieving audio data after remote mixing. If you need to get audio data from different audio processing stages such as capture and playback, you can register the corresponding callbacks by calling registerAudioFrameObserver.
    *
    * @returns
    * The AudioFrame instance, if the method call succeeds.
@@ -302,4 +321,15 @@ export abstract class IMediaEngine {
   abstract unregisterVideoEncodedFrameObserver(
     observer: IVideoEncodedFrameObserver
   ): number;
+
+  /**
+   * Unregisters a facial information observer.
+   *
+   * @param observer Facial information observer, see IFaceInfoObserver.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   */
+  abstract unregisterFaceInfoObserver(observer: IFaceInfoObserver): number;
 }

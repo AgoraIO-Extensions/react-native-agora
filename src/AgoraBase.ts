@@ -319,13 +319,17 @@ export enum ErrorCodeType {
    */
   ErrSetClientRoleNotAuthorized = 119,
   /**
-   * 120: Decryption fails. The user might have entered an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
+   * 120: Media streams decryption fails. The user might use an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
    */
   ErrDecryptionFailed = 120,
   /**
    * 121: The user ID is invalid.
    */
   ErrInvalidUserId = 121,
+  /**
+   * 122: Data streams decryption fails. The user might use an incorrect password to join the channel. Check the entered password, or tell the user to try rejoining the channel.
+   */
+  ErrDatastreamDecryptionFailed = 122,
   /**
    * 123: The user is banned from the server.
    */
@@ -889,6 +893,28 @@ export enum VideoCodecType {
 }
 
 /**
+ * The camera focal length types.
+ */
+export enum CameraFocalLengthType {
+  /**
+   * 0: (Default) Standard lens.
+   */
+  CameraFocalLengthDefault = 0,
+  /**
+   * 1: Wide-angle lens.
+   */
+  CameraFocalLengthWideAngle = 1,
+  /**
+   * 2: Ultra-wide-angle lens.
+   */
+  CameraFocalLengthUltraWide = 2,
+  /**
+   * 3: (For iOS only) Telephoto lens.
+   */
+  CameraFocalLengthTelephoto = 3,
+}
+
+/**
  * @ignore
  */
 export enum TCcMode {
@@ -1196,6 +1222,10 @@ export class EncodedVideoFrameInfo {
    * The type of video streams. See VideoStreamType.
    */
   streamType?: VideoStreamType;
+  /**
+   * @ignore
+   */
+  presentationMs?: number;
 }
 
 /**
@@ -1323,6 +1353,20 @@ export class CodecCapInfo {
 }
 
 /**
+ * Focal length information supported by the camera, including the camera direction and focal length type.
+ */
+export class FocalLengthInfo {
+  /**
+   * The camera direction. See CameraDirection.
+   */
+  cameraDirection?: number;
+  /**
+   * The focal length type. See CameraFocalLengthType.
+   */
+  focalLengthType?: CameraFocalLengthType;
+}
+
+/**
  * Video encoder configurations.
  */
 export class VideoEncoderConfiguration {
@@ -1403,11 +1447,11 @@ export enum SimulcastStreamMode {
  */
 export class SimulcastStreamConfig {
   /**
-   * The video dimension. See VideoDimensions. The default value is 160 × 120.
+   * The video dimension. See VideoDimensions. The default value is 50% of the high-quality video stream.
    */
   dimensions?: VideoDimensions;
   /**
-   * Video receive bitrate (Kbps), represented by an instantaneous value. The default value is 65.
+   * Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
    */
   kBitrate?: number;
   /**
@@ -1465,7 +1509,7 @@ export class WatermarkRatio {
  */
 export class WatermarkOptions {
   /**
-   * Is the watermark visible in the local preview view? true : (Default) The watermark is visible in the local preview view. false : The watermark is not visible in the local preview view.
+   * Whether the watermark is visible in the local preview view: true : (Default) The watermark is visible in the local preview view. false : The watermark is not visible in the local preview view.
    */
   visibleInPreview?: boolean;
   /**
@@ -1816,15 +1860,15 @@ export enum AudioScenarioType {
  */
 export class VideoFormat {
   /**
-   * The width (px) of the video frame.
+   * The width (px) of the video frame. The default value is 960.
    */
   width?: number;
   /**
-   * The height (px) of the video frame.
+   * The height (px) of the video frame. The default value is 540.
    */
   height?: number;
   /**
-   * The video frame rate (fps).
+   * The video frame rate (fps). The default value is 15.
    */
   fps?: number;
 }
@@ -1941,6 +1985,38 @@ export enum CaptureBrightnessLevelType {
 }
 
 /**
+ * Camera stabilization modes.
+ *
+ * The camera stabilization effect increases in the order of 1 < 2 < 3, and the latency will also increase accordingly.
+ */
+export enum CameraStabilizationMode {
+  /**
+   * -1: (Default) Camera stabilization mode off.
+   */
+  CameraStabilizationModeOff = -1,
+  /**
+   * 0: Automatic camera stabilization. The system automatically selects a stabilization mode based on the status of the camera. However, the latency is relatively high in this mode, so it is recommended not to use this enumeration.
+   */
+  CameraStabilizationModeAuto = 0,
+  /**
+   * 1: (Recommended) Level 1 camera stabilization.
+   */
+  CameraStabilizationModeLevel1 = 1,
+  /**
+   * 2: Level 2 camera stabilization.
+   */
+  CameraStabilizationModeLevel2 = 2,
+  /**
+   * 3: Level 3 camera stabilization.
+   */
+  CameraStabilizationModeLevel3 = 3,
+  /**
+   * @ignore
+   */
+  CameraStabilizationModeMaxLevel = 3,
+}
+
+/**
  * The state of the local audio.
  */
 export enum LocalAudioStreamState {
@@ -1999,7 +2075,7 @@ export enum LocalAudioStreamReason {
    */
   LocalAudioStreamReasonNoPlayoutDevice = 7,
   /**
-   * 8: The local audio capture is interrupted by a system call, Siri, or alarm clock. Remind your users to end the phone call, Siri, or alarm clock if the local audio capture is required.
+   * 8: The local audio capture is interrupted by a system call, smart assistants, or alarm clock. Prompt your users to end the phone call, smart assistants, or alarm clock if the local audio capture is required.
    */
   LocalAudioStreamReasonInterrupted = 8,
   /**
@@ -2047,15 +2123,15 @@ export enum LocalVideoStreamReason {
    */
   LocalVideoStreamReasonFailure = 1,
   /**
-   * 2: No permission to use the local video capturing device. Remind the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use CAMERA in the onPermissionError callback instead.
+   * 2: No permission to use the local video capturing device. Prompt the user to grant permissions and rejoin the channel. Deprecated: This enumerator is deprecated. Please use CAMERA in the onPermissionError callback instead.
    */
   LocalVideoStreamReasonDeviceNoPermission = 2,
   /**
-   * 3: The local video capturing device is in use. Remind the user to check whether another application occupies the camera.
+   * 3: The local video capturing device is in use. Prompt the user to check if the camera is being used by another app, or try to rejoin the channel.
    */
   LocalVideoStreamReasonDeviceBusy = 3,
   /**
-   * 4: The local video capture fails. Remind your user to check whether the video capture device is working properly, whether the camera is occupied by another application, or try to rejoin the channel.
+   * 4: The local video capture fails. Prompt the user to check whether the video capture device is working properly, whether the camera is used by another app, or try to rejoin the channel.
    */
   LocalVideoStreamReasonCaptureFailure = 4,
   /**
@@ -2063,11 +2139,11 @@ export enum LocalVideoStreamReason {
    */
   LocalVideoStreamReasonCodecNotSupport = 5,
   /**
-   * 6: (iOS only) The app is in the background. Remind the user that video capture cannot be performed normally when the app is in the background.
+   * 6: (iOS only) The app is in the background. Prompt the user that video capture cannot be performed normally when the app is in the background.
    */
   LocalVideoStreamReasonCaptureInbackground = 6,
   /**
-   * 7: (iOS only) The current application window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Remind the user that the application cannot capture video properly when the app is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
+   * 7: (iOS only) The current app window is running in Slide Over, Split View, or Picture in Picture mode, and another app is occupying the camera. Prompt the user that the app cannot capture video properly when it is running in Slide Over, Split View, or Picture in Picture mode and another app is occupying the camera.
    */
   LocalVideoStreamReasonCaptureMultipleForegroundApps = 7,
   /**
@@ -2082,6 +2158,16 @@ export enum LocalVideoStreamReason {
    * @ignore
    */
   LocalVideoStreamReasonDeviceInvalidId = 10,
+  /**
+   * 14: (Android only) Video capture is interrupted. Possible reasons include the following:
+   *  The camera is being used by another app. Prompt the user to check if the camera is being used by another app.
+   *  The current app has been switched to the background. You can use foreground services to notify the operating system and ensure that the app can still collect video when it switches to the background.
+   */
+  LocalVideoStreamReasonDeviceInterrupt = 14,
+  /**
+   * 15: (Android only) The video capture device encounters an error. Prompt the user to close and restart the camera to restore functionality. If this operation does not solve the problem, check if the camera has a hardware failure.
+   */
+  LocalVideoStreamReasonDeviceFatalError = 15,
   /**
    * @ignore
    */
@@ -2198,6 +2284,14 @@ export enum RemoteAudioStateReason {
    * 7: The remote user leaves the channel.
    */
   RemoteAudioReasonRemoteOffline = 7,
+  /**
+   * @ignore
+   */
+  RemoteAudioReasonNoPacketReceive = 8,
+  /**
+   * @ignore
+   */
+  RemoteAudioReasonLocalPlayFailed = 9,
 }
 
 /**
@@ -2639,7 +2733,7 @@ export enum RtmpStreamPublishReason {
    */
   RtmpStreamPublishReasonInvalidAppid = 15,
   /**
-   * 16: Your project does not have permission to use streaming services. Refer to Media Push to enable the Media Push permission.
+   * 16: Your project does not have permission to use streaming services.
    */
   RtmpStreamPublishReasonInvalidPrivilege = 16,
   /**
@@ -3348,7 +3442,7 @@ export class VideoCanvas {
    */
   subviewUid?: number;
   /**
-   * The video display window.
+   * The video display window. In one VideoCanvas, you can only choose to set either view or surfaceTexture. If both are set, only the settings in view take effect.
    */
   view?: any;
   /**
@@ -3396,7 +3490,7 @@ export class VideoCanvas {
  */
 export enum LighteningContrastLevel {
   /**
-   * @ignore
+   * 0: Low contrast level.
    */
   LighteningContrastLow = 0,
   /**
@@ -3628,7 +3722,7 @@ export class SegmentationProperty {
    */
   modelType?: SegModelType;
   /**
-   * The range of accuracy for identifying green colors (different shades of green) in the view. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of green. When the value of this parameter is too large, the edge of the portrait and the green color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to SegModelGreen.
+   * The accuracy range for recognizing background colors in the image. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of pure color. When the value of this parameter is too large, the edge of the portrait and the pure color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to SegModelGreen.
    */
   greenCapacity?: number;
 }
@@ -3773,6 +3867,10 @@ export enum AudioEffectPreset {
    * Virtual surround sound, that is, the SDK generates a simulated surround sound field on the basis of stereo channels, thereby creating a surround sound effect. If the virtual surround sound is enabled, users need to use stereo audio playback devices to hear the anticipated audio effect.
    */
   RoomAcousticsVirtualSurroundSound = 0x02010900,
+  /**
+   * The audio effect of chorus. Agora recommends using this effect in chorus scenarios to enhance the sense of depth and dimension in the vocals.
+   */
+  RoomAcousticsChorus = 0x02010d00,
   /**
    * A middle-aged man's voice. Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect.
    */
@@ -4203,7 +4301,7 @@ export enum ChannelMediaRelayError {
    */
   RelayErrorServerErrorResponse = 1,
   /**
-   * 2: No server response. You can call leaveChannel to leave the channel. This error can also occur if your project has not enabled co-host token authentication. You can to enable the service for cohosting across channels before starting a channel media relay.
+   * 2: No server response. This error may be caused by poor network connections. If this error occurs when initiating a channel media relay, you can try again later; if this error occurs during channel media relay, you can call leaveChannel to leave the channel. This error can also occur if the channel media relay service is not enabled in the project. You can contact to enable the service.
    */
   RelayErrorServerNoResponse = 2,
   /**
@@ -4424,6 +4522,10 @@ export class EncryptionConfig {
    * Salt, 32 bytes in length. Agora recommends that you use OpenSSL to generate salt on the server side. See Media Stream Encryption for details. This parameter takes effect only in Aes128Gcm2 or Aes256Gcm2 encrypted mode. In this case, ensure that this parameter is not 0.
    */
   encryptionKdfSalt?: number[];
+  /**
+   * Whether to enable data stream encryption: true : Enable data stream encryption. false : (Default) Disable data stream encryption.
+   */
+  datastreamEncryptionEnabled?: boolean;
 }
 
 /**
@@ -4435,13 +4537,21 @@ export enum EncryptionErrorType {
    */
   EncryptionErrorInternalFailure = 0,
   /**
-   * 1: Decryption errors. Ensure that the receiver and the sender use the same encryption mode and key.
+   * 1: Media stream decryption error. Ensure that the receiver and the sender use the same encryption mode and key.
    */
   EncryptionErrorDecryptionFailure = 1,
   /**
-   * 2: Encryption errors.
+   * 2: Media stream encryption error.
    */
   EncryptionErrorEncryptionFailure = 2,
+  /**
+   * 3: Data stream decryption error. Ensure that the receiver and the sender use the same encryption mode and key.
+   */
+  EncryptionErrorDatastreamDecryptionFailure = 3,
+  /**
+   * 4: Data stream encryption error.
+   */
+  EncryptionErrorDatastreamEncryptionFailure = 4,
 }
 
 /**
@@ -4583,21 +4693,25 @@ export class UserInfo {
 }
 
 /**
- * The audio filter of in-ear monitoring.
+ * The audio filter types of in-ear monitoring.
  */
 export enum EarMonitoringFilterType {
   /**
-   * 1<<0: Do not add an audio filter to the in-ear monitor.
+   * 1<<0: No audio filter added to in-ear monitoring.
    */
   EarMonitoringFilterNone = 1 << 0,
   /**
-   * 1<<1: Add an audio filter to the in-ear monitor. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
+   * 1<<1: Add vocal effects audio filter to in-ear monitoring. If you implement functions such as voice beautifier and audio effect, users can hear the voice after adding these effects.
    */
   EarMonitoringFilterBuiltInAudioFilters = 1 << 1,
   /**
-   * 1<<2: Enable noise suppression to the in-ear monitor.
+   * 1<<2: Add noise suppression audio filter to in-ear monitoring.
    */
   EarMonitoringFilterNoiseSuppression = 1 << 2,
+  /**
+   * 1<<15: Reuse the audio filter that has been processed on the sending end for in-ear monitoring. This enumerator reduces CPU usage while increasing in-ear monitoring latency, which is suitable for latency-tolerant scenarios requiring low CPU consumption.
+   */
+  EarMonitoringFilterReusePostProcessingFilter = 1 << 15,
 }
 
 /**
@@ -4916,7 +5030,7 @@ export class SpatialAudioParams {
   speaker_attenuation?: number;
   /**
    * Whether to enable the Doppler effect: When there is a relative displacement between the sound source and the receiver of the sound source, the tone heard by the receiver changes. true : Enable the Doppler effect. false : (Default) Disable the Doppler effect.
-   *  This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, cohosting, or online KTV).
+   *  This parameter is suitable for scenarios where the sound source is moving at high speed (for example, racing games). It is not recommended for common audio and video interactive scenarios (for example, voice chat, co-streaming, or online KTV).
    *  When this parameter is enabled, Agora recommends that you set a regular period (such as 30 ms), and then call the updatePlayerPositionInfo, updateSelfPosition, and updateRemotePosition methods to continuously update the relative distance between the sound source and the receiver. The following factors can cause the Doppler effect to be unpredictable or the sound to be jittery: the period of updating the distance is too long, the updating period is irregular, or the distance information is lost due to network packet loss or delay.
    */
   enable_doppler?: boolean;

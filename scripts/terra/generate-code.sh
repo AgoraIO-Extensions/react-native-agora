@@ -16,5 +16,3 @@ npm exec terra -- run \
 cd ${PROJECT_ROOT}
 
 yarn build:ts-interface
-
-yarn lint --fix

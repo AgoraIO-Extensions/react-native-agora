@@ -79,6 +79,9 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   override release(sync: boolean = false) {
     this._media_engine.release();
     this._local_spatial_audio_engine.release();
+    RtcEngineExInternal._event_handlers.map((it) => {
+      super.unregisterEventHandler(it);
+    });
     RtcEngineExInternal._event_handlers = [];
     RtcEngineExInternal._direct_cdn_streaming_event_handler = [];
     RtcEngineExInternal._metadata_observer = [];
@@ -200,6 +203,8 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   }
 
   override registerEventHandler(eventHandler: IRtcEngineEventHandler): boolean {
+    // only call iris when no event handler registered
+    let callIris = RtcEngineExInternal._event_handlers.length === 0;
     if (
       !RtcEngineExInternal._event_handlers.find(
         (value) => value === eventHandler
@@ -207,7 +212,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     ) {
       RtcEngineExInternal._event_handlers.push(eventHandler);
     }
-    return super.registerEventHandler(eventHandler);
+    return callIris ? super.registerEventHandler(eventHandler) : true;
   }
 
   override unregisterEventHandler(
@@ -217,7 +222,9 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
       RtcEngineExInternal._event_handlers.filter(
         (value) => value !== eventHandler
       );
-    return super.unregisterEventHandler(eventHandler);
+    // only call iris when no event handler registered
+    let callIris = RtcEngineExInternal._event_handlers.length === 0;
+    return callIris ? super.unregisterEventHandler(eventHandler) : true;
   }
 
   override createMediaPlayer(): IMediaPlayer {
@@ -314,10 +321,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
       : 'RtcEngine_setClientRole_b46cc48';
   }
 
-  protected override getApiTypeFromStartPreviewWithoutSourceType(): string {
-    return 'RtcEngine_startPreview';
-  }
-
   protected override getApiTypeFromEnableDualStreamMode(
     enabled: boolean,
     streamConfig?: SimulcastStreamConfig
@@ -345,14 +348,6 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     return options === undefined
       ? 'RtcEngine_joinChannelWithUserAccount_0e4f59e'
       : 'RtcEngine_joinChannelWithUserAccount_4685af9';
-  }
-
-  protected override getApiTypeFromPreloadChannelWithUserAccount(
-    token: string,
-    channelId: string,
-    userAccount: string
-  ): string {
-    return 'RtcEngine_startScreenCapture_9ebb320';
   }
 
   override getAudioDeviceManager(): IAudioDeviceManager {

@@ -7,6 +7,7 @@ import {
   AudioScenarioType,
   AudioSessionOperationRestriction,
   BeautyOptions,
+  CameraStabilizationMode,
   ChannelMediaRelayConfiguration,
   ChannelProfileType,
   ClientRoleOptions,
@@ -19,6 +20,7 @@ import {
   EarMonitoringFilterType,
   EchoTestConfiguration,
   EncryptionConfig,
+  FocalLengthInfo,
   HeadphoneEqualizerPreset,
   IAudioEncodedFrameObserver,
   LastmileProbeConfig,
@@ -893,6 +895,17 @@ export function processIRtcEngineEventHandler(
           jsonParams.height,
           jsonParams.layoutCount,
           jsonParams.layoutlist
+        );
+      }
+      break;
+
+    case 'onAudioMetadataReceived':
+      if (handler.onAudioMetadataReceived !== undefined) {
+        handler.onAudioMetadataReceived(
+          jsonParams.connection,
+          jsonParams.uid,
+          jsonParams.metadata,
+          jsonParams.length
         );
       }
       break;
@@ -2686,6 +2699,24 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setAudioMixingPitch_46f8ab7';
   }
 
+  setAudioMixingPlaybackSpeed(speed: number): number {
+    const apiType = this.getApiTypeFromSetAudioMixingPlaybackSpeed(speed);
+    const jsonParams = {
+      speed: speed,
+      toJSON: () => {
+        return {
+          speed: speed,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetAudioMixingPlaybackSpeed(speed: number): string {
+    return 'RtcEngine_setAudioMixingPlaybackSpeed_46f8ab7';
+  }
+
   getEffectsVolume(): number {
     const apiType = this.getApiTypeFromGetEffectsVolume();
     const jsonParams = {};
@@ -3539,6 +3570,26 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromUploadLogFile(): string {
     return 'RtcEngine_uploadLogFile_66d4ecd';
+  }
+
+  writeLog(level: LogLevel, fmt: string): number {
+    const apiType = this.getApiTypeFromWriteLog(level, fmt);
+    const jsonParams = {
+      level: level,
+      fmt: fmt,
+      toJSON: () => {
+        return {
+          level: level,
+          fmt: fmt,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromWriteLog(level: LogLevel, fmt: string): string {
+    return 'RtcEngine_writeLog_62889f6';
   }
 
   setLocalRenderMode(
@@ -4807,6 +4858,26 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setCameraAutoExposureFaceModeEnabled_5039d15';
   }
 
+  setCameraStabilizationMode(mode: CameraStabilizationMode): number {
+    const apiType = this.getApiTypeFromSetCameraStabilizationMode(mode);
+    const jsonParams = {
+      mode: mode,
+      toJSON: () => {
+        return {
+          mode: mode,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetCameraStabilizationMode(
+    mode: CameraStabilizationMode
+  ): string {
+    return 'RtcEngine_setCameraStabilizationMode_701b981';
+  }
+
   setDefaultAudioRouteToSpeakerphone(defaultToSpeaker: boolean): number {
     const apiType =
       this.getApiTypeFromSetDefaultAudioRouteToSpeakerphone(defaultToSpeaker);
@@ -4873,6 +4944,35 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromSetRouteInCommunicationMode(route: number): string {
     return 'RtcEngine_setRouteInCommunicationMode_46f8ab7';
+  }
+
+  isCameraCenterStageSupported(): boolean {
+    const apiType = this.getApiTypeFromIsCameraCenterStageSupported();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromIsCameraCenterStageSupported(): string {
+    return 'RtcEngine_isCameraCenterStageSupported';
+  }
+
+  enableCameraCenterStage(enabled: boolean): number {
+    const apiType = this.getApiTypeFromEnableCameraCenterStage(enabled);
+    const jsonParams = {
+      enabled: enabled,
+      toJSON: () => {
+        return {
+          enabled: enabled,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromEnableCameraCenterStage(enabled: boolean): string {
+    return 'RtcEngine_enableCameraCenterStage_5039d15';
   }
 
   getScreenCaptureSources(
@@ -5158,6 +5258,25 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromQueryScreenCaptureCapability(): string {
     return 'RtcEngine_queryScreenCaptureCapability';
+  }
+
+  queryCameraFocalLengthCapability(): {
+    focalLengthInfos: FocalLengthInfo[];
+    size: number;
+  } {
+    const apiType = this.getApiTypeFromQueryCameraFocalLengthCapability();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const focalLengthInfos = jsonResults.focalLengthInfos;
+    const size = jsonResults.size;
+    return {
+      focalLengthInfos,
+      size,
+    };
+  }
+
+  protected getApiTypeFromQueryCameraFocalLengthCapability(): string {
+    return 'RtcEngine_queryCameraFocalLengthCapability_2dee6af';
   }
 
   setScreenCaptureScenario(screenScenario: ScreenScenarioType): number {
@@ -6656,6 +6775,29 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_isFeatureAvailableOnDevice_a694b62';
   }
 
+  sendAudioMetadata(metadata: string, length: number): number {
+    const apiType = this.getApiTypeFromSendAudioMetadata(metadata, length);
+    const jsonParams = {
+      metadata: metadata,
+      length: length,
+      toJSON: () => {
+        return {
+          metadata: metadata,
+          length: length,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSendAudioMetadata(
+    metadata: string,
+    length: number
+  ): string {
+    return 'RtcEngine_sendAudioMetadata_878f309';
+  }
+
   startScreenCaptureBySourceType(
     sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
@@ -6682,7 +6824,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
   ): string {
-    return 'RtcEngine_startScreenCaptureBySourceType';
+    return 'RtcEngine_startScreenCapture_9ebb320';
   }
 
   stopScreenCaptureBySourceType(sourceType: VideoSourceType): number {
@@ -6703,7 +6845,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   protected getApiTypeFromStopScreenCaptureBySourceType(
     sourceType: VideoSourceType
   ): string {
-    return 'RtcEngine_stopScreenCaptureBySourceType';
+    return 'RtcEngine_stopScreenCapture_4fd718e';
   }
 
   release(sync: boolean = false): void {
@@ -6731,7 +6873,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromStartPreviewWithoutSourceType(): string {
-    return 'RtcEngine_startPreviewWithoutSourceType';
+    return 'RtcEngine_startPreview';
   }
 
   getAudioDeviceManager(): IAudioDeviceManager {
@@ -6742,7 +6884,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetAudioDeviceManager(): string {
-    return 'RtcEngine_getAudioDeviceManager';
+    return 'RtcEngine_queryInterface_257d192';
   }
 
   getVideoDeviceManager(): IVideoDeviceManager {
@@ -6753,7 +6895,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetVideoDeviceManager(): string {
-    return 'RtcEngine_getVideoDeviceManager';
+    return 'RtcEngine_queryInterface_257d192';
   }
 
   getMusicContentCenter(): IMusicContentCenter {
@@ -6764,7 +6906,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetMusicContentCenter(): string {
-    return 'RtcEngine_getMusicContentCenter';
+    return 'RtcEngine_queryInterface_257d192';
   }
 
   getMediaEngine(): IMediaEngine {
@@ -6775,7 +6917,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetMediaEngine(): string {
-    return 'RtcEngine_getMediaEngine';
+    return 'RtcEngine_queryInterface_257d192';
   }
 
   getLocalSpatialAudioEngine(): ILocalSpatialAudioEngine {
@@ -6786,7 +6928,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetLocalSpatialAudioEngine(): string {
-    return 'RtcEngine_getLocalSpatialAudioEngine';
+    return 'RtcEngine_queryInterface_257d192';
   }
 
   getH265Transcoder(): IH265Transcoder {
@@ -6797,7 +6939,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetH265Transcoder(): string {
-    return 'RtcEngine_getH265Transcoder';
+    return 'RtcEngine_queryInterface_257d192';
   }
 
   sendMetaData(metadata: Metadata, sourceType: VideoSourceType): number {
@@ -6855,7 +6997,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromDestroyRendererByView(view: any): string {
-    return 'RtcEngine_destroyRendererByView';
+    return '';
   }
 
   destroyRendererByConfig(
@@ -6888,7 +7030,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     channelId?: string,
     uid: number = 0
   ): string {
-    return 'RtcEngine_destroyRendererByConfig';
+    return '';
   }
 
   unregisterAudioEncodedFrameObserver(
