@@ -47,6 +47,7 @@ import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
 import { MusicContentCenterInternal } from './MusicContentCenterInternal';
+import { parseIntPtr2Number } from '../Utils';
 
 const checkers = createCheckers(
   AgoraBaseTI,
@@ -372,6 +373,11 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   override getH265Transcoder(): IH265Transcoder {
     return this._h265_transcoder;
+  }
+
+  override getNativeHandle(): number {
+    let result = super.getNativeHandle();
+    return parseIntPtr2Number(result);
   }
 
   override registerAudioEncodedFrameObserver(

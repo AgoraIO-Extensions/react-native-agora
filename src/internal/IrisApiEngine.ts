@@ -2,7 +2,8 @@ import { Buffer } from 'buffer';
 
 import base64 from 'base64-js';
 import EventEmitter from 'eventemitter3';
-import JSON from 'json-bigint';
+import JSONBigInt from 'json-bigint';
+const JSON = JSONBigInt({ storeAsString: true });
 import { NativeEventEmitter } from 'react-native';
 
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
