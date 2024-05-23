@@ -6997,7 +6997,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromDestroyRendererByView(view: any): string {
-    return '';
+    return 'RtcEngine_destroyRendererByView';
   }
 
   destroyRendererByConfig(
@@ -7030,7 +7030,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     channelId?: string,
     uid: number = 0
   ): string {
-    return '';
+    return 'RtcEngine_destroyRendererByConfig';
   }
 
   unregisterAudioEncodedFrameObserver(
