@@ -191,7 +191,7 @@ export default class ChannelMediaRelay
       <>
         <AgoraTextInput
           onChangeText={(text) => {
-            this.setState({ destChannelNames: text.split(' ') });
+            this.setState({ destChannelNames: text ? text.split(' ') : [] });
           }}
           placeholder={'destChannelNames (split by blank)'}
           value={destChannelNames.join(' ')}

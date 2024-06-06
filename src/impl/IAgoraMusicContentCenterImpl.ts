@@ -8,6 +8,7 @@ import {
   MusicChartInfo,
   MusicCollection,
   MusicContentCenterConfiguration,
+  MusicPlayMode,
 } from '../IAgoraMusicContentCenter';
 
 import { IMediaPlayerImpl } from './IAgoraMediaPlayerImpl';
@@ -174,6 +175,24 @@ export function processIMusicContentCenterEventHandler(
 
 // @ts-ignore
 export class IMusicPlayerImpl extends IMediaPlayerImpl implements IMusicPlayer {
+  setPlayMode(mode: MusicPlayMode): number {
+    const apiType = this.getApiTypeFromSetPlayMode(mode);
+    const jsonParams = {
+      mode: mode,
+      toJSON: () => {
+        return {
+          mode: mode,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetPlayMode(mode: MusicPlayMode): string {
+    return 'MusicPlayer_setPlayMode_748bee0';
+  }
+
   openWithSongCode(songCode: number, startPos: number = 0): number {
     const apiType = this.getApiTypeFromOpenWithSongCode(songCode, startPos);
     const jsonParams = {
@@ -286,6 +305,24 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
 
   protected getApiTypeFromCreateMusicPlayer(): string {
     return 'MusicContentCenter_createMusicPlayer';
+  }
+
+  destroyMusicPlayer(musicPlayer: IMusicPlayer): number {
+    const apiType = this.getApiTypeFromDestroyMusicPlayer(musicPlayer);
+    const jsonParams = {
+      music_player: musicPlayer,
+      toJSON: () => {
+        return {};
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromDestroyMusicPlayer(
+    musicPlayer: IMusicPlayer
+  ): string {
+    return 'MusicContentCenter_destroyMusicPlayer_876d086';
   }
 
   getMusicCharts(): string {
@@ -455,11 +492,11 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     const apiType = this.getApiTypeFromGetLyric(songCode, lyricType);
     const jsonParams = {
       songCode: songCode,
-      LyricType: lyricType,
+      lyricType: lyricType,
       toJSON: () => {
         return {
           songCode: songCode,
-          LyricType: lyricType,
+          lyricType: lyricType,
         };
       },
     };

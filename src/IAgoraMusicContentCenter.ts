@@ -4,6 +4,24 @@ import { IMediaPlayer } from './IAgoraMediaPlayer';
 /**
  * @ignore
  */
+export enum MusicPlayMode {
+  /**
+   * @ignore
+   */
+  KMusicPlayModeOriginal = 0,
+  /**
+   * @ignore
+   */
+  KMusicPlayModeAccompany = 1,
+  /**
+   * @ignore
+   */
+  KMusicPlayModeLeadSing = 2,
+}
+
+/**
+ * @ignore
+ */
 export enum PreloadState {
   /**
    * @ignore
@@ -326,6 +344,11 @@ export abstract class IMusicPlayer extends IMediaPlayer {
   /**
    * @ignore
    */
+  abstract setPlayMode(mode: MusicPlayMode): number;
+
+  /**
+   * @ignore
+   */
   abstract openWithSongCode(songCode: number, startPos?: number): number;
 }
 
@@ -364,6 +387,11 @@ export abstract class IMusicContentCenter {
    * @ignore
    */
   abstract createMusicPlayer(): IMusicPlayer;
+
+  /**
+   * @ignore
+   */
+  abstract destroyMusicPlayer(musicPlayer: IMusicPlayer): number;
 
   /**
    * @ignore
