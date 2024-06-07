@@ -29,6 +29,7 @@ import {
 } from '../IAgoraRtcEngine';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
+import { parseIntPtr2Number } from '../Utils';
 import { IRtcEngineEvent } from '../extension/IAgoraRtcEngineExtension';
 import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
 import AgoraBaseTI from '../ti/AgoraBase-ti';
@@ -47,7 +48,6 @@ import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
 import { MusicContentCenterInternal } from './MusicContentCenterInternal';
-import { parseIntPtr2Number } from '../Utils';
 
 const checkers = createCheckers(
   AgoraBaseTI,

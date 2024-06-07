@@ -2,7 +2,7 @@
   "root": true,
   "extends": ["@react-native", "prettier"],
   "env": {
-    "esnext": true
+    "es2020": true
   },
   "plugins": ["import", "auto-import"],
   "rules": {

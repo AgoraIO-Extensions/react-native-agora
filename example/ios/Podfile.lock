@@ -411,7 +411,7 @@ PODS:
   - React-jsinspector (0.72.10)
   - React-logger (0.72.10):
     - glog
-  - react-native-agora (4.3.0):
+  - react-native-agora (4.3.1):
     - AgoraIrisRTC_iOS (= 4.3.1-build.1)
     - AgoraRtcEngine_iOS (= 4.3.1)
     - RCT-Folly (= 2021.07.22.00)
@@ -786,7 +786,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 45ef2ec6dcde31b90469175ec76ddac77b91dfc3
   React-jsinspector: de0198127395fec3058140a20c045167f761bb16
   React-logger: dc3a2b174d79c2da635059212747d8d929b54e06
-  react-native-agora: 4f85b3cdfa151e91df4953d4b9bf4fdbb3d527ff
+  react-native-agora: 5aaaa7e0353ca90f53fdeb30f3ba17a6c2fd3db1
   react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
