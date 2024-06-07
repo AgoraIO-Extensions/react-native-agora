@@ -5,6 +5,7 @@ import {
   IMusicPlayer,
   Music,
   MusicCollection,
+  MusicPlayMode,
 } from '../IAgoraMusicContentCenter';
 import { IMusicContentCenterEvent } from '../extension/IAgoraMusicContentCenterExtension';
 import {
@@ -129,6 +130,10 @@ export class MusicPlayerInternal
     super(mediaPlayerId);
     // @ts-ignore
     this._musicPlayer = new _MusicPlayerInternal(mediaPlayerId);
+  }
+
+  setPlayMode(mode: MusicPlayMode): number {
+    return this._musicPlayer.setPlayMode(mode);
   }
 
   openWithSongCode(songCode: number, startPos?: number): number {

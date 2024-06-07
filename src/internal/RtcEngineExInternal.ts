@@ -27,6 +27,7 @@ import {
   RtcEngineContext,
   SDKBuildInfo,
 } from '../IAgoraRtcEngine';
+import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
 import { parseIntPtr2Number } from '../Utils';
@@ -311,6 +312,15 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     return options === undefined
       ? 'RtcEngine_leaveChannel'
       : 'RtcEngine_leaveChannel_2c0e3aa';
+  }
+
+  protected override getApiTypeFromLeaveChannelEx(
+    connection: RtcConnection,
+    options?: LeaveChannelOptions
+  ): string {
+    return options === undefined
+      ? 'RtcEngineEx_leaveChannelEx_c81e1a4'
+      : 'RtcEngineEx_leaveChannelEx_b03ee9a';
   }
 
   protected override getApiTypeFromSetClientRole(

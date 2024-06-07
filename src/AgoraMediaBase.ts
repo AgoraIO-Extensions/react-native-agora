@@ -949,12 +949,12 @@ export interface IAudioFrameObserverBase {
  */
 export interface IAudioFrameObserver extends IAudioFrameObserverBase {
   /**
-   * Retrieves the audio frame of a specified user before mixing.
+   * Retrieves the audio frame before mixing of subscribed remote users.
    *
    * Due to framework limitations, this callback does not support sending processed audio data back to the SDK.
    *
    * @param channelId The channel ID.
-   * @param uid The user ID of the specified user.
+   * @param uid The ID of subscribed remote users.
    * @param audioFrame The raw audio data. See AudioFrame.
    */
   onPlaybackAudioFrameBeforeMixing?(
@@ -1066,8 +1066,8 @@ export interface IVideoFrameObserver {
    *
    * @param sourceType Video source types, including cameras, screens, or media player. See VideoSourceType.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
-   *  iOS: I420 or CVPixelBufferRef
+   *  Android: I420
+   *  iOS: I420
    */
   onCaptureVideoFrame?(
     sourceType: VideoSourceType,
@@ -1078,13 +1078,14 @@ export interface IVideoFrameObserver {
    * Occurs each time the SDK receives a video frame before encoding.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios. After processing, you can send the processed video data back to the SDK in this callback.
+   *  It's recommended that you implement this callback through the C++ API.
    *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
    *  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
    *
    * @param sourceType The type of the video source. See VideoSourceType.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
-   *  iOS: I420 or CVPixelBufferRef
+   *  Android: I420
+   *  iOS: I420
    */
   onPreEncodeVideoFrame?(
     sourceType: VideoSourceType,
@@ -1101,13 +1102,14 @@ export interface IVideoFrameObserver {
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.
    *  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
+   *  It's recommended that you implement this callback through the C++ API.
    *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
    *
    * @param channelId The channel ID.
    * @param remoteUid The user ID of the remote user who sends the current video frame.
    * @param videoFrame The video frame. See VideoFrame. The default value of the video frame data format obtained through this callback is as follows:
-   *  Android: I420 or RGB (GLES20.GL_TEXTURE_2D)
-   *  iOS: I420 or CVPixelBufferRef
+   *  Android: I420
+   *  iOS: I420
    */
   onRenderVideoFrame?(
     channelId: string,
@@ -1236,7 +1238,7 @@ export class MediaRecorderConfiguration {
 /**
  * Facial information observer.
  *
- * You can call registerFaceInfoObserver to register or unregister the IFaceInfoObserver object.
+ * You can call registerFaceInfoObserver to register one IFaceInfoObserver observer.
  */
 export interface IFaceInfoObserver {
   /**
