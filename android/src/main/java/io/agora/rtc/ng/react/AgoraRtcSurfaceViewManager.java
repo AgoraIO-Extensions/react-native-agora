@@ -24,7 +24,7 @@ public class AgoraRtcSurfaceViewManager extends AgoraRtcSurfaceViewManagerSpec<F
   @Override
   public FrameLayout createViewInstance(ThemedReactContext context) {
     this.context = context;
-    RoundedFrameLayout layout = new RoundedFrameLayout(context.getReactApplicationContext());
+    AgoraRoundedFrameLayout layout = new AgoraRoundedFrameLayout(context.getReactApplicationContext());
     layout.addView(new SurfaceView(context.getApplicationContext()));
     return layout;
   }
@@ -56,10 +56,10 @@ public class AgoraRtcSurfaceViewManager extends AgoraRtcSurfaceViewManagerSpec<F
     ((SurfaceView) view.getChildAt(0)).setZOrderMediaOverlay(isMediaOverlay);
   }
 
-  
+
   @Override
-  @ReactProp(name = "cornerRadius")
-  public void setCornerRadius(FrameLayout view, float radius){
-    ((RoundedFrameLayout) view).setCornerRadius(radius);
+  @ReactProp(name = "borderRadius")
+  public void setBorderRadius(FrameLayout view, float radius){
+    ((AgoraRoundedFrameLayout) view).setBorderRadius(radius);
   }
 }

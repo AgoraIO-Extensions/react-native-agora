@@ -34,6 +34,7 @@ import {
   AgoraDropdown,
   AgoraStyle,
   AgoraSwitch,
+  AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
@@ -52,6 +53,7 @@ interface State extends BaseVideoComponentState {
   cpuAppUsage?: number;
   cpuTotalUsage?: number;
   txPacketLossRate?: number;
+  borderRadius?: number;
   remoteUserStatsList: Map<
     number,
     { remoteVideoStats: RemoteVideoStats; remoteAudioStats: RemoteAudioStats }
@@ -84,6 +86,7 @@ export default class JoinChannelVideo
       startPreview: false,
       switchCamera: false,
       renderByTextureView: false,
+      borderRadius: 0,
       setupMode: VideoViewSetupMode.VideoViewSetupReplace,
     };
   }
@@ -293,6 +296,7 @@ export default class JoinChannelVideo
       cpuAppUsage,
       cpuTotalUsage,
       txPacketLossRate,
+      borderRadius,
     } = this.state;
     return (
       <>
@@ -309,6 +313,7 @@ export default class JoinChannelVideo
               user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall
             }
             zOrderMediaOverlay={user.uid !== 0}
+            borderRadius={borderRadius}
             canvas={{ ...user, setupMode }}
           />
         )}
@@ -423,6 +428,20 @@ export default class JoinChannelVideo
             )}
           </>
         ) : undefined}
+        <AgoraDivider />
+        <AgoraTextInput
+          onChangeText={(text) => {
+            if (isNaN(+text)) return;
+            this.setState({
+              borderRadius:
+                text === '' ? this.createState().borderRadius : +text,
+            });
+          }}
+          numberKeyboard={true}
+          placeholder={`borderRadius (defaults: ${
+            this.createState().borderRadius
+          })`}
+        />
         <AgoraDivider />
       </>
     );

@@ -13,7 +13,7 @@ public abstract class AgoraRtcSurfaceViewManagerSpec<T extends View> extends Sim
   public abstract void setZOrderOnTop(T view, boolean onTop);
 
   public abstract void setZOrderMediaOverlay(T view, boolean isMediaOverlay);
-  
-  public abstract void setCornerRadius(T view, float radius);
+
+  public abstract void setBorderRadius(T view, float radius);
 
 }

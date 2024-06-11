@@ -1,6 +1,5 @@
 import type { HostComponent, ViewProps } from 'react-native';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
 export interface NativeProps extends ViewProps {
   callApi: {
@@ -10,7 +9,7 @@ export interface NativeProps extends ViewProps {
   };
   zOrderOnTop?: boolean;
   zOrderMediaOverlay?: boolean;
-  cornerRadius?: Float;
+  borderRadius?: number;
 }
 
 export default codegenNativeComponent<NativeProps>(
