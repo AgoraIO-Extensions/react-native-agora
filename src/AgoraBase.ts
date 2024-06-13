@@ -986,6 +986,10 @@ export enum AudioCodecType {
    * @ignore
    */
   AudioCodecLpcnet = 12,
+  /**
+   * @ignore
+   */
+  AudioCodecOpusmc = 13,
 }
 
 /**
@@ -1148,6 +1152,30 @@ export enum VideoStreamType {
    * 1: Low-quality video stream.
    */
   VideoStreamLow = 1,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer1 = 4,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer2 = 5,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer3 = 6,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer4 = 7,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer5 = 8,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer6 = 9,
 }
 
 /**
@@ -1292,6 +1320,20 @@ export enum VideoMirrorModeType {
    * 2: Disable mirror mode.
    */
   VideoMirrorModeDisabled = 2,
+}
+
+/**
+ * @ignore
+ */
+export enum CameraFormatType {
+  /**
+   * @ignore
+   */
+  CameraFormatNv12 = 0,
+  /**
+   * @ignore
+   */
+  CameraFormatBgra = 1,
 }
 
 /**
@@ -1458,6 +1500,72 @@ export class SimulcastStreamConfig {
    * The frame rate (fps) of the local video. The default value is 5.
    */
   framerate?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum StreamLayerIndex {
+  /**
+   * @ignore
+   */
+  StreamLayer1 = 0,
+  /**
+   * @ignore
+   */
+  StreamLayer2 = 1,
+  /**
+   * @ignore
+   */
+  StreamLayer3 = 2,
+  /**
+   * @ignore
+   */
+  StreamLayer4 = 3,
+  /**
+   * @ignore
+   */
+  StreamLayer5 = 4,
+  /**
+   * @ignore
+   */
+  StreamLayer6 = 5,
+  /**
+   * @ignore
+   */
+  StreamLow = 6,
+  /**
+   * @ignore
+   */
+  StreamLayerCountMax = 7,
+}
+
+/**
+ * @ignore
+ */
+export class StreamLayerConfig {
+  /**
+   * @ignore
+   */
+  dimensions?: VideoDimensions;
+  /**
+   * @ignore
+   */
+  framerate?: number;
+  /**
+   * @ignore
+   */
+  enable?: boolean;
+}
+
+/**
+ * @ignore
+ */
+export class SimulcastConfig {
+  /**
+   * @ignore
+   */
+  configs?: StreamLayerConfig[];
 }
 
 /**
@@ -1938,6 +2046,10 @@ export enum VideoApplicationScenarioType {
    *  Bitrate: 500 Kbps 1: The meeting scenario.
    */
   ApplicationScenarioMeeting = 1,
+  /**
+   * @ignore
+   */
+  ApplicationScenario1v1 = 2,
 }
 
 /**
@@ -2220,6 +2332,10 @@ export enum LocalVideoStreamReason {
    * @ignore
    */
   LocalVideoStreamReasonScreenCaptureResumed = 29,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureDisplayDisconnected = 30,
 }
 
 /**
@@ -3535,6 +3651,106 @@ export class BeautyOptions {
 }
 
 /**
+ * @ignore
+ */
+export enum FaceShapeArea {
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNone = -1,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaHeadscale = 0,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaForehead = 1,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaFacecontour = 2,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaFacelength = 3,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaFacewidth = 4,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaCheekbone = 5,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaCheek = 6,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaChin = 7,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaEyescale = 8,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNoselength = 9,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNosewidth = 10,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaMouthscale = 11,
+}
+
+/**
+ * @ignore
+ */
+export class FaceShapeAreaOptions {
+  /**
+   * @ignore
+   */
+  shapeArea?: FaceShapeArea;
+  /**
+   * @ignore
+   */
+  shapeIntensity?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum FaceShapeStyle {
+  /**
+   * @ignore
+   */
+  FaceShapeStyleFemale = 0,
+  /**
+   * @ignore
+   */
+  FaceShapeStyleMale = 1,
+}
+
+/**
+ * @ignore
+ */
+export class FaceShapeBeautyOptions {
+  /**
+   * @ignore
+   */
+  shapeStyle?: FaceShapeStyle;
+  /**
+   * @ignore
+   */
+  styleIntensity?: number;
+}
+
+/**
  * The low-light enhancement mode.
  */
 export enum LowLightEnhanceMode {
@@ -4009,6 +4225,52 @@ export enum HeadphoneEqualizerPreset {
 /**
  * @ignore
  */
+export enum VoiceAiTunerType {
+  /**
+   * @ignore
+   */
+  VoiceAiTunerMatureMale = 0,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerFreshMale = 1,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerElegantFemale = 2,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerSweetFemale = 3,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerWarmMaleSinging = 4,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerGentleFemaleSinging = 5,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerHuskyMaleSinging = 6,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerWarmElegantFemaleSinging = 7,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerPowerfulMaleSinging = 8,
+  /**
+   * @ignore
+   */
+  VoiceAiTunerDreamyFemaleSinging = 9,
+}
+
+/**
+ * @ignore
+ */
 export class ScreenCaptureParameters {
   /**
    * @ignore
@@ -4287,6 +4549,10 @@ export enum AreaCodeEx {
    * @ignore
    */
   AreaCodeUs = 0x00000800,
+  /**
+   * @ignore
+   */
+  AreaCodeRu = 0x00001000,
   /**
    * @ignore
    */

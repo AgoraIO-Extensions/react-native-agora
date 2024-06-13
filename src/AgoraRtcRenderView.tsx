@@ -36,7 +36,7 @@ export interface RtcSurfaceViewProps extends RtcRendererViewProps {
   zOrderMediaOverlay?: boolean;
 
   /**
-   * Sets the border radius of the SurfaceView's container.
+   * @ignore
    */
   borderRadius?: number;
 }

@@ -4,6 +4,7 @@ import {
   DataStreamConfig,
   EncryptionConfig,
   LiveTranscoding,
+  SimulcastConfig,
   SimulcastStreamConfig,
   SimulcastStreamMode,
   SpatialAudioParams,
@@ -1361,6 +1362,35 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     connection: RtcConnection
   ): string {
     return 'RtcEngineEx_setDualStreamModeEx_622d0f3';
+  }
+
+  setSimulcastConfigEx(
+    simulcastConfig: SimulcastConfig,
+    connection: RtcConnection
+  ): number {
+    const apiType = this.getApiTypeFromSetSimulcastConfigEx(
+      simulcastConfig,
+      connection
+    );
+    const jsonParams = {
+      simulcastConfig: simulcastConfig,
+      connection: connection,
+      toJSON: () => {
+        return {
+          simulcastConfig: simulcastConfig,
+          connection: connection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetSimulcastConfigEx(
+    simulcastConfig: SimulcastConfig,
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_setSimulcastConfigEx_bd8d7d0';
   }
 
   setHighPriorityUserListEx(

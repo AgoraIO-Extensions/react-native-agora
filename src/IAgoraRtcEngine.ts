@@ -33,6 +33,8 @@ import {
   EncryptionConfig,
   EncryptionErrorType,
   ErrorCodeType,
+  FaceShapeAreaOptions,
+  FaceShapeBeautyOptions,
   FocalLengthInfo,
   HeadphoneEqualizerPreset,
   IAudioEncodedFrameObserver,
@@ -68,6 +70,7 @@ import {
   ScreenScenarioType,
   SegmentationProperty,
   SenderOptions,
+  SimulcastConfig,
   SimulcastStreamConfig,
   SimulcastStreamMode,
   SpatialAudioParams,
@@ -84,6 +87,7 @@ import {
   VideoCodecType,
   VideoContentHint,
   VideoDenoiserOptions,
+  VideoDimensions,
   VideoEncoderConfiguration,
   VideoFormat,
   VideoLayout,
@@ -95,6 +99,7 @@ import {
   VideoSubscriptionOptions,
   VideoTranscoderError,
   VirtualBackgroundSource,
+  VoiceAiTunerType,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
   WatermarkOptions,
@@ -105,6 +110,7 @@ import {
 import {
   ContentInspectConfig,
   ContentInspectResult,
+  ExtensionContext,
   IAudioSpectrumObserver,
   MediaSourceType,
   RawAudioFrameOpModeType,
@@ -358,6 +364,30 @@ export enum StreamFallbackOptions {
    * @ignore
    */
   StreamFallbackOptionAudioOnly = 2,
+  /**
+   * @ignore
+   */
+  StreamFallbackOptionVideoStreamLayer1 = 3,
+  /**
+   * @ignore
+   */
+  StreamFallbackOptionVideoStreamLayer2 = 4,
+  /**
+   * @ignore
+   */
+  StreamFallbackOptionVideoStreamLayer3 = 5,
+  /**
+   * @ignore
+   */
+  StreamFallbackOptionVideoStreamLayer4 = 6,
+  /**
+   * @ignore
+   */
+  StreamFallbackOptionVideoStreamLayer5 = 7,
+  /**
+   * @ignore
+   */
+  StreamFallbackOptionVideoStreamLayer6 = 8,
 }
 
 /**
@@ -472,6 +502,10 @@ export class LocalVideoStats {
    *  1: Hardware encoding is applied for acceleration.
    */
   hwEncoderAccelerating?: number;
+  /**
+   * @ignore
+   */
+  simulcastDimensions?: VideoDimensions[];
 }
 
 /**
@@ -584,6 +618,10 @@ export class RemoteVideoStats {
    * The bitrate (Kbps) of the remote video received since the last count.
    */
   receivedBitrate?: number;
+  /**
+   * @ignore
+   */
+  decoderInputFrameRate?: number;
   /**
    * The frame rate (fps) of decoding the remote video.
    */
@@ -1212,6 +1250,10 @@ export class ChannelMediaOptions {
    * Whether the audio stream being published is filtered according to the volume algorithm: true : The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect. false : The audio stream is not filtered. If you need to enable this function, contact.
    */
   isAudioFilterable?: boolean;
+  /**
+   * @ignore
+   */
+  parameters?: string;
 }
 
 /**
@@ -2485,55 +2527,29 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * The event callback of the extension.
-   *
-   * To listen for events while the extension is running, you need to register this callback.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param key The key of the extension.
-   * @param value The value of the extension key.
+   * @ignore
    */
-  onExtensionEvent?(
-    provider: string,
-    extension: string,
+  onExtensionEventWithContext?(
+    context: ExtensionContext,
     key: string,
     value: string
   ): void;
 
   /**
-   * Occurs when the extension is enabled.
-   *
-   * The extension triggers this callback after it is successfully enabled.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
+   * @ignore
    */
-  onExtensionStarted?(provider: string, extension: string): void;
+  onExtensionStartedWithContext?(context: ExtensionContext): void;
 
   /**
-   * Occurs when the extension is disabled.
-   *
-   * The extension triggers this callback after it is successfully destroyed.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
+   * @ignore
    */
-  onExtensionStopped?(provider: string, extension: string): void;
+  onExtensionStoppedWithContext?(context: ExtensionContext): void;
 
   /**
-   * Occurs when the extension runs incorrectly.
-   *
-   * In case of extension enabling failure or runtime errors, the extension triggers this callback and reports the error code along with the reasons.
-   *
-   * @param provider The name of the extension provider.
-   * @param extension The name of the extension.
-   * @param error Error code. For details, see the extension documentation provided by the extension provider.
-   * @param message Reason. For details, see the extension documentation provided by the extension provider.
+   * @ignore
    */
-  onExtensionError?(
-    provider: string,
-    extension: string,
+  onExtensionErrorWithContext?(
+    context: ExtensionContext,
     error: number,
     message: string
   ): void;
@@ -2684,6 +2700,10 @@ export enum MaxMetadataSizeType {
  * Media metadata.
  */
 export class Metadata {
+  /**
+   * @ignore
+   */
+  channelId?: string;
   /**
    * The user ID.
    *  For the recipient: The ID of the remote user who sent the Metadata.
@@ -3286,6 +3306,37 @@ export abstract class IRtcEngine {
     options: BeautyOptions,
     type?: MediaSourceType
   ): number;
+
+  /**
+   * @ignore
+   */
+  abstract setFaceShapeBeautyOptions(
+    enabled: boolean,
+    options: FaceShapeBeautyOptions,
+    type?: MediaSourceType
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract setFaceShapeAreaOptions(
+    options: FaceShapeAreaOptions,
+    type?: MediaSourceType
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract getFaceShapeBeautyOptions(
+    type?: MediaSourceType
+  ): FaceShapeBeautyOptions;
+
+  /**
+   * @ignore
+   */
+  abstract getFaceShapeAreaOptions(
+    type?: MediaSourceType
+  ): FaceShapeAreaOptions;
 
   /**
    * Sets low-light enhancement.
@@ -4615,6 +4666,11 @@ export abstract class IRtcEngine {
   abstract setHeadphoneEQParameters(lowGain: number, highGain: number): number;
 
   /**
+   * @ignore
+   */
+  abstract enableVoiceAITuner(enabled: boolean, type: VoiceAiTunerType): number;
+
+  /**
    * Sets the log file.
    *
    * Deprecated: Use the mLogConfig parameter in initialize method instead. Specifies an SDK output log file. The log file records all log data for the SDK’s operation. Ensure that the directory for the log file exists and is writable. Ensure that you call initialize immediately after calling the IRtcEngine method, or the output log may not be complete.
@@ -4781,6 +4837,11 @@ export abstract class IRtcEngine {
     mode: SimulcastStreamMode,
     streamConfig?: SimulcastStreamConfig
   ): number;
+
+  /**
+   * @ignore
+   */
+  abstract setSimulcastConfig(simulcastConfig: SimulcastConfig): number;
 
   /**
    * Sets whether to enable the local playback of external audio source.
@@ -6047,41 +6108,6 @@ export abstract class IRtcEngine {
     uid: number,
     userPriority: PriorityType
   ): number;
-
-  /**
-   * Sets the built-in encryption mode.
-   *
-   * Deprecated: Use enableEncryption instead. The SDK supports built-in encryption schemes, AES-128-GCM is supported by default. Call this method to use other encryption modes. All users in the same channel must use the same encryption mode and secret. Refer to the information related to the AES encryption algorithm on the differences between the encryption modes. Before calling this method, please call setEncryptionSecret to enable the built-in encryption function.
-   *
-   * @param encryptionMode The following encryption modes:
-   *  " aes-128-xts ": 128-bit AES encryption, XTS mode.
-   *  " aes-128-ecb ": 128-bit AES encryption, ECB mode.
-   *  " aes-256-xts ": 256-bit AES encryption, XTS mode.
-   *  " sm4-128-ecb ": 128-bit SM4 encryption, ECB mode.
-   *  " aes-128-gcm ": 128-bit AES encryption, GCM mode.
-   *  " aes-256-gcm ": 256-bit AES encryption, GCM mode.
-   *  "": When this parameter is set as null, the encryption mode is set as " aes-128-gcm " by default.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract setEncryptionMode(encryptionMode: string): number;
-
-  /**
-   * Enables built-in encryption with an encryption password before users join a channel.
-   *
-   * Deprecated: Use enableEncryption instead. Before joining the channel, you need to call this method to set the secret parameter to enable the built-in encryption. All users in the same channel should use the same secret. The secret is automatically cleared once a user leaves the channel. If you do not specify the secret or secret is set as null, the built-in encryption is disabled.
-   *  Do not use this method for Media Push.
-   *  For optimal transmission, ensure that the encrypted data size does not exceed the original data size + 16 bytes. 16 bytes is the maximum padding size for AES encryption.
-   *
-   * @param secret The encryption password.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract setEncryptionSecret(secret: string): number;
 
   /**
    * Enables or disables the built-in encryption.
