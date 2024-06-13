@@ -15,6 +15,7 @@
 		51C0ADB2D05FD3E09BD14D10 /* libPods-ScreenShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995956B4E8573A01AC9C535 /* libPods-ScreenShare.a */; };
 		7699B88040F8A987B510C191 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BB373C6F2C1AA14700EA05A6 /* VideoRawDataNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BB373C6E2C1AA14700EA05A6 /* VideoRawDataNativeModule.m */; };
 		F5652807291BE31F00793068 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F56527FF291BE31E00793068 /* agora-logo.png */; };
 		F5652809291BE31F00793068 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652801291BE31E00793068 /* ding.mp3 */; };
 		F565280A291BE31F00793068 /* dang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652802291BE31E00793068 /* dang.mp3 */; };
@@ -75,6 +76,9 @@
 		6B4351393DA57450FBFEC119 /* Pods-ScreenShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.release.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AgoraRtcNgExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		BB373C6A2C1AA0EA00EA05A6 /* VideoRawDataNativeModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoRawDataNativeModule.h; sourceTree = "<group>"; };
+		BB373C6E2C1AA14700EA05A6 /* VideoRawDataNativeModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoRawDataNativeModule.m; sourceTree = "<group>"; };
+		BBD83E082C1AA0220030ADAF /* NativeModules */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; name = NativeModules; path = AgoraRtcNgExampleTests/NativeModules; sourceTree = SOURCE_ROOT; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F56527FF291BE31E00793068 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		F5652801291BE31E00793068 /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
@@ -120,6 +124,7 @@
 		00E356EF1AD99517003FC87E /* AgoraRtcNgExampleTests */ = {
 			isa = PBXGroup;
 			children = (
+				BBD83E082C1AA0220030ADAF /* NativeModules */,
 				00E356F21AD99517003FC87E /* AgoraRtcNgExampleTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
@@ -170,6 +175,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				BB373C692C1AA0CB00EA05A6 /* NativeModules */,
 				F56527FE291BE31E00793068 /* Resources */,
 				13B07FAE1A68108700A75B9A /* AgoraRtcNgExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -192,6 +198,15 @@
 				F5652811291BE33F00793068 /* ScreenShare.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BB373C692C1AA0CB00EA05A6 /* NativeModules */ = {
+			isa = PBXGroup;
+			children = (
+				BB373C6A2C1AA0EA00EA05A6 /* VideoRawDataNativeModule.h */,
+				BB373C6E2C1AA14700EA05A6 /* VideoRawDataNativeModule.m */,
+			);
+			path = NativeModules;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -551,6 +566,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				BB373C6F2C1AA14700EA05A6 /* VideoRawDataNativeModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

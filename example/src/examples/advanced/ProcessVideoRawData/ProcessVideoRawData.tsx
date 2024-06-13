@@ -1,22 +1,38 @@
 import React, { ReactElement } from 'react';
+import { NativeModules, Platform } from 'react-native';
+
 import {
   ChannelProfileType,
   ClientRoleType,
+  ErrorCodeType,
   IRtcEngineEventHandler,
+  RtcConnection,
+  RtcStats,
+  RtcSurfaceView,
+  RtcTextureView,
+  UserOfflineReasonType,
+  VideoCanvas,
   createAgoraRtcEngine,
 } from 'react-native-agora';
-import * as RawData from 'react-native-agora-rawdata';
 
 import {
   BaseComponent,
   BaseVideoComponentState,
 } from '../../../components/BaseComponent';
-import { AgoraButton } from '../../../components/ui';
+import {
+  AgoraButton,
+  AgoraDivider,
+  AgoraStyle,
+  AgoraSwitch,
+} from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { askMediaAccess } from '../../../utils/permissions';
 
+const { VideoRawDataNativeModule } = NativeModules;
+
 interface State extends BaseVideoComponentState {
-  enablePlugin: boolean;
+  switchCamera: boolean;
+  renderByTextureView: boolean;
 }
 
 export default class ProcessVideoRawData
@@ -33,7 +49,8 @@ export default class ProcessVideoRawData
       joinChannelSuccess: false,
       remoteUsers: [],
       startPreview: false,
-      enablePlugin: false,
+      switchCamera: false,
+      renderByTextureView: false,
     };
   }
 
@@ -53,6 +70,7 @@ export default class ProcessVideoRawData
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
+    VideoRawDataNativeModule.initialize(appId);
     this.engine.registerEventHandler(this);
 
     // Need granted the microphone and camera permission
@@ -97,46 +115,115 @@ export default class ProcessVideoRawData
   }
 
   /**
-   * Step 3: enablePlugin
+   * Step 3 (Optional): switchCamera
    */
-  enablePlugin = () => {
-    RawData.createPlugin(this.engine?.getNativeHandle()!);
-    RawData.enablePlugin();
-    this.setState({ enablePlugin: true });
+  switchCamera = () => {
+    this.engine?.switchCamera();
+    this.setState((preState) => {
+      return { switchCamera: !preState.switchCamera };
+    });
   };
 
   /**
-   * Step 4: disablePlugin
-   */
-  disablePlugin = () => {
-    RawData.disablePlugin();
-    RawData.destroyPlugin();
-    this.setState({ enablePlugin: false });
-  };
-
-  /**
-   * Step 5: leaveChannel
+   * Step 4: leaveChannel
    */
   protected leaveChannel() {
     this.engine?.leaveChannel();
   }
 
   /**
-   * Step 6: releaseRtcEngine
+   * Step 5: releaseRtcEngine
    */
   protected releaseRtcEngine() {
-    this.disablePlugin();
     this.engine?.unregisterEventHandler(this);
+    VideoRawDataNativeModule.releaseModule();
     this.engine?.release();
   }
 
+  protected renderUsers(): ReactElement | undefined {
+    return super.renderUsers();
+  }
+
+  onError(err: ErrorCodeType, msg: string) {
+    super.onError(err, msg);
+  }
+
+  onJoinChannelSuccess(connection: RtcConnection, elapsed: number) {
+    super.onJoinChannelSuccess(connection, elapsed);
+  }
+
+  onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
+    super.onLeaveChannel(connection, stats);
+  }
+
+  onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
+    super.onUserJoined(connection, remoteUid, elapsed);
+  }
+
+  onUserOffline(
+    connection: RtcConnection,
+    remoteUid: number,
+    reason: UserOfflineReasonType
+  ) {
+    super.onUserOffline(connection, remoteUid, reason);
+  }
+
+  protected renderVideo(user: VideoCanvas): ReactElement | undefined {
+    const { renderByTextureView } = this.state;
+    return (
+      <>
+        {renderByTextureView ? (
+          <RtcTextureView
+            style={
+              user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall
+            }
+            canvas={{
+              ...user,
+            }}
+          />
+        ) : (
+          <RtcSurfaceView
+            style={
+              user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall
+            }
+            zOrderMediaOverlay={user.uid !== 0}
+            canvas={{
+              ...user,
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  protected renderConfiguration(): ReactElement | undefined {
+    const { startPreview, joinChannelSuccess, renderByTextureView } =
+      this.state;
+    return (
+      <>
+        <AgoraSwitch
+          disabled={
+            (!startPreview && !joinChannelSuccess) || Platform.OS !== 'android'
+          }
+          title={`renderByTextureView`}
+          value={renderByTextureView}
+          onValueChange={(value) => {
+            this.setState({ renderByTextureView: value });
+          }}
+        />
+        <AgoraDivider />
+      </>
+    );
+  }
+
   protected renderAction(): ReactElement | undefined {
-    const { enablePlugin } = this.state;
+    const { startPreview, joinChannelSuccess } = this.state;
     return (
       <>
         <AgoraButton
-          title={`${enablePlugin ? 'disable' : 'enable'} Plugin`}
-          onPress={enablePlugin ? this.disablePlugin : this.enablePlugin}
+          disabled={!startPreview && !joinChannelSuccess}
+          title={`switchCamera`}
+          onPress={this.switchCamera}
         />
       </>
     );
