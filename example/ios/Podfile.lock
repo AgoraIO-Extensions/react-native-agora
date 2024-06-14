@@ -416,8 +416,6 @@ PODS:
     - AgoraRtcEngine_iOS (= 4.3.2)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - react-native-agora-rawdata (0.1.0):
-    - React-Core
   - react-native-image-tools (0.8.1):
     - React
   - react-native-safe-area-context (4.7.2):
@@ -600,7 +598,6 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-agora (from `../..`)
-  - react-native-agora-rawdata (from `../node_modules/react-native-agora-rawdata`)
   - react-native-image-tools (from `../node_modules/react-native-image-tool`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
@@ -693,8 +690,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-agora:
     :path: "../.."
-  react-native-agora-rawdata:
-    :path: "../node_modules/react-native-agora-rawdata"
   react-native-image-tools:
     :path: "../node_modules/react-native-image-tool"
   react-native-safe-area-context:
@@ -787,7 +782,6 @@ SPEC CHECKSUMS:
   React-jsinspector: de0198127395fec3058140a20c045167f761bb16
   React-logger: dc3a2b174d79c2da635059212747d8d929b54e06
   react-native-agora: 4079dd4ceb688d085e68a4aa1148f323dbd3d0eb
-  react-native-agora-rawdata: 097895cdccd8fcf3cff5dffe23372f5d3c89fd31
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
