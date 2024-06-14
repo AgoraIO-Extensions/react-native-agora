@@ -2,6 +2,28 @@ import './extension/AgoraMediaBaseExtension';
 import { EncodedVideoFrameInfo } from './AgoraBase';
 
 /**
+ * @ignore
+ */
+export class ExtensionContext {
+  /**
+   * @ignore
+   */
+  isValid?: boolean;
+  /**
+   * @ignore
+   */
+  uid?: number;
+  /**
+   * @ignore
+   */
+  providerName?: string;
+  /**
+   * @ignore
+   */
+  extensionName?: string;
+}
+
+/**
  * The type of the video source.
  */
 export enum VideoSourceType {
@@ -450,6 +472,10 @@ export enum VideoPixelFormat {
    */
   VideoCvpixelBgra = 14,
   /**
+   * @ignore
+   */
+  VideoCvpixelP010 = 15,
+  /**
    * 16: The format is I422.
    */
   VideoPixelI422 = 16,
@@ -517,6 +543,294 @@ export abstract class IVideoFrameMetaInfo {
    * @ignore
    */
   abstract getMetaInfoStr(key: MetaInfoKey): string;
+}
+
+/**
+ * @ignore
+ */
+export enum PrimaryID {
+  /**
+   * @ignore
+   */
+  PrimaryidBt709 = 1,
+  /**
+   * @ignore
+   */
+  PrimaryidUnspecified = 2,
+  /**
+   * @ignore
+   */
+  PrimaryidBt470m = 4,
+  /**
+   * @ignore
+   */
+  PrimaryidBt470bg = 5,
+  /**
+   * @ignore
+   */
+  PrimaryidSmpte170m = 6,
+  /**
+   * @ignore
+   */
+  PrimaryidSmpte240m = 7,
+  /**
+   * @ignore
+   */
+  PrimaryidFilm = 8,
+  /**
+   * @ignore
+   */
+  PrimaryidBt2020 = 9,
+  /**
+   * @ignore
+   */
+  PrimaryidSmptest428 = 10,
+  /**
+   * @ignore
+   */
+  PrimaryidSmptest431 = 11,
+  /**
+   * @ignore
+   */
+  PrimaryidSmptest432 = 12,
+  /**
+   * @ignore
+   */
+  PrimaryidJedecp22 = 22,
+}
+
+/**
+ * @ignore
+ */
+export enum RangeID {
+  /**
+   * @ignore
+   */
+  RangeidInvalid = 0,
+  /**
+   * @ignore
+   */
+  RangeidLimited = 1,
+  /**
+   * @ignore
+   */
+  RangeidFull = 2,
+  /**
+   * @ignore
+   */
+  RangeidDerived = 3,
+}
+
+/**
+ * @ignore
+ */
+export enum MatrixID {
+  /**
+   * @ignore
+   */
+  MatrixidRgb = 0,
+  /**
+   * @ignore
+   */
+  MatrixidBt709 = 1,
+  /**
+   * @ignore
+   */
+  MatrixidUnspecified = 2,
+  /**
+   * @ignore
+   */
+  MatrixidFcc = 4,
+  /**
+   * @ignore
+   */
+  MatrixidBt470bg = 5,
+  /**
+   * @ignore
+   */
+  MatrixidSmpte170m = 6,
+  /**
+   * @ignore
+   */
+  MatrixidSmpte240m = 7,
+  /**
+   * @ignore
+   */
+  MatrixidYcocg = 8,
+  /**
+   * @ignore
+   */
+  MatrixidBt2020Ncl = 9,
+  /**
+   * @ignore
+   */
+  MatrixidBt2020Cl = 10,
+  /**
+   * @ignore
+   */
+  MatrixidSmpte2085 = 11,
+  /**
+   * @ignore
+   */
+  MatrixidCdncls = 12,
+  /**
+   * @ignore
+   */
+  MatrixidCdcls = 13,
+  /**
+   * @ignore
+   */
+  MatrixidBt2100Ictcp = 14,
+}
+
+/**
+ * @ignore
+ */
+export enum TransferID {
+  /**
+   * @ignore
+   */
+  TransferidBt709 = 1,
+  /**
+   * @ignore
+   */
+  TransferidUnspecified = 2,
+  /**
+   * @ignore
+   */
+  TransferidGamma22 = 4,
+  /**
+   * @ignore
+   */
+  TransferidGamma28 = 5,
+  /**
+   * @ignore
+   */
+  TransferidSmpte170m = 6,
+  /**
+   * @ignore
+   */
+  TransferidSmpte240m = 7,
+  /**
+   * @ignore
+   */
+  TransferidLinear = 8,
+  /**
+   * @ignore
+   */
+  TransferidLog = 9,
+  /**
+   * @ignore
+   */
+  TransferidLogSqrt = 10,
+  /**
+   * @ignore
+   */
+  TransferidIec6196624 = 11,
+  /**
+   * @ignore
+   */
+  TransferidBt1361Ecg = 12,
+  /**
+   * @ignore
+   */
+  TransferidIec6196621 = 13,
+  /**
+   * @ignore
+   */
+  TransferidBt202010 = 14,
+  /**
+   * @ignore
+   */
+  TransferidBt202012 = 15,
+  /**
+   * @ignore
+   */
+  TransferidSmptest2084 = 16,
+  /**
+   * @ignore
+   */
+  TransferidSmptest428 = 17,
+  /**
+   * @ignore
+   */
+  TransferidAribStdB67 = 18,
+}
+
+/**
+ * @ignore
+ */
+export class ColorSpace {
+  /**
+   * @ignore
+   */
+  primaries?: PrimaryID;
+  /**
+   * @ignore
+   */
+  transfer?: TransferID;
+  /**
+   * @ignore
+   */
+  matrix?: MatrixID;
+  /**
+   * @ignore
+   */
+  range?: RangeID;
+}
+
+/**
+ * @ignore
+ */
+export class Hdr10MetadataInfo {
+  /**
+   * @ignore
+   */
+  redPrimaryX?: number;
+  /**
+   * @ignore
+   */
+  redPrimaryY?: number;
+  /**
+   * @ignore
+   */
+  greenPrimaryX?: number;
+  /**
+   * @ignore
+   */
+  greenPrimaryY?: number;
+  /**
+   * @ignore
+   */
+  bluePrimaryX?: number;
+  /**
+   * @ignore
+   */
+  bluePrimaryY?: number;
+  /**
+   * @ignore
+   */
+  whitePointX?: number;
+  /**
+   * @ignore
+   */
+  whitePointY?: number;
+  /**
+   * @ignore
+   */
+  maxMasteringLuminance?: number;
+  /**
+   * @ignore
+   */
+  minMasteringLuminance?: number;
+  /**
+   * @ignore
+   */
+  maxContentLightLevel?: number;
+  /**
+   * @ignore
+   */
+  maxFrameAverageLightLevel?: number;
 }
 
 /**
@@ -608,6 +922,10 @@ export class ExternalVideoFrame {
    */
   textureId?: number;
   /**
+   * @ignore
+   */
+  fence_object?: number;
+  /**
    * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
    */
   matrix?: number[];
@@ -630,7 +948,19 @@ export class ExternalVideoFrame {
   /**
    * @ignore
    */
+  alphaStitchMode?: number;
+  /**
+   * @ignore
+   */
   texture_slice_index?: number;
+  /**
+   * @ignore
+   */
+  hdr10MetadataInfo?: Hdr10MetadataInfo;
+  /**
+   * @ignore
+   */
+  colorSpace?: ColorSpace;
 }
 
 /**
@@ -710,11 +1040,23 @@ export class VideoFrame {
   /**
    * @ignore
    */
+  alphaStitchMode?: number;
+  /**
+   * @ignore
+   */
   pixelBuffer?: Uint8Array;
   /**
    * The meta information in the video frame. To use this parameter, please.
    */
   metaInfo?: IVideoFrameMetaInfo;
+  /**
+   * @ignore
+   */
+  hdr10MetadataInfo?: Hdr10MetadataInfo;
+  /**
+   * @ignore
+   */
+  colorSpace?: ColorSpace;
 }
 
 /**
