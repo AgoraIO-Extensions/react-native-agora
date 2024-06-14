@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
+  ExtensionContext,
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
 } from 'react-native-agora';
@@ -148,18 +149,15 @@ export default class Extension
     this.engine?.release();
   }
 
-  onExtensionErrored(
-    provider: string,
-    extName: string,
+  onExtensionErrorWithContext(
+    context: ExtensionContext,
     error: number,
     msg: string
   ) {
     this.error(
-      'onExtensionErrored',
-      'provider',
-      provider,
-      'extName',
-      extName,
+      'onExtensionErrorWithContext',
+      'context',
+      context,
       'error',
       error,
       'msg',
@@ -167,18 +165,15 @@ export default class Extension
     );
   }
 
-  onExtensionEvent(
-    provider: string,
-    extName: string,
+  onExtensionEventWithContext(
+    context: ExtensionContext,
     key: string,
     value: string
   ) {
     this.info(
-      'onExtensionEvent',
-      'provider',
-      provider,
-      'extName',
-      extName,
+      'onExtensionEventWithContext',
+      'context',
+      context,
       'key',
       key,
       'value',
@@ -186,13 +181,13 @@ export default class Extension
     );
   }
 
-  onExtensionStarted(provider: string, extName: string) {
-    this.info('onExtensionStarted', 'provider', provider, 'extName', extName);
+  onExtensionStartedWithContext(context: ExtensionContext) {
+    this.info('onExtensionStartedWithContext', 'context', context);
     this.setState({ enableExtension: true });
   }
 
-  onExtensionStopped(provider: string, extName: string) {
-    this.info('onExtensionStopped', 'provider', provider, 'extName', extName);
+  onExtensionStopped(context: ExtensionContext) {
+    this.info('onExtensionStopped', 'context', context);
     this.setState({ enableExtension: false });
   }
 
