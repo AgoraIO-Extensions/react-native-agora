@@ -201,16 +201,16 @@ export default class ProcessVideoRawData
       this.state;
     return (
       <>
-        <AgoraSwitch
-          disabled={
-            (!startPreview && !joinChannelSuccess) || Platform.OS !== 'android'
-          }
-          title={`renderByTextureView`}
-          value={renderByTextureView}
-          onValueChange={(value) => {
-            this.setState({ renderByTextureView: value });
-          }}
-        />
+        {Platform.OS === 'android' && (
+          <AgoraSwitch
+            disabled={!startPreview && !joinChannelSuccess}
+            title={`renderByTextureView`}
+            value={renderByTextureView}
+            onValueChange={(value) => {
+              this.setState({ renderByTextureView: value });
+            }}
+          />
+        )}
         <AgoraDivider />
       </>
     );
