@@ -27,7 +27,10 @@ public class AgoraRoundedFrameLayout extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-
+        if(borderRadius == 0) {
+            super.dispatchDraw(canvas);
+            return;
+        }
         int saveCount = canvas.save();
 
         Path path = new Path();
