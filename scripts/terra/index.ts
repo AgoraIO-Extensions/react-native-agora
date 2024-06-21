@@ -9,6 +9,7 @@ import {
 
 import {
   IrisApiIdParserUserData,
+  OverrideNodeParserUserData,
   renderWithConfiguration,
 } from '@agoraio-extensions/terra_shared_configs';
 
@@ -18,17 +19,19 @@ type CXXFileUserData = {
   fileName: string;
 };
 
-type TerraNodeUserData = IrisApiIdParserUserData & {
-  isStruct: boolean;
-  isEnumz: boolean;
-  isClazz: boolean;
-  isCallback: boolean;
-};
+type TerraNodeUserData = IrisApiIdParserUserData &
+  OverrideNodeParserUserData & {
+    isStruct: boolean;
+    isEnumz: boolean;
+    isClazz: boolean;
+    isCallback: boolean;
+  };
 
-type ClazzMethodUserData = IrisApiIdParserUserData & {
-  output: string;
-  input: string;
-};
+type ClazzMethodUserData = IrisApiIdParserUserData &
+  OverrideNodeParserUserData & {
+    output: string;
+    input: string;
+  };
 
 export default function (
   terraContext: TerraContext,
