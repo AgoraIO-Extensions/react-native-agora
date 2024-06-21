@@ -119,7 +119,7 @@ export abstract class IMediaEngine {
    *
    * Before calling this method to push external audio data, perform the following steps:
    *  Call createCustomAudioTrack to create a custom audio track and get the audio track ID.
-   *  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+   *  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAudioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
    *
    * @param frame The external audio frame. See AudioFrame.
    * @param trackId The audio track ID. If you want to publish a custom external audio source, set this parameter to the ID of the corresponding custom audio track you want to publish.
@@ -195,7 +195,7 @@ export abstract class IMediaEngine {
    *
    * Ensure that you call this method before joining a channel. To publish a custom audio source, see the following steps:
    *  Call this method to create a custom audio track and get the audio track ID.
-   *  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAduioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
+   *  Call joinChannel to join the channel. In ChannelMediaOptions, set publishCustomAudioTrackId to the audio track ID that you want to publish, and set publishCustomAudioTrack to true.
    *  Call pushAudioFrame and specify trackId as the audio track ID set in step 2. You can then publish the corresponding custom audio source in the channel.
    *
    * @param trackType The type of the custom audio track. See AudioTrackType. If AudioTrackDirect is specified for this parameter, you must set publishMicrophoneTrack to false in ChannelMediaOptions when calling joinChannel to join the channel; otherwise, joining the channel fails and returns the error code -2.
@@ -203,7 +203,7 @@ export abstract class IMediaEngine {
    *
    * @returns
    * If the method call is successful, the audio track ID is returned as the unique identifier of the audio track.
-   *  If the method call fails, a negative value is returned.
+   *  If the method call fails, 0xffffffff is returned.
    */
   abstract createCustomAudioTrack(
     trackType: AudioTrackType,

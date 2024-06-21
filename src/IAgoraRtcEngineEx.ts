@@ -78,9 +78,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Sets channel options and leaves the channel.
    *
-   * This method lets the user leave the channel, for example, by hanging up or exiting the call. After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call. This method can be called whether or not a call is currently in progress. This method releases all resources related to the session. Calling this method does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
-   *  If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-   *  If you want to leave the channels that you joined by calling joinChannel and joinChannelEx, call the leaveChannel method.
+   * After calling this method, the SDK terminates the audio and video interaction, leaves the current channel, and releases all resources related to the session. After calling joinChannelEx to join a channel, you must call this method to end the call, otherwise, the next call cannot be started.
+   *  This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
+   *  If you call leaveChannel, you will leave all the channels you have joined by calling joinChannel or joinChannelEx.
    *
    * @param connection The connection information. See RtcConnection.
    * @param options The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
@@ -251,9 +251,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Stops or resumes subscribing to the video streams of all remote users.
    *
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the video streams of all remote users by default.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -486,8 +486,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Gets the current connection state of the SDK.
    *
-   * You can call this method either before or after joining a channel.
-   *
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -516,8 +514,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
 
   /**
    * Creates a data stream.
-   *
-   * Creates a data stream. Each user can create up to five data streams in a single channel.
    *
    * @param config The configurations for the data stream. See DataStreamConfig.
    * @param connection The connection information. See RtcConnection.
