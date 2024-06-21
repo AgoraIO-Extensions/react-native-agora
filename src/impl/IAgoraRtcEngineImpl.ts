@@ -6999,7 +6999,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetAudioDeviceManager(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getAudioDeviceManager';
   }
 
   getVideoDeviceManager(): IVideoDeviceManager {
@@ -7010,7 +7010,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetVideoDeviceManager(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getVideoDeviceManager';
   }
 
   getMusicContentCenter(): IMusicContentCenter {
@@ -7021,7 +7021,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetMusicContentCenter(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getMusicContentCenter';
   }
 
   getMediaEngine(): IMediaEngine {
@@ -7032,7 +7032,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetMediaEngine(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getMediaEngine';
   }
 
   getLocalSpatialAudioEngine(): ILocalSpatialAudioEngine {
@@ -7043,7 +7043,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetLocalSpatialAudioEngine(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getLocalSpatialAudioEngine';
   }
 
   getH265Transcoder(): IH265Transcoder {
@@ -7054,7 +7054,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetH265Transcoder(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getH265Transcoder';
   }
 
   sendMetaData(metadata: Metadata, sourceType: VideoSourceType): number {
@@ -7112,7 +7112,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromDestroyRendererByView(view: any): string {
-    return 'RtcEngine_destroyRendererByView';
+    return 'RtcEngine_destroyRendererByView_a55f55f';
   }
 
   destroyRendererByConfig(
@@ -7145,7 +7145,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     channelId?: string,
     uid: number = 0
   ): string {
-    return 'RtcEngine_destroyRendererByConfig';
+    return 'RtcEngine_destroyRendererByConfig_542c2ae';
   }
 
   unregisterAudioEncodedFrameObserver(

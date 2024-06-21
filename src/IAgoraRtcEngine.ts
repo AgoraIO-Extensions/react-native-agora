@@ -1430,10 +1430,10 @@ export interface IRtcEngineEventHandler {
   /**
    * Occurs when a user leaves a channel.
    *
-   * This callback notifies the app that the user leaves the channel by calling leaveChannel. From this callback, the app can get information such as the call duration and statistics.
+   * You can obtain information such as the total duration of a call, and the data traffic that the SDK transmits and receives.
    *
    * @param connection The connection information. See RtcConnection.
-   * @param stats The statistics of the call. See RtcStats.
+   * @param stats Call statistics. See RtcStats.
    */
   onLeaveChannel?(connection: RtcConnection, stats: RtcStats): void;
 
@@ -1495,7 +1495,7 @@ export interface IRtcEngineEventHandler {
   /**
    * Reports the last mile network quality of each user in the channel.
    *
-   * This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server. The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times. txQuality is Unknown when the user is not sending a stream; rxQuality is Unknown when the user is not receiving a stream.
+   * This callback reports the last mile network conditions of each user in the channel. Last mile refers to the connection between the local device and Agora's edge server. The SDK triggers this callback once every two seconds. If a channel includes multiple users, the SDK triggers this callback as many times. This callback provides feedback on network quality through sending and receiving broadcast packets within the channel. Excessive broadcast packets can lead to broadcast storms. To prevent broadcast storms from causing a large amount of data transmission within the channel, this callback supports feedback on the network quality of up to 4 remote hosts simultaneously by default. txQuality is Unknown when the user is not sending a stream; rxQuality is Unknown when the user is not receiving a stream.
    *
    * @param connection The connection information. See RtcConnection.
    * @param remoteUid The user ID. The network quality of the user with this user ID is reported. If the uid is 0, the local network quality is reported.
@@ -1649,6 +1649,8 @@ export interface IRtcEngineEventHandler {
 
   /**
    * Occurs when the renderer receives the first frame of the remote video.
+   *
+   * This callback is only triggered when the video frame is rendered by the SDK; it will not be triggered if the user employs custom video rendering.You need to implement this independently using methods outside the SDK.
    *
    * @param connection The connection information. See RtcConnection.
    * @param remoteUid The user ID of the remote user sending the video stream.
@@ -2143,9 +2145,7 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * Occurs when the user role switches during the interactive live streaming.
-   *
-   * The SDK triggers this callback when the local user switches their user role by calling setClientRole after joining the channel.
+   * Occurs when the user role or the audience latency level changes.
    *
    * @param connection The connection information. See RtcConnection.
    * @param oldRole Role that the user switches from: ClientRoleType.
@@ -2160,9 +2160,9 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
-   * Occurs when the user role switching fails in the interactive live streaming.
+   * Occurs when switching a user role fails.
    *
-   * In the live broadcasting channel profile, when the local user calls setClientRole to switch the user role after joining the channel but the switch fails, the SDK triggers this callback to report the reason for the failure and the current user role.
+   * This callback informs you about the reason for failing to switching and your current user role.
    *
    * @param connection The connection information. See RtcConnection.
    * @param reason The reason for a user role switch failure. See ClientRoleChangeFailedReason.
@@ -2910,8 +2910,7 @@ export class ExtensionInfo {
  */
 export abstract class IRtcEngine {
   /**
-   * Before calling other APIs, you must call createAgoraRtcEngine and initialize to create and initialize the IRtcEngine object.
-   *  The SDK supports creating only one IRtcEngine instance for an app.
+   * All called methods provided by the IRtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
    *
    * @param context Configurations for the IRtcEngine instance. See RtcEngineContext.
    *
@@ -2976,7 +2975,6 @@ export abstract class IRtcEngine {
    *  All lowercase English letters: a to z.
    *  All uppercase English letters: A to Z.
    *  All numeric characters: 0 to 9.
-   *  Space
    *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
    * @param uid The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and onJoinChannelSuccess returns it in the callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
    *
@@ -3031,7 +3029,6 @@ export abstract class IRtcEngine {
    *  All lowercase English letters: a to z.
    *  All uppercase English letters: A to Z.
    *  All numeric characters: 0 to 9.
-   *  Space
    *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
    * @param uid The user ID. This parameter is used to identify the user in the channel for real-time audio and video interaction. You need to set and manage user IDs yourself, and ensure that each user ID in the same channel is unique. This parameter is a 32-bit unsigned integer. The value range is 1 to 2 32 -1. If the user ID is not assigned (or set to 0), the SDK assigns a random user ID and onJoinChannelSuccess returns it in the callback. Your application must record and maintain the returned user ID, because the SDK does not do so.
    * @param options The channel media options. See ChannelMediaOptions.
@@ -3071,8 +3068,7 @@ export abstract class IRtcEngine {
   /**
    * Sets channel options and leaves the channel.
    *
-   * If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-   *  If you have called joinChannelEx to join multiple channels, calling this method will leave the channels when calling joinChannel and joinChannelEx at the same time. This method will release all resources related to the session, leave the channel, that is, hang up or exit the call. This method can be called whether or not a call is currently in progress. After joining the channel, you must call this method or to end the call, otherwise, the next call cannot be started. Calling this method does not necessarily mean that the user has left the channel. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
+   * After calling this method, the SDK terminates the audio and video interaction, leaves the current channel, and releases all resources related to the session. After joining the channel, you must call this method to end the call; otherwise, the next call cannot be started. If you have called joinChannelEx to join multiple channels, calling this method will leave all the channels you joined. This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
    *
    * @param options The options for leaving the channel. See LeaveChannelOptions.
    *
@@ -3103,15 +3099,12 @@ export abstract class IRtcEngine {
   /**
    * Sets the channel profile.
    *
-   * After initializing the SDK, the default channel profile is the live streaming profile. You can call this method to set the channel profile. The Agora SDK differentiates channel profiles and applies optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call and prioritizes video quality for interactive live video streaming.
-   *  To ensure the quality of real-time communication, Agora recommends that all users in a channel use the same channel profile.
-   *  This method must be called and set before joinChannel, and cannot be set again after joining the channel.
-   *  The default audio route and video encoding bitrate are different in different channel profiles. See setDefaultAudioRouteToSpeakerphone and setVideoEncoderConfiguration.
+   * You can call this method to set the channel profile. The SDK adopts different optimization strategies for different channel profiles. For example, in a live streaming scenario, the SDK prioritizes video quality. After initializing the SDK, the default channel profile is the live streaming profile. In different channel scenarios, the default audio routing of the SDK is different. See setDefaultAudioRouteToSpeakerphone.
    *
    * @param profile The channel profile. See ChannelProfileType.
    *
    * @returns
-   * 0(ERR_OK): Success.
+   * 0: Success.
    *  < 0: Failure.
    *  -2: The parameter is invalid.
    *  -7: The SDK is not initialized.
@@ -3119,14 +3112,11 @@ export abstract class IRtcEngine {
   abstract setChannelProfile(profile: ChannelProfileType): number;
 
   /**
-   * Sets the user role and level in an interactive live streaming channel.
+   * Set the user role and the audience latency level in a live streaming scenario.
    *
-   * In the interactive live streaming profile, the SDK sets the user role as audience by default. You can call this method to set the user role as host. You can call this method either before or after joining a channel. If you call this method to switch the user role after joining a channel, the SDK automatically does the following:
-   *  Calls muteLocalAudioStream and muteLocalVideoStream to change the publishing state.
-   *  Triggers onClientRoleChanged on the local client.
-   *  Triggers onUserJoined or onUserOffline on the remote client. This method applies to the interactive live streaming profile (the profile parameter of setChannelProfile is set as ChannelProfileLiveBroadcasting) only.
+   * By default,the SDK sets the user role as audience. You can call this method to set the user role as host. The user role (roles) determines the users' permissions at the SDK level, including whether they can publish audio and video streams in a channel.
    *
-   * @param role The user role in the interactive live streaming. See ClientRoleType.
+   * @param role The user role. See ClientRoleType. If you set the user role as an audience member, you cannot publish audio and video streams in the channel. If you want to publish media streams in a channel during live streaming, ensure you set the user role as broadcaster.
    * @param options The detailed options of a user, including the user level. See ClientRoleOptions.
    *
    * @returns
@@ -3632,9 +3622,9 @@ export abstract class IRtcEngine {
   /**
    * Stops or resumes subscribing to the video streams of all remote users.
    *
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users. By default, the SDK subscribes to the video streams of all remote users when joining a channel. To modify this behavior, you can set autoSubscribeVideo to false when calling joinChannel to join the channel, which will cancel the subscription to the video streams of all users upon joining the channel.
+   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users. By default, the SDK subscribes to the video streams of all remote users when joining a channel. To modify this behavior, you can set autoSubscribeVideo to false when calling joinChannel to join the channel, which will cancel the subscription to the video streams of all users upon joining the channel.
    *
-   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the video streams of all remote users by default.
    *
    * @returns
    * 0: Success.
@@ -5038,7 +5028,11 @@ export abstract class IRtcEngine {
   /**
    * Whether to mute the recording signal.
    *
-   * @param mute true : The media file is muted. false : (Default) Do not mute the recording signal. If you have already called adjustRecordingSignalVolume to adjust the volume, then when you call this method and set it to true, the SDK will record the current volume and mute it. To restore the previous volume, call this method again and set it to false.
+   * If you have already called adjustRecordingSignalVolume to adjust the recording signal volume, when you call this method and set it to true, the SDK behaves as follows:
+   *  Records the adjusted volume.
+   *  Mutes the recording signal. When you call this method again and set it to false, the recording signal volume will be restored to the volume recorded by the SDK before muting.
+   *
+   * @param mute true : Mute the recording signal. false : (Default) Do not mute the recording signal.
    *
    * @returns
    * 0: Success.
@@ -5194,8 +5188,6 @@ export abstract class IRtcEngine {
    * Enables in-ear monitoring.
    *
    * This method enables or disables in-ear monitoring.
-   *  Users must use earphones (wired or Bluetooth) to hear the in-ear monitoring effect.
-   *  You can call this method either before or after joining a channel.
    *
    * @param enabled Enables or disables in-ear monitoring. true : Enables in-ear monitoring. false : (Default) Disables in-ear monitoring.
    * @param includeAudioFilters The audio filter types of in-ear monitoring. See EarMonitoringFilterType.
@@ -5303,7 +5295,7 @@ export abstract class IRtcEngine {
    *
    * @returns
    * If the method call is successful, the video track ID is returned as the unique identifier of the video track.
-   *  If the method call fails, a negative value is returned.
+   *  If the method call fails, 0xffffffff is returned.
    */
   abstract createCustomVideoTrack(): number;
 
@@ -5344,7 +5336,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports camera zoom.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *
    * @returns
    * true : The device supports camera zoom. false : The device does not support camera zoom.
@@ -5354,7 +5346,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device camera supports face detection.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *  This method is for Android and iOS only.
    *
    * @returns
@@ -5365,7 +5357,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports camera flash.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *  The app enables the front camera by default. If your front camera does not support flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
    *  On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
    *
@@ -5377,7 +5369,7 @@ export abstract class IRtcEngine {
   /**
    * Check whether the device supports the manual focus function.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *
    * @returns
    * true : The device supports the manual focus function. false : The device does not support the manual focus function.
@@ -5387,7 +5379,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports the face auto-focus function.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *
    * @returns
    * true : The device supports the face auto-focus function. false : The device does not support the face auto-focus function.
@@ -5427,7 +5419,7 @@ export abstract class IRtcEngine {
   /**
    * Gets the maximum zoom ratio supported by the camera.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *
    * @returns
    * The maximum zoom factor.
@@ -5482,7 +5474,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports manual exposure.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *
    * @returns
    * true : The device supports manual exposure. false : The device does not support manual exposure.
@@ -5510,7 +5502,7 @@ export abstract class IRtcEngine {
   /**
    * Queries whether the current camera supports adjusting exposure value.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *  Before calling setCameraExposureFactor, Agora recoomends that you call this method to query whether the current camera supports adjusting the exposure value.
    *  By calling this method, you adjust the exposure value of the currently active camera, that is, the camera specified when calling setCameraCapturerConfiguration.
    *
@@ -5538,7 +5530,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports auto exposure.
    *
-   * This method must be called after the camera is successfully enabled, that is, after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
    *  This method applies to iOS only.
    *
    * @returns
@@ -5759,7 +5751,7 @@ export abstract class IRtcEngine {
    *
    * Call this method after starting screen sharing or window sharing.
    *
-   * @param captureParams The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges.
+   * @param captureParams The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. The video properties of the screen sharing stream only need to be set through this parameter, and are unrelated to setVideoEncoderConfiguration.
    *
    * @returns
    * 0: Success.
@@ -6068,8 +6060,6 @@ export abstract class IRtcEngine {
   /**
    * Gets the current connection state of the SDK.
    *
-   * You can call this method either before or after joining a channel.
-   *
    * @returns
    * The current connection state. See ConnectionStateType.
    */
@@ -6128,8 +6118,6 @@ export abstract class IRtcEngine {
 
   /**
    * Creates a data stream.
-   *
-   * Creates a data stream. Each user can create up to five data streams in a single channel.
    *
    * @param config The configurations for the data stream. See DataStreamConfig.
    *
@@ -6312,10 +6300,9 @@ export abstract class IRtcEngine {
   /**
    * Registers a user account.
    *
-   * Once registered, the user account can be used to identify the local user when the user joins the channel. After the registration is successful, the user account can identify the identity of the local user, and the user can use it to join the channel. After the user successfully registers a user account, the SDK triggers the onLocalUserRegistered callback on the local client, reporting the user ID and account of the local user. This method is optional. To join a channel with a user account, you can choose either of the following ways:
-   *  Call registerLocalUserAccount to create a user account, and then call joinChannelWithUserAccount to join the channel.
-   *  Call the joinChannelWithUserAccount method to join the channel. The difference between the two ways is that the time elapsed between calling the registerLocalUserAccount method and joining the channel is shorter than directly calling joinChannelWithUserAccount.
-   *  Ensure that you set the userAccount parameter; otherwise, this method does not take effect.
+   * Once registered, the user account can be used to identify the local user when the user joins the channel. After the registration is successful, the user account can identify the identity of the local user, and the user can use it to join the channel. This method is optional. If you want to join a channel using a user account, you can choose one of the following methods:
+   *  Call the registerLocalUserAccount method to register a user account, and then call the joinChannelWithUserAccount method to join a channel, which can shorten the time it takes to enter the channel.
+   *  Call the joinChannelWithUserAccount method to join a channel.
    *  Ensure that the userAccount is unique in the channel.
    *  To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the ID of the user is set to the same parameter type.
    *
@@ -6346,7 +6333,6 @@ export abstract class IRtcEngine {
    *  All lowercase English letters: a to z.
    *  All uppercase English letters: A to Z.
    *  All numeric characters: 0 to 9.
-   *  Space
    *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
    * @param userAccount The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported characters are as follows(89 in total):
    *  The 26 lowercase English letters: a to z.
@@ -6386,7 +6372,6 @@ export abstract class IRtcEngine {
    *  All lowercase English letters: a to z.
    *  All uppercase English letters: A to Z.
    *  All numeric characters: 0 to 9.
-   *  Space
    *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
    * @param userAccount The user account. This parameter is used to identify the user in the channel for real-time audio and video engagement. You need to set and manage user accounts yourself and ensure that each user account in the same channel is unique. The maximum length of this parameter is 255 bytes. Ensure that you set this parameter and do not set it as null. Supported characters are as follows(89 in total):
    *  The 26 lowercase English letters: a to z.
@@ -6410,7 +6395,7 @@ export abstract class IRtcEngine {
   /**
    * Gets the user information by passing in the user account.
    *
-   * After a remote user joins the channel, the SDK gets the user ID and account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method to get the user account of the remote user from the UserInfo object by passing in the user ID.
+   * After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method and pass in the user account to get the UID of the remote user from the UserInfo object.
    *
    * @param userAccount The user account.
    *
@@ -6423,7 +6408,7 @@ export abstract class IRtcEngine {
   /**
    * Gets the user information by passing in the user ID.
    *
-   * After a remote user joins the channel, the SDK gets the user ID and account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method to get the user account of the remote user from the UserInfo object by passing in the user ID.
+   * After a remote user joins the channel, the SDK gets the UID and user account of the remote user, caches them in a mapping table object, and triggers the onUserInfoUpdated callback on the local client. After receiving the callback, you can call this method and passi in the UID.to get the user account of the specified user from the UserInfo object.
    *
    * @param uid The user ID.
    *
@@ -6524,7 +6509,7 @@ export abstract class IRtcEngine {
   /**
    * Starts pushing media streams to the CDN directly.
    *
-   * Aogra does not support pushing media streams to one URL repeatedly. Media options Agora does not support setting the value of publishCameraTrack and publishCustomVideoTrack as true, or the value of publishMicrophoneTrack and publishCustomAudioTrack as true at the same time. When choosing media setting options (DirectCdnStreamingMediaOptions), you can refer to the following examples: If you want to push audio and video streams published by the host to the CDN, the media setting options should be set as follows: publishCustomAudioTrack is set as true and call the pushAudioFrame method publishCustomVideoTrack is set as true and call the pushVideoFrame method publishCameraTrack is set as false (the default value) publishMicrophoneTrack is set as false (the default value) As of v4.2.0, Agora SDK supports audio-only live streaming. You can set publishCustomAudioTrack or publishMicrophoneTrack in DirectCdnStreamingMediaOptions as true and call pushAudioFrame to push audio streams. Agora only supports pushing one audio and video streams or one audio streams to CDN.
+   * Aogra does not support pushing media streams to one URL repeatedly. Media options Agora does not support setting the value of publishCameraTrack and publishCustomVideoTrack as true, or the value of publishMicrophoneTrack and publishCustomAudioTrack as true at the same time. When choosing media setting options (DirectCdnStreamingMediaOptions), you can refer to the following examples: If you want to push audio and video streams captured by the host from a custom source, the media setting options should be set as follows: publishCustomAudioTrack is set as true and call the pushAudioFrame method publishCustomVideoTrack is set as true and call the pushVideoFrame method publishCameraTrack is set as false (the default value) publishMicrophoneTrack is set as false (the default value) As of v4.2.0, Agora SDK supports audio-only live streaming. You can set publishCustomAudioTrack or publishMicrophoneTrack in DirectCdnStreamingMediaOptions as true and call pushAudioFrame to push audio streams. Agora only supports pushing one audio and video streams or one audio streams to CDN.
    *
    * @param eventHandler See onDirectCdnStreamingStateChanged and onDirectCdnStreamingStats.
    * @param publishUrl The CDN live streaming URL.
