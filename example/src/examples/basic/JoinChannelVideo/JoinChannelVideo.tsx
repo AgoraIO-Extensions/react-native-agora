@@ -237,7 +237,7 @@ export default class JoinChannelVideo
     });
   }
 
-  onLocalVideoStats(source: VideoSourceType, stats: LocalVideoStats): void {
+  onLocalVideoStats(connection: RtcConnection, stats: LocalVideoStats): void {
     this.setState({
       videoSentBitrate: stats.sentBitrate,
       encodedFrameWidth: stats.encodedFrameWidth,
