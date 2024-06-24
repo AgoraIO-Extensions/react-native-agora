@@ -1800,7 +1800,7 @@ export interface IRtcEngineEventHandler {
    * @param connection The connection information. See RtcConnection.
    * @param stats The statistics of the local video stream. See LocalVideoStats.
    */
-  onLocalVideoStats?(source: VideoSourceType, stats: LocalVideoStats): void;
+  onLocalVideoStats?(connection: RtcConnection, stats: LocalVideoStats): void;
 
   /**
    * Reports the statistics of the video stream sent by each remote users.
