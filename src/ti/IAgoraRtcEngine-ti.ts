@@ -40,7 +40,7 @@ export const IRtcEngineEventHandler = t.iface([], {
   "onUserEnableLocalVideo": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("remoteUid", "number"), t.param("enabled", "boolean"))),
   "onRemoteAudioStats": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("stats", "RemoteAudioStats"))),
   "onLocalAudioStats": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("stats", "LocalAudioStats"))),
-  "onLocalVideoStats": t.opt(t.func("void", t.param("source", "VideoSourceType"), t.param("stats", "LocalVideoStats"))),
+  "onLocalVideoStats": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("stats", "LocalVideoStats"))),
   "onRemoteVideoStats": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("stats", "RemoteVideoStats"))),
   "onCameraReady": t.opt(t.func("void")),
   "onCameraFocusAreaChanged": t.opt(t.func("void", t.param("x", "number"), t.param("y", "number"), t.param("width", "number"), t.param("height", "number"))),
