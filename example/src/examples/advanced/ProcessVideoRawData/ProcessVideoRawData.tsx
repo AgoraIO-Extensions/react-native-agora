@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import {
   ChannelProfileType,
@@ -9,7 +9,6 @@ import {
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
-  RtcTextureView,
   UserOfflineReasonType,
   VideoCanvas,
   createAgoraRtcEngine,
@@ -19,21 +18,13 @@ import {
   BaseComponent,
   BaseVideoComponentState,
 } from '../../../components/BaseComponent';
-import {
-  AgoraButton,
-  AgoraDivider,
-  AgoraStyle,
-  AgoraSwitch,
-} from '../../../components/ui';
+import { AgoraStyle } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { askMediaAccess } from '../../../utils/permissions';
 
 const { VideoRawDataNativeModule } = NativeModules;
 
-interface State extends BaseVideoComponentState {
-  switchCamera: boolean;
-  renderByTextureView: boolean;
-}
+interface State extends BaseVideoComponentState {}
 
 export default class ProcessVideoRawData
   extends BaseComponent<{}, State>
@@ -49,8 +40,6 @@ export default class ProcessVideoRawData
       joinChannelSuccess: false,
       remoteUsers: [],
       startPreview: false,
-      switchCamera: false,
-      renderByTextureView: false,
     };
   }
 
@@ -115,16 +104,6 @@ export default class ProcessVideoRawData
   }
 
   /**
-   * Step 3 (Optional): switchCamera
-   */
-  switchCamera = () => {
-    this.engine?.switchCamera();
-    this.setState((preState) => {
-      return { switchCamera: !preState.switchCamera };
-    });
-  };
-
-  /**
    * Step 4: leaveChannel
    */
   protected leaveChannel() {
@@ -169,63 +148,14 @@ export default class ProcessVideoRawData
   }
 
   protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    const { renderByTextureView } = this.state;
     return (
-      <>
-        {renderByTextureView ? (
-          <RtcTextureView
-            style={
-              user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall
-            }
-            canvas={{
-              ...user,
-            }}
-          />
-        ) : (
-          <RtcSurfaceView
-            style={
-              user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall
-            }
-            zOrderMediaOverlay={user.uid !== 0}
-            canvas={{
-              ...user,
-            }}
-          />
-        )}
-      </>
-    );
-  }
-
-  protected renderConfiguration(): ReactElement | undefined {
-    const { startPreview, joinChannelSuccess, renderByTextureView } =
-      this.state;
-    return (
-      <>
-        {Platform.OS === 'android' && (
-          <AgoraSwitch
-            disabled={!startPreview && !joinChannelSuccess}
-            title={`renderByTextureView`}
-            value={renderByTextureView}
-            onValueChange={(value) => {
-              this.setState({ renderByTextureView: value });
-            }}
-          />
-        )}
-        <AgoraDivider />
-      </>
-    );
-  }
-
-  protected renderAction(): ReactElement | undefined {
-    const { startPreview, joinChannelSuccess } = this.state;
-    return (
-      <>
-        <AgoraButton
-          disabled={!startPreview && !joinChannelSuccess}
-          title={`switchCamera`}
-          onPress={this.switchCamera}
-        />
-      </>
+      <RtcSurfaceView
+        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        zOrderMediaOverlay={user.uid !== 0}
+        canvas={{
+          ...user,
+        }}
+      />
     );
   }
 }
