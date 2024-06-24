@@ -32,7 +32,7 @@ export default class AudioCallRoute
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      defaultToSpeaker: false,
+      defaultToSpeaker: true,
       speakerOn: false,
     };
   }
