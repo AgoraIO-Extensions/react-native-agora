@@ -3724,15 +3724,15 @@ export class FaceShapeAreaOptions {
 /**
  * @ignore
  */
-export enum FaceShapeStyle {
+export enum FaceShapeBeautyStyle {
   /**
    * @ignore
    */
-  FaceShapeStyleFemale = 0,
+  FaceShapeBeautyStyleFemale = 0,
   /**
    * @ignore
    */
-  FaceShapeStyleMale = 1,
+  FaceShapeBeautyStyleMale = 1,
 }
 
 /**
@@ -3742,7 +3742,7 @@ export class FaceShapeBeautyOptions {
   /**
    * @ignore
    */
-  shapeStyle?: FaceShapeStyle;
+  shapeStyle?: FaceShapeBeautyStyle;
   /**
    * @ignore
    */

@@ -20,6 +20,7 @@ import {
   EarMonitoringFilterType,
   EchoTestConfiguration,
   EncryptionConfig,
+  FaceShapeArea,
   FaceShapeAreaOptions,
   FaceShapeBeautyOptions,
   FocalLengthInfo,
@@ -1705,13 +1706,16 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   getFaceShapeAreaOptions(
+    shapeArea: FaceShapeArea,
     type: MediaSourceType = MediaSourceType.PrimaryCameraSource
   ): FaceShapeAreaOptions {
-    const apiType = this.getApiTypeFromGetFaceShapeAreaOptions(type);
+    const apiType = this.getApiTypeFromGetFaceShapeAreaOptions(shapeArea, type);
     const jsonParams = {
+      shapeArea: shapeArea,
       type: type,
       toJSON: () => {
         return {
+          shapeArea: shapeArea,
           type: type,
         };
       },
@@ -1722,9 +1726,10 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetFaceShapeAreaOptions(
+    shapeArea: FaceShapeArea,
     type: MediaSourceType = MediaSourceType.PrimaryCameraSource
   ): string {
-    return 'RtcEngine_getFaceShapeAreaOptions_f7106b5';
+    return 'RtcEngine_getFaceShapeAreaOptions_0783e2c';
   }
 
   setLowlightEnhanceOptions(
