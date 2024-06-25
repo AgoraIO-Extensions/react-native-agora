@@ -1,12 +1,18 @@
+import { Text } from '@rneui/base';
 import React, { ReactElement } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
   ErrorCodeType,
   IRtcEngineEventHandler,
+  LocalAudioStats,
+  LocalVideoStats,
   LocalVideoStreamReason,
   LocalVideoStreamState,
+  QualityType,
+  RemoteAudioStats,
+  RemoteVideoStats,
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
@@ -37,6 +43,19 @@ interface State extends BaseVideoComponentState {
   switchCamera: boolean;
   renderByTextureView: boolean;
   setupMode: VideoViewSetupMode;
+  lastmileDelay?: number;
+  videoSentBitrate?: number;
+  encodedFrameWidth?: number;
+  encodedFrameHeight?: number;
+  encoderOutputFrameRate?: number;
+  audioSentBitrate?: number;
+  cpuAppUsage?: number;
+  cpuTotalUsage?: number;
+  txPacketLossRate?: number;
+  remoteUserStatsList: Map<
+    number,
+    { remoteVideoStats: RemoteVideoStats; remoteAudioStats: RemoteAudioStats }
+  >;
 }
 
 export default class JoinChannelVideo
@@ -52,6 +71,16 @@ export default class JoinChannelVideo
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
+      remoteUserStatsList: new Map(),
+      encodedFrameWidth: 0,
+      encodedFrameHeight: 0,
+      encoderOutputFrameRate: 0,
+      lastmileDelay: 0,
+      videoSentBitrate: 0,
+      audioSentBitrate: 0,
+      cpuAppUsage: 0,
+      cpuTotalUsage: 0,
+      txPacketLossRate: 0,
       startPreview: false,
       switchCamera: false,
       renderByTextureView: false,
@@ -199,23 +228,158 @@ export default class JoinChannelVideo
     );
   }
 
+  onRtcStats(connection: RtcConnection, stats: RtcStats): void {
+    this.setState({
+      lastmileDelay: stats.lastmileDelay,
+      cpuAppUsage: stats.cpuAppUsage,
+      cpuTotalUsage: stats.cpuTotalUsage,
+      txPacketLossRate: stats.txPacketLossRate,
+    });
+  }
+
+  onLocalVideoStats(connection: RtcConnection, stats: LocalVideoStats): void {
+    this.setState({
+      videoSentBitrate: stats.sentBitrate,
+      encodedFrameWidth: stats.encodedFrameWidth,
+      encodedFrameHeight: stats.encodedFrameHeight,
+      encoderOutputFrameRate: stats.encoderOutputFrameRate,
+    });
+  }
+
+  onLocalAudioStats(connection: RtcConnection, stats: LocalAudioStats): void {
+    this.setState({
+      audioSentBitrate: stats.sentBitrate,
+    });
+  }
+
+  onRemoteVideoStats(connection: RtcConnection, stats: RemoteVideoStats): void {
+    const { remoteUserStatsList } = this.state;
+    if (stats.uid) {
+      remoteUserStatsList.set(stats.uid, {
+        remoteVideoStats: stats,
+        remoteAudioStats:
+          remoteUserStatsList.get(stats.uid)?.remoteAudioStats || {},
+      });
+    }
+  }
+
+  onRemoteAudioStats(connection: RtcConnection, stats: RemoteAudioStats): void {
+    const { remoteUserStatsList } = this.state;
+    if (stats.uid) {
+      remoteUserStatsList.set(stats.uid, {
+        remoteVideoStats:
+          remoteUserStatsList.get(stats.uid)?.remoteVideoStats || {},
+        remoteAudioStats: stats,
+      });
+    }
+  }
+
   protected renderUsers(): ReactElement | undefined {
     return super.renderUsers();
   }
 
   protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    const { renderByTextureView, setupMode } = this.state;
-    return renderByTextureView ? (
-      <RtcTextureView
-        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        canvas={{ ...user, setupMode }}
-      />
-    ) : (
-      <RtcSurfaceView
-        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={user.uid !== 0}
-        canvas={{ ...user, setupMode }}
-      />
+    const {
+      renderByTextureView,
+      setupMode,
+      joinChannelSuccess,
+      encodedFrameWidth,
+      encodedFrameHeight,
+      encoderOutputFrameRate,
+      remoteUserStatsList,
+      lastmileDelay,
+      videoSentBitrate,
+      audioSentBitrate,
+      cpuAppUsage,
+      cpuTotalUsage,
+      txPacketLossRate,
+    } = this.state;
+    return (
+      <>
+        {renderByTextureView ? (
+          <RtcTextureView
+            style={
+              user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall
+            }
+            canvas={{ ...user, setupMode }}
+          />
+        ) : (
+          <RtcSurfaceView
+            style={
+              user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall
+            }
+            zOrderMediaOverlay={user.uid !== 0}
+            canvas={{ ...user, setupMode }}
+          />
+        )}
+        {joinChannelSuccess && user.sourceType === 0 && (
+          <View style={AgoraStyle.statusBar}>
+            <Text style={AgoraStyle.statusBarText}>
+              {encodedFrameWidth}x{encodedFrameHeight},{encoderOutputFrameRate}
+              fps
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              LM Delay: {lastmileDelay}ms
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              VSend: {videoSentBitrate}kbps
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              ASend: {audioSentBitrate}kbps
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              CPU: {cpuAppUsage}%/{cpuTotalUsage}%
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              Send Loss: {txPacketLossRate}%
+            </Text>
+          </View>
+        )}
+        {joinChannelSuccess && user.sourceType !== 0 && user.uid && (
+          <View style={AgoraStyle.statusBar}>
+            <Text style={AgoraStyle.statusBarText}>
+              VRecv:{' '}
+              {
+                remoteUserStatsList.get(user.uid)?.remoteVideoStats
+                  .receivedBitrate
+              }
+              kbps
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              ARecv:{' '}
+              {
+                remoteUserStatsList.get(user.uid)?.remoteAudioStats
+                  .receivedBitrate
+              }
+              kbps
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              VLoss:{' '}
+              {
+                remoteUserStatsList.get(user.uid)?.remoteVideoStats
+                  .packetLossRate
+              }
+              %
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              ALoss:{' '}
+              {
+                remoteUserStatsList.get(user.uid)?.remoteAudioStats
+                  .audioLossRate
+              }
+              %
+            </Text>
+            <Text style={AgoraStyle.statusBarText}>
+              AQuality:{' '}
+              {
+                QualityType[
+                  remoteUserStatsList.get(user.uid)?.remoteAudioStats.quality!
+                ]
+              }
+            </Text>
+          </View>
+        )}
+      </>
     );
   }
 
@@ -224,16 +388,16 @@ export default class JoinChannelVideo
       this.state;
     return (
       <>
-        <AgoraSwitch
-          disabled={
-            (!startPreview && !joinChannelSuccess) || Platform.OS !== 'android'
-          }
-          title={`renderByTextureView`}
-          value={renderByTextureView}
-          onValueChange={(value) => {
-            this.setState({ renderByTextureView: value });
-          }}
-        />
+        {Platform.OS === 'android' && (
+          <AgoraSwitch
+            disabled={!startPreview && !joinChannelSuccess}
+            title={`renderByTextureView`}
+            value={renderByTextureView}
+            onValueChange={(value) => {
+              this.setState({ renderByTextureView: value });
+            }}
+          />
+        )}
         <AgoraDivider />
         <AgoraDropdown
           title={'setupMode'}

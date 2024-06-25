@@ -30,6 +30,7 @@ import {
 import { RtcConnection } from '../IAgoraRtcEngineEx';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
+import { parseIntPtr2Number } from '../Utils';
 import { IRtcEngineEvent } from '../extension/IAgoraRtcEngineExtension';
 import { IRtcEngineExImpl } from '../impl/IAgoraRtcEngineExImpl';
 import AgoraBaseTI from '../ti/AgoraBase-ti';
@@ -382,6 +383,11 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   override getH265Transcoder(): IH265Transcoder {
     return this._h265_transcoder;
+  }
+
+  override getNativeHandle(): number {
+    let result = super.getNativeHandle();
+    return parseIntPtr2Number(result);
   }
 
   override registerAudioEncodedFrameObserver(

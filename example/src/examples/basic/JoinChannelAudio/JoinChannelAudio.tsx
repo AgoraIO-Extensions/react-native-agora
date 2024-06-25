@@ -1,13 +1,19 @@
+import { Text } from '@rneui/base';
 import React, { ReactElement } from 'react';
+import { View } from 'react-native';
 import {
+  AudioVolumeInfo,
   ChannelProfileType,
   ClientRoleType,
   EarMonitoringFilterType,
   ErrorCodeType,
   IRtcEngineEventHandler,
+  LocalAudioStats,
   LocalAudioStreamReason,
   LocalAudioStreamState,
   MediaDeviceType,
+  QualityType,
+  RemoteAudioStats,
   RtcConnection,
   RtcStats,
   UserOfflineReasonType,
@@ -20,9 +26,12 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
+  AgoraCard,
   AgoraDivider,
   AgoraDropdown,
+  AgoraList,
   AgoraSlider,
+  AgoraStyle,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { enumToItems } from '../../../utils';
@@ -34,6 +43,16 @@ interface State extends BaseAudioComponentState {
   enableSpeakerphone: boolean;
   recordingSignalVolume: number;
   playbackSignalVolume: number;
+  localVolume?: number;
+  lastmileDelay?: number;
+  audioSentBitrate?: number;
+  cpuAppUsage?: number;
+  cpuTotalUsage?: number;
+  txPacketLossRate?: number;
+  remoteUserStatsList: Map<
+    number,
+    { volume: number; remoteAudioStats: RemoteAudioStats }
+  >;
   includeAudioFilters: EarMonitoringFilterType;
   enableInEarMonitoring: boolean;
   inEarMonitoringVolume: number;
@@ -60,6 +79,13 @@ export default class JoinChannelAudio
       includeAudioFilters: EarMonitoringFilterType.EarMonitoringFilterNone,
       enableInEarMonitoring: false,
       inEarMonitoringVolume: 100,
+      remoteUserStatsList: new Map(),
+      localVolume: 0,
+      lastmileDelay: 0,
+      audioSentBitrate: 0,
+      cpuAppUsage: 0,
+      cpuTotalUsage: 0,
+      txPacketLossRate: 0,
     };
   }
 
@@ -86,6 +112,7 @@ export default class JoinChannelAudio
 
     // Only need to enable audio on this case
     this.engine.enableAudio();
+    this.engine.enableAudioVolumeIndication(200, 3, true);
   }
 
   /**
@@ -301,6 +328,127 @@ export default class JoinChannelAudio
 
   onAudioRoutingChanged(routing: number) {
     this.info('onAudioRoutingChanged', 'routing', routing);
+  }
+
+  onAudioVolumeIndication(
+    connection: RtcConnection,
+    speakers: AudioVolumeInfo[],
+    speakerNumber: number,
+    totalVolume: number
+  ): void {
+    speakers.map((speaker) => {
+      if (speaker.uid === 0) {
+        this.setState({ localVolume: speaker.volume });
+      } else {
+        if (!speaker.uid) return;
+        const { remoteUserStatsList } = this.state;
+        remoteUserStatsList.set(speaker.uid, {
+          volume: speaker.volume!,
+          remoteAudioStats:
+            remoteUserStatsList.get(speaker.uid)?.remoteAudioStats || {},
+        });
+      }
+    });
+  }
+
+  onRtcStats(connection: RtcConnection, stats: RtcStats): void {
+    this.setState({
+      lastmileDelay: stats.lastmileDelay,
+      cpuAppUsage: stats.cpuAppUsage,
+      cpuTotalUsage: stats.cpuTotalUsage,
+      txPacketLossRate: stats.txPacketLossRate,
+    });
+  }
+
+  onLocalAudioStats(connection: RtcConnection, stats: LocalAudioStats): void {
+    this.setState({
+      audioSentBitrate: stats.sentBitrate,
+    });
+  }
+
+  onRemoteAudioStats(connection: RtcConnection, stats: RemoteAudioStats): void {
+    const { remoteUserStatsList } = this.state;
+    if (stats.uid) {
+      remoteUserStatsList.set(stats.uid, {
+        volume: remoteUserStatsList.get(stats.uid)?.volume || 0,
+        remoteAudioStats: stats,
+      });
+    }
+  }
+
+  protected renderUsers(): ReactElement | undefined {
+    const {
+      joinChannelSuccess,
+      remoteUsers,
+      localVolume,
+      lastmileDelay,
+      audioSentBitrate,
+      cpuAppUsage,
+      cpuTotalUsage,
+      txPacketLossRate,
+      remoteUserStatsList,
+    } = this.state;
+    return (
+      <>
+        {joinChannelSuccess ? (
+          <>
+            <AgoraCard title={`local`}>
+              <>
+                <Text>Volume: {localVolume}</Text>
+                <Text>LM Delay: {lastmileDelay}ms</Text>
+                <Text>ASend: {audioSentBitrate}kbps</Text>
+                <Text>
+                  CPU: {cpuAppUsage}%/{cpuTotalUsage}%
+                </Text>
+                <Text>Send Loss: {txPacketLossRate}%</Text>
+              </>
+            </AgoraCard>
+            <AgoraList
+              style={AgoraStyle.videoContainer}
+              numColumns={undefined}
+              horizontal={true}
+              data={remoteUsers}
+              renderItem={({ item }) => (
+                <AgoraCard key={`${item}`} title={`${item}`}>
+                  {joinChannelSuccess ? (
+                    <View>
+                      <Text>
+                        Volume: {remoteUserStatsList.get(item)?.volume}
+                      </Text>
+                      <Text>
+                        ARecv:{' '}
+                        {
+                          remoteUserStatsList.get(item)?.remoteAudioStats
+                            .receivedBitrate
+                        }
+                        kbps
+                      </Text>
+                      <Text>
+                        ALoss:{' '}
+                        {
+                          remoteUserStatsList.get(item)?.remoteAudioStats
+                            .audioLossRate
+                        }
+                        %
+                      </Text>
+                      <Text>
+                        AQuality:{' '}
+                        {
+                          QualityType[
+                            remoteUserStatsList.get(item)?.remoteAudioStats
+                              .quality!
+                          ]
+                        }
+                      </Text>
+                    </View>
+                  ) : undefined}
+                </AgoraCard>
+              )}
+            />
+          </>
+        ) : undefined}
+      </>
+    );
   }
 
   protected renderConfiguration(): ReactElement | undefined {

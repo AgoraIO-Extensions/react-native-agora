@@ -11,6 +11,9 @@ import { ParseResult, TerraContext } from '@agoraio-extensions/terra-core';
 
 import {
   IrisApiIdParserUserData,
+  OverrideNodeParserUserData,
+  getIrisApiIdValue,
+  getOverrideNodeParserUserData,
   renderWithConfiguration,
 } from '@agoraio-extensions/terra_shared_configs';
 
@@ -38,20 +41,22 @@ type TerraNodeUserData = IrisApiIdParserUserData & {
   prefix_name: string;
 };
 
-type VariableUserData = IrisApiIdParserUserData & {
-  name: string;
-};
+type VariableUserData = IrisApiIdParserUserData &
+  OverrideNodeParserUserData & {
+    name: string;
+  };
 
-type ClazzMethodUserData = IrisApiIdParserUserData & {
-  output: string;
-  input: string;
-  input_map: Variable[];
-  input_map_fixed: Variable[];
-  output_map: Variable[];
-  hasParameters: boolean;
-  bindingFunctionName: string;
-  returnParam: string;
-};
+type ClazzMethodUserData = IrisApiIdParserUserData &
+  OverrideNodeParserUserData & {
+    output: string;
+    input: string;
+    input_map: Variable[];
+    input_map_fixed: Variable[];
+    output_map: Variable[];
+    hasParameters: boolean;
+    bindingFunctionName: string;
+    returnParam: string;
+  };
 
 export function impl(parseResult: ParseResult) {
   let preParseResult = deepClone(parseResult, ['parent', 'outVariable']);
@@ -93,16 +98,10 @@ export function impl(parseResult: ParseResult) {
             returnParam: '',
             ...method.user_data,
           };
-          if (!clazzMethodUserData.IrisApiIdParser) {
-            clazzMethodUserData.IrisApiIdParser = {
-              key: `${method.parent_name.replace(new RegExp('^I(.*)'), '$1')}_${
-                method.name
-              }`,
-              value: `${method.parent_name.replace(
-                new RegExp('^I(.*)'),
-                '$1'
-              )}_${method.name}`,
-            };
+          let overrideNode = getOverrideNodeParserUserData(method);
+          if (overrideNode && overrideNode.redirectIrisApiId) {
+            clazzMethodUserData.IrisApiIdParser.value =
+              overrideNode.redirectIrisApiId;
           }
           method.return_type.name = convertToCamelCase(method.return_type.name);
           method.asMemberFunction().parameters.map((param) => {

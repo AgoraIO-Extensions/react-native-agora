@@ -1,13 +1,10 @@
 {
   "root": true,
-  "extends": [
-    "@react-native",
-    "prettier"
-  ],
-  "plugins": [
-    "import",
-    "auto-import"
-  ],
+  "extends": ["@react-native", "prettier"],
+  "env": {
+    "es2020": true
+  },
+  "plugins": ["import", "auto-import"],
   "rules": {
     "prettier/prettier": [
       "error",

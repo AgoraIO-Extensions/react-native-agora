@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
+  AreaCode,
   ChannelProfileType,
   ClientRoleType,
   ErrorCodeType,
@@ -14,12 +15,19 @@ import {
   BaseAudioComponentState,
   BaseComponent,
 } from '../../../components/BaseComponent';
-import { AgoraButton, AgoraTextInput } from '../../../components/ui';
+import {
+  AgoraButton,
+  AgoraDropdown,
+  AgoraTextInput,
+} from '../../../components/ui';
 import Config from '../../../config/agora.config';
+import { enumToItems } from '../../../utils';
 import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseAudioComponentState {
   userAccount: string;
+  isInitialized: boolean;
+  selectedAreaCode: number;
 }
 
 export default class StringUid
@@ -30,12 +38,14 @@ export default class StringUid
     return {
       appId: Config.appId,
       enableVideo: false,
+      isInitialized: false,
       channelId: Config.channelId,
       token: Config.token,
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
       userAccount: '',
+      selectedAreaCode: AreaCode.AreaCodeGlob,
     };
   }
 
@@ -43,25 +53,7 @@ export default class StringUid
    * Step 1: initRtcEngine
    */
   protected async initRtcEngine() {
-    const { appId } = this.state;
-    if (!appId) {
-      this.error(`appId is invalid`);
-    }
-
     this.engine = createAgoraRtcEngine();
-    this.engine.initialize({
-      appId,
-      logConfig: { filePath: Config.logFilePath },
-      // Should use ChannelProfileLiveBroadcasting on most of cases
-      channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
-    });
-    this.engine.registerEventHandler(this);
-
-    // Need granted the microphone permission
-    await askMediaAccess(['android.permission.RECORD_AUDIO']);
-
-    // Only need to enable audio on this case
-    this.engine.enableAudio();
   }
 
   /**
@@ -116,6 +108,7 @@ export default class StringUid
   protected releaseRtcEngine() {
     this.engine?.unregisterEventHandler(this);
     this.engine?.release();
+    this.setState({ isInitialized: false });
   }
 
   onError(err: ErrorCodeType, msg: string) {
@@ -127,6 +120,7 @@ export default class StringUid
   }
 
   onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
+    this.releaseRtcEngine();
     super.onLeaveChannel(connection, stats);
   }
 
@@ -144,6 +138,66 @@ export default class StringUid
 
   onLocalUserRegistered(uid: number, userAccount: string) {
     this.info('LocalUserRegistered', uid, userAccount);
+  }
+
+  protected async initializeEngine() {
+    const { appId } = this.state;
+    if (!appId) {
+      this.error(`appId is invalid`);
+    }
+    this.engine!.initialize({
+      appId,
+      logConfig: { filePath: Config.logFilePath },
+      // Should use ChannelProfileLiveBroadcasting on most of cases
+      channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+      areaCode: this.state.selectedAreaCode,
+    });
+    this.engine!.registerEventHandler(this);
+
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
+
+    // Only need to enable audio on this case
+    this.engine!.enableAudio();
+    this.setState({ isInitialized: true });
+  }
+
+  protected renderChannel(): ReactElement | undefined {
+    const { channelId, joinChannelSuccess, isInitialized, selectedAreaCode } =
+      this.state;
+    return (
+      <>
+        <AgoraDropdown
+          title={'Select Area Code'}
+          items={enumToItems(AreaCode)}
+          value={selectedAreaCode}
+          onValueChange={(value) => {
+            this.setState({ selectedAreaCode: value });
+          }}
+        />
+        <AgoraButton
+          title={`${isInitialized ? 'release' : 'initialize'} engine`}
+          disabled={joinChannelSuccess}
+          onPress={() => {
+            isInitialized ? this.releaseRtcEngine() : this.initializeEngine();
+          }}
+        />
+        <AgoraTextInput
+          onChangeText={(text) => {
+            this.setState({ channelId: text });
+          }}
+          placeholder={`channelId`}
+          value={channelId}
+        />
+        <AgoraButton
+          title={`${joinChannelSuccess ? 'leave' : 'join'} Channel`}
+          disabled={!isInitialized}
+          onPress={() => {
+            joinChannelSuccess ? this.leaveChannel() : this.joinChannel();
+          }}
+        />
+      </>
+    );
   }
 
   protected renderConfiguration(): ReactElement | undefined {

@@ -24,6 +24,7 @@ Any scene of this project can run successfully alone.
 
 | Demo                                                         | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [AudioCallRoute](./src/examples/advanced/AudioCallRoute) | control audio call route |
 | [AudioMixing](./src/examples/advanced/AudioMixing) | Starts playing the music file |
 | [AudioSpectrum](./src/examples/advanced/AudioSpectrum) | Turn on audio spectrum monitoring |
 | [BeautyEffect](./src/examples/advanced/BeautyEffect) | Sets the image enhancement options |

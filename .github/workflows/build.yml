@@ -6,17 +6,6 @@ concurrency:
 
 on:
   workflow_dispatch:
-    inputs:
-      force:
-        description: 'force build'
-        required: false
-        type: boolean
-        default: false
-      build_ios:
-        description: 'build iOS'
-        required: false
-        type: boolean
-        default: true
 
 jobs:
   build-android:
@@ -78,7 +67,7 @@ jobs:
 
       - name: Build example for Android
         run: |
-          yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --force="${{ inputs.force }}"
+          yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --force=true
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
@@ -89,7 +78,6 @@ jobs:
           if-no-files-found: error
 
   build-ios:
-    if: ${{ inputs.build_ios }}
     runs-on: macos-latest
     env:
       TURBO_CACHE_DIR: .turbo/ios
@@ -113,15 +101,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turborepo-ios-
 
-      - name: Check turborepo cache for iOS
-        if: ${{ !inputs.force }}
-        run: |
-          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'build:ios').cache.status")
-
-          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
-            echo "turbo_cache_hit=1" >> $GITHUB_ENV
-          fi
-
       - name: Cache cocoapods
         if: env.turbo_cache_hit != 1
         id: cocoapods-cache
@@ -134,7 +113,6 @@ jobs:
             ${{ runner.os }}-cocoapods-0-
 
       - name: Install cocoapods
-        if: ${{ inputs.force }} || (env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true')
         run: |
           yarn pod-install example/ios
 
@@ -175,7 +153,7 @@ jobs:
 
       - name: Build example for iOS
         run: |
-          yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --force="${{ inputs.force }}"
+          yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --force=true
 
       - name: Upload IPA
         uses: actions/upload-artifact@v3

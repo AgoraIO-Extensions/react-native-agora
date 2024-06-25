@@ -59,6 +59,7 @@ export interface BaseComponentState {
   uid?: number;
   joinChannelSuccess?: boolean;
   remoteUsers?: number[];
+  hideAction?: boolean;
   startPreview?: boolean;
 }
 
@@ -170,6 +171,7 @@ export abstract class BaseComponent<
   render() {
     const users = this.renderUsers();
     const configuration = this.renderConfiguration();
+    const { hideAction } = this.state;
     return (
       <KeyboardAvoidingView
         style={AgoraStyle.fullSize}
@@ -184,14 +186,21 @@ export abstract class BaseComponent<
         {configuration ? (
           <>
             <AgoraDivider />
-            <AgoraText style={styles.title}>
+            <AgoraText
+              style={styles.title}
+              onPress={() => {
+                this.setState({ hideAction: !hideAction });
+              }}
+            >
               {`The Configuration of ${this.constructor.name}`}
             </AgoraText>
             <AgoraDivider />
             <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
           </>
         ) : undefined}
-        <AgoraView style={AgoraStyle.float}>{this.renderAction()}</AgoraView>
+        {!hideAction ? (
+          <AgoraView style={AgoraStyle.float}>{this.renderAction()}</AgoraView>
+        ) : undefined}
       </KeyboardAvoidingView>
     );
   }

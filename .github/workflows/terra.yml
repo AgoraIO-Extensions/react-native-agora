@@ -2,6 +2,11 @@ name: Generate codes
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'native sdk version'
+        type: string
+        required: true
 
 jobs:
   generate-codes:
@@ -23,6 +28,10 @@ jobs:
           generate-code: true
           generate-comment: true
           generate-code-command: |
+            sed "s/sdkVersion: .*/sdkVersion: ${{ inputs.version }}/g" config/impl_config.yaml > tmp
+            mv tmp config/impl_config.yaml
+            sed "s/sdkVersion: .*/sdkVersion: ${{ inputs.version }}/g" config/types_config.yaml > tmp
+            mv tmp config/types_config.yaml
             sh generate-prepare.sh
             sh generate-code.sh
           generate-comment-command: |

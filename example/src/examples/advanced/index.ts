@@ -1,3 +1,4 @@
+import AudioCallRoute from './AudioCallRoute/AudioCallRoute';
 import AudioMixing from './AudioMixing/AudioMixing';
 import AudioSpectrum from './AudioSpectrum/AudioSpectrum';
 import BeautyEffect from './BeautyEffect/BeautyEffect';
@@ -31,6 +32,10 @@ import VoiceChanger from './VoiceChanger/VoiceChanger';
 const Advanced = {
   title: 'Advanced',
   data: [
+    {
+      name: 'AudioCallRoute',
+      component: AudioCallRoute,
+    },
     {
       name: 'AudioMixing',
       component: AudioMixing,

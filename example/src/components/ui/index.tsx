@@ -290,4 +290,13 @@ export const AgoraStyle = StyleSheet.create({
     width: '100%',
     height: 200,
   },
+  statusBar: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  statusBarText: {
+    color: '#ffffff',
+  },
 });

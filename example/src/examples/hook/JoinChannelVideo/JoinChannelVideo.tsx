@@ -172,16 +172,16 @@ export default function JoinChannelVideo() {
   function renderConfiguration(): ReactElement | undefined {
     return (
       <>
-        <AgoraSwitch
-          disabled={
-            (!startPreview && !joinChannelSuccess) || Platform.OS !== 'android'
-          }
-          title={`renderByTextureView`}
-          value={renderByTextureView}
-          onValueChange={(value) => {
-            setRenderByTextureView(value);
-          }}
-        />
+        {Platform.OS === 'android' && (
+          <AgoraSwitch
+            disabled={!startPreview && !joinChannelSuccess}
+            title={`renderByTextureView`}
+            value={renderByTextureView}
+            onValueChange={(value) => {
+              setRenderByTextureView(value);
+            }}
+          />
+        )}
         <AgoraDivider />
         <AgoraDropdown
           title={'setupMode'}
