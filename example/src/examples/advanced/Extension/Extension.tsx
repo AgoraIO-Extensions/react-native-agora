@@ -186,8 +186,8 @@ export default class Extension
     this.setState({ enableExtension: true });
   }
 
-  onExtensionStopped(context: ExtensionContext) {
-    this.info('onExtensionStopped', 'context', context);
+  OnExtensionStoppedWithContext(context: ExtensionContext) {
+    this.info('OnExtensionStoppedWithContext', 'context', context);
     this.setState({ enableExtension: false });
   }
 
