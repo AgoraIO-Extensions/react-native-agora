@@ -4,6 +4,7 @@ import {
   DataStreamConfig,
   EncryptionConfig,
   LiveTranscoding,
+  SimulcastConfig,
   SimulcastStreamConfig,
   SimulcastStreamMode,
   SpatialAudioParams,
@@ -15,7 +16,11 @@ import {
   VideoSubscriptionOptions,
   WatermarkOptions,
 } from '../AgoraBase';
-import { ContentInspectConfig, RenderModeType } from '../AgoraMediaBase';
+import {
+  ContentInspectConfig,
+  RenderModeType,
+  SnapshotConfig,
+} from '../AgoraMediaBase';
 import {
   ChannelMediaOptions,
   LeaveChannelOptions,
@@ -85,6 +90,40 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     options?: LeaveChannelOptions
   ): string {
     return 'RtcEngineEx_leaveChannelEx_b03ee9a';
+  }
+
+  leaveChannelWithUserAccountEx(
+    channelId: string,
+    userAccount: string,
+    options?: LeaveChannelOptions
+  ): number {
+    const apiType = this.getApiTypeFromLeaveChannelWithUserAccountEx(
+      channelId,
+      userAccount,
+      options
+    );
+    const jsonParams = {
+      channelId: channelId,
+      userAccount: userAccount,
+      options: options,
+      toJSON: () => {
+        return {
+          channelId: channelId,
+          userAccount: userAccount,
+          options: options,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromLeaveChannelWithUserAccountEx(
+    channelId: string,
+    userAccount: string,
+    options?: LeaveChannelOptions
+  ): string {
+    return 'RtcEngineEx_leaveChannelWithUserAccountEx_8bbe372';
   }
 
   updateChannelMediaOptionsEx(
@@ -1363,6 +1402,35 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_setDualStreamModeEx_622d0f3';
   }
 
+  setSimulcastConfigEx(
+    simulcastConfig: SimulcastConfig,
+    connection: RtcConnection
+  ): number {
+    const apiType = this.getApiTypeFromSetSimulcastConfigEx(
+      simulcastConfig,
+      connection
+    );
+    const jsonParams = {
+      simulcastConfig: simulcastConfig,
+      connection: connection,
+      toJSON: () => {
+        return {
+          simulcastConfig: simulcastConfig,
+          connection: connection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetSimulcastConfigEx(
+    simulcastConfig: SimulcastConfig,
+    connection: RtcConnection
+  ): string {
+    return 'RtcEngineEx_setSimulcastConfigEx_bd8d7d0';
+  }
+
   setHighPriorityUserListEx(
     uidList: number[],
     uidNum: number,
@@ -1564,6 +1632,40 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     length: number
   ): string {
     return 'RtcEngineEx_sendAudioMetadataEx_e2bf1c4';
+  }
+
+  takeSnapshotWithConfigEx(
+    connection: RtcConnection,
+    uid: number,
+    config: SnapshotConfig
+  ): number {
+    const apiType = this.getApiTypeFromTakeSnapshotWithConfigEx(
+      connection,
+      uid,
+      config
+    );
+    const jsonParams = {
+      connection: connection,
+      uid: uid,
+      config: config,
+      toJSON: () => {
+        return {
+          connection: connection,
+          uid: uid,
+          config: config,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromTakeSnapshotWithConfigEx(
+    connection: RtcConnection,
+    uid: number,
+    config: SnapshotConfig
+  ): string {
+    return 'RtcEngineEx_takeSnapshotEx_b856417';
   }
 }
 
