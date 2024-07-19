@@ -44,7 +44,7 @@ export function createAgoraRtcEngine(): IRtcEngine {
 /**
  * Gets one IMediaPlayerCacheManager instance.
  *
- * When you successfully call this method, the SDK returns a media player cache manager instance. The cache manager is a singleton pattern. Therefore, multiple calls to this method returns the same instance. Make sure the IRtcEngine is initialized before you call this method.
+ * Before calling any APIs in the IMediaPlayerCacheManager class, you need to call this method to get a cache manager instance of a media player.
  *
  * @returns
  * The IMediaPlayerCacheManager instance.

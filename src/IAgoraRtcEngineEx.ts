@@ -5,6 +5,7 @@ import {
   DataStreamConfig,
   EncryptionConfig,
   LiveTranscoding,
+  SimulcastConfig,
   SimulcastStreamConfig,
   SimulcastStreamMode,
   SpatialAudioParams,
@@ -16,7 +17,11 @@ import {
   VideoSubscriptionOptions,
   WatermarkOptions,
 } from './AgoraBase';
-import { ContentInspectConfig, RenderModeType } from './AgoraMediaBase';
+import {
+  ContentInspectConfig,
+  RenderModeType,
+  SnapshotConfig,
+} from './AgoraMediaBase';
 import {
   ChannelMediaOptions,
   IRtcEngine,
@@ -61,11 +66,11 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * 0: Success.
    *  < 0: Failure.
    *  -2: The parameter is invalid. For example, the token is invalid, the uid parameter is not set to an integer, or the value of a member in ChannelMediaOptions is invalid. You need to pass in a valid parameter and join the channel again.
-   *  -3: Failes to initialize the IRtcEngine object. You need to reinitialize the IRtcEngine object.
+   *  -3: Fails to initialize the IRtcEngine object. You need to reinitialize the IRtcEngine object.
    *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -8: The internal state of the IRtcEngine object is wrong. The typical cause is that you call this method to join the channel without calling startEchoTest to stop the test after calling stopEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
-   *  -17: The request to join the channel is rejected. The typical cause is that the user is in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
-   *  -102: The channel name is invalid. You need to pass in a valid channelname in channelId to rejoin the channel.
+   *  -8: The internal state of the IRtcEngine object is wrong. The typical cause is that you call this method to join the channel without calling stopEchoTest to stop the test after calling startEchoTest to start a call loop test. You need to call stopEchoTest before calling this method.
+   *  -17: The request to join the channel is rejected. The typical cause is that the user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
+   *  -102: The channel name is invalid. You need to pass in a valid channel name in channelId to rejoin the channel.
    *  -121: The user ID is invalid. You need to pass in a valid user ID in uid to rejoin the channel.
    */
   abstract joinChannelEx(
@@ -77,9 +82,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Sets channel options and leaves the channel.
    *
-   * This method lets the user leave the channel, for example, by hanging up or exiting the call. After calling joinChannelEx to join the channel, this method must be called to end the call before starting the next call. This method can be called whether or not a call is currently in progress. This method releases all resources related to the session. Calling this method does not necessarily mean that the user has left the channel. After you leave the channel, the SDK triggers the onLeaveChannel callback. After actually leaving the channel, the local user triggers the onLeaveChannel callback; after the user in the communication scenario and the host in the live streaming scenario leave the channel, the remote user triggers the onUserOffline callback.
-   *  If you call release immediately after calling this method, the SDK does not trigger the onLeaveChannel callback.
-   *  If you want to leave the channels that you joined by calling joinChannel and joinChannelEx, call the leaveChannel method.
+   * After calling this method, the SDK terminates the audio and video interaction, leaves the current channel, and releases all resources related to the session. After calling joinChannelEx to join a channel, you must call this method to end the call, otherwise, the next call cannot be started.
+   *  This method call is asynchronous. When this method returns, it does not necessarily mean that the user has left the channel.
+   *  If you call leaveChannel, you will leave all the channels you have joined by calling joinChannel or joinChannelEx.
    *
    * @param connection The connection information. See RtcConnection.
    * @param options The options for leaving the channel. See LeaveChannelOptions. This parameter only supports the stopMicrophoneRecording member in the LeaveChannelOptions settings; setting other members does not take effect.
@@ -94,6 +99,15 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   ): number;
 
   /**
+   * @ignore
+   */
+  abstract leaveChannelWithUserAccountEx(
+    channelId: string,
+    userAccount: string,
+    options?: LeaveChannelOptions
+  ): number;
+
+  /**
    * Updates the channel media options after joining the channel.
    *
    * @param options The channel media options. See ChannelMediaOptions.
@@ -102,9 +116,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
-   *  -2: The value of a member in the ChannelMediaOptions structure is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.
+   *  -2: The value of a member in ChannelMediaOptions is invalid. For example, the token or the user ID is invalid. You need to fill in a valid parameter.
    *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
-   *  -8: The internal state of the IRtcEngine object is wrong. The possible reason is that the user is not in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. If you receive the ConnectionStateDisconnected (1) or ConnectionStateFailed (5) state, the user is not in the channel. You need to call joinChannel to join a channel before calling this method.
+   *  -8: The internal state of the IRtcEngine object is wrong. The possible reason is that the user is not in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. If you receive the ConnectionStateDisconnected (1) or ConnectionStateFailed (5) state, the user is not in the channel. You need to call joinChannel to join a channel before calling this method.
    */
   abstract updateChannelMediaOptionsEx(
     options: ChannelMediaOptions,
@@ -250,9 +264,9 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Stops or resumes subscribing to the video streams of all remote users.
    *
-   * After successfully calling this method, the local user stops or resumes subscribing to the audio streams of all remote users, including all subsequent users.
+   * After successfully calling this method, the local user stops or resumes subscribing to the video streams of all remote users, including all subsequent users.
    *
-   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the audio streams of all remote users by default.
+   * @param mute Whether to stop subscribing to the video streams of all remote users. true : Stop subscribing to the video streams of all remote users. false : (Default) Subscribe to the video streams of all remote users by default.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -485,8 +499,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Gets the current connection state of the SDK.
    *
-   * You can call this method either before or after joining a channel.
-   *
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -497,7 +509,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Enables or disables the built-in encryption.
    *
-   * All users in the same channel must use the same encryption mode and encryption key. After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again. In scenarios requiring high security, Agora recommends calling this method to enable the built-in encryption before joining a channel.
+   * After the user leaves the channel, the SDK automatically disables the built-in encryption. To enable the built-in encryption, call this method before the user joins the channel again.
    *
    * @param connection The connection information. See RtcConnection.
    * @param enabled Whether to enable built-in encryption: true : Enable the built-in encryption. false : (Default) Disable the built-in encryption.
@@ -516,8 +528,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Creates a data stream.
    *
-   * Creates a data stream. Each user can create up to five data streams in a single channel.
-   *
    * @param config The configurations for the data stream. See DataStreamConfig.
    * @param connection The connection information. See RtcConnection.
    *
@@ -533,10 +543,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Sends data stream messages.
    *
-   * After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
-   *  Up to 60 packets can be sent per second in a channel with each packet having a maximum size of 1 KB.
-   *  Each client can send up to 30 KB of data per second.
-   *  Each user can have up to five data streams simultaneously. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
+   * A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client. The SDK has the following restrictions on this method:
+   *  Each user can have up to five data streams simultaneously.
+   *  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
+   *  Up to 30 KB of data can be sent per second in a data stream. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
    *  Ensure that you call createDataStreamEx to create a data channel before calling this method.
    *  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
    *
@@ -728,7 +738,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  < 0: Failure.
    *  -1: A general error occurs (no specified reason).
    *  -2: The parameter is invalid.
-   *  -7: The method call was rejected. It may be because the SDK has not been initialized successfully, or the user role is not a host.
    *  -8: Internal state error. Probably because the user is not a broadcaster.
    */
   abstract startOrUpdateChannelMediaRelayEx(
@@ -746,6 +755,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
+   *  -5: The method call was rejected. There is no ongoing channel media relay.
    */
   abstract stopChannelMediaRelayEx(connection: RtcConnection): number;
 
@@ -759,6 +769,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
+   *  -5: The method call was rejected. There is no ongoing channel media relay.
    */
   abstract pauseAllChannelMediaRelayEx(connection: RtcConnection): number;
 
@@ -772,6 +783,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * @returns
    * 0: Success.
    *  < 0: Failure.
+   *  -5: The method call was rejected. There is no paused channel media relay.
    */
   abstract resumeAllChannelMediaRelayEx(connection: RtcConnection): number;
 
@@ -836,6 +848,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * @ignore
    */
+  abstract setSimulcastConfigEx(
+    simulcastConfig: SimulcastConfig,
+    connection: RtcConnection
+  ): number;
+
+  /**
+   * @ignore
+   */
   abstract setHighPriorityUserListEx(
     uidList: number[],
     uidNum: number,
@@ -870,10 +890,10 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Enables or disables video screenshot and upload.
    *
-   * This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service. Before calling this method, ensure that you have contacted to activate the video screenshot upload service.
+   * This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
    *
-   * @param enabled Whether to enable video screenshot and upload : true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-   * @param config Configuration of video screenshot and upload. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(ContentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+   * @param enabled Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
+   * @param config Screenshot and upload configuration. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(ContentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -911,7 +931,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Gets the call ID with the connection ID.
    *
-   * Call this method after joining a channel. When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
+   * When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
    *
    * @param connection The connection information. See RtcConnection.
    *
@@ -928,5 +948,14 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection,
     metadata: string,
     length: number
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract takeSnapshotWithConfigEx(
+    connection: RtcConnection,
+    uid: number,
+    config: SnapshotConfig
   ): number;
 }

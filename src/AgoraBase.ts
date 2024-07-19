@@ -238,7 +238,7 @@ export enum ErrorCodeType {
   ErrNetDown = 14,
   /**
    * 17: The request to join the channel is rejected. Possible reasons include the following:
-   *  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
+   *  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
    *  After calling startEchoTest for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
    */
   ErrJoinChannelRejected = 17,
@@ -617,7 +617,7 @@ export enum QualityType {
    */
   QualityDown = 6,
   /**
-   * 7: Users cannot detect the network quality (not in use).
+   * @ignore
    */
   QualityUnsupported = 7,
   /**
@@ -1148,6 +1148,30 @@ export enum VideoStreamType {
    * 1: Low-quality video stream.
    */
   VideoStreamLow = 1,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer1 = 4,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer2 = 5,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer3 = 6,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer4 = 7,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer5 = 8,
+  /**
+   * @ignore
+   */
+  VideoStreamLayer6 = 9,
 }
 
 /**
@@ -1295,6 +1319,20 @@ export enum VideoMirrorModeType {
 }
 
 /**
+ * @ignore
+ */
+export enum CameraFormatType {
+  /**
+   * @ignore
+   */
+  CameraFormatNv12 = 0,
+  /**
+   * @ignore
+   */
+  CameraFormatBgra = 1,
+}
+
+/**
  * The bit mask of the codec type.
  */
 export enum CodecCapMask {
@@ -1395,7 +1433,7 @@ export class VideoEncoderConfiguration {
    */
   orientationMode?: OrientationMode;
   /**
-   * Video degradation preference under limited bandwidth. See DegradationPreference.
+   * Video degradation preference under limited bandwidth. See DegradationPreference. When this parameter is set to MaintainFramerate (1) or MaintainBalanced (2), orientationMode needs to be set to OrientationModeAdaptive (0) at the same time, otherwise the setting will not take effect.
    */
   degradationPreference?: DegradationPreference;
   /**
@@ -1458,6 +1496,72 @@ export class SimulcastStreamConfig {
    * The frame rate (fps) of the local video. The default value is 5.
    */
   framerate?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum StreamLayerIndex {
+  /**
+   * @ignore
+   */
+  StreamLayer1 = 0,
+  /**
+   * @ignore
+   */
+  StreamLayer2 = 1,
+  /**
+   * @ignore
+   */
+  StreamLayer3 = 2,
+  /**
+   * @ignore
+   */
+  StreamLayer4 = 3,
+  /**
+   * @ignore
+   */
+  StreamLayer5 = 4,
+  /**
+   * @ignore
+   */
+  StreamLayer6 = 5,
+  /**
+   * @ignore
+   */
+  StreamLow = 6,
+  /**
+   * @ignore
+   */
+  StreamLayerCountMax = 7,
+}
+
+/**
+ * @ignore
+ */
+export class StreamLayerConfig {
+  /**
+   * @ignore
+   */
+  dimensions?: VideoDimensions;
+  /**
+   * @ignore
+   */
+  framerate?: number;
+  /**
+   * @ignore
+   */
+  enable?: boolean;
+}
+
+/**
+ * @ignore
+ */
+export class SimulcastConfig {
+  /**
+   * @ignore
+   */
+  configs?: StreamLayerConfig[];
 }
 
 /**
@@ -1528,6 +1632,46 @@ export class WatermarkOptions {
    * The adaptation mode of the watermark. See WatermarkFitMode.
    */
   mode?: WatermarkFitMode;
+}
+
+/**
+ * @ignore
+ */
+export enum PipState {
+  /**
+   * @ignore
+   */
+  PipStateStarted = 0,
+  /**
+   * @ignore
+   */
+  PipStateStopped = 1,
+  /**
+   * @ignore
+   */
+  PipStateFailed = 2,
+}
+
+/**
+ * @ignore
+ */
+export class PipOptions {
+  /**
+   * @ignore
+   */
+  contentSource?: any;
+  /**
+   * @ignore
+   */
+  contentWidth?: number;
+  /**
+   * @ignore
+   */
+  contentHeight?: number;
+  /**
+   * @ignore
+   */
+  autoEnterPip?: boolean;
 }
 
 /**
@@ -1838,7 +1982,7 @@ export enum AudioScenarioType {
    */
   AudioScenarioGameStreaming = 3,
   /**
-   * 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios. In this scenario, audience members receive a pop-up window to request permission of using microphones.
+   * 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios.
    */
   AudioScenarioChatroom = 5,
   /**
@@ -2220,6 +2364,10 @@ export enum LocalVideoStreamReason {
    * @ignore
    */
   LocalVideoStreamReasonScreenCaptureResumed = 29,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureDisplayDisconnected = 30,
 }
 
 /**
@@ -3220,7 +3368,6 @@ export enum ConnectionChangedReasonType {
    *  All lowercase English letters: a to z.
    *  All uppercase English letters: A to Z.
    *  All numeric characters: 0 to 9.
-   *  Space
    *  "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
    */
   ConnectionChangedInvalidChannelName = 7,
@@ -3307,7 +3454,7 @@ export enum ConnectionChangedReasonType {
  */
 export enum ClientRoleChangeFailedReason {
   /**
-   * 1: The number of hosts in the channel is already at the upper limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+   * 1: The number of hosts in the channel exceeds the limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
    */
   ClientRoleChangeFailedTooManyBroadcasters = 1,
   /**
@@ -3315,11 +3462,11 @@ export enum ClientRoleChangeFailedReason {
    */
   ClientRoleChangeFailedNotAuthorized = 2,
   /**
-   * 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
+   * 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
    */
   ClientRoleChangeFailedRequestTimeOut = 3,
   /**
-   * 4: The SDK connection fails. You can use reason reported in the onConnectionStateChanged callback to troubleshoot the failure.
+   * 4: The SDK is disconnected from the Agora edge server. You can troubleshoot the failure through the reason reported by onConnectionStateChanged. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
    */
   ClientRoleChangeFailedConnectionFailed = 4,
 }
@@ -3439,7 +3586,7 @@ export enum VideoViewSetupMode {
  */
 export class VideoCanvas {
   /**
-   * The user ID.
+   * User ID that publishes the video source.
    */
   uid?: number;
   /**
@@ -3643,7 +3790,7 @@ export class ColorEnhanceOptions {
  */
 export enum BackgroundSourceType {
   /**
-   * 0: Process the background as alpha information without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
+   * 0: Process the background as alpha data without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
    */
   BackgroundNone = 0,
   /**
@@ -4287,6 +4434,10 @@ export enum AreaCodeEx {
    * @ignore
    */
   AreaCodeUs = 0x00000800,
+  /**
+   * @ignore
+   */
+  AreaCodeRu = 0x00001000,
   /**
    * @ignore
    */
