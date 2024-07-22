@@ -12,6 +12,7 @@ import {
   ErrorCodeType,
   IRtcEngine,
   IRtcEngineEventHandler,
+  PipState,
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
@@ -19,6 +20,8 @@ import {
   VideoCanvas,
   VideoSourceType,
 } from 'react-native-agora';
+
+import { PipStateConsumer } from '../context/pip';
 
 import { LogSink } from './LogSink';
 import {
@@ -83,6 +86,7 @@ export abstract class BaseComponent<
 {
   protected engine?: IRtcEngine;
   private _data: Array<string> = [];
+  updatePipState?: (newState: PipState) => void;
 
   constructor(props: StackScreenProps<{ [T in keyof P]: P[T] }, string>) {
     super(props);
@@ -171,28 +175,39 @@ export abstract class BaseComponent<
     const users = this.renderUsers();
     const configuration = this.renderConfiguration();
     return (
-      <KeyboardAvoidingView
-        style={AgoraStyle.fullSize}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <AgoraView style={AgoraStyle.fullWidth}>
-          {this.renderChannel()}
-        </AgoraView>
-        {users ? (
-          <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
-        ) : undefined}
-        {configuration ? (
-          <>
-            <AgoraDivider />
-            <AgoraText style={styles.title}>
-              {`The Configuration of ${this.constructor.name}`}
-            </AgoraText>
-            <AgoraDivider />
-            <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
-          </>
-        ) : undefined}
-        <AgoraView style={AgoraStyle.float}>{this.renderAction()}</AgoraView>
-      </KeyboardAvoidingView>
+      <PipStateConsumer>
+        {(context) => {
+          this.updatePipState = context.updatePipState;
+          return (
+            <KeyboardAvoidingView
+              style={AgoraStyle.fullSize}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+              <AgoraView style={AgoraStyle.fullWidth}>
+                {this.renderChannel()}
+              </AgoraView>
+              {users ? (
+                <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
+              ) : undefined}
+              {configuration ? (
+                <>
+                  <AgoraDivider />
+                  <AgoraText style={styles.title}>
+                    {`The Configuration of ${this.constructor.name}`}
+                  </AgoraText>
+                  <AgoraDivider />
+                  <ScrollView style={AgoraStyle.fullSize}>
+                    {configuration}
+                  </ScrollView>
+                </>
+              ) : undefined}
+              <AgoraView style={AgoraStyle.float}>
+                {this.renderAction()}
+              </AgoraView>
+            </KeyboardAvoidingView>
+          );
+        }}
+      </PipStateConsumer>
     );
   }
 

@@ -28,6 +28,7 @@ import io.agora.iris.IrisEventHandler;
 public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler {
   public static final String NAME = "AgoraRtcNg";
   public IrisApiEngine irisApiEngine;
+  private long currentActivityAddress;
 
   AgoraRtcNgModule(ReactApplicationContext context) {
     super(context);
@@ -45,6 +46,7 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
       IrisApiEngine.enableUseJsonArray(true);
       irisApiEngine = new IrisApiEngine(getReactApplicationContext());
       irisApiEngine.setEventHandler(this);
+      currentActivityAddress = IrisApiEngine.GetJObjectAddress(getReactApplicationContext().getCurrentActivity());
       return true;
     }
     return false;
@@ -54,6 +56,7 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
   public boolean destroyIrisApiEngine() {
     if (irisApiEngine != null) {
       irisApiEngine.setEventHandler(null);
+      IrisApiEngine.FreeJObjectByAddress(currentActivityAddress);
       irisApiEngine.destroy();
       irisApiEngine = null;
       return true;
@@ -76,6 +79,9 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
     }
 
     try {
+      if ("RtcEngine_setupPip_b0b4d39".equals(funcName)) {
+        params = handleSetupPip(params);
+      }
       newIrisApiEngine();
       return irisApiEngine.callIrisApi(funcName, params, buffers);
     } catch (Exception e) {
@@ -117,7 +123,18 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
       map.putArray("buffers", array);
     }
     getReactApplicationContext()
-      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-      .emit("AgoraRtcNg:onEvent", map);
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit("AgoraRtcNg:onEvent", map);
+  }
+
+  private String handleSetupPip(String params) {
+    try {
+      JSONObject paramsJson = new JSONObject(params);
+      JSONObject optionsJson = paramsJson.getJSONObject("options");
+      optionsJson.put("contentSource", currentActivityAddress);
+      return paramsJson.toString();
+    } catch (JSONException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
