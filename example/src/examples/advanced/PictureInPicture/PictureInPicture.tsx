@@ -1,6 +1,7 @@
-import React, { ReactElement } from 'react';
-import { Platform } from 'react-native';
+import React, { ReactElement, createRef } from 'react';
+import { Platform, StyleSheet } from 'react-native';
 import {
+  AgoraRtcRenderViewState,
   ChannelProfileType,
   ClientRoleType,
   ErrorCodeType,
@@ -30,7 +31,6 @@ import Config from '../../../config/agora.config';
 import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
-  pipContentSource: any;
   pipContentWidth: number;
   pipContentHeight: number;
   autoEnterPip: boolean;
@@ -42,6 +42,8 @@ export default class PictureInPicture
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler
 {
+  ref = React.createRef<RtcSurfaceView>();
+
   protected createState(): State {
     return {
       appId: Config.appId,
@@ -52,10 +54,9 @@ export default class PictureInPicture
       joinChannelSuccess: false,
       remoteUsers: [],
       startPreview: false,
-      pipContentSource: '',
       pipContentWidth: 640,
       pipContentHeight: 480,
-      autoEnterPip: false,
+      autoEnterPip: true,
       pipState: PipState.PipStateStopped,
       renderByTextureView: false,
     };
@@ -121,33 +122,30 @@ export default class PictureInPicture
   }
 
   /**
-   * Step 3-1: setupPip
+   * Step 3-1: startPip
    */
-  setupPip = () => {
-    const {
-      autoEnterPip,
-      pipContentSource,
-      pipContentWidth,
-      pipContentHeight,
-    } = this.state;
-    this.engine?.setupPip({
-      // this is only for iOS.
-      // In Android, pip mode resizes your whole app. So you need hide the content that you want to show in pip mode.
-      // You can listen onPipStateChanged to do this.
-      // In iOS, pip mode only resizes the video view that you pass from contentSource.
-      contentSource: pipContentSource,
-      contentWidth: pipContentWidth,
-      contentHeight: pipContentHeight,
-      autoEnterPip, // this is only for iOS
-    });
-  };
-
-  /**
-   * Step 3-2: startPip
-   */
-  startPip = () => {
-    this.setupPip();
-    this.engine?.startPip();
+  startPip = (ref: any) => {
+    const { pipContentWidth, pipContentHeight, autoEnterPip } = this.state;
+    let state: AgoraRtcRenderViewState = ref.current.state;
+    let contentSource = state.contentSource;
+    if (this.engine?.isPipSupported()) {
+      this.engine?.setupPip({
+        // this is only for iOS.
+        // In Android, pip mode resizes your whole app. So you need hide the content that you want to show in pip mode.
+        // You can listen onPipStateChanged to do this.
+        // In iOS, pip mode only resizes the video view that you pass from contentSource.
+        contentSource: contentSource,
+        // On Android, the width/height is used to cal the AspectRatio, but not actual width/height
+        // https://developer.android.com/reference/android/app/PictureInPictureParams.Builder#setAspectRatio(android.util.Rational)
+        contentWidth: pipContentWidth,
+        contentHeight: pipContentHeight,
+        //this is only form iOS.
+        autoEnterPip: autoEnterPip,
+      });
+      this.engine?.startPip();
+    } else {
+      this.error('Picture-in-Picture is not supported on this device');
+    }
   };
 
   /**
@@ -168,6 +166,7 @@ export default class PictureInPicture
    * Step 5: releaseRtcEngine
    */
   protected releaseRtcEngine() {
+    this.engine?.stopPip();
     this.engine?.unregisterEventHandler(this);
     this.engine?.release();
   }
@@ -198,10 +197,14 @@ export default class PictureInPicture
 
   onPipStateChanged(state: PipState): void {
     this.log(`onPipStateChanged: ${state}`);
-    if (this.updatePipState) {
-      this.updatePipState(state);
+    // iOS show the pip window by UIView, so you don't need to handle the UI by yourself
+    // Android show the pip window by Activity, so you need to handle the UI by yourself
+    if (Platform.OS === 'android') {
+      if (this.updatePipState) {
+        this.updatePipState(state);
+      }
+      this.setState({ pipState: state });
     }
-    this.setState({ pipState: state });
   }
 
   protected renderChannel(): ReactElement | undefined {
@@ -230,18 +233,37 @@ export default class PictureInPicture
   }
 
   protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    const { renderByTextureView } = this.state;
+    const {
+      renderByTextureView,
+      pipContentWidth,
+      pipContentHeight,
+      autoEnterPip,
+    } = this.state;
+    let ref = createRef<any>();
     return renderByTextureView ? (
       <RtcTextureView
         style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
         canvas={{ ...user }}
       />
     ) : (
-      <RtcSurfaceView
-        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={user.uid !== 0}
-        canvas={{ ...user }}
-      />
+      <>
+        <AgoraButton
+          containerStyle={styles.button}
+          title={`startPip`}
+          onPress={() => this.startPip(ref)}
+        />
+        <RtcSurfaceView
+          ref={ref}
+          pipOptions={{
+            autoEnterPip: autoEnterPip,
+            contentWidth: pipContentWidth,
+            contentHeight: pipContentHeight,
+          }}
+          style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+          zOrderMediaOverlay={user.uid !== 0}
+          canvas={{ ...user }}
+        />
+      </>
     );
   }
 
@@ -313,7 +335,8 @@ export default class PictureInPicture
 
   protected renderAction(): ReactElement | undefined {
     const { pipState } = this.state;
-    return pipState !== PipState.PipStateStarted ? (
+    return Platform.OS === 'android' &&
+      pipState !== PipState.PipStateStarted ? (
       <>
         <AgoraButton
           disabled={pipState === PipState.PipStateStarted}
@@ -324,3 +347,11 @@ export default class PictureInPicture
     ) : undefined;
   }
 }
+const styles = StyleSheet.create({
+  button: {
+    width: 100,
+    position: 'absolute',
+    zIndex: 9,
+    top: 10,
+  },
+});

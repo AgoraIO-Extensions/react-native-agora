@@ -1,6 +1,6 @@
 import type { ViewProps } from 'react-native';
 
-import { VideoCanvas } from './AgoraBase';
+import { PipOptions, VideoCanvas } from './AgoraBase';
 import { RtcConnection } from './IAgoraRtcEngineEx';
 import IAgoraRtcRenderView from './internal/IAgoraRtcRenderView';
 import AgoraRtcSurfaceViewNativeComponent from './specs/AgoraRtcSurfaceViewNativeComponent';
@@ -19,6 +19,8 @@ export interface RtcRendererViewProps extends ViewProps {
    * The connection infomation. See RtcConnection.
    */
   connection?: RtcConnection;
+  pipOptions?: PipOptions;
+  enablePip?: boolean;
 }
 
 /**
@@ -68,4 +70,9 @@ export class RtcTextureView extends IAgoraRtcRenderView<RtcRendererViewProps> {
   get view() {
     return AgoraRtcTextureViewNativeComponent;
   }
+}
+
+export interface AgoraRtcRenderViewState {
+  //iOS only
+  contentSource?: number | null;
 }

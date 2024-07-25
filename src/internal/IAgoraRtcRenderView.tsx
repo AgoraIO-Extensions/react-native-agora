@@ -1,15 +1,43 @@
 import React, { Component } from 'react';
-import { HostComponent, StyleSheet } from 'react-native';
+import {
+  HostComponent,
+  NativeModules,
+  Platform,
+  StyleSheet,
+  findNodeHandle,
+} from 'react-native';
 
 import { VideoSourceType } from '../AgoraMediaBase';
-import { RtcRendererViewProps } from '../AgoraRtcRenderView';
+import {
+  AgoraRtcRenderViewState,
+  RtcRendererViewProps,
+} from '../AgoraRtcRenderView';
 
 import { IrisApiParam } from './IrisApiEngine';
 
 export default abstract class IAgoraRtcRenderView<
   T extends RtcRendererViewProps
-> extends Component<T> {
+> extends Component<T, AgoraRtcRenderViewState> {
   abstract get view(): HostComponent<any>;
+  ref: React.RefObject<any> = React.createRef();
+
+  constructor(props: T) {
+    super(props);
+    this.state = {
+      contentSource: null,
+    };
+  }
+
+  componentDidMount(): void {
+    if (Platform.OS === 'ios') {
+      const viewHandle = findNodeHandle(this.ref.current);
+      NativeModules.AgoraRtcSurfaceView.callNativeMethod(viewHandle).then(
+        (value: number) => {
+          this.setState({ contentSource: value });
+        }
+      );
+    }
+  }
 
   get funcName(): string {
     let funcName: string;
@@ -59,6 +87,7 @@ export default abstract class IAgoraRtcRenderView<
     const AgoraRtcRenderer = this.view;
     return (
       <AgoraRtcRenderer
+        ref={this.ref}
         style={styles.renderer}
         callApi={this.params({ canvas, connection })}
         {...others}
