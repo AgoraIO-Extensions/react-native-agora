@@ -1,5 +1,5 @@
 import React, { ReactElement, createRef } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { AppState, AppStateStatus, Platform, StyleSheet } from 'react-native';
 import {
   AgoraRtcRenderViewState,
   ChannelProfileType,
@@ -7,12 +7,14 @@ import {
   ErrorCodeType,
   IRtcEngineEventHandler,
   PipState,
+  RemoteVideoStats,
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
   RtcTextureView,
   UserOfflineReasonType,
   VideoCanvas,
+  VideoSourceType,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
@@ -42,7 +44,8 @@ export default class PictureInPicture
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler
 {
-  ref = React.createRef<RtcSurfaceView>();
+  localViewRef = createRef<any>();
+  appState: AppStateStatus = AppState.currentState;
 
   protected createState(): State {
     return {
@@ -93,6 +96,18 @@ export default class PictureInPicture
     // Start preview before joinChannel
     this.engine.startPreview();
     this.setState({ startPreview: true });
+
+    const appStateListener = (nextAppState: AppStateStatus) => {
+      if (
+        this.appState.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        this.stopPip();
+      }
+
+      this.appState = nextAppState;
+    };
+    AppState.addEventListener('change', appStateListener);
   }
 
   /**
@@ -122,9 +137,9 @@ export default class PictureInPicture
   }
 
   /**
-   * Step 3-1: startPip
+   * Step 3-1: setupPip
    */
-  startPip = (ref: any) => {
+  setupPip = (ref: any) => {
     const { pipContentWidth, pipContentHeight, autoEnterPip } = this.state;
     let state: AgoraRtcRenderViewState = ref.current.state;
     let contentSource = state.contentSource;
@@ -142,17 +157,28 @@ export default class PictureInPicture
         //this is only form iOS.
         autoEnterPip: autoEnterPip,
       });
-      this.engine?.startPip();
     } else {
       this.error('Picture-in-Picture is not supported on this device');
     }
   };
 
   /**
-   * Step 3-2: stopPip, iOS only
+   * Step 3-2: startPip
+   */
+  startPip = (ref: any) => {
+    this.setupPip(ref);
+    if (this.engine?.isPipSupported()) {
+      this.engine?.startPip();
+    }
+  };
+
+  /**
+   * Step 3-3: stopPip(iOS only)
    */
   stopPip = () => {
-    this.engine?.stopPip();
+    if (this.engine?.isPipSupported()) {
+      this.engine?.stopPip();
+    }
   };
 
   /**
@@ -166,13 +192,27 @@ export default class PictureInPicture
    * Step 5: releaseRtcEngine
    */
   protected releaseRtcEngine() {
-    this.engine?.stopPip();
     this.engine?.unregisterEventHandler(this);
     this.engine?.release();
   }
 
   onError(err: ErrorCodeType, msg: string) {
     super.onError(err, msg);
+  }
+
+  /**
+   * Optional for iOS: sample will auto EnterPip mode with local view
+   * you can choose the autoEnterPip view by yourself such as remote view
+   */
+  onFirstLocalVideoFrame(
+    source: VideoSourceType,
+    width: number,
+    height: number,
+    elapsed: number
+  ): void {
+    if (source === VideoSourceType.VideoSourceCamera) {
+      this.setupPip(this.localViewRef);
+    }
   }
 
   onJoinChannelSuccess(connection: RtcConnection, elapsed: number) {
@@ -196,20 +236,23 @@ export default class PictureInPicture
   }
 
   onPipStateChanged(state: PipState): void {
-    this.log(`onPipStateChanged: ${state}`);
+    this.info('onPipStateChanged', 'state', state);
+
     // iOS show the pip window by UIView, so you don't need to handle the UI by yourself
     // Android show the pip window by Activity, so you need to handle the UI by yourself
     if (Platform.OS === 'android') {
       if (this.updatePipState) {
         this.updatePipState(state);
       }
-      this.setState({ pipState: state });
+      // this.setState({ pipState: state });
     }
+    this.setState({ pipState: state });
   }
 
   protected renderChannel(): ReactElement | undefined {
     const { channelId, joinChannelSuccess, pipState } = this.state;
-    return pipState !== PipState.PipStateStarted ? (
+    return Platform.OS === 'ios' ||
+      (Platform.OS === 'android' && pipState !== PipState.PipStateStarted) ? (
       <>
         <AgoraTextInput
           onChangeText={(text) => {
@@ -233,12 +276,7 @@ export default class PictureInPicture
   }
 
   protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    const {
-      renderByTextureView,
-      pipContentWidth,
-      pipContentHeight,
-      autoEnterPip,
-    } = this.state;
+    const { renderByTextureView, pipState } = this.state;
     let ref = createRef<any>();
     return renderByTextureView ? (
       <RtcTextureView
@@ -247,18 +285,23 @@ export default class PictureInPicture
       />
     ) : (
       <>
-        <AgoraButton
-          containerStyle={styles.button}
-          title={`startPip`}
-          onPress={() => this.startPip(ref)}
-        />
+        {Platform.OS === 'ios' && (
+          <AgoraButton
+            containerStyle={styles.button}
+            title={
+              Platform.OS === 'ios' && pipState !== PipState.PipStateStarted
+                ? `startPip`
+                : `stopPip`
+            }
+            onPress={() =>
+              Platform.OS === 'ios' && pipState !== PipState.PipStateStarted
+                ? this.startPip(user.uid === 0 ? this.localViewRef : ref)
+                : this.stopPip()
+            }
+          />
+        )}
         <RtcSurfaceView
-          ref={ref}
-          pipOptions={{
-            autoEnterPip: autoEnterPip,
-            contentWidth: pipContentWidth,
-            contentHeight: pipContentHeight,
-          }}
+          ref={user.uid === 0 ? this.localViewRef : ref}
           style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
           zOrderMediaOverlay={user.uid !== 0}
           canvas={{ ...user }}
@@ -275,7 +318,8 @@ export default class PictureInPicture
       autoEnterPip,
       pipState,
     } = this.state;
-    return pipState !== PipState.PipStateStarted ? (
+    return Platform.OS === 'ios' ||
+      (Platform.OS === 'android' && pipState !== PipState.PipStateStarted) ? (
       <>
         <AgoraSwitch
           disabled={
