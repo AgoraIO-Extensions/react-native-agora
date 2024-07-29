@@ -314,6 +314,8 @@ export abstract class IMediaPlayer {
   /**
    * Sets the view.
    *
+   * @param view The render view.
+   *
    * @returns
    * 0: Success.
    *  < 0: Failure.

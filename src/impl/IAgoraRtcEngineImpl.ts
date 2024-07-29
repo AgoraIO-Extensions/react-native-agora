@@ -2071,27 +2071,6 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_muteAllRemoteAudioStreams_5039d15';
   }
 
-  setDefaultMuteAllRemoteAudioStreams(mute: boolean): number {
-    const apiType =
-      this.getApiTypeFromSetDefaultMuteAllRemoteAudioStreams(mute);
-    const jsonParams = {
-      mute: mute,
-      toJSON: () => {
-        return {
-          mute: mute,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetDefaultMuteAllRemoteAudioStreams(
-    mute: boolean
-  ): string {
-    return 'RtcEngine_setDefaultMuteAllRemoteAudioStreams_5039d15';
-  }
-
   muteRemoteAudioStream(uid: number, mute: boolean): number {
     const apiType = this.getApiTypeFromMuteRemoteAudioStream(uid, mute);
     const jsonParams = {
@@ -2167,27 +2146,6 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromMuteAllRemoteVideoStreams(mute: boolean): string {
     return 'RtcEngine_muteAllRemoteVideoStreams_5039d15';
-  }
-
-  setDefaultMuteAllRemoteVideoStreams(mute: boolean): number {
-    const apiType =
-      this.getApiTypeFromSetDefaultMuteAllRemoteVideoStreams(mute);
-    const jsonParams = {
-      mute: mute,
-      toJSON: () => {
-        return {
-          mute: mute,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetDefaultMuteAllRemoteVideoStreams(
-    mute: boolean
-  ): string {
-    return 'RtcEngine_setDefaultMuteAllRemoteVideoStreams_5039d15';
   }
 
   setRemoteDefaultVideoStreamType(streamType: VideoStreamType): number {

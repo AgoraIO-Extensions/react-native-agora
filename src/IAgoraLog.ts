@@ -28,6 +28,10 @@ export enum LogLevel {
    * @ignore
    */
   LogLevelApiCall = 0x0010,
+  /**
+   * @ignore
+   */
+  LogLevelDebug = 0x0020,
 }
 
 /**
