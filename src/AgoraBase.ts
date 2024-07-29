@@ -238,7 +238,7 @@ export enum ErrorCodeType {
   ErrNetDown = 14,
   /**
    * 17: The request to join the channel is rejected. Possible reasons include the following:
-   *  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to determine whether the user exists in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
+   *  The user is already in the channel. Agora recommends that you use the onConnectionStateChanged callback to see whether the user is in the channel. Do not call this method to join the channel unless you receive the ConnectionStateDisconnected (1) state.
    *  After calling startEchoTest for the call test, the user tries to join the channel without calling stopEchoTest to end the current test. To join a channel, the call test must be ended by calling stopEchoTest.
    */
   ErrJoinChannelRejected = 17,
@@ -1300,6 +1300,10 @@ export class AdvanceOptions {
    * Compression preference for video encoding. See CompressionPreference.
    */
   compressionPreference?: CompressionPreference;
+  /**
+   * Whether to encode and send the Alpha data present in the video frame to the remote end: true : Encode and send Alpha data. false : (Default) Do not encode and send Alpha data.
+   */
+  encodeAlpha?: boolean;
 }
 
 /**
@@ -1437,7 +1441,7 @@ export class VideoEncoderConfiguration {
    */
   orientationMode?: OrientationMode;
   /**
-   * Video degradation preference under limited bandwidth. See DegradationPreference.
+   * Video degradation preference under limited bandwidth. See DegradationPreference. When this parameter is set to MaintainFramerate (1) or MaintainBalanced (2), orientationMode needs to be set to OrientationModeAdaptive (0) at the same time, otherwise the setting will not take effect.
    */
   degradationPreference?: DegradationPreference;
   /**
@@ -1946,7 +1950,7 @@ export enum AudioScenarioType {
    */
   AudioScenarioGameStreaming = 3,
   /**
-   * 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios. In this scenario, audience members receive a pop-up window to request permission of using microphones.
+   * 5: Chatroom scenario, where users need to frequently switch the user role or mute and unmute the microphone. For example, education scenarios.
    */
   AudioScenarioChatroom = 5,
   /**
@@ -2030,7 +2034,7 @@ export enum VideoApplicationScenarioType {
    */
   ApplicationScenarioGeneral = 0,
   /**
-   * If set to ApplicationScenarioMeeting (1), the SDK automatically enables the following strategies:
+   * ApplicationScenarioMeeting (1) is suitable for meeting scenarios. If set to ApplicationScenarioMeeting (1), the SDK automatically enables the following strategies:
    *  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
    *  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
    *  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
@@ -3422,7 +3426,7 @@ export enum ConnectionChangedReasonType {
  */
 export enum ClientRoleChangeFailedReason {
   /**
-   * 1: The number of hosts in the channel is already at the upper limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
+   * 1: The number of hosts in the channel exceeds the limit. This enumerator is reported only when the support for 128 users is enabled. The maximum number of hosts is based on the actual number of hosts configured when you enable the 128-user feature.
    */
   ClientRoleChangeFailedTooManyBroadcasters = 1,
   /**
@@ -3430,11 +3434,11 @@ export enum ClientRoleChangeFailedReason {
    */
   ClientRoleChangeFailedNotAuthorized = 2,
   /**
-   * 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again.
+   * 3: The request is timed out. Agora recommends you prompt the user to check the network connection and try to switch their user role again. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
    */
   ClientRoleChangeFailedRequestTimeOut = 3,
   /**
-   * 4: The SDK connection fails. You can use reason reported in the onConnectionStateChanged callback to troubleshoot the failure.
+   * 4: The SDK is disconnected from the Agora edge server. You can troubleshoot the failure through the reason reported by onConnectionStateChanged. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
    */
   ClientRoleChangeFailedConnectionFailed = 4,
 }
@@ -3858,7 +3862,7 @@ export class ColorEnhanceOptions {
  */
 export enum BackgroundSourceType {
   /**
-   * 0: Process the background as alpha information without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
+   * 0: Process the background as alpha data without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
    */
   BackgroundNone = 0,
   /**

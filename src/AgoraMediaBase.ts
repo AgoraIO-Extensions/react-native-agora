@@ -308,7 +308,7 @@ export enum ContentInspectType {
 }
 
 /**
- * A ContentInspectModule structure used to configure the frequency of video screenshot and upload.
+ * ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
  */
 export class ContentInspectModule {
   /**
@@ -322,7 +322,7 @@ export class ContentInspectModule {
 }
 
 /**
- * Configuration of video screenshot and upload.
+ * Screenshot and upload configuration.
  */
 export class ContentInspectConfig {
   /**
@@ -399,6 +399,10 @@ export class AudioPcmFrame {
    * The audio frame.
    */
   data_?: number[];
+  /**
+   * @ignore
+   */
+  is_stereo_?: boolean;
 }
 
 /**
@@ -836,6 +840,32 @@ export class Hdr10MetadataInfo {
 /**
  * @ignore
  */
+export enum AlphaStitchMode {
+  /**
+   * @ignore
+   */
+  NoAlphaStitch = 0,
+  /**
+   * @ignore
+   */
+  AlphaStitchUp = 1,
+  /**
+   * @ignore
+   */
+  AlphaStitchBelow = 2,
+  /**
+   * @ignore
+   */
+  AlphaStitchLeft = 3,
+  /**
+   * @ignore
+   */
+  AlphaStitchRight = 4,
+}
+
+/**
+ * @ignore
+ */
 export enum EglContextType {
   /**
    * @ignore
@@ -924,19 +954,19 @@ export class ExternalVideoFrame {
   /**
    * @ignore
    */
-  fence_object?: number;
+  fenceObject?: number;
   /**
    * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
    */
   matrix?: number[];
   /**
-   * This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
+   * @ignore
    */
-  metadata_buffer?: Uint8Array;
+  metadataBuffer?: Uint8Array;
   /**
-   * This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
+   * @ignore
    */
-  metadata_size?: number;
+  metadataSize?: number;
   /**
    * @ignore
    */
@@ -946,13 +976,17 @@ export class ExternalVideoFrame {
    */
   fillAlphaBuffer?: boolean;
   /**
-   * @ignore
+   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame.
    */
-  alphaStitchMode?: number;
+  alphaStitchMode?: AlphaStitchMode;
   /**
    * @ignore
    */
-  texture_slice_index?: number;
+  d3d11Texture2d?: any;
+  /**
+   * @ignore
+   */
+  textureSliceIndex?: number;
   /**
    * @ignore
    */
@@ -1030,7 +1064,7 @@ export class VideoFrame {
    */
   textureId?: number;
   /**
-   * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
+   * @ignore
    */
   matrix?: number[];
   /**
@@ -1038,15 +1072,15 @@ export class VideoFrame {
    */
   alphaBuffer?: Uint8Array;
   /**
-   * @ignore
+   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame.
    */
-  alphaStitchMode?: number;
+  alphaStitchMode?: AlphaStitchMode;
   /**
    * @ignore
    */
   pixelBuffer?: Uint8Array;
   /**
-   * The meta information in the video frame. To use this parameter, please.
+   * The meta information in the video frame. To use this parameter, please contact.
    */
   metaInfo?: IVideoFrameMetaInfo;
   /**
@@ -1420,6 +1454,7 @@ export interface IVideoFrameObserver {
    * Occurs each time the SDK receives a video frame before encoding.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios. After processing, you can send the processed video data back to the SDK in this callback.
+   *  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
    *  It's recommended that you implement this callback through the C++ API.
    *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
    *  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
@@ -1443,6 +1478,7 @@ export interface IVideoFrameObserver {
    * Occurs each time the SDK receives a video frame sent by the remote user.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.
+   *  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
    *  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
    *  It's recommended that you implement this callback through the C++ API.
    *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
@@ -1593,27 +1629,7 @@ export interface IFaceInfoObserver {
    *  pitch: Head pitch angle. A positve value means looking down, while a negative value means looking up.
    *  yaw: Head yaw angle. A positve value means turning left, while a negative value means turning right.
    *  roll: Head roll angle. A positve value means tilting to the right, while a negative value means tilting to the left.
-   *  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON:
-   * {
-   *  "faces":[{
-   *  "blendshapes":{
-   *  "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0,
-   *  "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0,
-   *  "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0,
-   *  "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0,
-   *  "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0,
-   *  "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0,
-   *  "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0,
-   *  "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0,
-   *  "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0,
-   *  "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0,
-   *  "tongueOut":0.0
-   *  },
-   *  "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5},
-   *
-   *  }],
-   *  "timestamp":"654879876546"
-   * }
+   *  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON: { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5}, }], "timestamp":"654879876546" }
    *
    * @returns
    * true : Facial information JSON parsing successful. false : Facial information JSON parsing failed.
