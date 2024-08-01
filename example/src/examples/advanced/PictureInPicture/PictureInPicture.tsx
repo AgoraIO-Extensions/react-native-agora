@@ -141,8 +141,11 @@ export default class PictureInPicture
    */
   setupPip = (ref: any) => {
     const { pipContentWidth, pipContentHeight, autoEnterPip } = this.state;
-    let state: AgoraRtcRenderViewState = ref.current.state;
-    let contentSource = state.contentSource;
+    let contentSource: any = 0;
+    if (Platform.OS === 'ios') {
+      let state: AgoraRtcRenderViewState = ref.current.state;
+      contentSource = state.contentSource;
+    }
     if (this.engine?.isPipSupported()) {
       this.engine?.setupPip({
         // this is only for iOS.
@@ -244,7 +247,6 @@ export default class PictureInPicture
       if (this.updatePipState) {
         this.updatePipState(state);
       }
-      // this.setState({ pipState: state });
     }
     this.setState({ pipState: state });
   }
