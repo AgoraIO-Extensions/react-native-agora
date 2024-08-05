@@ -1,6 +1,46 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.4.0-dev.6)
-  - AgoraRtcEngine_iOS_Preview (4.4.0-dev.6)
+  - AgoraIrisRTC_iOS (4.4.0-build.1)
+  - AgoraRtcEngine_iOS (4.4.0):
+    - AgoraRtcEngine_iOS/AIAEC (= 4.4.0)
+    - AgoraRtcEngine_iOS/AIAECLL (= 4.4.0)
+    - AgoraRtcEngine_iOS/AINS (= 4.4.0)
+    - AgoraRtcEngine_iOS/AINSLL (= 4.4.0)
+    - AgoraRtcEngine_iOS/AudioBeauty (= 4.4.0)
+    - AgoraRtcEngine_iOS/Basic (= 4.4.0)
+    - AgoraRtcEngine_iOS/ClearVision (= 4.4.0)
+    - AgoraRtcEngine_iOS/ContentInspect (= 4.4.0)
+    - AgoraRtcEngine_iOS/FaceCapture (= 4.4.0)
+    - AgoraRtcEngine_iOS/FaceDetection (= 4.4.0)
+    - AgoraRtcEngine_iOS/LipSync (= 4.4.0)
+    - AgoraRtcEngine_iOS/ReplayKit (= 4.4.0)
+    - AgoraRtcEngine_iOS/RtcBasic (= 4.4.0)
+    - AgoraRtcEngine_iOS/SpatialAudio (= 4.4.0)
+    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.4.0)
+    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.4.0)
+    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.4.0)
+    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.4.0)
+    - AgoraRtcEngine_iOS/VirtualBackground (= 4.4.0)
+    - AgoraRtcEngine_iOS/VQA (= 4.4.0)
+  - AgoraRtcEngine_iOS/AIAEC (4.4.0)
+  - AgoraRtcEngine_iOS/AIAECLL (4.4.0)
+  - AgoraRtcEngine_iOS/AINS (4.4.0)
+  - AgoraRtcEngine_iOS/AINSLL (4.4.0)
+  - AgoraRtcEngine_iOS/AudioBeauty (4.4.0)
+  - AgoraRtcEngine_iOS/Basic (4.4.0)
+  - AgoraRtcEngine_iOS/ClearVision (4.4.0)
+  - AgoraRtcEngine_iOS/ContentInspect (4.4.0)
+  - AgoraRtcEngine_iOS/FaceCapture (4.4.0)
+  - AgoraRtcEngine_iOS/FaceDetection (4.4.0)
+  - AgoraRtcEngine_iOS/LipSync (4.4.0)
+  - AgoraRtcEngine_iOS/ReplayKit (4.4.0)
+  - AgoraRtcEngine_iOS/RtcBasic (4.4.0)
+  - AgoraRtcEngine_iOS/SpatialAudio (4.4.0)
+  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.4.0)
+  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.4.0)
+  - AgoraRtcEngine_iOS/VideoCodecDec (4.4.0)
+  - AgoraRtcEngine_iOS/VideoCodecEnc (4.4.0)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.4.0)
+  - AgoraRtcEngine_iOS/VQA (4.4.0)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -72,9 +112,9 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - hermes-engine (0.72.10):
-    - hermes-engine/Pre-built (= 0.72.10)
-  - hermes-engine/Pre-built (0.72.10)
+  - hermes-engine (0.72.12):
+    - hermes-engine/Pre-built (= 0.72.12)
+  - hermes-engine/Pre-built (0.72.12)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -378,8 +418,8 @@ PODS:
   - React-logger (0.72.12):
     - glog
   - react-native-agora (4.3.2):
-    - AgoraIrisRTC_iOS (= 4.4.0-dev.6)
-    - AgoraRtcEngine_iOS_Preview (= 4.4.0-dev.6)
+    - AgoraIrisRTC_iOS (= 4.4.0-build.1)
+    - AgoraRtcEngine_iOS (= 4.4.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-image-tools (0.8.1):
@@ -517,7 +557,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS_Preview (= 4.4.0-dev.6)
+  - AgoraRtcEngine_iOS (= 4.4.0)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -593,9 +633,9 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - AgoraIrisRTC_iOS
-    - AgoraRtcEngine_iOS_Preview
+    - AgoraRtcEngine_iOS
     - CocoaAsyncSocket
     - Flipper
     - Flipper-Boost-iOSX
@@ -712,8 +752,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: 53fabfc9ff89b741c3b13e33657ce2326912725e
-  AgoraRtcEngine_iOS_Preview: c83f9cb5da05abdf70eb05ee8b03495e124705b6
+  AgoraIrisRTC_iOS: b28c8aa87cfa3eeec9be2bf1df35e6b5c28aaff1
+  AgoraRtcEngine_iOS: 645039304ab4e32cb43506659056fb71f5d1a3b0
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -729,7 +769,7 @@ SPEC CHECKSUMS:
   FlipperKit: 2efad7007d6745a3f95e4034d547be637f89d3f6
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  hermes-engine: 90e4033deb00bee33330a9f15eff0f874bd82f6d
+  hermes-engine: e89344b9e9e54351c3c5cac075e0275148fb37ba
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -747,7 +787,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 95bdf0ab46024ca9849e08739b6abd8fe489cd33
   React-jsinspector: 8e291ed0ab371314de269001d6b9b25db6aabf42
   React-logger: d4010de0b0564e63637ad08373bc73b5d919974b
-  react-native-agora: a115bd55c895251b0ed3ca57a5694301b9e4f307
+  react-native-agora: e440bb9c0abad211ff7ab6877dd12f07252c5168
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
@@ -778,6 +818,6 @@ SPEC CHECKSUMS:
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 59a38465eb84c9b7e1d5bda1bad2dbd9821a2b6b
+PODFILE CHECKSUM: e6f852241acd4926e2d97e62a62ba5748df7ca3e
 
 COCOAPODS: 1.13.0
