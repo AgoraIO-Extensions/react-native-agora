@@ -1,16 +1,13 @@
-import { by, device, element, expect, system } from 'detox';
+import { by, device, element, expect } from 'detox';
 
 describe('Example', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    const permissions = { camera: 'YES', microphone: 'YES' };
+    await device.launchApp({ permissions });
   });
 
   beforeEach(async () => {
     await device.reloadReactNative();
-    if (device.getPlatform() === 'ios') {
-      await system.element(by.system.label('Allow')).tap();
-      await system.element(by.system.label('Continue')).tap();
-    }
   });
 
   it('should have APIExample screen', async () => {
