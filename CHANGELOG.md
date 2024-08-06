@@ -1,5 +1,13 @@
 
 
+# [4.4.0-dev.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.3.2...v4.4.0-dev.1) (2024-08-06)
+
+
+### Features
+
+* **example:** add AudioCallRoute, call quality monitoring in JoinChannelAudio & JoinChannelVideo ([6b646e8](https://github.com/AgoraIO-Extensions/react-native-agora/commit/6b646e84600f4c664f0daf349439264c59783571))
+* **example:** processVideoRawData from native side ([00f89b0](https://github.com/AgoraIO-Extensions/react-native-agora/commit/00f89b07a2b3fb2c59fd972c00f9bd2ac7c6849c))
+
 ## [4.3.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.3.1...v4.3.2) (2024-06-06)
 
 
