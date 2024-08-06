@@ -1,4 +1,4 @@
-import { by, device, element, expect } from 'detox';
+import { by, device, element, expect, system } from 'detox';
 
 describe('Example', () => {
   beforeAll(async () => {
@@ -7,6 +7,8 @@ describe('Example', () => {
 
   beforeEach(async () => {
     await device.reloadReactNative();
+    await system.element(by.system.label('Allow')).tap();
+    await system.element(by.system.label('Continue')).tap();
   });
 
   it('should have APIExample screen', async () => {
