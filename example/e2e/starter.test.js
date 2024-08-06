@@ -7,8 +7,10 @@ describe('Example', () => {
 
   beforeEach(async () => {
     await device.reloadReactNative();
-    await system.element(by.system.label('Allow')).tap();
-    await system.element(by.system.label('Continue')).tap();
+    if (device.getPlatform() === 'ios') {
+      await system.element(by.system.label('Allow')).tap();
+      await system.element(by.system.label('Continue')).tap();
+    }
   });
 
   it('should have APIExample screen', async () => {
