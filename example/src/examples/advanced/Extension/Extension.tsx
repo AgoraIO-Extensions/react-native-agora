@@ -37,9 +37,9 @@ export default class Extension
       joinChannelSuccess: false,
       remoteUsers: [],
       startPreview: false,
-      path: 'agora_segmentation_extension',
-      provider: 'agora_video_filters_segmentation',
-      extension: 'portrait_segmentation',
+      path: '',
+      provider: '',
+      extension: '',
       enableExtension: false,
     };
   }
@@ -95,8 +95,10 @@ export default class Extension
       this.engine?.loadExtensionProvider(path);
     }
 
-    this.engine?.enableExtension(provider, extension, true);
-    this.setState({ enableExtension: true });
+    let result = this.engine?.enableExtension(provider, extension, true);
+    if (result && result < 0) {
+      this.error(`enableExtension failed: ${result}`);
+    }
   };
 
   /**
@@ -104,8 +106,10 @@ export default class Extension
    */
   disableExtension = () => {
     const { provider, extension } = this.state;
-    this.engine?.enableExtension(provider, extension, false);
-    this.setState({ enableExtension: false });
+    let result = this.engine?.enableExtension(provider, extension, false);
+    if (result && result < 0) {
+      this.error(`enableExtension failed: ${result}`);
+    }
   };
 
   /**
@@ -183,12 +187,22 @@ export default class Extension
 
   onExtensionStartedWithContext(context: ExtensionContext) {
     this.info('onExtensionStartedWithContext', 'context', context);
-    this.setState({ enableExtension: true });
+    if (
+      context.providerName === this.state.provider &&
+      context.extensionName === this.state.extension
+    ) {
+      this.setState({ enableExtension: true });
+    }
   }
 
-  OnExtensionStoppedWithContext(context: ExtensionContext) {
-    this.info('OnExtensionStoppedWithContext', 'context', context);
-    this.setState({ enableExtension: false });
+  onExtensionStoppedWithContext(context: ExtensionContext) {
+    this.info('onExtensionStoppedWithContext', 'context', context);
+    if (
+      context.providerName === this.state.provider &&
+      context.extensionName === this.state.extension
+    ) {
+      this.setState({ enableExtension: false });
+    }
   }
 
   protected renderConfiguration(): ReactElement | undefined {
@@ -229,11 +243,10 @@ export default class Extension
   }
 
   protected renderAction(): ReactElement | undefined {
-    const { joinChannelSuccess, enableExtension } = this.state;
+    const { enableExtension } = this.state;
     return (
       <>
         <AgoraButton
-          disabled={joinChannelSuccess}
           title={`${enableExtension ? 'disable' : 'enable'} Extension`}
           onPress={
             enableExtension ? this.disableExtension : this.enableExtension
