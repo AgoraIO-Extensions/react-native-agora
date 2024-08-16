@@ -2,23 +2,23 @@ import './extension/AgoraMediaBaseExtension';
 import { EncodedVideoFrameInfo } from './AgoraBase';
 
 /**
- * @ignore
+ * The context information of the extension.
  */
 export class ExtensionContext {
   /**
-   * @ignore
+   * Whether the uid in ExtensionContext is valid: true : The uid is valid. false : The uid is invalid.
    */
   isValid?: boolean;
   /**
-   * @ignore
+   * The user ID. 0 represents a local user, while greater than 0 represents a remote user.
    */
   uid?: number;
   /**
-   * @ignore
+   * The name of the extension provider.
    */
   providerName?: string;
   /**
-   * @ignore
+   * The name of the extension.
    */
   extensionName?: string;
 }
@@ -960,23 +960,25 @@ export class ExternalVideoFrame {
    */
   matrix?: number[];
   /**
-   * @ignore
+   * This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
    */
   metadataBuffer?: Uint8Array;
   /**
-   * @ignore
+   * This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
    */
   metadataSize?: number;
   /**
-   * @ignore
+   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
    */
   alphaBuffer?: Uint8Array;
   /**
-   * @ignore
+   * This parameter only applies to video data in BGRA or RGBA format. Whether to extract the alpha channel data from the video frame and automatically fill it into alphaBuffer : true ：Extract and fill the alpha channel data. false : (Default) Do not extract and fill the Alpha channel data. For video data in BGRA or RGBA format, you can set the Alpha channel data in either of the following ways:
+   *  Automatically by setting this parameter to true.
+   *  Manually through the alphaBuffer parameter.
    */
   fillAlphaBuffer?: boolean;
   /**
-   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame.
+   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
    */
   alphaStitchMode?: AlphaStitchMode;
   /**
@@ -1064,15 +1066,15 @@ export class VideoFrame {
    */
   textureId?: number;
   /**
-   * @ignore
+   * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
    */
   matrix?: number[];
   /**
-   * @ignore
+   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
    */
   alphaBuffer?: Uint8Array;
   /**
-   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame.
+   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
    */
   alphaStitchMode?: AlphaStitchMode;
   /**
