@@ -254,6 +254,11 @@ export default class ScreenShare
       return;
     }
 
+    // ⚠️ before publish screen share in another channel, you should set screen share into blocklist
+    let blockList = [uid2];
+    this.engine?.setSubscribeAudioBlocklist(blockList, blockList.length);
+    this.engine?.setSubscribeVideoBlocklist(blockList, blockList.length);
+
     // publish screen share stream
     this.engine?.joinChannelEx(
       token2,
@@ -284,6 +289,9 @@ export default class ScreenShare
   unpublishScreenCapture = () => {
     const { channelId, uid2 } = this.state;
     this.engine?.leaveChannelEx({ channelId, localUid: uid2 });
+    // ⚠️ delete blocklist after unpublish screen share stream
+    this.engine?.setSubscribeAudioBlocklist([], 0);
+    this.engine?.setSubscribeVideoBlocklist([], 0);
   };
 
   /**
@@ -330,9 +338,6 @@ export default class ScreenShare
   onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
     const { uid2 } = this.state;
     if (connection.localUid === uid2 || remoteUid === uid2) {
-      // ⚠️ mute the streams from screen sharing
-      this.engine?.muteRemoteAudioStream(uid2, true);
-      this.engine?.muteRemoteVideoStream(uid2, true);
       return;
     }
     super.onUserJoined(connection, remoteUid, elapsed);
