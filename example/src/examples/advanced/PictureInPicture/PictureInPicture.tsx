@@ -6,15 +6,14 @@ import {
   ClientRoleType,
   ErrorCodeType,
   IRtcEngineEventHandler,
+  PipOptions,
   PipState,
-  RemoteVideoStats,
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
   RtcTextureView,
   UserOfflineReasonType,
   VideoCanvas,
-  VideoSourceType,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
@@ -97,6 +96,13 @@ export default class PictureInPicture
     this.engine.startPreview();
     this.setState({ startPreview: true });
 
+    if (Platform.OS === 'ios') {
+      // You should call this method when you want to use the pip feature in iOS background mode.
+      this.engine.setParameters(
+        JSON.stringify({ 'che.video.render.type': 22 })
+      );
+    }
+
     const appStateListener = (nextAppState: AppStateStatus) => {
       if (
         this.appState.match(/inactive|background/) &&
@@ -137,42 +143,49 @@ export default class PictureInPicture
   }
 
   /**
-   * Step 3-1: setupPip
+   * Step 3-1: startPip
    */
-  setupPip = (ref: any) => {
+  startPip = (ref: any, user?: VideoCanvas) => {
+    if (!this.engine?.isPipSupported()) {
+      return this.error('Picture-in-Picture is not supported on this device');
+    }
     const { pipContentWidth, pipContentHeight, autoEnterPip } = this.state;
-    let contentSource: any = 0;
+    let pipOptions: PipOptions = {};
     if (Platform.OS === 'ios') {
+      // iOS pip mode parameters
+      let contentSource: any = 0;
       let state: AgoraRtcRenderViewState = ref.current.state;
       contentSource = state.contentSource;
-    }
-    if (this.engine?.isPipSupported()) {
-      this.engine?.setupPip({
-        // this is only for iOS.
-        // In Android, pip mode resizes your whole app. So you need hide the content that you want to show in pip mode.
-        // You can listen onPipStateChanged to do this.
+      pipOptions = {
         // In iOS, pip mode only resizes the video view that you pass from contentSource.
         contentSource: contentSource,
+        contentWidth: pipContentWidth,
+        contentHeight: pipContentHeight,
+        autoEnterPip: autoEnterPip,
+        associatedView: contentSource,
+      };
+      if (user) {
+        // If you want to use the pip feature by special stream , you should set the uid and sourceType.
+        // if uid is 0, it means the local stream
+        // If the uid is not 0, it means the remote stream, and the sourceType should be set to VideoSourceType.VideoSourceRemote
+        pipOptions = {
+          ...pipOptions,
+          uid: user?.uid,
+          // sourceType: user.sourceType,
+        };
+      }
+      this.engine?.setupPip(pipOptions);
+    } else {
+      pipOptions = {
         // On Android, the width/height is used to cal the AspectRatio, but not actual width/height
         // https://developer.android.com/reference/android/app/PictureInPictureParams.Builder#setAspectRatio(android.util.Rational)
         contentWidth: pipContentWidth,
         contentHeight: pipContentHeight,
-        //this is only form iOS.
-        autoEnterPip: autoEnterPip,
-      });
-    } else {
-      this.error('Picture-in-Picture is not supported on this device');
+      };
+      // android pip mode parameters
+      this.engine?.setupPip(pipOptions);
     }
-  };
-
-  /**
-   * Step 3-2: startPip
-   */
-  startPip = (ref: any) => {
-    this.setupPip(ref);
-    if (this.engine?.isPipSupported()) {
-      this.engine?.startPip();
-    }
+    this.engine?.startPip();
   };
 
   /**
@@ -201,21 +214,6 @@ export default class PictureInPicture
 
   onError(err: ErrorCodeType, msg: string) {
     super.onError(err, msg);
-  }
-
-  /**
-   * Optional for iOS: sample will auto EnterPip mode with local view
-   * you can choose the autoEnterPip view by yourself such as remote view
-   */
-  onFirstLocalVideoFrame(
-    source: VideoSourceType,
-    width: number,
-    height: number,
-    elapsed: number
-  ): void {
-    if (source === VideoSourceType.VideoSourceCamera) {
-      this.setupPip(this.localViewRef);
-    }
   }
 
   onJoinChannelSuccess(connection: RtcConnection, elapsed: number) {
@@ -297,7 +295,7 @@ export default class PictureInPicture
             }
             onPress={() =>
               Platform.OS === 'ios' && pipState !== PipState.PipStateStarted
-                ? this.startPip(user.uid === 0 ? this.localViewRef : ref)
+                ? this.startPip(user.uid === 0 ? this.localViewRef : ref, user)
                 : this.stopPip()
             }
           />

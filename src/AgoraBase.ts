@@ -1672,6 +1672,18 @@ export class PipOptions {
    * @ignore
    */
   autoEnterPip?: boolean;
+  /**
+   * @ignore
+   */
+  uid?: number;
+  /**
+   * @ignore
+   */
+  associatedView?: any;
+  /**
+   * @ignore
+   */
+  sourceType?: VideoSourceType;
 }
 
 /**
