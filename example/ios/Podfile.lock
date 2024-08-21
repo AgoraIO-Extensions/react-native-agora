@@ -1,5 +1,5 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.4.0-build.1)
+  - AgoraIrisRTC_iOS (4.4.0-build.4)
   - AgoraRtcEngine_iOS (4.4.0):
     - AgoraRtcEngine_iOS/AIAEC (= 4.4.0)
     - AgoraRtcEngine_iOS/AIAECLL (= 4.4.0)
@@ -418,7 +418,7 @@ PODS:
   - React-logger (0.72.12):
     - glog
   - react-native-agora (4.3.2):
-    - AgoraIrisRTC_iOS (= 4.4.0-build.1)
+    - AgoraIrisRTC_iOS (= 4.4.0-build.4)
     - AgoraRtcEngine_iOS (= 4.4.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
