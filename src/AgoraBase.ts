@@ -1635,58 +1635,6 @@ export class WatermarkOptions {
 }
 
 /**
- * @ignore
- */
-export enum PipState {
-  /**
-   * @ignore
-   */
-  PipStateStarted = 0,
-  /**
-   * @ignore
-   */
-  PipStateStopped = 1,
-  /**
-   * @ignore
-   */
-  PipStateFailed = 2,
-}
-
-/**
- * @ignore
- */
-export class PipOptions {
-  /**
-   * @ignore
-   */
-  contentSource?: any;
-  /**
-   * @ignore
-   */
-  contentWidth?: number;
-  /**
-   * @ignore
-   */
-  contentHeight?: number;
-  /**
-   * @ignore
-   */
-  autoEnterPip?: boolean;
-  /**
-   * @ignore
-   */
-  uid?: number;
-  /**
-   * @ignore
-   */
-  associatedView?: any;
-  /**
-   * @ignore
-   */
-  sourceType?: VideoSourceType;
-}
-
-/**
  * Statistics of a call session.
  */
 export class RtcStats {
@@ -2078,7 +2026,7 @@ export enum VideoApplicationScenarioType {
    */
   ApplicationScenarioGeneral = 0,
   /**
-   * If set to ApplicationScenarioMeeting (1), the SDK automatically enables the following strategies:
+   * ApplicationScenarioMeeting (1) is suitable for meeting scenarios. The SDK automatically enables the following strategies:
    *  In meeting scenarios where low-quality video streams are required to have a high bitrate, the SDK automatically enables multiple technologies used to deal with network congestions, to enhance the performance of the low-quality streams and to ensure the smooth reception by subscribers.
    *  The SDK monitors the number of subscribers to the high-quality video stream in real time and dynamically adjusts its configuration based on the number of subscribers.
    *  If nobody subscribers to the high-quality stream, the SDK automatically reduces its bitrate and frame rate to save upstream bandwidth.
@@ -3580,7 +3528,7 @@ export enum NetworkType {
  */
 export enum VideoViewSetupMode {
   /**
-   * 0: (Default) Replaces a view.
+   * 0: (Default) Clear all added views and replace with a new view.
    */
   VideoViewSetupReplace = 0,
   /**
@@ -3647,6 +3595,50 @@ export class VideoCanvas {
    * The observation position of the video frame in the video link. See VideoModulePosition.
    */
   position?: VideoModulePosition;
+}
+
+/**
+ * @ignore
+ */
+export enum PipState {
+  /**
+   * @ignore
+   */
+  PipStateStarted = 0,
+  /**
+   * @ignore
+   */
+  PipStateStopped = 1,
+  /**
+   * @ignore
+   */
+  PipStateFailed = 2,
+}
+
+/**
+ * @ignore
+ */
+export class PipOptions {
+  /**
+   * @ignore
+   */
+  contentSource?: any;
+  /**
+   * @ignore
+   */
+  contentWidth?: number;
+  /**
+   * @ignore
+   */
+  contentHeight?: number;
+  /**
+   * @ignore
+   */
+  autoEnterPip?: boolean;
+  /**
+   * @ignore
+   */
+  canvas?: VideoCanvas;
 }
 
 /**
@@ -4294,7 +4286,7 @@ export class AudioRecordingConfiguration {
    */
   fileRecordingType?: AudioFileRecordingType;
   /**
-   * Recording quality. See AudioRecordingQualityType. Note: This parameter applies to AAC files only.
+   * Recording quality. See AudioRecordingQualityType. This parameter applies to AAC files only.
    */
   quality?: AudioRecordingQualityType;
   /**

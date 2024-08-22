@@ -1,5 +1,5 @@
 import React, { ReactElement, createRef } from 'react';
-import { AppState, AppStateStatus, Platform, StyleSheet } from 'react-native';
+import { AppState, AppStateStatus, Platform } from 'react-native';
 import {
   AgoraRtcRenderViewState,
   ChannelProfileType,
@@ -8,12 +8,14 @@ import {
   IRtcEngineEventHandler,
   PipOptions,
   PipState,
+  RenderModeType,
   RtcConnection,
   RtcStats,
   RtcSurfaceView,
   RtcTextureView,
   UserOfflineReasonType,
   VideoCanvas,
+  VideoSourceType,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
@@ -23,12 +25,16 @@ import {
 } from '../../../components/BaseComponent';
 import {
   AgoraButton,
+  AgoraCard,
   AgoraDivider,
+  AgoraDropdown,
+  AgoraList,
   AgoraStyle,
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
+import { arrayToItems } from '../../../utils';
 import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
@@ -37,13 +43,14 @@ interface State extends BaseVideoComponentState {
   autoEnterPip: boolean;
   pipState: number;
   renderByTextureView: boolean;
+  userRefList: { ref: React.RefObject<any>; canvas: VideoCanvas }[];
+  selectUser: number;
 }
 
 export default class PictureInPicture
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler
 {
-  localViewRef = createRef<any>();
   appState: AppStateStatus = AppState.currentState;
 
   protected createState(): State {
@@ -55,6 +62,13 @@ export default class PictureInPicture
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
+      userRefList: [
+        {
+          ref: createRef<any>(),
+          canvas: { uid: 0, renderMode: RenderModeType.RenderModeHidden },
+        },
+      ],
+      selectUser: 0,
       startPreview: false,
       pipContentWidth: 640,
       pipContentHeight: 480,
@@ -109,6 +123,12 @@ export default class PictureInPicture
         nextAppState === 'active'
       ) {
         this.stopPip();
+        this.setState({ pipState: PipState.PipStateStopped });
+        if (Platform.OS === 'android') {
+          if (this.updatePipState) {
+            this.updatePipState(PipState.PipStateStopped);
+          }
+        }
       }
 
       this.appState = nextAppState;
@@ -143,48 +163,56 @@ export default class PictureInPicture
   }
 
   /**
-   * Step 3-1: startPip
+   * Step 3-1: setupPip
    */
-  startPip = (ref: any, user?: VideoCanvas) => {
+  setupPip = (uid: number) => {
     if (!this.engine?.isPipSupported()) {
       return this.error('Picture-in-Picture is not supported on this device');
     }
-    const { pipContentWidth, pipContentHeight, autoEnterPip } = this.state;
+    const { pipContentWidth, pipContentHeight, autoEnterPip, userRefList } =
+      this.state;
     let pipOptions: PipOptions = {};
     if (Platform.OS === 'ios') {
       // iOS pip mode parameters
-      let contentSource: any = 0;
-      let state: AgoraRtcRenderViewState = ref.current.state;
-      contentSource = state.contentSource;
-      pipOptions = {
-        // In iOS, pip mode only resizes the video view that you pass from contentSource.
-        contentSource: contentSource,
-        contentWidth: pipContentWidth,
-        contentHeight: pipContentHeight,
-        autoEnterPip: autoEnterPip,
-        associatedView: contentSource,
-      };
+      let user = userRefList.find((item) => item.canvas.uid === uid)?.canvas;
       if (user) {
-        // If you want to use the pip feature by special stream , you should set the uid and sourceType.
-        // if uid is 0, it means the local stream
-        // If the uid is not 0, it means the remote stream, and the sourceType should be set to VideoSourceType.VideoSourceRemote
-        pipOptions = {
-          ...pipOptions,
-          uid: user?.uid,
-          // sourceType: user.sourceType,
-        };
+        const ref = userRefList.find((item) => item.canvas.uid === uid)?.ref;
+        if (ref) {
+          let state: AgoraRtcRenderViewState = ref.current.state;
+          pipOptions = {
+            contentWidth: pipContentWidth,
+            contentHeight: pipContentHeight,
+            autoEnterPip: autoEnterPip,
+          };
+          // you should use the pip feature by VideoCanvas in iOS.
+          if (user) {
+            pipOptions = {
+              ...pipOptions,
+              // On iOS, the contentSource is same as the VideoCanvas.view
+              contentSource: state.contentSource,
+              canvas: { ...user, view: state.contentSource },
+            };
+          }
+          console.log('pipOptions', pipOptions);
+          this.engine?.setupPip(pipOptions);
+        }
       }
-      this.engine?.setupPip(pipOptions);
     } else {
+      // android pip mode parameters
       pipOptions = {
         // On Android, the width/height is used to cal the AspectRatio, but not actual width/height
         // https://developer.android.com/reference/android/app/PictureInPictureParams.Builder#setAspectRatio(android.util.Rational)
         contentWidth: pipContentWidth,
         contentHeight: pipContentHeight,
       };
-      // android pip mode parameters
       this.engine?.setupPip(pipOptions);
     }
+  };
+
+  /**
+   * Step 3-2: startPip
+   */
+  startPip = () => {
     this.engine?.startPip();
   };
 
@@ -226,6 +254,14 @@ export default class PictureInPicture
 
   onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
     super.onUserJoined(connection, remoteUid, elapsed);
+    const { userRefList } = this.state;
+    if (userRefList.findIndex((item) => item.canvas.uid === remoteUid) === -1) {
+      userRefList.push({
+        ref: createRef<any>(),
+        canvas: { uid: remoteUid, renderMode: RenderModeType.RenderModeHidden },
+      });
+      this.setState({ userRefList });
+    }
   }
 
   onUserOffline(
@@ -234,6 +270,14 @@ export default class PictureInPicture
     reason: UserOfflineReasonType
   ) {
     super.onUserOffline(connection, remoteUid, reason);
+    const { userRefList } = this.state;
+    const index = userRefList.findIndex(
+      (item) => item.canvas.uid === remoteUid
+    );
+    if (index !== -1) {
+      userRefList.splice(index, 1);
+      this.setState({ userRefList });
+    }
   }
 
   onPipStateChanged(state: PipState): void {
@@ -272,37 +316,85 @@ export default class PictureInPicture
   }
 
   protected renderUsers(): ReactElement | undefined {
-    return super.renderUsers();
+    const {
+      enableVideo,
+      startPreview,
+      joinChannelSuccess,
+      remoteUsers,
+      pipState,
+    } = this.state;
+    return enableVideo ? (
+      <>
+        {!!startPreview || joinChannelSuccess
+          ? this.renderUser({
+              uid: 0,
+              sourceType: VideoSourceType.VideoSourceCamera,
+            })
+          : undefined}
+        {!!startPreview || joinChannelSuccess ? (
+          <AgoraList
+            style={
+              Platform.OS === 'android' && pipState === PipState.PipStateStarted
+                ? AgoraStyle.videoPipContainer
+                : AgoraStyle.videoContainer
+            }
+            numColumns={undefined}
+            horizontal={true}
+            data={remoteUsers}
+            renderItem={({ item }) =>
+              this.renderUser({
+                uid: item,
+                sourceType: VideoSourceType.VideoSourceRemote,
+              })!
+            }
+          />
+        ) : undefined}
+      </>
+    ) : undefined;
+  }
+
+  protected renderUser(user: VideoCanvas): ReactElement | undefined {
+    const video = this.renderVideo(user);
+    const { pipState } = this.state;
+    return user.uid === 0 ||
+      (Platform.OS === 'android' && pipState === PipState.PipStateStarted) ? (
+      video
+    ) : (
+      <AgoraCard
+        key={`${user.uid} - ${user.sourceType}`}
+        title={`${user.uid} - ${user.sourceType}`}
+      >
+        {video}
+      </AgoraCard>
+    );
   }
 
   protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    const { renderByTextureView, pipState } = this.state;
-    let ref = createRef<any>();
+    const { renderByTextureView, userRefList, pipState } = this.state;
     return renderByTextureView ? (
       <RtcTextureView
-        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+        ref={userRefList.find((item) => item.canvas.uid === user.uid)?.ref}
+        style={
+          user.uid === 0
+            ? AgoraStyle.videoLarge
+            : Platform.OS === 'android' && pipState === PipState.PipStateStarted
+            ? AgoraStyle.videoPip
+            : AgoraStyle.videoSmall
+        }
         canvas={{ ...user }}
       />
     ) : (
       <>
-        {Platform.OS === 'ios' && (
-          <AgoraButton
-            containerStyle={styles.button}
-            title={
-              Platform.OS === 'ios' && pipState !== PipState.PipStateStarted
-                ? `startPip`
-                : `stopPip`
-            }
-            onPress={() =>
-              Platform.OS === 'ios' && pipState !== PipState.PipStateStarted
-                ? this.startPip(user.uid === 0 ? this.localViewRef : ref, user)
-                : this.stopPip()
-            }
-          />
-        )}
         <RtcSurfaceView
-          ref={user.uid === 0 ? this.localViewRef : ref}
-          style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
+          ref={userRefList.find((item) => item.canvas.uid === user.uid)?.ref}
+          style={
+            user.uid === 0
+              ? AgoraStyle.videoLarge
+              : Platform.OS === 'android' &&
+                pipState === PipState.PipStateStarted
+              ? AgoraStyle.videoPip
+              : AgoraStyle.videoSmall
+          }
           zOrderMediaOverlay={user.uid !== 0}
           canvas={{ ...user }}
         />
@@ -317,6 +409,8 @@ export default class PictureInPicture
       renderByTextureView,
       autoEnterPip,
       pipState,
+      selectUser,
+      remoteUsers,
     } = this.state;
     return Platform.OS === 'ios' ||
       (Platform.OS === 'android' && pipState !== PipState.PipStateStarted) ? (
@@ -362,6 +456,15 @@ export default class PictureInPicture
         />
         {Platform.OS === 'ios' && (
           <>
+            <AgoraDropdown
+              title={'Select User to Setup Pip'}
+              items={arrayToItems(remoteUsers.concat([0]))}
+              value={selectUser}
+              onValueChange={(value) => {
+                this.setState({ selectUser: value });
+              }}
+            />
+            <AgoraDivider />
             <AgoraSwitch
               disabled={pipState === PipState.PipStateStarted}
               title={`autoEnterPip`}
@@ -370,7 +473,6 @@ export default class PictureInPicture
                 this.setState({ autoEnterPip: value });
               }}
             />
-            <AgoraDivider />
           </>
         )}
       </>
@@ -378,24 +480,31 @@ export default class PictureInPicture
   }
 
   protected renderAction(): ReactElement | undefined {
-    const { pipState } = this.state;
-    return Platform.OS === 'android' &&
-      pipState !== PipState.PipStateStarted ? (
+    const { pipState, selectUser } = this.state;
+    return (Platform.OS === 'android' &&
+      pipState !== PipState.PipStateStarted) ||
+      Platform.OS === 'ios' ? (
       <>
         <AgoraButton
           disabled={pipState === PipState.PipStateStarted}
-          title={`startPip`}
-          onPress={this.startPip}
+          title={`setup pip`}
+          onPress={() => {
+            this.setupPip(selectUser);
+          }}
+        />
+        <AgoraButton
+          title={`${
+            pipState === PipState.PipStateStarted ? 'stop' : 'start'
+          } pip`}
+          onPress={() => {
+            if (Platform.OS === 'android') {
+              this.startPip();
+            } else {
+              this.startPip();
+            }
+          }}
         />
       </>
     ) : undefined;
   }
 }
-const styles = StyleSheet.create({
-  button: {
-    width: 100,
-    position: 'absolute',
-    zIndex: 9,
-    top: 10,
-  },
-});

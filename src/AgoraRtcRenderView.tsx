@@ -70,7 +70,12 @@ export class RtcTextureView extends IAgoraRtcRenderView<RtcRendererViewProps> {
   }
 }
 
+/**
+ * @ignore
+ */
 export interface AgoraRtcRenderViewState {
-  //iOS only
+  /**
+   * @ignore
+   */
   contentSource?: number | null;
 }
