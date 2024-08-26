@@ -175,9 +175,6 @@ export abstract class BaseComponent<
         style={AgoraStyle.fullSize}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <AgoraView style={AgoraStyle.fullWidth}>
-          {this.renderChannel()}
-        </AgoraView>
         {users ? (
           <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
         ) : undefined}

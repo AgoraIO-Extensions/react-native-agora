@@ -56,15 +56,6 @@ export default function App() {
             })
           )}
         </RootStack.Navigator>
-        <TouchableOpacity
-          onPress={() => {
-            setDebuggable(!isDebuggable());
-          }}
-        >
-          <Text style={styles.version}>
-            Powered by Agora RTC SDK {version.version} build {version.build}
-          </Text>
-        </TouchableOpacity>
       </SafeAreaView>
     </NavigationContainer>
   );

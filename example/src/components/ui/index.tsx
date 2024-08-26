@@ -250,7 +250,9 @@ export const AgoraStyle = StyleSheet.create({
     left: 0,
   },
   videoLarge: {
-    flex: 1,
+    // flex: 1,
+    width: '100%',
+    height: '100%',
   },
   videoSmall: {
     width: 150,

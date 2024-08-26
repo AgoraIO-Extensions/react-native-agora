@@ -204,76 +204,13 @@ export default class JoinChannelVideo
   }
 
   protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    const { renderByTextureView, setupMode } = this.state;
-    return renderByTextureView ? (
-      <RtcTextureView
-        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        canvas={{ ...user, setupMode }}
-      />
-    ) : (
+    const { setupMode } = this.state;
+    return (
       <RtcSurfaceView
         style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
         zOrderMediaOverlay={user.uid !== 0}
         canvas={{ ...user, setupMode }}
       />
-    );
-  }
-
-  protected renderConfiguration(): ReactElement | undefined {
-    const { startPreview, joinChannelSuccess, renderByTextureView, setupMode } =
-      this.state;
-    return (
-      <>
-        <AgoraSwitch
-          disabled={
-            (!startPreview && !joinChannelSuccess) || Platform.OS !== 'android'
-          }
-          title={`renderByTextureView`}
-          value={renderByTextureView}
-          onValueChange={(value) => {
-            this.setState({ renderByTextureView: value });
-          }}
-        />
-        <AgoraDivider />
-        <AgoraDropdown
-          title={'setupMode'}
-          items={enumToItems(VideoViewSetupMode)}
-          value={setupMode}
-          onValueChange={(value) => {
-            this.setState({ setupMode: value });
-          }}
-        />
-        {setupMode === VideoViewSetupMode.VideoViewSetupAdd ? (
-          <>
-            <AgoraDivider />
-            {renderByTextureView ? (
-              <RtcTextureView
-                style={AgoraStyle.videoSmall}
-                canvas={{ uid: 0, setupMode }}
-              />
-            ) : (
-              <RtcSurfaceView
-                style={AgoraStyle.videoSmall}
-                canvas={{ uid: 0, setupMode }}
-              />
-            )}
-          </>
-        ) : undefined}
-        <AgoraDivider />
-      </>
-    );
-  }
-
-  protected renderAction(): ReactElement | undefined {
-    const { startPreview, joinChannelSuccess } = this.state;
-    return (
-      <>
-        <AgoraButton
-          disabled={!startPreview && !joinChannelSuccess}
-          title={`switchCamera`}
-          onPress={this.switchCamera}
-        />
-      </>
     );
   }
 }
