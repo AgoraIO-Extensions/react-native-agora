@@ -1,45 +1,39 @@
 import React, { ReactElement } from 'react';
-import { NativeModules } from 'react-native';
-
 import {
   ChannelProfileType,
   ClientRoleType,
-  ErrorCodeType,
   IRtcEngineEventHandler,
-  RtcConnection,
-  RtcStats,
-  RtcSurfaceView,
-  UserOfflineReasonType,
-  VideoCanvas,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
 import {
+  BaseAudioComponentState,
   BaseComponent,
-  BaseVideoComponentState,
 } from '../../../components/BaseComponent';
-import { AgoraStyle } from '../../../components/ui';
+import { AgoraDivider, AgoraSwitch } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { askMediaAccess } from '../../../utils/permissions';
 
-const { VideoRawDataNativeModule } = NativeModules;
+interface State extends BaseAudioComponentState {
+  defaultToSpeaker: boolean;
+  speakerOn: boolean;
+}
 
-interface State extends BaseVideoComponentState {}
-
-export default class ProcessVideoRawData
+export default class AudioCallRoute
   extends BaseComponent<{}, State>
   implements IRtcEngineEventHandler
 {
   protected createState(): State {
     return {
       appId: Config.appId,
-      enableVideo: true,
+      enableVideo: false,
       channelId: Config.channelId,
       token: Config.token,
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      startPreview: false,
+      defaultToSpeaker: true,
+      speakerOn: false,
     };
   }
 
@@ -59,22 +53,13 @@ export default class ProcessVideoRawData
       // Should use ChannelProfileLiveBroadcasting on most of cases
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
-    VideoRawDataNativeModule.initialize(appId);
     this.engine.registerEventHandler(this);
 
-    // Need granted the microphone and camera permission
-    await askMediaAccess([
-      'android.permission.RECORD_AUDIO',
-      'android.permission.CAMERA',
-    ]);
+    // Need granted the microphone permission
+    await askMediaAccess(['android.permission.RECORD_AUDIO']);
 
-    // Need to enable video on this case
-    // If you only call `enableAudio`, only relay the audio stream to the target channel
-    this.engine.enableVideo();
-
-    // Start preview before joinChannel
-    this.engine.startPreview();
-    this.setState({ startPreview: true });
+    // Only need to enable audio on this case
+    this.engine.enableAudio();
   }
 
   /**
@@ -104,6 +89,32 @@ export default class ProcessVideoRawData
   }
 
   /**
+   * Step 3-1: setDefaultAudioRouteToSpeakerphone
+   */
+  protected setDefaultAudioRouteToSpeakerphone() {
+    const { defaultToSpeaker } = this.state;
+    this.engine?.setDefaultAudioRouteToSpeakerphone(!defaultToSpeaker);
+    this.setState({
+      defaultToSpeaker: !defaultToSpeaker,
+    });
+  }
+
+  /**
+   * Step 3-2: setEnableSpeakerphone
+   */
+  protected setEnableSpeakerphone() {
+    const { speakerOn } = this.state;
+    this.engine?.setEnableSpeakerphone(!speakerOn);
+    this.setState({
+      speakerOn: !speakerOn,
+    });
+  }
+
+  onAudioRoutingChanged(routing: number): void {
+    this.info('onAudioRoutingChanged', 'routing', routing);
+  }
+
+  /**
    * Step 4: leaveChannel
    */
   protected leaveChannel() {
@@ -115,47 +126,37 @@ export default class ProcessVideoRawData
    */
   protected releaseRtcEngine() {
     this.engine?.unregisterEventHandler(this);
-    VideoRawDataNativeModule.releaseModule();
     this.engine?.release();
   }
 
-  protected renderUsers(): ReactElement | undefined {
-    return super.renderUsers();
-  }
-
-  onError(err: ErrorCodeType, msg: string) {
-    super.onError(err, msg);
-  }
-
-  onJoinChannelSuccess(connection: RtcConnection, elapsed: number) {
-    super.onJoinChannelSuccess(connection, elapsed);
-  }
-
-  onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
-    super.onLeaveChannel(connection, stats);
-  }
-
-  onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
-    super.onUserJoined(connection, remoteUid, elapsed);
-  }
-
-  onUserOffline(
-    connection: RtcConnection,
-    remoteUid: number,
-    reason: UserOfflineReasonType
-  ) {
-    super.onUserOffline(connection, remoteUid, reason);
-  }
-
-  protected renderVideo(user: VideoCanvas): ReactElement | undefined {
+  protected renderConfiguration(): ReactElement | undefined {
+    const { defaultToSpeaker, speakerOn, joinChannelSuccess } = this.state;
     return (
-      <RtcSurfaceView
-        style={user.uid === 0 ? AgoraStyle.videoLarge : AgoraStyle.videoSmall}
-        zOrderMediaOverlay={user.uid !== 0}
-        canvas={{
-          ...user,
-        }}
-      />
+      <>
+        <AgoraSwitch
+          title={'setDefaultAudioRouteToSpeakerphone'}
+          disabled={joinChannelSuccess}
+          value={defaultToSpeaker}
+          onValueChange={() => {
+            this.setDefaultAudioRouteToSpeakerphone();
+          }}
+        />
+        <AgoraDivider />
+        <AgoraSwitch
+          title={'setEnableSpeakerphone'}
+          value={speakerOn}
+          disabled={!joinChannelSuccess}
+          onValueChange={() => {
+            this.setEnableSpeakerphone();
+          }}
+        />
+        <AgoraDivider />
+      </>
     );
+  }
+
+  protected renderAction(): ReactElement | undefined {
+    // const { startAudioMixing, pauseAudioMixing } = this.state;
+    return <></>;
   }
 }

@@ -2,6 +2,28 @@ import './extension/AgoraMediaBaseExtension';
 import { EncodedVideoFrameInfo } from './AgoraBase';
 
 /**
+ * The context information of the extension.
+ */
+export class ExtensionContext {
+  /**
+   * Whether the uid in ExtensionContext is valid: true : The uid is valid. false : The uid is invalid.
+   */
+  isValid?: boolean;
+  /**
+   * The user ID. 0 represents a local user, while greater than 0 represents a remote user.
+   */
+  uid?: number;
+  /**
+   * The name of the extension provider.
+   */
+  providerName?: string;
+  /**
+   * The name of the extension.
+   */
+  extensionName?: string;
+}
+
+/**
  * The type of the video source.
  */
 export enum VideoSourceType {
@@ -286,7 +308,7 @@ export enum ContentInspectType {
 }
 
 /**
- * A ContentInspectModule structure used to configure the frequency of video screenshot and upload.
+ * ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
  */
 export class ContentInspectModule {
   /**
@@ -300,7 +322,7 @@ export class ContentInspectModule {
 }
 
 /**
- * Configuration of video screenshot and upload.
+ * Screenshot and upload configuration.
  */
 export class ContentInspectConfig {
   /**
@@ -377,6 +399,10 @@ export class AudioPcmFrame {
    * The audio frame.
    */
   data_?: number[];
+  /**
+   * @ignore
+   */
+  is_stereo_?: boolean;
 }
 
 /**
@@ -450,6 +476,10 @@ export enum VideoPixelFormat {
    */
   VideoCvpixelBgra = 14,
   /**
+   * @ignore
+   */
+  VideoCvpixelP010 = 15,
+  /**
    * 16: The format is I422.
    */
   VideoPixelI422 = 16,
@@ -517,6 +547,320 @@ export abstract class IVideoFrameMetaInfo {
    * @ignore
    */
   abstract getMetaInfoStr(key: MetaInfoKey): string;
+}
+
+/**
+ * @ignore
+ */
+export enum PrimaryID {
+  /**
+   * @ignore
+   */
+  PrimaryidBt709 = 1,
+  /**
+   * @ignore
+   */
+  PrimaryidUnspecified = 2,
+  /**
+   * @ignore
+   */
+  PrimaryidBt470m = 4,
+  /**
+   * @ignore
+   */
+  PrimaryidBt470bg = 5,
+  /**
+   * @ignore
+   */
+  PrimaryidSmpte170m = 6,
+  /**
+   * @ignore
+   */
+  PrimaryidSmpte240m = 7,
+  /**
+   * @ignore
+   */
+  PrimaryidFilm = 8,
+  /**
+   * @ignore
+   */
+  PrimaryidBt2020 = 9,
+  /**
+   * @ignore
+   */
+  PrimaryidSmptest428 = 10,
+  /**
+   * @ignore
+   */
+  PrimaryidSmptest431 = 11,
+  /**
+   * @ignore
+   */
+  PrimaryidSmptest432 = 12,
+  /**
+   * @ignore
+   */
+  PrimaryidJedecp22 = 22,
+}
+
+/**
+ * @ignore
+ */
+export enum RangeID {
+  /**
+   * @ignore
+   */
+  RangeidInvalid = 0,
+  /**
+   * @ignore
+   */
+  RangeidLimited = 1,
+  /**
+   * @ignore
+   */
+  RangeidFull = 2,
+  /**
+   * @ignore
+   */
+  RangeidDerived = 3,
+}
+
+/**
+ * @ignore
+ */
+export enum MatrixID {
+  /**
+   * @ignore
+   */
+  MatrixidRgb = 0,
+  /**
+   * @ignore
+   */
+  MatrixidBt709 = 1,
+  /**
+   * @ignore
+   */
+  MatrixidUnspecified = 2,
+  /**
+   * @ignore
+   */
+  MatrixidFcc = 4,
+  /**
+   * @ignore
+   */
+  MatrixidBt470bg = 5,
+  /**
+   * @ignore
+   */
+  MatrixidSmpte170m = 6,
+  /**
+   * @ignore
+   */
+  MatrixidSmpte240m = 7,
+  /**
+   * @ignore
+   */
+  MatrixidYcocg = 8,
+  /**
+   * @ignore
+   */
+  MatrixidBt2020Ncl = 9,
+  /**
+   * @ignore
+   */
+  MatrixidBt2020Cl = 10,
+  /**
+   * @ignore
+   */
+  MatrixidSmpte2085 = 11,
+  /**
+   * @ignore
+   */
+  MatrixidCdncls = 12,
+  /**
+   * @ignore
+   */
+  MatrixidCdcls = 13,
+  /**
+   * @ignore
+   */
+  MatrixidBt2100Ictcp = 14,
+}
+
+/**
+ * @ignore
+ */
+export enum TransferID {
+  /**
+   * @ignore
+   */
+  TransferidBt709 = 1,
+  /**
+   * @ignore
+   */
+  TransferidUnspecified = 2,
+  /**
+   * @ignore
+   */
+  TransferidGamma22 = 4,
+  /**
+   * @ignore
+   */
+  TransferidGamma28 = 5,
+  /**
+   * @ignore
+   */
+  TransferidSmpte170m = 6,
+  /**
+   * @ignore
+   */
+  TransferidSmpte240m = 7,
+  /**
+   * @ignore
+   */
+  TransferidLinear = 8,
+  /**
+   * @ignore
+   */
+  TransferidLog = 9,
+  /**
+   * @ignore
+   */
+  TransferidLogSqrt = 10,
+  /**
+   * @ignore
+   */
+  TransferidIec6196624 = 11,
+  /**
+   * @ignore
+   */
+  TransferidBt1361Ecg = 12,
+  /**
+   * @ignore
+   */
+  TransferidIec6196621 = 13,
+  /**
+   * @ignore
+   */
+  TransferidBt202010 = 14,
+  /**
+   * @ignore
+   */
+  TransferidBt202012 = 15,
+  /**
+   * @ignore
+   */
+  TransferidSmptest2084 = 16,
+  /**
+   * @ignore
+   */
+  TransferidSmptest428 = 17,
+  /**
+   * @ignore
+   */
+  TransferidAribStdB67 = 18,
+}
+
+/**
+ * @ignore
+ */
+export class ColorSpace {
+  /**
+   * @ignore
+   */
+  primaries?: PrimaryID;
+  /**
+   * @ignore
+   */
+  transfer?: TransferID;
+  /**
+   * @ignore
+   */
+  matrix?: MatrixID;
+  /**
+   * @ignore
+   */
+  range?: RangeID;
+}
+
+/**
+ * @ignore
+ */
+export class Hdr10MetadataInfo {
+  /**
+   * @ignore
+   */
+  redPrimaryX?: number;
+  /**
+   * @ignore
+   */
+  redPrimaryY?: number;
+  /**
+   * @ignore
+   */
+  greenPrimaryX?: number;
+  /**
+   * @ignore
+   */
+  greenPrimaryY?: number;
+  /**
+   * @ignore
+   */
+  bluePrimaryX?: number;
+  /**
+   * @ignore
+   */
+  bluePrimaryY?: number;
+  /**
+   * @ignore
+   */
+  whitePointX?: number;
+  /**
+   * @ignore
+   */
+  whitePointY?: number;
+  /**
+   * @ignore
+   */
+  maxMasteringLuminance?: number;
+  /**
+   * @ignore
+   */
+  minMasteringLuminance?: number;
+  /**
+   * @ignore
+   */
+  maxContentLightLevel?: number;
+  /**
+   * @ignore
+   */
+  maxFrameAverageLightLevel?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum AlphaStitchMode {
+  /**
+   * @ignore
+   */
+  NoAlphaStitch = 0,
+  /**
+   * @ignore
+   */
+  AlphaStitchUp = 1,
+  /**
+   * @ignore
+   */
+  AlphaStitchBelow = 2,
+  /**
+   * @ignore
+   */
+  AlphaStitchLeft = 3,
+  /**
+   * @ignore
+   */
+  AlphaStitchRight = 4,
 }
 
 /**
@@ -608,29 +952,51 @@ export class ExternalVideoFrame {
    */
   textureId?: number;
   /**
+   * @ignore
+   */
+  fenceObject?: number;
+  /**
    * This parameter only applies to video data in Texture format. Incoming 4 × 4 transformational matrix. The typical value is a unit matrix.
    */
   matrix?: number[];
   /**
    * This parameter only applies to video data in Texture format. The MetaData buffer. The default value is NULL.
    */
-  metadata_buffer?: Uint8Array;
+  metadataBuffer?: Uint8Array;
   /**
    * This parameter only applies to video data in Texture format. The MetaData size. The default value is 0.
    */
-  metadata_size?: number;
+  metadataSize?: number;
   /**
-   * @ignore
+   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
    */
   alphaBuffer?: Uint8Array;
   /**
-   * @ignore
+   * This parameter only applies to video data in BGRA or RGBA format. Whether to extract the alpha channel data from the video frame and automatically fill it into alphaBuffer : true ：Extract and fill the alpha channel data. false : (Default) Do not extract and fill the Alpha channel data. For video data in BGRA or RGBA format, you can set the Alpha channel data in either of the following ways:
+   *  Automatically by setting this parameter to true.
+   *  Manually through the alphaBuffer parameter.
    */
   fillAlphaBuffer?: boolean;
   /**
+   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
+   */
+  alphaStitchMode?: AlphaStitchMode;
+  /**
    * @ignore
    */
-  texture_slice_index?: number;
+  d3d11Texture2d?: any;
+  /**
+   * @ignore
+   */
+  textureSliceIndex?: number;
+  /**
+   * @ignore
+   */
+  hdr10MetadataInfo?: Hdr10MetadataInfo;
+  /**
+   * @ignore
+   */
+  colorSpace?: ColorSpace;
 }
 
 /**
@@ -704,17 +1070,29 @@ export class VideoFrame {
    */
   matrix?: number[];
   /**
-   * @ignore
+   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
    */
   alphaBuffer?: Uint8Array;
+  /**
+   * When the video frame contains alpha channel data, it represents the relative position of alphaBuffer and the video frame. See AlphaStitchMode.
+   */
+  alphaStitchMode?: AlphaStitchMode;
   /**
    * @ignore
    */
   pixelBuffer?: Uint8Array;
   /**
-   * The meta information in the video frame. To use this parameter, please.
+   * The meta information in the video frame. To use this parameter, please contact.
    */
   metaInfo?: IVideoFrameMetaInfo;
+  /**
+   * @ignore
+   */
+  hdr10MetadataInfo?: Hdr10MetadataInfo;
+  /**
+   * @ignore
+   */
+  colorSpace?: ColorSpace;
 }
 
 /**
@@ -999,7 +1377,7 @@ export interface IAudioSpectrumObserver {
   /**
    * Gets the statistics of a local audio spectrum.
    *
-   * After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
+   * After successfully calling registerAudioSpectrumObserver to implement the onLocalAudioSpectrum callback in IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK triggers this callback as the time interval you set to report the received remote audio data spectrum before encoding.
    *
    * @param data The audio spectrum data of the local user. See AudioSpectrumData.
    */
@@ -1078,6 +1456,7 @@ export interface IVideoFrameObserver {
    * Occurs each time the SDK receives a video frame before encoding.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data before encoding and then process the data according to your particular scenarios. After processing, you can send the processed video data back to the SDK in this callback.
+   *  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
    *  It's recommended that you implement this callback through the C++ API.
    *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
    *  The video data that this callback gets has been preprocessed, with its content cropped and rotated, and the image enhanced.
@@ -1101,6 +1480,7 @@ export interface IVideoFrameObserver {
    * Occurs each time the SDK receives a video frame sent by the remote user.
    *
    * After you successfully register the video frame observer, the SDK triggers this callback each time it receives a video frame. In this callback, you can get the video data sent from the remote end before rendering, and then process it according to the particular scenarios.
+   *  It is recommended that you ensure the modified parameters in videoFrame are consistent with the actual situation of the video frames in the video frame buffer. Otherwise, it may cause unexpected rotation, distortion, and other issues in the local preview and remote video display.
    *  If the video data type you get is RGBA, the SDK does not support processing the data of the alpha channel.
    *  It's recommended that you implement this callback through the C++ API.
    *  Due to framework limitations, this callback does not support sending processed video data back to the SDK.
@@ -1252,26 +1632,8 @@ export interface IFaceInfoObserver {
    *  yaw: Head yaw angle. A positve value means turning left, while a negative value means turning right.
    *  roll: Head roll angle. A positve value means tilting to the right, while a negative value means tilting to the left.
    *  timestamp: String. The timestamp of the output result, in milliseconds. Here is an example of JSON:
-   * {
-   *  "faces":[{
-   *  "blendshapes":{
-   *  "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0,
-   *  "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0,
-   *  "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0,
-   *  "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0,
-   *  "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0,
-   *  "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0,
-   *  "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0,
-   *  "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0,
-   *  "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0,
-   *  "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0,
-   *  "tongueOut":0.0
-   *  },
-   *  "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5},
-   *
-   *  }],
-   *  "timestamp":"654879876546"
-   * }
+   * { "faces":[{ "blendshapes":{ "eyeBlinkLeft":0.9, "eyeLookDownLeft":0.0, "eyeLookInLeft":0.0, "eyeLookOutLeft":0.0, "eyeLookUpLeft":0.0, "eyeSquintLeft":0.0, "eyeWideLeft":0.0, "eyeBlinkRight":0.0, "eyeLookDownRight":0.0, "eyeLookInRight":0.0, "eyeLookOutRight":0.0, "eyeLookUpRight":0.0, "eyeSquintRight":0.0, "eyeWideRight":0.0, "jawForward":0.0, "jawLeft":0.0, "jawRight":0.0, "jawOpen":0.0, "mouthClose":0.0, "mouthFunnel":0.0, "mouthPucker":0.0, "mouthLeft":0.0, "mouthRight":0.0, "mouthSmileLeft":0.0, "mouthSmileRight":0.0, "mouthFrownLeft":0.0, "mouthFrownRight":0.0, "mouthDimpleLeft":0.0, "mouthDimpleRight":0.0, "mouthStretchLeft":0.0, "mouthStretchRight":0.0, "mouthRollLower":0.0, "mouthRollUpper":0.0, "mouthShrugLower":0.0, "mouthShrugUpper":0.0, "mouthPressLeft":0.0, "mouthPressRight":0.0, "mouthLowerDownLeft":0.0, "mouthLowerDownRight":0.0, "mouthUpperUpLeft":0.0, "mouthUpperUpRight":0.0, "browDownLeft":0.0, "browDownRight":0.0, "browInnerUp":0.0, "browOuterUpLeft":0.0, "browOuterUpRight":0.0, "cheekPuff":0.0, "cheekSquintLeft":0.0, "cheekSquintRight":0.0, "noseSneerLeft":0.0, "noseSneerRight":0.0, "tongueOut":0.0 }, "rotation":{"pitch":30.0, "yaw":25.5, "roll":-15.5},
+   *  }], "timestamp":"654879876546" }
    *
    * @returns
    * true : Facial information JSON parsing successful. false : Facial information JSON parsing failed.

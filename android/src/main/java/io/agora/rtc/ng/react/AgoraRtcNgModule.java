@@ -27,6 +27,7 @@ import io.agora.iris.IrisEventHandler;
 @ReactModule(name = AgoraRtcNgModule.NAME)
 public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler {
   public static final String NAME = "AgoraRtcNg";
+  public final Object irisApiLock = new Object();
   public IrisApiEngine irisApiEngine;
 
   AgoraRtcNgModule(ReactApplicationContext context) {
@@ -41,49 +42,55 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
 
   @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean newIrisApiEngine() {
-    if (irisApiEngine == null) {
-      IrisApiEngine.enableUseJsonArray(true);
-      irisApiEngine = new IrisApiEngine(getReactApplicationContext());
-      irisApiEngine.setEventHandler(this);
-      return true;
+    synchronized (irisApiLock) {
+      if (irisApiEngine == null) {
+        IrisApiEngine.enableUseJsonArray(true);
+        irisApiEngine = new IrisApiEngine(getReactApplicationContext());
+        irisApiEngine.setEventHandler(this);
+        return true;
+      }
     }
     return false;
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean destroyIrisApiEngine() {
-    if (irisApiEngine != null) {
-      irisApiEngine.setEventHandler(null);
-      irisApiEngine.destroy();
-      irisApiEngine = null;
-      return true;
+    synchronized (irisApiLock) {
+      if (irisApiEngine != null) {
+        irisApiEngine.setEventHandler(null);
+        irisApiEngine.destroy();
+        irisApiEngine = null;
+        return true;
+      }
     }
     return false;
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
   public String callApi(ReadableMap args) {
-    String funcName = args.getString("funcName");
-    String params = args.getString("params");
-    List<byte[]> buffers = null;
+    synchronized (irisApiLock) {
+      String funcName = args.getString("funcName");
+      String params = args.getString("params");
+      List<byte[]> buffers = null;
 
-    ReadableArray array = args.getArray("buffers");
-    if (array != null) {
-      buffers = new ArrayList<>();
-      for (int i = 0; i < array.size(); i++) {
-        buffers.add(Base64.decode(array.getString(i), Base64.DEFAULT));
+      ReadableArray array = args.getArray("buffers");
+      if (array != null) {
+        buffers = new ArrayList<>();
+        for (int i = 0; i < array.size(); i++) {
+          buffers.add(Base64.decode(array.getString(i), Base64.DEFAULT));
+        }
       }
-    }
 
-    try {
-      newIrisApiEngine();
-      return irisApiEngine.callIrisApi(funcName, params, buffers);
-    } catch (Exception e) {
-      e.printStackTrace();
       try {
-        return new JSONObject().put("result", e.getMessage()).toString();
-      } catch (JSONException ex) {
-        throw new RuntimeException(ex);
+        newIrisApiEngine();
+        return irisApiEngine.callIrisApi(funcName, params, buffers);
+      } catch (Exception e) {
+        e.printStackTrace();
+        try {
+          return new JSONObject().put("result", e.getMessage()).toString();
+        } catch (JSONException ex) {
+          throw new RuntimeException(ex);
+        }
       }
     }
   }
@@ -117,7 +124,7 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
       map.putArray("buffers", array);
     }
     getReactApplicationContext()
-      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-      .emit("AgoraRtcNg:onEvent", map);
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit("AgoraRtcNg:onEvent", map);
   }
 }

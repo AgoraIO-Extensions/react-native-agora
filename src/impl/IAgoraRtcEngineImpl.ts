@@ -20,6 +20,9 @@ import {
   EarMonitoringFilterType,
   EchoTestConfiguration,
   EncryptionConfig,
+  FaceShapeArea,
+  FaceShapeAreaOptions,
+  FaceShapeBeautyOptions,
   FocalLengthInfo,
   HeadphoneEqualizerPreset,
   IAudioEncodedFrameObserver,
@@ -35,6 +38,7 @@ import {
   ScreenScenarioType,
   SegmentationProperty,
   SenderOptions,
+  SimulcastConfig,
   SimulcastStreamConfig,
   SimulcastStreamMode,
   SpatialAudioParams,
@@ -51,6 +55,7 @@ import {
   VideoStreamType,
   VideoSubscriptionOptions,
   VirtualBackgroundSource,
+  VoiceAiTunerType,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
   WatermarkOptions,
@@ -416,7 +421,7 @@ export function processIRtcEngineEventHandler(
 
     case 'onLocalVideoStats':
       if (handler.onLocalVideoStats !== undefined) {
-        handler.onLocalVideoStats(jsonParams.source, jsonParams.stats);
+        handler.onLocalVideoStats(jsonParams.connection, jsonParams.stats);
       }
       break;
 
@@ -910,34 +915,32 @@ export function processIRtcEngineEventHandler(
       }
       break;
 
-    case 'onExtensionEvent':
-      if (handler.onExtensionEvent !== undefined) {
-        handler.onExtensionEvent(
-          jsonParams.provider,
-          jsonParams.extension,
+    case 'onExtensionEventWithContext':
+      if (handler.onExtensionEventWithContext !== undefined) {
+        handler.onExtensionEventWithContext(
+          jsonParams.context,
           jsonParams.key,
           jsonParams.value
         );
       }
       break;
 
-    case 'onExtensionStarted':
-      if (handler.onExtensionStarted !== undefined) {
-        handler.onExtensionStarted(jsonParams.provider, jsonParams.extension);
+    case 'onExtensionStartedWithContext':
+      if (handler.onExtensionStartedWithContext !== undefined) {
+        handler.onExtensionStartedWithContext(jsonParams.context);
       }
       break;
 
-    case 'onExtensionStopped':
-      if (handler.onExtensionStopped !== undefined) {
-        handler.onExtensionStopped(jsonParams.provider, jsonParams.extension);
+    case 'onExtensionStoppedWithContext':
+      if (handler.onExtensionStoppedWithContext !== undefined) {
+        handler.onExtensionStoppedWithContext(jsonParams.context);
       }
       break;
 
-    case 'onExtensionError':
-      if (handler.onExtensionError !== undefined) {
-        handler.onExtensionError(
-          jsonParams.provider,
-          jsonParams.extension,
+    case 'onExtensionErrorWithContext':
+      if (handler.onExtensionErrorWithContext !== undefined) {
+        handler.onExtensionErrorWithContext(
+          jsonParams.context,
           jsonParams.error,
           jsonParams.message
         );
@@ -1619,6 +1622,116 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setBeautyEffectOptions_e7635d1';
   }
 
+  setFaceShapeBeautyOptions(
+    enabled: boolean,
+    options: FaceShapeBeautyOptions,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): number {
+    const apiType = this.getApiTypeFromSetFaceShapeBeautyOptions(
+      enabled,
+      options,
+      type
+    );
+    const jsonParams = {
+      enabled: enabled,
+      options: options,
+      type: type,
+      toJSON: () => {
+        return {
+          enabled: enabled,
+          options: options,
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetFaceShapeBeautyOptions(
+    enabled: boolean,
+    options: FaceShapeBeautyOptions,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): string {
+    return 'RtcEngine_setFaceShapeBeautyOptions_a862ce7';
+  }
+
+  setFaceShapeAreaOptions(
+    options: FaceShapeAreaOptions,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): number {
+    const apiType = this.getApiTypeFromSetFaceShapeAreaOptions(options, type);
+    const jsonParams = {
+      options: options,
+      type: type,
+      toJSON: () => {
+        return {
+          options: options,
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetFaceShapeAreaOptions(
+    options: FaceShapeAreaOptions,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): string {
+    return 'RtcEngine_setFaceShapeAreaOptions_2e242a3';
+  }
+
+  getFaceShapeBeautyOptions(
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): FaceShapeBeautyOptions {
+    const apiType = this.getApiTypeFromGetFaceShapeBeautyOptions(type);
+    const jsonParams = {
+      type: type,
+      toJSON: () => {
+        return {
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const options = jsonResults.options;
+    return options;
+  }
+
+  protected getApiTypeFromGetFaceShapeBeautyOptions(
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): string {
+    return 'RtcEngine_getFaceShapeBeautyOptions_8382895';
+  }
+
+  getFaceShapeAreaOptions(
+    shapeArea: FaceShapeArea,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): FaceShapeAreaOptions {
+    const apiType = this.getApiTypeFromGetFaceShapeAreaOptions(shapeArea, type);
+    const jsonParams = {
+      shapeArea: shapeArea,
+      type: type,
+      toJSON: () => {
+        return {
+          shapeArea: shapeArea,
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const options = jsonResults.options;
+    return options;
+  }
+
+  protected getApiTypeFromGetFaceShapeAreaOptions(
+    shapeArea: FaceShapeArea,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): string {
+    return 'RtcEngine_getFaceShapeAreaOptions_0783e2c';
+  }
+
   setLowlightEnhanceOptions(
     enabled: boolean,
     options: LowlightEnhanceOptions,
@@ -1958,27 +2071,6 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_muteAllRemoteAudioStreams_5039d15';
   }
 
-  setDefaultMuteAllRemoteAudioStreams(mute: boolean): number {
-    const apiType =
-      this.getApiTypeFromSetDefaultMuteAllRemoteAudioStreams(mute);
-    const jsonParams = {
-      mute: mute,
-      toJSON: () => {
-        return {
-          mute: mute,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetDefaultMuteAllRemoteAudioStreams(
-    mute: boolean
-  ): string {
-    return 'RtcEngine_setDefaultMuteAllRemoteAudioStreams_5039d15';
-  }
-
   muteRemoteAudioStream(uid: number, mute: boolean): number {
     const apiType = this.getApiTypeFromMuteRemoteAudioStream(uid, mute);
     const jsonParams = {
@@ -2054,27 +2146,6 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromMuteAllRemoteVideoStreams(mute: boolean): string {
     return 'RtcEngine_muteAllRemoteVideoStreams_5039d15';
-  }
-
-  setDefaultMuteAllRemoteVideoStreams(mute: boolean): number {
-    const apiType =
-      this.getApiTypeFromSetDefaultMuteAllRemoteVideoStreams(mute);
-    const jsonParams = {
-      mute: mute,
-      toJSON: () => {
-        return {
-          mute: mute,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetDefaultMuteAllRemoteVideoStreams(
-    mute: boolean
-  ): string {
-    return 'RtcEngine_setDefaultMuteAllRemoteVideoStreams_5039d15';
   }
 
   setRemoteDefaultVideoStreamType(streamType: VideoStreamType): number {
@@ -3488,6 +3559,29 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setHeadphoneEQParameters_4e92b3c';
   }
 
+  enableVoiceAITuner(enabled: boolean, type: VoiceAiTunerType): number {
+    const apiType = this.getApiTypeFromEnableVoiceAITuner(enabled, type);
+    const jsonParams = {
+      enabled: enabled,
+      type: type,
+      toJSON: () => {
+        return {
+          enabled: enabled,
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromEnableVoiceAITuner(
+    enabled: boolean,
+    type: VoiceAiTunerType
+  ): string {
+    return 'RtcEngine_enableVoiceAITuner_28f5d5b';
+  }
+
   setLogFile(filePath: string): number {
     const apiType = this.getApiTypeFromSetLogFile(filePath);
     const jsonParams = {
@@ -3728,6 +3822,26 @@ export class IRtcEngineImpl implements IRtcEngine {
     streamConfig?: SimulcastStreamConfig
   ): string {
     return 'RtcEngine_setDualStreamMode_b3a4f6c';
+  }
+
+  setSimulcastConfig(simulcastConfig: SimulcastConfig): number {
+    const apiType = this.getApiTypeFromSetSimulcastConfig(simulcastConfig);
+    const jsonParams = {
+      simulcastConfig: simulcastConfig,
+      toJSON: () => {
+        return {
+          simulcastConfig: simulcastConfig,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetSimulcastConfig(
+    simulcastConfig: SimulcastConfig
+  ): string {
+    return 'RtcEngine_setSimulcastConfig_3dcdfd7';
   }
 
   enableCustomAudioLocalPlayback(trackId: number, enabled: boolean): number {
@@ -5686,42 +5800,6 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setRemoteUserPriority_f34115b';
   }
 
-  setEncryptionMode(encryptionMode: string): number {
-    const apiType = this.getApiTypeFromSetEncryptionMode(encryptionMode);
-    const jsonParams = {
-      encryptionMode: encryptionMode,
-      toJSON: () => {
-        return {
-          encryptionMode: encryptionMode,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetEncryptionMode(encryptionMode: string): string {
-    return 'RtcEngine_setEncryptionMode_3a2037f';
-  }
-
-  setEncryptionSecret(secret: string): number {
-    const apiType = this.getApiTypeFromSetEncryptionSecret(secret);
-    const jsonParams = {
-      secret: secret,
-      toJSON: () => {
-        return {
-          secret: secret,
-        };
-      },
-    };
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
-    return jsonResults.result;
-  }
-
-  protected getApiTypeFromSetEncryptionSecret(secret: string): string {
-    return 'RtcEngine_setEncryptionSecret_3a2037f';
-  }
-
   enableEncryption(enabled: boolean, config: EncryptionConfig): number {
     const apiType = this.getApiTypeFromEnableEncryption(enabled, config);
     const jsonParams = {
@@ -6884,7 +6962,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetAudioDeviceManager(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getAudioDeviceManager';
   }
 
   getVideoDeviceManager(): IVideoDeviceManager {
@@ -6895,7 +6973,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetVideoDeviceManager(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getVideoDeviceManager';
   }
 
   getMusicContentCenter(): IMusicContentCenter {
@@ -6906,7 +6984,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetMusicContentCenter(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getMusicContentCenter';
   }
 
   getMediaEngine(): IMediaEngine {
@@ -6917,7 +6995,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetMediaEngine(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getMediaEngine';
   }
 
   getLocalSpatialAudioEngine(): ILocalSpatialAudioEngine {
@@ -6928,7 +7006,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetLocalSpatialAudioEngine(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getLocalSpatialAudioEngine';
   }
 
   getH265Transcoder(): IH265Transcoder {
@@ -6939,7 +7017,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromGetH265Transcoder(): string {
-    return 'RtcEngine_queryInterface_257d192';
+    return 'RtcEngine_getH265Transcoder';
   }
 
   sendMetaData(metadata: Metadata, sourceType: VideoSourceType): number {
@@ -6997,7 +7075,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromDestroyRendererByView(view: any): string {
-    return 'RtcEngine_destroyRendererByView';
+    return 'RtcEngine_destroyRendererByView_a55f55f';
   }
 
   destroyRendererByConfig(
@@ -7030,7 +7108,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     channelId?: string,
     uid: number = 0
   ): string {
-    return 'RtcEngine_destroyRendererByConfig';
+    return 'RtcEngine_destroyRendererByConfig_542c2ae';
   }
 
   unregisterAudioEncodedFrameObserver(

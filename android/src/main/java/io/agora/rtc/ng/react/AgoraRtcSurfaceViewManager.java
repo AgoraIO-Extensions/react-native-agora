@@ -35,11 +35,13 @@ public class AgoraRtcSurfaceViewManager extends AgoraRtcSurfaceViewManagerSpec<F
     String funcName = arguments.getString("funcName");
     String params = arguments.getString("params");
     AgoraRtcNgModule module = context.getNativeModule(AgoraRtcNgModule.class);
-    if (module != null) {
-      try {
-        module.irisApiEngine.callIrisApi(funcName, params, view.getChildAt(0));
-      } catch (Exception e) {
-        e.printStackTrace();
+    synchronized (module.irisApiLock) {
+      if (module != null) {
+        try {
+          module.irisApiEngine.callIrisApi(funcName, params, view.getChildAt(0));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
     }
   }

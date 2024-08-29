@@ -2,7 +2,8 @@ import { by, device, element, expect } from 'detox';
 
 describe('Example', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    const permissions = { camera: 'YES', microphone: 'YES' };
+    await device.launchApp({ permissions });
   });
 
   beforeEach(async () => {
