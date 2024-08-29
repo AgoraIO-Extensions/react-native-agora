@@ -500,7 +500,11 @@ export default class PictureInPicture
             if (Platform.OS === 'android') {
               this.startPip();
             } else {
-              this.startPip();
+              if (pipState === PipState.PipStateStarted) {
+                this.stopPip();
+              } else {
+                this.startPip();
+              }
             }
           }}
         />
