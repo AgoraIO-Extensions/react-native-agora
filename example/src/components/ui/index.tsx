@@ -249,12 +249,21 @@ export const AgoraStyle = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
+  videoPipContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
   videoLarge: {
     flex: 1,
   },
   videoSmall: {
     width: 150,
     height: 150,
+  },
+  videoPip: {
+    width: 30,
+    height: 30,
   },
   float: {
     position: 'absolute',

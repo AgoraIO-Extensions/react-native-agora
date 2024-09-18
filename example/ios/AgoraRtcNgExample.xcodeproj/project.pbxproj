@@ -15,6 +15,7 @@
 		51C0ADB2D05FD3E09BD14D10 /* libPods-ScreenShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995956B4E8573A01AC9C535 /* libPods-ScreenShare.a */; };
 		7699B88040F8A987B510C191 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BB877BF02C4E33440009E4A0 /* AgoraRtcNgExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = BB877BEF2C4E33440009E4A0 /* AgoraRtcNgExample.entitlements */; };
 		F5652807291BE31F00793068 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F56527FF291BE31E00793068 /* agora-logo.png */; };
 		F5652809291BE31F00793068 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652801291BE31E00793068 /* ding.mp3 */; };
 		F565280A291BE31F00793068 /* dang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652802291BE31E00793068 /* dang.mp3 */; };
@@ -75,6 +76,7 @@
 		6B4351393DA57450FBFEC119 /* Pods-ScreenShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.release.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AgoraRtcNgExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; sourceTree = "<group>"; };
+		BB877BEF2C4E33440009E4A0 /* AgoraRtcNgExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AgoraRtcNgExample.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F56527FF291BE31E00793068 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
 		F5652801291BE31E00793068 /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ding.mp3; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				BB877BEF2C4E33440009E4A0 /* AgoraRtcNgExample.entitlements */,
 				F56527FE291BE31E00793068 /* Resources */,
 				13B07FAE1A68108700A75B9A /* AgoraRtcNgExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -347,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5652809291BE31F00793068 /* ding.mp3 in Resources */,
+				BB877BF02C4E33440009E4A0 /* AgoraRtcNgExample.entitlements in Resources */,
 				F57F54D62A03AEA8008DFB3C /* effect.mp3 in Resources */,
 				F565280A291BE31F00793068 /* dang.mp3 in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,

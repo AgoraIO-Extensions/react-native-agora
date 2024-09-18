@@ -15,12 +15,14 @@ import {
 } from 'react-native';
 
 import {
+  PipState,
   SDKBuildInfo,
   createAgoraRtcEngine,
   isDebuggable,
   setDebuggable,
 } from 'react-native-agora';
 
+import { PipStateConsumer, PipStateProvider } from './context/pip';
 import Advanced from './examples/advanced';
 import Basic from './examples/basic';
 import Hooks from './examples/hook';
@@ -39,33 +41,47 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <SafeAreaView
-        style={styles.container}
-        onStartShouldSetResponder={(_) => {
-          Keyboard.dismiss();
-          return false;
-        }}
-      >
-        <RootStack.Navigator screenOptions={{ gestureEnabled: false }}>
-          <RootStack.Screen name={'APIExample'} component={Home} />
-          {DATA.map((value) =>
-            value.data.map(({ name, component }) => {
-              return component ? (
-                <RootStack.Screen name={name} component={component} />
-              ) : undefined;
-            })
+      <PipStateProvider>
+        <PipStateConsumer>
+          {(context) => (
+            <SafeAreaView
+              style={styles.container}
+              onStartShouldSetResponder={(_) => {
+                Keyboard.dismiss();
+                return false;
+              }}
+            >
+              <RootStack.Navigator
+                screenOptions={{
+                  gestureEnabled: false,
+                  headerShown: context.pipState !== PipState.PipStateStarted,
+                }}
+              >
+                <RootStack.Screen name={'APIExample'} component={Home} />
+                {DATA.map((value) =>
+                  value.data.map(({ name, component }) => {
+                    return component ? (
+                      <RootStack.Screen name={name} component={component} />
+                    ) : undefined;
+                  })
+                )}
+              </RootStack.Navigator>
+              {context.pipState !== PipState.PipStateStarted ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    setDebuggable(!isDebuggable());
+                  }}
+                >
+                  <Text style={styles.version}>
+                    Powered by Agora RTC SDK {version.version} build{' '}
+                    {version.build}
+                  </Text>
+                </TouchableOpacity>
+              ) : null}
+            </SafeAreaView>
           )}
-        </RootStack.Navigator>
-        <TouchableOpacity
-          onPress={() => {
-            setDebuggable(!isDebuggable());
-          }}
-        >
-          <Text style={styles.version}>
-            Powered by Agora RTC SDK {version.version} build {version.build}
-          </Text>
-        </TouchableOpacity>
-      </SafeAreaView>
+        </PipStateConsumer>
+      </PipStateProvider>
     </NavigationContainer>
   );
 }

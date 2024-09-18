@@ -13,6 +13,7 @@ import LocalVideoTranscoder from './LocalVideoTranscoder/LocalVideoTranscoder';
 import MediaPlayer from './MediaPlayer/MediaPlayer';
 import MediaRecorder from './MediaRecorder/MediaRecorder';
 import MusicContentCenter from './MusicContentCenter/MusicContentCenter';
+import PictureInPicture from './PictureInPicture/PictureInPicture';
 import PlayEffect from './PlayEffect/PlayEffect';
 import ProcessVideoRawData from './ProcessVideoRawData/ProcessVideoRawData';
 import PushVideoFrame from './PushVideoFrame/PushVideoFrame';
@@ -31,6 +32,10 @@ import VoiceChanger from './VoiceChanger/VoiceChanger';
 const Advanced = {
   title: 'Advanced',
   data: [
+    {
+      name: 'PictureInPicture',
+      component: PictureInPicture,
+    },
     {
       name: 'AudioMixing',
       component: AudioMixing,

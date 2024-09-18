@@ -39,4 +39,15 @@ RCT_CUSTOM_VIEW_PROPERTY(callApi, NSDictionary, UIView) {
     }
 }
 
+RCT_EXPORT_METHOD(callNativeMethod:(nonnull NSNumber*) reactTag
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        UIView *view = viewRegistry[reactTag];
+        void *viewPointer = (__bridge void *)view;
+        resolve([NSNumber numberWithUnsignedLongLong:(unsigned long long)viewPointer]);
+    }];
+
+}
+
 @end

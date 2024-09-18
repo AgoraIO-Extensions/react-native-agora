@@ -69,3 +69,13 @@ export class RtcTextureView extends IAgoraRtcRenderView<RtcRendererViewProps> {
     return AgoraRtcTextureViewNativeComponent;
   }
 }
+
+/**
+ * @ignore
+ */
+export interface AgoraRtcRenderViewState {
+  /**
+   * @ignore
+   */
+  contentSource?: number | null;
+}
