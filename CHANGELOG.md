@@ -1,5 +1,13 @@
 
 
+## [4.3.2-build.5-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.3.2...v4.3.2-build.5-rc.1) (2024-09-18)
+
+
+### Features
+
+* **android:** pip ([13258cb](https://github.com/AgoraIO-Extensions/react-native-agora/commit/13258cb71c35c9a9b0337a1da84bc713f0d2da3c))
+* **iOS:** pip ([96348ce](https://github.com/AgoraIO-Extensions/react-native-agora/commit/96348ce96f62566d81d7262f4e054f99330e3099))
+
 ## [4.3.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.3.1...v4.3.2) (2024-06-06)
 
 
