@@ -106,6 +106,44 @@ export enum VideoSourceType {
 }
 
 /**
+ * @ignore
+ */
+export enum AudioSourceType {
+  /**
+   * @ignore
+   */
+  AudioSourceMicrophone = 0,
+  /**
+   * @ignore
+   */
+  AudioSourceCustom = 1,
+  /**
+   * @ignore
+   */
+  AudioSourceMediaPlayer = 2,
+  /**
+   * @ignore
+   */
+  AudioSourceLoopbackRecording = 3,
+  /**
+   * @ignore
+   */
+  AudioSourceMixedStream = 4,
+  /**
+   * @ignore
+   */
+  AudioSourceRemoteUser = 5,
+  /**
+   * @ignore
+   */
+  AudioSourceRemoteChannel = 6,
+  /**
+   * @ignore
+   */
+  AudioSourceUnknown = 100,
+}
+
+/**
  * The type of the audio route.
  */
 export enum AudioRoute {
@@ -1138,6 +1176,20 @@ export enum VideoModulePosition {
 }
 
 /**
+ * @ignore
+ */
+export class SnapshotConfig {
+  /**
+   * @ignore
+   */
+  filePath?: string;
+  /**
+   * @ignore
+   */
+  position?: VideoModulePosition;
+}
+
+/**
  * This class is used to get raw PCM audio.
  *
  * You can inherit this class and implement the onFrame callback to get raw PCM audio.
@@ -1613,6 +1665,30 @@ export class MediaRecorderConfiguration {
    * @ignore
    */
   recorderInfoUpdateInterval?: number;
+  /**
+   * @ignore
+   */
+  width?: number;
+  /**
+   * @ignore
+   */
+  height?: number;
+  /**
+   * @ignore
+   */
+  fps?: number;
+  /**
+   * @ignore
+   */
+  sample_rate?: number;
+  /**
+   * @ignore
+   */
+  channel_num?: number;
+  /**
+   * @ignore
+   */
+  videoSourceType?: VideoSourceType;
 }
 
 /**

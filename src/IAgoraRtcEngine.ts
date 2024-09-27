@@ -36,7 +36,9 @@ import {
   FaceShapeArea,
   FaceShapeAreaOptions,
   FaceShapeBeautyOptions,
+  FilterEffectOptions,
   FocalLengthInfo,
+  HdrCapability,
   HeadphoneEqualizerPreset,
   IAudioEncodedFrameObserver,
   LastmileProbeConfig,
@@ -44,6 +46,7 @@ import {
   LicenseErrorType,
   LiveTranscoding,
   LocalAccessPointConfiguration,
+  LocalAudioMixerConfiguration,
   LocalAudioStats,
   LocalAudioStreamReason,
   LocalAudioStreamState,
@@ -93,6 +96,7 @@ import {
   VideoFormat,
   VideoLayout,
   VideoMirrorModeType,
+  VideoModuleType,
   VideoOrientation,
   VideoQoePreferenceType,
   VideoRenderingTracingInfo,
@@ -116,6 +120,7 @@ import {
   MediaSourceType,
   RawAudioFrameOpModeType,
   RenderModeType,
+  SnapshotConfig,
   VideoSourceType,
 } from './AgoraMediaBase';
 import { IH265Transcoder } from './IAgoraH265Transcoder';
@@ -221,6 +226,10 @@ export enum AudioMixingReasonType {
    * 724: Successfully call stopAudioMixing to stop playing the music file.
    */
   AudioMixingReasonStoppedByUser = 724,
+  /**
+   * @ignore
+   */
+  AudioMixingReasonResumedByUser = 726,
   /**
    * 0: The SDK opens music file successfully.
    */
@@ -946,7 +955,7 @@ export class ScreenCaptureConfiguration {
   /**
    * @ignore
    */
-  windowId?: any;
+  windowId?: number;
   /**
    * @ignore
    */
@@ -1026,7 +1035,7 @@ export class ScreenCaptureSourceInfo {
   /**
    * @ignore
    */
-  sourceId?: any;
+  sourceId?: number;
   /**
    * @ignore
    */
@@ -1066,7 +1075,7 @@ export class ScreenCaptureSourceInfo {
   /**
    * @ignore
    */
-  sourceDisplayId?: any;
+  sourceDisplayId?: number;
 }
 
 /**
@@ -1565,7 +1574,7 @@ export interface IRtcEngineEventHandler {
    * @param elapsed Time elapsed (ms) from the local user calling joinChannel until this callback is triggered.
    */
   onFirstLocalVideoFramePublished?(
-    source: VideoSourceType,
+    connection: RtcConnection,
     elapsed: number
   ): void;
 
@@ -3368,6 +3377,15 @@ export abstract class IRtcEngine {
   ): FaceShapeAreaOptions;
 
   /**
+   * @ignore
+   */
+  abstract setFilterEffectOptions(
+    enabled: boolean,
+    options: FilterEffectOptions,
+    type?: MediaSourceType
+  ): number;
+
+  /**
    * Sets low-light enhancement.
    *
    * The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
@@ -4784,6 +4802,19 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
+   * @ignore
+   */
+  abstract setLocalRenderTargetFps(
+    sourceType: VideoSourceType,
+    targetFps: number
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract setRemoteRenderTargetFps(targetFps: number): number;
+
+  /**
    * Sets the local video mirror mode.
    *
    * Deprecated: This method is deprecated. Use setLocalRenderMode instead.
@@ -5711,7 +5742,7 @@ export abstract class IRtcEngine {
    * @ignore
    */
   abstract startScreenCaptureByWindowId(
-    windowId: any,
+    windowId: number,
     regionRect: Rectangle,
     captureParams: ScreenCaptureParameters
   ): number;
@@ -5819,6 +5850,11 @@ export abstract class IRtcEngine {
     focalLengthInfos: FocalLengthInfo[];
     size: number;
   };
+
+  /**
+   * @ignore
+   */
+  abstract setExternalMediaProjection(): any;
 
   /**
    * Sets the screen sharing scenario.
@@ -5990,6 +6026,23 @@ export abstract class IRtcEngine {
    *  < 0: Failure.
    */
   abstract stopLocalVideoTranscoder(): number;
+
+  /**
+   * @ignore
+   */
+  abstract startLocalAudioMixer(config: LocalAudioMixerConfiguration): number;
+
+  /**
+   * @ignore
+   */
+  abstract updateLocalAudioMixerConfiguration(
+    config: LocalAudioMixerConfiguration
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract stopLocalAudioMixer(): number;
 
   /**
    * Starts camera capture.
@@ -6819,6 +6872,11 @@ export abstract class IRtcEngine {
   /**
    * @ignore
    */
+  abstract queryHDRCapability(videoModule: VideoModuleType): HdrCapability;
+
+  /**
+   * @ignore
+   */
   abstract startScreenCaptureBySourceType(
     sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
@@ -6966,6 +7024,11 @@ export abstract class IRtcEngine {
    * The native handle of the SDK.
    */
   abstract getNativeHandle(): number;
+
+  /**
+   * @ignore
+   */
+  abstract takeSnapshotWithConfig(uid: number, config: SnapshotConfig): number;
 }
 
 /**
@@ -6998,6 +7061,10 @@ export enum MediaDeviceStateType {
    * 2: The device is disabled.
    */
   MediaDeviceStateDisabled = 2,
+  /**
+   * @ignore
+   */
+  MediaDeviceStatePluggedIn = 3,
   /**
    * 4: The device is not found.
    */
