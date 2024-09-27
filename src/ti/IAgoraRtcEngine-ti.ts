@@ -25,7 +25,7 @@ export const IRtcEngineEventHandler = t.iface([], {
   "onDownlinkNetworkInfoUpdated": t.opt(t.func("void", t.param("info", "DownlinkNetworkInfo"))),
   "onLastmileQuality": t.opt(t.func("void", t.param("quality", "QualityType"))),
   "onFirstLocalVideoFrame": t.opt(t.func("void", t.param("source", "VideoSourceType"), t.param("width", "number"), t.param("height", "number"), t.param("elapsed", "number"))),
-  "onFirstLocalVideoFramePublished": t.opt(t.func("void", t.param("source", "VideoSourceType"), t.param("elapsed", "number"))),
+  "onFirstLocalVideoFramePublished": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("elapsed", "number"))),
   "onFirstRemoteVideoDecoded": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("remoteUid", "number"), t.param("width", "number"), t.param("height", "number"), t.param("elapsed", "number"))),
   "onVideoSizeChanged": t.opt(t.func("void", t.param("connection", "RtcConnection"), t.param("sourceType", "VideoSourceType"), t.param("uid", "number"), t.param("width", "number"), t.param("height", "number"), t.param("rotation", "number"))),
   "onLocalVideoStateChanged": t.opt(t.func("void", t.param("source", "VideoSourceType"), t.param("state", "LocalVideoStreamState"), t.param("reason", "LocalVideoStreamReason"))),
