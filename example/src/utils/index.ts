@@ -27,12 +27,12 @@ export const arrayToItems = (array: any[]): AgoraDropdownItem[] => {
 };
 
 export const enumToItems = (enumType: any): AgoraDropdownItem[] => {
-  const items = Object.values(enumType);
-  const keys = items.filter((v) => typeof v === 'string') as string[];
-  const values = items.filter((v) => typeof v === 'number') as number[];
-  return keys.map((value, index) => ({
-    label: value,
-    value: values[index],
+  const entries = Object.entries(enumType);
+  const items = entries.filter(([, value]) => typeof value === 'number');
+  items.sort((a: any, b: any) => a[1] - b[1]);
+  return items.map(([key, value]) => ({
+    label: key,
+    value: value,
   }));
 };
 
