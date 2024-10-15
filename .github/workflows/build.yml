@@ -43,10 +43,15 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 10406996
+
       - name: Finalize Android SDK
         if: env.turbo_cache_hit != 1
         run: |
-          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/11.0/bin/sdkmanager --licenses > /dev/null"
+          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/10406996/bin/sdkmanager --licenses > /dev/null"
 
       - name: Cache Gradle
         if: env.turbo_cache_hit != 1
