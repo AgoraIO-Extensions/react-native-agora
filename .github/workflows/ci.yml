@@ -104,7 +104,7 @@ jobs:
       - name: Finalize Android SDK
         if: env.turbo_cache_hit != 1
         run: |
-          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/11.0/bin/sdkmanager --licenses > /dev/null"
+          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
 
       - name: Cache Gradle
         if: env.turbo_cache_hit != 1
