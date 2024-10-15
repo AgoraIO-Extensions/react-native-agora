@@ -1,5 +1,6 @@
 import './extension/AgoraBaseExtension';
 import {
+  AudioSourceType,
   RenderModeType,
   VideoModulePosition,
   VideoSourceType,
@@ -771,6 +772,10 @@ export enum OrientationMode {
  */
 export enum DegradationPreference {
   /**
+   * @ignore
+   */
+  MaintainAuto = -1,
+  /**
    * 0: (Default) Prefers to reduce the video frame rate while maintaining video resolution during video encoding under limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
    */
   MaintainQuality = 0,
@@ -1261,6 +1266,10 @@ export class EncodedVideoFrameInfo {
  */
 export enum CompressionPreference {
   /**
+   * @ignore
+   */
+  PreferCompressionAuto = -1,
+  /**
    * 0: Low latency preference. The SDK compresses video frames to reduce latency. This preference is suitable for scenarios where smoothness is prioritized and reduced video quality is acceptable.
    */
   PreferLowLatency = 0,
@@ -1338,6 +1347,54 @@ export enum CameraFormatType {
    * @ignore
    */
   CameraFormatBgra = 1,
+}
+
+/**
+ * @ignore
+ */
+export enum VideoModuleType {
+  /**
+   * @ignore
+   */
+  VideoModuleCapturer = 0,
+  /**
+   * @ignore
+   */
+  VideoModuleSoftwareEncoder = 1,
+  /**
+   * @ignore
+   */
+  VideoModuleHardwareEncoder = 2,
+  /**
+   * @ignore
+   */
+  VideoModuleSoftwareDecoder = 3,
+  /**
+   * @ignore
+   */
+  VideoModuleHardwareDecoder = 4,
+  /**
+   * @ignore
+   */
+  VideoModuleRenderer = 5,
+}
+
+/**
+ * @ignore
+ */
+export enum HdrCapability {
+  /**
+   * @ignore
+   */
+  HdrCapabilityUnknown = -1,
+  /**
+   * @ignore
+   */
+  HdrCapabilityUnsupported = 0,
+  /**
+   * @ignore
+   */
+  HdrCapabilitySupported = 1,
 }
 
 /**
@@ -2054,6 +2111,10 @@ export enum VideoApplicationScenarioType {
    * ApplicationScenario1v1 (2) is suitable for 1v1 video call scenarios. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. 2: 1v1 video call scenario.
    */
   ApplicationScenario1v1 = 2,
+  /**
+   * @ignore
+   */
+  ApplicationScenarioLiveshow = 3,
 }
 
 /**
@@ -3224,6 +3285,46 @@ export enum VideoTranscoderError {
 }
 
 /**
+ * @ignore
+ */
+export class MixedAudioStream {
+  /**
+   * @ignore
+   */
+  sourceType?: AudioSourceType;
+  /**
+   * @ignore
+   */
+  remoteUserUid?: number;
+  /**
+   * @ignore
+   */
+  channelName?: string;
+  /**
+   * @ignore
+   */
+  trackId?: number;
+}
+
+/**
+ * @ignore
+ */
+export class LocalAudioMixerConfiguration {
+  /**
+   * @ignore
+   */
+  streamCount?: number;
+  /**
+   * @ignore
+   */
+  sourceStreams?: MixedAudioStream[];
+  /**
+   * @ignore
+   */
+  syncWithLocalMic?: boolean;
+}
+
+/**
  * Configurations of the last-mile network test.
  */
 export class LastmileProbeConfig {
@@ -3754,6 +3855,20 @@ export class FaceShapeBeautyOptions {
 }
 
 /**
+ * @ignore
+ */
+export class FilterEffectOptions {
+  /**
+   * @ignore
+   */
+  path?: string;
+  /**
+   * @ignore
+   */
+  strength?: number;
+}
+
+/**
  * The low-light enhancement mode.
  */
 export enum LowLightEnhanceMode {
@@ -3821,10 +3936,6 @@ export enum VideoDenoiserLevel {
    * 1: Promotes reducing performance consumption during video noise reduction. prioritizes reducing performance consumption over video noise reduction quality. The performance consumption is lower, and the video noise reduction speed is faster. To avoid a noticeable shadowing effect (shadows trailing behind moving objects) in the processed video, Agora recommends that you use this settinging when the camera is fixed.
    */
   VideoDenoiserLevelFast = 1,
-  /**
-   * 2: Enhanced video noise reduction. prioritizes video noise reduction quality over reducing performance consumption. The performance consumption is higher, the video noise reduction speed is slower, and the video noise reduction quality is better. If VideoDenoiserLevelHighQuality is not enough for your video noise reduction needs, you can use this enumerator.
-   */
-  VideoDenoiserLevelStrength = 2,
 }
 
 /**
@@ -5245,6 +5356,20 @@ export class LocalAccessPointConfiguration {
 /**
  * @ignore
  */
+export enum RecorderStreamType {
+  /**
+   * @ignore
+   */
+  Rtc = 0,
+  /**
+   * @ignore
+   */
+  Preview = 1,
+}
+
+/**
+ * @ignore
+ */
 export class RecorderStreamInfo {
   /**
    * @ignore
@@ -5254,6 +5379,10 @@ export class RecorderStreamInfo {
    * @ignore
    */
   uid?: number;
+  /**
+   * @ignore
+   */
+  type?: RecorderStreamType;
 }
 
 /**

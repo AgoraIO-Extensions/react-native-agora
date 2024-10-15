@@ -157,6 +157,11 @@ export abstract class IMediaEngine {
   ): number;
 
   /**
+   * @ignore
+   */
+  abstract setExternalRemoteEglContext(eglContext: any): number;
+
+  /**
    * Sets the external audio source parameters.
    *
    * Deprecated: This method is deprecated, use createCustomAudioTrack instead.
