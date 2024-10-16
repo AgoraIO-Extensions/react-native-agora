@@ -14069,11 +14069,11 @@ __metadata:
 
 "react-native-image-tool@github:LichKing-2234/react-native-image-tools":
   version: 0.8.1
-  resolution: "react-native-image-tool@https://github.com/LichKing-2234/react-native-image-tools.git#commit=6ac74db10da838f1e529c364dfe2fb92293a12f7"
+  resolution: "react-native-image-tool@https://github.com/LichKing-2234/react-native-image-tools.git#commit=1241453bdf29e7d70a37e6c2369b582d2f9cff3f"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: fcb7944526ba2e095624c15e88d53a220e7665de49eb19cb554abfa17df13310f44513952c9a9aeb48007f2afbe3f6b2adc99fa489919dadd583614514476bf9
+  checksum: 9ebb53a7d3e2374b0e4caf9f4fde305538370eef7755ea5330d779657c620563024d9f6c44d2ec2b5e8041d7a33f13b73372fd4800b54aa257af82b2acf0b519
   languageName: node
   linkType: hard
 
