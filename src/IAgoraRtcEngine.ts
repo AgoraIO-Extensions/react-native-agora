@@ -1161,7 +1161,7 @@ export class ChannelMediaOptions {
    */
   publishCustomAudioTrack?: boolean;
   /**
-   * The ID of the custom audio source to publish. The default value is 0. If you have set sourceNumber in setExternalAudioSource to a value greater than 1, the SDK creates the corresponding number of custom audio tracks and assigns an ID to each audio track, starting from 0.
+   * The ID of the custom audio track to be published. The default value is 0. You can obtain the custom audio track ID through the createCustomAudioTrack method.
    */
   publishCustomAudioTrackId?: number;
   /**
@@ -1507,8 +1507,8 @@ export interface IRtcEngineEventHandler {
    *
    * @param connection The connection information. See RtcConnection.
    * @param remoteUid The user ID. The network quality of the user with this user ID is reported. If the uid is 0, the local network quality is reported.
-   * @param txQuality Uplink network quality rating of the user in terms of the transmission bit rate, packet loss rate, average RTT (Round-Trip Time) and jitter of the uplink network. This parameter is a quality rating helping you understand how well the current uplink network conditions can support the selected video encoder configuration. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 640 × 480 and a frame rate of 15 fps in the LIVE_BROADCASTING profile, but might be inadequate for resolutions higher than 1280 × 720. QualityUnknown (0): The quality is unknown. QualityExcellent (1): The quality is excellent. QualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. QualityPoor (3): Users can feel the communication is slightly impaired. QualityBad (4): Users cannot communicate smoothly. QualityVbad (5): The quality is so bad that users can barely communicate. QualityDown (6): The network is down, and users cannot communicate at all.
-   * @param rxQuality Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network. QualityUnknown (0): The quality is unknown. QualityExcellent (1): The quality is excellent. QualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. QualityPoor (3): Users can feel the communication is slightly impaired. QualityBad (4): Users cannot communicate smoothly. QualityVbad (5): The quality is so bad that users can barely communicate. QualityDown (6): The network is down, and users cannot communicate at all.
+   * @param txQuality Uplink network quality rating of the user in terms of the transmission bit rate, packet loss rate, average RTT (Round-Trip Time) and jitter of the uplink network. This parameter is a quality rating helping you understand how well the current uplink network conditions can support the selected video encoder configuration. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 640 × 480 and a frame rate of 15 fps in the LIVE_BROADCASTING profile, but might be inadequate for resolutions higher than 1280 × 720. QualityUnknown (0): The quality is unknown. QualityExcellent (1): The quality is excellent. QualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. QualityPoor (3): Users can feel the communication is slightly impaired. QualityBad (4): Users cannot communicate smoothly. QualityVbad (5): The quality is so bad that users can barely communicate. QualityDown (6): The network is down, and users cannot communicate at all. QualityDetecting (8): The last-mile probe test is in progress.
+   * @param rxQuality Downlink network quality rating of the user in terms of packet loss rate, average RTT, and jitter of the downlink network. QualityUnknown (0): The quality is unknown. QualityExcellent (1): The quality is excellent. QualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. QualityPoor (3): Users can feel the communication is slightly impaired. QualityBad (4): Users cannot communicate smoothly. QualityVbad (5): The quality is so bad that users can barely communicate. QualityDown (6): The network is down, and users cannot communicate at all. QualityDetecting (8): The last-mile probe test is in progress.
    */
   onNetworkQuality?(
     connection: RtcConnection,
@@ -1541,7 +1541,7 @@ export interface IRtcEngineEventHandler {
    *
    * This callback reports the last-mile network conditions of the local user before the user joins the channel. Last mile refers to the connection between the local device and Agora's edge server. Before the user joins the channel, this callback is triggered by the SDK once startLastmileProbeTest is called and reports the last-mile network conditions of the local user.
    *
-   * @param quality The last-mile network quality. QualityUnknown (0): The quality is unknown. QualityExcellent (1): The quality is excellent. QualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. QualityPoor (3): Users can feel the communication is slightly impaired. QualityBad (4): Users cannot communicate smoothly. QualityVbad (5): The quality is so bad that users can barely communicate. QualityDown (6): The network is down, and users cannot communicate at all. See QualityType.
+   * @param quality The last-mile network quality. QualityUnknown (0): The quality is unknown. QualityExcellent (1): The quality is excellent. QualityGood (2): The network quality seems excellent, but the bitrate can be slightly lower than excellent. QualityPoor (3): Users can feel the communication is slightly impaired. QualityBad (4): Users cannot communicate smoothly. QualityVbad (5): The quality is so bad that users can barely communicate. QualityDown (6): The network is down, and users cannot communicate at all. QualityDetecting (8): The last-mile probe test is in progress. See QualityType.
    */
   onLastmileQuality?(quality: QualityType): void;
 
@@ -1972,7 +1972,7 @@ export interface IRtcEngineEventHandler {
    * @param connection The connection information. See RtcConnection.
    * @param remoteUid The ID of the remote user sending the message.
    * @param streamId The stream ID of the received message.
-   * @param code The error code. See ErrorCodeType.
+   * @param code Error code. See ErrorCodeType.
    * @param missed The number of lost messages.
    * @param cached Number of incoming cached messages when the data stream is interrupted.
    */
@@ -2965,10 +2965,10 @@ export abstract class IRtcEngine {
   /**
    * Gets the warning or error description.
    *
-   * @param code The error code or warning code reported by the SDK.
+   * @param code The error code reported by the SDK.
    *
    * @returns
-   * The specific error or warning description.
+   * The specific error description.
    */
   abstract getErrorDescription(code: number): string;
 
@@ -3737,14 +3737,10 @@ export abstract class IRtcEngine {
   /**
    * Options for subscribing to remote video streams.
    *
-   * When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user.
-   *  If you only register one IVideoFrameObserver object, the SDK subscribes to the raw video data and encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-   *  If you only register one IVideoEncodedFrameObserver object, the SDK only subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to true).
-   *  If you register one IVideoFrameObserver object and one IVideoEncodedFrameObserver object successively, the SDK subscribes to the encoded video data by default (the effect is equivalent to setting encodedFrameOnly to false).
-   *  If you call this method first with the options parameter set, and then register one IVideoFrameObserver or IVideoEncodedFrameObserver object, you need to call this method again and set the options parameter as described in the above two items to get the desired results. Agora recommends the following steps:
-   *  Set autoSubscribeVideo to false when calling joinChannel to join a channel.
-   *  Call this method after receiving the onUserJoined callback to set the subscription options for the specified remote user's video stream.
-   *  Call the muteRemoteVideoStream method to resume subscribing to the video stream of the specified remote user. If you set encodedFrameOnly to true in the previous step, the SDK triggers the onEncodedVideoFrameReceived callback locally to report the received encoded video frame information.
+   * When a remote user has enabled dual-stream mode, you can call this method to choose the option for subscribing to the video streams sent by the remote user. The default subscription behavior of the SDK for remote video streams depends on the type of registered video observer:
+   *  If the IVideoFrameObserver observer is registered, the default is to subscribe to both raw data and encoded data.
+   *  If the IVideoEncodedFrameObserver observer is registered, the default is to subscribe only to the encoded data.
+   *  If both types of observers are registered, the default behavior follows the last registered video observer. For example, if the last registered observer is the IVideoFrameObserver observer, the default is to subscribe to both raw data and encoded data. If you want to modify the default behavior, or set different subscription options for different uids, you can call this method to set it.
    *
    * @param uid The user ID of the remote user.
    * @param options The video subscription options. See VideoSubscriptionOptions.
@@ -4026,7 +4022,7 @@ export abstract class IRtcEngine {
   /**
    * Adjusts the volume during audio mixing.
    *
-   * This method adjusts the audio mixing volume on both the local client and remote clients.
+   * This method adjusts the audio mixing volume on both the local client and remote clients. This method does not affect the volume of the audio file set in the playEffect method.
    *
    * @param volume Audio mixing volume. The value ranges between 0 and 100. The default value is 100, which means the original volume.
    *
@@ -5854,7 +5850,7 @@ export abstract class IRtcEngine {
   /**
    * @ignore
    */
-  abstract setExternalMediaProjection(): any;
+  abstract setExternalMediaProjection(mediaProjection: any): number;
 
   /**
    * Sets the screen sharing scenario.
@@ -6176,9 +6172,8 @@ export abstract class IRtcEngine {
    * Sends data stream messages.
    *
    * After calling createDataStream, you can call this method to send data stream messages to all users in the channel. The SDK has the following restrictions on this method:
-   *  Each user can have up to five data streams simultaneously.
-   *  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
-   *  Up to 30 KB of data can be sent per second in a data stream. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
+   *  Each client within the channel can have up to 5 data channels simultaneously, with a total shared packet bitrate limit of 30 KB/s for all data channels.
+   *  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client.
    *  This method needs to be called after createDataStream and joining the channel.
    *  In live streaming scenarios, this method only applies to hosts.
    *
@@ -6664,7 +6659,7 @@ export abstract class IRtcEngine {
    * When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
    *
    * @param enabled Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-   * @param config Screenshot and upload configuration. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(ContentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+   * @param config Screenshot and upload configuration. See ContentInspectConfig.
    *
    * @returns
    * 0: Success.
@@ -6713,7 +6708,7 @@ export abstract class IRtcEngine {
    * Sets up cloud proxy service.
    *
    * When users' network access is restricted by a firewall, configure the firewall to allow specific IP addresses and ports provided by Agora; then, call this method to enable the cloud proxyType and set the cloud proxy type with the proxyType parameter. After successfully connecting to the cloud proxy, the SDK triggers the onConnectionStateChanged (ConnectionStateConnecting, ConnectionChangedSettingProxyServer) callback. To disable the cloud proxy that has been set, call the setCloudProxy (NoneProxy). To change the cloud proxy type that has been set, call the setCloudProxy (NoneProxy) first, and then call the setCloudProxy to set the proxyType you want.
-   *  Agora recommends that you call this method after joining a channel.
+   *  Agora recommends that you call this method before joining a channel.
    *  When a user is behind a firewall and uses the Force UDP cloud proxy, the services for Media Push and cohosting across channels are not available.
    *  When you use the Force TCP cloud proxy, note that an error would occur when calling the startAudioMixing method to play online music files in the HTTP protocol. The services for Media Push and cohosting across channels use the cloud proxy with the TCP protocol.
    *
