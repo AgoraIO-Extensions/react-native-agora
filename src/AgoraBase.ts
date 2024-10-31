@@ -622,7 +622,7 @@ export enum QualityType {
    */
   QualityUnsupported = 7,
   /**
-   * 8: Detecting the network quality.
+   * 8: The last-mile network probe test is in progress.
    */
   QualityDetecting = 8,
 }
@@ -3299,7 +3299,7 @@ export class MixedAudioStream {
   /**
    * @ignore
    */
-  channelName?: string;
+  channelId?: string;
   /**
    * @ignore
    */
@@ -3317,7 +3317,7 @@ export class LocalAudioMixerConfiguration {
   /**
    * @ignore
    */
-  sourceStreams?: MixedAudioStream[];
+  audioInputStreams?: MixedAudioStream[];
   /**
    * @ignore
    */
@@ -3973,7 +3973,7 @@ export class ColorEnhanceOptions {
  */
 export enum BackgroundSourceType {
   /**
-   * 0: Process the background as alpha data without replacement, only separating the portrait and the background. After setting this value, you can call startLocalVideoTranscoder to implement the picture-in-picture effect.
+   * @ignore
    */
   BackgroundNone = 0,
   /**
@@ -4088,6 +4088,10 @@ export class AudioTrackConfig {
    * Whether to enable the local audio-playback device: true : (Default) Enable the local audio-playback device. false : Do not enable the local audio-playback device.
    */
   enableLocalPlayback?: boolean;
+  /**
+   * @ignore
+   */
+  enableAudioProcessing?: boolean;
 }
 
 /**
