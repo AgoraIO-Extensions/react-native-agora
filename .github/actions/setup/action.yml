@@ -15,10 +15,11 @@ runs:
       with:
         bundler-cache: true
 
-    - name: Setup activesupport
+    - name: Setup by gem
       if: ${{ runner.os == 'macOS' }}
       run:
         gem install activesupport -v 7.0.8
+        gem install xcodeproj -v 1.25.1
       shell: bash
 
     - name: Setup Cocoapods
