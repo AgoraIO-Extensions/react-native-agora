@@ -1,5 +1,7 @@
 
 
+# [4.5.0-dev.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.4.0...v4.5.0-dev.1) (2024-11-06)
+
 # [4.4.0](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.3.2...v4.4.0) (2024-08-29)
 
 
