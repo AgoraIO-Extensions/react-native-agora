@@ -62,5 +62,5 @@ target 'AgoraRtcNgExample' do
 end
 
 target 'ScreenShare' do
-  pod 'AgoraRtcEngine_iOS_Preview', '4.5.0-dev.12'
+  pod 'AgoraRtcEngine_iOS_Preview', '4.5.0-dev.15'
 end
