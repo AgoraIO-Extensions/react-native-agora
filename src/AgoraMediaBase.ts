@@ -106,23 +106,23 @@ export enum VideoSourceType {
 }
 
 /**
- * @ignore
+ * The audio source type.
  */
 export enum AudioSourceType {
   /**
-   * @ignore
+   * 0: (Default) Microphone.
    */
   AudioSourceMicrophone = 0,
   /**
-   * @ignore
+   * 1: Custom audio stream.
    */
   AudioSourceCustom = 1,
   /**
-   * @ignore
+   * 2: Media player.
    */
   AudioSourceMediaPlayer = 2,
   /**
-   * @ignore
+   * 3: System audio stream captured during screen sharing.
    */
   AudioSourceLoopbackRecording = 3,
   /**
@@ -130,15 +130,15 @@ export enum AudioSourceType {
    */
   AudioSourceMixedStream = 4,
   /**
-   * @ignore
+   * 5: Audio stream from a specified remote user.
    */
   AudioSourceRemoteUser = 5,
   /**
-   * @ignore
+   * 6: Mixed audio streams from all users in the current channel.
    */
   AudioSourceRemoteChannel = 6,
   /**
-   * @ignore
+   * 100: An unknown audio source.
    */
   AudioSourceUnknown = 100,
 }
@@ -536,11 +536,11 @@ export enum VideoPixelFormat {
  */
 export enum RenderModeType {
   /**
-   * 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
+   * 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
    */
   RenderModeHidden = 1,
   /**
-   * 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
+   * 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
    */
   RenderModeFit = 2,
   /**
@@ -876,27 +876,27 @@ export class Hdr10MetadataInfo {
 }
 
 /**
- * @ignore
+ * The relative position of alphaBuffer and video frames.
  */
 export enum AlphaStitchMode {
   /**
-   * @ignore
+   * 0: (Default) Only video frame, that is, alphaBuffer is not stitched with the video frame.
    */
   NoAlphaStitch = 0,
   /**
-   * @ignore
+   * 1: alphaBuffer is above the video frame.
    */
   AlphaStitchUp = 1,
   /**
-   * @ignore
+   * 2: alphaBuffer is below the video frame.
    */
   AlphaStitchBelow = 2,
   /**
-   * @ignore
+   * 3: alphaBuffer is to the left of the video frame.
    */
   AlphaStitchLeft = 3,
   /**
-   * @ignore
+   * 4: alphaBuffer is to the right of the video frame.
    */
   AlphaStitchRight = 4,
 }
@@ -1032,7 +1032,7 @@ export class ExternalVideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * @ignore
+   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
    */
   colorSpace?: ColorSpace;
 }
@@ -1130,7 +1130,7 @@ export class VideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * @ignore
+   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
    */
   colorSpace?: ColorSpace;
 }
@@ -1178,15 +1178,17 @@ export enum VideoModulePosition {
 }
 
 /**
- * @ignore
+ * The snapshot configuration.
  */
 export class SnapshotConfig {
   /**
-   * @ignore
+   * The local path (including filename extensions) of the snapshot. For example:
+   *  iOS: /App Sandbox/Library/Caches/example.jpg
+   *  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg Ensure that the path you specify exists and is writable.
    */
   filePath?: string;
   /**
-   * @ignore
+   * The position of the snapshot video frame in the video pipeline. See VideoModulePosition.
    */
   position?: VideoModulePosition;
 }
