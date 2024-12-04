@@ -147,7 +147,7 @@ jobs:
     strategy:
       matrix:
         newArch: [1, 0]
-    runs-on: macos-latest
+    runs-on: macos-12
     env:
       TURBO_CACHE_DIR: .turbo/ios
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
@@ -208,7 +208,7 @@ jobs:
         run: |
           yarn turbo run detox:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
-      - uses: futureware-tech/simulator-action@v1
+      - uses: futureware-tech/simulator-action@v4
         with:
           model: 'iPhone 14'
 
