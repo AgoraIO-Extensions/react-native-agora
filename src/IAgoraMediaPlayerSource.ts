@@ -42,7 +42,7 @@ export interface IMediaPlayerSourceObserver {
    *
    * After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
    *
-   * @param eventCode The player events. See MediaPlayerEvent.
+   * @param eventCode The player event. See MediaPlayerEvent.
    * @param elapsedTime The time (ms) when the event occurs.
    * @param message Information about the event.
    */

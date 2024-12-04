@@ -1185,7 +1185,7 @@ export class ChannelMediaOptions {
    */
   publishTranscodedVideoTrack?: boolean;
   /**
-   * @ignore
+   * Whether to publish the mixed audio track: true : Publish the mixed audio track. false : Do not publish the mixed audio track.
    */
   publishMixedAudioTrack?: boolean;
   /**
@@ -2401,7 +2401,7 @@ export interface IRtcEngineEventHandler {
   /**
    * Video frame rendering event callback.
    *
-   * After calling the startMediaRenderingTracing method or joining the channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
+   * After calling the startMediaRenderingTracing method or joining a channel, the SDK triggers this callback to report the events of video frame rendering and the indicators during the rendering process. Developers can optimize the indicators to improve the efficiency of the first video frame rendering.
    *
    * @param connection The connection information. See RtcConnection.
    * @param uid The user ID.
@@ -3329,7 +3329,9 @@ export abstract class IRtcEngine {
    *
    * @param enabled Whether to enable the image enhancement function: true : Enable the image enhancement function. false : (Default) Disable the image enhancement function.
    * @param options The image enhancement options. See BeautyOptions.
-   * @param type Source type of the extension. See MediaSourceType.
+   * @param type The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  Use the default value PrimaryCameraSource if you use camera to capture local video.
+   *  Set this parameter to CustomVideoSource if you use custom video source.
    *
    * @returns
    * 0: Success.
@@ -3377,7 +3379,17 @@ export abstract class IRtcEngine {
   ): FaceShapeAreaOptions;
 
   /**
-   * @ignore
+   * Sets the filter effect options and specifies the media source.
+   *
+   * @param enabled Whether to enable the filter effect: true : Yes. false : (Default) No.
+   * @param options The filter effect options. See FilterEffectOptions.
+   * @param type The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  Use the default value PrimaryCameraSource if you use camera to capture local video.
+   *  Set this parameter to CustomVideoSource if you use custom video source.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract setFilterEffectOptions(
     enabled: boolean,
@@ -3388,17 +3400,13 @@ export abstract class IRtcEngine {
   /**
    * Sets low-light enhancement.
    *
-   * The low-light enhancement feature can adaptively adjust the brightness value of the video captured in situations with low or uneven lighting, such as backlit, cloudy, or dark scenes. It restores or highlights the image details and improves the overall visual effect of the video. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
-   *  Call this method after calling enableVideo.
-   *  Dark light enhancement has certain requirements for equipment performance. The low-light enhancement feature has certain performance requirements on devices. If your device overheats after you enable low-light enhancement, Agora recommends modifying the low-light enhancement options to a less performance-consuming level or disabling low-light enhancement entirely.
-   *  Both this method and setExtensionProperty can turn on low-light enhancement:
-   *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-   *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   * You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
    *
    * @param enabled Whether to enable low-light enhancement: true : Enable low-light enhancement. false : (Default) Disable low-light enhancement.
    * @param options The low-light enhancement options. See LowlightEnhanceOptions.
-   * @param type The type of the video source. See MediaSourceType.
+   * @param type The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  Use the default value PrimaryCameraSource if you use camera to capture local video.
+   *  Set this parameter to CustomVideoSource if you use custom video source.
    *
    * @returns
    * 0: Success.
@@ -3413,17 +3421,13 @@ export abstract class IRtcEngine {
   /**
    * Sets video noise reduction.
    *
-   * Underlit environments and low-end video capture devices can cause video images to contain significant noise, which affects video quality. In real-time interactive scenarios, video noise also consumes bitstream resources and reduces encoding efficiency during encoding. You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect.
-   *  Call this method after calling enableVideo.
-   *  Video noise reduction has certain requirements for equipment performance. If your device overheats after you enable video noise reduction, Agora recommends modifying the video noise reduction options to a less performance-consuming level or disabling video noise reduction entirely.
-   *  Both this method and setExtensionProperty can turn on video noise reduction function:
-   *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-   *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
-   *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
+   * You can call this method to enable the video noise reduction feature and set the options of the video noise reduction effect. If the noise reduction implemented by this method does not meet your needs, Agora recommends that you call the setBeautyEffectOptions method to enable the beauty and skin smoothing function to achieve better video noise reduction effects. The recommended BeautyOptions settings for intense noise reduction effect are as follows: lighteningContrastLevel LighteningContrastNormal lighteningLevel : 0.0 smoothnessLevel : 0.5 rednessLevel : 0.0 sharpnessLevel : 0.1
    *
    * @param enabled Whether to enable video noise reduction: true : Enable video noise reduction. false : (Default) Disable video noise reduction.
    * @param options The video noise reduction options. See VideoDenoiserOptions.
-   * @param type The type of the video source. See MediaSourceType.
+   * @param type The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  Use the default value PrimaryCameraSource if you use camera to capture local video.
+   *  Set this parameter to CustomVideoSource if you use custom video source.
    *
    * @returns
    * 0: Success.
@@ -3441,14 +3445,13 @@ export abstract class IRtcEngine {
    * The video images captured by the camera can have color distortion. The color enhancement feature intelligently adjusts video characteristics such as saturation and contrast to enhance the video color richness and color reproduction, making the video more vivid. You can call this method to enable the color enhancement feature and set the options of the color enhancement effect.
    *  Call this method after calling enableVideo.
    *  The color enhancement feature has certain performance requirements on devices. With color enhancement turned on, Agora recommends that you change the color enhancement level to one that consumes less performance or turn off color enhancement if your device is experiencing severe heat problems.
-   *  Both this method and setExtensionProperty can enable color enhancement:
-   *  When you use the SDK to capture video, Agora recommends this method (this method only works for video captured by the SDK).
-   *  When you use an external video source to implement custom video capture, or send an external video source to the SDK, Agora recommends using setExtensionProperty.
    *  This method relies on the image enhancement dynamic library libagora_clear_vision_extension.dll. If the dynamic library is deleted, the function cannot be enabled normally.
    *
    * @param enabled Whether to enable color enhancement: true Enable color enhancement. false : (Default) Disable color enhancement.
    * @param options The color enhancement options. See ColorEnhanceOptions.
-   * @param type The type of the video source. See MediaSourceType.
+   * @param type The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  Use the default value PrimaryCameraSource if you use camera to capture local video.
+   *  Set this parameter to CustomVideoSource if you use custom video source.
    *
    * @returns
    * 0: Success.
@@ -3484,9 +3487,9 @@ export abstract class IRtcEngine {
    * @param enabled Whether to enable virtual background: true : Enable virtual background. false : Disable virtual background.
    * @param backgroundSource The custom background. See VirtualBackgroundSource. To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
    * @param segproperty Processing properties for background images. See SegmentationProperty.
-   * @param type The type of the video source. See MediaSourceType. In this method, this parameter supports only the following two settings:
-   *  The default value is PrimaryCameraSource.
-   *  If you want to use the second camera to capture video, set this parameter to SecondaryCameraSource.
+   * @param type The type of the media source to which the filter effect is applied. See MediaSourceType. In this method, this parameter supports only the following two settings:
+   *  Use the default value PrimaryCameraSource if you use camera to capture local video.
+   *  Set this parameter to CustomVideoSource if you use custom video source.
    *
    * @returns
    * 0: Success.
@@ -3528,7 +3531,7 @@ export abstract class IRtcEngine {
    *  If someone subscribes to the low-quality stream, the SDK enables the low-quality stream and resets it to the SimulcastStreamConfig configuration used in the most recent calling of setDualStreamMode. If no configuration has been set by the user previously, the following values are used:
    *  Resolution: 480 × 272
    *  Frame rate: 15 fps
-   *  Bitrate: 500 Kbps ApplicationScenario1v1 (2) is suitable for 1v1 video call scenarios. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions.
+   *  Bitrate: 500 Kbps ApplicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. ApplicationScenarioLiveshow (3) This is applicable to the scenario. In this scenario, fast video rendering and high image quality are crucial. The SDK implements several performance optimizations, including automatically enabling accelerated audio and video frame rendering to minimize first-frame latency (no need to call enableInstantMediaRendering), and B-frame encoding to achieve better image quality and bandwidth efficiency. The SDK also provides enhanced video quality and smooth playback, even in poor network conditions or on lower-end devices.
    *
    * @returns
    * 0: Success.
@@ -4798,7 +4801,14 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * @ignore
+   * Sets the maximum frame rate for rendering local video.
+   *
+   * @param sourceType The type of the video source. See VideoSourceType.
+   * @param targetFps The capture frame rate (fps) of the local video. Sopported values are: 1, 7, 10, 15, 24, 30, 60. Set this parameter to a value lower than the actual video frame rate; otherwise, the settings do not take effect.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract setLocalRenderTargetFps(
     sourceType: VideoSourceType,
@@ -4806,7 +4816,13 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * @ignore
+   * Sets the maximum frame rate for rendering remote video.
+   *
+   * @param targetFps The capture frame rate (fps) of the local video. Sopported values are: 1, 7, 10, 15, 24, 30, 60. Set this parameter to a value lower than the actual video frame rate; otherwise, the settings do not take effect.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract setRemoteRenderTargetFps(targetFps: number): number;
 
@@ -5381,7 +5397,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device camera supports face detection.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *  This method is for Android and iOS only.
    *
    * @returns
@@ -5392,7 +5408,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports camera flash.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *  The app enables the front camera by default. If your front camera does not support flash, this method returns false. If you want to check whether the rear camera supports the flash function, call switchCamera before this method.
    *  On iPads with system version 15, even if isCameraTorchSupported returns true, you might fail to successfully enable the flash by calling setCameraTorchOn due to system issues.
    *
@@ -5404,7 +5420,7 @@ export abstract class IRtcEngine {
   /**
    * Check whether the device supports the manual focus function.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * true : The device supports the manual focus function. false : The device does not support the manual focus function.
@@ -5414,7 +5430,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports the face auto-focus function.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * true : The device supports the face auto-focus function. false : The device does not support the face auto-focus function.
@@ -5449,7 +5465,7 @@ export abstract class IRtcEngine {
   /**
    * Gets the maximum zoom ratio supported by the camera.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * The maximum zoom factor.
@@ -5503,7 +5519,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports manual exposure.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *
    * @returns
    * true : The device supports manual exposure. false : The device does not support manual exposure.
@@ -5531,7 +5547,7 @@ export abstract class IRtcEngine {
   /**
    * Queries whether the current camera supports adjusting exposure value.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *  Before calling setCameraExposureFactor, Agora recoomends that you call this method to query whether the current camera supports adjusting the exposure value.
    *  By calling this method, you adjust the exposure value of the currently active camera, that is, the camera specified when calling setCameraCapturerConfiguration.
    *
@@ -5559,7 +5575,7 @@ export abstract class IRtcEngine {
   /**
    * Checks whether the device supports auto exposure.
    *
-   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateEncoding (2).
+   * This method must be called after the SDK triggers the onLocalVideoStateChanged callback and returns the local video state as LocalVideoStreamStateCapturing (1).
    *  This method applies to iOS only.
    *
    * @returns
@@ -5776,7 +5792,7 @@ export abstract class IRtcEngine {
    *
    * Call this method after starting screen sharing or window sharing.
    *
-   * @param captureParams The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. The video properties of the screen sharing stream only need to be set through this parameter, and are unrelated to setVideoEncoderConfiguration.
+   * @param captureParams The screen sharing encoding parameters. The video properties of the screen sharing stream only need to be set through this parameter, and are unrelated to setVideoEncoderConfiguration.
    *
    * @returns
    * 0: Success.
@@ -5795,7 +5811,7 @@ export abstract class IRtcEngine {
    *  When you do not pass in a value, Agora bills you at 1280 × 720.
    *  When you pass in a value, Agora bills you at that value.
    *
-   * @param captureParams The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
+   * @param captureParams The screen sharing encoding parameters. See ScreenCaptureParameters2.
    *
    * @returns
    * 0: Success.
@@ -5815,7 +5831,7 @@ export abstract class IRtcEngine {
    *  This method is for Android and iOS only.
    *  On the iOS platform, screen sharing is only available on iOS 12.0 and later.
    *
-   * @param captureParams The screen sharing encoding parameters. The default video resolution is 1920 × 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. See ScreenCaptureParameters2.
+   * @param captureParams The screen sharing encoding parameters. See ScreenCaptureParameters2.
    *
    * @returns
    * 0: Success.
@@ -5848,7 +5864,15 @@ export abstract class IRtcEngine {
   };
 
   /**
-   * @ignore
+   * Configures MediaProjection outside of the SDK to capture screen video streams.
+   *
+   * This method is for Android only. After successfully calling this method, the external MediaProjection you set will replace the MediaProjection requested by the SDK to capture the screen video stream. When the screen sharing is stopped or IRtcEngine is destroyed, the SDK will automatically release the MediaProjection.
+   *
+   * @param mediaProjection An object used to capture screen video streams.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract setExternalMediaProjection(mediaProjection: any): number;
 
@@ -6024,19 +6048,46 @@ export abstract class IRtcEngine {
   abstract stopLocalVideoTranscoder(): number;
 
   /**
-   * @ignore
+   * Starts local audio mixing.
+   *
+   * This method supports merging multiple audio streams into one audio stream locally. For example, merging the audio streams captured from the local microphone, and that from the media player, the sound card, and the remote users into one audio stream, and then publish the merged audio stream to the channel.
+   *  If you want to mix the locally captured audio streams, you can set publishMixedAudioTrack in ChannelMediaOptions to true, and then publish the mixed audio stream to the channel.
+   *  If you want to mix the remote audio stream, ensure that the remote audio stream has been published in the channel and you have subcribed to the audio stream that you need to mix.
+   *
+   * @param config The configurations for mixing the lcoal audio. See LocalAudioMixerConfiguration.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
    */
   abstract startLocalAudioMixer(config: LocalAudioMixerConfiguration): number;
 
   /**
-   * @ignore
+   * Updates the configurations for mixing audio streams locally.
+   *
+   * After calling startLocalAudioMixer, call this method if you want to update the local audio mixing configuration.
+   *
+   * @param config The configurations for mixing the lcoal audio. See LocalAudioMixerConfiguration.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
    */
   abstract updateLocalAudioMixerConfiguration(
     config: LocalAudioMixerConfiguration
   ): number;
 
   /**
-   * @ignore
+   * Stops the local audio mixing.
+   *
+   * After calling startLocalAudioMixer, call this method if you want to stop the local audio mixing.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   *  -7: The IRtcEngine object has not been initialized. You need to initialize the IRtcEngine object before calling this method.
    */
   abstract stopLocalAudioMixer(): number;
 
@@ -7021,7 +7072,16 @@ export abstract class IRtcEngine {
   abstract getNativeHandle(): number;
 
   /**
-   * @ignore
+   * Takes a screenshot of the video at the specified observation point.
+   *
+   * This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+   *
+   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+   * @param config The configuration of the snaptshot. See SnapshotConfig.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
    */
   abstract takeSnapshotWithConfig(uid: number, config: SnapshotConfig): number;
 }
@@ -7057,7 +7117,7 @@ export enum MediaDeviceStateType {
    */
   MediaDeviceStateDisabled = 2,
   /**
-   * @ignore
+   * 3: The device is plugged in.
    */
   MediaDeviceStatePluggedIn = 3,
   /**
