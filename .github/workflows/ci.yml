@@ -66,7 +66,7 @@ jobs:
     strategy:
       matrix:
         newArch: [true, false]
-    runs-on: macos-14
+    runs-on: macos-latest
     env:
       TURBO_CACHE_DIR: .turbo/android
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
@@ -147,7 +147,7 @@ jobs:
     strategy:
       matrix:
         newArch: [1, 0]
-    runs-on: macos-14
+    runs-on: macos-latest
     env:
       TURBO_CACHE_DIR: .turbo/ios
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
