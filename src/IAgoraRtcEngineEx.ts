@@ -17,7 +17,11 @@ import {
   VideoSubscriptionOptions,
   WatermarkOptions,
 } from './AgoraBase';
-import { ContentInspectConfig, RenderModeType } from './AgoraMediaBase';
+import {
+  ContentInspectConfig,
+  RenderModeType,
+  SnapshotConfig,
+} from './AgoraMediaBase';
 import {
   ChannelMediaOptions,
   IRtcEngine,
@@ -90,6 +94,15 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    */
   abstract leaveChannelEx(
     connection: RtcConnection,
+    options?: LeaveChannelOptions
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract leaveChannelWithUserAccountEx(
+    channelId: string,
+    userAccount: string,
     options?: LeaveChannelOptions
   ): number;
 
@@ -531,9 +544,8 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * Sends data stream messages.
    *
    * A successful method call triggers the onStreamMessage callback on the remote client, from which the remote user gets the stream message. A failed method call triggers the onStreamMessageError callback on the remote client. The SDK has the following restrictions on this method:
-   *  Each user can have up to five data streams simultaneously.
-   *  Up to 60 packets can be sent per second in a data stream with each packet having a maximum size of 1 KB.
-   *  Up to 30 KB of data can be sent per second in a data stream. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
+   *  Each client within the channel can have up to 5 data channels simultaneously, with a total shared packet bitrate limit of 30 KB/s for all data channels.
+   *  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
    *  Call this method after joinChannelEx.
    *  Ensure that you call createDataStreamEx to create a data channel before calling this method.
    *  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
@@ -878,7 +890,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    * This method can take screenshots for multiple video streams and upload them. When video screenshot and upload function is enabled, the SDK takes screenshots and uploads videos sent by local users based on the type and frequency of the module you set in ContentInspectConfig. After video screenshot and upload, the Agora server sends the callback notification to your app server in HTTPS requests and sends all screenshots to the third-party cloud storage service.
    *
    * @param enabled Whether to enalbe video screenshot and upload: true : Enables video screenshot and upload. false : Disables video screenshot and upload.
-   * @param config Screenshot and upload configuration. See ContentInspectConfig. When the video moderation module is set to video moderation via Agora self-developed extension(ContentInspectSupervision), the video screenshot and upload dynamic library libagora_content_inspect_extension.dll is required. Deleting this library disables the screenshot and upload feature.
+   * @param config Screenshot and upload configuration. See ContentInspectConfig.
    * @param connection The connection information. See RtcConnection.
    *
    * @returns
@@ -916,7 +928,7 @@ export abstract class IRtcEngineEx extends IRtcEngine {
   /**
    * Gets the call ID with the connection ID.
    *
-   * When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get the callId parameter, and pass it in when calling methods such as rate and complain.
+   * When a user joins a channel on a client, a callId is generated to identify the call from the client. You can call this method to get callId, and pass it in when calling methods such as rate and complain.
    *
    * @param connection The connection information. See RtcConnection.
    *
@@ -933,5 +945,24 @@ export abstract class IRtcEngineEx extends IRtcEngine {
     connection: RtcConnection,
     metadata: string,
     length: number
+  ): number;
+
+  /**
+   * Gets a video screenshot of the specified observation point using the connection ID.
+   *
+   * This method takes a snapshot of a video stream from the specified user, generates a JPG image, and saves it to the specified path.
+   *
+   * @param connection The connection information. See RtcConnection.
+   * @param uid The user ID. Set uid as 0 if you want to take a snapshot of the local user's video.
+   * @param config The configuration of the snaptshot. See SnapshotConfig.
+   *
+   * @returns
+   * 0: Success.
+   *  < 0: Failure.
+   */
+  abstract takeSnapshotWithConfigEx(
+    connection: RtcConnection,
+    uid: number,
+    config: SnapshotConfig
   ): number;
 }

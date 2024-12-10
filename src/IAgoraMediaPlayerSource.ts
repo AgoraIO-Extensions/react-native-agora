@@ -42,7 +42,7 @@ export interface IMediaPlayerSourceObserver {
    *
    * After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
    *
-   * @param eventCode The player events. See MediaPlayerEvent.
+   * @param eventCode The player event. See MediaPlayerEvent.
    * @param elapsedTime The time (ms) when the event occurs.
    * @param message Information about the event.
    */
@@ -66,8 +66,8 @@ export interface IMediaPlayerSourceObserver {
    * Reports the playback duration that the buffered data can support.
    *
    * When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support.
-   *  When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns PlayerEventBufferLow.
-   *  When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns PlayerEventBufferRecover.
+   *  When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns PlayerEventBufferLow (6).
+   *  When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns PlayerEventBufferRecover (7).
    *
    * @param playCachedBuffer The playback duration (ms) that the buffered data can support.
    */

@@ -2,7 +2,7 @@ parsers:
   - name: RTCParser
     package: '@agoraio-extensions/terra_shared_configs'
     args:
-      sdkVersion: 4.4.0
+      sdkVersion: 4.5.0
       FixEnumConstantParser:
         skipCalEnumValue: true
 

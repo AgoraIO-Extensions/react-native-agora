@@ -23,12 +23,15 @@ import {
   FaceShapeArea,
   FaceShapeAreaOptions,
   FaceShapeBeautyOptions,
+  FilterEffectOptions,
   FocalLengthInfo,
+  HdrCapability,
   HeadphoneEqualizerPreset,
   IAudioEncodedFrameObserver,
   LastmileProbeConfig,
   LiveTranscoding,
   LocalAccessPointConfiguration,
+  LocalAudioMixerConfiguration,
   LocalTranscoderConfiguration,
   LowlightEnhanceOptions,
   RecorderStreamInfo,
@@ -50,6 +53,7 @@ import {
   VideoEncoderConfiguration,
   VideoFormat,
   VideoMirrorModeType,
+  VideoModuleType,
   VideoOrientation,
   VideoQoePreferenceType,
   VideoStreamType,
@@ -66,6 +70,7 @@ import {
   MediaSourceType,
   RawAudioFrameOpModeType,
   RenderModeType,
+  SnapshotConfig,
   VideoSourceType,
 } from '../AgoraMediaBase';
 import { IH265Transcoder } from '../IAgoraH265Transcoder';
@@ -272,7 +277,7 @@ export function processIRtcEngineEventHandler(
     case 'onFirstLocalVideoFramePublished':
       if (handler.onFirstLocalVideoFramePublished !== undefined) {
         handler.onFirstLocalVideoFramePublished(
-          jsonParams.source,
+          jsonParams.connection,
           jsonParams.elapsed
         );
       }
@@ -1730,6 +1735,40 @@ export class IRtcEngineImpl implements IRtcEngine {
     type: MediaSourceType = MediaSourceType.PrimaryCameraSource
   ): string {
     return 'RtcEngine_getFaceShapeAreaOptions_0783e2c';
+  }
+
+  setFilterEffectOptions(
+    enabled: boolean,
+    options: FilterEffectOptions,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): number {
+    const apiType = this.getApiTypeFromSetFilterEffectOptions(
+      enabled,
+      options,
+      type
+    );
+    const jsonParams = {
+      enabled: enabled,
+      options: options,
+      type: type,
+      toJSON: () => {
+        return {
+          enabled: enabled,
+          options: options,
+          type: type,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetFilterEffectOptions(
+    enabled: boolean,
+    options: FilterEffectOptions,
+    type: MediaSourceType = MediaSourceType.PrimaryCameraSource
+  ): string {
+    return 'RtcEngine_setFilterEffectOptions_53b4be3';
   }
 
   setLowlightEnhanceOptions(
@@ -3749,6 +3788,53 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_setRemoteRenderMode_6771ce0';
   }
 
+  setLocalRenderTargetFps(
+    sourceType: VideoSourceType,
+    targetFps: number
+  ): number {
+    const apiType = this.getApiTypeFromSetLocalRenderTargetFps(
+      sourceType,
+      targetFps
+    );
+    const jsonParams = {
+      sourceType: sourceType,
+      targetFps: targetFps,
+      toJSON: () => {
+        return {
+          sourceType: sourceType,
+          targetFps: targetFps,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetLocalRenderTargetFps(
+    sourceType: VideoSourceType,
+    targetFps: number
+  ): string {
+    return 'RtcEngine_setLocalRenderTargetFps_2ad83d8';
+  }
+
+  setRemoteRenderTargetFps(targetFps: number): number {
+    const apiType = this.getApiTypeFromSetRemoteRenderTargetFps(targetFps);
+    const jsonParams = {
+      targetFps: targetFps,
+      toJSON: () => {
+        return {
+          targetFps: targetFps,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetRemoteRenderTargetFps(targetFps: number): string {
+    return 'RtcEngine_setRemoteRenderTargetFps_46f8ab7';
+  }
+
   setLocalVideoMirrorMode(mirrorMode: VideoMirrorModeType): number {
     const apiType = this.getApiTypeFromSetLocalVideoMirrorMode(mirrorMode);
     const jsonParams = {
@@ -5177,7 +5263,7 @@ export class IRtcEngineImpl implements IRtcEngine {
     regionRect: Rectangle,
     captureParams: ScreenCaptureParameters
   ): string {
-    return 'RtcEngine_startScreenCaptureByDisplayId_7cf6800';
+    return 'RtcEngine_startScreenCaptureByDisplayId_ce89867';
   }
 
   startScreenCaptureByScreenRect(
@@ -5227,7 +5313,7 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   startScreenCaptureByWindowId(
-    windowId: any,
+    windowId: number,
     regionRect: Rectangle,
     captureParams: ScreenCaptureParameters
   ): number {
@@ -5253,11 +5339,11 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 
   protected getApiTypeFromStartScreenCaptureByWindowId(
-    windowId: any,
+    windowId: number,
     regionRect: Rectangle,
     captureParams: ScreenCaptureParameters
   ): string {
-    return 'RtcEngine_startScreenCaptureByWindowId_5ab7e59';
+    return 'RtcEngine_startScreenCaptureByWindowId_ce89867';
   }
 
   setScreenCaptureContentHint(contentHint: VideoContentHint): number {
@@ -5391,6 +5477,27 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromQueryCameraFocalLengthCapability(): string {
     return 'RtcEngine_queryCameraFocalLengthCapability_2dee6af';
+  }
+
+  setExternalMediaProjection(mediaProjection: any): number {
+    const apiType =
+      this.getApiTypeFromSetExternalMediaProjection(mediaProjection);
+    const jsonParams = {
+      mediaProjection: mediaProjection,
+      toJSON: () => {
+        return {
+          mediaProjection: mediaProjection,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromSetExternalMediaProjection(
+    mediaProjection: any
+  ): string {
+    return 'RtcEngine_setExternalMediaProjection_f337cbf';
   }
 
   setScreenCaptureScenario(screenScenario: ScreenScenarioType): number {
@@ -5624,6 +5731,60 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromStopLocalVideoTranscoder(): string {
     return 'RtcEngine_stopLocalVideoTranscoder';
+  }
+
+  startLocalAudioMixer(config: LocalAudioMixerConfiguration): number {
+    const apiType = this.getApiTypeFromStartLocalAudioMixer(config);
+    const jsonParams = {
+      config: config,
+      toJSON: () => {
+        return {
+          config: config,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromStartLocalAudioMixer(
+    config: LocalAudioMixerConfiguration
+  ): string {
+    return 'RtcEngine_startLocalAudioMixer_a7ff78e';
+  }
+
+  updateLocalAudioMixerConfiguration(
+    config: LocalAudioMixerConfiguration
+  ): number {
+    const apiType =
+      this.getApiTypeFromUpdateLocalAudioMixerConfiguration(config);
+    const jsonParams = {
+      config: config,
+      toJSON: () => {
+        return {
+          config: config,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromUpdateLocalAudioMixerConfiguration(
+    config: LocalAudioMixerConfiguration
+  ): string {
+    return 'RtcEngine_updateLocalAudioMixerConfiguration_a7ff78e';
+  }
+
+  stopLocalAudioMixer(): number {
+    const apiType = this.getApiTypeFromStopLocalAudioMixer();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromStopLocalAudioMixer(): string {
+    return 'RtcEngine_stopLocalAudioMixer';
   }
 
   startCameraCapture(
@@ -6876,6 +7037,27 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_sendAudioMetadata_878f309';
   }
 
+  queryHDRCapability(videoModule: VideoModuleType): HdrCapability {
+    const apiType = this.getApiTypeFromQueryHDRCapability(videoModule);
+    const jsonParams = {
+      videoModule: videoModule,
+      toJSON: () => {
+        return {
+          videoModule: videoModule,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const capability = jsonResults.capability;
+    return capability;
+  }
+
+  protected getApiTypeFromQueryHDRCapability(
+    videoModule: VideoModuleType
+  ): string {
+    return 'RtcEngine_queryHDRCapability_bebdacb';
+  }
+
   startScreenCaptureBySourceType(
     sourceType: VideoSourceType,
     config: ScreenCaptureConfiguration
@@ -7141,6 +7323,29 @@ export class IRtcEngineImpl implements IRtcEngine {
 
   protected getApiTypeFromGetNativeHandle(): string {
     return 'RtcEngine_getNativeHandle';
+  }
+
+  takeSnapshotWithConfig(uid: number, config: SnapshotConfig): number {
+    const apiType = this.getApiTypeFromTakeSnapshotWithConfig(uid, config);
+    const jsonParams = {
+      uid: uid,
+      config: config,
+      toJSON: () => {
+        return {
+          uid: uid,
+          config: config,
+        };
+      },
+    };
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    return jsonResults.result;
+  }
+
+  protected getApiTypeFromTakeSnapshotWithConfig(
+    uid: number,
+    config: SnapshotConfig
+  ): string {
+    return 'RtcEngine_takeSnapshot_5669ea6';
   }
 }
 

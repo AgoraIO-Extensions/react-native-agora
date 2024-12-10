@@ -66,7 +66,7 @@ jobs:
     strategy:
       matrix:
         newArch: [true, false]
-    runs-on: macos-12
+    runs-on: macos-13
     env:
       TURBO_CACHE_DIR: .turbo/android
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
@@ -208,9 +208,9 @@ jobs:
         run: |
           yarn turbo run detox:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
-      - uses: futureware-tech/simulator-action@v1
+      - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 14'
+          model: 'iPhone 15'
 
       - name: Run e2e tests
         # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162

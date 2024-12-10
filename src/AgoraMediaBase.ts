@@ -106,6 +106,44 @@ export enum VideoSourceType {
 }
 
 /**
+ * The audio source type.
+ */
+export enum AudioSourceType {
+  /**
+   * 0: (Default) Microphone.
+   */
+  AudioSourceMicrophone = 0,
+  /**
+   * 1: Custom audio stream.
+   */
+  AudioSourceCustom = 1,
+  /**
+   * 2: Media player.
+   */
+  AudioSourceMediaPlayer = 2,
+  /**
+   * 3: System audio stream captured during screen sharing.
+   */
+  AudioSourceLoopbackRecording = 3,
+  /**
+   * @ignore
+   */
+  AudioSourceMixedStream = 4,
+  /**
+   * 5: Audio stream from a specified remote user.
+   */
+  AudioSourceRemoteUser = 5,
+  /**
+   * 6: Mixed audio streams from all users in the current channel.
+   */
+  AudioSourceRemoteChannel = 6,
+  /**
+   * 100: An unknown audio source.
+   */
+  AudioSourceUnknown = 100,
+}
+
+/**
  * The type of the audio route.
  */
 export enum AudioRoute {
@@ -498,11 +536,11 @@ export enum VideoPixelFormat {
  */
 export enum RenderModeType {
   /**
-   * 1: Hidden mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). One dimension of the video may have clipped contents.
+   * 1: Hidden mode. The priority is to fill the window. Any excess video that does not match the window size will be cropped.
    */
   RenderModeHidden = 1,
   /**
-   * 2: Fit mode. Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
+   * 2: Fit mode. The priority is to ensure that all video content is displayed. Any areas of the window that are not filled due to the mismatch between video size and window size will be filled with black.
    */
   RenderModeFit = 2,
   /**
@@ -838,27 +876,27 @@ export class Hdr10MetadataInfo {
 }
 
 /**
- * @ignore
+ * The relative position of alphaBuffer and video frames.
  */
 export enum AlphaStitchMode {
   /**
-   * @ignore
+   * 0: (Default) Only video frame, that is, alphaBuffer is not stitched with the video frame.
    */
   NoAlphaStitch = 0,
   /**
-   * @ignore
+   * 1: alphaBuffer is above the video frame.
    */
   AlphaStitchUp = 1,
   /**
-   * @ignore
+   * 2: alphaBuffer is below the video frame.
    */
   AlphaStitchBelow = 2,
   /**
-   * @ignore
+   * 3: alphaBuffer is to the left of the video frame.
    */
   AlphaStitchLeft = 3,
   /**
-   * @ignore
+   * 4: alphaBuffer is to the right of the video frame.
    */
   AlphaStitchRight = 4,
 }
@@ -994,7 +1032,7 @@ export class ExternalVideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * @ignore
+   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
    */
   colorSpace?: ColorSpace;
 }
@@ -1070,7 +1108,9 @@ export class VideoFrame {
    */
   matrix?: number[];
   /**
-   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc. In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+   * The alpha channel data output by using portrait segmentation algorithm. This data matches the size of the video frame, with each pixel value ranging from [0,255], where 0 represents the background and 255 represents the foreground (portrait). By setting this parameter, you can render the video background into various effects, such as transparent, solid color, image, video, etc.
+   *  In custom video rendering scenarios, ensure that both the video frame and alphaBuffer are of the Full Range type; other types may cause abnormal alpha data rendering.
+   *  Make sure that alphaBuffer is exactly the same size as the video frame (width × height), otherwise it may cause the app to crash.
    */
   alphaBuffer?: Uint8Array;
   /**
@@ -1082,7 +1122,7 @@ export class VideoFrame {
    */
   pixelBuffer?: Uint8Array;
   /**
-   * The meta information in the video frame. To use this parameter, please contact.
+   * The meta information in the video frame. To use this parameter, contact.
    */
   metaInfo?: IVideoFrameMetaInfo;
   /**
@@ -1090,7 +1130,7 @@ export class VideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * @ignore
+   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
    */
   colorSpace?: ColorSpace;
 }
@@ -1135,6 +1175,22 @@ export enum VideoModulePosition {
    * 8: The position after local video capture and before pre-processing. The observed video here does not have pre-processing effects, which can be verified by enabling image enhancement, virtual background, or watermarks.
    */
   PositionPostCapturerOrigin = 1 << 3,
+}
+
+/**
+ * The snapshot configuration.
+ */
+export class SnapshotConfig {
+  /**
+   * The local path (including filename extensions) of the snapshot. For example:
+   *  iOS: /App Sandbox/Library/Caches/example.jpg
+   *  Android: /storage/emulated/0/Android/data/<package name>/files/example.jpg Ensure that the path you specify exists and is writable.
+   */
+  filePath?: string;
+  /**
+   * The position of the snapshot video frame in the video pipeline. See VideoModulePosition.
+   */
+  position?: VideoModulePosition;
 }
 
 /**
@@ -1388,7 +1444,7 @@ export interface IAudioSpectrumObserver {
    *
    * After successfully calling registerAudioSpectrumObserver to implement the onRemoteAudioSpectrum callback in the IAudioSpectrumObserver and calling enableAudioSpectrumMonitor to enable audio spectrum monitoring, the SDK will trigger the callback as the time interval you set to report the received remote audio data spectrum.
    *
-   * @param spectrums The audio spectrum information of the remote user, see UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
+   * @param spectrums The audio spectrum information of the remote user. See UserAudioSpectrumInfo. The number of arrays is the number of remote users monitored by the SDK. If the array is null, it means that no audio spectrum of remote users is detected.
    * @param spectrumNumber The number of remote users.
    */
   onRemoteAudioSpectrum?(
@@ -1613,6 +1669,30 @@ export class MediaRecorderConfiguration {
    * @ignore
    */
   recorderInfoUpdateInterval?: number;
+  /**
+   * @ignore
+   */
+  width?: number;
+  /**
+   * @ignore
+   */
+  height?: number;
+  /**
+   * @ignore
+   */
+  fps?: number;
+  /**
+   * @ignore
+   */
+  sample_rate?: number;
+  /**
+   * @ignore
+   */
+  channel_num?: number;
+  /**
+   * @ignore
+   */
+  videoSourceType?: VideoSourceType;
 }
 
 /**

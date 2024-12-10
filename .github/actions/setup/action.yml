@@ -15,10 +15,9 @@ runs:
       with:
         bundler-cache: true
 
-    - name: Setup activesupport
+    - name: Setup by gem
       if: ${{ runner.os == 'macOS' }}
-      run:
-        gem install activesupport -v 7.0.8
+      run: gem install 'activesupport:7.0.8' 'xcodeproj:1.25.1'
       shell: bash
 
     - name: Setup Cocoapods
@@ -41,7 +40,7 @@ runs:
 
     - name: Install dependencies
       env:
-        POD_INSTALL: "0"
+        POD_INSTALL: '0'
       if: steps.yarn-cache.outputs.cache-hit != 'true'
       run: yarn install --immutable
       shell: bash

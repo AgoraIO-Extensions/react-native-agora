@@ -31,7 +31,6 @@ Any scene of this project can run successfully alone.
 | [ChannelMediaRelay](./src/examples/advanced/ChannelMediaRelay) | Starts relaying media streams across channels. This method can be used to implement scenarios such as co-host across channels |
 | [ContentInspect](./src/examples/advanced/ContentInspect) | Content inspect |
 | [DirectCdnStreaming](./src/examples/advanced/DirectCdnStreaming) | Direct CDN streaming |
-| [EncodedVideoFrame](./src/examples/advanced/EncodedVideoFrame) | Encoded video frame |
 | [Encryption](./src/examples/advanced/Encryption) | Enables/Disables the built-in encryption |
 | [Extension](./src/examples/advanced/Extension) | Enables/Disables extensions |
 | [JoinMultipleChannel](./src/examples/advanced/JoinMultipleChannel) | Joins a channel with the connection ID |

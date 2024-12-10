@@ -1,46 +1,46 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.4.0-build.6)
-  - AgoraRtcEngine_iOS (4.4.0):
-    - AgoraRtcEngine_iOS/AIAEC (= 4.4.0)
-    - AgoraRtcEngine_iOS/AIAECLL (= 4.4.0)
-    - AgoraRtcEngine_iOS/AINS (= 4.4.0)
-    - AgoraRtcEngine_iOS/AINSLL (= 4.4.0)
-    - AgoraRtcEngine_iOS/AudioBeauty (= 4.4.0)
-    - AgoraRtcEngine_iOS/Basic (= 4.4.0)
-    - AgoraRtcEngine_iOS/ClearVision (= 4.4.0)
-    - AgoraRtcEngine_iOS/ContentInspect (= 4.4.0)
-    - AgoraRtcEngine_iOS/FaceCapture (= 4.4.0)
-    - AgoraRtcEngine_iOS/FaceDetection (= 4.4.0)
-    - AgoraRtcEngine_iOS/LipSync (= 4.4.0)
-    - AgoraRtcEngine_iOS/ReplayKit (= 4.4.0)
-    - AgoraRtcEngine_iOS/RtcBasic (= 4.4.0)
-    - AgoraRtcEngine_iOS/SpatialAudio (= 4.4.0)
-    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.4.0)
-    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.4.0)
-    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.4.0)
-    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.4.0)
-    - AgoraRtcEngine_iOS/VirtualBackground (= 4.4.0)
-    - AgoraRtcEngine_iOS/VQA (= 4.4.0)
-  - AgoraRtcEngine_iOS/AIAEC (4.4.0)
-  - AgoraRtcEngine_iOS/AIAECLL (4.4.0)
-  - AgoraRtcEngine_iOS/AINS (4.4.0)
-  - AgoraRtcEngine_iOS/AINSLL (4.4.0)
-  - AgoraRtcEngine_iOS/AudioBeauty (4.4.0)
-  - AgoraRtcEngine_iOS/Basic (4.4.0)
-  - AgoraRtcEngine_iOS/ClearVision (4.4.0)
-  - AgoraRtcEngine_iOS/ContentInspect (4.4.0)
-  - AgoraRtcEngine_iOS/FaceCapture (4.4.0)
-  - AgoraRtcEngine_iOS/FaceDetection (4.4.0)
-  - AgoraRtcEngine_iOS/LipSync (4.4.0)
-  - AgoraRtcEngine_iOS/ReplayKit (4.4.0)
-  - AgoraRtcEngine_iOS/RtcBasic (4.4.0)
-  - AgoraRtcEngine_iOS/SpatialAudio (4.4.0)
-  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.4.0)
-  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.4.0)
-  - AgoraRtcEngine_iOS/VideoCodecDec (4.4.0)
-  - AgoraRtcEngine_iOS/VideoCodecEnc (4.4.0)
-  - AgoraRtcEngine_iOS/VirtualBackground (4.4.0)
-  - AgoraRtcEngine_iOS/VQA (4.4.0)
+  - AgoraInfra_iOS (1.2.13)
+  - AgoraIrisRTC_iOS (4.5.0-build.1)
+  - AgoraRtcEngine_iOS (4.5.0):
+    - AgoraRtcEngine_iOS/AIAEC (= 4.5.0)
+    - AgoraRtcEngine_iOS/AIAECLL (= 4.5.0)
+    - AgoraRtcEngine_iOS/AINS (= 4.5.0)
+    - AgoraRtcEngine_iOS/AINSLL (= 4.5.0)
+    - AgoraRtcEngine_iOS/AudioBeauty (= 4.5.0)
+    - AgoraRtcEngine_iOS/ClearVision (= 4.5.0)
+    - AgoraRtcEngine_iOS/ContentInspect (= 4.5.0)
+    - AgoraRtcEngine_iOS/FaceCapture (= 4.5.0)
+    - AgoraRtcEngine_iOS/FaceDetection (= 4.5.0)
+    - AgoraRtcEngine_iOS/LipSync (= 4.5.0)
+    - AgoraRtcEngine_iOS/ReplayKit (= 4.5.0)
+    - AgoraRtcEngine_iOS/RtcBasic (= 4.5.0)
+    - AgoraRtcEngine_iOS/SpatialAudio (= 4.5.0)
+    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.5.0)
+    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.5.0)
+    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.5.0)
+    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.5.0)
+    - AgoraRtcEngine_iOS/VirtualBackground (= 4.5.0)
+    - AgoraRtcEngine_iOS/VQA (= 4.5.0)
+  - AgoraRtcEngine_iOS/AIAEC (4.5.0)
+  - AgoraRtcEngine_iOS/AIAECLL (4.5.0)
+  - AgoraRtcEngine_iOS/AINS (4.5.0)
+  - AgoraRtcEngine_iOS/AINSLL (4.5.0)
+  - AgoraRtcEngine_iOS/AudioBeauty (4.5.0)
+  - AgoraRtcEngine_iOS/ClearVision (4.5.0)
+  - AgoraRtcEngine_iOS/ContentInspect (4.5.0)
+  - AgoraRtcEngine_iOS/FaceCapture (4.5.0)
+  - AgoraRtcEngine_iOS/FaceDetection (4.5.0)
+  - AgoraRtcEngine_iOS/LipSync (4.5.0)
+  - AgoraRtcEngine_iOS/ReplayKit (4.5.0)
+  - AgoraRtcEngine_iOS/RtcBasic (4.5.0):
+    - AgoraInfra_iOS (= 1.2.13)
+  - AgoraRtcEngine_iOS/SpatialAudio (4.5.0)
+  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.5.0)
+  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.5.0)
+  - AgoraRtcEngine_iOS/VideoCodecDec (4.5.0)
+  - AgoraRtcEngine_iOS/VideoCodecEnc (4.5.0)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.5.0)
+  - AgoraRtcEngine_iOS/VQA (4.5.0)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -417,9 +417,9 @@ PODS:
   - React-jsinspector (0.72.12)
   - React-logger (0.72.12):
     - glog
-  - react-native-agora (4.3.2):
-    - AgoraIrisRTC_iOS (= 4.4.0-build.6)
-    - AgoraRtcEngine_iOS (= 4.4.0)
+  - react-native-agora (4.4.0):
+    - AgoraIrisRTC_iOS (= 4.5.0-build.1)
+    - AgoraRtcEngine_iOS (= 4.5.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-image-tools (0.8.1):
@@ -557,7 +557,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS (= 4.4.0)
+  - AgoraRtcEngine_iOS (= 4.5.0)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -633,7 +633,8 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
+    - AgoraInfra_iOS
     - AgoraIrisRTC_iOS
     - AgoraRtcEngine_iOS
     - CocoaAsyncSocket
@@ -752,8 +753,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: b28c8aa87cfa3eeec9be2bf1df35e6b5c28aaff1
-  AgoraRtcEngine_iOS: 645039304ab4e32cb43506659056fb71f5d1a3b0
+  AgoraInfra_iOS: 65e11a2183ab7836258768868d06058c22701b13
+  AgoraIrisRTC_iOS: 8207edf56ceaae6b8ee773d8e2137c6b7cb062be
+  AgoraRtcEngine_iOS: 38b5e0a49bbad5616f284e6a4f9e4f5bb3fb3b2e
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -787,7 +789,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 95bdf0ab46024ca9849e08739b6abd8fe489cd33
   React-jsinspector: 8e291ed0ab371314de269001d6b9b25db6aabf42
   React-logger: d4010de0b0564e63637ad08373bc73b5d919974b
-  react-native-agora: e440bb9c0abad211ff7ab6877dd12f07252c5168
+  react-native-agora: e851f18fa99b8ff8cb38bd2f2b7d17f06fd1a470
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
@@ -818,6 +820,6 @@ SPEC CHECKSUMS:
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: e6f852241acd4926e2d97e62a62ba5748df7ca3e
+PODFILE CHECKSUM: 3754fe81d40fc873534ad6c2bee5dc849457061f
 
 COCOAPODS: 1.13.0

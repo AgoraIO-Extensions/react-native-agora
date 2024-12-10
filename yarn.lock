@@ -13919,7 +13919,7 @@ __metadata:
     react-native-color-picker: ^0.6.0
     react-native-fs: ^2.20.0
     react-native-gesture-handler: ^2.9.0
-    react-native-image-tool: "github:LichKing-2234/react-native-image-tools"
+    react-native-image-tool: AgoraIO-Extensions/react-native-image-tools
     react-native-picker-select: ^8.0.4
     react-native-safe-area-context: ^4.5.0
     react-native-screens: ^3.20.0
@@ -14067,13 +14067,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-image-tool@github:LichKing-2234/react-native-image-tools":
+react-native-image-tool@AgoraIO-Extensions/react-native-image-tools:
   version: 0.8.1
-  resolution: "react-native-image-tool@https://github.com/LichKing-2234/react-native-image-tools.git#commit=6ac74db10da838f1e529c364dfe2fb92293a12f7"
+  resolution: "react-native-image-tool@https://github.com/AgoraIO-Extensions/react-native-image-tools.git#commit=7ffc05ec3a6976b605c307942986a289ab4f47ef"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: fcb7944526ba2e095624c15e88d53a220e7665de49eb19cb554abfa17df13310f44513952c9a9aeb48007f2afbe3f6b2adc99fa489919dadd583614514476bf9
+  checksum: 1a6eb6e3c9b09c092a3c0a6408d04ebbecc350bee4eda4b2c8f1ed2d50d2b0fe9f12b8f912540cda333e7ae9a7bf6d6e3fb0d7f840a1d741938314290c463e74
   languageName: node
   linkType: hard
 
