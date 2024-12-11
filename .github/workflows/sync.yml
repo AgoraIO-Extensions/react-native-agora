@@ -14,7 +14,7 @@ jobs:
           source-repo: 'react-native-agora'
           target-branch: ${{ github.ref_name }}
           github-email: ${{ secrets.GIT_EMAIL }}
-          github-email: ${{ secrets.GH_PRIVATE_KEY }}
+          github-private-key: ${{ secrets.GH_PRIVATE_KEY }}
           github-username: ${{ secrets.GIT_USERNAME }}
           pre-command: |
             sh scripts/publishCN/rewrite.sh
