@@ -1,4 +1,4 @@
-name: Generate codes
+name: Sync to shengwang
 
 on:
   workflow_dispatch:
