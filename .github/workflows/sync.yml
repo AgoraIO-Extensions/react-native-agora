@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate code and comment by terra
-        uses: AgoraIO-Extensions/actions/.github/actions/shengwang@sync
+        uses: AgoraIO-Extensions/actions/.github/actions/shengwang-sync@sync
         with:
           target-repo: 'git@github.com:AgoraIO-Extensions/react-native-shengwang.git'
           target-branch: ${{ github.ref_name }}
