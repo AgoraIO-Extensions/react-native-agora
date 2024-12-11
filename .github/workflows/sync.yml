@@ -10,7 +10,9 @@ jobs:
       - name: Generate code and comment by terra
         uses: AgoraIO-Extensions/actions/.github/actions/shengwang@sync
         with:
-          target_repo: 'git@github.com:AgoraIO-Extensions/react-native-shengwang.git'
-          target_branch: ${{ github.ref_name }}
+          target-repo: 'git@github.com:AgoraIO-Extensions/react-native-shengwang.git'
+          target-branch: ${{ github.ref_name }}
+          github-email: ${{ secrets.GIT_EMAIL }}
+          github-username: ${{ secrets.GIT_USERNAME }}
           pre-command: |
             sh scripts/publishCN/rewrite.sh
