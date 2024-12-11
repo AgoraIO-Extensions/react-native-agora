@@ -1,0 +1,16 @@
+name: Sync to shengwang
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-codes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate code and comment by terra
+        uses: AgoraIO-Extensions/actions/.github/actions/shengwang@sync
+        with:
+          target_repo: 'git@github.com:AgoraIO-Extensions/react-native-shengwang.git'
+          target_branch: ${{ github.ref_name }}
+          pre-command: |
+            sh scripts/publishCN/rewrite.sh
