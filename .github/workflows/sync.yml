@@ -18,3 +18,4 @@ jobs:
           github-username: ${{ secrets.GIT_USERNAME }}
           pre-command: |
             sh scripts/publishCN/rewrite.sh
+          create-pr: true
