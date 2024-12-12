@@ -12,6 +12,7 @@ jobs:
         with:
           target-repo: 'react-native-shengwang'
           source-repo: 'react-native-agora'
+          github-token: ${{ secrets.GH_TOKEN }}
           target-branch: ${{ github.ref_name }}
           github-email: ${{ secrets.GIT_EMAIL }}
           github-private-key: ${{ secrets.GH_PRIVATE_KEY }}
