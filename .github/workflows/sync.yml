@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-codes:
+  move-to-shengwang:
     runs-on: ubuntu-latest
     steps:
       - name: Sync to shengwang
