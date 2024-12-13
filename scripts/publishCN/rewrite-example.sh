@@ -2,7 +2,7 @@
 set -e
 MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
-source ${PROJECT_ROOT}/scripts/publishCN/common.sh
+. ${PROJECT_ROOT}/scripts/publishCN/common.sh
 
 change_dir="${PROJECT_ROOT}/example/src"
 

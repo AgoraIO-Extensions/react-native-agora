@@ -2,7 +2,7 @@
 set -e
 MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
-source ${PROJECT_ROOT}/scripts/publishCN/common.sh
+. ${PROJECT_ROOT}/scripts/publishCN/common.sh
 
 change_file=${PROJECT_ROOT}/react-native-agora.podspec
 sed "s/${old_package_name}/${new_package_name}/g" ${change_file} > tmp && mv tmp ${change_file}
