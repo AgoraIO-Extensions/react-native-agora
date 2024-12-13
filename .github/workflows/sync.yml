@@ -18,5 +18,6 @@ jobs:
           github-private-key: ${{ secrets.GH_PRIVATE_KEY }}
           github-username: ${{ secrets.GIT_USERNAME }}
           pre-command: |
-            sh scripts/publishCN/rewrite.sh
+            sh scripts/publishCN/rewrite-dep.sh
+            sh scripts/publishCN/rewrite-example.sh
           create-pr: true

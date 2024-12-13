@@ -2,21 +2,7 @@
 set -e
 MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
-
-old_package_name='react-native-agora'
-new_package_name='react-native-shenwang'
-
-old_native_sdk_android_rtc='io.agora.rtc:full-sdk'
-new_native_sdk_android_rtc='io.shengwang.rtc:full-sdk'
-old_native_sdk_android_rtc_special='io.agora.rtc:agora-special-full'
-new_native_sdk_android_rtc_special='io.shengwang.rtc:agora-special-full'
-old_native_sdk_android_rtc_screen='io.agora.rtc:full-screen-sharing'
-new_native_sdk_android_rtc_screen='io.shengwangw.rtc:full-screen-sharing'
-
-old_native_sdk_iOS_rtc='AgoraRtcEngine_iOS'
-new_native_sdk_iOS_rtc='AgoraRtcEngine_iOS'
-old_native_sdk_iOS_rtc_special='AgoraRtcEngine_Special_iOS'
-new_native_sdk_iOS_rtc_special='ShengwangRtcEngine_Special_iOS'
+source ${PROJECT_ROOT}/scripts/publishCN/common.sh
 
 change_file=${PROJECT_ROOT}/react-native-agora.podspec
 sed "s/${old_package_name}/${new_package_name}/g" ${change_file} > tmp && mv tmp ${change_file}
