@@ -1,6 +1,6 @@
 PODS:
   - AgoraInfra_iOS (1.2.13)
-  - AgoraIrisRTC_iOS (4.5.0-build.1)
+  - AgoraIrisRTC_iOS (4.5.0-build.2)
   - AgoraRtcEngine_iOS (4.5.0):
     - AgoraRtcEngine_iOS/AIAEC (= 4.5.0)
     - AgoraRtcEngine_iOS/AIAECLL (= 4.5.0)
@@ -417,8 +417,8 @@ PODS:
   - React-jsinspector (0.72.12)
   - React-logger (0.72.12):
     - glog
-  - react-native-agora (4.4.0):
-    - AgoraIrisRTC_iOS (= 4.5.0-build.1)
+  - react-native-agora (4.5.0):
+    - AgoraIrisRTC_iOS (= 4.5.0-build.2)
     - AgoraRtcEngine_iOS (= 4.5.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -754,7 +754,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AgoraInfra_iOS: 65e11a2183ab7836258768868d06058c22701b13
-  AgoraIrisRTC_iOS: 8207edf56ceaae6b8ee773d8e2137c6b7cb062be
+  AgoraIrisRTC_iOS: 67278818a420cf54184a197f7b47afb23704d7e2
   AgoraRtcEngine_iOS: 38b5e0a49bbad5616f284e6a4f9e4f5bb3fb3b2e
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -789,7 +789,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 95bdf0ab46024ca9849e08739b6abd8fe489cd33
   React-jsinspector: 8e291ed0ab371314de269001d6b9b25db6aabf42
   React-logger: d4010de0b0564e63637ad08373bc73b5d919974b
-  react-native-agora: e851f18fa99b8ff8cb38bd2f2b7d17f06fd1a470
+  react-native-agora: 4874a8adf0ca14572feb7fafdc9f4bc69270be83
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
