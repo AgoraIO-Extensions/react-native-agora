@@ -18,67 +18,66 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Update dependencies
+      - name: Get dependencies
         id: dep
-        uses: AgoraIO-Extensions/actions/.github/actions/dep@main
+        uses: AgoraIO-Extensions/actions/.github/actions/dep@dev/dep
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          dependencies-content: ${{ inputs.dependencies-content }}          
-          target-files: |
-            android/build.gradle
-            example/ios/Podfile
-            react-native-agora.podspec
+          dependencies-content: ${{ inputs.dependencies-content }}
 
-      - name: Update example
+      - name: Update dependencies
         run: |
-          yarn pod-install example/ios
+          echo "${{ steps.dep.outputs.matches }}"
 
-      - name: Create pull request
-        uses: AgoraIO-Extensions/actions/.github/actions/pr@main
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          target-repo: ${{ github.workspace }}
-          target-branch: ${{ github.ref_name }}
-          target-branch-name-surffix: dep-update
-          pull-request-title: |
-            [AUTO] Update dependencies
-          pull-request-body: |
-            Dependencies content: 
-            
-            ${{ steps.dep.outputs.matches }}
+  #     - name: Update example
+  #       run: |
+  #         yarn pod-install example/ios
 
-  update-pod:
-    runs-on: macos-latest
-    needs: update-dependencies
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref_name }}-dep-update
-          token: ${{ secrets.GH_TOKEN }}
+  #     - name: Create pull request
+  #       uses: AgoraIO-Extensions/actions/.github/actions/pr@main
+  #       with:
+  #         github-token: ${{ secrets.GH_TOKEN }}
+  #         target-repo: ${{ github.workspace }}
+  #         target-branch: ${{ github.ref_name }}
+  #         target-branch-name-surffix: dep-update
+  #         pull-request-title: |
+  #           [AUTO] Update dependencies
+  #         pull-request-body: |
+  #           Dependencies content:
 
-      - name: Setup
-        uses: ./.github/actions/setup
+  #           ${{ steps.dep.outputs.matches }}
 
-      - name: Cache cocoapods
-        id: cocoapods-cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/ios/Pods
-          key: ${{ runner.os }}-cocoapods-0-${{ hashFiles('example/ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cocoapods-0-
+  # update-pod:
+  #   runs-on: macos-latest
+  #   needs: update-dependencies
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         ref: ${{ github.ref_name }}-dep-update
+  #         token: ${{ secrets.GH_TOKEN }}
 
-      - name: Update Podfile.lock
-        run: |
-          pod update
-        working-directory: example/ios
-      
-      - name: Commit changes
-        run: |
-          git config --global user.email "${{ secrets.GIT_EMAIL }}"
-          git config --global user.name "${{ secrets.GIT_USERNAME }}"
-          git add example
-          git commit -m "chore(example): update Podfile.lock by new dependencies"
-          git push
+  #     - name: Setup
+  #       uses: ./.github/actions/setup
+
+  #     - name: Cache cocoapods
+  #       id: cocoapods-cache
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           **/ios/Pods
+  #         key: ${{ runner.os }}-cocoapods-0-${{ hashFiles('example/ios/Podfile.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-cocoapods-0-
+
+  #     - name: Update Podfile.lock
+  #       run: |
+  #         pod update
+  #       working-directory: example/ios
+
+  #     - name: Commit changes
+  #       run: |
+  #         git config --global user.email "${{ secrets.GIT_EMAIL }}"
+  #         git config --global user.name "${{ secrets.GIT_USERNAME }}"
+  #         git add example
+  #         git commit -m "chore(example): update Podfile.lock by new dependencies"
+  #         git push
