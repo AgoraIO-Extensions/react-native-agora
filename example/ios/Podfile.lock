@@ -417,7 +417,7 @@ PODS:
   - React-jsinspector (0.72.12)
   - React-logger (0.72.12):
     - glog
-  - react-native-agora (4.5.0):
+  - react-native-agora (4.5.1):
     - AgoraIrisRTC_iOS (= 4.5.0-build.2)
     - AgoraRtcEngine_iOS (= 4.5.0)
     - RCT-Folly (= 2021.07.22.00)
@@ -789,7 +789,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 95bdf0ab46024ca9849e08739b6abd8fe489cd33
   React-jsinspector: 8e291ed0ab371314de269001d6b9b25db6aabf42
   React-logger: d4010de0b0564e63637ad08373bc73b5d919974b
-  react-native-agora: 4874a8adf0ca14572feb7fafdc9f4bc69270be83
+  react-native-agora: 8266ee6ad8b70fa7a7b711feb0e8e3801169487d
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
@@ -820,6 +820,6 @@ SPEC CHECKSUMS:
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 3754fe81d40fc873534ad6c2bee5dc849457061f
+PODFILE CHECKSUM: 76adaeb79c4a76fa1660f3ad88aff8f4f8dea91b
 
 COCOAPODS: 1.13.0
