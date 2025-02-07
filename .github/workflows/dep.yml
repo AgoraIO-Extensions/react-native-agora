@@ -26,7 +26,7 @@ jobs:
 
       - name: Update dependencies
         run: |
-          echo "${{ steps.dep.outputs.matches }}"
+          sh scripts/dep.sh "${{ steps.dep.outputs.matches }}"
 
   #     - name: Update example
   #       run: |
