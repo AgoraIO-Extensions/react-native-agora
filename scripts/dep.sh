@@ -19,8 +19,11 @@ if [ -z "$MAVEN_DEPENDENCIES" ] && [ -z "$IRIS_MAVEN_DEPENDENCIES" ]; then
   exit 0
 else
   ALL_DEPENDENCIES=$(printf "%s\n%s" "$MAVEN_DEPENDENCIES" "$IRIS_MAVEN_DEPENDENCIES" | sed 's/^/  /')
-  sed -i.bak -e '/\/\/\/ dependencies start/,/\/\/\/ dependencies end/{//!d;}' -e "/\/\/\/ dependencies start/r /dev/stdin" "$ANDROID_BUILD_GRADLE_PATH" <<< "$ALL_DEPENDENCIES"
+  TEMP_FILE=$(mktemp)
+  echo "$ALL_DEPENDENCIES" > "$TEMP_FILE"
+  sed -i.bak -e '/\/\/\/ dependencies start/,/\/\/\/ dependencies end/{//!d;}' -e "/\/\/\/ dependencies start/r $TEMP_FILE" "$ANDROID_BUILD_GRADLE_PATH"
   rm "${ANDROID_BUILD_GRADLE_PATH}.bak"
+  rm "$TEMP_FILE"
   echo "android/build.gradle updated."
 fi
 
@@ -32,13 +35,18 @@ if [ -z "$COCOAPODS_DEPENDENCIES" ] && [ -z "$IRIS_COCOAPODS_DEPENDENCIES" ]; th
   exit 0
 else
   ALL_DEPENDENCIES=$(printf "%s\n%s" "$COCOAPODS_DEPENDENCIES" "$IRIS_COCOAPODS_DEPENDENCIES" | sed 's/^pod /s.dependency /' | sed 's/^/  /')
-  # ALL_DEPENDENCIES=$(printf "%s\n%s" "$COCOAPODS_DEPENDENCIES" "$IRIS_COCOAPODS_DEPENDENCIES" | sed 's/^/  /' | sed "s/^pod /s.dependency /")
-  sed -i.bak -e '/#dependencies start/,/#dependencies end/{//!d;}' -e "/#dependencies start/r /dev/stdin" "$iOS_PODSPEC_PATH" <<< "$ALL_DEPENDENCIES"
+  TEMP_FILE=$(mktemp)
+  echo "$ALL_DEPENDENCIES" > "$TEMP_FILE"
+  sed -i.bak -e '/#dependencies start/,/#dependencies end/{//!d;}' -e "/#dependencies start/r $TEMP_FILE" "$iOS_PODSPEC_PATH"
   rm "${iOS_PODSPEC_PATH}.bak"
+  rm "$TEMP_FILE"
   echo "react-native-agora.podspec updated."
 
   EXAMPLE_DEPENDENCIES=$(printf "%s\n%s" "$COCOAPODS_DEPENDENCIES" | sed 's/^/  /')
-  sed -i.bak -e '/#dependencies start/,/#dependencies end/{//!d;}' -e "/#dependencies start/r /dev/stdin" "$EXAMPLE_IOS_PODFILE_PATH" <<< "$EXAMPLE_DEPENDENCIES"
+  TEMP_FILE=$(mktemp)
+  echo "$EXAMPLE_DEPENDENCIES" > "$TEMP_FILE"
+  sed -i.bak -e '/#dependencies start/,/#dependencies end/{//!d;}' -e "/#dependencies start/r $TEMP_FILE" "$EXAMPLE_IOS_PODFILE_PATH"
   rm "${EXAMPLE_IOS_PODFILE_PATH}.bak"
+  rm "$TEMP_FILE"
   echo "example/ios/Podfile updated."
 fi
