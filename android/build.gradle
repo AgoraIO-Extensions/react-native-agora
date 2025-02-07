@@ -164,9 +164,11 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+  /// dependencies start
   api 'io.agora.rtc:agora-special-full:4.5.0.1'
   implementation 'io.agora.rtc:full-screen-sharing:4.5.0.1'
   implementation 'io.agora.rtc:iris-rtc:4.5.0-build.2'
+  /// dependencies end
 }
 
 if (isNewArchitectureEnabled()) {
