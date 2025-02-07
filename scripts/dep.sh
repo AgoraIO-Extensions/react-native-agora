@@ -14,11 +14,26 @@ INPUT=$1
 MAVEN_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .maven[]')
 IRIS_MAVEN_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .iris_maven[]')
 
+# Function to modify dependencies
+modify_dependencies() {
+  local dependencies="$1"
+  local modified_dependencies=""
+  while IFS= read -r line; do
+    if [[ "$line" == *"agora-special-full"* || "$line" == *"full-sdk"* || "$line" == *"agora-full-preview"* ]]; then
+      modified_dependencies+="${line/implementation/api}"$'\n'
+    else
+      modified_dependencies+="$line"$'\n'
+    fi
+  done <<< "$dependencies"
+  echo "$modified_dependencies"
+}
+
 if [ -z "$MAVEN_DEPENDENCIES" ] && [ -z "$IRIS_MAVEN_DEPENDENCIES" ]; then
   echo "No Android maven dependencies need to change."
   exit 0
 else
   ALL_DEPENDENCIES=$(printf "%s\n%s" "$MAVEN_DEPENDENCIES" "$IRIS_MAVEN_DEPENDENCIES" | sed 's/^/  /')
+  ALL_DEPENDENCIES=$(modify_dependencies "$ALL_DEPENDENCIES")
   TEMP_FILE=$(mktemp)
   echo "$ALL_DEPENDENCIES" > "$TEMP_FILE"
   sed -i.bak -e '/\/\/\/ dependencies start/,/\/\/\/ dependencies end/{//!d;}' -e "/\/\/\/ dependencies start/r $TEMP_FILE" "$ANDROID_BUILD_GRADLE_PATH"
