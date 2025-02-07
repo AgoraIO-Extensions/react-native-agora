@@ -15,9 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup
-        uses: ./.github/actions/setup
-
       - name: Get dependencies
         id: dep
         uses: AgoraIO-Extensions/actions/.github/actions/dep@dev/dep
@@ -26,7 +23,10 @@ jobs:
 
       - name: Update dependencies
         run: |
-          sh scripts/dep.sh "${{ steps.dep.outputs.matches }}"
+          sh scripts/dep.sh ${{ steps.dep.outputs.matches }}
+
+      # - name: Setup
+      #   uses: ./.github/actions/setup
 
   #     - name: Update example
   #       run: |
