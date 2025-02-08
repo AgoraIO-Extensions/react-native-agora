@@ -15,19 +15,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Update dependencies
+      - name: Get dependencies
         id: dep
         uses: AgoraIO-Extensions/actions/.github/actions/dep@main
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          dependencies-content: ${{ inputs.dependencies-content }}          
-          target-files: |
-            android/build.gradle
-            example/ios/Podfile
-            react-native-agora.podspec
+          dependencies-content: ${{ inputs.dependencies-content }}
+
+      - name: Update dependencies
+        run: |
+          sh scripts/dep.sh ${{ steps.dep.outputs.matches }}
+
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Update example
         run: |
@@ -43,8 +42,8 @@ jobs:
           pull-request-title: |
             [AUTO] Update dependencies
           pull-request-body: |
-            Dependencies content: 
-            
+            Dependencies content:
+
             ${{ steps.dep.outputs.matches }}
 
   update-pod:
@@ -74,7 +73,7 @@ jobs:
         run: |
           pod update
         working-directory: example/ios
-      
+
       - name: Commit changes
         run: |
           git config --global user.email "${{ secrets.GIT_EMAIL }}"
