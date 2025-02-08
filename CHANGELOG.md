@@ -1,5 +1,12 @@
 
 
+## [4.5.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.0...v4.5.1) (2025-01-03)
+
+
+### Bug Fixes
+
+* The issue of call API with an invalid data type may cause crash ([#847](https://github.com/AgoraIO-Extensions/react-native-agora/issues/847)) ([e94f4f2](https://github.com/AgoraIO-Extensions/react-native-agora/commit/e94f4f2e380a458de07f14f33ab14d79cf043b24))
+
 # [4.5.0](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.4.0...v4.5.0) (2024-12-10)
 
 

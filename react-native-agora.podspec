@@ -40,8 +40,10 @@ Pod::Spec.new do |s|
    end
   end
 
+  #dependencies start
   s.dependency 'AgoraRtcEngine_iOS', '4.5.0'
-  s.dependency 'AgoraIrisRTC_iOS', '4.5.0-build.1'
+  s.dependency 'AgoraIrisRTC_iOS', '4.5.0-build.2'
+  #dependencies end
   s.libraries = 'stdc++'
   s.framework = 'ReplayKit'
 end
