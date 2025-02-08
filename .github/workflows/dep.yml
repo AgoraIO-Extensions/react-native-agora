@@ -17,7 +17,7 @@ jobs:
 
       - name: Get dependencies
         id: dep
-        uses: AgoraIO-Extensions/actions/.github/actions/dep@dev/dep
+        uses: AgoraIO-Extensions/actions/.github/actions/dep@main
         with:
           dependencies-content: ${{ inputs.dependencies-content }}
 
