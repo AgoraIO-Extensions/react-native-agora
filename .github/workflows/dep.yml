@@ -45,39 +45,3 @@ jobs:
             Dependencies content:
 
             ${{ steps.dep.outputs.matches }}
-
-  update-pod:
-    runs-on: macos-latest
-    needs: update-dependencies
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref_name }}-dep-update
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Cache cocoapods
-        id: cocoapods-cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/ios/Pods
-          key: ${{ runner.os }}-cocoapods-0-${{ hashFiles('example/ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cocoapods-0-
-
-      - name: Update Podfile.lock
-        run: |
-          pod update
-        working-directory: example/ios
-
-      - name: Commit changes
-        run: |
-          git config --global user.email "${{ secrets.GIT_EMAIL }}"
-          git config --global user.name "${{ secrets.GIT_USERNAME }}"
-          git add example
-          git commit -m "chore(example): update Podfile.lock by new dependencies"
-          git push
