@@ -151,6 +151,10 @@ export enum WarnCodeType {
   /**
    * @ignore
    */
+  WarnAdmPopState = 1055,
+  /**
+   * @ignore
+   */
   WarnAdmWinCoreNoRecordingDevice = 1322,
   /**
    * @ignore
@@ -2019,9 +2023,17 @@ export enum AudioScenarioType {
    */
   AudioScenarioMeeting = 8,
   /**
+   * @ignore
+   */
+  AudioScenarioAiServer = 9,
+  /**
+   * @ignore
+   */
+  AudioScenarioAiClient = 10,
+  /**
    * The number of enumerations.
    */
-  AudioScenarioNum = 9,
+  AudioScenarioNum = 11,
 }
 
 /**
