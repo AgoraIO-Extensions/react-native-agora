@@ -1,4 +1,8 @@
-import { PickerProps } from '@react-native-picker/picker/typings/Picker';
+import { Picker } from '@react-native-picker/picker';
+import {
+  PickerItemProps,
+  PickerProps,
+} from '@react-native-picker/picker/typings/Picker';
 import {
   Button,
   ButtonProps,
@@ -29,10 +33,6 @@ import {
   View,
   ViewProps,
 } from 'react-native';
-import PickerSelect, {
-  Item,
-  PickerSelectProps,
-} from 'react-native-picker-select';
 
 export { RtcSurfaceView } from 'react-native-agora';
 
@@ -196,10 +196,14 @@ export const AgoraCard = (
   );
 };
 
-export interface AgoraDropdownItem extends Item {}
+export interface AgoraDropdownItem extends PickerItemProps {}
 
 export const AgoraDropdown = (
-  props: PickerSelectProps & PickerProps & { title: string }
+  props: PickerItemProps & {
+    title: string;
+    items: AgoraDropdownItem[];
+    onValueChange: (value: any, index: number) => void;
+  }
 ) => {
   const [value, setValue] = useState(props.value);
 
@@ -207,25 +211,30 @@ export const AgoraDropdown = (
     setValue(props.value);
   }, [props.value]);
 
+  console.log(props);
+
   return (
     <AgoraView style={AgoraStyle.fullWidth}>
       <AgoraText children={props.title} />
-      <PickerSelect
-        {...props}
-        pickerProps={{
-          style: AgoraStyle.fullWidth,
-          enabled: props.enabled,
-          dropdownIconColor: 'gray',
-        }}
-        value={value}
-        // @ts-ignore
-        textInputProps={{ style: AgoraStyle.input, chevronUp: true }}
+      <Picker
+        selectedValue={value}
         onValueChange={(v, index) => {
           if (v === null || v === undefined) return;
           setValue(v);
           props.onValueChange?.call(this, v, index);
         }}
-      />
+      >
+        {props.items?.map((item, index) => {
+          return (
+            <Picker.Item
+              key={index}
+              label={item.label}
+              value={item.value}
+              enabled={item.enabled}
+            />
+          );
+        })}
+      </Picker>
     </AgoraView>
   );
 };

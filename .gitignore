@@ -23,6 +23,7 @@ build/
 xcuserdata
 *.xccheckout
 *.xcode.env.local
+**/.xcode.env.local
 *.moved-aside
 DerivedData
 *.hmap
@@ -44,6 +45,7 @@ android.iml
 # Cocoapods
 #
 example/ios/Pods
+**/Pods/
 
 # Ruby
 example/vendor/
