@@ -1,8 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  StackScreenProps,
-  createStackNavigator,
-} from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import {
   Keyboard,
@@ -25,7 +23,7 @@ import Advanced from './examples/advanced';
 import Basic from './examples/basic';
 import Hooks from './examples/hook';
 
-const RootStack = createStackNavigator<any>();
+const RootStack = createNativeStackNavigator<any>();
 
 const DATA = [Basic, Advanced, Hooks];
 

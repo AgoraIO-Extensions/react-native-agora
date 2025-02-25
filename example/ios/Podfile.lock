@@ -47,9 +47,9 @@ PODS:
   - FBLazyVector (0.77.1)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - hermes-engine (0.77.0):
-    - hermes-engine/Pre-built (= 0.77.0)
-  - hermes-engine/Pre-built (0.77.0)
+  - hermes-engine (0.77.1):
+    - hermes-engine/Pre-built (= 0.77.1)
+  - hermes-engine/Pre-built (0.77.1)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1719,7 +1719,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.4.0):
+  - RNScreens (4.9.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1740,9 +1740,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.4.0)
+    - RNScreens/common (= 4.9.0)
     - Yoga
-  - RNScreens/common (4.4.0):
+  - RNScreens/common (4.9.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1764,7 +1764,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.11.1):
+  - RNSVG (15.11.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1784,9 +1784,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.11.1)
+    - RNSVG/common (= 15.11.2)
     - Yoga
-  - RNSVG/common (15.11.1):
+  - RNSVG/common (15.11.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1852,7 +1852,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-agora (from `../..`)
+  - react-native-agora (from `../node_modules/react-native-agora`)
   - react-native-image-tools (from `../node_modules/react-native-image-tool`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
@@ -1975,7 +1975,7 @@ EXTERNAL SOURCES:
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-agora:
-    :path: "../.."
+    :path: "../node_modules/react-native-agora"
   react-native-image-tools:
     :path: "../node_modules/react-native-image-tool"
   react-native-safe-area-context:
@@ -2065,8 +2065,8 @@ SPEC CHECKSUMS:
   FBLazyVector: 79c4b7ec726447eec5f8593379466bd9fde1aa14
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
-  hermes-engine: 1f783c3d53940aed0d2c84586f0b7a85ab7827ef
-  RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
+  hermes-engine: ccc24d29d650ea725d582a9a53d57cd417fbdb53
+  RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: 664055db806cce35c3c1b43c84414dd66e117ae6
   RCTRequired: dc9a83fa1012054f94430d210337ca3a1afe6fc0
   RCTTypeSafety: 031cefa254a1df313a196f105b8fcffdab1c5ab6
@@ -2131,8 +2131,8 @@ SPEC CHECKSUMS:
   RNCPicker: ffbd7b9fc7c1341929e61dbef6219f7860f57418
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 9b05fab9a0b48fe48c968de7dbb9ca38a2b4f7ab
-  RNScreens: 7feff8baab9ec69110bce0011d45cb7e2b38be28
-  RNSVG: 7e38044415125a1d108294377de261d2fe2c54c9
+  RNScreens: 2faba2591006e59fa14b9b665599ce29435a749a
+  RNSVG: cb725f4400af94396beaeab55098e0a57f2ee020
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 2957d0e744897870b5a377f26522e3f08cadd7ac
