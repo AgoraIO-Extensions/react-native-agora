@@ -1764,7 +1764,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.11.2):
+  - RNSVG (15.11.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1784,9 +1784,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.11.2)
+    - RNSVG/common (= 15.11.1)
     - Yoga
-  - RNSVG/common (15.11.2):
+  - RNSVG/common (15.11.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1852,7 +1852,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-agora (from `../node_modules/react-native-agora`)
+  - react-native-agora (from `../..`)
   - react-native-image-tools (from `../node_modules/react-native-image-tool`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
@@ -1975,7 +1975,7 @@ EXTERNAL SOURCES:
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-agora:
-    :path: "../node_modules/react-native-agora"
+    :path: "../.."
   react-native-image-tools:
     :path: "../node_modules/react-native-image-tool"
   react-native-safe-area-context:
@@ -2132,7 +2132,7 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 9b05fab9a0b48fe48c968de7dbb9ca38a2b4f7ab
   RNScreens: 2faba2591006e59fa14b9b665599ce29435a749a
-  RNSVG: cb725f4400af94396beaeab55098e0a57f2ee020
+  RNSVG: 7e38044415125a1d108294377de261d2fe2c54c9
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 2957d0e744897870b5a377f26522e3f08cadd7ac
