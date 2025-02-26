@@ -158,6 +158,11 @@
     "name": "AgoraRtcNgSpec",
     "type": "all",
     "jsSrcsDir": "src/specs",
+    "ios": {
+      "componentProvider": {
+        "AgoraRtcSurfaceView": "AgoraRtcSurfaceView"
+      }
+    },
     "android": {
       "javaPackageName": "io.agora.rtc.ng.react"
     }
