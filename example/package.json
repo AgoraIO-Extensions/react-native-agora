@@ -26,6 +26,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.24.0",
     "react-native-image-tool": "AgoraIO-Extensions/react-native-image-tools",
+    "react-native-picker-select": "^9.3.1",
     "react-native-safe-area-context": "^5.2.0",
     "react-native-screens": "^4.6.0",
     "react-native-svg": "^15.11.1",
