@@ -48,11 +48,6 @@ using namespace facebook::react;
     const auto &oldViewProps = *std::static_pointer_cast<AgoraRtcSurfaceViewProps const>(_props);
     const auto &newViewProps = *std::static_pointer_cast<AgoraRtcSurfaceViewProps const>(props);
 
-    // Add NSLog to print oldViewProps and newViewProps
-    NSLog(@"oldViewProps: funcName = %s, params = %s", oldViewProps.callApi.funcName.c_str(), oldViewProps.callApi.params.c_str());
-    NSLog(@"newViewProps: funcName = %s, params = %s", newViewProps.callApi.funcName.c_str(), newViewProps.callApi.params.c_str());
-    NSLog(@"_isInitialized: _isInitialized = %d", _isInitialized);
-
     if (_isDestroyed) {
         _isInitialized = NO;
         _isDestroyed = NO;
