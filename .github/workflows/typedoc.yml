@@ -16,7 +16,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
           zip -r react-native-agora-docs.zip docs
 
       - name: Upload Artifact ⬆️
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: react-native-agora-docs.zip
           path: react-native-agora-docs.zip

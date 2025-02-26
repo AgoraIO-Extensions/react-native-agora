@@ -70,7 +70,7 @@ jobs:
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --force=true
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: AgoraRtcNgExample
           path: |
@@ -156,7 +156,7 @@ jobs:
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --force=true
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: AgoraRtcNgExample-${{ github.run_id }}
           path: |
@@ -164,7 +164,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload dSYM
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: AgoraRtcNgExampleSymbol-${{ github.run_id }}
           path: |

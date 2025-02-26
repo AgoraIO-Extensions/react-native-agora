@@ -1,46 +1,6 @@
 PODS:
-  - AgoraInfra_iOS (1.2.13)
-  - AgoraIrisRTC_iOS (4.5.0-build.2)
-  - AgoraRtcEngine_iOS (4.5.0):
-    - AgoraRtcEngine_iOS/AIAEC (= 4.5.0)
-    - AgoraRtcEngine_iOS/AIAECLL (= 4.5.0)
-    - AgoraRtcEngine_iOS/AINS (= 4.5.0)
-    - AgoraRtcEngine_iOS/AINSLL (= 4.5.0)
-    - AgoraRtcEngine_iOS/AudioBeauty (= 4.5.0)
-    - AgoraRtcEngine_iOS/ClearVision (= 4.5.0)
-    - AgoraRtcEngine_iOS/ContentInspect (= 4.5.0)
-    - AgoraRtcEngine_iOS/FaceCapture (= 4.5.0)
-    - AgoraRtcEngine_iOS/FaceDetection (= 4.5.0)
-    - AgoraRtcEngine_iOS/LipSync (= 4.5.0)
-    - AgoraRtcEngine_iOS/ReplayKit (= 4.5.0)
-    - AgoraRtcEngine_iOS/RtcBasic (= 4.5.0)
-    - AgoraRtcEngine_iOS/SpatialAudio (= 4.5.0)
-    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.5.0)
-    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.5.0)
-    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.5.0)
-    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.5.0)
-    - AgoraRtcEngine_iOS/VirtualBackground (= 4.5.0)
-    - AgoraRtcEngine_iOS/VQA (= 4.5.0)
-  - AgoraRtcEngine_iOS/AIAEC (4.5.0)
-  - AgoraRtcEngine_iOS/AIAECLL (4.5.0)
-  - AgoraRtcEngine_iOS/AINS (4.5.0)
-  - AgoraRtcEngine_iOS/AINSLL (4.5.0)
-  - AgoraRtcEngine_iOS/AudioBeauty (4.5.0)
-  - AgoraRtcEngine_iOS/ClearVision (4.5.0)
-  - AgoraRtcEngine_iOS/ContentInspect (4.5.0)
-  - AgoraRtcEngine_iOS/FaceCapture (4.5.0)
-  - AgoraRtcEngine_iOS/FaceDetection (4.5.0)
-  - AgoraRtcEngine_iOS/LipSync (4.5.0)
-  - AgoraRtcEngine_iOS/ReplayKit (4.5.0)
-  - AgoraRtcEngine_iOS/RtcBasic (4.5.0):
-    - AgoraInfra_iOS (= 1.2.13)
-  - AgoraRtcEngine_iOS/SpatialAudio (4.5.0)
-  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.5.0)
-  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.5.0)
-  - AgoraRtcEngine_iOS/VideoCodecDec (4.5.0)
-  - AgoraRtcEngine_iOS/VideoCodecEnc (4.5.0)
-  - AgoraRtcEngine_iOS/VirtualBackground (4.5.0)
-  - AgoraRtcEngine_iOS/VQA (4.5.0)
+  - AgoraIrisRTC_iOS (4.5.1-dev.4)
+  - AgoraRtcEngine_iOS_Preview (4.5.1-dev.4)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
@@ -1253,8 +1213,8 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
   - react-native-agora (4.5.1):
-    - AgoraIrisRTC_iOS (= 4.5.0-build.2)
-    - AgoraRtcEngine_iOS (= 4.5.0)
+    - AgoraIrisRTC_iOS (= 4.5.1-dev.4)
+    - AgoraRtcEngine_iOS_Preview (= 4.5.1-dev.4)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1813,7 +1773,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS (= 4.5.0)
+  - AgoraRtcEngine_iOS_Preview (= 4.5.1-dev.4)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -1895,9 +1855,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AgoraInfra_iOS
     - AgoraIrisRTC_iOS
-    - AgoraRtcEngine_iOS
+    - AgoraRtcEngine_iOS_Preview
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -2056,9 +2015,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraInfra_iOS: 65e11a2183ab7836258768868d06058c22701b13
-  AgoraIrisRTC_iOS: 67278818a420cf54184a197f7b47afb23704d7e2
-  AgoraRtcEngine_iOS: 38b5e0a49bbad5616f284e6a4f9e4f5bb3fb3b2e
+  AgoraIrisRTC_iOS: b88e1ba73a90fe2a940d418e747b4aa3634895eb
+  AgoraRtcEngine_iOS_Preview: 8df25ee49f28c9e02169bea4ed4a2db2111c3151
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -2095,7 +2053,7 @@ SPEC CHECKSUMS:
   React-logger: e7eeebaed32b88dcc29b10901aa8c5822dc397c4
   React-Mapbuffer: 73dd1210c4ecf0dfb4e2d4e06f2a13f824a801a9
   React-microtasksnativemodule: d03753688e2abf135edcd4160ab3ce7526da8b0d
-  react-native-agora: d31ed60390bbe2a57cb5ace99609e131f6801a87
+  react-native-agora: bf3c2df3890ed0f919a1c03d75caff9d62ed7a13
   react-native-image-tools: 173708146c3fc759d8d8dd532327c04bd425eb86
   react-native-safe-area-context: 7e513d737b0b5c1d10bbe0e5fcc9f925a7be144c
   react-native-slider: bb7eb4732940fab78217e1c096bb647d8b0d1cf3
@@ -2137,6 +2095,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 1fd059161b449018342943b095a6d4e69bcaa719
 
-PODFILE CHECKSUM: cc9fabf644918ef977f471d4f229ef34562353fe
+PODFILE CHECKSUM: e61f60303a72f588f2996b3aa816873b9f40d679
 
 COCOAPODS: 1.16.2
