@@ -136,6 +136,7 @@ jobs:
         run: |
           sudo apt-get clean
           npm cache clean --force
+          rm -rf "${{ env.TURBO_CACHE_DIR }}"
           yarn cache clean
           rm -rf /home/runner/.android/cache/*
           df -h
