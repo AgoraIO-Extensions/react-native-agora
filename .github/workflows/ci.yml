@@ -156,9 +156,9 @@ jobs:
           arch: x86_64
           avd-name: emulator
           profile: pixel_5
-          ram-size: 1024M
-          heap-size: 1024M
-          disk-size: 2048M
+          ram-size: 512M
+          heap-size: 512M
+          disk-size: 1024M
           working-directory: example
           script: detox test -c android.emu.release
 
