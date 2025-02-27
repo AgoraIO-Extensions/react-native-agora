@@ -134,7 +134,6 @@ jobs:
 
       - name: Clean Gradle cache
         run: |
-          sudo apt-get clean
           npm cache clean --force
           rm -rf "${{ env.TURBO_CACHE_DIR }}"
           yarn cache clean
