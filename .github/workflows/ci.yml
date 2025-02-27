@@ -66,7 +66,7 @@ jobs:
     strategy:
       matrix:
         newArch: [true, false]
-    runs-on: macos-latest
+    runs-on: macos-13
     env:
       TURBO_CACHE_DIR: .turbo/android
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
@@ -152,8 +152,8 @@ jobs:
         if: ${{ matrix.newArch == false }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 31
-          arch: arm64
+          api-level: 26
+          arch: x86_64
           avd-name: emulator
           working-directory: example
           script: detox test -c android.emu.release
