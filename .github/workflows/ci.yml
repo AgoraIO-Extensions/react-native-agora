@@ -143,9 +143,13 @@ jobs:
         if: ${{ matrix.newArch == false }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 31
+          api-level: 26
           arch: x86_64
           avd-name: emulator
+          profile: pixel_5
+          ram-size: 1024M
+          heap-size: 1024M
+          disk-size: 2048M
           working-directory: example
           script: detox test -c android.emu.release
 
