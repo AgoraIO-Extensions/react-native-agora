@@ -134,12 +134,9 @@ jobs:
 
       - name: Clean Gradle cache
         run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/hostedtoolcache
           sudo apt-get clean
-          rm -rf ~/.gradle/caches
-          rm -rf ~/.gradle/wrapper
-          rm -rf /home/runner/.android/avd/*
+          npm cache clean --force
+          yarn cache clean
           rm -rf /home/runner/.android/cache/*
           df -h
 
@@ -154,7 +151,7 @@ jobs:
         if: ${{ matrix.newArch == false }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 26
+          api-level: 31
           arch: x86_64
           avd-name: emulator
           profile: pixel_5
