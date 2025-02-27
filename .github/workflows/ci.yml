@@ -78,21 +78,21 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Cache turborepo for Android
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-
+      # - name: Cache turborepo for Android
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{ env.TURBO_CACHE_DIR }}
+      #     key: ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-
 
-      - name: Check turborepo cache for Android
-        run: |
-          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'detox:android').cache.status")
+      # - name: Check turborepo cache for Android
+      #   run: |
+      #     TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'detox:android').cache.status")
 
-          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
-            echo "turbo_cache_hit=1" >> $GITHUB_ENV
-          fi
+      #     if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
+      #       echo "turbo_cache_hit=1" >> $GITHUB_ENV
+      #     fi
 
       - name: Install JDK
         if: env.turbo_cache_hit != 1
@@ -106,16 +106,16 @@ jobs:
         run: |
           /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
 
-      - name: Cache Gradle
-        if: env.turbo_cache_hit != 1
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/wrapper
-            ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ matrix.newArch }}-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.newArch }}-
+      # - name: Cache Gradle
+      #   if: env.turbo_cache_hit != 1
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.gradle/wrapper
+      #       ~/.gradle/caches
+      #     key: ${{ runner.os }}-gradle-${{ matrix.newArch }}-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gradle-${{ matrix.newArch }}-
 
       - name: Install Detox dependencies
         shell: bash
