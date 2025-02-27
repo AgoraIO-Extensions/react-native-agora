@@ -152,8 +152,8 @@ jobs:
         if: ${{ matrix.newArch == false }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 26
-          arch: x86_64
+          api-level: 31
+          arch: arm64
           avd-name: emulator
           working-directory: example
           script: detox test -c android.emu.release
