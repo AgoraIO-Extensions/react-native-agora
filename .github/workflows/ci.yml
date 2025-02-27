@@ -139,6 +139,7 @@ jobs:
           rm -rf "${{ env.TURBO_CACHE_DIR }}"
           yarn cache clean
           rm -rf /home/runner/.android/cache/*
+          rm -rf /home/runner/.android/avd/*
           df -h
 
       - name: Enable KVM group perms
@@ -152,13 +153,9 @@ jobs:
         if: ${{ matrix.newArch == false }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 31
+          api-level: 26
           arch: x86_64
           avd-name: emulator
-          profile: pixel_5
-          ram-size: 512M
-          heap-size: 512M
-          disk-size: 1024M
           working-directory: example
           script: detox test -c android.emu.release
 
