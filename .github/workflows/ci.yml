@@ -132,6 +132,12 @@ jobs:
         run: |
           yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Run e2e tests
         # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
         if: ${{ matrix.newArch == false }}
