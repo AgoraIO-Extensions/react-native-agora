@@ -134,11 +134,21 @@ jobs:
 
       - name: Clean Gradle cache
         run: |
+          # Save release APK
+          mkdir -p /tmp/save_apk
+          cp example/android/app/build/outputs/apk/release/app-release.apk /tmp/save_apk/ || true
+
+          # Clean Android build files
+          rm -rf example/android
+
+          # Restore release APK
+          mkdir -p example/android/app/build/outputs/apk/release
+          cp /tmp/save_apk/app-release.apk example/android/app/build/outputs/apk/release/ || true
+
+          # Clean other caches
+          rm -rf "${{ env.TURBO_CACHE_DIR }}" || true
           sudo apt-get clean
           npm cache clean --force
-          rm -rf example/android/app/build/intermediates || true
-          rm -rf example/android/app/.cxx || true
-          rm -rf "${{ env.TURBO_CACHE_DIR }}" || true
           rm -rf example/ios
           yarn cache clean
           rm -rf /home/runner/.android/cache/* || true
