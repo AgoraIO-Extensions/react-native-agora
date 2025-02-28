@@ -66,7 +66,7 @@ jobs:
     strategy:
       matrix:
         newArch: [true, false]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       TURBO_CACHE_DIR: .turbo/android
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
@@ -131,6 +131,23 @@ jobs:
       - name: Build example for Android
         run: |
           yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+      - name: Clean Useless cache
+        run: |
+          rm -rf "${{ env.TURBO_CACHE_DIR }}" || true
+          rm -rf ~/.gradle/caches || true
+          rm -rf ~/.gradle/wrapper || true
+          sudo apt-get clean
+          npm cache clean --force
+          rm -rf example/ios
+          yarn cache clean
+          df -h
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Run e2e tests
         # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
