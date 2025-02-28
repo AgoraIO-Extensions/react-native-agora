@@ -147,6 +147,8 @@ jobs:
 
           # Clean other caches
           rm -rf "${{ env.TURBO_CACHE_DIR }}" || true
+          rm -rf ~/.gradle/caches || true
+          rm -rf ~/.gradle/wrapper || true
           sudo apt-get clean
           npm cache clean --force
           rm -rf example/ios
