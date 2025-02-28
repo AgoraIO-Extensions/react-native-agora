@@ -65,7 +65,7 @@ jobs:
   test-android:
     strategy:
       matrix:
-        newArch: [false]
+        newArch: [true, false]
     runs-on: ubuntu-latest
     env:
       TURBO_CACHE_DIR: .turbo/android
@@ -139,6 +139,7 @@ jobs:
           rm -rf example/android/app/build/intermediates || true
           rm -rf example/android/app/.cxx || true
           rm -rf "${{ env.TURBO_CACHE_DIR }}" || true
+          rm -rf example/ios
           yarn cache clean
           rm -rf /home/runner/.android/cache/* || true
           rm -rf /home/runner/.android/avd/* || true
