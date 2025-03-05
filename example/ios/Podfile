@@ -41,6 +41,6 @@ end
 
 target 'ScreenShare' do
   #dependencies start
-  pod 'AgoraRtcEngine_iOS_Preview', '4.5.1-dev.4'
+  pod 'AgoraRtcEngine_iOS_Preview', '4.5.1-dev.5'
   #dependencies end
 end
