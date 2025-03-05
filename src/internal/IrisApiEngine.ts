@@ -536,7 +536,7 @@ export function callIrisApi(funcName: string, params: any): any {
         if (typeof retObj.result === 'number' && retObj.result < 0) {
           console.error('callApi', funcName, JSON.stringify(params), ret);
         } else {
-          console.debug('callApi', funcName, JSON.stringify(params), ret);
+          console.log('callApi', funcName, JSON.stringify(params), ret);
         }
       }
       return retObj;

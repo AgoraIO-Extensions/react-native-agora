@@ -71,10 +71,10 @@ yarn clean
 To confirm that the app is running with the new architecture, you can check the Metro logs for a message like this:
 
 ```sh
-Running "AgoraRtcNgExample" with {"fabric":true,"initialProps":{"concurrentRoot":true},"rootTag":1}
+Running "AgoraRtcNgExample" with {"fabric":true,"initialProps":{},"rootTag":1}
 ```
 
-Note the `"fabric":true` and `"concurrentRoot":true` properties.
+Note the `"fabric":true` properties.
 
 Make sure your code passes TypeScript and ESLint. Run the following to verify:
 

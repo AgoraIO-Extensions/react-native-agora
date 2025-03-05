@@ -217,6 +217,7 @@ export const AgoraDropdown = (
           enabled: props.enabled,
           dropdownIconColor: 'gray',
         }}
+        style={{ inputIOSContainer: { pointerEvents: 'none' } }}
         value={value}
         // @ts-ignore
         textInputProps={{ style: AgoraStyle.input, chevronUp: true }}
