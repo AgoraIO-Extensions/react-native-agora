@@ -223,7 +223,7 @@ jobs:
 
       - name: Build example for iOS
         run: |
-          yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --force=true
+          yarn turbo run detox:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
       - uses: futureware-tech/simulator-action@v4
         with:
