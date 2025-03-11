@@ -163,7 +163,7 @@ jobs:
   test-ios:
     strategy:
       matrix:
-        newArch: [1, 0]
+        newArch: [false, true]
     runs-on: macos-latest
     env:
       TURBO_CACHE_DIR: .turbo/ios
@@ -176,6 +176,10 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Setup fastlane
+        run: |
+          brew install fastlane
+
       - name: Cache turborepo for iOS
         uses: actions/cache@v3
         with:
@@ -183,14 +187,6 @@ jobs:
           key: ${{ runner.os }}-turborepo-ios-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-turborepo-ios-detox-${{ matrix.newArch }}-
-
-      - name: Check turborepo cache for iOS
-        run: |
-          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run detox:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'detox:ios').cache.status")
-
-          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
-            echo "turbo_cache_hit=1" >> $GITHUB_ENV
-          fi
 
       - name: Cache cocoapods
         if: env.turbo_cache_hit != 1
@@ -204,16 +200,8 @@ jobs:
             ${{ runner.os }}-cocoapods-${{ matrix.newArch }}-
 
       - name: Install cocoapods
-        if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'
         run: |
           yarn pod-install example/ios
-
-      - name: Install Detox dependencies
-        shell: bash
-        run: |
-          npm i -g detox-cli react-native-cli
-          brew tap wix/brew
-          brew install applesimutils
 
       - name: Modify APP ID
         run: |
@@ -231,7 +219,7 @@ jobs:
 
       - name: Run e2e tests
         # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
-        if: ${{ matrix.newArch == 0 }}
+        if: ${{ matrix.newArch == false }}
         working-directory: example
         run: |
           detox clean-framework-cache
