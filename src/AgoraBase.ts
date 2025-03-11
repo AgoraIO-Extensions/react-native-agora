@@ -1989,7 +1989,7 @@ export enum AudioProfileType {
    */
   AudioProfileMusicHighQualityStereo = 5,
   /**
-   * 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
+   * 6: A sample rate of 16 kHz, audio encoding, mono, and Acoustic Echo Cancellation (AEC) enabled.
    */
   AudioProfileIot = 6,
   /**
@@ -2027,7 +2027,7 @@ export enum AudioScenarioType {
    */
   AudioScenarioAiServer = 9,
   /**
-   * @ignore
+   * 10: AI conversation scenario, which is only applicable to scenarios where the user interacts with the conversational AI agent created by.
    */
   AudioScenarioAiClient = 10,
   /**
@@ -3205,7 +3205,9 @@ export class TranscodingVideoStream {
    */
   remoteUserUid?: number;
   /**
-   * The URL of the image. Use this parameter only when the source type is the image for local video mixing.
+   * The file path of local images. Use this parameter only when the source type is the image for local video mixing. Examples:
+   *  Android: /storage/emulated/0/Pictures/image.png
+   *  iOS: /var/mobile/Containers/Data/Application/<APP-UUID>/Documents/image.png
    */
   imageUrl?: string;
   /**
