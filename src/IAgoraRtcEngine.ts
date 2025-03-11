@@ -6866,7 +6866,7 @@ export abstract class IRtcEngine {
    * Enables tracing the video frame rendering process.
    *
    * The SDK starts tracing the rendering status of the video frames in the channel from the moment this method is successfully called and reports information about the event through the onVideoRenderingTracingResult callback.
-   *  By default, the SDK starts tracing the video rendering event automatically when the local user successfully joins the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
+   *  The SDK automatically starts tracking the rendering events of the video from the moment that you call joinChannel to join the channel. You can call this method at an appropriate time according to the actual application scenario to customize the tracing process.
    *  After the local user leaves the current channel, the SDK automatically resets the time point to the next time when the user successfully joins the channel.
    *
    * @returns
