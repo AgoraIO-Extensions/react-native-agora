@@ -9,10 +9,14 @@ on:
 
 jobs:
   build-android:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        newArch: [false, true]
     env:
       TURBO_CACHE_DIR: .turbo/android
       turbo_cache_hit: 0
+      ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,9 +28,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-android-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-android-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-android-
+            ${{ runner.os }}-turborepo-android-${{ matrix.newArch }}-
 
       - name: Check turborepo cache for Android
         run: |
@@ -41,7 +45,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11'
+          java-version: '17'
 
       - name: Finalize Android SDK
         if: env.turbo_cache_hit != 1
@@ -55,9 +59,9 @@ jobs:
           path: |
             ~/.gradle/wrapper
             ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-false-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ matrix.newArch }}-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-false-
+            ${{ runner.os }}-gradle-${{ matrix.newArch }}-
 
       - name: Modify APP ID
         run: |
@@ -72,16 +76,20 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: AgoraRtcNgExample
+          name: AgoraRtcNgExample-Android-${{ matrix.newArch && 'NewArch' || 'OldArch' }}-${{ github.run_id }}
           path: |
             example/android/app/build/outputs/apk/release/*.apk
           if-no-files-found: error
 
   build-ios:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        newArch: [false, true]
     env:
       TURBO_CACHE_DIR: .turbo/ios
       turbo_cache_hit: 0
+      RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -97,9 +105,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-ios-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-ios-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-ios-
+            ${{ runner.os }}-turborepo-ios-${{ matrix.newArch }}-
 
       - name: Cache cocoapods
         if: env.turbo_cache_hit != 1
@@ -108,9 +116,9 @@ jobs:
         with:
           path: |
             **/ios/Pods
-          key: ${{ runner.os }}-cocoapods-0-${{ hashFiles('example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-cocoapods-${{ matrix.newArch }}-${{ hashFiles('example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cocoapods-0-
+            ${{ runner.os }}-cocoapods-${{ matrix.newArch }}-
 
       - name: Install cocoapods
         run: |
@@ -158,7 +166,7 @@ jobs:
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: AgoraRtcNgExample-${{ github.run_id }}
+          name: AgoraRtcNgExample-iOS-${{ matrix.newArch && 'NewArch' || 'OldArch' }}-${{ github.run_id }}
           path: |
             example/ios/*.ipa
           if-no-files-found: error
@@ -166,7 +174,7 @@ jobs:
       - name: Upload dSYM
         uses: actions/upload-artifact@v4
         with:
-          name: AgoraRtcNgExampleSymbol-${{ github.run_id }}
+          name: AgoraRtcNgExampleSymbol-${{ matrix.newArch && 'NewArch' || 'OldArch' }}-${{ github.run_id }}
           path: |
             example/ios/*.dSYM.zip
           if-no-files-found: error

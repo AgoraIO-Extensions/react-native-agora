@@ -66,7 +66,7 @@ jobs:
     strategy:
       matrix:
         newArch: [true, false]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       TURBO_CACHE_DIR: .turbo/android
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
@@ -99,7 +99,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11'
+          java-version: '17'
 
       - name: Finalize Android SDK
         if: env.turbo_cache_hit != 1
@@ -132,6 +132,23 @@ jobs:
         run: |
           yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
+      - name: Clean Useless cache
+        run: |
+          rm -rf "${{ env.TURBO_CACHE_DIR }}" || true
+          rm -rf ~/.gradle/caches || true
+          rm -rf ~/.gradle/wrapper || true
+          sudo apt-get clean
+          npm cache clean --force
+          rm -rf example/ios
+          yarn cache clean
+          df -h
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Run e2e tests
         # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
         if: ${{ matrix.newArch == false }}
@@ -151,7 +168,6 @@ jobs:
     env:
       TURBO_CACHE_DIR: .turbo/ios
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
-      turbo_cache_hit: 0
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -159,35 +175,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Cache turborepo for iOS
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-ios-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-turborepo-ios-detox-${{ matrix.newArch }}-
-
-      - name: Check turborepo cache for iOS
-        run: |
-          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run detox:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'detox:ios').cache.status")
-
-          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
-            echo "turbo_cache_hit=1" >> $GITHUB_ENV
-          fi
-
-      - name: Cache cocoapods
-        if: env.turbo_cache_hit != 1
-        id: cocoapods-cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/ios/Pods
-          key: ${{ runner.os }}-cocoapod-${{ matrix.newArch }}-${{ hashFiles('example/ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cocoapods-${{ matrix.newArch }}-
-
       - name: Install cocoapods
-        if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'
         run: |
           yarn pod-install example/ios
 

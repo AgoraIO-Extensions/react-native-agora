@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* AgoraRtcNgExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AgoraRtcNgExampleTests.m */; };
 		0C80B921A6F3F58F76C31292 /* libPods-AgoraRtcNgExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-AgoraRtcNgExample.a */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		0D6218A331F0B581869A7361 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BA1F89A3C8AF5E1D57110DD4 /* PrivacyInfo.xcprivacy */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		51C0ADB2D05FD3E09BD14D10 /* libPods-ScreenShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995956B4E8573A01AC9C535 /* libPods-ScreenShare.a */; };
 		7699B88040F8A987B510C191 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		BB373C6F2C1AA14700EA05A6 /* VideoRawDataNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BB373C6E2C1AA14700EA05A6 /* VideoRawDataNativeModule.m */; };
+		BB09EF1B2D6DC900002D32F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB09EF1A2D6DC900002D32F0 /* AppDelegate.swift */; };
+		BB328BD72D6F18F300C8D67D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB328BD62D6F18F300C8D67D /* WebKit.framework */; };
+		BB49F07E2D6DCB2700D51F3B /* VideoRawDataNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BB49F07C2D6DCB2700D51F3B /* VideoRawDataNativeModule.m */; };
 		F5652807291BE31F00793068 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F56527FF291BE31E00793068 /* agora-logo.png */; };
 		F5652809291BE31F00793068 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652801291BE31E00793068 /* ding.mp3 */; };
 		F565280A291BE31F00793068 /* dang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5652802291BE31E00793068 /* dang.mp3 */; };
@@ -61,11 +62,8 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* AgoraRtcNgExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraRtcNgExampleTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AgoraRtcNgExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgoraRtcNgExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = AgoraRtcNgExample/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = AgoraRtcNgExample/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AgoraRtcNgExample/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AgoraRtcNgExample/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = AgoraRtcNgExample/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgoraRtcNgExample-AgoraRtcNgExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-AgoraRtcNgExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample.debug.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample/Pods-AgoraRtcNgExample.debug.xcconfig"; sourceTree = "<group>"; };
 		45F306609F451ADF48C3F8C6 /* Pods-ScreenShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.debug.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.debug.xcconfig"; sourceTree = "<group>"; };
@@ -76,8 +74,11 @@
 		6B4351393DA57450FBFEC119 /* Pods-ScreenShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenShare.release.xcconfig"; path = "Target Support Files/Pods-ScreenShare/Pods-ScreenShare.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AgoraRtcNgExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; path = "Target Support Files/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests/Pods-AgoraRtcNgExample-AgoraRtcNgExampleTests.release.xcconfig"; sourceTree = "<group>"; };
-		BB373C6A2C1AA0EA00EA05A6 /* VideoRawDataNativeModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoRawDataNativeModule.h; sourceTree = "<group>"; };
-		BB373C6E2C1AA14700EA05A6 /* VideoRawDataNativeModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoRawDataNativeModule.m; sourceTree = "<group>"; };
+		BA1F89A3C8AF5E1D57110DD4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = AgoraRtcNgExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		BB09EF1A2D6DC900002D32F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AgoraRtcNgExample/AppDelegate.swift; sourceTree = "<group>"; };
+		BB328BD62D6F18F300C8D67D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		BB49F07B2D6DCB2700D51F3B /* VideoRawDataNativeModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoRawDataNativeModule.h; sourceTree = "<group>"; };
+		BB49F07C2D6DCB2700D51F3B /* VideoRawDataNativeModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoRawDataNativeModule.m; sourceTree = "<group>"; };
 		BBD83E082C1AA0220030ADAF /* NativeModules */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; name = NativeModules; path = AgoraRtcNgExampleTests/NativeModules; sourceTree = SOURCE_ROOT; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F56527FF291BE31E00793068 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
@@ -105,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB328BD72D6F18F300C8D67D /* WebKit.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-AgoraRtcNgExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,12 +144,11 @@
 		13B07FAE1A68108700A75B9A /* AgoraRtcNgExample */ = {
 			isa = PBXGroup;
 			children = (
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				BB09EF1A2D6DC900002D32F0 /* AppDelegate.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
-				13B07FB71A68108700A75B9A /* main.m */,
+				BA1F89A3C8AF5E1D57110DD4 /* PrivacyInfo.xcprivacy */,
 			);
 			name = AgoraRtcNgExample;
 			sourceTree = "<group>";
@@ -155,6 +156,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB328BD62D6F18F300C8D67D /* WebKit.framework */,
 				F5652820291C0EE700793068 /* hermes.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-AgoraRtcNgExample.a */,
@@ -175,7 +177,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				BB373C692C1AA0CB00EA05A6 /* NativeModules */,
+				BB49F07D2D6DCB2700D51F3B /* NativeModules */,
 				F56527FE291BE31E00793068 /* Resources */,
 				13B07FAE1A68108700A75B9A /* AgoraRtcNgExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -200,11 +202,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BB373C692C1AA0CB00EA05A6 /* NativeModules */ = {
+		BB49F07D2D6DCB2700D51F3B /* NativeModules */ = {
 			isa = PBXGroup;
 			children = (
-				BB373C6A2C1AA0EA00EA05A6 /* VideoRawDataNativeModule.h */,
-				BB373C6E2C1AA14700EA05A6 /* VideoRawDataNativeModule.m */,
+				BB49F07B2D6DCB2700D51F3B /* VideoRawDataNativeModule.h */,
+				BB49F07C2D6DCB2700D51F3B /* VideoRawDataNativeModule.m */,
 			);
 			path = NativeModules;
 			sourceTree = "<group>";
@@ -317,12 +319,8 @@
 			attributes = {
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
-					00E356ED1AD99517003FC87E = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
-					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1600;
 					};
 					F5652810291BE33F00793068 = {
 						CreatedOnToolsVersion = 14.1;
@@ -367,6 +365,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F5652807291BE31F00793068 /* agora-logo.png in Resources */,
+				0D6218A331F0B581869A7361 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,7 +393,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
 		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -564,9 +563,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				BB373C6F2C1AA14700EA05A6 /* VideoRawDataNativeModule.m in Sources */,
+				BB09EF1B2D6DC900002D32F0 /* AppDelegate.swift in Sources */,
+				BB49F07E2D6DCB2700D51F3B /* VideoRawDataNativeModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,7 +604,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = AgoraRtcNgExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -633,7 +631,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = PV44H27855;
 				INFOPLIST_FILE = AgoraRtcNgExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -663,6 +661,7 @@
 				DEVELOPMENT_TEAM = PV44H27855;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AgoraRtcNgExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -697,6 +696,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PV44H27855;
 				INFOPLIST_FILE = AgoraRtcNgExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -722,9 +722,10 @@
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -791,15 +792,18 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
 		83CBBA211A601CBA00E9B192 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -861,6 +865,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -871,7 +876,7 @@
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "$(inherited)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -884,7 +889,7 @@
 				INFOPLIST_FILE = ScreenShare/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ScreenShare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -908,7 +913,7 @@
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "$(inherited)";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -922,7 +927,7 @@
 				INFOPLIST_FILE = ScreenShare/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ScreenShare;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

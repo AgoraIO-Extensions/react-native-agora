@@ -18,6 +18,8 @@ using namespace facebook::react;
 
 @implementation AgoraRtcSurfaceView {
     UIView * _view;
+    BOOL _isInitialized;
+    BOOL _isDestroyed;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -32,6 +34,8 @@ using namespace facebook::react;
         _props = defaultProps;
 
         _view = [[UIView alloc] init];
+        _isInitialized = NO;
+        _isDestroyed = NO;
 
         self.contentView = _view;
     }
@@ -44,7 +48,12 @@ using namespace facebook::react;
     const auto &oldViewProps = *std::static_pointer_cast<AgoraRtcSurfaceViewProps const>(_props);
     const auto &newViewProps = *std::static_pointer_cast<AgoraRtcSurfaceViewProps const>(props);
 
-    if (oldViewProps.callApi.funcName != newViewProps.callApi.funcName || oldViewProps.callApi.params != newViewProps.callApi.params) {
+    if (_isDestroyed) {
+        _isInitialized = NO;
+        _isDestroyed = NO;
+    }
+
+    if (!_isInitialized || oldViewProps.callApi.funcName != newViewProps.callApi.funcName || oldViewProps.callApi.params != newViewProps.callApi.params) {
         char result[kBasicResultLength];
         void *buffers[1];
         buffers[0] = (__bridge void*)_view;
@@ -60,9 +69,16 @@ using namespace facebook::react;
         if ([[AgoraRtcNg shareInstance] irisApiEngine]) {
             [[AgoraRtcNg shareInstance] irisApiEngine]->CallIrisApi(&param);
         }
+        _isInitialized = YES;
     }
 
     [super updateProps:props oldProps:oldProps];
+}
+
+- (void)removeFromSuperview
+{
+    [super removeFromSuperview];
+    _isDestroyed = YES;
 }
 
 Class<RCTComponentViewProtocol> AgoraRtcSurfaceViewCls(void)

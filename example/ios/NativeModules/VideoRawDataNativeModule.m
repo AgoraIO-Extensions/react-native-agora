@@ -15,17 +15,17 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(initialize:(NSString *)appId) {
   RCTLogInfo(@"[initialize] Initializing Agora RtcEngine with App ID: %@", appId);
-  
+
   self.appId = appId;
-  
+
   self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:appId delegate:self];
-  
+
   RCTLogInfo(@"[initialize] Agora RtcEngine created successfully.");
-  
+
   [self.rtcEngine enableVideo];
-  
+
   [self.rtcEngine setVideoFrameDelegate:self];
-  
+
   return nil;
 }
 
@@ -35,7 +35,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(releaseModule) {
     [AgoraRtcEngineKit destroy];
     self.rtcEngine = nil;
   }
-  
+
   return nil;
 }
 
