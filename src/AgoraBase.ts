@@ -2120,7 +2120,7 @@ export enum VideoApplicationScenarioType {
    */
   ApplicationScenarioMeeting = 1,
   /**
-   * ApplicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. 2: 1v1 video call scenario.
+   * ApplicationScenario1v1 (2) This is applicable to the scenario. To meet the requirements for low latency and high-quality video in this scenario, the SDK optimizes its strategies, improving performance in terms of video quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak network conditions. This enumeration value is only applicable to the broadcaster vs. broadcaster scenario. 2: 1v1 video call scenario.
    */
   ApplicationScenario1v1 = 2,
   /**
@@ -3667,7 +3667,7 @@ export enum VideoViewSetupMode {
    */
   VideoViewSetupAdd = 1,
   /**
-   * 2: Deletes a view.
+   * 2: Deletes a view. When you no longer need to use a certain view, it is recommended to delete the view by setting setupMode to VideoViewSetupRemove, otherwise it may lead to leak of rendering resources.
    */
   VideoViewSetupRemove = 2,
 }
@@ -3689,7 +3689,7 @@ export class VideoCanvas {
    */
   view?: any;
   /**
-   * The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents completely transparent black.
+   * The background color of the video canvas in RGBA format. The default value is 0x00000000, which represents black.
    */
   backgroundColor?: number;
   /**

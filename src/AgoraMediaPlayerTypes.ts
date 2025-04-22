@@ -242,6 +242,10 @@ export enum MediaPlayerEvent {
    * @ignore
    */
   PlayerEventTryOpenFailed = 18,
+  /**
+   * @ignore
+   */
+  PlayerEventHttpRedirect = 19,
 }
 
 /**
