@@ -548,7 +548,6 @@ export abstract class IRtcEngineEx extends IRtcEngine {
    *  Each data channel can send up to 60 packets per second, with each packet being a maximum of 1 KB. After calling createDataStreamEx, you can call this method to send data stream messages to all users in the channel.
    *  Call this method after joinChannelEx.
    *  Ensure that you call createDataStreamEx to create a data channel before calling this method.
-   *  This method applies only to the COMMUNICATION profile or to the hosts in the LIVE_BROADCASTING profile. If an audience in the LIVE_BROADCASTING profile calls this method, the audience may be switched to a host.
    *
    * @param streamId The data stream ID. You can get the data stream ID by calling createDataStreamEx.
    * @param data The message to be sent.

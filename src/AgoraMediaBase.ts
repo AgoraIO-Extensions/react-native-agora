@@ -430,6 +430,10 @@ export class AudioPcmFrame {
    */
   num_channels_?: number;
   /**
+   * @ignore
+   */
+  audio_track_number_?: number;
+  /**
    * The number of bytes per sample.
    */
   bytes_per_sample?: BytesPerSample;
