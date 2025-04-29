@@ -1,46 +1,46 @@
 PODS:
-  - AgoraInfra_iOS (1.2.13)
-  - AgoraIrisRTC_iOS (4.5.1-build.1)
-  - AgoraRtcEngine_iOS (4.5.1):
-    - AgoraRtcEngine_iOS/AIAEC (= 4.5.1)
-    - AgoraRtcEngine_iOS/AIAECLL (= 4.5.1)
-    - AgoraRtcEngine_iOS/AINS (= 4.5.1)
-    - AgoraRtcEngine_iOS/AINSLL (= 4.5.1)
-    - AgoraRtcEngine_iOS/AudioBeauty (= 4.5.1)
-    - AgoraRtcEngine_iOS/ClearVision (= 4.5.1)
-    - AgoraRtcEngine_iOS/ContentInspect (= 4.5.1)
-    - AgoraRtcEngine_iOS/FaceCapture (= 4.5.1)
-    - AgoraRtcEngine_iOS/FaceDetection (= 4.5.1)
-    - AgoraRtcEngine_iOS/LipSync (= 4.5.1)
-    - AgoraRtcEngine_iOS/ReplayKit (= 4.5.1)
-    - AgoraRtcEngine_iOS/RtcBasic (= 4.5.1)
-    - AgoraRtcEngine_iOS/SpatialAudio (= 4.5.1)
-    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.5.1)
-    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.5.1)
-    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.5.1)
-    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.5.1)
-    - AgoraRtcEngine_iOS/VirtualBackground (= 4.5.1)
-    - AgoraRtcEngine_iOS/VQA (= 4.5.1)
-  - AgoraRtcEngine_iOS/AIAEC (4.5.1)
-  - AgoraRtcEngine_iOS/AIAECLL (4.5.1)
-  - AgoraRtcEngine_iOS/AINS (4.5.1)
-  - AgoraRtcEngine_iOS/AINSLL (4.5.1)
-  - AgoraRtcEngine_iOS/AudioBeauty (4.5.1)
-  - AgoraRtcEngine_iOS/ClearVision (4.5.1)
-  - AgoraRtcEngine_iOS/ContentInspect (4.5.1)
-  - AgoraRtcEngine_iOS/FaceCapture (4.5.1)
-  - AgoraRtcEngine_iOS/FaceDetection (4.5.1)
-  - AgoraRtcEngine_iOS/LipSync (4.5.1)
-  - AgoraRtcEngine_iOS/ReplayKit (4.5.1)
-  - AgoraRtcEngine_iOS/RtcBasic (4.5.1):
-    - AgoraInfra_iOS (= 1.2.13)
-  - AgoraRtcEngine_iOS/SpatialAudio (4.5.1)
-  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.5.1)
-  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.5.1)
-  - AgoraRtcEngine_iOS/VideoCodecDec (4.5.1)
-  - AgoraRtcEngine_iOS/VideoCodecEnc (4.5.1)
-  - AgoraRtcEngine_iOS/VirtualBackground (4.5.1)
-  - AgoraRtcEngine_iOS/VQA (4.5.1)
+  - AgoraInfra_iOS (1.2.13.1)
+  - AgoraIrisRTC_iOS (4.5.2-test.1)
+  - AgoraRtcEngine_iOS (4.5.2):
+    - AgoraRtcEngine_iOS/AIAEC (= 4.5.2)
+    - AgoraRtcEngine_iOS/AIAECLL (= 4.5.2)
+    - AgoraRtcEngine_iOS/AINS (= 4.5.2)
+    - AgoraRtcEngine_iOS/AINSLL (= 4.5.2)
+    - AgoraRtcEngine_iOS/AudioBeauty (= 4.5.2)
+    - AgoraRtcEngine_iOS/ClearVision (= 4.5.2)
+    - AgoraRtcEngine_iOS/ContentInspect (= 4.5.2)
+    - AgoraRtcEngine_iOS/FaceCapture (= 4.5.2)
+    - AgoraRtcEngine_iOS/FaceDetection (= 4.5.2)
+    - AgoraRtcEngine_iOS/LipSync (= 4.5.2)
+    - AgoraRtcEngine_iOS/ReplayKit (= 4.5.2)
+    - AgoraRtcEngine_iOS/RtcBasic (= 4.5.2)
+    - AgoraRtcEngine_iOS/SpatialAudio (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoAv1CodecDec (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoAv1CodecEnc (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.5.2)
+    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.5.2)
+    - AgoraRtcEngine_iOS/VirtualBackground (= 4.5.2)
+    - AgoraRtcEngine_iOS/VQA (= 4.5.2)
+  - AgoraRtcEngine_iOS/AIAEC (4.5.2)
+  - AgoraRtcEngine_iOS/AIAECLL (4.5.2)
+  - AgoraRtcEngine_iOS/AINS (4.5.2)
+  - AgoraRtcEngine_iOS/AINSLL (4.5.2)
+  - AgoraRtcEngine_iOS/AudioBeauty (4.5.2)
+  - AgoraRtcEngine_iOS/ClearVision (4.5.2)
+  - AgoraRtcEngine_iOS/ContentInspect (4.5.2)
+  - AgoraRtcEngine_iOS/FaceCapture (4.5.2)
+  - AgoraRtcEngine_iOS/FaceDetection (4.5.2)
+  - AgoraRtcEngine_iOS/LipSync (4.5.2)
+  - AgoraRtcEngine_iOS/ReplayKit (4.5.2)
+  - AgoraRtcEngine_iOS/RtcBasic (4.5.2):
+    - AgoraInfra_iOS (= 1.2.13.1)
+  - AgoraRtcEngine_iOS/SpatialAudio (4.5.2)
+  - AgoraRtcEngine_iOS/VideoAv1CodecDec (4.5.2)
+  - AgoraRtcEngine_iOS/VideoAv1CodecEnc (4.5.2)
+  - AgoraRtcEngine_iOS/VideoCodecDec (4.5.2)
+  - AgoraRtcEngine_iOS/VideoCodecEnc (4.5.2)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.5.2)
+  - AgoraRtcEngine_iOS/VQA (4.5.2)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
@@ -1253,8 +1253,8 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
   - react-native-agora (4.5.2):
-    - AgoraIrisRTC_iOS (= 4.5.1-build.1)
-    - AgoraRtcEngine_iOS (= 4.5.1)
+    - AgoraIrisRTC_iOS (= 4.5.2-test.1)
+    - AgoraRtcEngine_iOS (= 4.5.2)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1932,7 +1932,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS (= 4.5.1)
+  - AgoraRtcEngine_iOS (= 4.5.2)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -2178,9 +2178,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraInfra_iOS: 65e11a2183ab7836258768868d06058c22701b13
-  AgoraIrisRTC_iOS: dd3d957c25be6bd2b2a5d03fe706ebe8a46909f0
-  AgoraRtcEngine_iOS: 5092a058c7b2842db39d8ca614d451af6f84969a
+  AgoraInfra_iOS: 3691b2b277a1712a35ae96de25af319de0d73d08
+  AgoraIrisRTC_iOS: 646bfd756ab8f75a944482e7e93e55d4d2d25384
+  AgoraRtcEngine_iOS: 97e2398a2addda9057815a2a583a658e36796ff6
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -2217,7 +2217,7 @@ SPEC CHECKSUMS:
   React-logger: e7eeebaed32b88dcc29b10901aa8c5822dc397c4
   React-Mapbuffer: 73dd1210c4ecf0dfb4e2d4e06f2a13f824a801a9
   React-microtasksnativemodule: d03753688e2abf135edcd4160ab3ce7526da8b0d
-  react-native-agora: 80fd3599192b96e535d61dfd04664bc4fd573a4c
+  react-native-agora: acf5a0e28e77fac2188a09becfa4b2d294736819
   react-native-image-tools: 173708146c3fc759d8d8dd532327c04bd425eb86
   react-native-safe-area-context: 7e513d737b0b5c1d10bbe0e5fcc9f925a7be144c
   react-native-slider: bb7eb4732940fab78217e1c096bb647d8b0d1cf3
@@ -2260,6 +2260,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 1fd059161b449018342943b095a6d4e69bcaa719
 
-PODFILE CHECKSUM: a11cb6fc5b6c0ac38cd7f309b8b8a8f05c23888e
+PODFILE CHECKSUM: 608e45591afdf6ea32f51a7c00d225e0d7762761
 
 COCOAPODS: 1.16.2
