@@ -116,15 +116,19 @@ export const AgoraSlider = (props: {
   step: number;
   onSlidingComplete: (value: number) => void;
 }) => {
-  const [value, setValue] = useState(props.value);
+  const progress = useSharedValue(props.value);
 
   useEffect(() => {
-    setValue(props.value);
-  }, [props.value]);
+    progress.value = props.value;
+  }, [progress, props.value]);
 
-  const progress = useSharedValue(value);
-  const min = useSharedValue(props.minimumValue);
-  const max = useSharedValue(props.maximumValue);
+  const minimumValue = useSharedValue(props.minimumValue);
+  const maximumValue = useSharedValue(props.maximumValue);
+
+  useEffect(() => {
+    minimumValue.value = props.minimumValue;
+    maximumValue.value = props.maximumValue;
+  }, [minimumValue, maximumValue, props.minimumValue, props.maximumValue]);
 
   return (
     <>
@@ -133,10 +137,9 @@ export const AgoraSlider = (props: {
         disable={props.disabled}
         style={AgoraStyle.slider}
         progress={progress}
-        minimumValue={min}
-        maximumValue={max}
+        minimumValue={minimumValue}
+        maximumValue={maximumValue}
         onSlidingComplete={(value) => {
-          setValue(value);
           props.onSlidingComplete?.call(this, Math.round(value * 10) / 10);
         }}
       />
