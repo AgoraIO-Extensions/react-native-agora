@@ -469,12 +469,15 @@ export default class MusicContentCenter
               })}
               value={songCode}
               onValueChange={(value) => {
-                this.setState({ songCode: value, preload: false }, () => {
-                  setTimeout(() => {
-                    this.stop();
-                    this.preload();
-                  });
-                });
+                this.setState(
+                  { songCode: value, preload: false, position: 0 },
+                  () => {
+                    setTimeout(() => {
+                      this.stop();
+                      this.preload();
+                    });
+                  }
+                );
               }}
             />
           </>

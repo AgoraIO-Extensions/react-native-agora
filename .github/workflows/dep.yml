@@ -30,6 +30,7 @@ jobs:
 
       - name: Update example
         run: |
+          rm -rf example/ios/Podfile.lock
           yarn pod-install example/ios
 
       - name: Create pull request

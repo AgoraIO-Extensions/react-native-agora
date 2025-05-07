@@ -12,8 +12,6 @@ import {
   InputProps,
   ListItem,
   ListItemProps,
-  Slider,
-  SliderProps,
   Switch,
   SwitchProps,
   Text,
@@ -29,10 +27,13 @@ import {
   View,
   ViewProps,
 } from 'react-native';
+
+import { Slider } from 'react-native-awesome-slider';
 import PickerSelect, {
   Item,
   PickerSelectProps,
 } from 'react-native-picker-select';
+import { useSharedValue } from 'react-native-reanimated';
 
 export { RtcSurfaceView } from 'react-native-agora';
 
@@ -106,26 +107,40 @@ export const AgoraTextInput = (
   );
 };
 
-export const AgoraSlider = (props: SliderProps & { title: string }) => {
-  const [value, setValue] = useState(props.value);
+export const AgoraSlider = (props: {
+  disabled?: boolean;
+  value: number;
+  title: string;
+  minimumValue: number;
+  maximumValue: number;
+  step: number;
+  onSlidingComplete: (value: number) => void;
+}) => {
+  const progress = useSharedValue(props.value);
 
   useEffect(() => {
-    setValue(props.value);
-  }, [props.value]);
+    progress.value = props.value;
+  }, [progress, props.value]);
 
-  const { title, ...others } = props;
+  const minimumValue = useSharedValue(props.minimumValue);
+  const maximumValue = useSharedValue(props.maximumValue);
+
+  useEffect(() => {
+    minimumValue.value = props.minimumValue;
+    maximumValue.value = props.maximumValue;
+  }, [minimumValue, maximumValue, props.minimumValue, props.maximumValue]);
+
   return (
     <>
-      <AgoraText children={title} />
+      <AgoraText children={props.title} />
       <Slider
+        disable={props.disabled}
         style={AgoraStyle.slider}
-        minimumTrackTintColor={'white'}
-        thumbStyle={AgoraStyle.thumb}
-        {...others}
-        value={value}
-        onValueChange={(v) => {
-          setValue(v);
-          props.onValueChange?.call(this, v);
+        progress={progress}
+        minimumValue={minimumValue}
+        maximumValue={maximumValue}
+        onSlidingComplete={(value) => {
+          props.onSlidingComplete?.call(this, Math.round(value * 10) / 10);
         }}
       />
     </>

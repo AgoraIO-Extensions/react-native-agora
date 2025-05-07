@@ -30,7 +30,6 @@ modify_dependencies() {
 
 if [ -z "$MAVEN_DEPENDENCIES" ] && [ -z "$IRIS_MAVEN_DEPENDENCIES" ]; then
   echo "No Android maven dependencies need to change."
-  exit 0
 else
   ALL_DEPENDENCIES=$(printf "%s\n%s" "$MAVEN_DEPENDENCIES" "$IRIS_MAVEN_DEPENDENCIES" | sed 's/^/  /')
   ALL_DEPENDENCIES=$(modify_dependencies "$ALL_DEPENDENCIES")
@@ -47,7 +46,6 @@ IRIS_COCOAPODS_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "
 
 if [ -z "$COCOAPODS_DEPENDENCIES" ] && [ -z "$IRIS_COCOAPODS_DEPENDENCIES" ]; then
   echo "No iOS cocoapods dependencies need to change."
-  exit 0
 else
   ALL_DEPENDENCIES=$(printf "%s\n%s" "$COCOAPODS_DEPENDENCIES" "$IRIS_COCOAPODS_DEPENDENCIES" | sed 's/^pod /s.dependency /' | sed 's/^/  /')
   TEMP_FILE=$(mktemp)
