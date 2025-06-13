@@ -1,15 +1,49 @@
 import React, { Component } from 'react';
-import { HostComponent, StyleSheet } from 'react-native';
+import {
+  HostComponent,
+  NativeModules,
+  Platform,
+  StyleSheet,
+  findNodeHandle,
+} from 'react-native';
 
 import { VideoSourceType } from '../AgoraMediaBase';
-import { RtcRendererViewProps } from '../AgoraRtcRenderView';
+import {
+  AgoraRtcRenderViewState,
+  RtcRendererViewProps,
+} from '../AgoraRtcRenderView';
 
 import { IrisApiParam } from './IrisApiEngine';
 
 export default abstract class IAgoraRtcRenderView<
   T extends RtcRendererViewProps
-> extends Component<T> {
+> extends Component<T, AgoraRtcRenderViewState> {
   abstract get view(): HostComponent<any>;
+  ref: React.RefObject<any> = React.createRef();
+
+  constructor(props: T) {
+    super(props);
+    this.state = {
+      contentView: undefined,
+    };
+  }
+
+  private onLayout = () => {
+    if (Platform.OS === 'ios') {
+      const viewHandle = findNodeHandle(this.ref.current);
+      if (viewHandle) {
+        NativeModules.AgoraRtcSurfaceView.callNativeMethod(viewHandle)
+          .then((viewTag: number) => {
+            if (viewTag) {
+              this.setState({ contentView: viewTag });
+            }
+          })
+          .catch((error: Error) => {
+            console.error('Failed to get view pointer:', error);
+          });
+      }
+    }
+  };
 
   get funcName(): string {
     let funcName: string;
@@ -54,13 +88,15 @@ export default abstract class IAgoraRtcRenderView<
     };
   }
 
-  render() {
+  render(): React.ReactElement {
     const { canvas, connection, ...others } = this.props;
     const AgoraRtcRenderer = this.view;
     return (
       <AgoraRtcRenderer
+        ref={this.ref}
         style={styles.renderer}
         callApi={this.params({ canvas, connection })}
+        onLayout={this.onLayout}
         {...others}
       />
     );

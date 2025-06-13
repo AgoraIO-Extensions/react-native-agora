@@ -15,6 +15,7 @@ import { IMediaEngine } from '../IAgoraMediaEngine';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
 import { IMusicContentCenter } from '../IAgoraMusicContentCenter';
+import { AgoraPip } from '../IAgoraPip';
 import {
   ChannelMediaOptions,
   DirectCdnStreamingMediaOptions,
@@ -38,6 +39,7 @@ import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 import IAgoraRtcEngineTI from '../ti/IAgoraRtcEngine-ti';
 
 import { H265TranscoderInternal } from './AgoraH265TranscoderInternal';
+import { AgoraPipInternal } from './AgoraPipInternal';
 import {
   DeviceEventEmitter,
   EVENT_TYPE,
@@ -435,5 +437,9 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
         (value) => value !== observer
       );
     return super.unregisterAudioSpectrumObserver(observer);
+  }
+
+  getAgoraPip(): AgoraPip {
+    return new AgoraPipInternal();
   }
 }

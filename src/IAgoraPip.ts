@@ -10,21 +10,10 @@ import { RtcConnection } from './IAgoraRtcEngineEx';
 
 export class AgoraPipVideoStream {
   /** The RTC connection associated with this video stream. */
-  connection: RtcConnection;
+  connection?: RtcConnection;
 
   /** The video canvas configuration for rendering this stream. */
-  canvas: VideoCanvas;
-
-  /**
-   * Creates an AgoraPipVideoStream instance.
-   *
-   * Both connection and canvas parameters are required to properly
-   * configure the video stream in PiP mode.
-   */
-  constructor(connection: RtcConnection, canvas: VideoCanvas) {
-    this.connection = connection;
-    this.canvas = canvas;
-  }
+  canvas?: VideoCanvas;
 }
 
 /**
@@ -58,14 +47,14 @@ export class AgoraPipContentViewLayout {
    * Creates space between the layout edges and the streams.
    * If null, no padding will be applied.
    */
-  padding: number;
+  padding?: number;
 
   /**
    * The horizontal and vertical spacing between streams in pixels.
    * Creates consistent gaps between adjacent streams.
    * If null, streams will be placed directly adjacent to each other.
    */
-  spacing: number;
+  spacing?: number;
 
   /**
    * Maximum number of rows allowed in the layout.
@@ -73,7 +62,7 @@ export class AgoraPipContentViewLayout {
    * If null, rows will be created as needed to fit all streams.
    * Must be greater than 0 or null.
    */
-  row: number;
+  row?: number;
 
   /**
    * Maximum number of streams per row.
@@ -81,20 +70,7 @@ export class AgoraPipContentViewLayout {
    * If null, streams will flow to fill the available width.
    * Must be greater than 0 or null.
    */
-  column: number;
-
-  /**
-   * Creates an AgoraPipContentViewLayout instance.
-   *
-   * The streams parameter is required and specifies which video streams
-   * should be shown in the layout in sequential order.
-   */
-  constructor(padding: number, spacing: number, row: number, column: number) {
-    this.padding = padding;
-    this.spacing = spacing;
-    this.row = row;
-    this.column = column;
-  }
+  column?: number;
 }
 
 /**
@@ -104,49 +80,6 @@ export class AgoraPipContentViewLayout {
  * for both Android and iOS platforms.
  */
 export class AgoraPipOptions {
-  /**
-   * Creates an AgoraPipOptions instance.
-   *
-   * All parameters are optional and platform-specific.
-   */
-  constructor(
-    autoEnterEnabled?: boolean,
-    aspectRatioX?: number,
-    aspectRatioY?: number,
-    sourceRectHintLeft?: number,
-    sourceRectHintTop?: number,
-    sourceRectHintRight?: number,
-    sourceRectHintBottom?: number,
-    seamlessResizeEnabled?: boolean,
-    useExternalStateMonitor?: boolean,
-    externalStateMonitorInterval?: number,
-    sourceContentView?: number,
-    contentView?: number,
-    videoStreams?: AgoraPipVideoStream[],
-    contentViewLayout?: AgoraPipContentViewLayout,
-    preferredContentWidth?: number,
-    preferredContentHeight?: number,
-    controlStyle?: number
-  ) {
-    this.autoEnterEnabled = autoEnterEnabled;
-    this.aspectRatioX = aspectRatioX;
-    this.aspectRatioY = aspectRatioY;
-    this.sourceRectHintLeft = sourceRectHintLeft;
-    this.sourceRectHintTop = sourceRectHintTop;
-    this.sourceRectHintRight = sourceRectHintRight;
-    this.sourceRectHintBottom = sourceRectHintBottom;
-    this.seamlessResizeEnabled = seamlessResizeEnabled;
-    this.useExternalStateMonitor = useExternalStateMonitor;
-    this.externalStateMonitorInterval = externalStateMonitorInterval;
-    this.sourceContentView = sourceContentView;
-    this.contentView = contentView;
-    this.videoStreams = videoStreams;
-    this.contentViewLayout = contentViewLayout;
-    this.preferredContentWidth = preferredContentWidth;
-    this.preferredContentHeight = preferredContentHeight;
-    this.controlStyle = controlStyle;
-  }
-
   /**
    * Whether to automatically enter PiP mode.
    *
@@ -293,13 +226,13 @@ export class AgoraPipOptions {
 /** Represents the current state of Picture-in-Picture mode. */
 export enum AgoraPipState {
   /** PiP mode has been successfully started. */
-  pipStateStarted = 1,
+  pipStateStarted = 0,
 
   /** PiP mode has been stopped. */
-  pipStateStopped = 2,
+  pipStateStopped = 1,
 
   /** PiP mode failed to start or encountered an error. */
-  pipStateFailed = 3,
+  pipStateFailed = 2,
 }
 
 /**
@@ -326,15 +259,17 @@ export interface AgoraPipStateChangedObserver {
  */
 export abstract class AgoraPip {
   /** Releases resources associated with PiP mode. */
-  abstract dispose(): void;
+  abstract release(): void;
 
   /** Registers an observer for PiP state changes. */
   abstract registerPipStateChangedObserver(
     observer: AgoraPipStateChangedObserver
   ): void;
 
-  /** Unregister a previously registered PiP state observer. */
-  abstract unregisterPipStateChangedObserver(): void;
+  /** Unregister an observer PiP state observer. */
+  abstract unregisterPipStateChangedObserver(
+    observer: AgoraPipStateChangedObserver
+  ): void;
 
   /** Checks if PiP mode is supported on the current device. */
   abstract pipIsSupported(): boolean;

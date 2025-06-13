@@ -21,6 +21,7 @@ export * from './IAgoraRtcEngineEx';
 export * from './IAgoraSpatialAudio';
 export * from './IAudioDeviceManager';
 export * from './AgoraRtcRenderView';
+export * from './IAgoraPip';
 export {
   isDebuggable,
   setDebuggable,

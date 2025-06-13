@@ -1,5 +1,6 @@
 import { IAudioEncodedFrameObserver } from '../AgoraBase';
 import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { AgoraPip } from '../IAgoraPip';
 import {
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
@@ -60,5 +61,12 @@ declare module '../IAgoraRtcEngine' {
     removeAllListeners<EventType extends keyof IRtcEngineEvent>(
       eventType?: EventType
     ): void;
+
+    /**
+     * Gets the AgoraPip instance.
+     *
+     * @returns The AgoraPip instance.
+     */
+    getAgoraPip(): AgoraPip;
   }
 }
