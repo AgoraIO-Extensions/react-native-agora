@@ -107,6 +107,7 @@ export default class PictureInPicture
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
     this.engine.registerEventHandler(this);
+    this.engine.getAgoraPip().registerPipStateChangedObserver(this);
 
     // Need granted the microphone and camera permission
     await askMediaAccess([

@@ -169,6 +169,8 @@ dependencies {
   implementation 'io.agora.rtc:full-screen-sharing:4.5.2'
   implementation 'io.agora.rtc:iris-rtc:4.5.2-build.1'
   /// dependencies end
+
+  api 'io.agora.rtc:pip:0.0.1-rc.1'
 }
 
 if (isNewArchitectureEnabled()) {
