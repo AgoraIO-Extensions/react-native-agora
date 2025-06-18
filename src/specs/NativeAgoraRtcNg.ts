@@ -28,7 +28,7 @@ export interface Spec extends TurboModule {
 
   isPipActivated(): boolean;
 
-  pipSetup(options: string): boolean;
+  pipSetup(options: Object): boolean;
 
   pipStart(): boolean;
 

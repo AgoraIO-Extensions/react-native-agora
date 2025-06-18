@@ -45,7 +45,7 @@ export class AgoraPipInternal implements AgoraPip {
   }
   pipSetup(options: AgoraPipOptions): boolean {
     if (typeof options === 'object') {
-      return AgoraRtcNg.pipSetup(JSON.stringify(options));
+      return AgoraRtcNg.pipSetup(options);
     } else {
       return false;
     }
