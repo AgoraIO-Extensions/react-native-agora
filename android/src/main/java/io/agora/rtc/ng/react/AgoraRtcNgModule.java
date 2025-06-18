@@ -1,6 +1,10 @@
 package io.agora.rtc.ng.react;
 
+import android.app.Activity;
 import android.util.Base64;
+import android.graphics.Rect;
+import android.os.Build;
+import android.util.Rational;
 
 import androidx.annotation.NonNull;
 
@@ -20,15 +24,20 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.agora.iris.IrisApiEngine;
 import io.agora.iris.IrisEventHandler;
+
+import io.agora.pip.AgoraPIPActivityProxy;
+import io.agora.pip.AgoraPIPController;
 
 @ReactModule(name = AgoraRtcNgModule.NAME)
 public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler {
   public static final String NAME = "AgoraRtcNg";
   public final Object irisApiLock = new Object();
   public IrisApiEngine irisApiEngine;
+  private AgoraPIPController pipController;
 
   AgoraRtcNgModule(ReactApplicationContext context) {
     super(context);
@@ -47,6 +56,10 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
         IrisApiEngine.enableUseJsonArray(true);
         irisApiEngine = new IrisApiEngine(getReactApplicationContext());
         irisApiEngine.setEventHandler(this);
+        Activity currentActivity = getReactApplicationContext().getCurrentActivity();
+        if (currentActivity != null) {
+          initPipController(currentActivity);
+        }
         return true;
       }
     }
@@ -60,6 +73,7 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
         irisApiEngine.setEventHandler(null);
         irisApiEngine.destroy();
         irisApiEngine = null;
+        pipController = null;
         return true;
       }
     }
@@ -95,6 +109,34 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
     }
   }
 
+  private void initPipController(@NonNull Activity activity) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+      if (!(activity instanceof AgoraPIPActivityProxy)) {
+        return;
+      }
+
+      if (pipController != null) {
+        pipController.dispose();
+      }
+
+      pipController = new AgoraPIPController(
+          (AgoraPIPActivityProxy) activity,
+          new AgoraPIPController.PIPStateChangedListener() {
+            @Override
+            public void onPIPStateChangedListener(
+                AgoraPIPController.PIPState state, String error) {
+              try {
+                OnEvent("AgoraPip_onPipStateChanged",
+                    new JSONObject().put("state", state.getValue()).put("error", error).toString(), null);
+              } catch (JSONException e) {
+                throw new RuntimeException(e);
+              }
+            }
+          });
+    }
+  }
+
   @ReactMethod
   public void showRPSystemBroadcastPickerView(boolean showsMicrophoneButton, Promise promise) {
     promise.reject("", "not support");
@@ -108,6 +150,101 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
   @ReactMethod
   public void removeListeners(double count) {
 
+  }
+
+  private boolean checkPipIsReady() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+      return false;
+    }
+    if (pipController == null) {
+      return false;
+    }
+    return true;
+  }
+
+  @ReactMethod
+  public boolean pipIsSupported() {
+    return checkPipIsReady() && pipController.isSupported();
+  }
+
+  @ReactMethod
+  public boolean pipIsAutoEnterSupported() {
+    return checkPipIsReady() && pipController.isAutoEnterSupported();
+  }
+
+  @ReactMethod
+  public boolean isPipActivated() {
+    return checkPipIsReady() && pipController.isActivated();
+  }
+
+  @ReactMethod
+  public boolean pipSetup(String options) {
+    if (!checkPipIsReady()) {
+      return false;
+    }
+    try {
+      JSONObject jsonObject = new JSONObject(options);
+      Rational aspectRatio = null;
+      if (jsonObject.has("aspectRatioX") && jsonObject.has("aspectRatioY")) {
+        aspectRatio = new Rational(jsonObject.getInt("aspectRatioX"),
+            jsonObject.getInt("aspectRatioY"));
+      }
+      Boolean autoEnterEnabled = null;
+      if (jsonObject.has("autoEnterEnabled")) {
+        autoEnterEnabled = jsonObject.getBoolean("autoEnterEnabled");
+      }
+      Rect sourceRectHint = null;
+      if (jsonObject.has("sourceRectHintLeft") &&
+          jsonObject.has("sourceRectHintTop") &&
+          jsonObject.has("sourceRectHintRight") &&
+          jsonObject.has("sourceRectHintBottom")) {
+        sourceRectHint = new Rect(
+            jsonObject.getInt("sourceRectHintLeft"),
+            jsonObject.getInt("sourceRectHintTop"),
+            jsonObject.getInt("sourceRectHintRight"),
+            jsonObject.getInt("sourceRectHintBottom"));
+      }
+      Boolean seamlessResizeEnabled = null;
+      if (jsonObject.has("seamlessResizeEnabled")) {
+        seamlessResizeEnabled = jsonObject.getBoolean("seamlessResizeEnabled");
+      }
+      Boolean useExternalStateMonitor = null;
+      if (jsonObject.has("useExternalStateMonitor")) {
+        useExternalStateMonitor = jsonObject.getBoolean("useExternalStateMonitor");
+      } else {
+        useExternalStateMonitor = true;
+      }
+      Integer externalStateMonitorInterval = null;
+      if (jsonObject.has("externalStateMonitorInterval")) {
+        externalStateMonitorInterval = jsonObject.getInt("externalStateMonitorInterval");
+      } else {
+        externalStateMonitorInterval = 100;
+      }
+      boolean result = pipController.setup(
+          aspectRatio, autoEnterEnabled, sourceRectHint,
+          seamlessResizeEnabled, useExternalStateMonitor,
+          externalStateMonitorInterval);
+      return result;
+    } catch (JSONException e) {
+      return false;
+    }
+  }
+
+  @ReactMethod
+  public boolean pipStart() {
+    return checkPipIsReady() && pipController.start();
+  }
+
+  @ReactMethod
+  public void pipStop() {
+    return;
+  }
+
+  @ReactMethod
+  public void pipDispose() {
+    if (checkPipIsReady()) {
+      pipController.dispose();
+    }
   }
 
   @Override

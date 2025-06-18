@@ -1,11 +1,9 @@
 import React, { ReactElement, createRef } from 'react';
 import { AppState, AppStateStatus, Platform } from 'react-native';
 import {
-  AgoraPipContentViewLayout,
   AgoraPipOptions,
   AgoraPipState,
   AgoraPipStateChangedObserver,
-  AgoraPipVideoStream,
   AgoraRtcRenderViewState,
   ChannelProfileType,
   ClientRoleType,
@@ -19,7 +17,6 @@ import {
   UserOfflineReasonType,
   VideoCanvas,
   VideoSourceType,
-  VideoViewSetupMode,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
@@ -142,7 +139,6 @@ export default class PictureInPicture
         this.appState.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
-        this.stopPip();
         this.setState({ pipState: AgoraPipState.pipStateStopped });
         if (Platform.OS === 'android') {
           if (this.updatePipState) {
@@ -191,10 +187,6 @@ export default class PictureInPicture
       pipContentWidth,
       pipContentHeight,
       isPipAutoEnterSupported,
-      pipContentRow,
-      pipContentCol,
-      channelId,
-      remoteUsers,
       userRefList,
     } = this.state;
 
@@ -231,7 +223,7 @@ export default class PictureInPicture
         seamlessResizeEnabled: true,
 
         // The external state monitor checks the PiP view state at the interval specified by externalStateMonitorInterval (100ms).
-        useExternalStateMonitor: false,
+        useExternalStateMonitor: true,
         externalStateMonitorInterval: 100,
       };
     } else {
@@ -361,7 +353,10 @@ export default class PictureInPicture
    * Step 3-3: stopPip
    */
   stopPip = () => {
-    if (this.engine?.getAgoraPip().pipIsSupported()) {
+    if (
+      Platform.OS !== 'android' &&
+      this.engine?.getAgoraPip().pipIsSupported()
+    ) {
       this.engine?.getAgoraPip().pipStop();
     }
   };
@@ -670,11 +665,11 @@ export default class PictureInPicture
   }
 
   protected renderAction(): ReactElement | undefined {
-    const { pipState, selectUser } = this.state;
+    const { pipState, selectUser, isPipSupported } = this.state;
     const isAndroidAndInPip =
       Platform.OS === 'android' && pipState === AgoraPipState.pipStateStarted;
 
-    return !isAndroidAndInPip ? (
+    return isPipSupported && !isAndroidAndInPip ? (
       <>
         <AgoraButton
           title={`setup pip`}

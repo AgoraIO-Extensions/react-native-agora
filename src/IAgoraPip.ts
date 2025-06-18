@@ -83,7 +83,6 @@ export class AgoraPipOptions {
   /**
    * Whether to automatically enter PiP mode.
    *
-   * Platform: Android only
    */
   autoEnterEnabled?: boolean;
 
@@ -147,7 +146,7 @@ export class AgoraPipOptions {
    *
    * When enabled, creates a dedicated thread to monitor PiP window state.
    * Use externalStateMonitorInterval to configure monitoring frequency.
-   * Defaults to false.
+   * Defaults to true.
    * Platform: Android only
    */
   useExternalStateMonitor?: boolean;
