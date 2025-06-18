@@ -227,42 +227,6 @@ export default class PictureInPicture
         externalStateMonitorInterval: 100,
       };
     } else {
-      // let contentViewLayout: AgoraPipContentViewLayout = {
-      //   padding: 0,
-      //   spacing: 2,
-      //   row: pipContentRow,
-      //   column: pipContentCol,
-      // };
-
-      // let videoStreams: AgoraPipVideoStream[] = [
-      //   {
-      //     connection: {
-      //       channelId: channelId,
-      //       localUid: uid,
-      //     },
-      //     canvas: {
-      //       uid: 0,
-      //       sourceType: VideoSourceType.VideoSourceCamera,
-      //       setupMode: VideoViewSetupMode.VideoViewSetupAdd,
-      //       renderMode: RenderModeType.RenderModeHidden,
-      //     },
-      //   },
-      //   ...remoteUsers.map((userUid) => {
-      //     return {
-      //       connection: {
-      //         channelId: channelId,
-      //         localUid: userUid,
-      //       },
-      //       canvas: {
-      //         uid: userUid,
-      //         sourceType: VideoSourceType.VideoSourceRemote,
-      //         setupMode: VideoViewSetupMode.VideoViewSetupAdd,
-      //         renderMode: RenderModeType.RenderModeHidden,
-      //       },
-      //     };
-      //   }),
-      // ];
-
       // iOS pip mode parameters
       let user = userRefList.find((item) => item.canvas.uid === uid)?.canvas;
       let contentView = 0;
@@ -292,37 +256,6 @@ export default class PictureInPicture
         // If you pass 0, the PIP controller will automatically manage and display all video streams.
         // If you pass a specific view ID, you become responsible for managing the content shown in the PIP window.
         contentView: contentView,
-
-        // The contentViewLayout determines the layout of video streams in the PIP window.
-        // You can customize the grid layout by specifying:
-        // - padding: Space between the window edge and content (in pixels)
-        // - spacing: Space between video streams (in pixels)
-        // - row: Number of rows in the grid layout
-        // - column: Number of columns in the grid layout
-        //
-        // The SDK provides a basic grid layout system that arranges video streams in a row x column matrix.
-        // For example:
-        // - row=2, column=2: Up to 4 video streams in a 2x2 grid
-        // - row=1, column=2: Up to 2 video streams side by side
-        // - row=2, column=1: Up to 2 video streams stacked vertically
-        //
-        // Note:
-        // - This layout configuration only takes effect when contentView is 0 (using native view)
-        // - The grid layout is filled from left-to-right, top-to-bottom
-        // - Empty cells will be left blank if there are fewer streams than grid spaces
-        // - For custom layouts beyond the grid system, set contentView to your own view ID
-        // contentViewLayout,
-
-        // The videoStreams array specifies which video streams to display in the PIP window.
-        // Each stream can be configured with properties like uid, sourceType, setupMode, and renderMode.
-        // Note:
-        // - This configuration only takes effect when contentView is set to 0 (native view mode).
-        // - The streams will be laid out according to the contentViewLayout grid configuration.
-        // - The order of the video streams in the array determines the display order in the PIP window.
-        // - The SDK will automatically create and manage native views for each video stream.
-        // - The view property in VideoCanvas will be replaced by the SDK-managed native view.
-        // - You can customize the rendering of each stream using properties like renderMode and mirrorMode.
-        // videoStreams,
 
         // The controlStyle property determines which controls are visible in the PiP window.
         // Available styles:
