@@ -22,4 +22,19 @@ public abstract class AgoraRtcNgSpec extends ReactContextBaseJavaModule {
   public abstract void addListener(String eventName);
 
   public abstract void removeListeners(double count);
+
+  public abstract boolean pipIsSupported();
+
+  public abstract boolean pipIsAutoEnterSupported();
+
+  public abstract boolean isPipActivated();
+
+  public abstract boolean pipSetup(ReadableMap options);
+
+  public abstract boolean pipStart();
+
+  public abstract void pipStop();
+
+  public abstract void pipDispose();
+
 }

@@ -162,83 +162,99 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
     return true;
   }
 
-  @ReactMethod
+  @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean pipIsSupported() {
-    return checkPipIsReady() && pipController.isSupported();
+    synchronized (irisApiLock) {
+      return checkPipIsReady() && pipController.isSupported();
+    }
   }
 
-  @ReactMethod
+  @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean pipIsAutoEnterSupported() {
-    return checkPipIsReady() && pipController.isAutoEnterSupported();
+    synchronized (irisApiLock) {
+      return checkPipIsReady() && pipController.isAutoEnterSupported();
+    }
   }
 
-  @ReactMethod
+  @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean isPipActivated() {
-    return checkPipIsReady() && pipController.isActivated();
+    synchronized (irisApiLock) {
+      return checkPipIsReady() && pipController.isActivated();
+    }
   }
 
-  @ReactMethod
+  @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean pipSetup(ReadableMap options) {
-    if (!checkPipIsReady()) {
-      return false;
+    synchronized (irisApiLock) {
+      if (!checkPipIsReady()) {
+        return false;
+      }
+      Rational aspectRatio = null;
+      if (options.hasKey("aspectRatioX") && options.hasKey("aspectRatioY")) {
+        aspectRatio = new Rational(options.getInt("aspectRatioX"),
+            options.getInt("aspectRatioY"));
+      }
+      Boolean autoEnterEnabled = null;
+      if (options.hasKey("autoEnterEnabled")) {
+        autoEnterEnabled = options.getBoolean("autoEnterEnabled");
+      }
+      Rect sourceRectHint = null;
+      if (options.hasKey("sourceRectHintLeft") &&
+          options.hasKey("sourceRectHintTop") &&
+          options.hasKey("sourceRectHintRight") &&
+          options.hasKey("sourceRectHintBottom")) {
+        sourceRectHint = new Rect(
+            options.getInt("sourceRectHintLeft"),
+            options.getInt("sourceRectHintTop"),
+            options.getInt("sourceRectHintRight"),
+            options.getInt("sourceRectHintBottom"));
+      }
+      Boolean seamlessResizeEnabled = null;
+      if (options.hasKey("seamlessResizeEnabled")) {
+        seamlessResizeEnabled = options.getBoolean("seamlessResizeEnabled");
+      }
+      Boolean useExternalStateMonitor = null;
+      if (options.hasKey("useExternalStateMonitor")) {
+        useExternalStateMonitor = options.getBoolean("useExternalStateMonitor");
+      } else {
+        useExternalStateMonitor = true;
+      }
+      Integer externalStateMonitorInterval = null;
+      if (options.hasKey("externalStateMonitorInterval")) {
+        externalStateMonitorInterval = options.getInt("externalStateMonitorInterval");
+      } else {
+        externalStateMonitorInterval = 100;
+      }
+      boolean result = pipController.setup(
+          aspectRatio, autoEnterEnabled, sourceRectHint,
+          seamlessResizeEnabled, useExternalStateMonitor,
+          externalStateMonitorInterval);
+      return result;
     }
-    Rational aspectRatio = null;
-    if (options.hasKey("aspectRatioX") && options.hasKey("aspectRatioY")) {
-      aspectRatio = new Rational(options.getInt("aspectRatioX"),
-          options.getInt("aspectRatioY"));
-    }
-    Boolean autoEnterEnabled = null;
-    if (options.hasKey("autoEnterEnabled")) {
-      autoEnterEnabled = options.getBoolean("autoEnterEnabled");
-    }
-    Rect sourceRectHint = null;
-    if (options.hasKey("sourceRectHintLeft") &&
-        options.hasKey("sourceRectHintTop") &&
-        options.hasKey("sourceRectHintRight") &&
-        options.hasKey("sourceRectHintBottom")) {
-      sourceRectHint = new Rect(
-          options.getInt("sourceRectHintLeft"),
-          options.getInt("sourceRectHintTop"),
-          options.getInt("sourceRectHintRight"),
-          options.getInt("sourceRectHintBottom"));
-    }
-    Boolean seamlessResizeEnabled = null;
-    if (options.hasKey("seamlessResizeEnabled")) {
-      seamlessResizeEnabled = options.getBoolean("seamlessResizeEnabled");
-    }
-    Boolean useExternalStateMonitor = null;
-    if (options.hasKey("useExternalStateMonitor")) {
-      useExternalStateMonitor = options.getBoolean("useExternalStateMonitor");
-    } else {
-      useExternalStateMonitor = true;
-    }
-    Integer externalStateMonitorInterval = null;
-    if (options.hasKey("externalStateMonitorInterval")) {
-      externalStateMonitorInterval = options.getInt("externalStateMonitorInterval");
-    } else {
-      externalStateMonitorInterval = 100;
-    }
-    boolean result = pipController.setup(
-        aspectRatio, autoEnterEnabled, sourceRectHint,
-        seamlessResizeEnabled, useExternalStateMonitor,
-        externalStateMonitorInterval);
-    return result;
   }
 
-  @ReactMethod
+  @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean pipStart() {
-    return checkPipIsReady() && pipController.start();
+    synchronized (irisApiLock) {
+      return checkPipIsReady() && pipController.start();
+    }
   }
 
-  @ReactMethod
+  @ReactMethod(isBlockingSynchronousMethod = true)
   public void pipStop() {
-    return;
+    synchronized (irisApiLock) {
+      if (checkPipIsReady()) {
+        pipController.stop();
+      }
+    }
   }
 
-  @ReactMethod
+  @ReactMethod(isBlockingSynchronousMethod = true)
   public void pipDispose() {
-    if (checkPipIsReady()) {
-      pipController.dispose();
+    synchronized (irisApiLock) {
+      if (checkPipIsReady()) {
+        pipController.dispose();
+      }
     }
   }
 
