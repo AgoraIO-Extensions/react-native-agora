@@ -1,10 +1,5 @@
 import React, { ReactElement, createRef } from 'react';
-import {
-  AppState,
-  AppStateStatus,
-  InteractionManager,
-  Platform,
-} from 'react-native';
+import { AppState, AppStateStatus, Platform } from 'react-native';
 import {
   AgoraPipOptions,
   AgoraPipState,
@@ -225,7 +220,7 @@ export default class PictureInPicture
         seamlessResizeEnabled: true,
 
         // The external state monitor checks the PiP view state at the interval specified by externalStateMonitorInterval (100ms).
-        useExternalStateMonitor: false,
+        useExternalStateMonitor: true,
         externalStateMonitorInterval: 100,
       };
     } else {
@@ -373,11 +368,6 @@ export default class PictureInPicture
     if (!isPipDisposed) {
       this.setupPip();
     }
-
-    // 在PIP模式变化后
-    InteractionManager.runAfterInteractions(() => {
-      this.setState({ pipState: AgoraPipState.pipStateStopped });
-    });
   }
 
   onPipStateChanged(state: AgoraPipState, error: string | null): void {
