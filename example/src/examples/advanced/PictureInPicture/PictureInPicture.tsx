@@ -306,6 +306,10 @@ export default class PictureInPicture
    * Step 4: leaveChannel
    */
   protected leaveChannel() {
+    if (Platform.OS === 'ios') {
+      this.engine?.getAgoraPip().pipStop();
+      this.engine?.getAgoraPip().pipDispose();
+    }
     this.engine?.leaveChannel();
   }
 
@@ -390,17 +394,19 @@ export default class PictureInPicture
     this.setState({ pipState: state });
   }
 
-  // componentDidMount() {
-  //   if (Platform.OS === 'android') {
-  //     AgoraServiceHelper.startForegroundService();
-  //   }
-  // }
+  componentDidMount() {
+    super.componentDidMount();
+    if (Platform.OS === 'android') {
+      AgoraServiceHelper.startForegroundService();
+    }
+  }
 
-  // componentWillUnmount() {
-  //   if (Platform.OS === 'android') {
-  //     AgoraServiceHelper.stopForegroundService();
-  //   }
-  // }
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    if (Platform.OS === 'android') {
+      AgoraServiceHelper.stopForegroundService();
+    }
+  }
 
   protected renderChannel(): ReactElement | undefined {
     const { channelId, joinChannelSuccess, pipState } = this.state;
