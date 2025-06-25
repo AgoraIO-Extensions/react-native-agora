@@ -1,5 +1,10 @@
 import React, { ReactElement, createRef } from 'react';
-import { AppState, AppStateStatus, Platform } from 'react-native';
+import {
+  AppState,
+  AppStateStatus,
+  InteractionManager,
+  Platform,
+} from 'react-native';
 import {
   AgoraPipOptions,
   AgoraPipState,
@@ -36,6 +41,7 @@ import {
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import { arrayToItems } from '../../../utils';
+import AgoraServiceHelper from '../../../utils/AgoraServiceHelper';
 import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
@@ -48,8 +54,6 @@ interface State extends BaseVideoComponentState {
   isPipAutoEnterSupported: boolean;
   isPipSupported: boolean;
   isPipDisposed: boolean;
-  pipContentRow: number;
-  pipContentCol: number;
 }
 
 export default class PictureInPicture
@@ -79,11 +83,9 @@ export default class PictureInPicture
       pipContentHeight: 540,
       pipState: AgoraPipState.pipStateStopped,
       renderByTextureView: false,
-      isPipAutoEnterSupported: false,
-      isPipSupported: false,
+      isPipAutoEnterSupported: true,
+      isPipSupported: true,
       isPipDisposed: false,
-      pipContentRow: 1,
-      pipContentCol: 0,
     };
   }
 
@@ -123,7 +125,7 @@ export default class PictureInPicture
     if (Platform.OS === 'ios') {
       // You should call this method when you want to use the pip feature in iOS background mode.
       this.engine.setParameters(
-        JSON.stringify({ 'che.video.render.type': 22 })
+        JSON.stringify({ 'che.video.render.mode': 22 })
       );
     }
 
@@ -181,7 +183,7 @@ export default class PictureInPicture
   /**
    * Step 3-1: setupPip
    */
-  setupPip = (uid: number) => {
+  setupPip = (uid?: number) => {
     const {
       isPipSupported,
       pipContentWidth,
@@ -223,7 +225,7 @@ export default class PictureInPicture
         seamlessResizeEnabled: true,
 
         // The external state monitor checks the PiP view state at the interval specified by externalStateMonitorInterval (100ms).
-        useExternalStateMonitor: true,
+        useExternalStateMonitor: false,
         externalStateMonitorInterval: 100,
       };
     } else {
@@ -333,17 +335,24 @@ export default class PictureInPicture
 
   onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
     super.onLeaveChannel(connection, stats);
+    const { isPipDisposed } = this.state;
+    if (!isPipDisposed) {
+      this.setupPip();
+    }
   }
 
   onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
     super.onUserJoined(connection, remoteUid, elapsed);
-    const { userRefList } = this.state;
+    const { userRefList, isPipDisposed } = this.state;
     if (userRefList.findIndex((item) => item.canvas.uid === remoteUid) === -1) {
       userRefList.push({
         ref: createRef<any>(),
         canvas: { uid: remoteUid, renderMode: RenderModeType.RenderModeHidden },
       });
       this.setState({ userRefList });
+    }
+    if (!isPipDisposed) {
+      this.setupPip();
     }
   }
 
@@ -353,7 +362,7 @@ export default class PictureInPicture
     reason: UserOfflineReasonType
   ) {
     super.onUserOffline(connection, remoteUid, reason);
-    const { userRefList } = this.state;
+    const { userRefList, isPipDisposed } = this.state;
     const index = userRefList.findIndex(
       (item) => item.canvas.uid === remoteUid
     );
@@ -361,6 +370,14 @@ export default class PictureInPicture
       userRefList.splice(index, 1);
       this.setState({ userRefList });
     }
+    if (!isPipDisposed) {
+      this.setupPip();
+    }
+
+    // 在PIP模式变化后
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({ pipState: AgoraPipState.pipStateStopped });
+    });
   }
 
   onPipStateChanged(state: AgoraPipState, error: string | null): void {
@@ -382,6 +399,18 @@ export default class PictureInPicture
 
     this.setState({ pipState: state });
   }
+
+  // componentDidMount() {
+  //   if (Platform.OS === 'android') {
+  //     AgoraServiceHelper.startForegroundService();
+  //   }
+  // }
+
+  // componentWillUnmount() {
+  //   if (Platform.OS === 'android') {
+  //     AgoraServiceHelper.stopForegroundService();
+  //   }
+  // }
 
   protected renderChannel(): ReactElement | undefined {
     const { channelId, joinChannelSuccess, pipState } = this.state;
@@ -415,6 +444,9 @@ export default class PictureInPicture
       remoteUsers,
       pipState,
     } = this.state;
+
+    console.log(remoteUsers);
+
     return enableVideo ? (
       <>
         {!!startPreview || joinChannelSuccess
@@ -555,34 +587,6 @@ export default class PictureInPicture
         />
         {Platform.OS === 'ios' && (
           <>
-            <AgoraTextInput
-              style={AgoraStyle.fullSize}
-              onChangeText={(text) => {
-                if (isNaN(+text)) return;
-                this.setState({
-                  pipContentRow:
-                    text === '' ? this.createState().pipContentRow : +text,
-                });
-              }}
-              numberKeyboard={true}
-              placeholder={`pipContentRow (defaults: ${
-                this.createState().pipContentRow
-              })`}
-            />
-            <AgoraTextInput
-              style={AgoraStyle.fullSize}
-              onChangeText={(text) => {
-                if (isNaN(+text)) return;
-                this.setState({
-                  pipContentCol:
-                    text === '' ? this.createState().pipContentCol : +text,
-                });
-              }}
-              numberKeyboard={true}
-              placeholder={`pipContentCol (defaults: ${
-                this.createState().pipContentCol
-              })`}
-            />
             <AgoraDropdown
               title={'Select User to Setup Pip'}
               items={arrayToItems(remoteUsers.concat([0]))}
