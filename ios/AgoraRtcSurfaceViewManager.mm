@@ -2,7 +2,6 @@
 #import "RCTBridge.h"
 #import <AgoraRtcWrapper/iris_engine_base.h>
 #import <React/RCTUIManager.h>
-#import <React/RCTUIManagerUtils.h>
 #import <React/RCTViewManager.h>
 
 @interface AgoraRtcSurfaceViewManager : RCTViewManager
@@ -37,27 +36,6 @@ RCT_CUSTOM_VIEW_PROPERTY(callApi, NSDictionary, UIView) {
       module.irisApiEngine->CallIrisApi(&param);
     }
   }
-}
-
-RCT_EXPORT_METHOD(callNativeMethod
-                  : (nonnull NSNumber *)reactTag resolver
-                  : (RCTPromiseResolveBlock)resolve rejecter
-                  : (RCTPromiseRejectBlock)reject) {
-  [self.bridge.uiManager
-      addUIBlock:^(__unused RCTUIManager *uiManager,
-                   NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        UIView *view = viewRegistry[reactTag];
-        if (!view) {
-          reject(@"E_VIEW_NOT_FOUND", @"View not found", nil);
-          return;
-        }
-
-        void *viewPointer = (__bridge void *)view;
-        NSNumber *pointerValue = [NSNumber
-            numberWithUnsignedLongLong:(unsigned long long)viewPointer];
-        NSLog(@"Passing view pointer: %p for tag: %@", viewPointer, reactTag);
-        resolve(pointerValue);
-      }];
 }
 
 @end

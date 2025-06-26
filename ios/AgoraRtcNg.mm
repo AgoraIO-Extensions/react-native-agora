@@ -3,11 +3,20 @@
 #import <AgoraRtcWrapper/iris_module.h>
 #import <React/RCTUIManager.h>
 #import <ReplayKit/ReplayKit.h>
+#import <objc/runtime.h>
 #include <regex>
 #include <string>
 #include <vector>
 
 #define EVENT_NAME @"AgoraRtcNg:onEvent"
+
+@interface AgoraNativeView : UIView
+
+@end
+
+@implementation AgoraNativeView
+
+@end
 
 @interface AgoraRtcNg ()
 
@@ -60,6 +69,7 @@ private:
 
 @property(nonatomic) agora::iris::EventHandler *eventHandler;
 @property(nonatomic, strong) AgoraPIPController *pipController;
+@property(nonatomic, strong) NSMutableArray *_Nonnull nativeViews;
 
 @end
 
@@ -75,6 +85,7 @@ RCT_EXPORT_MODULE()
 - (instancetype)init {
   if (self = [super init]) {
     self.irisApiEngine = nullptr;
+    self.nativeViews = [[NSMutableArray alloc] init];
     self.eventHandler = new agora::iris::EventHandler((__bridge void *)self);
     self.pipController = [[AgoraPIPController alloc]
         initWith:(id<AgoraPIPStateChangedDelegate>)self];
@@ -142,6 +153,78 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(destroyIrisApiEngine) {
   return [NSNull null];
 }
 
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(nativeViewCreate) {
+  UIView *view = [[AgoraNativeView alloc] init];
+  [self.nativeViews addObject:view];
+  view.translatesAutoresizingMaskIntoConstraints = NO;
+  uint64_t viewId = (uint64_t)view;
+  NSLog(@"nativeViewCreate: %llu", viewId);
+  return @(viewId);
+}
+
+RCT_EXPORT_METHOD(nativeViewDestroy : (nonnull NSNumber *)viewId) {
+  UIView *view = [self findNativeView:[viewId unsignedLongLongValue]];
+
+  if (view) {
+    [view removeFromSuperview];           // Remove from parent view hierarchy
+    [self.nativeViews removeObject:view]; // Remove from our array
+    view = nil;                           // Clear the reference
+  }
+}
+
+RCT_EXPORT_METHOD(nativeViewSetParent : (nonnull NSDictionary *)options) {
+
+  UIView *view =
+      [self findNativeView:[options[@"viewId"] unsignedLongLongValue]];
+  UIView *parentView =
+      [self findNativeView:[options[@"parentViewId"] unsignedLongLongValue]];
+
+  // remove from previous parent view only it has a parent view and is not
+  // the same as the new parent view, even if the new parent view is nil
+  if (view.superview && view.superview != parentView) {
+    [view removeFromSuperview];
+  }
+
+  // if parent view is nil, return true, which means the caller only want to
+  // remove the view from its parent view
+  if (!parentView) {
+    return;
+  }
+
+  // if view is not in parent view, insert to new parent view at index if
+  // specified
+  if (view.superview != parentView) {
+    // insert to new parent view at index if specified
+    if (options[@"indexOfParentView"]) {
+      [parentView insertSubview:view
+                        atIndex:[options[@"indexOfParentView"] intValue]];
+    } else {
+      [parentView addSubview:view];
+    }
+  } else if (options[@"indexOfParentView"]) {
+    // remove and reinsert to new index if it is not the same with the
+    // specified index
+    if ([options[@"indexOfParentView"] intValue] !=
+        [parentView.subviews indexOfObject:view]) {
+      [view removeFromSuperview];
+      [parentView insertSubview:view
+                        atIndex:[options[@"indexOfParentView"] intValue]];
+    }
+  }
+}
+
+RCT_EXPORT_METHOD(nativeViewSetLayout : (nonnull NSDictionary *)options) {
+
+  UIView *view =
+      [self findNativeView:[options[@"viewId"] unsignedLongLongValue]];
+
+  // Handle layout properties
+  if (options[@"layout"]) {
+    [self applyContentViewLayout:(NSDictionary *)options[@"layout"]
+                          toView:view];
+  }
+}
+
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(pipIsSupported) {
   return @([self.pipController isSupported]);
 }
@@ -180,26 +263,6 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(pipSetup
           [[options objectForKey:@"autoEnterEnabled"] boolValue];
     }
 
-    // contentView
-    if ([options objectForKey:@"contentView"]) {
-      NSNumber *pointerValue = [options objectForKey:@"contentView"];
-      if ([pointerValue isKindOfClass:[NSNumber class]]) {
-        unsigned long long pointerLongValue =
-            [pointerValue unsignedLongLongValue];
-        UIView *view = (__bridge UIView *)(void *)pointerLongValue;
-        if (view && [view isKindOfClass:[UIView class]]) {
-          pipOptions.contentView = view;
-        } else {
-          return NO;
-        }
-      } else {
-        return NO;
-      }
-    } else {
-      // MUST set contentView
-      return NO;
-    }
-
     // preferred content size
     if ([options objectForKey:@"preferredContentWidth"] &&
         [options objectForKey:@"preferredContentHeight"]) {
@@ -213,6 +276,14 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(pipSetup
       pipOptions.controlStyle =
           [[options objectForKey:@"controlStyle"] intValue];
     }
+
+    pipOptions.sourceContentView = 0;
+    NSNumber *pointerValue = [options objectForKey:@"contentView"];
+    unsigned long long pointerLongValue = [pointerValue unsignedLongLongValue];
+    UIView *view = (__bridge UIView *)(void *)pointerLongValue;
+
+    NSLog(@"pipSetup: %@", pointerLongValue);
+    pipOptions.contentView = view;
 
     AgoraRtcNg *instance = [AgoraRtcNg shareInstance];
     return [instance.pipController setup:pipOptions];
@@ -369,6 +440,207 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(callApi
 - (void)invalidate {
   [super invalidate];
   instance = nil;
+}
+
+- (void)applyContentViewLayout:(NSDictionary *)contentViewLayout
+                        toView:(UIView *)view {
+  if (!contentViewLayout || !view) {
+    return;
+  }
+
+  // Get actual subview count
+  NSArray *subviews = view.subviews;
+  NSInteger subviewCount = subviews.count;
+  if (subviewCount == 0) {
+    return;
+  }
+
+  NSNumber *padding = contentViewLayout[@"padding"];
+  NSNumber *spacing = contentViewLayout[@"spacing"];
+  NSNumber *row = contentViewLayout[@"row"];
+  NSNumber *column = contentViewLayout[@"column"];
+
+  // Validate row and column values
+  NSInteger actualRow = row ? [row integerValue] : 0;
+  NSInteger actualColumn = column ? [column integerValue] : 0;
+
+  // Rule 3: Ignore negative values
+  if (actualRow < 0)
+    actualRow = 0;
+  if (actualColumn < 0)
+    actualColumn = 0;
+
+  // Rule 1: If row is not set or 0, calculate based on column and subview count
+  if (actualRow == 0) {
+    if (actualColumn > 0) {
+      actualRow = (subviewCount + actualColumn - 1) / actualColumn;
+    } else {
+      // If both row and column are not set, use a default layout
+      actualRow = 1;
+      actualColumn = subviewCount;
+    }
+  }
+
+  // Rule 2: Column is just a reference, adjust if needed
+  if (actualColumn == 0) {
+    if (actualRow > subviewCount) {
+      actualColumn = 1;
+    } else {
+      actualColumn = (subviewCount + actualRow - 1) / actualRow;
+    }
+  }
+
+  // Rule 4: If actualRow * actualColumn is less than subviewCount, adjust
+  // actualRow and actualColumn
+  if (actualRow * actualColumn < subviewCount) {
+    actualColumn = (subviewCount + actualRow - 1) / actualRow;
+  }
+
+  // Remove existing constraints
+  [view removeConstraints:view.constraints];
+  for (UIView *subview in subviews) {
+    // Only remove constraints between subview and parent view
+    NSArray *subviewConstraints = [subview.constraints copy];
+    for (NSLayoutConstraint *constraint in subviewConstraints) {
+      if ((constraint.firstItem == subview && constraint.secondItem == view) ||
+          (constraint.firstItem == view && constraint.secondItem == subview)) {
+        [subview removeConstraint:constraint];
+      }
+    }
+    subview.translatesAutoresizingMaskIntoConstraints = NO;
+  }
+
+  // Apply padding
+  CGFloat paddingValue = padding ? [padding doubleValue] : 0;
+  CGFloat spacingValue = spacing ? [spacing doubleValue] : 0;
+
+  // Create constraints for each subview
+  for (NSInteger i = 0; i < subviewCount; i++) {
+    UIView *subview = subviews[i];
+    NSInteger currentRow = i / actualColumn;
+    NSInteger currentColumn = i % actualColumn;
+
+    // Width constraint - equal width for all subviews in the same column
+    if (currentColumn == 0) {
+      // First column - set width based on container width
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeWidth
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:view
+                                       attribute:NSLayoutAttributeWidth
+                                      multiplier:1.0 / actualColumn
+                                        constant:-(spacingValue *
+                                                       (actualColumn - 1) +
+                                                   paddingValue * 2) /
+                                                 actualColumn]];
+    } else {
+      // Other columns - equal to first column
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeWidth
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:subviews[i - currentColumn]
+                                       attribute:NSLayoutAttributeWidth
+                                      multiplier:1.0
+                                        constant:0.0]];
+    }
+
+    // Height constraint - equal height for all rows, regardless of whether they
+    // have subviews
+    [view
+        addConstraint:[NSLayoutConstraint
+                          constraintWithItem:subview
+                                   attribute:NSLayoutAttributeHeight
+                                   relatedBy:NSLayoutRelationEqual
+                                      toItem:view
+                                   attribute:NSLayoutAttributeHeight
+                                  multiplier:1.0 / actualRow
+                                    constant:-(spacingValue * (actualRow - 1) +
+                                               paddingValue * 2) /
+                                             actualRow]];
+
+    // Position constraints
+    if (currentColumn == 0) {
+      // First column - leading edge
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeLeading
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:view
+                                       attribute:NSLayoutAttributeLeading
+                                      multiplier:1.0
+                                        constant:paddingValue]];
+    } else {
+      // Other columns - spacing from previous view
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeLeading
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:subviews[i - 1]
+                                       attribute:NSLayoutAttributeTrailing
+                                      multiplier:1.0
+                                        constant:spacingValue]];
+    }
+
+    if (currentRow == 0) {
+      // First row - top edge
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeTop
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:view
+                                       attribute:NSLayoutAttributeTop
+                                      multiplier:1.0
+                                        constant:paddingValue]];
+    } else {
+      // Other rows - spacing from row above
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeTop
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:subviews[i - actualColumn]
+                                       attribute:NSLayoutAttributeBottom
+                                      multiplier:1.0
+                                        constant:spacingValue]];
+    }
+
+    // Last column - trailing edge
+    if (currentColumn == actualColumn - 1) {
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeTrailing
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:view
+                                       attribute:NSLayoutAttributeTrailing
+                                      multiplier:1.0
+                                        constant:-paddingValue]];
+    }
+
+    // Last row - bottom edge
+    if (currentRow == actualRow - 1) {
+      [view addConstraint:[NSLayoutConstraint
+                              constraintWithItem:subview
+                                       attribute:NSLayoutAttributeBottom
+                                       relatedBy:NSLayoutRelationEqual
+                                          toItem:view
+                                       attribute:NSLayoutAttributeBottom
+                                      multiplier:1.0
+                                        constant:-paddingValue]];
+    }
+  }
+}
+
+- (UIView *)findNativeView:(uint64_t)viewId {
+  __block UIView *view;
+  [self.nativeViews
+      enumerateObjectsUsingBlock:^(UIView *obj, NSUInteger idx, BOOL *stop) {
+        if ((uint64_t)obj == viewId) {
+          view = obj;
+          *stop = YES;
+        }
+      }];
+  return view;
 }
 
 // Don't compile this code when we build for the old architecture.

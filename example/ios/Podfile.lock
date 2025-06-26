@@ -1,6 +1,6 @@
 PODS:
   - AgoraIrisRTC_iOS (4.5.2.140-build.2)
-  - AgoraPIP_iOS (0.0.2-rc.2)
+  - AgoraPIP_iOS (0.0.4)
   - AgoraRtcEngine_Special_iOS (4.5.2.140)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
@@ -1215,7 +1215,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-agora (4.5.3):
     - AgoraIrisRTC_iOS (= 4.5.2.140-build.2)
-    - AgoraPIP_iOS (= 0.0.2-rc.2)
+    - AgoraPIP_iOS (= 0.0.4)
     - AgoraRtcEngine_Special_iOS (= 4.5.2.140)
     - DoubleConversion
     - glog
@@ -2141,7 +2141,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AgoraIrisRTC_iOS: 94fcf69409b32c91a61d39c6353ccb7acc407242
-  AgoraPIP_iOS: 6b95d1ba554267eb0fb6f94067eb4f9848f9057b
+  AgoraPIP_iOS: a36b4d0d11636edd8efcad1ed9dbfa78b3a1cf11
   AgoraRtcEngine_Special_iOS: aa5c57a16e9b43734f38da4c6105a15d55c33873
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -2179,7 +2179,7 @@ SPEC CHECKSUMS:
   React-logger: e7eeebaed32b88dcc29b10901aa8c5822dc397c4
   React-Mapbuffer: 73dd1210c4ecf0dfb4e2d4e06f2a13f824a801a9
   React-microtasksnativemodule: d03753688e2abf135edcd4160ab3ce7526da8b0d
-  react-native-agora: ede249f41be3ea6f938c2850ab6ad464a6bb187d
+  react-native-agora: ecec2a109831b5370e2fb6a7191f4172d2687dd3
   react-native-image-tools: 173708146c3fc759d8d8dd532327c04bd425eb86
   react-native-safe-area-context: 7e513d737b0b5c1d10bbe0e5fcc9f925a7be144c
   react-native-slider: bb7eb4732940fab78217e1c096bb647d8b0d1cf3

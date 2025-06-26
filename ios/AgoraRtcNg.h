@@ -1,3 +1,4 @@
+#import <UIKit/UIKit.h>
 #import <AgoraRtcWrapper/iris_engine_base.h>
 #import <React/RCTEventEmitter.h>
 // #import <AgoraPIPKit/AgoraPIPKit.h>

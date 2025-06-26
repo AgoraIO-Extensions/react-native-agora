@@ -1,22 +1,24 @@
-import React, { ReactElement, createRef } from 'react';
+import React, { ReactElement } from 'react';
 import { AppState, AppStateStatus, Platform } from 'react-native';
 import {
+  AgoraPipContentViewLayout,
   AgoraPipOptions,
   AgoraPipState,
   AgoraPipStateChangedObserver,
-  AgoraRtcRenderViewState,
   ChannelProfileType,
   ClientRoleType,
   ErrorCodeType,
   IRtcEngineEventHandler,
   RenderModeType,
   RtcConnection,
+  RtcRendererViewProps,
   RtcStats,
   RtcSurfaceView,
   RtcTextureView,
   UserOfflineReasonType,
   VideoCanvas,
   VideoSourceType,
+  VideoViewSetupMode,
   createAgoraRtcEngine,
 } from 'react-native-agora';
 
@@ -28,14 +30,12 @@ import {
   AgoraButton,
   AgoraCard,
   AgoraDivider,
-  AgoraDropdown,
   AgoraList,
   AgoraStyle,
   AgoraSwitch,
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
-import { arrayToItems } from '../../../utils';
 import AgoraServiceHelper from '../../../utils/AgoraServiceHelper';
 import { askMediaAccess } from '../../../utils/permissions';
 
@@ -44,11 +44,11 @@ interface State extends BaseVideoComponentState {
   pipContentHeight: number;
   pipState: number;
   renderByTextureView: boolean;
-  userRefList: { ref: React.RefObject<any>; canvas: VideoCanvas }[];
-  selectUser: number;
   isPipAutoEnterSupported: boolean;
   isPipSupported: boolean;
   isPipDisposed: boolean;
+  pipContentRow: number;
+  pipContentCol: number;
 }
 
 export default class PictureInPicture
@@ -66,13 +66,6 @@ export default class PictureInPicture
       uid: Config.uid,
       joinChannelSuccess: false,
       remoteUsers: [],
-      userRefList: [
-        {
-          ref: createRef<any>(),
-          canvas: { uid: 0, renderMode: RenderModeType.RenderModeHidden },
-        },
-      ],
-      selectUser: 0,
       startPreview: false,
       pipContentWidth: 960,
       pipContentHeight: 540,
@@ -81,6 +74,8 @@ export default class PictureInPicture
       isPipAutoEnterSupported: true,
       isPipSupported: true,
       isPipDisposed: false,
+      pipContentRow: 1,
+      pipContentCol: 0,
     };
   }
 
@@ -178,13 +173,15 @@ export default class PictureInPicture
   /**
    * Step 3-1: setupPip
    */
-  setupPip = (uid?: number) => {
+  setupPip = () => {
     const {
       isPipSupported,
       pipContentWidth,
       pipContentHeight,
       isPipAutoEnterSupported,
-      userRefList,
+      remoteUsers,
+      pipContentRow,
+      pipContentCol,
     } = this.state;
 
     if (!isPipSupported) {
@@ -224,16 +221,34 @@ export default class PictureInPicture
         externalStateMonitorInterval: 100,
       };
     } else {
-      // iOS pip mode parameters
-      let user = userRefList.find((item) => item.canvas.uid === uid)?.canvas;
-      let contentView = 0;
-      if (user) {
-        const ref = userRefList.find((item) => item.canvas.uid === uid)?.ref;
-        if (ref) {
-          let state: AgoraRtcRenderViewState = ref.current.state;
-          contentView = state.contentView ?? 0;
-        }
-      }
+      let contentViewLayout: AgoraPipContentViewLayout = {
+        padding: 0,
+        spacing: 2,
+        row: pipContentRow,
+        column: pipContentCol,
+      };
+
+      let videoStreams: RtcRendererViewProps[] = [
+        //this is the local user, please do not set uid for it
+        {
+          canvas: {
+            sourceType: VideoSourceType.VideoSourceCamera,
+            setupMode: VideoViewSetupMode.VideoViewSetupAdd, //please use VideoViewSetupAdd only
+            renderMode: RenderModeType.RenderModeHidden,
+          },
+        },
+        ...remoteUsers.map((userUid) => {
+          return {
+            //this is the remote user, please set uid for it
+            canvas: {
+              uid: userUid,
+              sourceType: VideoSourceType.VideoSourceRemote,
+              setupMode: VideoViewSetupMode.VideoViewSetupAdd, //please use VideoViewSetupAdd only
+              renderMode: RenderModeType.RenderModeHidden,
+            },
+          };
+        }),
+      ];
 
       options = {
         // Use preferredContentWidth and preferredContentHeight to set the size of the PIP window.
@@ -243,16 +258,36 @@ export default class PictureInPicture
         preferredContentWidth: pipContentWidth,
         preferredContentHeight: pipContentHeight,
 
-        // The sourceContentView determines the source frame for the PiP animation and restore target.
-        // Pass 0 to use the app's root view. For optimal animation, set this to the view containing
-        // your video content. The system uses this view for the PiP enter/exit animations and as the
-        // restore target when returning to the app or stopping PiP.
-        sourceContentView: 0,
+        // The contentViewLayout determines the layout of video streams in the PIP window.
+        // You can customize the grid layout by specifying:
+        // - padding: Space between the window edge and content (in pixels)
+        // - spacing: Space between video streams (in pixels)
+        // - row: Number of rows in the grid layout
+        // - column: Number of columns in the grid layout
+        //
+        // The SDK provides a basic grid layout system that arranges video streams in a row x column matrix.
+        // For example:
+        // - row=2, column=2: Up to 4 video streams in a 2x2 grid
+        // - row=1, column=2: Up to 2 video streams side by side
+        // - row=2, column=1: Up to 2 video streams stacked vertically
+        //
+        // Note:
+        // - This layout configuration only takes effect when contentView is 0 (using native view)
+        // - The grid layout is filled from left-to-right, top-to-bottom
+        // - Empty cells will be left blank if there are fewer streams than grid spaces
+        // - For custom layouts beyond the grid system, set contentView to your own view ID
+        contentViewLayout,
 
-        // The contentView determines which view will be displayed in the PIP window.
-        // If you pass 0, the PIP controller will automatically manage and display all video streams.
-        // If you pass a specific view ID, you become responsible for managing the content shown in the PIP window.
-        contentView: contentView,
+        // The videoStreams array specifies which video streams to display in the PIP window.
+        // Each stream can be configured with properties like uid, sourceType, setupMode, and renderMode.
+        // Note:
+        // - This configuration only takes effect when contentView is set to 0 (native view mode).
+        // - The streams will be laid out according to the contentViewLayout grid configuration.
+        // - The order of the video streams in the array determines the display order in the PIP window.
+        // - The SDK will automatically create and manage native views for each video stream.
+        // - The view property in VideoCanvas will be replaced by the SDK-managed native view.
+        // - You can customize the rendering of each stream using properties like renderMode and mirrorMode.
+        videoStreams,
 
         // The controlStyle property determines which controls are visible in the PiP window.
         // Available styles:
@@ -306,10 +341,6 @@ export default class PictureInPicture
    * Step 4: leaveChannel
    */
   protected leaveChannel() {
-    if (Platform.OS === 'ios') {
-      this.engine?.getAgoraPip().pipStop();
-      this.engine?.getAgoraPip().pipDispose();
-    }
     this.engine?.leaveChannel();
   }
 
@@ -342,14 +373,7 @@ export default class PictureInPicture
 
   onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
     super.onUserJoined(connection, remoteUid, elapsed);
-    const { userRefList, isPipDisposed } = this.state;
-    if (userRefList.findIndex((item) => item.canvas.uid === remoteUid) === -1) {
-      userRefList.push({
-        ref: createRef<any>(),
-        canvas: { uid: remoteUid, renderMode: RenderModeType.RenderModeHidden },
-      });
-      this.setState({ userRefList });
-    }
+    const { isPipDisposed } = this.state;
     if (!isPipDisposed) {
       this.setupPip();
     }
@@ -361,14 +385,7 @@ export default class PictureInPicture
     reason: UserOfflineReasonType
   ) {
     super.onUserOffline(connection, remoteUid, reason);
-    const { userRefList, isPipDisposed } = this.state;
-    const index = userRefList.findIndex(
-      (item) => item.canvas.uid === remoteUid
-    );
-    if (index !== -1) {
-      userRefList.splice(index, 1);
-      this.setState({ userRefList });
-    }
+    const { isPipDisposed } = this.state;
     if (!isPipDisposed) {
       this.setupPip();
     }
@@ -441,8 +458,6 @@ export default class PictureInPicture
       pipState,
     } = this.state;
 
-    console.log(remoteUsers);
-
     return enableVideo ? (
       <>
         {!!startPreview || joinChannelSuccess
@@ -494,10 +509,9 @@ export default class PictureInPicture
   }
 
   protected renderVideo(user: VideoCanvas): ReactElement | undefined {
-    const { renderByTextureView, userRefList, pipState } = this.state;
+    const { renderByTextureView, pipState } = this.state;
     return renderByTextureView ? (
       <RtcTextureView
-        ref={userRefList.find((item) => item.canvas.uid === user.uid)?.ref}
         style={
           user.uid === 0
             ? AgoraStyle.videoLarge
@@ -511,7 +525,6 @@ export default class PictureInPicture
     ) : (
       <>
         <RtcSurfaceView
-          ref={userRefList.find((item) => item.canvas.uid === user.uid)?.ref}
           style={
             user.uid === 0
               ? AgoraStyle.videoLarge
@@ -528,14 +541,8 @@ export default class PictureInPicture
   }
 
   protected renderConfiguration(): ReactElement | undefined {
-    const {
-      startPreview,
-      joinChannelSuccess,
-      renderByTextureView,
-      pipState,
-      selectUser,
-      remoteUsers,
-    } = this.state;
+    const { startPreview, joinChannelSuccess, renderByTextureView, pipState } =
+      this.state;
 
     const isAndroidAndInPip =
       Platform.OS === 'android' && pipState === AgoraPipState.pipStateStarted;
@@ -583,13 +590,33 @@ export default class PictureInPicture
         />
         {Platform.OS === 'ios' && (
           <>
-            <AgoraDropdown
-              title={'Select User to Setup Pip'}
-              items={arrayToItems(remoteUsers.concat([0]))}
-              value={selectUser}
-              onValueChange={(value) => {
-                this.setState({ selectUser: value });
+            <AgoraTextInput
+              style={AgoraStyle.fullSize}
+              onChangeText={(text) => {
+                if (isNaN(+text)) return;
+                this.setState({
+                  pipContentRow:
+                    text === '' ? this.createState().pipContentRow : +text,
+                });
               }}
+              numberKeyboard={true}
+              placeholder={`pipContentRow (defaults: ${
+                this.createState().pipContentRow
+              })`}
+            />
+            <AgoraTextInput
+              style={AgoraStyle.fullSize}
+              onChangeText={(text) => {
+                if (isNaN(+text)) return;
+                this.setState({
+                  pipContentCol:
+                    text === '' ? this.createState().pipContentCol : +text,
+                });
+              }}
+              numberKeyboard={true}
+              placeholder={`pipContentCol (defaults: ${
+                this.createState().pipContentCol
+              })`}
             />
           </>
         )}
@@ -598,7 +625,7 @@ export default class PictureInPicture
   }
 
   protected renderAction(): ReactElement | undefined {
-    const { pipState, selectUser, isPipSupported } = this.state;
+    const { pipState, isPipSupported } = this.state;
     const isAndroidAndInPip =
       Platform.OS === 'android' && pipState === AgoraPipState.pipStateStarted;
 
@@ -607,7 +634,7 @@ export default class PictureInPicture
         <AgoraButton
           title={`setup pip`}
           onPress={() => {
-            this.setupPip(selectUser);
+            this.setupPip();
           }}
         />
         <AgoraButton

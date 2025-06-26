@@ -5,6 +5,65 @@
  * a video stream within the PiP window.
  */
 
+import { RtcRendererViewProps } from './AgoraRtcRenderView';
+
+/**
+ * Layout configuration for Picture-in-Picture (PiP) video streams.
+ *
+ * This class defines how multiple video streams should be arranged in a flow layout,
+ * where streams are placed from left to right and top to bottom in sequence.
+ *
+ * Example layout with padding=10, spacing=5, column=3:
+ * ```
+ * ┌────────────────────────────────────┐
+ * │                                    │
+ * │  ┌────┐  ┌────┐  ┌────┐           │
+ * │  │ 1  │  │ 2  │  │ 3  │           │
+ * │  └────┘  └────┘  └────┘           │
+ * │                                    │
+ * │  ┌────┐  ┌────┐  ┌────┐           │
+ * │  │ 4  │  │ 5  │  │ 6  │           │
+ * │  └────┘  └────┘  └────┘           │
+ * │                                    │
+ * │  ┌────┐                           │
+ * │  │ 7  │                           │
+ * │  └────┘                           │
+ * │                                    │
+ * └────────────────────────────────────┘
+ * ```
+ */
+export class AgoraPipContentViewLayout {
+  /**
+   * The padding around the entire layout in pixels.
+   * Creates space between the layout edges and the streams.
+   * If null, no padding will be applied.
+   */
+  padding?: number;
+
+  /**
+   * The horizontal and vertical spacing between streams in pixels.
+   * Creates consistent gaps between adjacent streams.
+   * If null, streams will be placed directly adjacent to each other.
+   */
+  spacing?: number;
+
+  /**
+   * Maximum number of rows allowed in the layout.
+   * When reached, no more rows will be created even if more streams exist.
+   * If null, rows will be created as needed to fit all streams.
+   * Must be greater than 0 or null.
+   */
+  row?: number;
+
+  /**
+   * Maximum number of streams per row.
+   * When reached, a new row will be started.
+   * If null, streams will flow to fill the available width.
+   * Must be greater than 0 or null.
+   */
+  column?: number;
+}
+
 /**
  * Configuration options for Agora Picture-in-Picture (PiP) mode.
  *
@@ -93,19 +152,24 @@ export class AgoraPipOptions {
   externalStateMonitorInterval?: number;
 
   /**
-   * The source content view identifier.
+   * Configuration for video transcoding.
    *
-   * Set to 0 to use the root view as the source.
+   * Only takes effect when contentView is set to 0.
+   * When user let the SDK manage the view, all video streams will place in a root view in the PIP window.
    * Platform: iOS only
    */
-  sourceContentView?: number;
+  videoStreams?: RtcRendererViewProps[];
 
   /**
-   * The content view identifier for video rendering.
+   * Layout configuration for PiP video streams.
    *
-   * Set to 0 to let the SDK manage the view.
-   * When set to 0, you must provide video sources through videoStreams.
+   * Only takes effect when contentView is set to 0.
    * Platform: iOS only
+   */
+  contentViewLayout?: AgoraPipContentViewLayout;
+
+  /**
+   * @ignore
    */
   contentView?: number;
 
