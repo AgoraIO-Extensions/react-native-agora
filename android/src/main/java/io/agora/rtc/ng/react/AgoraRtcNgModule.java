@@ -148,19 +148,20 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
   }
 
   @ReactMethod
-  public void nativeViewCreate() {
+  public double nativeViewCreate() {
+    return 0;
   }
 
   @ReactMethod
-  public void nativeViewDestroy(int viewId) {
+  public void nativeViewDestroy(double viewId) {
   }
 
   @ReactMethod
-  public void nativeViewSetParent(int viewId, int parentViewId, int indexOfParentView) {
+  public void nativeViewSetParent(ReadableMap options) {
   }
 
   @ReactMethod
-  public void nativeViewSetLayout(int viewId, ReadableMap layout) {
+  public void nativeViewSetLayout(ReadableMap options) {
   }
 
   @ReactMethod
