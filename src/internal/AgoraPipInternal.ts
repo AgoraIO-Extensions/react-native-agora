@@ -78,8 +78,9 @@ export class AgoraPipInternal implements AgoraPip {
       this._pipSubViews.forEach((videoStream) => {
         this.disposeNativeViewByVideoStream(videoStream);
       });
+      this._pipSubViews = [];
       if (this._pipContentView !== 0) {
-        AgoraRtcNg.nativeViewDestroy(this._pipContentView);
+        AgoraRtcNg.nativeViewDestroy({ viewId: this._pipContentView });
         this._pipContentView = 0;
       }
     }
@@ -88,7 +89,7 @@ export class AgoraPipInternal implements AgoraPip {
   private disposeNativeViewByVideoStream(videoStream: RtcRendererViewProps) {
     videoStream.canvas.setupMode = VideoViewSetupMode.VideoViewSetupRemove;
     AgoraRtcNg.callApi(getParams(videoStream));
-    AgoraRtcNg.nativeViewDestroy(videoStream.canvas.view);
+    AgoraRtcNg.nativeViewDestroy({ viewId: videoStream.canvas.view });
   }
 
   private pipSetupForIos(options: AgoraPipOptions): boolean {

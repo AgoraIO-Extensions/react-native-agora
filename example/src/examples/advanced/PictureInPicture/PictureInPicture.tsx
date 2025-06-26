@@ -36,7 +36,6 @@ import {
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
-import AgoraServiceHelper from '../../../utils/AgoraServiceHelper';
 import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
@@ -365,18 +364,24 @@ export default class PictureInPicture
 
   onLeaveChannel(connection: RtcConnection, stats: RtcStats) {
     super.onLeaveChannel(connection, stats);
-    const { isPipDisposed } = this.state;
-    if (!isPipDisposed) {
-      this.setupPip();
-    }
+    this.pipDispose();
   }
 
   onUserJoined(connection: RtcConnection, remoteUid: number, elapsed: number) {
-    super.onUserJoined(connection, remoteUid, elapsed);
-    const { isPipDisposed } = this.state;
-    if (!isPipDisposed) {
-      this.setupPip();
-    }
+    this.setState(
+      (preState) => {
+        return {
+          remoteUsers: [...(preState.remoteUsers ?? []), remoteUid],
+        };
+      },
+      () => {
+        // Because the window rendering and pip setup are asynchronous, we need to ensure that the window rendering is prioritized,
+        // so we need to use setTimeout to ensure that the window rendering is completed before the pip setup.
+        setTimeout(() => {
+          this.setupPip();
+        }, 0);
+      }
+    );
   }
 
   onUserOffline(
@@ -384,11 +389,16 @@ export default class PictureInPicture
     remoteUid: number,
     reason: UserOfflineReasonType
   ) {
-    super.onUserOffline(connection, remoteUid, reason);
-    const { isPipDisposed } = this.state;
-    if (!isPipDisposed) {
-      this.setupPip();
-    }
+    this.setState(
+      (preState) => {
+        return {
+          remoteUsers: preState.remoteUsers?.filter((uid) => uid !== remoteUid),
+        };
+      },
+      () => {
+        this.setupPip();
+      }
+    );
   }
 
   onPipStateChanged(state: AgoraPipState, error: string | null): void {
@@ -409,20 +419,6 @@ export default class PictureInPicture
     }
 
     this.setState({ pipState: state });
-  }
-
-  componentDidMount() {
-    super.componentDidMount();
-    if (Platform.OS === 'android') {
-      AgoraServiceHelper.startForegroundService();
-    }
-  }
-
-  componentWillUnmount() {
-    super.componentWillUnmount();
-    if (Platform.OS === 'android') {
-      AgoraServiceHelper.stopForegroundService();
-    }
   }
 
   protected renderChannel(): ReactElement | undefined {

@@ -153,7 +153,7 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
   }
 
   @ReactMethod
-  public void nativeViewDestroy(double viewId) {
+  public void nativeViewDestroy(ReadableMap options) {
   }
 
   @ReactMethod

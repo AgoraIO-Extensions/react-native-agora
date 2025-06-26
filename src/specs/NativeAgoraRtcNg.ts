@@ -38,7 +38,7 @@ export interface Spec extends TurboModule {
 
   nativeViewCreate(): number;
 
-  nativeViewDestroy(viewId: number): void;
+  nativeViewDestroy(options: Object): void;
 
   nativeViewSetParent(options: Object): void;
 

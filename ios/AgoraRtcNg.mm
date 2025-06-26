@@ -154,16 +154,20 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(destroyIrisApiEngine) {
 }
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(nativeViewCreate) {
-  UIView *view = [[AgoraNativeView alloc] init];
-  [self.nativeViews addObject:view];
-  view.translatesAutoresizingMaskIntoConstraints = NO;
-  uint64_t viewId = (uint64_t)view;
-  NSLog(@"nativeViewCreate: %llu", viewId);
-  return @(viewId);
+  __block NSNumber *result = nil;
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    UIView *view = [[AgoraNativeView alloc] init];
+    [self.nativeViews addObject:view];
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    uint64_t viewId = (uint64_t)view;
+    result = @(viewId);
+  });
+  return result;
 }
 
-RCT_EXPORT_METHOD(nativeViewDestroy : (nonnull NSNumber *)viewId) {
-  UIView *view = [self findNativeView:[viewId unsignedLongLongValue]];
+RCT_EXPORT_METHOD(nativeViewDestroy : (nonnull NSDictionary *)options) {
+  UIView *view =
+      [self findNativeView:[options[@"viewId"] unsignedLongLongValue]];
 
   if (view) {
     [view removeFromSuperview];           // Remove from parent view hierarchy
@@ -282,7 +286,6 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(pipSetup
     unsigned long long pointerLongValue = [pointerValue unsignedLongLongValue];
     UIView *view = (__bridge UIView *)(void *)pointerLongValue;
 
-    NSLog(@"pipSetup: %@", pointerLongValue);
     pipOptions.contentView = view;
 
     AgoraRtcNg *instance = [AgoraRtcNg shareInstance];
@@ -299,7 +302,6 @@ RCT_EXPORT_METHOD(pipStop) { [self.pipController stop]; }
 RCT_EXPORT_METHOD(pipDispose) { [self.pipController dispose]; }
 
 - (void)pipStateChanged:(AgoraPIPState)state error:(NSString *)error {
-  NSLog(@"pipStateChanged: %ld, error: %@", (long)state, error ?: @"");
 
   if (self.hasListeners) {
     NSDictionary *eventData =
