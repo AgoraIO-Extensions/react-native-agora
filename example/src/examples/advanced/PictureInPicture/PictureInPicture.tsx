@@ -36,6 +36,8 @@ import {
   AgoraTextInput,
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
+import AgoraServiceHelper from '../../../utils/AgoraServiceHelper';
+import { error } from '../../../utils/log';
 import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {
@@ -419,6 +421,20 @@ export default class PictureInPicture
     }
 
     this.setState({ pipState: state });
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    if (Platform.OS === 'android') {
+      AgoraServiceHelper.startForegroundService();
+    }
+  }
+
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    if (Platform.OS === 'android') {
+      AgoraServiceHelper.stopForegroundService();
+    }
   }
 
   protected renderChannel(): ReactElement | undefined {
