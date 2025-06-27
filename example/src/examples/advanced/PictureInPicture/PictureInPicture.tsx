@@ -37,7 +37,6 @@ import {
 } from '../../../components/ui';
 import Config from '../../../config/agora.config';
 import AgoraServiceHelper from '../../../utils/AgoraServiceHelper';
-import { error } from '../../../utils/log';
 import { askMediaAccess } from '../../../utils/permissions';
 
 interface State extends BaseVideoComponentState {

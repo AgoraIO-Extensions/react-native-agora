@@ -67,10 +67,10 @@ export class AgoraPipInternal implements AgoraPip {
     AgoraRtcNg.pipStop();
   }
   pipDispose(): void {
+    AgoraRtcNg.pipDispose();
     if (Platform.OS === 'ios') {
       this.disposeAllNativeViews();
     }
-    AgoraRtcNg.pipDispose();
   }
 
   private disposeAllNativeViews() {
