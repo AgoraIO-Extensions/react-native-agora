@@ -1,6 +1,6 @@
 PODS:
   - AgoraIrisRTC_iOS (4.5.2.140-build.2)
-  - AgoraPIP_iOS (0.0.4)
+  - AgoraPIP_iOS (0.0.4-rc.1)
   - AgoraRtcEngine_Special_iOS (4.5.2.140)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
@@ -1215,7 +1215,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-agora (4.5.3):
     - AgoraIrisRTC_iOS (= 4.5.2.140-build.2)
-    - AgoraPIP_iOS (= 0.0.4)
+    - AgoraPIP_iOS (= 0.0.4-rc.1)
     - AgoraRtcEngine_Special_iOS (= 4.5.2.140)
     - DoubleConversion
     - glog
@@ -2141,14 +2141,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AgoraIrisRTC_iOS: 94fcf69409b32c91a61d39c6353ccb7acc407242
-  AgoraPIP_iOS: a36b4d0d11636edd8efcad1ed9dbfa78b3a1cf11
+  AgoraPIP_iOS: 8cd815d6829cda9199a4ba3e0d1fcf7183ed0309
   AgoraRtcEngine_Special_iOS: aa5c57a16e9b43734f38da4c6105a15d55c33873
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 79c4b7ec726447eec5f8593379466bd9fde1aa14
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: ccc24d29d650ea725d582a9a53d57cd417fbdb53
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: 664055db806cce35c3c1b43c84414dd66e117ae6
@@ -2179,7 +2179,7 @@ SPEC CHECKSUMS:
   React-logger: e7eeebaed32b88dcc29b10901aa8c5822dc397c4
   React-Mapbuffer: 73dd1210c4ecf0dfb4e2d4e06f2a13f824a801a9
   React-microtasksnativemodule: d03753688e2abf135edcd4160ab3ce7526da8b0d
-  react-native-agora: ecec2a109831b5370e2fb6a7191f4172d2687dd3
+  react-native-agora: 25135debb0e85697e595525ae10d5052e285102a
   react-native-image-tools: 173708146c3fc759d8d8dd532327c04bd425eb86
   react-native-safe-area-context: 7e513d737b0b5c1d10bbe0e5fcc9f925a7be144c
   react-native-slider: bb7eb4732940fab78217e1c096bb647d8b0d1cf3
