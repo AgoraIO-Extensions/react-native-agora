@@ -44,7 +44,7 @@ const Header = ({ getData }: { getData: () => Array<string> }) => {
 
   return (
     <>
-      <AgoraButton title="Logs" onPress={toggleOverlay} />
+      <AgoraText onPress={toggleOverlay}>Logs</AgoraText>
       <LogSink
         visible={visible}
         data={getData()}
