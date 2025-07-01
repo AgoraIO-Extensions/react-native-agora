@@ -167,7 +167,7 @@ dependencies {
   /// dependencies start
   api 'io.agora.rtc:full-screen-sharing:4.5.2.140'
   api 'io.agora.rtc:agora-special-full:4.5.2.140'
-  api 'io.agora.rtc:iris-rtc:4.5.2.140-test.2'
+  api 'io.agora.rtc:iris-rtc:4.5.2.140-test.1'
   /// dependencies end
 }
 
