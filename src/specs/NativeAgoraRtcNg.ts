@@ -35,14 +35,6 @@ export interface Spec extends TurboModule {
   pipStop(): void;
 
   pipDispose(): void;
-
-  nativeViewCreate(): number;
-
-  nativeViewDestroy(options: Object): void;
-
-  nativeViewSetParent(options: Object): void;
-
-  nativeViewSetLayout(options: Object): void;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('AgoraRtcNg');

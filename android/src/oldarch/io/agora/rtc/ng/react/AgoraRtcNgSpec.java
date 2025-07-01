@@ -37,12 +37,4 @@ public abstract class AgoraRtcNgSpec extends ReactContextBaseJavaModule {
 
   public abstract void pipDispose();
 
-  public abstract double nativeViewCreate();
-
-  public abstract void nativeViewDestroy(ReadableMap options);
-
-  public abstract void nativeViewSetParent(ReadableMap options);
-
-  public abstract void nativeViewSetLayout(ReadableMap options);
-
 }

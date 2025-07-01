@@ -10,8 +10,8 @@ import com.facebook.react.ReactActivity;
 
 import java.lang.ref.WeakReference;
 
-import io.agora.pip.AgoraPIPActivityProxy;
-import io.agora.pip.AgoraPIPActivityListener;
+import io.agora.iris.pip.AgoraPIPActivityProxy;
+import io.agora.iris.pip.AgoraPIPActivityListener;
 
 public class AgoraPIPActivity extends ReactActivity implements AgoraPIPActivityProxy {
   private WeakReference<AgoraPIPActivityListener> mListener;

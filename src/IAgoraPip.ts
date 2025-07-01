@@ -169,7 +169,17 @@ export class AgoraPipOptions {
   contentViewLayout?: AgoraPipContentViewLayout;
 
   /**
-   * @ignore
+   * The sourceContentView determines the source frame for the PiP animation and restore target.
+   * Pass 0 to use the app's root view. For optimal animation, set this to the view containing
+   * your video content. The system uses this view for the PiP enter/exit animations and as the
+   * restore target when returning to the app or stopping PiP.
+   */
+  sourceContentView?: number;
+
+  /**
+   * The contentView determines which view will be displayed in the PIP window.
+   * If you pass 0, the PIP controller will automatically manage and display all video streams.
+   * If you pass a specific view ID, you become responsible for managing the content shown in the PIP window.
    */
   contentView?: number;
 

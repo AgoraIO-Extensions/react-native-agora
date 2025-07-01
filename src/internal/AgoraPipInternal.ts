@@ -1,8 +1,5 @@
-import { Platform } from 'react-native';
 import { createCheckers } from 'ts-interface-checker';
 
-import { VideoViewSetupMode } from '../AgoraBase';
-import { RtcRendererViewProps } from '../AgoraRtcRenderView';
 import {
   AgoraPip,
   AgoraPipOptions,
@@ -12,7 +9,6 @@ import { IAgoraPipEvent } from '../extension/IAgoraPipExtension';
 import AgoraRtcNg from '../specs';
 import IAgoraPipTI from '../ti/IAgoraPip-ti';
 
-import { getParams } from './IAgoraRtcRenderView';
 import {
   DeviceEventEmitter,
   EVENT_TYPE,
@@ -37,8 +33,6 @@ export function processAgoraPipObserver(
 
 export class AgoraPipInternal implements AgoraPip {
   static _agora_pip_observers: AgoraPipStateChangedObserver[] = [];
-  private _pipSubViews: RtcRendererViewProps[] = [];
-  private _pipContentView: number = 0;
 
   pipIsSupported(): boolean {
     return AgoraRtcNg.pipIsSupported();
@@ -51,11 +45,7 @@ export class AgoraPipInternal implements AgoraPip {
   }
   pipSetup(options: AgoraPipOptions): boolean {
     if (typeof options === 'object') {
-      if (Platform.OS === 'ios') {
-        return this.pipSetupForIos(options);
-      } else {
-        return AgoraRtcNg.pipSetup(options);
-      }
+      return AgoraRtcNg.pipSetup(options);
     } else {
       return false;
     }
@@ -68,98 +58,6 @@ export class AgoraPipInternal implements AgoraPip {
   }
   pipDispose(): void {
     AgoraRtcNg.pipDispose();
-    if (Platform.OS === 'ios') {
-      this.disposeAllNativeViews();
-    }
-  }
-
-  private disposeAllNativeViews() {
-    if (this._pipSubViews.length > 0) {
-      this._pipSubViews.forEach((videoStream) => {
-        this.disposeNativeViewByVideoStream(videoStream);
-      });
-      this._pipSubViews = [];
-      if (this._pipContentView !== 0) {
-        AgoraRtcNg.nativeViewDestroy({ viewId: this._pipContentView });
-        this._pipContentView = 0;
-      }
-    }
-  }
-
-  private disposeNativeViewByVideoStream(videoStream: RtcRendererViewProps) {
-    videoStream.canvas.setupMode = VideoViewSetupMode.VideoViewSetupRemove;
-    AgoraRtcNg.callApi(getParams(videoStream));
-    AgoraRtcNg.nativeViewDestroy({ viewId: videoStream.canvas.view });
-  }
-
-  private pipSetupForIos(options: AgoraPipOptions): boolean {
-    if (this._pipContentView === 0) {
-      this._pipContentView = AgoraRtcNg.nativeViewCreate();
-    }
-    if (options.videoStreams && options.videoStreams.length > 0) {
-      // 1. find items to remove in _pipSubViews (not in new videoStreams)
-      const toRemove = this._pipSubViews.filter(
-        (subView) =>
-          !options.videoStreams!.some(
-            (stream) => stream.canvas.uid === subView.canvas.uid
-          )
-      );
-
-      // remove not needed views
-      toRemove.forEach((item) => {
-        this.disposeNativeViewByVideoStream(item);
-        const index = this._pipSubViews.findIndex(
-          (sv) => sv.canvas.uid === item.canvas.uid
-        );
-        if (index !== -1) {
-          this._pipSubViews.splice(index, 1);
-        }
-      });
-
-      // 2. process each videoStream
-      for (let index = 0; index < options.videoStreams.length; index++) {
-        const videoStream = options.videoStreams[index];
-        if (!videoStream) {
-          continue;
-        }
-        // find if exist same uid view
-        const existingViewIndex = this._pipSubViews.findIndex(
-          (sv) => sv.canvas.uid === videoStream.canvas.uid
-        );
-
-        if (existingViewIndex !== -1) {
-          // exist, keep view value, update other properties
-          const existingView =
-            this._pipSubViews?.[existingViewIndex]?.canvas.view;
-          if (existingView) {
-            videoStream.canvas.view = existingView;
-          }
-          // currently, we do not update other properties of the view
-          this._pipSubViews[existingViewIndex] = videoStream;
-        } else {
-          // not exist, create new view
-          videoStream.canvas.view = AgoraRtcNg.nativeViewCreate();
-          this._pipSubViews.push(videoStream);
-          // set view params
-          AgoraRtcNg.callApi(getParams(videoStream));
-        }
-        // set parent view
-        AgoraRtcNg.nativeViewSetParent({
-          viewId: videoStream.canvas.view,
-          parentViewId: this._pipContentView,
-          indexOfParentView: index,
-        });
-      }
-
-      // // set content view layout
-      AgoraRtcNg.nativeViewSetLayout({
-        viewId: this._pipContentView,
-        layout: options.contentViewLayout,
-      });
-    }
-
-    options.contentView = this._pipContentView;
-    return AgoraRtcNg.pipSetup(options);
   }
 
   release() {

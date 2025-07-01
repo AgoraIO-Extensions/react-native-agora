@@ -17,6 +17,7 @@ import {
   RtcTextureView,
   UserOfflineReasonType,
   VideoCanvas,
+  VideoMirrorModeType,
   VideoSourceType,
   VideoViewSetupMode,
   createAgoraRtcEngine,
@@ -112,13 +113,6 @@ export default class PictureInPicture
     this.engine.startPreview();
     this.setState({ startPreview: true });
 
-    if (Platform.OS === 'ios') {
-      // You should call this method when you want to use the pip feature in iOS background mode.
-      this.engine.setParameters(
-        JSON.stringify({ 'che.video.render.mode': 22 })
-      );
-    }
-
     this.setState({
       isPipAutoEnterSupported: this.engine
         .getAgoraPip()
@@ -182,6 +176,8 @@ export default class PictureInPicture
       remoteUsers,
       pipContentRow,
       pipContentCol,
+      channelId,
+      uid,
     } = this.state;
 
     if (!isPipSupported) {
@@ -231,14 +227,23 @@ export default class PictureInPicture
       let videoStreams: RtcRendererViewProps[] = [
         //this is the local user, please do not set uid for it
         {
+          connection: {
+            channelId,
+            localUid: uid,
+          },
           canvas: {
             sourceType: VideoSourceType.VideoSourceCamera,
             setupMode: VideoViewSetupMode.VideoViewSetupAdd, //please use VideoViewSetupAdd only
             renderMode: RenderModeType.RenderModeHidden,
+            mirrorMode: VideoMirrorModeType.VideoMirrorModeEnabled,
           },
         },
         ...remoteUsers.map((userUid) => {
           return {
+            connection: {
+              channelId,
+              localUid: userUid,
+            },
             //this is the remote user, please set uid for it
             canvas: {
               uid: userUid,
@@ -257,6 +262,17 @@ export default class PictureInPicture
         // The system may adjust the final window size to maintain system constraints.
         preferredContentWidth: pipContentWidth,
         preferredContentHeight: pipContentHeight,
+
+        // The sourceContentView determines the source frame for the PiP animation and restore target.
+        // Pass 0 to use the app's root view. For optimal animation, set this to the view containing
+        // your video content. The system uses this view for the PiP enter/exit animations and as the
+        // restore target when returning to the app or stopping PiP.
+        sourceContentView: 0,
+
+        // The contentView determines which view will be displayed in the PIP window.
+        // If you pass 0, the PIP controller will automatically manage and display all video streams.
+        // If you pass a specific view ID, you become responsible for managing the content shown in the PIP window.
+        contentView: 0, // force to use native view
 
         // The contentViewLayout determines the layout of video streams in the PIP window.
         // You can customize the grid layout by specifying:

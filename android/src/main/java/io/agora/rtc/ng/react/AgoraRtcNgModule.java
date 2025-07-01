@@ -29,8 +29,8 @@ import java.util.Map;
 import io.agora.iris.IrisApiEngine;
 import io.agora.iris.IrisEventHandler;
 
-import io.agora.pip.AgoraPIPActivityProxy;
-import io.agora.pip.AgoraPIPController;
+import io.agora.iris.pip.AgoraPIPActivityProxy;
+import io.agora.iris.pip.AgoraPIPController;
 
 @ReactModule(name = AgoraRtcNgModule.NAME)
 public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler {
@@ -145,23 +145,6 @@ public class AgoraRtcNgModule extends AgoraRtcNgSpec implements IrisEventHandler
   @ReactMethod
   public void addListener(String eventName) {
 
-  }
-
-  @ReactMethod
-  public double nativeViewCreate() {
-    return 0;
-  }
-
-  @ReactMethod
-  public void nativeViewDestroy(ReadableMap options) {
-  }
-
-  @ReactMethod
-  public void nativeViewSetParent(ReadableMap options) {
-  }
-
-  @ReactMethod
-  public void nativeViewSetLayout(ReadableMap options) {
   }
 
   @ReactMethod
