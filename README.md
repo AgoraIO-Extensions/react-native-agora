@@ -1,4 +1,5 @@
 > NOTE: These sdk and samples only for the Agora Video 4.x APIs. For examples using previous releases please see the following branches:
+>
 > - [3.x](https://github.com/AgoraIO-Extensions/react-native-agora/tree/3.x)
 
 # react-native-agora
@@ -148,6 +149,7 @@ compileOptions{
 - [Release Notes](https://docs.agora.io/en/video-calling/reference/release-notes?platform=react-native)
 - [File bugs about this sample](https://github.com/AgoraIO-Extensions/react-native-agora/issues)
 - [React Native Getting Started](https://facebook.github.io/react-native/docs/getting-started.html)
+- [Picture in Picture](./example/src/examples/advanced/PictureInPicture/PictureInPicture.md)
 
 ## Contributing
 
