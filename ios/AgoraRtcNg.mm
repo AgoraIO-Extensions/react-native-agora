@@ -85,15 +85,15 @@ RCT_EXPORT_MODULE()
 }
 
 - (void)dealloc {
+  if (self.pipController) {
+    [self.pipController dispose];
+    self.pipController = nil;
+  }
   if (self.irisApiEngine) {
     delete self.irisApiEngine;
   }
   if (self.eventHandler) {
     delete self.eventHandler;
-  }
-  if (self.pipController) {
-    [self.pipController dispose];
-    self.pipController = nil;
   }
 }
 
