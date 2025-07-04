@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {
+  AgoraPipState,
   ErrorCodeType,
   IRtcEngine,
   IRtcEngineEventHandler,
@@ -19,6 +20,8 @@ import {
   VideoCanvas,
   VideoSourceType,
 } from 'react-native-agora';
+
+import { PipStateConsumer } from '../context/pip';
 
 import { LogSink } from './LogSink';
 import {
@@ -41,7 +44,7 @@ const Header = ({ getData }: { getData: () => Array<string> }) => {
 
   return (
     <>
-      <AgoraButton title="Logs" onPress={toggleOverlay} />
+      <AgoraText onPress={toggleOverlay}>Logs</AgoraText>
       <LogSink
         visible={visible}
         data={getData()}
@@ -84,6 +87,7 @@ export abstract class BaseComponent<
 {
   protected engine?: IRtcEngine;
   private _data: Array<string> = [];
+  updatePipState?: (newState: AgoraPipState) => void;
 
   constructor(props: StackScreenProps<{ [T in keyof P]: P[T] }, string>) {
     super(props);
@@ -173,35 +177,46 @@ export abstract class BaseComponent<
     const configuration = this.renderConfiguration();
     const { hideAction } = this.state;
     return (
-      <KeyboardAvoidingView
-        style={AgoraStyle.fullSize}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <AgoraView style={AgoraStyle.fullWidth}>
-          {this.renderChannel()}
-        </AgoraView>
-        {users ? (
-          <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
-        ) : undefined}
-        {configuration ? (
-          <>
-            <AgoraDivider />
-            <AgoraText
-              style={styles.title}
-              onPress={() => {
-                this.setState({ hideAction: !hideAction });
-              }}
+      <PipStateConsumer>
+        {(context) => {
+          this.updatePipState = context.updatePipState;
+          return (
+            <KeyboardAvoidingView
+              style={AgoraStyle.fullSize}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-              {`The Configuration of ${this.constructor.name}`}
-            </AgoraText>
-            <AgoraDivider />
-            <ScrollView style={AgoraStyle.fullSize}>{configuration}</ScrollView>
-          </>
-        ) : undefined}
-        {!hideAction ? (
-          <AgoraView style={AgoraStyle.float}>{this.renderAction()}</AgoraView>
-        ) : undefined}
-      </KeyboardAvoidingView>
+              <AgoraView style={AgoraStyle.fullWidth}>
+                {this.renderChannel()}
+              </AgoraView>
+              {users ? (
+                <AgoraView style={AgoraStyle.fullSize}>{users}</AgoraView>
+              ) : undefined}
+              {configuration ? (
+                <>
+                  <AgoraDivider />
+                  <AgoraText
+                    style={styles.title}
+                    onPress={() => {
+                      this.setState({ hideAction: !hideAction });
+                    }}
+                  >
+                    {`The Configuration of ${this.constructor.name}`}
+                  </AgoraText>
+                  <AgoraDivider />
+                  <ScrollView style={AgoraStyle.fullSize}>
+                    {configuration}
+                  </ScrollView>
+                </>
+              ) : undefined}
+              {!hideAction ? (
+                <AgoraView style={AgoraStyle.float}>
+                  {this.renderAction()}
+                </AgoraView>
+              ) : undefined}
+            </KeyboardAvoidingView>
+          );
+        }}
+      </PipStateConsumer>
     );
   }
 

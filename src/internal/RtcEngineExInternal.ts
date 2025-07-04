@@ -15,6 +15,7 @@ import { IMediaEngine } from '../IAgoraMediaEngine';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
 import { IMusicContentCenter } from '../IAgoraMusicContentCenter';
+import { AgoraPip } from '../IAgoraPip';
 import {
   ChannelMediaOptions,
   DirectCdnStreamingMediaOptions,
@@ -38,6 +39,7 @@ import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 import IAgoraRtcEngineTI from '../ti/IAgoraRtcEngine-ti';
 
 import { H265TranscoderInternal } from './AgoraH265TranscoderInternal';
+import { AgoraPipInternal } from './AgoraPipInternal';
 import {
   DeviceEventEmitter,
   EVENT_TYPE,
@@ -69,6 +71,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   private _local_spatial_audio_engine: ILocalSpatialAudioEngine =
     new LocalSpatialAudioEngineInternal();
   private _h265_transcoder: IH265Transcoder = new H265TranscoderInternal();
+  private _agora_pip: AgoraPip = new AgoraPipInternal();
 
   override initialize(context: RtcEngineContext): number {
     const ret = super.initialize(context);
@@ -79,6 +82,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   }
 
   override release(sync: boolean = false) {
+    this._agora_pip.release();
     this._media_engine.release();
     this._local_spatial_audio_engine.release();
     RtcEngineExInternal._event_handlers.map((it) => {
@@ -435,5 +439,9 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
         (value) => value !== observer
       );
     return super.unregisterAudioSpectrumObserver(observer);
+  }
+
+  getAgoraPip(): AgoraPip {
+    return this._agora_pip;
   }
 }

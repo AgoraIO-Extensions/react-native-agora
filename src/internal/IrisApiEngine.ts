@@ -3,6 +3,7 @@ import { Buffer } from 'buffer';
 import base64 from 'base64-js';
 import EventEmitter from 'eventemitter3';
 import JSONBigInt from 'json-bigint';
+
 const JSON = JSONBigInt({ storeAsString: true });
 import { NativeEventEmitter } from 'react-native';
 
@@ -29,6 +30,7 @@ import {
   IMusicContentCenterEventHandler,
   MusicCollection,
 } from '../IAgoraMusicContentCenter';
+import { AgoraPipStateChangedObserver } from '../IAgoraPip';
 import {
   IDirectCdnStreamingEventHandler,
   IMetadataObserver,
@@ -59,6 +61,7 @@ import AgoraRtcNg from '../specs';
 
 import { H265TranscoderInternal } from './AgoraH265TranscoderInternal';
 import { VideoFrameMetaInfoInternal } from './AgoraMediaBaseInternal';
+import { AgoraPipInternal, processAgoraPipObserver } from './AgoraPipInternal';
 import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
@@ -114,6 +117,7 @@ export enum EVENT_TYPE {
   IRtcEngine,
   IMusicContentCenter,
   IAgoraH265Transcoder,
+  IAgoraPip,
 }
 
 type ProcessorType =
@@ -131,7 +135,8 @@ type ProcessorType =
   | IRtcEngineEventHandler
   | IMusicContentCenterEventHandler
   | IH265TranscoderObserver
-  | IFaceInfoObserver;
+  | IFaceInfoObserver
+  | AgoraPipStateChangedObserver;
 
 type EventProcessors = {
   IAudioFrameObserver: EventProcessor<IAudioFrameObserver>;
@@ -149,6 +154,7 @@ type EventProcessors = {
   IMusicContentCenterEventHandler: EventProcessor<IMusicContentCenterEventHandler>;
   IH265TranscoderObserver: EventProcessor<IH265TranscoderObserver>;
   IFaceInfoObserver: EventProcessor<IFaceInfoObserver>;
+  AgoraPipStateChangedObserver: EventProcessor<AgoraPipStateChangedObserver>;
 };
 
 /**
@@ -368,6 +374,12 @@ export const EVENT_PROCESSORS: EventProcessors = {
     func: [processIFaceInfoObserver],
     handlers: () => MediaEngineInternal._face_info_observers,
   },
+  AgoraPipStateChangedObserver: {
+    suffix: 'AgoraPip_',
+    type: () => EVENT_TYPE.IAgoraPip,
+    func: [processAgoraPipObserver],
+    handlers: () => AgoraPipInternal._agora_pip_observers,
+  },
 };
 
 function handleEvent({ event, data, buffers }: any) {
@@ -409,7 +421,7 @@ function handleEvent({ event, data, buffers }: any) {
   }
 
   const _buffers: Uint8Array[] = (buffers as string[])?.map((value) => {
-    return Buffer.from(value, 'base64');
+    return Buffer.from(value, 'base64') as unknown as Uint8Array;
   });
   if (processor.preprocess) {
     processor.preprocess(_event, _data, _buffers);
@@ -449,15 +461,21 @@ export function callIrisApi(funcName: string, params: any): any {
             base64.fromByteArray(params.frame.buffer ?? Buffer.from(''))
           );
           // frame.eglContext
-          buffers.push(base64.fromByteArray(Buffer.from('')));
+          buffers.push(
+            base64.fromByteArray(Buffer.from('') as unknown as Uint8Array)
+          );
           // frame.metadata_buffer
-          buffers.push(base64.fromByteArray(Buffer.from('')));
+          buffers.push(
+            base64.fromByteArray(Buffer.from('') as unknown as Uint8Array)
+          );
           // frame.alphaBuffer
           buffers.push(
             base64.fromByteArray(params.frame.alphaBuffer ?? Buffer.from(''))
           );
           // frame.d3d11_texture_2d
-          buffers.push(base64.fromByteArray(Buffer.from('')));
+          buffers.push(
+            base64.fromByteArray(Buffer.from('') as unknown as Uint8Array)
+          );
           break;
         case 'MediaEngine_pushEncodedVideoImage_e71452b':
           // imageBuffer

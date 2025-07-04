@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import {
+  AgoraPipState,
   SDKBuildInfo,
   createAgoraRtcEngine,
   isDebuggable,
@@ -20,6 +21,7 @@ import {
 } from 'react-native-agora';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { PipStateConsumer, PipStateProvider } from './context/pip';
 import Advanced from './examples/advanced';
 import Basic from './examples/basic';
 import Hooks from './examples/hook';
@@ -39,33 +41,48 @@ export default function App() {
   return (
     <NavigationContainer>
       <GestureHandlerRootView>
-        <SafeAreaView
-          style={styles.container}
-          onStartShouldSetResponder={(_) => {
-            Keyboard.dismiss();
-            return false;
-          }}
-        >
-          <RootStack.Navigator screenOptions={{ gestureEnabled: false }}>
-            <RootStack.Screen name={'APIExample'} component={Home} />
-            {DATA.map((value) =>
-              value.data.map(({ name, component }) => {
-                return component ? (
-                  <RootStack.Screen name={name} component={component} />
-                ) : undefined;
-              })
+        <PipStateProvider>
+          <PipStateConsumer>
+            {(context) => (
+              <SafeAreaView
+                style={styles.container}
+                onStartShouldSetResponder={(_) => {
+                  Keyboard.dismiss();
+                  return false;
+                }}
+              >
+                <RootStack.Navigator
+                  screenOptions={{
+                    gestureEnabled: false,
+                    headerShown:
+                      context.pipState !== AgoraPipState.pipStateStarted,
+                  }}
+                >
+                  <RootStack.Screen name={'APIExample'} component={Home} />
+                  {DATA.map((value) =>
+                    value.data.map(({ name, component }) => {
+                      return component ? (
+                        <RootStack.Screen name={name} component={component} />
+                      ) : undefined;
+                    })
+                  )}
+                </RootStack.Navigator>
+                {context.pipState !== AgoraPipState.pipStateStarted && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDebuggable(!isDebuggable());
+                    }}
+                  >
+                    <Text style={styles.version}>
+                      Powered by Agora RTC SDK {version.version} build{' '}
+                      {version.build}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </SafeAreaView>
             )}
-          </RootStack.Navigator>
-          <TouchableOpacity
-            onPress={() => {
-              setDebuggable(!isDebuggable());
-            }}
-          >
-            <Text style={styles.version}>
-              Powered by Agora RTC SDK {version.version} build {version.build}
-            </Text>
-          </TouchableOpacity>
-        </SafeAreaView>
+          </PipStateConsumer>
+        </PipStateProvider>
       </GestureHandlerRootView>
     </NavigationContainer>
   );

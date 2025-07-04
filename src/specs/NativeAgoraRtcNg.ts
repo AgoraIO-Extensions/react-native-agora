@@ -21,6 +21,20 @@ export interface Spec extends TurboModule {
 
   // Keep: Required for RN built in Event Emitter Calls.
   removeListeners(count: number): void;
+
+  pipIsSupported(): boolean;
+
+  pipIsAutoEnterSupported(): boolean;
+
+  isPipActivated(): boolean;
+
+  pipSetup(options: Object): boolean;
+
+  pipStart(): boolean;
+
+  pipStop(): void;
+
+  pipDispose(): void;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('AgoraRtcNg');

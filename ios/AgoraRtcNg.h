@@ -1,3 +1,4 @@
+#import <UIKit/UIKit.h>
 #import <AgoraRtcWrapper/iris_engine_base.h>
 #import <React/RCTEventEmitter.h>
 
@@ -12,6 +13,7 @@
 #endif
 
 @property(nonatomic) IApiEngineBase *irisApiEngine;
+// @property(nonatomic) AgoraPIPController *pipController;
 
 + (instancetype)shareInstance;
 
