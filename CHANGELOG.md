@@ -1,5 +1,7 @@
 
 
+## [4.5.2-build.140-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.3...v4.5.2-build.140-rc.1) (2025-07-04)
+
 ## [4.5.3](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.2...v4.5.3) (2025-05-07)
 
 
