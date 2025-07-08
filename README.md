@@ -2,6 +2,9 @@
 >
 > - [3.x](https://github.com/AgoraIO-Extensions/react-native-agora/tree/3.x)
 
+> To improve our support and provide better responses to your questions, we have migrated GitHub issues to [Agora Support](https://agoraio.zendesk.com/hc/en-us/)
+> If you encounter any problems, please submit your issues through this new support platform.
+
 # react-native-agora
 
 [![npm](https://img.shields.io/npm/v/react-native-agora.svg)](https://www.npmjs.com/package/react-native-agora)
