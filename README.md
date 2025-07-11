@@ -1,3 +1,5 @@
+> ⚠️ **Note**: To provide you with better and higher quality technical support services, we will no longer provide technical support through GitHub issues. If you need help, please contact us directly through [Agora Support](https://www.agora.io/en/customer-support/).
+
 > NOTE: These sdk and samples only for the Agora Video 4.x APIs. For examples using previous releases please see the following branches:
 >
 > - [3.x](https://github.com/AgoraIO-Extensions/react-native-agora/tree/3.x)
