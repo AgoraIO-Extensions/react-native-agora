@@ -41,8 +41,8 @@ Pod::Spec.new do |s|
   end
 
   #dependencies start
-  s.dependency 'AgoraRtcEngine_Special_iOS', '4.5.2.140'
-  s.dependency 'AgoraIrisRTC_iOS', '4.5.2.140-build.6'
+  s.dependency 'AgoraAudio_iOS', '4.5.2'
+  s.dependency 'AgoraIrisRTCAudio_iOS', '4.5.2-build.3'
   #dependencies end
 
   s.libraries = 'stdc++'
