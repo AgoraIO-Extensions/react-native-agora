@@ -27,7 +27,7 @@ module.exports = {
 
           const result = child_process.spawnSync(
             'yarn',
-            ['pod-install', 'example/ios'],
+            ['pod-install', 'examples/legacy/ios'],
             {
               cwd: project.cwd,
               env: process.env,
