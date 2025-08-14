@@ -2,6 +2,8 @@ import {
   IH265Transcoder,
   IH265TranscoderObserver,
 } from '../IAgoraH265Transcoder';
+import { callIrisApi } from '../index';
+
 export function processIH265TranscoderObserver(
   handler: IH265TranscoderObserver,
   event: string,
@@ -148,5 +150,3 @@ export class IH265TranscoderImpl implements IH265Transcoder {
     return 'H265Transcoder_unregisterTranscoderObserver_e1ee996';
   }
 }
-
-import { callIrisApi } from '../internal/call';

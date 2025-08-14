@@ -1,5 +1,6 @@
 import { AudioDeviceInfo } from '../IAgoraRtcEngine';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
+import { callIrisApi } from '../index';
 
 // @ts-ignore
 export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
@@ -439,5 +440,3 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return 'AudioDeviceManager_getRecordingDefaultDevice';
   }
 }
-
-import { callIrisApi } from '../internal/call';

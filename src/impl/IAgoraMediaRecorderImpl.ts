@@ -3,6 +3,7 @@ import {
   MediaRecorderConfiguration,
 } from '../AgoraMediaBase';
 import { IMediaRecorder } from '../IAgoraMediaRecorder';
+import { callIrisApi } from '../index';
 
 // @ts-ignore
 export class IMediaRecorderImpl implements IMediaRecorder {
@@ -55,5 +56,3 @@ export class IMediaRecorderImpl implements IMediaRecorder {
     return 'MediaRecorder_stopRecording';
   }
 }
-
-import { callIrisApi } from '../internal/call';

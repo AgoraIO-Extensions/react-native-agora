@@ -1154,11 +1154,11 @@ export enum H264PacketizeMode {
  */
 export enum VideoStreamType {
   /**
-   * 0: High-quality video stream.
+   * 0: High-quality video stream, that is, a video stream with the highest resolution and bitrate.
    */
   VideoStreamHigh = 0,
   /**
-   * 1: Low-quality video stream.
+   * 1: Low-quality video stream, that is, a video stream with the lowest resolution and bitrate.
    */
   VideoStreamLow = 1,
   /**
@@ -1558,7 +1558,7 @@ export class SimulcastStreamConfig {
    */
   dimensions?: VideoDimensions;
   /**
-   * Video receive bitrate (Kbps), represented by an instantaneous value. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
+   * Video bitrate (Kbps). The default value is -1. This parameter does not need to be set. The SDK automatically matches the most suitable bitrate based on the video resolution and frame rate you set.
    */
   kBitrate?: number;
   /**
@@ -1678,7 +1678,9 @@ export class WatermarkRatio {
 }
 
 /**
- * Configurations of the watermark image.
+ * Watermark image configurations.
+ *
+ * Configuration options for setting the watermark image to be added.
  */
 export class WatermarkOptions {
   /**
