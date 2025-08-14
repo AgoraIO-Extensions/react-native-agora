@@ -9,11 +9,7 @@ import { IAgoraPipEvent } from '../extension/IAgoraPipExtension';
 import AgoraRtcNg from '../specs';
 import IAgoraPipTI from '../ti/IAgoraPip-ti';
 
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-} from './IrisApiEngine';
+import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
 
 const checkers = createCheckers(IAgoraPipTI);
 

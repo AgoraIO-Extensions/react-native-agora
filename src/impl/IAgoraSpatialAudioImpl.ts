@@ -492,4 +492,4 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
   }
 }
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+import { callIrisApi } from '../internal/call';

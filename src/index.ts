@@ -22,11 +22,8 @@ export * from './IAgoraSpatialAudio';
 export * from './IAudioDeviceManager';
 export * from './AgoraRtcRenderView';
 export * from './IAgoraPip';
-export {
-  isDebuggable,
-  setDebuggable,
-  callIrisApi,
-} from './internal/IrisApiEngine';
+export { isDebuggable, setDebuggable } from './Utils';
+export { callIrisApi } from './internal/call';
 
 const instance = new RtcEngineExInternal();
 

@@ -56,4 +56,4 @@ export class IMediaRecorderImpl implements IMediaRecorder {
   }
 }
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+import { callIrisApi } from '../internal/call';

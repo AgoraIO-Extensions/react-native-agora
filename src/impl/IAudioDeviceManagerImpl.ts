@@ -440,4 +440,4 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
   }
 }
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+import { callIrisApi } from '../internal/call';

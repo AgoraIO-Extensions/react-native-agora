@@ -97,8 +97,7 @@
     "react-native": "*"
   },
   "workspaces": [
-    "examples/legacy",
-    "examples/expo"
+    "examples/*"
   ],
   "packageManager": "yarn@3.6.1",
   "engines": {

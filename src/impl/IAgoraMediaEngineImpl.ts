@@ -488,4 +488,4 @@ export class IMediaEngineImpl implements IMediaEngine {
   }
 }
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+import { callIrisApi } from '../internal/call';

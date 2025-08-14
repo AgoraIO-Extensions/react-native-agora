@@ -7349,4 +7349,4 @@ export class IRtcEngineImpl implements IRtcEngine {
   }
 }
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+import { callIrisApi } from '../internal/call';

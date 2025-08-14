@@ -234,4 +234,4 @@ export function processIMediaRecorderObserver(
   }
 }
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+import { callIrisApi } from '../internal/call';

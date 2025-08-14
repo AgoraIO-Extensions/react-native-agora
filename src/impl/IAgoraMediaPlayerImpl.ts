@@ -1166,4 +1166,4 @@ export function processIMediaPlayerVideoFrameObserver(
   }
 }
 
-import { callIrisApi } from '../internal/IrisApiEngine';
+import { callIrisApi } from '../internal/call';

@@ -40,17 +40,13 @@ import IAgoraRtcEngineTI from '../ti/IAgoraRtcEngine-ti';
 
 import { H265TranscoderInternal } from './AgoraH265TranscoderInternal';
 import { AgoraPipInternal } from './AgoraPipInternal';
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-  callIrisApi,
-} from './IrisApiEngine';
 import { LocalSpatialAudioEngineInternal } from './LocalSpatialAudioEngineInternal';
 import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
 import { MusicContentCenterInternal } from './MusicContentCenterInternal';
+import { callIrisApi } from './call';
+import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
 
 const checkers = createCheckers(
   AgoraBaseTI,
