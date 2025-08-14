@@ -2,7 +2,7 @@ import {
   IH265Transcoder,
   IH265TranscoderObserver,
 } from '../IAgoraH265Transcoder';
-import { callIrisApi } from '../index';
+import { callIrisApi } from '../internal/call';
 
 export function processIH265TranscoderObserver(
   handler: IH265TranscoderObserver,

@@ -14,7 +14,7 @@ import {
   IVideoFrameObserver,
 } from '../AgoraMediaBase';
 import { IMediaEngine } from '../IAgoraMediaEngine';
-import { callIrisApi } from '../index';
+import { callIrisApi } from '../internal/call';
 
 // @ts-ignore
 export class IMediaEngineImpl implements IMediaEngine {

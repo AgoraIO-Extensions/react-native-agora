@@ -1,3 +1,6 @@
+{{#user_data.renderFileEnd}}
+import { callIrisApi } from '../internal/call';
+{{/user_data.renderFileEnd}}
 {{#nodes}}
 {{#user_data.isCallback}}
 export function process{{name}}(handler: {{name}},

@@ -4,7 +4,7 @@ import {
   RemoteVoicePositionInfo,
   SpatialAudioZone,
 } from '../IAgoraSpatialAudio';
-import { callIrisApi } from '../index';
+import { callIrisApi } from '../internal/call';
 
 // @ts-ignore
 export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {

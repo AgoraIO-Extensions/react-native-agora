@@ -17,7 +17,7 @@ import {
   IMediaPlayerVideoFrameObserver,
 } from '../IAgoraMediaPlayer';
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource';
-import { callIrisApi } from '../index';
+import { callIrisApi } from '../internal/call';
 
 // @ts-ignore
 export class IMediaPlayerImpl implements IMediaPlayer {

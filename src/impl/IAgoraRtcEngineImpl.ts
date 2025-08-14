@@ -109,7 +109,7 @@ import {
 } from '../IAgoraRtcEngine';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
-import { callIrisApi } from '../index';
+import { callIrisApi } from '../internal/call';
 
 export function processIRtcEngineEventHandler(
   handler: IRtcEngineEventHandler,

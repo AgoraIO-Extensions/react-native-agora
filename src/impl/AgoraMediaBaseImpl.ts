@@ -10,7 +10,7 @@ import {
   IVideoFrameObserver,
   MetaInfoKey,
 } from '../AgoraMediaBase';
-import { callIrisApi } from '../index';
+import { callIrisApi } from '../internal/call';
 
 // @ts-ignore
 export class IVideoFrameMetaInfoImpl implements IVideoFrameMetaInfo {

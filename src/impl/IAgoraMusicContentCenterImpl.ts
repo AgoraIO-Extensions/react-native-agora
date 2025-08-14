@@ -10,7 +10,7 @@ import {
   MusicContentCenterConfiguration,
   MusicPlayMode,
 } from '../IAgoraMusicContentCenter';
-import { callIrisApi } from '../index';
+import { callIrisApi } from '../internal/call';
 
 import { IMediaPlayerImpl } from './IAgoraMediaPlayerImpl';
 
