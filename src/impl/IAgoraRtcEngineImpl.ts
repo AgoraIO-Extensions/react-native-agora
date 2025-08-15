@@ -109,6 +109,7 @@ import {
 } from '../IAgoraRtcEngine';
 import { ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio';
 import { IAudioDeviceManager } from '../IAudioDeviceManager';
+import { callIrisApi } from '../internal/call';
 
 export function processIRtcEngineEventHandler(
   handler: IRtcEngineEventHandler,
@@ -7348,5 +7349,3 @@ export class IRtcEngineImpl implements IRtcEngine {
     return 'RtcEngine_takeSnapshot_5669ea6';
   }
 }
-
-import { callIrisApi } from '../internal/IrisApiEngine';

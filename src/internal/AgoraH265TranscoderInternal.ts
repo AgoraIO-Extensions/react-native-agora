@@ -8,11 +8,7 @@ import IAgoraH265TranscoderTI from '../ti/IAgoraH265Transcoder-ti';
 
 const checkers = createCheckers(IAgoraH265TranscoderTI);
 
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-} from './IrisApiEngine';
+import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
 
 export class H265TranscoderInternal extends IH265TranscoderImpl {
   static _h265_transcoder_observers: IH265TranscoderObserver[] = [];

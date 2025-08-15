@@ -27,6 +27,7 @@ import {
   StreamFallbackOptions,
 } from '../IAgoraRtcEngine';
 import { IRtcEngineEx, RtcConnection } from '../IAgoraRtcEngineEx';
+import { callIrisApi } from '../internal/call';
 
 import { IRtcEngineImpl } from './IAgoraRtcEngineImpl';
 
@@ -1668,5 +1669,3 @@ export class IRtcEngineExImpl extends IRtcEngineImpl implements IRtcEngineEx {
     return 'RtcEngineEx_takeSnapshotEx_b856417';
   }
 }
-
-import { callIrisApi } from '../internal/IrisApiEngine';

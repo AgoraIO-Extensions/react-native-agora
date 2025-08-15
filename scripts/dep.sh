@@ -5,7 +5,7 @@ MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 ANDROID_BUILD_GRADLE_PATH="${PROJECT_ROOT}/android/build.gradle"
 iOS_PODSPEC_PATH="${PROJECT_ROOT}/react-native-agora.podspec"
-EXAMPLE_IOS_PODFILE_PATH="${PROJECT_ROOT}/example/ios/Podfile"
+EXAMPLE_IOS_PODFILE_PATH="${PROJECT_ROOT}/examples/legacy/ios/Podfile"
 if [ "$#" -lt 1 ]; then
     exit 1
 fi
@@ -61,5 +61,5 @@ else
   sed -i.bak -e '/#dependencies start/,/#dependencies end/{//!d;}' -e "/#dependencies start/r $TEMP_FILE" "$EXAMPLE_IOS_PODFILE_PATH"
   rm "${EXAMPLE_IOS_PODFILE_PATH}.bak"
   rm "$TEMP_FILE"
-  echo "example/ios/Podfile updated."
+  echo "examples/legacy/ios/Podfile updated."
 fi
