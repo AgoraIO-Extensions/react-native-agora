@@ -3,7 +3,6 @@ import { Buffer } from 'buffer';
 import JSONBigInt from 'json-bigint';
 
 const JSON = JSONBigInt({ storeAsString: true });
-import { NativeEventEmitter } from 'react-native';
 
 import { AudioFrame, AudioPcmFrame, VideoFrame } from '../AgoraMediaBase';
 import { MusicCollection } from '../IAgoraMusicContentCenter';
@@ -30,8 +29,6 @@ import {
   processIRtcEngineEventHandler,
 } from '../impl/IAgoraRtcEngineImpl';
 
-import AgoraRtcNg from '../specs';
-
 import { H265TranscoderInternal } from './AgoraH265TranscoderInternal';
 import { VideoFrameMetaInfoInternal } from './AgoraMediaBaseInternal';
 import { AgoraPipInternal, processAgoraPipObserver } from './AgoraPipInternal';
@@ -55,9 +52,6 @@ export type IrisApiParam = {
   params: string;
   buffers?: string[];
 };
-
-const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);
-AgoraEventEmitter.addListener('AgoraRtcNg:onEvent', handleEvent);
 
 /**
  * @internal
@@ -284,7 +278,7 @@ export const EVENT_PROCESSORS: EventProcessors = {
   },
 };
 
-function handleEvent({ event, data, buffers }: any) {
+export function handleEvent({ event, data, buffers }: any) {
   if (debuggable) {
     console.info('onEvent', event, data, buffers);
   }

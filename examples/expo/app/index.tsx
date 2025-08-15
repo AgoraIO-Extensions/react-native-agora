@@ -18,10 +18,11 @@ import {
 
 import { PipStateConsumer } from '../src/context/pip';
 
-import Advanced from '../src/examples/advanced';
-import Basic from '../src/examples/basic';
-import Hooks from '../src/examples/hook';
 import * as log from '../src/utils/log';
+
+import Advanced from './examples/advanced';
+import Basic from './examples/basic';
+import Hooks from './examples/hook';
 
 const DATA = [Basic, Advanced, Hooks];
 const AppSectionList = SectionList<any>;

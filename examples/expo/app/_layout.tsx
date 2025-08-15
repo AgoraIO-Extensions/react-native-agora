@@ -12,9 +12,9 @@ import { AgoraText } from '../src/components/ui';
 
 import { PipStateProvider } from '../src/context/pip';
 
-import Advanced from '../src/examples/advanced';
-import Basic from '../src/examples/basic';
-import Hooks from '../src/examples/hook';
+import Advanced from './examples/advanced';
+import Basic from './examples/basic';
+import Hooks from './examples/hook';
 
 const Header = () => {
   const [visible, setVisible] = useState(false);
