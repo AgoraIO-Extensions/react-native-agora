@@ -44,11 +44,10 @@ import {
 } from './MusicContentCenterInternal';
 import { RtcEngineExInternal } from './RtcEngineExInternal';
 import {
-  DeviceEventEmitter,
   EVENT_TYPE,
   EventProcessor,
   EventProcessors,
-  ProcessorType,
+  emitEvent,
 } from './event';
 
 export type IrisApiParam = {
@@ -341,15 +340,4 @@ function handleEvent({ event, data, buffers }: any) {
   }
 
   emitEvent(_event, processor, _data);
-}
-
-/**
- * @internal
- */
-export function emitEvent<EventType extends keyof T, T extends ProcessorType>(
-  eventType: EventType,
-  eventProcessor: EventProcessor<T>,
-  data: any
-): void {
-  DeviceEventEmitter.emit(eventType as string, eventProcessor, data);
 }

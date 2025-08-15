@@ -1,5 +1,7 @@
 import createAgoraRtcEngine from '../';
+import { emitEvent } from '../internal/event';
 
+import { EVENT_PROCESSORS } from '../internal/IrisApiEngine';
 jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
   getEnforcing: () => {},
 }));
@@ -123,5 +125,3 @@ test('removeAllListeners', () => {
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
-
-import { EVENT_PROCESSORS, emitEvent } from '../internal/IrisApiEngine';

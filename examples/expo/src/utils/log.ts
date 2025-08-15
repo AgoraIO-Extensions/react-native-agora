@@ -1,37 +1,48 @@
 import { Alert } from 'react-native';
 
-export const _logSink = (
-  level: 'debug' | 'log' | 'info' | 'warn' | 'error',
-  message?: any,
-  ...optionalParams: any[]
-): string => {
-  if (level === 'error' && !__DEV__) {
-    alert(message);
-  } else {
-    console[level](message, ...optionalParams);
+class LogSink {
+  _data: Array<string> = [];
+
+  sink(
+    level: 'debug' | 'log' | 'info' | 'warn' | 'error',
+    message?: any,
+    ...optionalParams: any[]
+  ): string {
+    if (level === 'error' && !__DEV__) {
+      alert(message);
+    } else {
+      console[level](message, ...optionalParams);
+    }
+    const content = `${optionalParams.map((v) => JSON.stringify(v))}`;
+    this._data.splice(0, 0, `[${level}] ${message} ${content}`);
+    return content;
   }
-  const content = `${optionalParams.map((v) => JSON.stringify(v))}`;
-  return content;
-};
+
+  clearData() {
+    this._data = [];
+  }
+}
+
+export const logSink = new LogSink();
 
 export const debug = (message?: any, ...optionalParams: any[]): void => {
-  alert(message, _logSink('debug', message, optionalParams));
+  alert(message, logSink.sink('debug', message, optionalParams));
 };
 
 export const log = (message?: any, ...optionalParams: any[]): void => {
-  _logSink('log', message, optionalParams);
+  logSink.sink('log', message, optionalParams);
 };
 
 export const info = (message?: any, ...optionalParams: any[]): void => {
-  _logSink('info', message, optionalParams);
+  logSink.sink('info', message, optionalParams);
 };
 
 export const warn = (message?: any, ...optionalParams: any[]): void => {
-  _logSink('warn', message, optionalParams);
+  logSink.sink('warn', message, optionalParams);
 };
 
 export const error = (message?: any, ...optionalParams: any[]): void => {
-  _logSink('error', message, optionalParams);
+  logSink.sink('error', message, optionalParams);
 };
 
 export const alert = (title: string, message?: string): void => {

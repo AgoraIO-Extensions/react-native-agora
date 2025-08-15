@@ -1,7 +1,9 @@
 import { Buffer } from 'buffer';
 
 import base64 from 'base64-js';
+import JSONBigInt from 'json-bigint';
 
+const JSON = JSONBigInt({ storeAsString: true });
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
 import { isDebuggable } from '../Utils';
 import AgoraRtcNg from '../specs';

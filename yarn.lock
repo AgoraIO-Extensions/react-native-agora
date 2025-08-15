@@ -14609,7 +14609,7 @@ __metadata:
     react-native-image-tool: AgoraIO-Extensions/react-native-image-tools
     react-native-picker-select: ^9.3.1
     react-native-reanimated: 3.17.5
-    react-native-safe-area-context: 5.4.0
+    react-native-safe-area-context: ^5.2.0
     react-native-screens: ~4.11.1
     react-native-svg: ^15.11.1
     react-native-vector-icons: ^9.2.0
@@ -14891,16 +14891,6 @@ react-native-image-tool@AgoraIO-Extensions/react-native-image-tools:
     react: "*"
     react-native: "*"
   checksum: fe667e4764f691b2e752eaedb7527fd8ac251637ae9e7dd9ab124abae85627839b5daea064befc5e09ca710ef673d5501ed11286eb39dfcb04f5d57b2d47e49c
-  languageName: node
-  linkType: hard
-
-"react-native-safe-area-context@npm:5.4.0":
-  version: 5.4.0
-  resolution: "react-native-safe-area-context@npm:5.4.0"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 7d7f9a8278048650fd207d436798bd062d6f78d771cb0665b92aef69dba870251339e6812e1d669fd1958345288bd0f9ac98fbfe353c13958d18b58dc946c341
   languageName: node
   linkType: hard
 

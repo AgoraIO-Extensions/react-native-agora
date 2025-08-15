@@ -87,3 +87,14 @@ export type EventProcessors = {
   IFaceInfoObserver: EventProcessor<IFaceInfoObserver>;
   AgoraPipStateChangedObserver: EventProcessor<AgoraPipStateChangedObserver>;
 };
+
+/**
+ * @internal
+ */
+export function emitEvent<EventType extends keyof T, T extends ProcessorType>(
+  eventType: EventType,
+  eventProcessor: EventProcessor<T>,
+  data: any
+): void {
+  DeviceEventEmitter.emit(eventType as string, eventProcessor, data);
+}

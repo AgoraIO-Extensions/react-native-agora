@@ -1,14 +1,13 @@
 import { Link } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-  Keyboard,
-  SafeAreaView,
   SectionList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import {
   AgoraPipState,
   SDKBuildInfo,
@@ -16,13 +15,13 @@ import {
   isDebuggable,
   setDebuggable,
 } from 'react-native-agora';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { PipStateConsumer, PipStateProvider } from '../src/context/pip';
+import { PipStateConsumer } from '../src/context/pip';
 
 import Advanced from '../src/examples/advanced';
 import Basic from '../src/examples/basic';
 import Hooks from '../src/examples/hook';
+import * as log from '../src/utils/log';
 
 const DATA = [Basic, Advanced, Hooks];
 const AppSectionList = SectionList<any>;
@@ -36,51 +35,43 @@ export default function Index() {
   }, []);
 
   return (
-    <GestureHandlerRootView>
-      <PipStateProvider>
-        <PipStateConsumer>
-          {(context) => (
-            <SafeAreaView
-              style={styles.container}
-              onStartShouldSetResponder={(_) => {
-                Keyboard.dismiss();
-                return false;
+    <PipStateConsumer>
+      {(context) => (
+        <>
+          <AppSectionList
+            sections={DATA}
+            keyExtractor={(item, index) => item.name + index}
+            renderItem={({ item, section }) => (
+              <View style={styles.item}>
+                <Link
+                  onPress={() => {
+                    log.logSink.clearData();
+                  }}
+                  style={styles.title}
+                  href={`examples/${section.title}/${item.name}/${item.name}`}
+                >
+                  {item.name}
+                </Link>
+              </View>
+            )}
+            renderSectionHeader={({ section: { title } }) => (
+              <Text style={styles.header}>{title}</Text>
+            )}
+          />
+          {context.pipState !== AgoraPipState.pipStateStarted && (
+            <TouchableOpacity
+              onPress={() => {
+                setDebuggable(!isDebuggable());
               }}
             >
-              <AppSectionList
-                sections={DATA}
-                keyExtractor={(item, index) => item.name + index}
-                renderItem={({ item, section }) => (
-                  <View style={styles.item}>
-                    <Link
-                      style={styles.title}
-                      href={`examples/${section.title}/${item.name}/${item.name}`}
-                    >
-                      {item.name}
-                    </Link>
-                  </View>
-                )}
-                renderSectionHeader={({ section: { title } }) => (
-                  <Text style={styles.header}>{title}</Text>
-                )}
-              />
-              {context.pipState !== AgoraPipState.pipStateStarted && (
-                <TouchableOpacity
-                  onPress={() => {
-                    setDebuggable(!isDebuggable());
-                  }}
-                >
-                  <Text style={styles.version}>
-                    Powered by Agora RTC SDK {version.version} build{' '}
-                    {version.build}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </SafeAreaView>
+              <Text style={styles.version}>
+                Powered by Agora RTC SDK {version.version} build {version.build}
+              </Text>
+            </TouchableOpacity>
           )}
-        </PipStateConsumer>
-      </PipStateProvider>
-    </GestureHandlerRootView>
+        </>
+      )}
+    </PipStateConsumer>
   );
 }
 

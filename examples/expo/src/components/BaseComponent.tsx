@@ -1,5 +1,5 @@
 import { ParamListBase } from '@react-navigation/native';
-import React, { Component, ReactElement, useState } from 'react';
+import React, { Component, ReactElement } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -20,9 +20,9 @@ import {
   VideoSourceType,
 } from 'react-native-agora';
 
+import * as log from '../../src/utils/log';
 import { PipStateConsumer } from '../context/pip';
 
-import { LogSink } from './LogSink';
 import {
   AgoraButton,
   AgoraCard,
@@ -33,25 +33,6 @@ import {
   AgoraTextInput,
   AgoraView,
 } from './ui';
-
-const Header = ({ getData }: { getData: () => Array<string> }) => {
-  const [visible, setVisible] = useState(false);
-
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
-
-  return (
-    <>
-      <AgoraText onPress={toggleOverlay}>Logs</AgoraText>
-      <LogSink
-        visible={visible}
-        data={getData()}
-        onBackdropPress={toggleOverlay}
-      />
-    </>
-  );
-};
 
 export interface BaseComponentState {
   appId: string;
@@ -85,17 +66,11 @@ export abstract class BaseComponent<
   implements IRtcEngineEventHandler
 {
   protected engine?: IRtcEngine;
-  private _data: Array<string> = [];
   updatePipState?: (newState: AgoraPipState) => void;
 
   constructor(props: any) {
     super(props);
-    console.log(props, 22);
     this.state = this.createState();
-    const headerRight = () => <Header getData={() => this._data} />;
-    props.options = {
-      headerRight,
-    };
   }
 
   componentDidMount() {
@@ -103,6 +78,7 @@ export abstract class BaseComponent<
   }
 
   componentWillUnmount() {
+    log.logSink.clearData();
     this.releaseRtcEngine();
   }
 
@@ -304,39 +280,24 @@ export abstract class BaseComponent<
     return undefined;
   }
 
-  private _logSink(
-    level: 'debug' | 'log' | 'info' | 'warn' | 'error',
-    message?: any,
-    ...optionalParams: any[]
-  ): string {
-    if (level === 'error' && !__DEV__) {
-      this.alert(message);
-    } else {
-      console[level](message, ...optionalParams);
-    }
-    const content = `${optionalParams.map((v) => JSON.stringify(v))}`;
-    this._data.splice(0, 0, `[${level}] ${message} ${content}`);
-    return content;
-  }
-
   protected debug(message?: any, ...optionalParams: any[]): void {
-    this.alert(message, this._logSink('debug', message, optionalParams));
+    log.log(message, log.log('debug', message, optionalParams));
   }
 
   protected log(message?: any, ...optionalParams: any[]): void {
-    this._logSink('log', message, optionalParams);
+    log.log('log', message, optionalParams);
   }
 
   protected info(message?: any, ...optionalParams: any[]): void {
-    this._logSink('info', message, optionalParams);
+    log.log('info', message, optionalParams);
   }
 
   protected warn(message?: any, ...optionalParams: any[]): void {
-    this._logSink('warn', message, optionalParams);
+    this.log('warn', message, optionalParams);
   }
 
   protected error(message?: any, ...optionalParams: any[]): void {
-    this._logSink('error', message, optionalParams);
+    log.log('error', message, optionalParams);
   }
 
   protected alert(title: string, message?: string): void {

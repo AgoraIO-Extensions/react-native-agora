@@ -1,27 +1,43 @@
 import { Overlay } from '@rneui/themed';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 
-import { AgoraDivider, AgoraText } from './ui';
+import * as log from '../utils/log';
+
+import { AgoraButton, AgoraDivider, AgoraText } from './ui';
 
 export interface Props {
-  visible: boolean;
-  data?: Array<string>;
   onBackdropPress: () => void;
 }
 
-export const LogSink = ({ visible, data, onBackdropPress }: Props) => {
+export const LogSink = ({ onBackdropPress }: Props) => {
+  const [data, setData] = useState<Array<string> | undefined>(
+    log.logSink._data
+  );
+
+  useEffect(() => {
+    setData(log.logSink._data);
+  }, [data]);
+
   return (
     <Overlay
-      isVisible={visible}
+      isVisible
       onBackdropPress={onBackdropPress}
       overlayStyle={styles.overlay}
     >
       <AgoraText style={styles.title}>Logs</AgoraText>
+      <AgoraButton
+        title={'clear'}
+        onPress={() => {
+          log.logSink.clearData();
+          setData([]);
+        }}
+      />
       <AgoraDivider />
       <FlatList
         data={data}
         inverted={true}
+        scrollEnabled
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => <AgoraText>{item}</AgoraText>}
       />
