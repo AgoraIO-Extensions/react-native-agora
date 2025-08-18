@@ -10,6 +10,9 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/cli": "15.0.1",
+    "@react-native-community/cli-platform-android": "15.0.1",
+    "@react-native-community/cli-platform-ios": "15.0.1",
     "@react-native-community/slider": "^4.5.5",
     "@react-native-picker/picker": "^2.11.0",
     "@rneui/base": "^4.0.0-rc.8",
