@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.guoxianzhe.reactnativeagoraexampleexpo'
+    namespace 'com.reactnativeagoraexampleexpo'
     defaultConfig {
-        applicationId 'com.guoxianzhe.reactnativeagoraexampleexpo'
+        applicationId 'com.reactnativeagoraexampleexpo'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

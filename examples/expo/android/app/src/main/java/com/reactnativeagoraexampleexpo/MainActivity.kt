@@ -1,16 +1,16 @@
-package com.guoxianzhe.reactnativeagoraexampleexpo
+package com.reactnativeagoraexampleexpo
 
 import android.os.Build
 import android.os.Bundle
 
-import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 import expo.modules.ReactActivityDelegateWrapper
+import io.agora.rtc.ng.react.AgoraPIPActivity
 
-class MainActivity : ReactActivity() {
+class MainActivity : AgoraPIPActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.

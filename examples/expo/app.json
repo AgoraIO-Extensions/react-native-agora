@@ -22,7 +22,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.guoxianzhe.reactnativeagoraexampleexpo"
+      "package": "com.reactnativeagoraexampleexpo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
