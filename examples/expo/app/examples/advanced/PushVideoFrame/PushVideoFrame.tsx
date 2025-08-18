@@ -132,7 +132,6 @@ export default class PushVideoFrame
 
     getAbsolutePath(filePath).then((path) => {
       ImageTools.GetImageRGBAs(path).then((value: any) => {
-        console.log(value);
         this.engine?.getMediaEngine().pushVideoFrame({
           type: VideoBufferType.VideoBufferRawData,
           format: VideoPixelFormat.VideoPixelRgba,

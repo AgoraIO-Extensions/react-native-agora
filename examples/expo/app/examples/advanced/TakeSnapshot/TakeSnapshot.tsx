@@ -1,4 +1,3 @@
-import RNFS from 'expo-file-system';
 import React, { ReactElement } from 'react';
 import { Platform } from 'react-native';
 import {
@@ -9,6 +8,7 @@ import {
   RtcConnection,
   createAgoraRtcEngine,
 } from 'react-native-agora';
+import RNFS from 'react-native-fs';
 
 import {
   BaseComponent,
@@ -49,7 +49,9 @@ export default class TakeSnapshot
       startPreview: false,
       targetUid: 0,
       filePath: `${
-        Platform.OS === 'android' ? RNFS.cacheDirectory : RNFS.documentDirectory
+        Platform.OS === 'android'
+          ? RNFS.ExternalCachesDirectoryPath
+          : RNFS.DocumentDirectoryPath
       }`,
       takeSnapshot: false,
     };

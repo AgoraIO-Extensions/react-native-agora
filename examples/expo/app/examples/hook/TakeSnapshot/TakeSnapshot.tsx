@@ -1,4 +1,3 @@
-import RNFS from 'expo-file-system';
 import React, {
   ReactElement,
   useCallback,
@@ -12,6 +11,7 @@ import {
   ErrorCodeType,
   RtcConnection,
 } from 'react-native-agora';
+import RNFS from 'react-native-fs';
 
 import { BaseComponent } from '../../../../src/components/hook/BaseComponent';
 import BaseRenderChannel from '../../../../src/components/hook/BaseRenderChannel';
@@ -46,7 +46,9 @@ export default function TakeSnapshot() {
   const [targetUid, setTargetUid] = useState<number>(0);
   const [osFilePath] = useState<string>(
     `${
-      Platform.OS === 'android' ? RNFS.cacheDirectory : RNFS.documentDirectory
+      Platform.OS === 'android'
+        ? RNFS.ExternalCachesDirectoryPath
+        : RNFS.DocumentDirectoryPath
     }`
   );
   const timestamp = useRef<number>(0);

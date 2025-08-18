@@ -1,10 +1,10 @@
-import {
-  bundleDirectory,
-  cacheDirectory,
-  copyAsync,
-  getInfoAsync,
-} from 'expo-file-system';
 import { Platform } from 'react-native';
+import {
+  ExternalCachesDirectoryPath,
+  MainBundlePath,
+  copyFileAssets,
+  exists,
+} from 'react-native-fs';
 
 import { AgoraDropdownItem } from '../components/ui';
 
@@ -40,7 +40,7 @@ export function getResourcePath(fileName: string): string {
   if (Platform.OS === 'android') {
     return `/assets/${fileName}`;
   }
-  return `${bundleDirectory}/${fileName}`;
+  return `${MainBundlePath}/${fileName}`;
 }
 
 export async function getAbsolutePath(filePath: string): Promise<string> {
@@ -48,10 +48,9 @@ export async function getAbsolutePath(filePath: string): Promise<string> {
     if (filePath.startsWith('/assets/')) {
       // const fileName = filePath;
       const fileName = filePath.replace('/assets/', '');
-      const destPath = `${cacheDirectory}/${fileName}`;
-      const dirInfo = await getInfoAsync(destPath);
-      if (!dirInfo.exists) {
-        await copyAsync({ from: destPath, to: destPath });
+      const destPath = `${ExternalCachesDirectoryPath}/${fileName}`;
+      if (!(await exists(destPath))) {
+        await copyFileAssets(fileName, destPath);
       }
       return destPath;
     }
