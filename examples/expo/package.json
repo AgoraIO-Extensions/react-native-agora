@@ -7,7 +7,9 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build:android": "cd android && ./gradlew assembleRelease --no-daemon --console=plain",
+    "build:ios": "cd ios && fastlane gym --export_method \"development\" --export_options \"{\\\"compileBitcode\\\":false}\" CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
     "@react-native-community/cli": "15.0.1",
@@ -41,7 +43,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "babel-plugin-module-resolver": "^5.0.0"
+    "babel-plugin-module-resolver": "^5.0.0",
+    "detox": "^20.22.0",
+    "jest": "^29.6.3"
   },
   "private": true
 }

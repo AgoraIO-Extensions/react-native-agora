@@ -15,10 +15,10 @@ runs:
       with:
         bundler-cache: true
 
-    - name: Setup by gem
-      if: ${{ runner.os == 'macOS' }}
-      run: gem install 'activesupport:7.0.8' 'xcodeproj:1.25.1'
-      shell: bash
+    # - name: Setup by gem
+    #   if: ${{ runner.os == 'macOS' }}
+    #   run: gem install 'activesupport:7.0.8' 'xcodeproj:1.25.1'
+    #   shell: bash
 
     - name: Setup Cocoapods
       if: ${{ runner.os == 'macOS' }}

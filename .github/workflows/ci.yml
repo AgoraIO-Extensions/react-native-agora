@@ -78,21 +78,21 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Cache turborepo for Android
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-
+      # - name: Cache turborepo for Android
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ${{ env.TURBO_CACHE_DIR }}
+      #     key: ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-turborepo-android-detox-${{ matrix.newArch }}-
 
-      - name: Check turborepo cache for Android
-        run: |
-          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'detox:android').cache.status")
+      # - name: Check turborepo cache for Android
+      #   run: |
+      #     TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'detox:android').cache.status")
 
-          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
-            echo "turbo_cache_hit=1" >> $GITHUB_ENV
-          fi
+      #     if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
+      #       echo "turbo_cache_hit=1" >> $GITHUB_ENV
+      #     fi
 
       - name: Install JDK
         if: env.turbo_cache_hit != 1
@@ -113,7 +113,7 @@ jobs:
           path: |
             ~/.gradle/wrapper
             ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ matrix.newArch }}-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ matrix.newArch }}-${{ hashFiles('examples/expo/android/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ matrix.newArch }}-
 
@@ -126,11 +126,11 @@ jobs:
         run: |
           sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
-        working-directory: example/src/config
+        working-directory: examples/expo/src/config
 
       - name: Build example for Android
         run: |
-          yarn turbo run detox:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+          yarn example build:android
 
       - name: Clean Useless cache
         run: |
@@ -157,7 +157,7 @@ jobs:
           api-level: 31
           arch: x86_64
           avd-name: emulator
-          working-directory: example
+          working-directory: examples/expo
           script: detox test -c android.emu.release
 
   test-ios:
@@ -177,7 +177,7 @@ jobs:
 
       - name: Install cocoapods
         run: |
-          yarn pod-install example/ios
+          yarn pod-install examples/expo/ios
 
       - name: Install Detox dependencies
         shell: bash
@@ -190,11 +190,11 @@ jobs:
         run: |
           sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
           mv tmp agora.config.ts
-        working-directory: example/src/config
+        working-directory: examples/expo/src/config
 
       - name: Build example for iOS
         run: |
-          yarn turbo run detox:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+          yarn example build:ios
 
       - uses: futureware-tech/simulator-action@v4
         with:
@@ -203,7 +203,7 @@ jobs:
       - name: Run e2e tests
         # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
         if: ${{ matrix.newArch == 0 }}
-        working-directory: example
+        working-directory: examples/expo
         run: |
           detox clean-framework-cache
           detox build-framework-cache
