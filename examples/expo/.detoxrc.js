@@ -15,14 +15,14 @@ module.exports = {
       binaryPath:
         'ios/build/Build/Products/Debug-iphonesimulator/reactnativeagoraexampleexpo.app',
       build:
-        'xcodebuild -workspace ios/reactnativeagoraexampleexpo.xcworkspace -scheme reactnativeagoraexampleexpo -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
+        'xcodebuild -workspace ios/reactnativeagoraexampleexpo.xcworkspace -scheme reactnativeagoraexampleexpo -configuration Debug -sdk iphonesimulator17.5 -derivedDataPath ios/build',
     },
     'ios.release': {
       type: 'ios.app',
       binaryPath:
         'ios/build/Build/Products/Release-iphonesimulator/reactnativeagoraexampleexpo.app',
       build:
-        'xcodebuild -workspace ios/reactnativeagoraexampleexpo.xcworkspace -scheme reactnativeagoraexampleexpo -configuration Release -sdk iphonesimulator -derivedDataPath ios/build',
+        'xcodebuild -workspace ios/reactnativeagoraexampleexpo.xcworkspace -scheme reactnativeagoraexampleexpo -configuration Release -sdk iphonesimulator17.5 -derivedDataPath ios/build',
     },
     'android.debug': {
       type: 'android.apk',
