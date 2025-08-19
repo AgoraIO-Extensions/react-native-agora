@@ -68,9 +68,7 @@ jobs:
         newArch: [true, false]
     runs-on: ubuntu-latest
     env:
-      TURBO_CACHE_DIR: .turbo/android
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
-      turbo_cache_hit: 0
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -79,27 +77,14 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Install JDK
-        if: env.turbo_cache_hit != 1
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'
 
       - name: Finalize Android SDK
-        if: env.turbo_cache_hit != 1
         run: |
           /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
-
-      - name: Cache Gradle
-        if: env.turbo_cache_hit != 1
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/wrapper
-            ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ matrix.newArch }}-${{ hashFiles('examples/expo/android/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.newArch }}-
 
       - name: Install Detox dependencies
         shell: bash
@@ -118,7 +103,6 @@ jobs:
 
       - name: Clean Useless cache
         run: |
-          rm -rf "${{ env.TURBO_CACHE_DIR }}" || true
           rm -rf ~/.gradle/caches || true
           rm -rf ~/.gradle/wrapper || true
           sudo apt-get clean
@@ -150,7 +134,6 @@ jobs:
         newArch: [1, 0]
     runs-on: macos-latest
     env:
-      TURBO_CACHE_DIR: .turbo/ios
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
     steps:
       - name: Checkout
