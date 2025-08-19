@@ -107,9 +107,11 @@
     "preset": "react-native",
     "modulePathIgnorePatterns": [
       "<rootDir>/examples/legacy/node_modules",
+      "<rootDir>/examples/expo/node_modules",
       "<rootDir>/lib/"
     ],
     "testPathIgnorePatterns": [
+      "<rootDir>/examples/expo/e2e",
       "<rootDir>/examples/legacy/e2e"
     ]
   },
