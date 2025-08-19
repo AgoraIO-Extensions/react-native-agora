@@ -99,7 +99,7 @@ jobs:
 
       - name: Build example for Android
         run: |
-          yarn example build:android
+          yarn example detox:android
 
       - name: Clean Useless cache
         run: |
@@ -142,10 +142,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Setup fastlane
-        run: |
-          brew install fastlane
-
       - name: Install cocoapods
         run: |
           yarn pod-install examples/expo/ios
@@ -165,7 +161,7 @@ jobs:
 
       - name: Build example for iOS
         run: |
-          yarn example build:ios
+          yarn example detox:ios
 
       - uses: futureware-tech/simulator-action@v4
         with:
