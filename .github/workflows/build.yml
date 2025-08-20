@@ -70,6 +70,7 @@ jobs:
 
       - name: Switch Xcode
         run: |
+          #https://github.com/actions/runner-images/issues/12758
           sudo xcode-select --switch /Applications/Xcode_16.4.app
 
       - name: Install cocoapods

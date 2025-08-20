@@ -132,7 +132,7 @@ jobs:
     strategy:
       matrix:
         newArch: [1, 0]
-    runs-on: macos-latest
+    runs-on: macos-15
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
     steps:
@@ -145,6 +145,11 @@ jobs:
       - name: Install cocoapods
         run: |
           yarn pod-install examples/expo/ios
+
+      - name: Switch Xcode
+        run: |
+          #https://github.com/actions/runner-images/issues/12758
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
 
       - name: Install Detox dependencies
         shell: bash
