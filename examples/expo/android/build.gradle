@@ -34,6 +34,30 @@ allprojects {
     }
     maven { url 'https://www.jitpack.io' }
   }
+
+  afterEvaluate { project ->
+    if (project.hasProperty('android')) {
+      android {
+        packagingOptions {
+          resources {
+            excludes += [
+              'META-INF/LICENSE.md',
+              'META-INF/LICENSE-notice.md',
+              'META-INF/DEPENDENCIES'
+            ]
+          }
+          jniLibs {
+            pickFirsts += [
+              'lib/arm64-v8a/libfbjni.so',
+              'lib/armeabi-v7a/libfbjni.so',
+              'lib/x86/libfbjni.so',
+              'lib/x86_64/libfbjni.so'
+            ]
+          }
+        }
+      }
+    }
+  }
 }
 
 apply plugin: "expo-root-project"
