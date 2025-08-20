@@ -107,7 +107,7 @@ jobs:
           rm -rf ~/.gradle/wrapper || true
           sudo apt-get clean
           npm cache clean --force
-          rm -rf example/ios
+          rm -rf examples/**/ios
           yarn cache clean
           df -h
 
