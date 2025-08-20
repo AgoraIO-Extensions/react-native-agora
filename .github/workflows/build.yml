@@ -68,6 +68,10 @@ jobs:
         run: |
           brew install fastlane
 
+      - name: Switch Xcode
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
+
       - name: Install cocoapods
         run: |
           yarn pod-install examples/expo/ios
