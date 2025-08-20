@@ -13,6 +13,7 @@
 		62B8C0AB79D11D7A26F5E0A4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 845E3E35A7D6C63406176706 /* PrivacyInfo.xcprivacy */; };
 		78477FA152C1B174C3EA039C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90F64417D32ABC2ED788171 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		BB64E1FB2E55B6F8005341DF /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BB64E1F92E55B6F8005341DF /* SampleHandler.m */; };
 		BBDB174B2E533AF300733525 /* dang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BBDB17432E533AF300733525 /* dang.mp3 */; };
 		BBDB174D2E533AF300733525 /* agora-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = BBDB17422E533AF300733525 /* agora-logo.png */; };
 		BBDB174E2E533AF300733525 /* effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BBDB17452E533AF300733525 /* effect.mp3 */; };
@@ -62,6 +63,9 @@
 		A90F64417D32ABC2ED788171 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-reactnativeagoraexampleexpo/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = reactnativeagoraexampleexpo/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		BB64E1F72E55B6F8005341DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BB64E1F82E55B6F8005341DF /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
+		BB64E1F92E55B6F8005341DF /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
 		BBDB173F2E533AF300733525 /* VideoRawDataNativeModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoRawDataNativeModule.h; sourceTree = "<group>"; };
 		BBDB17402E533AF300733525 /* VideoRawDataNativeModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoRawDataNativeModule.m; sourceTree = "<group>"; };
 		BBDB17422E533AF300733525 /* agora-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "agora-logo.png"; sourceTree = "<group>"; };
@@ -76,31 +80,6 @@
 		F11748442D0722820044C1D9 /* reactnativeagoraexampleexpo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "reactnativeagoraexampleexpo-Bridging-Header.h"; path = "reactnativeagoraexampleexpo/reactnativeagoraexampleexpo-Bridging-Header.h"; sourceTree = "<group>"; };
 		FA4FA44CBCBEE3300B71364C /* Pods-reactnativeagoraexampleexpo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reactnativeagoraexampleexpo.debug.xcconfig"; path = "Target Support Files/Pods-reactnativeagoraexampleexpo/Pods-reactnativeagoraexampleexpo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BBDB17612E533B6300733525 /* Exceptions for "ScreenShare" folder in "ScreenShare" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = BBDB17552E533B6200733525 /* ScreenShare */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		BBDB17592E533B6200733525 /* ScreenShare */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				BBDB17612E533B6300733525 /* Exceptions for "ScreenShare" folder in "ScreenShare" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = ScreenShare;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
@@ -183,7 +162,7 @@
 				BBDB17462E533AF300733525 /* Resources */,
 				13B07FAE1A68108700A75B9A /* reactnativeagoraexampleexpo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				BBDB17592E533B6200733525 /* ScreenShare */,
+				BB64E1FA2E55B6F8005341DF /* ScreenShare */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				417236903CD466177401803C /* Pods */,
@@ -210,6 +189,16 @@
 			);
 			name = Supporting;
 			path = reactnativeagoraexampleexpo/Supporting;
+			sourceTree = "<group>";
+		};
+		BB64E1FA2E55B6F8005341DF /* ScreenShare */ = {
+			isa = PBXGroup;
+			children = (
+				BB64E1F72E55B6F8005341DF /* Info.plist */,
+				BB64E1F82E55B6F8005341DF /* SampleHandler.h */,
+				BB64E1F92E55B6F8005341DF /* SampleHandler.m */,
+			);
+			path = ScreenShare;
 			sourceTree = "<group>";
 		};
 		BBDB17412E533AF300733525 /* NativeModules */ = {
@@ -279,9 +268,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				BBDB17592E533B6200733525 /* ScreenShare */,
 			);
 			name = ScreenShare;
 			productName = ScreenShare;
@@ -584,6 +570,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB64E1FB2E55B6F8005341DF /* SampleHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,7 +614,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.react-native-agora-example-expo";
-				PRODUCT_NAME = "reactnativeagoraexampleexpo";
+				PRODUCT_NAME = reactnativeagoraexampleexpo;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_OBJC_BRIDGING_HEADER = "reactnativeagoraexampleexpo/reactnativeagoraexampleexpo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -661,7 +648,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.react-native-agora-example-expo";
-				PRODUCT_NAME = "reactnativeagoraexampleexpo";
+				PRODUCT_NAME = reactnativeagoraexampleexpo;
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_OBJC_BRIDGING_HEADER = "reactnativeagoraexampleexpo/reactnativeagoraexampleexpo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -725,10 +712,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -783,10 +767,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
