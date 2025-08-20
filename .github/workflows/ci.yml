@@ -132,7 +132,7 @@ jobs:
     strategy:
       matrix:
         newArch: [1, 0]
-    runs-on: macos-15
+    runs-on: macos-latest
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
     steps:
@@ -170,7 +170,7 @@ jobs:
 
       - uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 15'
+          model: 'iPhone 16'
 
       - name: Run e2e tests
         # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
