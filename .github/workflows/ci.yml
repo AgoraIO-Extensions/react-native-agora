@@ -132,7 +132,7 @@ jobs:
     strategy:
       matrix:
         newArch: [1, 0]
-    runs-on: macos-15
+    runs-on: macos-latest
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
     steps:
