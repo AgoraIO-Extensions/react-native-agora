@@ -123,10 +123,10 @@ Add the following to your app.json:
         "expo-build-properties",
         {
           "android": {
-            "minSdkVersion": 24 // depends on your app
+            "minSdkVersion": 24 // depends on react-native and expo version that you choose
           },
           "ios": {
-            "deploymentTarget": "12.4" // depends on your app
+            "deploymentTarget": "12.4" // depends on react-native and expo version that you choose
           }
         }
       ]
