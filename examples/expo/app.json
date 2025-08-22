@@ -1,6 +1,26 @@
 {
   "expo": {
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera for video calls",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone for audio calls"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24
+          },
+          "ios": {
+            "deploymentTarget": "13.4"
+          }
+        }
+      ]
+    ],
     "name": "react-native-agora-example-expo",
     "slug": "react-native-agora-example-expo",
     "version": "1.0.0",

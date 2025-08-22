@@ -601,7 +601,7 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = reactnativeagoraexampleexpo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -614,7 +614,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.react-native-agora-example-expo";
-				PRODUCT_NAME = reactnativeagoraexampleexpo;
+				PRODUCT_NAME = "reactnativeagoraexampleexpo";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_OBJC_BRIDGING_HEADER = "reactnativeagoraexampleexpo/reactnativeagoraexampleexpo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -635,7 +635,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PV44H27855;
 				INFOPLIST_FILE = reactnativeagoraexampleexpo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -648,7 +648,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "io.agora.react-native-agora-example-expo";
-				PRODUCT_NAME = reactnativeagoraexampleexpo;
+				PRODUCT_NAME = "reactnativeagoraexampleexpo";
 				PROVISIONING_PROFILE_SPECIFIER = AgoraQA2021;
 				SWIFT_OBJC_BRIDGING_HEADER = "reactnativeagoraexampleexpo/reactnativeagoraexampleexpo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

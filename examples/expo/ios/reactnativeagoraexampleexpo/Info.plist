@@ -52,11 +52,11 @@
       <true/>
     </dict>
     <key>NSCameraUsageDescription</key>
-    <string>Camera</string>
+    <string>Allow $(PRODUCT_NAME) to access your camera for video calls</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string/>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Microphone</string>
+    <string>Allow $(PRODUCT_NAME) to access your microphone for audio calls</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
