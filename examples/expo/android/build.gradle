@@ -1,0 +1,64 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+  repositories {
+    google()
+    mavenCentral()
+  }
+  dependencies {
+    classpath('com.android.tools.build:gradle')
+    classpath('com.facebook.react:react-native-gradle-plugin')
+    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
+  }
+}
+
+def reactNativeAndroidDir = new File(
+  providers.exec {
+    workingDir(rootDir)
+    commandLine("node", "--print", "require.resolve('react-native/package.json')")
+  }.standardOutput.asText.get().trim(),
+  "../android"
+)
+
+allprojects {
+  repositories {
+    maven {
+      // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+      url(reactNativeAndroidDir)
+    }
+
+    google()
+    mavenCentral()
+    maven {
+        url("$rootDir/../node_modules/detox/Detox-android")
+    }
+    maven { url 'https://www.jitpack.io' }
+  }
+
+  afterEvaluate { project ->
+    if (project.hasProperty('android')) {
+      android {
+        packagingOptions {
+          resources {
+            excludes += [
+              'META-INF/LICENSE.md',
+              'META-INF/LICENSE-notice.md',
+              'META-INF/DEPENDENCIES'
+            ]
+          }
+          jniLibs {
+            pickFirsts += [
+              'lib/arm64-v8a/libfbjni.so',
+              'lib/armeabi-v7a/libfbjni.so',
+              'lib/x86/libfbjni.so',
+              'lib/x86_64/libfbjni.so'
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+
+apply plugin: "expo-root-project"
+apply plugin: "com.facebook.react.rootproject"

@@ -14,7 +14,7 @@
     "ios",
     "cpp",
     "*.podspec",
-    "!lib/typescript/example",
+    "!lib/typescript/examples",
     "!ios/build",
     "!android/build",
     "!android/gradle",
@@ -30,18 +30,20 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-agora-example",
+    "example": "yarn workspace react-native-agora-example-expo",
+    "legacy": "yarn workspace react-native-agora-example-legacy",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{cjs,js,ts,tsx}\"",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "clean": "del-cli android/build examples/legacy/android/build examples/legacy/android/app/build examples/legacy/ios/build lib",
     "prepare": "bob build",
     "release": "release-it",
-    "doc": "typedoc src --out ./docs --exclude \"example/**\"",
+    "doc": "typedoc src --out ./docs --exclude \"examples/**\"",
     "build:ts-interface": "ts-interface-builder src/*.ts -o src/ti/"
   },
   "keywords": [
     "react-native",
+    "expo",
     "ios",
     "android"
   ],
@@ -95,7 +97,7 @@
     "react-native": "*"
   },
   "workspaces": [
-    "example"
+    "examples/*"
   ],
   "packageManager": "yarn@3.6.1",
   "engines": {
@@ -104,11 +106,13 @@
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
+      "<rootDir>/examples/legacy/node_modules",
+      "<rootDir>/examples/expo/node_modules",
       "<rootDir>/lib/"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/example/e2e"
+      "<rootDir>/examples/expo/e2e",
+      "<rootDir>/examples/legacy/e2e"
     ]
   },
   "commitlint": {

@@ -1,7 +1,9 @@
+import { NativeEventEmitter } from 'react-native';
+
 import { IMediaPlayerCacheManager } from './IAgoraMediaPlayer';
 import { IRtcEngine } from './IAgoraRtcEngine';
+import { handleEvent } from './internal/IrisApiEngine';
 import { RtcEngineExInternal } from './internal/RtcEngineExInternal';
-import AgoraRtcNg from './specs';
 
 export const showRPSystemBroadcastPickerView =
   AgoraRtcNg.showRPSystemBroadcastPickerView;
@@ -22,11 +24,11 @@ export * from './IAgoraSpatialAudio';
 export * from './IAudioDeviceManager';
 export * from './AgoraRtcRenderView';
 export * from './IAgoraPip';
-export {
-  isDebuggable,
-  setDebuggable,
-  callIrisApi,
-} from './internal/IrisApiEngine';
+export { isDebuggable, setDebuggable } from './Utils';
+export { callIrisApi } from './internal/call';
+
+const AgoraEventEmitter = new NativeEventEmitter(AgoraRtcNg);
+AgoraEventEmitter.addListener('AgoraRtcNg:onEvent', handleEvent);
 
 const instance = new RtcEngineExInternal();
 
@@ -55,5 +57,7 @@ export function getMediaPlayerCacheManager(): IMediaPlayerCacheManager {
 }
 
 export default createAgoraRtcEngine;
+
+import AgoraRtcNg from './specs';
 
 import { IMediaPlayerCacheManagerImpl } from './impl/IAgoraMediaPlayerImpl';

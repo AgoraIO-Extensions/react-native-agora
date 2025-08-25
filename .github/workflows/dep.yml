@@ -30,8 +30,8 @@ jobs:
 
       - name: Update example
         run: |
-          rm -rf example/ios/Podfile.lock
-          yarn pod-install example/ios
+          rm -rf examples/expo/ios/Podfile.lock
+          yarn pod-install examples/expo/ios
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main

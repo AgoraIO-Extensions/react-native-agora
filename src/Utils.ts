@@ -17,3 +17,19 @@ export function parseIntPtr2Number(value: number | string): number {
     return value as number;
   }
 }
+
+export let debuggable = false;
+
+/**
+ * @internal
+ */
+export function setDebuggable(flag: boolean) {
+  debuggable = flag;
+}
+
+/**
+ * @internal
+ */
+export function isDebuggable() {
+  return debuggable && __DEV__;
+}

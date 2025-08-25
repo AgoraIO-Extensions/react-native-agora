@@ -24,7 +24,7 @@ runs:
       if: ${{ runner.os == 'macOS' }}
       uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.13.0
+        version: 1.16.2
 
     - name: Cache dependencies
       id: yarn-cache

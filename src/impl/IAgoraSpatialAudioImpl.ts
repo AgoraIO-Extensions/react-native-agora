@@ -4,6 +4,7 @@ import {
   RemoteVoicePositionInfo,
   SpatialAudioZone,
 } from '../IAgoraSpatialAudio';
+import { callIrisApi } from '../internal/call';
 
 // @ts-ignore
 export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
@@ -491,5 +492,3 @@ export class ILocalSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
     return 'LocalSpatialAudioEngine_clearRemotePositions';
   }
 }
-
-import { callIrisApi } from '../internal/IrisApiEngine';
