@@ -105,7 +105,7 @@ npx expo install react-native-agora
 Agora SDK requires minimum SDK versions:
 
 - Android: minSdkVersion = 24
-- iOS: iOS 13.0+
+- iOS: iOS 12.4+
 
 Install expo-build-properties to configure these:
 
