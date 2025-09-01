@@ -14,7 +14,7 @@ import {
   VideoCodecTypeForStream,
   createAgoraRtcEngine,
 } from 'react-native-agora';
-import { ColorPicker, fromHsv } from 'react-native-color-picker';
+import ColorPicker, { Panel1 } from 'reanimated-color-picker';
 
 import {
   BaseComponent,
@@ -44,7 +44,7 @@ interface State extends BaseVideoComponentState {
   videoFramerate: number;
   videoGop: number;
   videoCodecProfile: VideoCodecProfileType;
-  backgroundColor: number;
+  backgroundColor: string;
   videoCodecType: VideoCodecTypeForStream;
   transcodingUsers: TranscodingUser[];
   watermarkUrl: string;
@@ -78,7 +78,7 @@ export default class RTMPStreaming
       videoFramerate: 15,
       videoGop: 30,
       videoCodecProfile: VideoCodecProfileType.VideoCodecProfileHigh,
-      backgroundColor: 0x000000,
+      backgroundColor: '#000000',
       videoCodecType: VideoCodecTypeForStream.VideoCodecH264ForStream,
       transcodingUsers: [
         {
@@ -210,7 +210,7 @@ export default class RTMPStreaming
       videoFramerate,
       videoGop,
       videoCodecProfile,
-      backgroundColor,
+      backgroundColor: +backgroundColor.replace('#', '0x'),
       videoCodecType,
       transcodingUsers: [
         ...transcodingUsers,
@@ -325,6 +325,12 @@ export default class RTMPStreaming
     this.debug('onTranscodingUpdated');
   }
 
+  onSelectColor = ({ hex }) => {
+    this.setState({
+      backgroundColor: hex,
+    });
+  };
+
   protected renderConfiguration(): ReactElement | undefined {
     const {
       url,
@@ -363,13 +369,11 @@ export default class RTMPStreaming
               <AgoraText>backgroundColor</AgoraText>
               <ColorPicker
                 style={AgoraStyle.picker}
-                onColorChange={(selectedColor) => {
-                  this.setState({
-                    backgroundColor: +fromHsv(selectedColor).replace('#', '0x'),
-                  });
-                }}
-                color={`#${backgroundColor?.toString(16)}`}
-              />
+                onCompleteJS={this.onSelectColor}
+                value={backgroundColor}
+              >
+                <Panel1 />
+              </ColorPicker>
             </>
             <AgoraDivider />
             <AgoraView horizontal={true}>

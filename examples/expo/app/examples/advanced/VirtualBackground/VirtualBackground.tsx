@@ -7,7 +7,7 @@ import {
   IRtcEngineEventHandler,
   createAgoraRtcEngine,
 } from 'react-native-agora';
-import { ColorPicker, fromHsv } from 'react-native-color-picker';
+import ColorPicker, { Panel1 } from 'reanimated-color-picker';
 
 import {
   BaseComponent,
@@ -29,7 +29,7 @@ import { askMediaAccess } from '../../../../src/utils/permissions';
 
 interface State extends BaseVideoComponentState {
   background_source_type: BackgroundSourceType;
-  color: number;
+  color: string;
   source: string;
   blur_degree: BackgroundBlurDegree;
   enableVirtualBackground?: boolean;
@@ -50,7 +50,7 @@ export default class VirtualBackground
       remoteUsers: [],
       startPreview: false,
       background_source_type: BackgroundSourceType.BackgroundColor,
-      color: 0xffffff,
+      color: '#ffffff',
       source: getResourcePath('agora-logo.png'),
       blur_degree: BackgroundBlurDegree.BlurDegreeMedium,
     };
@@ -132,7 +132,7 @@ export default class VirtualBackground
       true,
       {
         background_source_type,
-        color,
+        color: +color.replace('#', '0x'),
         source: await getAbsolutePath(source),
         blur_degree,
       },
@@ -164,6 +164,12 @@ export default class VirtualBackground
     this.engine?.release();
   }
 
+  onSelectColor = ({ hex }) => {
+    this.setState({
+      color: hex,
+    });
+  };
+
   protected renderConfiguration(): ReactElement | undefined {
     const { background_source_type, color, source, blur_degree } = this.state;
     return (
@@ -179,13 +185,11 @@ export default class VirtualBackground
         {background_source_type === BackgroundSourceType.BackgroundColor ? (
           <ColorPicker
             style={AgoraStyle.picker}
-            onColorChange={(selectedColor) => {
-              this.setState({
-                color: +fromHsv(selectedColor).replace('#', '0x'),
-              });
-            }}
-            color={`#${color?.toString(16)}`}
-          />
+            onCompleteJS={this.onSelectColor}
+            value={color}
+          >
+            <Panel1 />
+          </ColorPicker>
         ) : undefined}
         <AgoraTextInput
           editable={

@@ -33,7 +33,6 @@
     "react-native": "0.79.5",
     "react-native-awesome-slider": "^2.9.0",
     "react-native-chart-kit": "^6.12.0",
-    "react-native-color-picker": "^0.6.0",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.24.0",
     "react-native-image-tool": "AgoraIO-Extensions/react-native-image-tools",
@@ -42,7 +41,8 @@
     "react-native-safe-area-context": "^5.2.0",
     "react-native-screens": "~4.11.1",
     "react-native-svg": "^15.11.1",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "reanimated-color-picker": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

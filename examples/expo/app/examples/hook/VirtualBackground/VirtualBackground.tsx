@@ -4,7 +4,7 @@ import {
   BackgroundSourceType,
   ClientRoleType,
 } from 'react-native-agora';
-import { ColorPicker, fromHsv } from 'react-native-color-picker';
+import ColorPicker, { Panel1 } from 'reanimated-color-picker';
 
 import { BaseComponent } from '../../../../src/components/hook/BaseComponent';
 import BaseRenderChannel from '../../../../src/components/hook/BaseRenderChannel';
@@ -43,7 +43,7 @@ export default function VirtualBackground() {
   const [background_source_type, setBackground_source_type] = useState<number>(
     BackgroundSourceType.BackgroundColor
   );
-  const [color, setColor] = useState(0xffffff);
+  const [color, setColor] = useState('#ffffff');
   const [source, setSource] = useState(getResourcePath('agora-logo.png'));
   const [blur_degree, setBlur_degree] = useState(
     BackgroundBlurDegree.BlurDegreeMedium
@@ -91,7 +91,7 @@ export default function VirtualBackground() {
       true,
       {
         background_source_type,
-        color,
+        color: +color.replace('#', '0x'),
         source: await getAbsolutePath(source),
         blur_degree,
       },
@@ -113,6 +113,10 @@ export default function VirtualBackground() {
    */
   const leaveChannel = () => {
     engine.current.leaveChannel();
+  };
+
+  const onSelectColor = ({ hex }) => {
+    setColor(hex);
   };
 
   return (
@@ -154,11 +158,11 @@ export default function VirtualBackground() {
         {background_source_type === BackgroundSourceType.BackgroundColor ? (
           <ColorPicker
             style={AgoraStyle.picker}
-            onColorChange={(selectedColor) => {
-              setColor(+fromHsv(selectedColor).replace('#', '0x'));
-            }}
-            color={`#${color?.toString(16)}`}
-          />
+            onCompleteJS={onSelectColor}
+            value={color}
+          >
+            <Panel1 />
+          </ColorPicker>
         ) : undefined}
         <AgoraTextInput
           editable={
