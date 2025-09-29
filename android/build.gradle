@@ -166,7 +166,7 @@ dependencies {
   implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
   /// dependencies start
   api 'io.agora.rtc:agora-special-full:4.5.2.2.LITE'
-  implementation 'io.agora.rtc:iris-rtc:4.5.2.2-lite.1'
+  api 'io.agora.rtc:iris-rtc:4.5.2.2-lite.1'
   /// dependencies end
 }
 
