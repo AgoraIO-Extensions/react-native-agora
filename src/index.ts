@@ -36,7 +36,7 @@ const instance = new RtcEngineExInternal();
  * Currently, the Agora RTC SDK v4.x supports creating only one IRtcEngine object for each app.
  *
  * @returns
- * One IRtcEngine object.
+ * IRtcEngine object.
  */
 export function createAgoraRtcEngine(): IRtcEngine {
   return instance;
