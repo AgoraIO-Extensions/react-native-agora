@@ -46,4 +46,4 @@ jobs:
       - name: print publish info
         run: |
           echo "[publish info][tag]: https://github.com/AgoraIO-Extensions/react-native-agora/releases/tag/v${{ inputs.increment }}"
-          echo "[publish info][url]: https://www.npmjs.com/package/react-native-agora/v${{ inputs.increment }}"
+          echo "[publish info][url]: https://www.npmjs.com/package/react-native-agora/v/${{ inputs.increment }}"
