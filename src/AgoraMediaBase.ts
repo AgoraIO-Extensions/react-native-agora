@@ -308,82 +308,6 @@ export enum MediaSourceType {
 /**
  * @ignore
  */
-export enum ContentInspectResult {
-  /**
-   * @ignore
-   */
-  ContentInspectNeutral = 1,
-  /**
-   * @ignore
-   */
-  ContentInspectSexy = 2,
-  /**
-   * @ignore
-   */
-  ContentInspectPorn = 3,
-}
-
-/**
- * The type of video content moderation module.
- */
-export enum ContentInspectType {
-  /**
-   * 0: (Default) This module has no actual function. Do not set type to this value.
-   */
-  ContentInspectInvalid = 0,
-  /**
-   * @ignore
-   */
-  ContentInspectModeration = 1,
-  /**
-   * 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
-   */
-  ContentInspectSupervision = 2,
-  /**
-   * 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
-   */
-  ContentInspectImageModeration = 3,
-}
-
-/**
- * ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
- */
-export class ContentInspectModule {
-  /**
-   * Types of functional module. See ContentInspectType.
-   */
-  type?: ContentInspectType;
-  /**
-   * The frequency (s) of video screenshot and upload. The value should be set as larger than 0. The default value is 0, the SDK does not take screenshots. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
-   */
-  interval?: number;
-}
-
-/**
- * Screenshot and upload configuration.
- */
-export class ContentInspectConfig {
-  /**
-   * Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
-   */
-  extraInfo?: string;
-  /**
-   * (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to ContentInspectImageModeration. If you want to use it, contact.
-   */
-  serverConfig?: string;
-  /**
-   * Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
-   */
-  modules?: ContentInspectModule[];
-  /**
-   * The number of functional modules, that is,the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
-   */
-  moduleCount?: number;
-}
-
-/**
- * @ignore
- */
 export class PacketOptions {
   /**
    * @ignore
@@ -1179,6 +1103,86 @@ export enum VideoModulePosition {
    * 8: The position after local video capture and before pre-processing. The observed video here does not have pre-processing effects, which can be verified by enabling image enhancement, virtual background, or watermarks.
    */
   PositionPostCapturerOrigin = 1 << 3,
+}
+
+/**
+ * @ignore
+ */
+export enum ContentInspectResult {
+  /**
+   * @ignore
+   */
+  ContentInspectNeutral = 1,
+  /**
+   * @ignore
+   */
+  ContentInspectSexy = 2,
+  /**
+   * @ignore
+   */
+  ContentInspectPorn = 3,
+}
+
+/**
+ * The type of video content moderation module.
+ */
+export enum ContentInspectType {
+  /**
+   * 0: (Default) This module has no actual function. Do not set type to this value.
+   */
+  ContentInspectInvalid = 0,
+  /**
+   * @ignore
+   */
+  ContentInspectModeration = 1,
+  /**
+   * 2: Video screenshot and upload via Agora self-developed extension. SDK takes screenshots of the video stream in the channel and uploads them.
+   */
+  ContentInspectSupervision = 2,
+  /**
+   * 3: Video screenshot and upload via extensions from Agora Extensions Marketplace. SDK uses video moderation extensions from Agora Extensions Marketplace to take screenshots of the video stream in the channel and uploads them.
+   */
+  ContentInspectImageModeration = 3,
+}
+
+/**
+ * ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
+ */
+export class ContentInspectModule {
+  /**
+   * Types of functional module. See ContentInspectType.
+   */
+  type?: ContentInspectType;
+  /**
+   * The frequency (s) of video screenshot and upload. The value should be set as larger than 0. The default value is 0, the SDK does not take screenshots. Agora recommends that you set the value as 10; you can also adjust it according to your business needs.
+   */
+  interval?: number;
+  /**
+   * @ignore
+   */
+  position?: VideoModulePosition;
+}
+
+/**
+ * Screenshot and upload configuration.
+ */
+export class ContentInspectConfig {
+  /**
+   * Additional information on the video content (maximum length: 1024 Bytes). The SDK sends the screenshots and additional information on the video content to the Agora server. Once the video screenshot and upload process is completed, the Agora server sends the additional information and the callback notification to your server.
+   */
+  extraInfo?: string;
+  /**
+   * (Optional) Server configuration related to uploading video screenshots via extensions from Agora Extensions Marketplace. This parameter only takes effect when type in ContentInspectModule is set to ContentInspectImageModeration. If you want to use it, contact.
+   */
+  serverConfig?: string;
+  /**
+   * Functional module. See ContentInspectModule. A maximum of 32 ContentInspectModule instances can be configured, and the value range of MAX_CONTENT_INSPECT_MODULE_COUNT is an integer in [1,32]. A function module can only be configured with one instance at most. Currently only the video screenshot and upload function is supported.
+   */
+  modules?: ContentInspectModule[];
+  /**
+   * The number of functional modules, that is,the number of configured ContentInspectModule instances, must be the same as the number of instances configured in modules. The maximum number is 32.
+   */
+  moduleCount?: number;
 }
 
 /**
