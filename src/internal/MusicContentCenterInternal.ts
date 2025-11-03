@@ -16,12 +16,8 @@ import {
 import IAgoraMusicContentCenterTI from '../ti/IAgoraMusicContentCenter-ti';
 const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-} from './IrisApiEngine';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
+import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   static _event_handlers: IMusicContentCenterEventHandler[] = [];
