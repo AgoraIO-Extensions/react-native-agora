@@ -325,7 +325,7 @@ export default class RTMPStreaming
     this.debug('onTranscodingUpdated');
   }
 
-  onSelectColor = ({ hex }) => {
+  onSelectColor = ({ hex }: { hex: string }) => {
     this.setState({
       backgroundColor: hex,
     });

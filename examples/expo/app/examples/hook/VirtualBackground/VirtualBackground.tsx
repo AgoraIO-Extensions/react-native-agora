@@ -115,7 +115,7 @@ export default function VirtualBackground() {
     engine.current.leaveChannel();
   };
 
-  const onSelectColor = ({ hex }) => {
+  const onSelectColor = ({ hex }: { hex: string }) => {
     setColor(hex);
   };
 

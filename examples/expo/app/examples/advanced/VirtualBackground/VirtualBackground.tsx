@@ -164,7 +164,7 @@ export default class VirtualBackground
     this.engine?.release();
   }
 
-  onSelectColor = ({ hex }) => {
+  onSelectColor = ({ hex }: { hex: string }) => {
     this.setState({
       color: hex,
     });
