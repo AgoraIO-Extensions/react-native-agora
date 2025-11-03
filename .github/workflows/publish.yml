@@ -6,12 +6,16 @@ on:
       increment:
         description: 'Increment "major", "minor", "patch", or "pre*" version; or specify version [default: "patch"]'
         required: true
-        default: 'patch'
+        default: "patch"
         type: string
       dry-run:
-        description: 'Do not touch or write anything, but show the commands'
+        description: "Do not touch or write anything, but show the commands"
         default: true
         type: boolean
+
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
 
 jobs:
   release-it:
@@ -27,9 +31,14 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Setup NPM auth token
+      - name: Update Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 23.7.0
+
+      - name: Update NPM
         run: |
-          npm set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_TOKEN }}
+          npm install -g npm@11.5.1
 
       - name: Dry Run Release
         if: ${{ inputs.dry-run }}
