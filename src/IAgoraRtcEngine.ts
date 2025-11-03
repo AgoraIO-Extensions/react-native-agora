@@ -1133,13 +1133,13 @@ export class ChannelMediaOptions {
    */
   publishMicrophoneTrack?: boolean;
   /**
-   * Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen.
-   */
-  publishScreenCaptureVideo?: boolean;
-  /**
    * Whether to publish the audio captured from the screen: true : Publish the audio captured from the screen. false : Publish the audio captured from the screen.
    */
   publishScreenCaptureAudio?: boolean;
+  /**
+   * Whether to publish the video captured from the screen: true : Publish the video captured from the screen. false : Do not publish the video captured from the screen.
+   */
+  publishScreenCaptureVideo?: boolean;
   /**
    * @ignore
    */
@@ -1487,7 +1487,7 @@ export interface IRtcEngineEventHandler {
    *
    * This callback occurs when the local audio effect file finishes playing.
    *
-   * @param soundId The ID of the audio effect. The ID of each audio effect file is unique.
+   * @param soundId The ID of the audio effect. The unique ID of each audio effect file.
    */
   onAudioEffectFinished?(soundId: number): void;
 
@@ -2958,7 +2958,7 @@ export abstract class IRtcEngine {
    * Gets the SDK version.
    *
    * @returns
-   * One SDKBuildInfo object.
+   * SDKBuildInfo object.
    */
   abstract getVersion(): SDKBuildInfo;
 
@@ -3915,7 +3915,7 @@ export abstract class IRtcEngine {
   /**
    * Destroys the media player instance.
    *
-   * @param mediaPlayer One IMediaPlayer object.
+   * @param mediaPlayer IMediaPlayer object.
    *
    * @returns
    * ≥ 0: Success. Returns the ID of media player instance.
@@ -4280,7 +4280,7 @@ export abstract class IRtcEngine {
   /**
    * Gets the volume of a specified audio effect file.
    *
-   * @param soundId The ID of the audio effect. The ID of each audio effect file is unique.
+   * @param soundId The ID of the audio effect. The unique ID of each audio effect file.
    * @param volume The playback volume. The value range is [0, 100]. The default value is 100, which represents the original volume.
    *
    * @returns

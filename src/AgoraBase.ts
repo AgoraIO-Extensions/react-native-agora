@@ -4414,9 +4414,41 @@ export enum VoiceAiTunerType {
 }
 
 /**
+ * The audio configuration for the shared screen stream.
+ *
+ * Only available where captureAudio is true.
+ */
+export class ScreenAudioParameters {
+  /**
+   * Audio sample rate (Hz). The default value is 16000.
+   */
+  sampleRate?: number;
+  /**
+   * The number of audio channels. The default value is 2, which means stereo.
+   */
+  channels?: number;
+  /**
+   * The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
+   */
+  captureSignalVolume?: number;
+  /**
+   * @ignore
+   */
+  excludeCurrentProcessAudio?: boolean;
+}
+
+/**
  * @ignore
  */
 export class ScreenCaptureParameters {
+  /**
+   * @ignore
+   */
+  captureAudio?: boolean;
+  /**
+   * @ignore
+   */
+  audioParams?: ScreenAudioParameters;
   /**
    * @ignore
    */
@@ -5180,26 +5212,6 @@ export class ScreenVideoParameters {
    * The content hint for screen sharing.
    */
   contentHint?: VideoContentHint;
-}
-
-/**
- * The audio configuration for the shared screen stream.
- *
- * Only available where captureAudio is true.
- */
-export class ScreenAudioParameters {
-  /**
-   * Audio sample rate (Hz). The default value is 16000.
-   */
-  sampleRate?: number;
-  /**
-   * The number of audio channels. The default value is 2, which means stereo.
-   */
-  channels?: number;
-  /**
-   * The volume of the captured system audio. The value range is [0, 100]. The default value is 100.
-   */
-  captureSignalVolume?: number;
 }
 
 /**
