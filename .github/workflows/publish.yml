@@ -10,7 +10,7 @@ on:
         type: string
       dry-run:
         description: "Do not touch or write anything, but show the commands"
-        default: true
+        default: false
         type: boolean
 
 permissions:
