@@ -939,6 +939,18 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return 'MediaPlayer_setSoundPositionParams_f282d50';
   }
 
+  getAudioBufferDelay(): number {
+    const apiType = this.getApiTypeFromGetAudioBufferDelay();
+    const jsonParams = {};
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams);
+    const delayMs = jsonResults.delayMs;
+    return delayMs;
+  }
+
+  protected getApiTypeFromGetAudioBufferDelay(): string {
+    return 'MediaPlayer_getAudioBufferDelay_c30e349';
+  }
+
   setPlayerOptionInInt(key: string, value: number): number {
     const apiType = this.getApiTypeFromSetPlayerOptionInInt(key, value);
     const jsonParams = {
