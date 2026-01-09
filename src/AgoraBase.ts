@@ -3,6 +3,7 @@ import {
   AudioSourceType,
   RenderModeType,
   VideoModulePosition,
+  VideoPixelFormat,
   VideoSourceType,
 } from './AgoraMediaBase';
 
@@ -15,11 +16,11 @@ export enum ChannelProfileType {
    */
   ChannelProfileCommunication = 0,
   /**
-   * 1: Live streaming. Live streaming. Use this profile when there are more than two users in the channel.
+   * 1: Live streaming. Use this profile when there are more than two users in the channel.
    */
   ChannelProfileLiveBroadcasting = 1,
   /**
-   * 2: Gaming. This profile is deprecated.
+   * 2: Gaming.
    */
   ChannelProfileGame = 2,
   /**
@@ -270,6 +271,10 @@ export enum ErrorCodeType {
    */
   ErrResourceLimited = 22,
   /**
+   * @ignore
+   */
+  ErrFuncIsProhibited = 23,
+  /**
    * 101: The specified App ID is invalid. Rejoin the channel with a valid App ID.
    */
   ErrInvalidAppId = 101,
@@ -414,6 +419,30 @@ export enum ErrorCodeType {
   /**
    * @ignore
    */
+  ErrRdtUserNotExist = 250,
+  /**
+   * @ignore
+   */
+  ErrRdtUserNotReady = 251,
+  /**
+   * @ignore
+   */
+  ErrRdtDataBlocked = 252,
+  /**
+   * @ignore
+   */
+  ErrRdtCmdExceedLimit = 253,
+  /**
+   * @ignore
+   */
+  ErrRdtDataExceedLimit = 254,
+  /**
+   * @ignore
+   */
+  ErrRdtEncryption = 255,
+  /**
+   * @ignore
+   */
   ErrLoginAlreadyLogin = 428,
   /**
    * @ignore
@@ -488,23 +517,23 @@ export enum LicenseErrorType {
  */
 export enum AudioSessionOperationRestriction {
   /**
-   * No restriction, the SDK can change the audio session.
+   * 0: No restriction, the SDK can change the audio session.
    */
   AudioSessionOperationRestrictionNone = 0,
   /**
-   * The SDK cannot change the audio session category.
+   * 1: The SDK cannot change the audio session category.
    */
   AudioSessionOperationRestrictionSetCategory = 1,
   /**
-   * The SDK cannot change the audio session category, mode, or categoryOptions.
+   * 2: The SDK cannot change the audio session category, mode, or categoryOptions.
    */
   AudioSessionOperationRestrictionConfigureSession = 1 << 1,
   /**
-   * The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
+   * 4: The SDK keeps the audio session active when the user leaves the channel, for example, to play an audio file in the background.
    */
   AudioSessionOperationRestrictionDeactivateSession = 1 << 2,
   /**
-   * Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
+   * 128: Completely restricts the operation permissions of the SDK on the audio session; the SDK cannot change the audio session.
    */
   AudioSessionOperationRestrictionAll = 1 << 7,
 }
@@ -672,27 +701,27 @@ export enum VideoOrientation {
  */
 export enum FrameRate {
   /**
-   * 1: 1 fps
+   * 1: 1 fps.
    */
   FrameRateFps1 = 1,
   /**
-   * 7: 7 fps
+   * 7: 7 fps.
    */
   FrameRateFps7 = 7,
   /**
-   * 10: 10 fps
+   * 10: 10 fps.
    */
   FrameRateFps10 = 10,
   /**
-   * 15: 15 fps
+   * 15: 15 fps.
    */
   FrameRateFps15 = 15,
   /**
-   * 24: 24 fps
+   * 24: 24 fps.
    */
   FrameRateFps24 = 24,
   /**
-   * 30: 30 fps
+   * 30: 30 fps.
    */
   FrameRateFps30 = 30,
   /**
@@ -776,7 +805,7 @@ export enum OrientationMode {
  */
 export enum DegradationPreference {
   /**
-   * 0: (Default) Automatic mode. The SDK will automatically select MaintainFramerate, MaintainBalanced or MaintainResolution based on the video scenario you set, in order to achieve the best overall quality of experience (QoE).
+   * -1: (Default) Automatic mode. The SDK will automatically select MaintainFramerate, MaintainBalanced or MaintainResolution based on the video scenario you set, in order to achieve the best overall quality of experience (QoE).
    */
   MaintainAuto = -1,
   /**
@@ -1006,47 +1035,47 @@ export enum AudioCodecType {
  */
 export enum AudioEncodingType {
   /**
-   * AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+   * 0x010101: AAC encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
    */
   AudioEncodingTypeAac16000Low = 0x010101,
   /**
-   * AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+   * 0x010102: AAC encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeAac16000Medium = 0x010102,
   /**
-   * AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
+   * 0x010201: AAC encoding format, 32000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 1.2 MB after encoding.
    */
   AudioEncodingTypeAac32000Low = 0x010201,
   /**
-   * AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+   * 0x010202: AAC encoding format, 32000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeAac32000Medium = 0x010202,
   /**
-   * AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+   * 0x010203: AAC encoding format, 32000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
    */
   AudioEncodingTypeAac32000High = 0x010203,
   /**
-   * AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+   * 0x010302: AAC encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeAac48000Medium = 0x010302,
   /**
-   * AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+   * 0x010303: AAC encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
    */
   AudioEncodingTypeAac48000High = 0x010303,
   /**
-   * OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+   * 0x020101: OPUS encoding format, 16000 Hz sampling rate, bass quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeOpus16000Low = 0x020101,
   /**
-   * OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+   * 0x020102: OPUS encoding format, 16000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeOpus16000Medium = 0x020102,
   /**
-   * OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
+   * 0x020302: OPUS encoding format, 48000 Hz sampling rate, medium sound quality. A file with an audio duration of 10 minutes is approximately 2 MB after encoding.
    */
   AudioEncodingTypeOpus48000Medium = 0x020302,
   /**
-   * OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
+   * 0x020303: OPUS encoding format, 48000 Hz sampling rate, high sound quality. A file with an audio duration of 10 minutes is approximately 3.5 MB after encoding.
    */
   AudioEncodingTypeOpus48000High = 0x020303,
 }
@@ -1056,11 +1085,11 @@ export enum AudioEncodingType {
  */
 export enum WatermarkFitMode {
   /**
-   * Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
+   * 0: Use the positionInLandscapeMode and positionInPortraitMode values you set in WatermarkOptions. The settings in WatermarkRatio are invalid.
    */
   FitModeCoverPosition = 0,
   /**
-   * Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
+   * 1: Use the value you set in WatermarkRatio. The settings in positionInLandscapeMode and positionInPortraitMode in WatermarkOptions are invalid.
    */
   FitModeUseImageRatio = 1,
 }
@@ -1215,10 +1244,6 @@ export enum MaxUserAccountLengthType {
  * Information about externally encoded video frames.
  */
 export class EncodedVideoFrameInfo {
-  /**
-   * The user ID to push the externally encoded video frame.
-   */
-  uid?: number;
   /**
    * The codec type of the local video stream. See VideoCodecType. The default value is VideoCodecH264 (2).
    */
@@ -1631,6 +1656,10 @@ export class SimulcastConfig {
    * @ignore
    */
   configs?: StreamLayerConfig[];
+  /**
+   * @ignore
+   */
+  publish_fallback_enable?: boolean;
 }
 
 /**
@@ -1703,6 +1732,228 @@ export class WatermarkOptions {
    * The adaptation mode of the watermark. See WatermarkFitMode.
    */
   mode?: WatermarkFitMode;
+  /**
+   * @ignore
+   */
+  zOrder?: number;
+}
+
+/**
+ * @ignore
+ */
+export enum WatermarkSourceType {
+  /**
+   * @ignore
+   */
+  Image = 0,
+  /**
+   * @ignore
+   */
+  Buffer = 1,
+  /**
+   * @ignore
+   */
+  Literal = 2,
+  /**
+   * @ignore
+   */
+  Timestamps = 3,
+}
+
+/**
+ * @ignore
+ */
+export class WatermarkTimestamp {
+  /**
+   * @ignore
+   */
+  fontSize?: number;
+  /**
+   * @ignore
+   */
+  fontFilePath?: string;
+  /**
+   * @ignore
+   */
+  strokeWidth?: number;
+  /**
+   * @ignore
+   */
+  format?: string;
+}
+
+/**
+ * @ignore
+ */
+export class WatermarkLiteral {
+  /**
+   * @ignore
+   */
+  fontSize?: number;
+  /**
+   * @ignore
+   */
+  strokeWidth?: number;
+  /**
+   * @ignore
+   */
+  wmLiteral?: string;
+  /**
+   * @ignore
+   */
+  fontFilePath?: string;
+}
+
+/**
+ * @ignore
+ */
+export class WatermarkBuffer {
+  /**
+   * @ignore
+   */
+  width?: number;
+  /**
+   * @ignore
+   */
+  height?: number;
+  /**
+   * @ignore
+   */
+  length?: number;
+  /**
+   * @ignore
+   */
+  format?: VideoPixelFormat;
+  /**
+   * @ignore
+   */
+  buffer?: Uint8Array;
+}
+
+/**
+ * @ignore
+ */
+export class WatermarkConfig {
+  /**
+   * @ignore
+   */
+  id?: string;
+  /**
+   * @ignore
+   */
+  type?: WatermarkSourceType;
+  /**
+   * @ignore
+   */
+  buffer?: WatermarkBuffer;
+  /**
+   * @ignore
+   */
+  timestamp?: WatermarkTimestamp;
+  /**
+   * @ignore
+   */
+  literal?: WatermarkLiteral;
+  /**
+   * @ignore
+   */
+  imageUrl?: string;
+  /**
+   * @ignore
+   */
+  options?: WatermarkOptions;
+}
+
+/**
+ * @ignore
+ */
+export enum MultipathMode {
+  /**
+   * @ignore
+   */
+  Duplicate = 0,
+  /**
+   * @ignore
+   */
+  Dynamic = 1,
+}
+
+/**
+ * @ignore
+ */
+export enum MultipathType {
+  /**
+   * @ignore
+   */
+  Lan = 0,
+  /**
+   * @ignore
+   */
+  Wifi = 1,
+  /**
+   * @ignore
+   */
+  Mobile = 2,
+  /**
+   * @ignore
+   */
+  Unknown = 99,
+}
+
+/**
+ * @ignore
+ */
+export class PathStats {
+  /**
+   * @ignore
+   */
+  type?: MultipathType;
+  /**
+   * @ignore
+   */
+  txKBitRate?: number;
+  /**
+   * @ignore
+   */
+  rxKBitRate?: number;
+}
+
+/**
+ * @ignore
+ */
+export class MultipathStats {
+  /**
+   * @ignore
+   */
+  lanTxBytes?: number;
+  /**
+   * @ignore
+   */
+  lanRxBytes?: number;
+  /**
+   * @ignore
+   */
+  wifiTxBytes?: number;
+  /**
+   * @ignore
+   */
+  wifiRxBytes?: number;
+  /**
+   * @ignore
+   */
+  mobileTxBytes?: number;
+  /**
+   * @ignore
+   */
+  mobileRxBytes?: number;
+  /**
+   * @ignore
+   */
+  activePathNum?: number;
+  /**
+   * @ignore
+   */
+  pathStats?: PathStats[];
 }
 
 /**
@@ -1844,6 +2095,10 @@ export class RtcStats {
    * The packet loss rate (%) from the Agora server to the client before using the anti-packet-loss method.
    */
   rxPacketLossRate?: number;
+  /**
+   * @ignore
+   */
+  lanAccelerateState?: number;
 }
 
 /**
@@ -2302,6 +2557,28 @@ export enum LocalVideoStreamState {
 }
 
 /**
+ * @ignore
+ */
+export enum LocalVideoEventType {
+  /**
+   * @ignore
+   */
+  LocalVideoEventTypeScreenCaptureWindowHidden = 1,
+  /**
+   * @ignore
+   */
+  LocalVideoEventTypeScreenCaptureWindowRecoverFromHidden = 2,
+  /**
+   * @ignore
+   */
+  LocalVideoEventTypeScreenCaptureStoppedByUser = 3,
+  /**
+   * @ignore
+   */
+  LocalVideoEventTypeScreenCaptureSystemInternalError = 4,
+}
+
+/**
  * Reasons for local video state changes.
  */
 export enum LocalVideoStreamReason {
@@ -2415,6 +2692,22 @@ export enum LocalVideoStreamReason {
    * @ignore
    */
   LocalVideoStreamReasonScreenCaptureDisplayDisconnected = 30,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureStoppedByUser = 31,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureInterruptedByOther = 32,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureStoppedByCall = 33,
+  /**
+   * @ignore
+   */
+  LocalVideoStreamReasonScreenCaptureExcludeWindowFailed = 34,
 }
 
 /**
@@ -3173,7 +3466,7 @@ export class LiveTranscoding {
   audioBitrate?: number;
   /**
    * The number of audio channels for Media Push. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose 3, 4, or 5.
-   *  1: (Default) Mono
+   *  1: (Default) Mono.
    *  2: Stereo.
    *  3: Three audio channels.
    *  4: Four audio channels.
@@ -3327,7 +3620,7 @@ export class MixedAudioStream {
 }
 
 /**
- * The configurations for mixing the lcoal audio.
+ * The configurations for mixing the local audio.
  */
 export class LocalAudioMixerConfiguration {
   /**
@@ -3475,7 +3768,7 @@ export enum ConnectionChangedReasonType {
    */
   ConnectionChangedInvalidToken = 8,
   /**
-   * (9): The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
+   * 9: The token currently being used has expired. You need to generate a new token on your server and rejoin the channel with the new token.
    */
   ConnectionChangedTokenExpired = 9,
   /**
@@ -3493,7 +3786,7 @@ export enum ConnectionChangedReasonType {
    */
   ConnectionChangedRenewToken = 12,
   /**
-   * (13): Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
+   * 13: Client IP address changed. If you receive this code multiple times, You need to prompt the user to switch networks and try joining the channel again.
    */
   ConnectionChangedClientIpAddressChanged = 13,
   /**
@@ -3562,60 +3855,6 @@ export enum ClientRoleChangeFailedReason {
    * 4: The SDK is disconnected from the Agora edge server. You can troubleshoot the failure through the reason reported by onConnectionStateChanged. Deprecated: This enumerator is deprecated since v4.4.0 and is not recommended for use.
    */
   ClientRoleChangeFailedConnectionFailed = 4,
-}
-
-/**
- * @ignore
- */
-export enum WlaccMessageReason {
-  /**
-   * @ignore
-   */
-  WlaccMessageReasonWeakSignal = 0,
-  /**
-   * @ignore
-   */
-  WlaccMessageReasonChannelCongestion = 1,
-}
-
-/**
- * @ignore
- */
-export enum WlaccSuggestAction {
-  /**
-   * @ignore
-   */
-  WlaccSuggestActionCloseToWifi = 0,
-  /**
-   * @ignore
-   */
-  WlaccSuggestActionConnectSsid = 1,
-  /**
-   * @ignore
-   */
-  WlaccSuggestActionCheck5g = 2,
-  /**
-   * @ignore
-   */
-  WlaccSuggestActionModifySsid = 3,
-}
-
-/**
- * @ignore
- */
-export class WlAccStats {
-  /**
-   * @ignore
-   */
-  e2eDelayPercent?: number;
-  /**
-   * @ignore
-   */
-  frozenRatioPercent?: number;
-  /**
-   * @ignore
-   */
-  lossRatePercent?: number;
 }
 
 /**
@@ -3785,51 +4024,119 @@ export enum FaceShapeArea {
   /**
    * @ignore
    */
-  FaceShapeAreaHeadscale = 0,
+  FaceShapeAreaHeadscale = 100,
   /**
    * @ignore
    */
-  FaceShapeAreaForehead = 1,
+  FaceShapeAreaForehead = 101,
   /**
    * @ignore
    */
-  FaceShapeAreaFacecontour = 2,
+  FaceShapeAreaFacecontour = 102,
   /**
    * @ignore
    */
-  FaceShapeAreaFacelength = 3,
+  FaceShapeAreaFacelength = 103,
   /**
    * @ignore
    */
-  FaceShapeAreaFacewidth = 4,
+  FaceShapeAreaFacewidth = 104,
   /**
    * @ignore
    */
-  FaceShapeAreaCheekbone = 5,
+  FaceShapeAreaCheekbone = 105,
   /**
    * @ignore
    */
-  FaceShapeAreaCheek = 6,
+  FaceShapeAreaCheek = 106,
   /**
    * @ignore
    */
-  FaceShapeAreaChin = 7,
+  FaceShapeAreaMandible = 107,
   /**
    * @ignore
    */
-  FaceShapeAreaEyescale = 8,
+  FaceShapeAreaChin = 108,
   /**
    * @ignore
    */
-  FaceShapeAreaNoselength = 9,
+  FaceShapeAreaEyescale = 200,
   /**
    * @ignore
    */
-  FaceShapeAreaNosewidth = 10,
+  FaceShapeAreaEyedistance = 201,
   /**
    * @ignore
    */
-  FaceShapeAreaMouthscale = 11,
+  FaceShapeAreaEyeposition = 202,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaLowereyelid = 203,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaEyepupils = 204,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaEyeinnercorner = 205,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaEyeoutercorner = 206,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNoselength = 300,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNosewidth = 301,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNosewing = 302,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNoseroot = 303,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNosebridge = 304,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNosetip = 305,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaNosegeneral = 306,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaMouthscale = 400,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaMouthposition = 401,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaMouthsmile = 402,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaMouthlip = 403,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaEyebrowposition = 500,
+  /**
+   * @ignore
+   */
+  FaceShapeAreaEyebrowthickness = 501,
 }
 
 /**
@@ -3858,6 +4165,10 @@ export enum FaceShapeBeautyStyle {
    * @ignore
    */
   FaceShapeBeautyStyleMale = 1,
+  /**
+   * @ignore
+   */
+  FaceShapeBeautyStyleNatural = 2,
 }
 
 /**
@@ -4076,6 +4387,24 @@ export enum SegModelType {
 }
 
 /**
+ * @ignore
+ */
+export enum ScreenColorType {
+  /**
+   * @ignore
+   */
+  ScreenColorAuto = 0,
+  /**
+   * @ignore
+   */
+  ScreenColorGreen = 1,
+  /**
+   * @ignore
+   */
+  ScreenColorBlue = 2,
+}
+
+/**
  * Processing properties for background images.
  */
 export class SegmentationProperty {
@@ -4087,6 +4416,10 @@ export class SegmentationProperty {
    * The accuracy range for recognizing background colors in the image. The value range is [0,1], and the default value is 0.5. The larger the value, the wider the range of identifiable shades of pure color. When the value of this parameter is too large, the edge of the portrait and the pure color in the portrait range are also detected. Agora recommends that you dynamically adjust the value of this parameter according to the actual effect. This parameter only takes effect when modelType is set to SegModelGreen.
    */
   greenCapacity?: number;
+  /**
+   * @ignore
+   */
+  screenColorType?: ScreenColorType;
 }
 
 /**
@@ -4116,7 +4449,7 @@ export class AudioTrackConfig {
    */
   enableLocalPlayback?: boolean;
   /**
-   * Whether to enable audio processing module: true Enable the audio processing module to apply the Automatic Echo Cancellation (AEC), Automatic Noise Suppression (ANS), and Automatic Gain Control (AGC) effects. false : (Default) Do not enable the audio processing module. This parameter only takes effect on AudioTrackDirect in custom audio capturing.
+   * Whether to enable audio processing module: true : Enable the audio processing module to apply the Automatic Echo Cancellation (AEC), Automatic Noise Suppression (ANS), and Automatic Gain Control (AGC) effects. false : (Default) Do not enable the audio processing module. This parameter only takes effect on AudioTrackDirect in custom audio capturing.
    */
   enableAudioProcessing?: boolean;
 }
@@ -4592,7 +4925,7 @@ export class AudioRecordingConfiguration {
  */
 export class AudioEncodedFrameObserverConfig {
   /**
-   * Audio profile. See AudioEncodedFrameObserverPosition.
+   * Audio observer position. See AudioEncodedFrameObserverPosition.
    */
   postionType?: AudioEncodedFrameObserverPosition;
   /**
@@ -5021,6 +5354,40 @@ export enum UploadErrorReason {
 }
 
 /**
+ * @ignore
+ */
+export enum RenewTokenErrorCode {
+  /**
+   * @ignore
+   */
+  RenewTokenSuccess = 0,
+  /**
+   * @ignore
+   */
+  RenewTokenFailure = 1,
+  /**
+   * @ignore
+   */
+  RenewTokenTokenExpired = 2,
+  /**
+   * @ignore
+   */
+  RenewTokenInvalidToken = 3,
+  /**
+   * @ignore
+   */
+  RenewTokenInvalidChannelName = 4,
+  /**
+   * @ignore
+   */
+  RenewTokenInconsistentAppid = 5,
+  /**
+   * @ignore
+   */
+  RenewTokenCanceledByNewRequest = 6,
+}
+
+/**
  * The type of the device permission.
  */
 export enum PermissionType {
@@ -5426,6 +5793,50 @@ export class RecorderStreamInfo {
    * @ignore
    */
   type?: RecorderStreamType;
+}
+
+/**
+ * @ignore
+ */
+export enum RdtStreamType {
+  /**
+   * @ignore
+   */
+  RdtStreamCmd = 0,
+  /**
+   * @ignore
+   */
+  RdtStreamData = 1,
+  /**
+   * @ignore
+   */
+  RdtStreamCount = 2,
+}
+
+/**
+ * @ignore
+ */
+export enum RdtState {
+  /**
+   * @ignore
+   */
+  RdtStateClosed = 0,
+  /**
+   * @ignore
+   */
+  RdtStateOpened = 1,
+  /**
+   * @ignore
+   */
+  RdtStateBlocked = 2,
+  /**
+   * @ignore
+   */
+  RdtStatePending = 3,
+  /**
+   * @ignore
+   */
+  RdtStateBroken = 4,
 }
 
 /**

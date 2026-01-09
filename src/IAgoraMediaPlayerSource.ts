@@ -118,7 +118,7 @@ export interface IMediaPlayerSourceObserver {
   onPlayerCacheStats?(stats: CacheStatistics): void;
 
   /**
-   * The statistics of the media file being played.
+   * Reports the statistics of the media file being played.
    *
    * The SDK triggers this callback once per second to report the statistics of the media file being played.
    *

@@ -5,7 +5,7 @@ import './extension/IAgoraRhythmPlayerExtension';
  */
 export enum RhythmPlayerStateType {
   /**
-   * (810): The virtual metronome is not enabled or disabled already.
+   * 810: The virtual metronome is not enabled or disabled already.
    */
   RhythmPlayerStateIdle = 810,
   /**
@@ -31,7 +31,7 @@ export enum RhythmPlayerStateType {
  */
 export enum RhythmPlayerReason {
   /**
-   * (0): The beat files are played normally without errors.
+   * 0: The beat files are played normally without errors.
    */
   RhythmPlayerReasonOk = 0,
   /**
@@ -47,7 +47,7 @@ export enum RhythmPlayerReason {
    */
   RhythmPlayerReasonCanNotPlay = 802,
   /**
-   * (803): The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
+   * 803: The duration of the beat file exceeds the limit. The maximum duration is 1.2 seconds.
    */
   RhythmPlayerReasonFileOverDurationLimit = 803,
 }

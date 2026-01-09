@@ -563,6 +563,11 @@ export abstract class IMediaPlayer {
   abstract setSoundPositionParams(pan: number, gain: number): number;
 
   /**
+   * @ignore
+   */
+  abstract getAudioBufferDelay(): number;
+
+  /**
    * Sets media player options.
    *
    * The media player supports setting options through key and value. The difference between this method and setPlayerOptionInString is that the value parameter of this method is of type Int, while the value of setPlayerOptionInString is of type String. These two methods cannot be used together.

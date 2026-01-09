@@ -960,7 +960,7 @@ export class ExternalVideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
+   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations.
    */
   colorSpace?: ColorSpace;
 }
@@ -1058,7 +1058,7 @@ export class VideoFrame {
    */
   hdr10MetadataInfo?: Hdr10MetadataInfo;
   /**
-   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations. You can configure the settings according your needs for custom video capturing and rendering.
+   * By default, the color space properties of video frames will apply the Full Range and BT.709 standard configurations.
    */
   colorSpace?: ColorSpace;
 }
@@ -1146,7 +1146,7 @@ export enum ContentInspectType {
 }
 
 /**
- * ContentInspectModule A structure used to configure the frequency of video screenshot and upload.
+ * ContentInspectModule class, a structure used to configure the frequency of video screenshot and upload.
  */
 export class ContentInspectModule {
   /**
@@ -1476,6 +1476,7 @@ export interface IVideoEncodedFrameObserver {
    * @param videoEncodedFrameInfo For the information of the encoded video frame, see EncodedVideoFrameInfo.
    */
   onEncodedVideoFrameReceived?(
+    channelId: string,
     uid: number,
     imageBuffer: Uint8Array,
     length: number,
@@ -1596,15 +1597,15 @@ export enum MediaRecorderContainerFormat {
  */
 export enum MediaRecorderStreamType {
   /**
-   * Only audio.
+   * 1: Only audio.
    */
   StreamTypeAudio = 0x01,
   /**
-   * Only video.
+   * 2: Only video.
    */
   StreamTypeVideo = 0x02,
   /**
-   * (Default) Audio and video.
+   * 3: (Default) Audio and video.
    */
   StreamTypeBoth = 0x01 | 0x02,
 }
