@@ -1,6 +1,5 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.6.2-dev.14)
-  - AgoraRtcEngine_iOS_Preview (4.6.2-dev.14)
+  - AgoraIrisRTC_iOS (4.6.2-dev.15)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - EXConstants (17.1.7):
@@ -1645,8 +1644,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
   - react-native-agora (4.5.2-build.2-rc.1):
-    - AgoraIrisRTC_iOS (= 4.6.2-dev.14)
-    - AgoraRtcEngine_iOS_Preview (= 4.6.2-dev.14)
+    - AgoraIrisRTC_iOS (= 4.6.2-dev.15)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1669,6 +1667,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
+    - ShengwangRtcEngine_iOS (= 4.6.2)
     - Yoga
   - react-native-image-tools (0.8.1):
     - React
@@ -2394,6 +2393,43 @@ PODS:
     - Yoga
   - RNVectorIcons (9.2.0):
     - React-Core
+  - ShengwangInfra_iOS (1.3.5)
+  - ShengwangRtcEngine_iOS (4.6.2):
+    - ShengwangRtcEngine_iOS/AIAEC (= 4.6.2)
+    - ShengwangRtcEngine_iOS/AIAECLL (= 4.6.2)
+    - ShengwangRtcEngine_iOS/AINS (= 4.6.2)
+    - ShengwangRtcEngine_iOS/AINSLL (= 4.6.2)
+    - ShengwangRtcEngine_iOS/AudioBeauty (= 4.6.2)
+    - ShengwangRtcEngine_iOS/ClearVision (= 4.6.2)
+    - ShengwangRtcEngine_iOS/ContentInspect (= 4.6.2)
+    - ShengwangRtcEngine_iOS/FaceCapture (= 4.6.2)
+    - ShengwangRtcEngine_iOS/FaceDetection (= 4.6.2)
+    - ShengwangRtcEngine_iOS/LipSync (= 4.6.2)
+    - ShengwangRtcEngine_iOS/ReplayKit (= 4.6.2)
+    - ShengwangRtcEngine_iOS/RtcBasic (= 4.6.2)
+    - ShengwangRtcEngine_iOS/SpatialAudio (= 4.6.2)
+    - ShengwangRtcEngine_iOS/VideoAv1CodecEnc (= 4.6.2)
+    - ShengwangRtcEngine_iOS/VideoCodecEnc (= 4.6.2)
+    - ShengwangRtcEngine_iOS/VirtualBackground (= 4.6.2)
+    - ShengwangRtcEngine_iOS/VQA (= 4.6.2)
+  - ShengwangRtcEngine_iOS/AIAEC (4.6.2)
+  - ShengwangRtcEngine_iOS/AIAECLL (4.6.2)
+  - ShengwangRtcEngine_iOS/AINS (4.6.2)
+  - ShengwangRtcEngine_iOS/AINSLL (4.6.2)
+  - ShengwangRtcEngine_iOS/AudioBeauty (4.6.2)
+  - ShengwangRtcEngine_iOS/ClearVision (4.6.2)
+  - ShengwangRtcEngine_iOS/ContentInspect (4.6.2)
+  - ShengwangRtcEngine_iOS/FaceCapture (4.6.2)
+  - ShengwangRtcEngine_iOS/FaceDetection (4.6.2)
+  - ShengwangRtcEngine_iOS/LipSync (4.6.2)
+  - ShengwangRtcEngine_iOS/ReplayKit (4.6.2)
+  - ShengwangRtcEngine_iOS/RtcBasic (4.6.2):
+    - ShengwangInfra_iOS (= 1.3.5)
+  - ShengwangRtcEngine_iOS/SpatialAudio (4.6.2)
+  - ShengwangRtcEngine_iOS/VideoAv1CodecEnc (4.6.2)
+  - ShengwangRtcEngine_iOS/VideoCodecEnc (4.6.2)
+  - ShengwangRtcEngine_iOS/VirtualBackground (4.6.2)
+  - ShengwangRtcEngine_iOS/VQA (4.6.2)
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
   - ZXingObjC/Core (3.6.9)
@@ -2403,7 +2439,6 @@ PODS:
     - ZXingObjC/Core
 
 DEPENDENCIES:
-  - AgoraRtcEngine_iOS_Preview (= 4.6.2-dev.14)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
@@ -2503,12 +2538,14 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - ShengwangRtcEngine_iOS (= 4.6.2)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - AgoraIrisRTC_iOS
-    - AgoraRtcEngine_iOS_Preview
+    - ShengwangInfra_iOS
+    - ShengwangRtcEngine_iOS
     - SocketRocket
     - ZXingObjC
 
@@ -2712,8 +2749,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: 51a71535d1a66793e348686c65da5e226780aca8
-  AgoraRtcEngine_iOS_Preview: 4d26a374d24e75cf5a2dcce2e3ea65cc6e748346
+  AgoraIrisRTC_iOS: 5ab14bd0b9e140455acfd26296a76c71eac1625f
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXConstants: 9d62a46a36eae6d28cb978efcbc68aef354d1704
@@ -2769,7 +2805,7 @@ SPEC CHECKSUMS:
   React-logger: e6e6164f1753e46d1b7e2c8f0949cd7937eaf31b
   React-Mapbuffer: 5b4959cbd91e7e8fae42ab0f4b7c25b86fd139a1
   React-microtasksnativemodule: 1695ab137281dd03de967b7bbeb4e392601f6432
-  react-native-agora: 8cf3443dcd6abdacf3298b128716f97707397586
+  react-native-agora: c8629d665f4799ef38c8bce72cc76752b965fb5f
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 6863f9e225b541b481514b0f6d51be0867184c2c
   react-native-slider: 351d1186b07d686b93dad14ce2b474ca62dea0fc
@@ -2811,10 +2847,12 @@ SPEC CHECKSUMS:
   RNScreens: c2e3cc506212228c607b4785b315205e28acbf0f
   RNSVG: ab2249cc665e5d0b2d30657a766a86c99a649a65
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
+  ShengwangInfra_iOS: 0ae2d429ec428cdbaebb39ac883ec64c5c20f7bb
+  ShengwangRtcEngine_iOS: f2f2ae79c5909bb51d138bb4ec62c6761c0ab9a3
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: adb397651e1c00672c12e9495babca70777e411e
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: e68822b858a3ddcb97454a5e254614f5ee268915
+PODFILE CHECKSUM: e3c472dd0d11eafdc13405fe4e79ab3503198bfd
 
 COCOAPODS: 1.16.2
