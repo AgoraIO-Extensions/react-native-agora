@@ -167,7 +167,7 @@ dependencies {
   /// dependencies start
   api 'cn.shengwang.rtc:full-sdk:4.6.2'
   implementation 'cn.shengwang.rtc:full-screen-sharing:4.6.2'
-  api 'io.agora.rtc:iris-rtc:4.6.2-dev.15'
+  api 'io.agora.rtc:iris-rtc:4.6.2-dev.16'
   /// dependencies end
 }
 

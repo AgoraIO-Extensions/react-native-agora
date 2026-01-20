@@ -1,5 +1,5 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.6.2-dev.15)
+  - AgoraIrisRTC_iOS (4.6.2-dev.16)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - EXConstants (17.1.7):
@@ -1644,7 +1644,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
   - react-native-agora (4.5.2-build.2-rc.1):
-    - AgoraIrisRTC_iOS (= 4.6.2-dev.15)
+    - AgoraIrisRTC_iOS (= 4.6.2-dev.16)
     - DoubleConversion
     - glog
     - hermes-engine
