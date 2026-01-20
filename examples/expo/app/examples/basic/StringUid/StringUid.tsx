@@ -89,7 +89,7 @@ export default class StringUid
     const { userAccount } = this.state;
     const userInfo = this.engine?.getUserInfoByUserAccount(userAccount);
     if (userInfo) {
-      this.debug('getUserInfoByUserAccount', 'userInfo', userInfo);
+      this.info('getUserInfoByUserAccount', 'userInfo', userInfo);
     } else {
       this.error('getUserInfoByUserAccount');
     }
