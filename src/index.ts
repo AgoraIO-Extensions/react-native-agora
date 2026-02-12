@@ -33,24 +33,14 @@ AgoraEventEmitter.addListener('AgoraRtcNg:onEvent', handleEvent);
 const instance = new RtcEngineExInternal();
 
 /**
- * Creates one IRtcEngine object.
- *
- * Currently, the Agora RTC SDK v4.x supports creating only one IRtcEngine object for each app.
- *
- * @returns
- * IRtcEngine object.
+ * @ignore
  */
 export function createAgoraRtcEngine(): IRtcEngine {
   return instance;
 }
 
 /**
- * Gets one IMediaPlayerCacheManager instance.
- *
- * Before calling any APIs in the IMediaPlayerCacheManager class, you need to call this method to get a cache manager instance of a media player.
- *
- * @returns
- * The IMediaPlayerCacheManager instance.
+ * @ignore
  */
 export function getMediaPlayerCacheManager(): IMediaPlayerCacheManager {
   return new IMediaPlayerCacheManagerImpl();
