@@ -1,39 +1,39 @@
 import './extension/AgoraMediaPlayerTypesExtension';
 
 /**
- * The playback state.
+ * The state of the media player.
  */
 export enum MediaPlayerState {
   /**
-   * 0: The default state. The media player returns this state code before you open the media resource or after you stop the playback.
+   * 0: Default state. The player returns this state code before you open a media file and after playback ends.
    */
   PlayerStateIdle = 0,
   /**
-   * 1: Opening the media resource.
+   * 1: Opening the media file.
    */
   PlayerStateOpening = 1,
   /**
-   * 2: Opens the media resource successfully.
+   * 2: Media file opened successfully.
    */
   PlayerStateOpenCompleted = 2,
   /**
-   * 3: The media resource is playing.
+   * 3: Playing.
    */
   PlayerStatePlaying = 3,
   /**
-   * 4: Pauses the playback.
+   * 4: Playback paused.
    */
   PlayerStatePaused = 4,
   /**
-   * 5: The playback is complete.
+   * 5: Playback completed.
    */
   PlayerStatePlaybackCompleted = 5,
   /**
-   * 6: The loop is complete.
+   * 6: All loops of playback completed.
    */
   PlayerStatePlaybackAllLoopsCompleted = 6,
   /**
-   * 7: The playback stops.
+   * 7: Playback stopped.
    */
   PlayerStateStopped = 7,
   /**
@@ -65,13 +65,13 @@ export enum MediaPlayerState {
    */
   PlayerStateSetTrackInternal = 56,
   /**
-   * 100: The media player fails to play the media resource.
+   * 100: Playback failed.
    */
   PlayerStateFailed = 100,
 }
 
 /**
- * Reasons for the changes in the media player status.
+ * Reason for media player state change.
  */
 export enum MediaPlayerReason {
   /**
@@ -91,19 +91,19 @@ export enum MediaPlayerReason {
    */
   PlayerReasonNoResource = -3,
   /**
-   * -4: Invalid media resource.
+   * -4: Invalid resource.
    */
   PlayerReasonInvalidMediaSource = -4,
   /**
-   * -5: The media stream type is unknown.
+   * -5: Unknown media stream type.
    */
   PlayerReasonUnknownStreamType = -5,
   /**
-   * -6: The object is not initialized.
+   * -6: Object not initialized.
    */
   PlayerReasonObjNotInitialized = -6,
   /**
-   * -7: The codec is not supported.
+   * -7: Codec not supported.
    */
   PlayerReasonCodecNotSupported = -7,
   /**
@@ -111,31 +111,31 @@ export enum MediaPlayerReason {
    */
   PlayerReasonVideoRenderFailed = -8,
   /**
-   * -9: An error with the internal state of the player occurs.
+   * -9: Invalid internal player state.
    */
   PlayerReasonInvalidState = -9,
   /**
-   * -10: The URL of the media resource cannot be found.
+   * -10: URL not found.
    */
   PlayerReasonUrlNotFound = -10,
   /**
-   * -11: Invalid connection between the player and the Agora Server.
+   * -11: Invalid connection between the player and Agora server.
    */
   PlayerReasonInvalidConnectionState = -11,
   /**
-   * -12: The playback buffer is insufficient.
+   * -12: Insufficient data in the playback buffer.
    */
   PlayerReasonSrcBufferUnderflow = -12,
   /**
-   * -13: The playback is interrupted.
+   * -13: Playback was interrupted abnormally and ended.
    */
   PlayerReasonInterrupted = -13,
   /**
-   * -14: The SDK does not support the method being called.
+   * -14: Unsupported API call by the SDK.
    */
   PlayerReasonNotSupported = -14,
   /**
-   * -15: The authentication information of the media resource is expired.
+   * -15: Authentication information for the media resource network path has expired.
    */
   PlayerReasonTokenExpired = -15,
   /**
@@ -143,29 +143,29 @@ export enum MediaPlayerReason {
    */
   PlayerReasonIpExpired = -16,
   /**
-   * -17: An unknown error.
+   * -17: Unknown error.
    */
   PlayerReasonUnknown = -17,
 }
 
 /**
- * The type of the media stream.
+ * The type of media stream.
  */
 export enum MediaStreamType {
   /**
-   * 0: The type is unknown.
+   * 0: Unknown type.
    */
   StreamTypeUnknown = 0,
   /**
-   * 1: The video stream.
+   * 1: Video stream.
    */
   StreamTypeVideo = 1,
   /**
-   * 2: The audio stream.
+   * 2: Audio stream.
    */
   StreamTypeAudio = 2,
   /**
-   * 3: The subtitle stream.
+   * 3: Subtitle stream.
    */
   StreamTypeSubtitle = 3,
 }
@@ -175,43 +175,43 @@ export enum MediaStreamType {
  */
 export enum MediaPlayerEvent {
   /**
-   * 0: The player begins to seek to a new playback position.
+   * 0: Seek started.
    */
   PlayerEventSeekBegin = 0,
   /**
-   * 1: The player finishes seeking to a new playback position.
+   * 1: Seek completed.
    */
   PlayerEventSeekComplete = 1,
   /**
-   * 2: An error occurs when seeking to a new playback position.
+   * 2: Seek error.
    */
   PlayerEventSeekError = 2,
   /**
-   * 5: The audio track used by the player has been changed.
+   * 5: Current audio track changed.
    */
   PlayerEventAudioTrackChanged = 5,
   /**
-   * 6: The currently buffered data is not enough to support playback.
+   * 6: Current buffer is insufficient for playback.
    */
   PlayerEventBufferLow = 6,
   /**
-   * 7: The currently buffered data is just enough to support playback.
+   * 7: Current buffer is just enough for playback.
    */
   PlayerEventBufferRecover = 7,
   /**
-   * 8: The audio or video playback freezes.
+   * 8: Audio or video stutter occurred.
    */
   PlayerEventFreezeStart = 8,
   /**
-   * 9: The audio or video playback resumes without freezing.
+   * 9: Audio and video stutter stopped.
    */
   PlayerEventFreezeStop = 9,
   /**
-   * 10: The player starts switching the media resource.
+   * 10: Media resource switching started.
    */
   PlayerEventSwitchBegin = 10,
   /**
-   * 11: Media resource switching is complete.
+   * 11: Media resource switching completed.
    */
   PlayerEventSwitchComplete = 11,
   /**
@@ -219,15 +219,15 @@ export enum MediaPlayerEvent {
    */
   PlayerEventSwitchError = 12,
   /**
-   * 13: The first video frame is rendered.
+   * 13: First video frame displayed.
    */
   PlayerEventFirstDisplayed = 13,
   /**
-   * 14: The cached media files reach the limit in number.
+   * 14: Reached the maximum number of cacheable files.
    */
   PlayerEventReachCacheFileMaxCount = 14,
   /**
-   * 15: The cached media files reach the limit in aggregate storage space.
+   * 15: Reached the maximum size of cacheable files.
    */
   PlayerEventReachCacheFileMaxSize = 15,
   /**
@@ -249,25 +249,25 @@ export enum MediaPlayerEvent {
 }
 
 /**
- * Events that occur when media resources are preloaded.
+ * Events that occur when preloading media resources.
  */
 export enum PlayerPreloadEvent {
   /**
-   * 0: Starts preloading media resources.
+   * 0: Start preloading media resources.
    */
   PlayerPreloadEventBegin = 0,
   /**
-   * 1: Preloading media resources is complete.
+   * 1: Preloading of media resources completed.
    */
   PlayerPreloadEventComplete = 1,
   /**
-   * 2: An error occurs when preloading media resources.
+   * 2: Error occurred while preloading media resources.
    */
   PlayerPreloadEventError = 2,
 }
 
 /**
- * The detailed information of the media stream.
+ * All information about the player media stream.
  */
 export class PlayerStreamInfo {
   /**
@@ -279,7 +279,7 @@ export class PlayerStreamInfo {
    */
   streamType?: MediaStreamType;
   /**
-   * The codec of the media stream.
+   * The codec specification of the media stream.
    */
   codecName?: string;
   /**
@@ -287,107 +287,107 @@ export class PlayerStreamInfo {
    */
   language?: string;
   /**
-   * This parameter only takes effect for video streams, and indicates the video frame rate (fps).
+   * Applies to video streams only. Indicates the video frame rate (fps).
    */
   videoFrameRate?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video bitrate (bps).
+   * Applies to video streams only. Indicates the video bitrate (bps).
    */
   videoBitRate?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video width (pixel).
+   * Applies to video streams only. Indicates the video width (px).
    */
   videoWidth?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video height (pixel).
+   * Applies to video streams only. Indicates the video height (px).
    */
   videoHeight?: number;
   /**
-   * This parameter only takes effect for video streams, and indicates the video rotation angle.
+   * Applies to video streams only. Indicates the rotation angle.
    */
   videoRotation?: number;
   /**
-   * This parameter only takes effect for audio streams, and indicates the audio sample rate (Hz).
+   * Applies to audio streams only. Indicates the audio sample rate (Hz).
    */
   audioSampleRate?: number;
   /**
-   * This parameter only takes effect for audio streams, and indicates the audio channel number.
+   * Applies to audio streams only. Indicates the number of audio channels.
    */
   audioChannels?: number;
   /**
-   * This parameter only takes effect for audio streams, and indicates the bit number of each audio sample.
+   * Applies to audio streams only. Indicates the number of bits per audio sample (bit).
    */
   audioBitsPerSample?: number;
   /**
-   * The total duration (ms) of the media stream.
+   * The duration of the media stream (milliseconds).
    */
   duration?: number;
 }
 
 /**
- * Information about the video bitrate of the media resource being played.
+ * Video bitrate information during media playback.
  */
 export class SrcInfo {
   /**
-   * The video bitrate (Kbps) of the media resource being played.
+   * Video bitrate (Kbps) during media playback.
    */
   bitrateInKbps?: number;
   /**
-   * The name of the media resource.
+   * Name of the media resource.
    */
   name?: string;
 }
 
 /**
- * The type of media metadata.
+ * Media metadata type.
  */
 export enum MediaPlayerMetadataType {
   /**
-   * 0: The type is unknown.
+   * 0: Unknown type.
    */
   PlayerMetadataTypeUnknown = 0,
   /**
-   * 1: The type is SEI.
+   * 1: SEI (Supplemental Enhancement Information) type.
    */
   PlayerMetadataTypeSei = 1,
 }
 
 /**
- * Statistics about the media files being cached.
+ * Statistics of cached files.
  */
 export class CacheStatistics {
   /**
-   * The size (bytes) of the media file being played.
+   * Size of the media file played this time, in bytes.
    */
   fileSize?: number;
   /**
-   * The size (bytes) of the media file that you want to cache.
+   * Size of the cached data of the media file played this time, in bytes.
    */
   cacheSize?: number;
   /**
-   * The size (bytes) of the media file that has been downloaded.
+   * Size of the downloaded media file played this time, in bytes.
    */
   downloadSize?: number;
 }
 
 /**
- * The information of the media file being played.
+ * Information about the currently playing media resource.
  */
 export class PlayerPlaybackStats {
   /**
-   * The frame rate (fps) of the video.
+   * Video frame rate, in fps.
    */
   videoFps?: number;
   /**
-   * The bitrate (kbps) of the video.
+   * Video bitrate, in kbps.
    */
   videoBitrateInKbps?: number;
   /**
-   * The bitrate (kbps) of the audio.
+   * Audio bitrate, in kbps.
    */
   audioBitrateInKbps?: number;
   /**
-   * The total bitrate (kbps) of the media stream.
+   * Total bitrate of the media stream, in kbps.
    */
   totalBitrateInKbps?: number;
 }
@@ -401,15 +401,15 @@ export class PlayerUpdatedInfo {
    */
   internalPlayerUuid?: string;
   /**
-   * The ID of a deivce.
+   * Device ID that identifies a device.
    */
   deviceId?: string;
   /**
-   * Height (pixel) of the video.
+   * Video height (pixels).
    */
   videoHeight?: number;
   /**
-   * Width (pixel) of the video.
+   * Video width (pixels).
    */
   videoWidth?: number;
   /**
@@ -417,52 +417,51 @@ export class PlayerUpdatedInfo {
    */
   audioSampleRate?: number;
   /**
-   * The number of audio channels.
+   * Number of audio channels.
    */
   audioChannels?: number;
   /**
-   * The number of bits per audio sample point.
+   * Number of bits per audio sample (bit).
    */
   audioBitsPerSample?: number;
 }
 
 /**
- * Information related to the media file to be played and the playback scenario configurations.
+ * Information and playback settings for the media file to be played.
  */
 export class MediaSource {
   /**
-   * The URL of the media file to be played.
+   * URL of the media resource to be played.
    */
   url?: string;
   /**
-   * The URI (Uniform Resource Identifier) of the media file.
+   * URI (Uniform Resource Identifier) of the media file, used to identify the media file.
    */
   uri?: string;
   /**
-   * The starting position (ms) for playback. The default value is 0.
+   * Start playback position in milliseconds. Default is 0.
    */
   startPos?: number;
   /**
-   * Whether to enable autoplay once the media file is opened: true : (Default) Yes. false : No. If autoplay is disabled, you need to call the play method to play a media file after it is opened.
+   * If you disable auto-play, call the play method after opening the media file to start playback. Whether to enable auto-play after opening the media file: true : (Default) Enable auto-play. false : Disable auto-play.
    */
   autoPlay?: boolean;
   /**
-   * Whether to cache the media file when it is being played: true : Enables caching. false : (Default) Disables caching.
-   *  Agora only supports caching on-demand audio and video streams that are not transmitted in HLS protocol.
-   *  If you need to enable caching, pass in a value to uri; otherwise, caching is based on the url of the media file.
-   *  If you enable this function, the Media Player caches part of the media file being played on your local device, and you can play the cached media file without internet connection. The statistics about the media file being cached are updated every second after the media file is played. See CacheStatistics.
+   * The SDK currently only supports caching for on-demand streams, not for on-demand streams transmitted via HLS.
+   *  Set a value for uri before enabling caching; otherwise, the player uses the media file's url as the cache index.
+   *  When real-time caching is enabled, the player preloads part of the media file to local storage. When you play the file again, the player loads data from the cache to save bandwidth. The statistics of the cached media file update every second after playback starts. See CacheStatistics. Whether to enable real-time caching for this playback: true : Enable real-time caching. false : (Default) Disable real-time caching.
    */
   enableCache?: boolean;
   /**
-   * Whether to allow the selection of different audio tracks when playing this media file: true : Allow to select different audio tracks. false : (Default) Do not allow to select different audio tracks. If you need to set different audio tracks for local playback and publishing to the channel, you need to set this parameter to true, and then call the selectMultiAudioTrack method to select the audio track.
+   * Whether to allow selecting different audio tracks for this playback: true : Allow selecting different audio tracks. false : (Default) Do not allow selecting different audio tracks. If you need to set different audio tracks for local playback and publishing to remote, set this parameter to true and then call the selectMultiAudioTrack method to set the audio track.
    */
   enableMultiAudioTrack?: boolean;
   /**
-   * Whether the media resource to be opened is a live stream or on-demand video distributed through Media Broadcast service: true : The media resource to be played is a live or on-demand video distributed through Media Broadcast service. false : (Default) The media resource is not a live stream or on-demand video distributed through Media Broadcast service. If you need to open a live stream or on-demand video distributed through Broadcast Streaming service, pass in the URL of the media resource to url, and set isAgoraSource as true; otherwise, you don't need to set the isAgoraSource parameter.
+   * If the media resource you want to open is a live or on-demand stream distributed via Agora's CDN, pass the stream URL to url and set isAgoraSource to true. Otherwise, you do not need to set isAgoraSource. Whether the opened media resource is a live or on-demand stream distributed via Agora's CDN: true : The media resource is distributed via Agora's CDN. false : (Default) The media resource is not distributed via Agora's CDN.
    */
   isAgoraSource?: boolean;
   /**
-   * Whether the media resource to be opened is a live stream: true : The media resource is a live stream. false : (Default) The media resource is not a live stream. If the media resource you want to open is a live stream, Agora recommends that you set this parameter as true so that the live stream can be loaded more quickly. If the media resource you open is not a live stream, but you set isLiveSource as true, the media resource is not to be loaded more quickly.
+   * Only when the media resource is a live stream, setting isLiveSource to true can speed up the opening of the media resource. Whether the opened media resource is a live stream: true : Live stream. false : (Default) Not a live stream. If the media resource is a live stream, it is recommended to set this parameter to true to speed up the opening of the live stream.
    */
   isLiveSource?: boolean;
 }

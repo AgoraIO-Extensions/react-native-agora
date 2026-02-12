@@ -7,43 +7,43 @@ import AgoraRtcSurfaceViewNativeComponent from './specs/AgoraRtcSurfaceViewNativ
 import AgoraRtcTextureViewNativeComponent from './specs/AgoraRtcTextureViewNativeComponent';
 
 /**
- * A common property for RtcSurfaceView and RtcTextureView.
+ * Common properties of RtcSurfaceView and RtcTextureView.
  */
 export interface RtcRendererViewProps extends ViewProps {
   /**
-   * The local video view and settings. See VideoCanvas.
+   * Local video display properties. See VideoCanvas.
    */
   canvas: VideoCanvas;
 
   /**
-   * The connection infomation. See RtcConnection.
+   * Connection information. See RtcConnection.
    */
   connection?: RtcConnection;
 }
 
 /**
- * Properties of the RtcSurfaceView.
+ * Properties of RtcSurfaceView.
  */
 export interface RtcSurfaceViewProps extends RtcRendererViewProps {
   /**
-   * Controls whether to place the surface of the RtcSurfaceView on top of the window: true : Place it on top of the window. false : Do not place it on top of another RtcSurfaceView in the window.
+   * Whether to place the surface layer of the RtcSurfaceView above the window: true : Place above the window. false : Do not place above the window.
    */
   zOrderOnTop?: boolean;
 
   /**
-   * Controls whether to place the surface of the RtcSurfaceView on top of another RtcSurfaceView in the window (but still behind the window): true : Place it on top of another RtcSurfaceView in the window. false : Do not place it on top of another RtcSurfaceView in the window.
+   * Whether to place the surface layer of the RtcSurfaceView above another RtcSurfaceView in the window (but still below the window): true : Place above another RtcSurfaceView in the window. false : Do not place above the window.
    */
   zOrderMediaOverlay?: boolean;
 }
 
 /**
- * The RtcSurfaceView class.
+ * RtcSurfaceView class.
  *
- * This class is used for rendering.
- *  Android: This class corresponds to the native SurfaceView.
- *  iOS: This class corresponds to the native UIView. To ensure the rendering of the image, before calling this component, you should proceed based on whether you are joining a channel:
- *  Not joining a channel: First call startPreview, and then call enableVideo.
- *  Joining a channel: First ensure capture is enabled, and then call enableVideo.
+ * This class is used for rendering:
+ *  Android: Corresponds to the native SurfaceView of the Android system.
+ *  iOS: Corresponds to the native UIView of the iOS system. To ensure rendering works, perform the following operations before calling this component depending on whether you have joined a channel:
+ *  If not joined: Call startPreview first, then call enableVideo.
+ *  If joined: Start capture first, then call enableVideo. Related references: RtcSurfaceViewProps RtcRendererViewProps
  */
 export class RtcSurfaceView extends IAgoraRtcRenderView<RtcSurfaceViewProps> {
   /**
@@ -55,11 +55,12 @@ export class RtcSurfaceView extends IAgoraRtcRenderView<RtcSurfaceViewProps> {
 }
 
 /**
- * The RtcTextureView class.
+ * RtcTextureView class.
  *
- * This class is used for rendering and corresponds to the Android native TextureView. This class is only available for the Android platform. To ensure the rendering of the image, before calling this component, you should proceed based on whether you are joining a channel:
- *  Not joining a channel: First call startPreview, and then call enableVideo.
- *  Joining a channel: First ensure capture is enabled, and then call enableVideo.
+ * This class is used for rendering. Corresponds to the native TextureView of the Android system.
+ * To ensure rendering works, perform the following operations before calling this component depending on whether you have joined a channel:
+ *  If not joined: Call startPreview first, then call enableVideo.
+ *  If joined: Start capture first, then call enableVideo. Related reference: RtcRendererViewProps The RtcTextureView class is for Android only and not supported on iOS.
  */
 export class RtcTextureView extends IAgoraRtcRenderView<RtcRendererViewProps> {
   /**

@@ -2,69 +2,69 @@ import './extension/IAgoraSpatialAudioExtension';
 import { RtcConnection } from './IAgoraRtcEngineEx';
 
 /**
- * The spatial position of the remote user or the media player.
+ * Spatial position information of the remote user or media player.
  */
 export class RemoteVoicePositionInfo {
   /**
-   * The coordinates in the world coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * Coordinates in the world coordinate system. This parameter is an array of length 3, representing the coordinates in the forward, right, and up directions respectively.
    */
   position?: number[];
   /**
-   * The unit vector of the x axis in the coordinate system. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * Unit vector of the forward axis in the world coordinate system. This parameter is an array of length 3, representing the directions in the forward, right, and up axes respectively.
    */
   forward?: number[];
 }
 
 /**
- * Sound insulation area settings.
+ * Sound isolation zone settings.
  */
 export class SpatialAudioZone {
   /**
-   * The ID of the sound insulation area.
+   * ID of the sound isolation zone.
    */
   zoneSetId?: number;
   /**
-   * The spatial center point of the sound insulation area. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * The spatial center point of the sound isolation zone. This parameter is an array of length 3, representing coordinates in the forward, right, and up directions respectively.
    */
   position?: number[];
   /**
-   * Starting at position, the forward unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * Unit vector pointing forward from position. This parameter is an array of length 3, representing coordinates in the forward, right, and up directions respectively.
    */
   forward?: number[];
   /**
-   * Starting at position, the right unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * Unit vector pointing right from position. This parameter is an array of length 3, representing coordinates in the forward, right, and up directions respectively.
    */
   right?: number[];
   /**
-   * Starting at position, the up unit vector. This parameter is an array of length 3, and the three values represent the front, right, and top coordinates in turn.
+   * Unit vector pointing upward from position. This parameter is an array of length 3, representing coordinates in the forward, right, and up directions respectively.
    */
   up?: number[];
   /**
-   * The entire sound insulation area is regarded as a cube; this represents the length of the forward side in the unit length of the game engine.
+   * Treating the entire sound isolation zone as a cube, this represents the length of the forward edge, in game engine units.
    */
   forwardLength?: number;
   /**
-   * The entire sound insulation area is regarded as a cube; this represents the length of the right side in the unit length of the game engine.
+   * Treating the entire sound isolation zone as a cube, this represents the length of the right edge, in game engine units.
    */
   rightLength?: number;
   /**
-   * The entire sound insulation area is regarded as a cube; this represents the length of the up side in the unit length of the game engine.
+   * Treating the entire sound isolation zone as a cube, this represents the length of the upward edge, in game engine units.
    */
   upLength?: number;
   /**
-   * The sound attenuation coefficient when users within the sound insulation area communicate with external users. The value range is [0,1]. The values are as follows:
-   *  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-   *  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-   *  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the audioAttenuation parameter.
-   *  (0.5,1]: Strong attenuation mode (default value is 1), that is, the volume and timbre attenuate rapidly during propagation.
+   * Sound attenuation coefficient when users inside and outside the sound isolation zone communicate. Value range: [0,1]. Where:
+   *  0: Broadcast mode, volume and timbre do not attenuate with distance; the local user hears no change regardless of distance.
+   *  (0,0.5): Weak attenuation mode; volume and timbre attenuate slightly, allowing sound to travel farther than in real environments.
+   *  0.5: Simulates real-world volume attenuation, equivalent to not setting audioAttenuation.
+   *  (0.5,1]: Strong attenuation mode (default is 1); volume and timbre attenuate rapidly.
    */
   audioAttenuation?: number;
 }
 
 /**
- * This class calculates user positions through the SDK to implement the spatial audio effect.
+ * This class implements spatial audio by calculating user coordinates through the SDK.
  *
- * This class inherits from IBaseSpatialAudioEngine. Before calling other APIs in this class, you need to call the initialize method to initialize this class.
+ * This class inherits from IBaseSpatialAudioEngine. Before calling other APIs under this class, you need to call the initialize method to initialize it.
  */
 export abstract class ILocalSpatialAudioEngine {
   /**
@@ -75,26 +75,26 @@ export abstract class ILocalSpatialAudioEngine {
   /**
    * Initializes ILocalSpatialAudioEngine.
    *
-   * Before calling other methods of the ILocalSpatialAudioEngine class, you need to call this method to initialize ILocalSpatialAudioEngine.
-   *  The SDK supports creating only one ILocalSpatialAudioEngine instance for an app.
+   * You need to call this method to initialize ILocalSpatialAudioEngine before calling other methods of the ILocalSpatialAudioEngine class.
+   *  The SDK only supports creating one instance of ILocalSpatialAudioEngine per app.
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure.
+   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract initialize(): number;
 
   /**
-   * Updates the spatial position of the specified remote user.
+   * Updates the spatial position information of a remote user.
    *
-   * After successfully calling this method, the SDK calculates the spatial audio parameters based on the relative position of the local and remote user. Call this method after the or joinChannel method.
+   * After successfully calling this method, the SDK calculates spatial audio parameters based on the relative positions of the local and remote users. This method must be called after joinChannel.
    *
-   * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   * @param posInfo The spatial position of the remote user. See RemoteVoicePositionInfo.
+   * @param uid User ID. Must be the same as the user ID used when the user joined the channel.
+   * @param posInfo Spatial position information of the remote user. See RemoteVoicePositionInfo.
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure.
+   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract updateRemotePosition(
     uid: number,
@@ -111,15 +111,16 @@ export abstract class ILocalSpatialAudioEngine {
   ): number;
 
   /**
-   * Removes the spatial position of the specified remote user.
+   * Deletes the spatial position information of the specified remote user.
    *
-   * After successfully calling this method, the local user no longer hears the specified remote user. After leaving the channel, to avoid wasting computing resources, call this method to delete the spatial position information of the specified remote user. Otherwise, the user's spatial position information will be saved continuously. When the number of remote users exceeds the number of audio streams that can be received as set in setMaxAudioRecvCount, the system automatically unsubscribes from the audio stream of the user who is furthest away based on relative distance.
+   * After this method is successfully called, the local user will no longer hear the specified remote user.
+   * To avoid wasting computational resources after leaving the channel, you need to call this method to remove the spatial position information of the specified remote user. Otherwise, the spatial position information of that user will be retained. When the number of remote users exceeds the maximum number of audio streams that can be received as set in setMaxAudioRecvCount, the SDK will automatically unsubscribe from the audio streams of the farthest users based on relative distance.
    *
-   * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
+   * @param uid User ID. Must match the user ID used when the user joined the channel.
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure.
+   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract removeRemotePosition(uid: number): number;
 
@@ -201,21 +202,17 @@ export abstract class ILocalSpatialAudioEngine {
   abstract muteRemoteAudioStream(uid: number, mute: boolean): number;
 
   /**
-   * Sets the sound attenuation effect for the specified user.
+   * Sets the audio attenuation effect for the specified user.
    *
-   * @param uid The user ID. This parameter must be the same as the user ID passed in when the user joined the channel.
-   * @param attenuation For the user's sound attenuation coefficient, the value range is [0,1]. The values are as follows:
-   *  0: Broadcast mode, where the volume and timbre are not attenuated with distance, and the volume and timbre heard by local users do not change regardless of distance.
-   *  (0,0.5): Weak attenuation mode, that is, the volume and timbre are only weakly attenuated during the propagation process, and the sound can travel farther than the real environment.
-   *  0.5: (Default) simulates the attenuation of the volume in the real environment; the effect is equivalent to not setting the speaker_attenuation parameter.
-   *  (0.5,1]: Strong attenuation mode, that is, the volume and timbre attenuate rapidly during the propagation process.
-   * @param forceSet Whether to force the user's sound attenuation effect: true : Force attenuation to set the sound attenuation of the user. At this time, the attenuation coefficient of the sound insulation area set in the audioAttenuation of the SpatialAudioZone does not take effect for the user.
-   *  If the sound source and listener are inside and outside the sound isolation area, the sound attenuation effect is determined by the audioAttenuation in SpatialAudioZone.
-   *  If the sound source and the listener are in the same sound insulation area or outside the same sound insulation area, the sound attenuation effect is determined by attenuation in this method. false : Do not force attenuation to set the user's sound attenuation effect, as shown in the following two cases.
+   * @param uid User ID. Must be the same as the user ID used when joining the channel.
+   * @param attenuation The audio attenuation coefficient for the user. The range is [0,1].
+   * @param forceSet Whether to force the audio attenuation effect for the user: true : Forces the use of attenuation to set the user's audio attenuation effect. In this case, the audioAttenuation set in SpatialAudioZone does not take effect for this user. false : Does not force the use of attenuation to set the user's audio attenuation effect. There are two cases:
+   *  If the audio source and listener are inside and outside the sound insulation zone respectively, the attenuation effect is determined by audioAttenuation in SpatialAudioZone.
+   *  If the audio source and listener are both inside the same sound insulation zone or both outside, the attenuation effect is determined by attenuation in this method.
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure.
+   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setRemoteAudioAttenuation(
     uid: number,
@@ -238,13 +235,14 @@ export abstract class ILocalSpatialAudioEngine {
   ): number;
 
   /**
-   * Removes the spatial positions of all remote users.
+   * Deletes the spatial position information of all remote users.
    *
-   * After successfully calling this method, the local user no longer hears any remote users. After leaving the channel, to avoid wasting resources, you can also call this method to delete the spatial positions of all remote users.
+   * After successfully calling this method, the local user will no longer hear any remote users.
+   * After leaving the channel, you can also call this method to delete all remote users' spatial position information to avoid wasting computing resources.
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure.
+   *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract clearRemotePositions(): number;
 }

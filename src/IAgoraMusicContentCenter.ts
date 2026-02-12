@@ -151,15 +151,15 @@ export class MvProperty {
 }
 
 /**
- * The climax parts of the music.
+ * @ignore
  */
 export class ClimaxSegment {
   /**
-   * The time (ms) when the climax part begins.
+   * @ignore
    */
   startTimeMs?: number;
   /**
-   * The time (ms) when the climax part ends.
+   * @ignore
    */
   endTimeMs?: number;
 }
