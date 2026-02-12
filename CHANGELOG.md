@@ -1,5 +1,12 @@
 
 
+## [4.6.2-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.2-build.2-rc.1...v4.6.2-rc.1) (2026-02-12)
+
+
+### Features
+
+* expo example ([#886](https://github.com/AgoraIO-Extensions/react-native-agora/issues/886)) ([f5bdea0](https://github.com/AgoraIO-Extensions/react-native-agora/commit/f5bdea071d9251d9e8b233f0c4a0aeaeb169c6dc))
+
 ## [4.5.2-build.2-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.2-build.140-rc.2...v4.5.2-build.2-rc.1) (2025-09-30)
 
 
