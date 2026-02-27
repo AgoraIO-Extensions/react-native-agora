@@ -7,6 +7,9 @@ PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
 change_dir_legacy="${PROJECT_ROOT}/examples/legacy/src"
 change_dir_expo="${PROJECT_ROOT}/examples/expo/app/examples"
 
+echo "Remove expo example podfile.lock"
+rm -rf "${PROJECT_ROOT}/examples/expo/ios/Podfile.lock"
+
 find "$change_dir_legacy" -type f | while read -r file; do
     sed -i.bak "s/${old_package_name}/${new_package_name}/g" "$file"
     echo "Replaced in $file"
