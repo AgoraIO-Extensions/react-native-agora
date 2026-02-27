@@ -20,5 +20,4 @@ jobs:
           pre-command: |
             sh scripts/publishCN/rewrite-dep.sh
             sh scripts/publishCN/rewrite-example.sh
-            rm -rf yarn.lock
           create-pr: true
