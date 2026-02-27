@@ -42,5 +42,5 @@ runs:
       env:
         POD_INSTALL: '0'
       if: steps.yarn-cache.outputs.cache-hit != 'true'
-      run: yarn install --immutable
+      run: yarn install
       shell: bash
