@@ -15,15 +15,3 @@ done
 find "$change_dir_legacy" -name "*.bak" -type f -delete
 
 echo "All replacements completed successfully, and backup files have been deleted."
-
-change_file=${PROJECT_ROOT}/examples/legacy/ios/Podfile
-sed "s/${old_package_name}/${new_package_name}/g" ${change_file} > tmp && mv tmp ${change_file}
-sed "s/${old_native_sdk_iOS_rtc}/${new_native_sdk_iOS_rtc}/g" ${change_file} > tmp && mv tmp ${change_file}
-sed "s/${old_native_sdk_iOS_rtc_special}/${new_native_sdk_iOS_rtc_special}/g" ${change_file} > tmp && mv tmp ${change_file}
-echo "${change_file} rewritten successfully"
-
-change_file2=${PROJECT_ROOT}/examples/expo/ios/Podfile
-sed "s/${old_package_name}/${new_package_name}/g" ${change_file2} > tmp && mv tmp ${change_file2}
-sed "s/${old_native_sdk_iOS_rtc}/${new_native_sdk_iOS_rtc}/g" ${change_file2} > tmp && mv tmp ${change_file2}
-sed "s/${old_native_sdk_iOS_rtc_special}/${new_native_sdk_iOS_rtc_special}/g" ${change_file2} > tmp && mv tmp ${change_file2}
-echo "${change_file2} rewritten successfully"
