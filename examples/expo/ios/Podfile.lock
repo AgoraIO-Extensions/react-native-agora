@@ -1,5 +1,5 @@
 PODS:
-  - AgoraIrisRTC_iOS2 (4.6.2-dev.25)
+  - AgoraIrisRTC_iOS2 (4.6.2-pip.1)
   - AgoraVideo_Special_iOS (4.6.2.70)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
@@ -1644,8 +1644,8 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-agora (4.5.2-build.2-rc.1):
-    - AgoraIrisRTC_iOS2 (= 4.6.2-dev.25)
+  - react-native-agora (4.6.2-rc.1):
+    - AgoraIrisRTC_iOS2 (= 4.6.2-pip.1)
     - AgoraVideo_Special_iOS (= 4.6.2.70)
     - DoubleConversion
     - glog
@@ -2712,7 +2712,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS2: 4cb14ca79fe4b2b3135c5dfc9d00ea01aafe817d
+  AgoraIrisRTC_iOS2: 4306db3c2352679211b766159cb3f9363c992d63
   AgoraVideo_Special_iOS: 9bd42c487f936f4d335d5630e2632f0b08e214f5
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
@@ -2769,7 +2769,7 @@ SPEC CHECKSUMS:
   React-logger: e6e6164f1753e46d1b7e2c8f0949cd7937eaf31b
   React-Mapbuffer: 5b4959cbd91e7e8fae42ab0f4b7c25b86fd139a1
   React-microtasksnativemodule: 1695ab137281dd03de967b7bbeb4e392601f6432
-  react-native-agora: 75382d8c1f423531481963b588fed4e2cb199945
+  react-native-agora: 9a5fb641df12d5fabde3d7a4cf17d73638a418b3
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 6863f9e225b541b481514b0f6d51be0867184c2c
   react-native-slider: 351d1186b07d686b93dad14ce2b474ca62dea0fc
