@@ -16,7 +16,3 @@ echo "${change_comment_file} rewritten successfully"
 change_file=${PROJECT_ROOT}/tsconfig.json
 sed "s/${old_package_name}/${new_package_name}/g" ${change_file} > tmp && mv tmp ${change_file}
 echo "${change_file} rewritten successfully"
-
-change_file=${PROJECT_ROOT}/react-native-agora.podspec
-sed "s/${old_package_name}/${new_package_name}/g" ${change_file} > tmp && mv tmp ${change_file}
-echo "${change_file} rewritten successfully"
