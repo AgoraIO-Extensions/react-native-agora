@@ -9,6 +9,7 @@ import { isDebuggable } from '../Utils';
 import AgoraRtcNg from '../specs';
 
 import { MediaRecorderInternal } from './MediaRecorderInternal';
+import { VideoEffectObjectInternal } from './VideoEffectObjectInternal';
 
 /**
  * @internal
@@ -64,6 +65,13 @@ export function callIrisApi(funcName: string, params: any): any {
       params.toJSON = function () {
         return { ...json, playerId: params.mediaPlayerId };
       };
+    } else if (funcName.startsWith('VideoEffectObject_')) {
+      params.videoEffectObjectId = // @ts-ignore
+        (this as VideoEffectObjectInternal).getVideoEffectObjectId();
+      const json = params.toJSON?.call();
+      params.toJSON = function () {
+        return { ...json, objectId: params.videoEffectObjectId };
+      };
     } else if (funcName.startsWith('MediaRecorder_')) {
       // @ts-ignore
       params.nativeHandle = (this as MediaRecorderInternal).nativeHandle;
@@ -99,6 +107,13 @@ export function callIrisApi(funcName: string, params: any): any {
           params.mediaPlayerId = params.media_player.getMediaPlayerId();
           params.toJSON = function () {
             return { playerId: params.mediaPlayerId };
+          };
+          break;
+        case 'RtcEngine_destroyVideoEffectObject_66d092b':
+          params.videoEffectObjectId =
+            params.videoEffectObject.getVideoEffectObjectId();
+          params.toJSON = function () {
+            return { objectId: params.videoEffectObjectId };
           };
           break;
         case 'RtcEngine_destroyMediaRecorder_95cdef5':

@@ -9,7 +9,7 @@ import {
   SimulcastStreamConfig,
   SimulcastStreamMode,
 } from '../AgoraBase';
-import { IAudioSpectrumObserver } from '../AgoraMediaBase';
+import { IAudioSpectrumObserver, MediaSourceType } from '../AgoraMediaBase';
 import { IH265Transcoder } from '../IAgoraH265Transcoder';
 import { IMediaEngine } from '../IAgoraMediaEngine';
 import { IMediaPlayer } from '../IAgoraMediaPlayer';
@@ -23,6 +23,7 @@ import {
   IMetadataObserver,
   IRtcEngineEventHandler,
   IVideoDeviceManager,
+  IVideoEffectObject,
   LeaveChannelOptions,
   MetadataType,
   RtcEngineContext,
@@ -45,6 +46,7 @@ import { MediaEngineInternal } from './MediaEngineInternal';
 import { MediaPlayerInternal } from './MediaPlayerInternal';
 import { MediaRecorderInternal } from './MediaRecorderInternal';
 import { MusicContentCenterInternal } from './MusicContentCenterInternal';
+import { VideoEffectObjectInternal } from './VideoEffectObjectInternal';
 import { callIrisApi } from './call';
 import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
 
@@ -439,5 +441,24 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
 
   getAgoraPip(): AgoraPip {
     return this._agora_pip;
+  }
+
+  override createVideoEffectObject(
+    bundlePath: string,
+    type?: MediaSourceType
+  ): IVideoEffectObject {
+    // @ts-ignore
+    const videoEffectObjectId = super.createVideoEffectObject(
+      bundlePath,
+      type
+    ) as number;
+    return new VideoEffectObjectInternal(videoEffectObjectId);
+  }
+
+  override destroyVideoEffectObject(
+    videoEffectObject: IVideoEffectObject
+  ): number {
+    const ret = super.destroyVideoEffectObject(videoEffectObject);
+    return ret;
   }
 }
