@@ -5,6 +5,15 @@ PROJECT_ROOT=$(realpath ${MY_PATH}/../..)
 . ${PROJECT_ROOT}/scripts/publishCN/common.sh
 
 change_file=${PROJECT_ROOT}/package.json
-sed "s/${old_package_name}/${new_package_name}/g" ${change_file} > tmp && mv tmp ${change_file}
+sed "s/\"name\": \"react-native-agora\"/\"name\": \"react-native-shengwang\"/g" ${change_file} > tmp && mv tmp ${change_file}
+sed "s/${old_repository}/${new_repository}/g" ${change_file} > tmp && mv tmp ${change_file}
 echo "${change_file} rewritten successfully"
 
+
+change_comment_file=${PROJECT_ROOT}/scripts/terra/comment_config.yaml
+sed "s/ng_json_template_en/ng_json_template_cn/g" ${change_comment_file} > tmp && mv tmp ${change_comment_file}
+echo "${change_comment_file} rewritten successfully"
+
+change_file=${PROJECT_ROOT}/tsconfig.json
+sed "s/${old_package_name}/${new_package_name}/g" ${change_file} > tmp && mv tmp ${change_file}
+echo "${change_file} rewritten successfully"

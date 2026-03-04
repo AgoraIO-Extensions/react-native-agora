@@ -10,6 +10,7 @@ import {
   MusicContentCenterConfiguration,
   MusicPlayMode,
 } from '../IAgoraMusicContentCenter';
+import { callIrisApi } from '../internal/call';
 
 import { IMediaPlayerImpl } from './IAgoraMediaPlayerImpl';
 
@@ -558,5 +559,3 @@ export class IMusicContentCenterImpl implements IMusicContentCenter {
     return 'MusicContentCenter_getInternalSongCode_3a3d1e7';
   }
 }
-
-import { callIrisApi } from '../internal/IrisApiEngine';

@@ -25,7 +25,7 @@ export const IAudioSpectrumObserver = t.iface([], {
 });
 
 export const IVideoEncodedFrameObserver = t.iface([], {
-  "onEncodedVideoFrameReceived": t.opt(t.func("void", t.param("uid", "number"), t.param("imageBuffer", "Uint8Array"), t.param("length", "number"), t.param("videoEncodedFrameInfo", "EncodedVideoFrameInfo"))),
+  "onEncodedVideoFrameReceived": t.opt(t.func("void", t.param("channelId", "string"), t.param("uid", "number"), t.param("imageBuffer", "Uint8Array"), t.param("length", "number"), t.param("videoEncodedFrameInfo", "EncodedVideoFrameInfo"))),
 });
 
 export const IVideoFrameObserver = t.iface([], {
