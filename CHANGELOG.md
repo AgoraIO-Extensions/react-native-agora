@@ -1,5 +1,18 @@
 
 
+## [4.6.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.3...v4.6.2) (2026-03-05)
+
+
+### Bug Fixes
+
+* picture in picture issue in iOS ([b825c78](https://github.com/AgoraIO-Extensions/react-native-agora/commit/b825c787cf8daaed1b23842499d496b85e31dacb))
+* script ([#885](https://github.com/AgoraIO-Extensions/react-native-agora/issues/885)) ([4dbdffd](https://github.com/AgoraIO-Extensions/react-native-agora/commit/4dbdffd7682ddac1e8541f61a99866d4ab5db75d))
+
+
+### Features
+
+* support native 4.6.2 ([#915](https://github.com/AgoraIO-Extensions/react-native-agora/issues/915)) ([03c369e](https://github.com/AgoraIO-Extensions/react-native-agora/commit/03c369e54586c17582531154a85ddbedd1af16eb))
+
 ## [4.6.2-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.2-build.2-rc.1...v4.6.2-rc.1) (2026-02-12)
 
 
