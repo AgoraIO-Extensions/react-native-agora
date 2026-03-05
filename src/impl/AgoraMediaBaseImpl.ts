@@ -10,6 +10,8 @@ import {
   IVideoFrameObserver,
   MetaInfoKey,
 } from '../AgoraMediaBase';
+import { callIrisApi } from '../internal/call';
+
 // @ts-ignore
 export class IVideoFrameMetaInfoImpl implements IVideoFrameMetaInfo {
   getMetaInfoStr(key: MetaInfoKey): string {
@@ -130,6 +132,7 @@ export function processIVideoEncodedFrameObserver(
     case 'onEncodedVideoFrameReceived':
       if (handler.onEncodedVideoFrameReceived !== undefined) {
         handler.onEncodedVideoFrameReceived(
+          jsonParams.channelId,
           jsonParams.uid,
           jsonParams.imageBuffer,
           jsonParams.length,
@@ -233,5 +236,3 @@ export function processIMediaRecorderObserver(
       break;
   }
 }
-
-import { callIrisApi } from '../internal/IrisApiEngine';

@@ -7,11 +7,7 @@ import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-} from './IrisApiEngine';
+import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
 
 export class MediaRecorderInternal extends IMediaRecorderImpl {
   static _observers: Map<string, IMediaRecorderObserver> = new Map<

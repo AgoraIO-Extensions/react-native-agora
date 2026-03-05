@@ -5,7 +5,10 @@ MY_PATH=$(realpath $(dirname "$0"))
 PROJECT_ROOT=$(realpath ${MY_PATH}/..)
 ANDROID_BUILD_GRADLE_PATH="${PROJECT_ROOT}/android/build.gradle"
 iOS_PODSPEC_PATH="${PROJECT_ROOT}/react-native-agora.podspec"
-EXAMPLE_IOS_PODFILE_PATH="${PROJECT_ROOT}/example/ios/Podfile"
+EXAMPLE_IOS_PODFILE_PATH="${PROJECT_ROOT}/examples/legacy/ios/Podfile"
+EXAMPLE_EXPO_IOS_PODFILE_PATH="${PROJECT_ROOT}/examples/expo/ios/Podfile"
+TERRA_CONFIG_PATH1="${PROJECT_ROOT}/scripts/terra/config/types_config.yaml"
+TERRA_CONFIG_PATH2="${PROJECT_ROOT}/scripts/terra/config/impl_config.yaml"
 if [ "$#" -lt 1 ]; then
     exit 1
 fi
@@ -13,6 +16,7 @@ INPUT=$1
 
 MAVEN_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .maven[]')
 IRIS_MAVEN_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .iris_maven[]')
+DEP_VERSION=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .version')
 
 # Function to modify dependencies
 modify_dependencies() {
@@ -61,5 +65,23 @@ else
   sed -i.bak -e '/#dependencies start/,/#dependencies end/{//!d;}' -e "/#dependencies start/r $TEMP_FILE" "$EXAMPLE_IOS_PODFILE_PATH"
   rm "${EXAMPLE_IOS_PODFILE_PATH}.bak"
   rm "$TEMP_FILE"
-  echo "example/ios/Podfile updated."
+  echo "examples/legacy/ios/Podfile updated."
+
+  EXAMPLE_DEPENDENCIES=$(printf "%s\n%s" "$COCOAPODS_DEPENDENCIES" | sed 's/^/  /')
+  TEMP_FILE=$(mktemp)
+  echo "$EXAMPLE_DEPENDENCIES" > "$TEMP_FILE"
+  sed -i.bak -e '/#dependencies start/,/#dependencies end/{//!d;}' -e "/#dependencies start/r $TEMP_FILE" "$EXAMPLE_EXPO_IOS_PODFILE_PATH"
+  rm "${EXAMPLE_EXPO_IOS_PODFILE_PATH}.bak"
+  rm "$TEMP_FILE"
+  echo "examples/expo/ios/Podfile updated."
+fi
+
+if [ -z "$DEP_VERSION" ]; then
+  echo "can not find dependencies version."
+else
+  echo "update dependencies version to $TERRA_CONFIG_PATH1"
+  sed 's|sdkVersion: \(.*\)|sdkVersion: '$DEP_VERSION'|g' $TERRA_CONFIG_PATH1 > tmp
+  mv tmp $TERRA_CONFIG_PATH1
+  sed 's|sdkVersion: \(.*\)|sdkVersion: '$DEP_VERSION'|g' $TERRA_CONFIG_PATH2 > tmp
+  mv tmp $TERRA_CONFIG_PATH2
 fi

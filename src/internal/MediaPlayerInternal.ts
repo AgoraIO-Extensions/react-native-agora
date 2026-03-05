@@ -19,11 +19,7 @@ const checkers = createCheckers(
   IAgoraMediaPlayerSourceTI
 );
 
-import {
-  DeviceEventEmitter,
-  EVENT_TYPE,
-  EventProcessor,
-} from './IrisApiEngine';
+import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
 
 export class MediaPlayerInternal extends IMediaPlayerImpl {
   static _source_observers: Map<number, IMediaPlayerSourceObserver[]> = new Map<

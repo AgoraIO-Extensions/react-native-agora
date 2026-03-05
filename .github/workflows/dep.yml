@@ -10,10 +10,13 @@ on:
 
 jobs:
   update-dependencies:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Get dependencies
         id: dep
@@ -25,13 +28,22 @@ jobs:
         run: |
           sh scripts/dep.sh ${{ steps.dep.outputs.matches }}
 
-      - name: Setup
-        uses: ./.github/actions/setup
+      - name: Generate code and comment by terra
+        uses: AgoraIO-Extensions/actions/.github/actions/generate@main
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          generate-code: true
+          generate-comment: true
+          generate-code-command: |
+            sh generate-prepare.sh
+            sh generate-code.sh
+          generate-comment-command: |
+            sh generate-comment.sh
 
       - name: Update example
         run: |
-          rm -rf example/ios/Podfile.lock
-          yarn pod-install example/ios
+          rm -rf examples/expo/ios/Podfile.lock
+          yarn pod-install examples/expo/ios
 
       - name: Create pull request
         uses: AgoraIO-Extensions/actions/.github/actions/pr@main

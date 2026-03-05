@@ -11,16 +11,16 @@ import {
 } from './AgoraMediaPlayerTypes';
 
 /**
- * Provides callbacks for media players.
+ * Provides callbacks for the media player.
  */
 export interface IMediaPlayerSourceObserver {
   /**
-   * Reports the changes of playback state.
+   * Reports player state changes.
    *
-   * When the state of the media player changes, the SDK triggers this callback to report the current playback state.
+   * When the player state changes, the SDK triggers this callback to report the new playback state.
    *
-   * @param state The playback state. See MediaPlayerState.
-   * @param reason The reason for the changes in the media player status. See MediaPlayerReason.
+   * @param state New playback state. See MediaPlayerState.
+   * @param reason Reason for the player state change. See MediaPlayerReason.
    */
   onPlayerSourceStateChanged?(
     state: MediaPlayerState,
@@ -28,22 +28,22 @@ export interface IMediaPlayerSourceObserver {
   ): void;
 
   /**
-   * Reports the playback progress of the media file.
+   * Reports the playback progress of the current media resource.
    *
-   * When playing media files, the SDK triggers this callback every two second to report current playback progress.
+   * While playing a media file, the SDK automatically triggers this callback every second to report the current playback progress.
    *
-   * @param positionMs The playback position (ms) of media files.
-   * @param timeStampMs The NTP timestamp (ms) of the current playback progress.
+   * @param positionMs Current playback progress in ms.
+   * @param timestampMs NTP timestamp of the current playback progress in ms.
    */
   onPositionChanged?(positionMs: number, timestampMs: number): void;
 
   /**
-   * Reports the player events.
+   * Reports player events.
    *
-   * After calling the seek method, the SDK triggers the callback to report the results of the seek operation.
+   * After calling seek to locate playback, the SDK triggers this callback to report the result of the seek operation.
    *
-   * @param eventCode The player event. See MediaPlayerEvent.
-   * @param elapsedTime The time (ms) when the event occurs.
+   * @param eventCode Player event. See MediaPlayerEvent.
+   * @param elapsedTime Time of the event (in milliseconds).
    * @param message Information about the event.
    */
   onPlayerEvent?(
@@ -53,31 +53,31 @@ export interface IMediaPlayerSourceObserver {
   ): void;
 
   /**
-   * Occurs when the media metadata is received.
+   * Reports received media metadata.
    *
-   * The callback occurs when the player receives the media metadata and reports the detailed information of the media metadata.
+   * After parsing the media metadata, the SDK triggers this callback to report the data type and content of the metadata.
    *
-   * @param data The detailed data of the media metadata.
-   * @param length The data length (bytes).
+   * @param data Specific data in a user-defined format.
+   * @param length Data length in bytes.
    */
   onMetaData?(data: Uint8Array, length: number): void;
 
   /**
-   * Reports the playback duration that the buffered data can support.
+   * Reports the playable duration of the current buffered data.
    *
-   * When playing online media resources, the SDK triggers this callback every two seconds to report the playback duration that the currently buffered data can support.
-   *  When the playback duration supported by the buffered data is less than the threshold (0 by default), the SDK returns PlayerEventBufferLow (6).
-   *  When the playback duration supported by the buffered data is greater than the threshold (0 by default), the SDK returns PlayerEventBufferRecover (7).
+   * While playing online media resources, the SDK triggers this callback every second to report the duration that the current buffered data can support for playback.
+   *  When the playable duration of the buffered data is less than the threshold (default is 0), PlayerEventBufferLow (6) is returned.
+   *  When the playable duration is greater than the threshold (default is 0), PlayerEventBufferRecover (7) is returned.
    *
-   * @param playCachedBuffer The playback duration (ms) that the buffered data can support.
+   * @param playCachedBuffer The duration (in milliseconds) that the current buffered data can support for playback.
    */
   onPlayBufferUpdated?(playCachedBuffer: number): void;
 
   /**
-   * Reports the events of preloaded media resources.
+   * Reports events during media resource preloading.
    *
-   * @param src The URL of the media resource.
-   * @param event Events that occur when media resources are preloaded. See PlayerPreloadEvent.
+   * @param src Path of the media resource.
+   * @param event Event that occurred during media resource preloading. See PlayerPreloadEvent.
    */
   onPreloadEvent?(src: string, event: PlayerPreloadEvent): void;
 
@@ -92,46 +92,46 @@ export interface IMediaPlayerSourceObserver {
   onAgoraCDNTokenWillExpire?(): void;
 
   /**
-   * Occurs when the video bitrate of the media resource changes.
+   * Callback when video bitrate of media resource changes.
    *
-   * @param from Information about the video bitrate of the media resource being played. See SrcInfo.
-   * @param to Information about the changed video bitrate of media resource being played. See SrcInfo.
+   * @param from Information about the video bitrate of the media resource before the change. See SrcInfo.
+   * @param to Information about the video bitrate of the media resource after the change. See SrcInfo.
    */
   onPlayerSrcInfoChanged?(from: SrcInfo, to: SrcInfo): void;
 
   /**
-   * Occurs when information related to the media player changes.
+   * Callback when media player information changes.
    *
-   * When the information about the media player changes, the SDK triggers this callback. You can use this callback for troubleshooting.
+   * When media player-related information changes, the SDK triggers this callback. You can use it for troubleshooting and diagnostics.
    *
-   * @param info Information related to the media player. See PlayerUpdatedInfo.
+   * @param info Media player-related information. See PlayerUpdatedInfo.
    */
   onPlayerInfoUpdated?(info: PlayerUpdatedInfo): void;
 
   /**
-   * Reports the statistics of the media file being cached.
+   * Reports information about the currently cached media resources.
    *
-   * After you call the openWithMediaSource method and set enableCache as true, the SDK triggers this callback once per second to report the statistics of the media file being cached.
+   * After calling the openWithMediaSource method and setting the enableCache member to true, the SDK triggers this callback once per second after the media file is opened, reporting statistical data of the currently cached media files.
    *
-   * @param stats The statistics of the media file being cached. See CacheStatistics.
+   * @param stats Information about the media resources in the cache. See CacheStatistics.
    */
   onPlayerCacheStats?(stats: CacheStatistics): void;
 
   /**
-   * The statistics of the media file being played.
+   * Reports information about the currently playing media resource.
    *
-   * The SDK triggers this callback once per second to report the statistics of the media file being played.
+   * After the media resource starts playing, the SDK triggers this callback once per second to report information about the media resource.
    *
-   * @param stats The statistics of the media file. See PlayerPlaybackStats.
+   * @param stats Information about the media resource. See PlayerPlaybackStats.
    */
   onPlayerPlaybackStats?(stats: PlayerPlaybackStats): void;
 
   /**
-   * Reports the volume of the media player.
+   * Audio volume indication callback for the media player.
    *
-   * The SDK triggers this callback every 200 milliseconds to report the current volume of the media player.
+   * The SDK triggers this callback every 200 ms to report the current volume of the media player.
    *
-   * @param volume The volume of the media player. The value ranges from 0 to 255.
+   * @param volume The current volume of the player, ranging from [0,255].
    */
   onAudioVolumeIndication?(volume: number): void;
 }

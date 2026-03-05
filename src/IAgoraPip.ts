@@ -1,282 +1,295 @@
-/**
- * Represents a video stream configuration for Picture-in-Picture (PiP) mode.
- *
- * This class holds the connection and canvas settings needed to display
- * a video stream within the PiP window.
- */
-
 import { RtcRendererViewProps } from './AgoraRtcRenderView';
 
 /**
- * Layout configuration for Picture-in-Picture (PiP) video streams.
+ * Layout configuration for picture-in-picture video streams.
  *
- * This class defines how multiple video streams should be arranged in a flow layout,
- * where streams are placed from left to right and top to bottom in sequence.
- *
- * Example layout with padding=10, spacing=5, column=3:
- * ```
- * ┌────────────────────────────────────┐
- * │                                    │
- * │  ┌────┐  ┌────┐  ┌────┐           │
- * │  │ 1  │  │ 2  │  │ 3  │           │
- * │  └────┘  └────┘  └────┘           │
- * │                                    │
- * │  ┌────┐  ┌────┐  ┌────┐           │
- * │  │ 4  │  │ 5  │  │ 6  │           │
- * │  └────┘  └────┘  └────┘           │
- * │                                    │
- * │  ┌────┐                           │
- * │  │ 7  │                           │
- * │  └────┘                           │
- * │                                    │
- * └────────────────────────────────────┘
- * ```
+ * Since Available since v4.6.2. This class defines how multiple video streams are arranged in a flowing layout, from left to right and top to bottom.
  */
 export class AgoraPipContentViewLayout {
   /**
-   * The padding around the entire layout in pixels.
-   * Creates space between the layout edges and the streams.
-   * If null, no padding will be applied.
+   * Padding around the entire layout in pixels. Used to create space between the layout edge and video streams. If null, no padding is applied.
    */
   padding?: number;
 
   /**
-   * The horizontal and vertical spacing between streams in pixels.
-   * Creates consistent gaps between adjacent streams.
-   * If null, streams will be placed directly adjacent to each other.
+   * Horizontal and vertical spacing between video streams in pixels. Used to create consistent spacing between adjacent video streams. If null, video streams are placed directly adjacent.
    */
   spacing?: number;
 
   /**
-   * Maximum number of rows allowed in the layout.
-   * When reached, no more rows will be created even if more streams exist.
-   * If null, rows will be created as needed to fit all streams.
-   * Must be greater than 0 or null.
+   * Maximum number of rows allowed in the layout. Once the maximum is reached, no new rows are created even if more video streams exist. If null, rows are created as needed to accommodate all streams. Must be greater than 0 or null.
    */
   row?: number;
 
   /**
-   * Maximum number of streams per row.
-   * When reached, a new row will be started.
-   * If null, streams will flow to fill the available width.
-   * Must be greater than 0 or null.
+   * Maximum number of video streams per row. Once the maximum is reached, a new row starts. If null, video streams flow to fill the available width. Must be greater than 0 or null.
    */
   column?: number;
 }
 
 /**
- * Configuration options for Agora Picture-in-Picture (PiP) mode.
+ * Configuration options for Agora picture-in-picture mode.
  *
- * This class provides platform-specific options to configure PiP behavior
- * for both Android and iOS platforms.
+ * Since Available since v4.6.2. This class provides platform-specific options to configure picture-in-picture behavior on Android and iOS.
  */
 export class AgoraPipOptions {
   /**
-   * Whether to automatically enter PiP mode.
-   *
+   * Whether to automatically enter picture-in-picture mode.
    */
   autoEnterEnabled?: boolean;
 
   /**
-   * The horizontal aspect ratio of the PiP window.
+   * Horizontal aspect ratio of the picture-in-picture window.
    *
-   * Platform: Android only
+   * (Android only)
    */
   aspectRatioX?: number;
 
   /**
-   * The vertical aspect ratio of the PiP window.
+   * Vertical aspect ratio of the picture-in-picture window.
    *
-   * Platform: Android only
+   * (Android only)
    */
   aspectRatioY?: number;
 
   /**
-   * The left coordinate of the source rectangle hint.
+   * Left coordinate of the source rectangle hint.
    *
-   * Used to specify the initial position of the PiP window.
-   * Platform: Android only
+   * Used to specify the initial position of the picture-in-picture window.
+   * (Android only)
    */
   sourceRectHintLeft?: number;
 
   /**
-   * The top coordinate of the source rectangle hint.
+   * Top coordinate of the source rectangle hint.
    *
-   * Used to specify the initial position of the PiP window.
-   * Platform: Android only
+   * Used to specify the initial position of the picture-in-picture window.
+   * (Android only)
    */
   sourceRectHintTop?: number;
 
   /**
-   * The right coordinate of the source rectangle hint.
+   * Right coordinate of the source rectangle hint.
    *
-   * Used to specify the initial position of the PiP window.
-   * Platform: Android only
+   * Used to specify the initial position of the picture-in-picture window.
+   * (Android only)
    */
   sourceRectHintRight?: number;
 
   /**
-   * The bottom coordinate of the source rectangle hint.
+   * Bottom coordinate of the source rectangle hint.
    *
-   * Used to specify the initial position of the PiP window.
-   * Platform: Android only
+   * Used to specify the initial position of the picture-in-picture window.
+   * (Android only)
    */
   sourceRectHintBottom?: number;
 
   /**
-   * Whether to enable seamless resize for the PiP window.
+   * Whether to enable seamless resizing of the picture-in-picture window.
    *
-   * When enabled, the PiP window will resize smoothly.
-   * Defaults to false.
-   * Platform: Android only
+   * When enabled, the window resizes smoothly.
+   * Default is false.
+   * (Android only)
    */
   seamlessResizeEnabled?: boolean;
 
   /**
-   * Whether to use external state monitoring.
+   * Whether to use an external state monitor.
    *
-   * When enabled, creates a dedicated thread to monitor PiP window state.
-   * Use externalStateMonitorInterval to configure monitoring frequency.
-   * Defaults to true.
-   * Platform: Android only
+   * When enabled, a dedicated thread is created to monitor the state of the picture-in-picture window. Use externalStateMonitorInterval to configure the monitoring frequency.
+   * Default is true.
+   * (Android only)
    */
   useExternalStateMonitor?: boolean;
 
   /**
-   * The interval for external state monitoring in milliseconds.
+   * Interval for external state monitoring, in milliseconds.
    *
-   * Only takes effect when useExternalStateMonitor is true.
-   * Defaults to 100ms.
-   * Platform: Android only
+   * Takes effect only when useExternalStateMonitor is true.
+   * Default is 100ms.
+   * (Android only)
    */
   externalStateMonitorInterval?: number;
 
   /**
-   * Configuration for video transcoding.
+   * Video transcoding configuration.
    *
-   * Only takes effect when contentView is set to 0.
-   * When user let the SDK manage the view, all video streams will place in a root view in the PIP window.
-   * Platform: iOS only
+   * Takes effect only when contentView is set to 0. When the SDK manages the views, all video streams are placed in the root view of the picture-in-picture window.
+   * (iOS only)
    */
   videoStreams?: RtcRendererViewProps[];
 
   /**
-   * Layout configuration for PiP video streams.
+   * Layout configuration for picture-in-picture video streams.
    *
-   * Only takes effect when contentView is set to 0.
-   * Platform: iOS only
+   * Takes effect only when contentView is set to 0.
+   * (iOS only)
    */
   contentViewLayout?: AgoraPipContentViewLayout;
 
   /**
-   * The sourceContentView determines the source frame for the PiP animation and restore target.
-   * Pass 0 to use the app's root view. For optimal animation, set this to the view containing
-   * your video content. The system uses this view for the PiP enter/exit animations and as the
-   * restore target when returning to the app or stopping PiP.
+   * sourceContentView determines the source frame and restore target for picture-in-picture animation. Pass 0 to use the app's root view. For best animation experience, set this to the view containing video content. The system uses this view for enter/exit animations and as the restore target when returning to the app or stopping picture-in-picture.
    */
   sourceContentView?: number;
 
   /**
-   * The contentView determines which view will be displayed in the PIP window.
-   * If you pass 0, the PIP controller will automatically manage and display all video streams.
-   * If you pass a specific view ID, you become responsible for managing the content shown in the PIP window.
+   * contentView determines which view will be displayed in the picture-in-picture window. If 0 is passed, the picture-in-picture controller automatically manages and displays all video streams. If a specific view ID is passed, you are responsible for managing the content displayed in the picture-in-picture window.
    */
   contentView?: number;
 
   /**
-   * The preferred width of the PiP content.
+   * Preferred width of the picture-in-picture content.
    *
-   * Platform: iOS only
+   * (iOS only)
    */
   preferredContentWidth?: number;
 
   /**
-   * The preferred height of the PiP content.
+   * Preferred height of the picture-in-picture content.
    *
-   * Platform: iOS only
+   * (iOS only)
    */
   preferredContentHeight?: number;
 
   /**
-   * The control style for the PiP window.
-   *
+   * Control style of the picture-in-picture window.
    * Available styles:
-   * * 0: Show all system controls (default)
-   * * 1: Hide forward and backward buttons
-   * * 2: Hide play/pause button and progress bar (recommended)
-   * * 3: Hide all system controls including close and restore buttons
-   *
-   * Platform: iOS only
+   *  0: Show all system controls (default)
+   *  1: Hide forward and back buttons
+   *  2: Hide play/pause button and progress bar (recommended)
+   *  3: Hide all system controls, including close and restore buttons (iOS only)
    */
   controlStyle?: number;
 }
 
-/** Represents the current state of Picture-in-Picture mode. */
+/**
+ * Represents the current state of Picture-in-Picture mode.
+ *
+ * Since Available since v4.6.2.
+ */
 export enum AgoraPipState {
-  /** PiP mode has been successfully started. */
+  /**
+   * 0: Picture-in-Picture mode has started successfully.
+   */
   pipStateStarted = 0,
 
-  /** PiP mode has been stopped. */
+  /**
+   * 1: Picture-in-Picture mode has stopped.
+   */
   pipStateStopped = 1,
 
-  /** PiP mode failed to start or encountered an error. */
+  /**
+   * 2: Failed to start Picture-in-Picture mode or encountered an error.
+   */
   pipStateFailed = 2,
 }
 
 /**
- * Observer for Picture-in-Picture state changes.
+ * Observer for picture-in-picture state changes.
  *
- * Implement this class to receive notifications about PiP state transitions
- * and potential errors.
+ * Since Available since v4.6.2. Implement this class to receive notifications of picture-in-picture state transitions and potential errors.
  */
 export interface AgoraPipStateChangedObserver {
   /**
-   * Callback function for PiP state changes.
-   *
-   * @param state - The new PiP state
-   * @param error - Error message if the state change failed, null otherwise
+   * @ignore
    */
   onPipStateChanged: (state: AgoraPipState, error: string | null) => void;
 }
 
 /**
- * Controller interface for managing Picture-in-Picture functionality.
+ * Controller interface for managing picture-in-picture functionality.
  *
- * This abstract class defines the methods required to control PiP mode,
- * including setup, state management, and lifecycle operations.
+ * Since Available since v4.6.2. This abstract class defines methods required to control picture-in-picture mode, including setup, state management, and lifecycle operations.
  */
 export abstract class AgoraPip {
-  /** Releases resources associated with PiP mode. */
+  /**
+   * Releases resources related to picture-in-picture.
+   *
+   * Since Available since v4.6.2.
+   */
   abstract release(): void;
 
-  /** Registers an observer for PiP state changes. */
+  /**
+   * Registers a picture-in-picture state change observer.
+   *
+   * @param observer Picture-in-picture state change observer. See AgoraPipStateChangedObserver.
+   */
   abstract registerPipStateChangedObserver(
     observer: AgoraPipStateChangedObserver
   ): void;
 
-  /** Unregister an observer PiP state observer. */
+  /**
+   * Unregisters the picture-in-picture state change observer.
+   *
+   * @param observer The picture-in-picture state change observer. See AgoraPipStateChangedObserver.
+   */
   abstract unregisterPipStateChangedObserver(
     observer: AgoraPipStateChangedObserver
   ): void;
 
-  /** Checks if PiP mode is supported on the current device. */
+  /**
+   * Checks whether the current device supports picture-in-picture mode.
+   *
+   * Since Available since v4.6.2.
+   *
+   * @returns
+   * true : The current device supports picture-in-picture mode. false : The current device does not support picture-in-picture mode.
+   */
   abstract pipIsSupported(): boolean;
 
-  /** Checks if automatic PiP mode entry is supported. */
+  /**
+   * Checks whether auto-entering picture-in-picture mode is supported.
+   *
+   * Since Available since v4.6.2.
+   *
+   * @returns
+   * true : Auto-entering picture-in-picture mode is supported. false : Auto-entering picture-in-picture mode is not supported.
+   */
   abstract pipIsAutoEnterSupported(): boolean;
 
-  /** Checks if PiP mode is currently active. */
+  /**
+   * Checks whether picture-in-picture mode is activated.
+   *
+   * Since Available since v4.6.2.
+   *
+   * @returns
+   * true : Picture-in-picture mode is activated. false : Picture-in-picture mode is not activated.
+   */
   abstract isPipActivated(): boolean;
 
-  /** Configures PiP mode with the specified options. */
+  /**
+   * Configures picture-in-picture mode.
+   *
+   * Since Available since v4.6.2.
+   *
+   * @param options Picture-in-picture configuration options. See AgoraPipOptions.
+   *
+   * @returns
+   * true : The method call succeeds. false : The method call fails.
+   */
   abstract pipSetup(options: AgoraPipOptions): boolean;
 
-  /** Starts PiP mode with the current configuration. */
+  /**
+   * Starts picture-in-picture mode.
+   *
+   * Since Available since v4.6.2.
+   *
+   * @returns
+   * true : The method call succeeds. false : The method call fails.
+   */
   abstract pipStart(): boolean;
 
-  /** Stops PiP mode. */
+  /**
+   * Stops picture-in-picture mode.
+   *
+   * Since Available since v4.6.2.
+   */
   abstract pipStop(): void;
 
-  /** Releases resources associated with PiP mode. */
+  /**
+   * Releases resources related to picture-in-picture.
+   *
+   * Since Available since v4.6.2.
+   */
   abstract pipDispose(): void;
 }
