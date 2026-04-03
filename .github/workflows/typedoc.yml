@@ -37,7 +37,7 @@ jobs:
         run: |
           zip -r react-native-agora-docs.zip docs
       - name: Upload Artifact ⬆️
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: react-native-agora-docs.zip
           path: react-native-agora-docs.zip
@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload docs directory
-          path: 'docs'
+          path: "docs"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
