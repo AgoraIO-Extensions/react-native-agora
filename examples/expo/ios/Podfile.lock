@@ -1,6 +1,6 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.5.2.140-build.6)
-  - AgoraRtcEngine_Special_iOS (4.5.2.140)
+  - AgoraIrisRTC_iOS (4.5.2.2-build.4)
+  - AgoraRtcEngine_Special_iOS (4.5.2.2.LITE)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - EXConstants (17.1.7):
@@ -272,6 +272,10 @@ PODS:
     - Yoga
   - ExpoAsset (11.1.7):
     - ExpoModulesCore
+  - ExpoCamera (16.1.11):
+    - ExpoModulesCore
+    - ZXingObjC/OneD
+    - ZXingObjC/PDF417
   - ExpoFileSystem (18.1.11):
     - ExpoModulesCore
   - ExpoFont (13.3.2):
@@ -1640,9 +1644,9 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-agora (4.5.3):
-    - AgoraIrisRTC_iOS (= 4.5.2.140-build.6)
-    - AgoraRtcEngine_Special_iOS (= 4.5.2.140)
+  - react-native-agora (4.5.2-build.2-rc.1):
+    - AgoraIrisRTC_iOS (= 4.5.2.2-build.4)
+    - AgoraRtcEngine_Special_iOS (= 4.5.2.2.LITE)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2392,9 +2396,14 @@ PODS:
     - React-Core
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
+  - ZXingObjC/Core (3.6.9)
+  - ZXingObjC/OneD (3.6.9):
+    - ZXingObjC/Core
+  - ZXingObjC/PDF417 (3.6.9):
+    - ZXingObjC/Core
 
 DEPENDENCIES:
-  - AgoraRtcEngine_Special_iOS (= 4.5.2.140)
+  - AgoraRtcEngine_Special_iOS (= 4.5.2.2.LITE)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
@@ -2406,6 +2415,7 @@ DEPENDENCIES:
   - expo-dev-menu (from `../node_modules/expo-dev-menu`)
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
+  - ExpoCamera (from `../node_modules/expo-camera/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoHead (from `../node_modules/expo-router/ios`)
@@ -2500,6 +2510,7 @@ SPEC REPOS:
     - AgoraIrisRTC_iOS
     - AgoraRtcEngine_Special_iOS
     - SocketRocket
+    - ZXingObjC
 
 EXTERNAL SOURCES:
   boost:
@@ -2524,6 +2535,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-dev-menu-interface/ios"
   ExpoAsset:
     :path: "../node_modules/expo-asset/ios"
+  ExpoCamera:
+    :path: "../node_modules/expo-camera/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   ExpoFont:
@@ -2699,8 +2712,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: 41a033327414eeea7a8666e69aa7cd2530b70a76
-  AgoraRtcEngine_Special_iOS: aa5c57a16e9b43734f38da4c6105a15d55c33873
+  AgoraIrisRTC_iOS: 7cd832a01e9607c4d07fa9d4891158ecc803a15c
+  AgoraRtcEngine_Special_iOS: 6240ca22a740b9ca12394857b58aad74ade72e1c
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXConstants: 9d62a46a36eae6d28cb978efcbc68aef354d1704
@@ -2712,6 +2725,7 @@ SPEC CHECKSUMS:
   expo-dev-menu: 2868212810f6651bc5c30e72c636ef64de31ec6b
   expo-dev-menu-interface: 609c35ae8b97479cdd4c9e23c8cf6adc44beea0e
   ExpoAsset: 7bdbbacf4e6752ae6e3cf70555cee076f6229e6e
+  ExpoCamera: fc1ab0e1c665b543a307c577df107e37cc2edc8e
   ExpoFileSystem: 9681caebda23fa1b38a12a9c68b2bade7072ce20
   ExpoFont: 091a47eeaa1b30b0b760aa1d0a2e7814e8bf6fe6
   ExpoHead: 7c1893efc8dc79570bdcbdadce175723f4c037ec
@@ -2755,7 +2769,7 @@ SPEC CHECKSUMS:
   React-logger: e6e6164f1753e46d1b7e2c8f0949cd7937eaf31b
   React-Mapbuffer: 5b4959cbd91e7e8fae42ab0f4b7c25b86fd139a1
   React-microtasksnativemodule: 1695ab137281dd03de967b7bbeb4e392601f6432
-  react-native-agora: d7979a8f866a05d36b753146653217af35043a61
+  react-native-agora: 535bf9995f1c241670fe24d41a261d90b5fbcb9e
   react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
   react-native-safe-area-context: 6863f9e225b541b481514b0f6d51be0867184c2c
   react-native-slider: 351d1186b07d686b93dad14ce2b474ca62dea0fc
@@ -2799,7 +2813,8 @@ SPEC CHECKSUMS:
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 357d74ecf46ef5be0234a0a2b08a9f728b37d93f
+  ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 851ca2817530080bcee3fa81d8aaa6a2e1694a55
+PODFILE CHECKSUM: 71f2fe07c943ff6ea88293368a671f0d417cb24c
 
 COCOAPODS: 1.16.2
