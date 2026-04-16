@@ -1,3 +1,4 @@
+import { VideoEffectNodeId } from '../../../../../../src/IAgoraRtcEngine';
 import {
   buildBundleCacheSyncTargets,
   buildStyleEffectOperations,
@@ -12,6 +13,10 @@ import {
 } from './VideoEffectHelpers';
 
 describe('VideoEffectHelpers', () => {
+  it('exposes the Sticker node id for video effect object callers', () => {
+    expect(VideoEffectNodeId.Sticker).toBe(1 << 3);
+  });
+
   it('parses bundle UI options into label/relativePath/templateName triples', () => {
     expect(
       parseBundleUiOptions({

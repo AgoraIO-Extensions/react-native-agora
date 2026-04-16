@@ -93,9 +93,6 @@ const FILTER_STRENGTH_FALLBACK = 0.5;
 const STYLE_INTENSITY_FALLBACK = 0.95;
 const THROTTLE_MS = 120;
 const SAVE_RESET_REFRESH_MS = 250;
-// The bundled materials include a Sticker template, but the current RN enum only exports
-// Beauty/StyleMakeup/Filter. We infer the next bit for the Sticker node to preserve the task scope.
-const STICKER_VIDEO_EFFECT_NODE_ID = 1 << 3;
 
 function getTemplateItems(options: BundleTemplateOption[]) {
   return options.map((option) => ({
@@ -365,10 +362,6 @@ export default class VideoEffect
       return;
     }
 
-    if (this.state.filterApplied) {
-      this.removeVideoEffectNode(VideoEffectNodeId.Filter, 'Filter');
-    }
-
     this.handleSdkResult(
       'addOrUpdateVideoEffect(StyleMakeup)',
       this.videoEffectObject.addOrUpdateVideoEffect(
@@ -380,7 +373,6 @@ export default class VideoEffect
       buildStyleEffectOperations('style_makeup_option', styleIntensity)
     );
     this.setState({
-      filterApplied: false,
       styleMakeupApplied: true,
     });
   };
@@ -396,10 +388,6 @@ export default class VideoEffect
       return;
     }
 
-    if (this.state.styleMakeupApplied) {
-      this.removeVideoEffectNode(VideoEffectNodeId.StyleMakeup, 'StyleMakeup');
-    }
-
     this.handleSdkResult(
       'addOrUpdateVideoEffect(Filter)',
       this.videoEffectObject.addOrUpdateVideoEffect(
@@ -412,7 +400,6 @@ export default class VideoEffect
     );
     this.setState({
       filterApplied: true,
-      styleMakeupApplied: false,
     });
   };
 
@@ -430,7 +417,7 @@ export default class VideoEffect
     this.handleSdkResult(
       'addOrUpdateVideoEffect(Sticker)',
       this.videoEffectObject.addOrUpdateVideoEffect(
-        STICKER_VIDEO_EFFECT_NODE_ID,
+        VideoEffectNodeId.Sticker,
         selectedStickerTemplate?.templateName ?? ''
       )
     );
@@ -438,7 +425,7 @@ export default class VideoEffect
   };
 
   removeSticker = () => {
-    this.removeVideoEffectNode(STICKER_VIDEO_EFFECT_NODE_ID, 'Sticker');
+    this.removeVideoEffectNode(VideoEffectNodeId.Sticker, 'Sticker');
     this.setState({ stickerApplied: false });
   };
 

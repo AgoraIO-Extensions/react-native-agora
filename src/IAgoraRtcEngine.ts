@@ -2764,6 +2764,10 @@ export enum VideoEffectNodeId {
    * (4): Filter effect node.
    */
   Filter = 1 << 2,
+  /**
+   * (8): Sticker effect node.
+   */
+  Sticker = 1 << 3,
 }
 
 /**
