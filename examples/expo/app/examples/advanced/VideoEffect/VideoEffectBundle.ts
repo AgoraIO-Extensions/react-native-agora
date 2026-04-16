@@ -36,6 +36,21 @@ function getRNFS(): RNFSModule {
   return module.default ?? module;
 }
 
+type VideoEffectCacheRootSource = {
+  ExternalCachesDirectoryPath?: string;
+  CachesDirectoryPath?: string;
+};
+
+export function getCacheRootForVideoEffectBundle(
+  platformOs: string,
+  cacheRootSource: VideoEffectCacheRootSource
+) {
+  if (platformOs === 'android') {
+    return cacheRootSource.ExternalCachesDirectoryPath;
+  }
+  return cacheRootSource.CachesDirectoryPath;
+}
+
 async function resetPreparedRoot(rnfs: RNFSModule, preparedRoot: string) {
   if (await rnfs.exists(preparedRoot)) {
     await rnfs.unlink(preparedRoot);
@@ -96,7 +111,10 @@ async function collectPreparedPathsRecursively(
 
 export async function prepareVideoEffectBundle(): Promise<PreparedVideoEffectBundle> {
   const rnfs = getRNFS();
-  const cacheRoot = rnfs.ExternalCachesDirectoryPath;
+  const cacheRoot = getCacheRootForVideoEffectBundle(Platform.OS, rnfs);
+  if (!cacheRoot) {
+    throw new Error('No cache root available for video effect bundle');
+  }
   const preparedPaths = getPreparedVideoEffectPaths(cacheRoot);
 
   await resetPreparedRoot(rnfs, preparedPaths.preparedRoot);

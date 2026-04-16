@@ -1,4 +1,5 @@
 import {
+  getCacheRootForVideoEffectBundle,
   getPreparedVideoEffectPaths,
   isPreparedVideoEffectRootValid,
 } from './VideoEffectBundle';
@@ -40,5 +41,21 @@ describe('VideoEffectBundle', () => {
         '/cache/AgoraBeautyMaterial/resource',
       ])
     ).toBe(true);
+  });
+
+  it('chooses platform-specific cache root', () => {
+    expect(
+      getCacheRootForVideoEffectBundle('android', {
+        ExternalCachesDirectoryPath: '/android-cache',
+        CachesDirectoryPath: '/ios-cache',
+      })
+    ).toBe('/android-cache');
+
+    expect(
+      getCacheRootForVideoEffectBundle('ios', {
+        ExternalCachesDirectoryPath: '/android-cache',
+        CachesDirectoryPath: '/ios-cache',
+      })
+    ).toBe('/ios-cache');
   });
 });
