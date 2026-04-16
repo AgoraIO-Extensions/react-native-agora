@@ -342,12 +342,11 @@ export default class VideoEffect
       return;
     }
     if (!this.applyOperations(this.buildBeautyOperations(beautyOptions))) {
-      if (this.rollbackVideoEffectNode(VideoEffectNodeId.Beauty, 'Beauty')) {
-        this.setState({
-          appliedBeautyOptions: null,
-          appliedBeautyTemplate: null,
-        });
-      }
+      this.rollbackVideoEffectNode(VideoEffectNodeId.Beauty, 'Beauty');
+      this.setState({
+        appliedBeautyOptions: null,
+        appliedBeautyTemplate: null,
+      });
       return;
     }
     this.setState({
@@ -425,17 +424,14 @@ export default class VideoEffect
         buildStyleEffectOperations('style_makeup_option', styleIntensity)
       )
     ) {
-      if (
-        this.rollbackVideoEffectNode(
-          VideoEffectNodeId.StyleMakeup,
-          'StyleMakeup'
-        )
-      ) {
-        this.setState({
-          appliedStyleIntensity: null,
-          appliedStyleMakeupTemplate: null,
-        });
-      }
+      this.rollbackVideoEffectNode(
+        VideoEffectNodeId.StyleMakeup,
+        'StyleMakeup'
+      );
+      this.setState({
+        appliedStyleIntensity: null,
+        appliedStyleMakeupTemplate: null,
+      });
       return;
     }
     this.setState({
@@ -478,12 +474,11 @@ export default class VideoEffect
         buildStyleEffectOperations('filter_effect_option', filterStrength)
       )
     ) {
-      if (this.rollbackVideoEffectNode(VideoEffectNodeId.Filter, 'Filter')) {
-        this.setState({
-          appliedFilterStrength: null,
-          appliedFilterTemplate: null,
-        });
-      }
+      this.rollbackVideoEffectNode(VideoEffectNodeId.Filter, 'Filter');
+      this.setState({
+        appliedFilterStrength: null,
+        appliedFilterTemplate: null,
+      });
       return;
     }
     this.setState({
