@@ -330,6 +330,7 @@ The Agora React Native Expo sample app includes various examples organized in th
 - MediaPlayer: Play media during calls
 - PictureInPicture: Enable Picture-in-Picture mode
 - ScreenShare: Share device screen
+- VideoEffect: Full VideoEffectObject demo with Beauty, Style Makeup, Filter, and Sticker
 - And many more...
 
 ### Hook-based Examples
