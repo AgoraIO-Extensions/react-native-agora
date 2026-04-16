@@ -27,7 +27,7 @@ The resulting Expo example should feel native to the current sample app, while s
   - apply and remove Sticker templates
   - persist Beauty configuration via `Save`
   - restore Beauty configuration via `Reset`
-- Ship the `AgoraBeautyMaterial/beauty_material_functional` bundle with the Expo demo so the example works out of the box.
+- Ship the `AgoraBeautyMaterial` resource root with the Expo demo so the example works out of the box.
 - Automatically prepare a valid local bundle directory without exposing a bundle path input to the user.
 - Keep Android and iOS behavior aligned as much as possible.
 
@@ -60,15 +60,17 @@ The React Native SDK surface already exposes the required `VideoEffectObject` AP
 - `getVideoEffectIntParam`
 - `getVideoEffectBoolParam`
 
-The Electron example additionally depends on a shipped resource bundle:
+The Electron example additionally depends on a shipped resource root:
 
-- `AgoraBeautyMaterial/beauty_material_functional`
+- `AgoraBeautyMaterial`
 
 and reads bundle metadata from:
 
 - `config.json`
 - `saved.json`
 - `saved.cache`
+
+The full `AgoraBeautyMaterial` root is required, not just `beauty_material_functional`, because some templates reference sibling assets such as `../../resource`.
 
 This resource-driven behavior must remain part of the Expo migration.
 
@@ -82,8 +84,8 @@ This layer is responsible for shipping and preparing the beauty material bundle 
 
 Responsibilities:
 
-- include `AgoraBeautyMaterial/beauty_material_functional` in Android and iOS app resources
-- materialize the bundle into a stable absolute directory that can be passed to `createVideoEffectObject`
+- include `AgoraBeautyMaterial` in Android and iOS app resources
+- materialize the bundle root into a stable absolute directory, then pass the `beauty_material_functional` subdirectory inside that prepared root to `createVideoEffectObject`
 - avoid repeated full copies when a prepared directory already exists and contains the required files
 - expose status and failure information to the demo page
 
@@ -141,24 +143,24 @@ The screen should not expose raw bundle path editing. Instead, it should show a 
 
 ### Android
 
-The `AgoraBeautyMaterial/beauty_material_functional` directory will be added to the Expo Android app assets.
+The `AgoraBeautyMaterial` directory will be added to the Expo Android app assets.
 
 At runtime:
 
 - the app prepares a target directory under a writable location such as `ExternalCachesDirectoryPath`
-- the bundled asset directory is recursively copied into that prepared directory
-- the returned prepared absolute directory becomes the bundle path for `createVideoEffectObject`
+- the bundled asset root is recursively copied into that prepared directory
+- the returned prepared absolute path for `AgoraBeautyMaterial/beauty_material_functional` becomes the bundle path for `createVideoEffectObject`
 
 If existing utilities cannot recursively copy an Android assets directory, a minimal Android native helper will be added for this purpose only.
 
 ### iOS
 
-The same resource directory will be added to the iOS project resources in Xcode.
+The same `AgoraBeautyMaterial` root directory will be added to the iOS project resources in Xcode.
 
 At runtime:
 
-- the app copies the bundled directory into a writable prepared directory
-- the prepared directory is used as the bundle path for `createVideoEffectObject`
+- the app copies the bundled root directory into a writable prepared directory
+- the prepared absolute path for `AgoraBeautyMaterial/beauty_material_functional` is used as the bundle path for `createVideoEffectObject`
 
 If React Native filesystem utilities are insufficient for the required directory-copy behavior, a minimal iOS helper will be added to copy a bundled directory into the target cache directory.
 
@@ -169,6 +171,7 @@ The prepared bundle directory must satisfy these requirements:
 - absolute path
 - contains `config.json`
 - contains all referenced template subdirectories
+- preserves sibling resources required by relative paths such as `../../resource`
 - writable for `saved.json` and `saved.cache` synchronization
 - reusable across screen openings unless invalidated
 
@@ -265,8 +268,8 @@ Expected file additions and updates:
 
 ### New Resource Files
 
-- Expo Android assets for `AgoraBeautyMaterial/beauty_material_functional`
-- Expo iOS resources for `AgoraBeautyMaterial/beauty_material_functional`
+- Expo Android assets for `AgoraBeautyMaterial`
+- Expo iOS resources for `AgoraBeautyMaterial`
 
 ### Optional Minimal Native Helpers
 
@@ -333,7 +336,7 @@ Risk:
 
 Mitigation:
 
-- limit migration scope to the required `beauty_material_functional` bundle only
+- include only the required `AgoraBeautyMaterial` root from the Electron demo, not unrelated Electron resources
 
 ### Android Asset Directory Copy Complexity
 
