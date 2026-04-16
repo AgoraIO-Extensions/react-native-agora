@@ -68,6 +68,19 @@ export function isSameTemplateOption(
   );
 }
 
+export function getDisplayValueForSelectedTemplate<T>(
+  selectedTemplate: BundleTemplateOption | null,
+  appliedTemplate: BundleTemplateOption | null,
+  draftValue: T,
+  appliedValue?: T | null
+) {
+  if (isSameTemplateOption(selectedTemplate, appliedTemplate) && appliedValue) {
+    return appliedValue;
+  }
+
+  return draftValue;
+}
+
 export function parseBundleUiOptions(config: {
   user_interface_option?: Record<string, string>;
 }): BundleTemplateOption[] {

@@ -48,6 +48,7 @@ import {
   destroyVideoEffectObjectResource,
   extractSdkDrivenBeautyOptionsFromConfig,
   findTemplateOptionByName,
+  getDisplayValueForSelectedTemplate,
   isSameTemplateOption,
   loadBundleTemplateGroupsAndInitialBeautyOptions,
   readBundleTemplateConfig,
@@ -58,9 +59,12 @@ import {
 type BundleStatus = 'preparing' | 'ready' | 'failed';
 
 interface State extends BaseVideoComponentState {
+  appliedBeautyOptions: SdkDrivenBeautyOptions | null;
   appliedBeautyTemplate: BundleTemplateOption | null;
+  appliedFilterStrength: number | null;
   appliedFilterTemplate: BundleTemplateOption | null;
   appliedStickerTemplate: BundleTemplateOption | null;
+  appliedStyleIntensity: number | null;
   appliedStyleMakeupTemplate: BundleTemplateOption | null;
   bundleError?: string;
   bundleStatus: BundleStatus;
@@ -175,9 +179,12 @@ export default class VideoEffect
   protected createState(): State {
     return {
       appId: Config.appId,
+      appliedBeautyOptions: null,
       appliedBeautyTemplate: null,
+      appliedFilterStrength: null,
       appliedFilterTemplate: null,
       appliedStickerTemplate: null,
+      appliedStyleIntensity: null,
       appliedStyleMakeupTemplate: null,
       beautyOptions: DEFAULT_SDK_DRIVEN_BEAUTY_OPTIONS,
       bundleStatus: 'preparing',
@@ -297,9 +304,12 @@ export default class VideoEffect
     destroyVideoEffectObjectResource(this.engine, this.videoEffectObject);
     this.videoEffectObject = undefined;
     this.setState({
+      appliedBeautyOptions: null,
       appliedBeautyTemplate: null,
+      appliedFilterStrength: null,
       appliedFilterTemplate: null,
       appliedStickerTemplate: null,
+      appliedStyleIntensity: null,
       appliedStyleMakeupTemplate: null,
       hasVideoEffectObject: false,
     });
@@ -319,14 +329,20 @@ export default class VideoEffect
       )
     );
     this.applyOperations(this.buildBeautyOperations(beautyOptions));
-    this.setState({ appliedBeautyTemplate: selectedBeautyTemplate });
+    this.setState({
+      appliedBeautyOptions: beautyOptions,
+      appliedBeautyTemplate: selectedBeautyTemplate,
+    });
   };
 
   removeBeauty = () => {
     this.clearBeautyRefreshTimer();
     this.clearBeautyUpdateTimer();
     this.removeVideoEffectNode(VideoEffectNodeId.Beauty, 'Beauty');
-    this.setState({ appliedBeautyTemplate: null });
+    this.setState({
+      appliedBeautyOptions: null,
+      appliedBeautyTemplate: null,
+    });
   };
 
   saveBeauty = () => {
@@ -378,6 +394,7 @@ export default class VideoEffect
       buildStyleEffectOperations('style_makeup_option', styleIntensity)
     );
     this.setState({
+      appliedStyleIntensity: styleIntensity,
       appliedStyleMakeupTemplate: selectedStyleMakeupTemplate,
     });
   };
@@ -385,7 +402,10 @@ export default class VideoEffect
   removeStyleMakeup = () => {
     this.clearStyleUpdateTimer();
     this.removeVideoEffectNode(VideoEffectNodeId.StyleMakeup, 'StyleMakeup');
-    this.setState({ appliedStyleMakeupTemplate: null });
+    this.setState({
+      appliedStyleIntensity: null,
+      appliedStyleMakeupTemplate: null,
+    });
   };
 
   applyFilter = () => {
@@ -405,6 +425,7 @@ export default class VideoEffect
       buildStyleEffectOperations('filter_effect_option', filterStrength)
     );
     this.setState({
+      appliedFilterStrength: filterStrength,
       appliedFilterTemplate: selectedFilterTemplate,
     });
   };
@@ -412,7 +433,10 @@ export default class VideoEffect
   removeFilter = () => {
     this.clearFilterUpdateTimer();
     this.removeVideoEffectNode(VideoEffectNodeId.Filter, 'Filter');
-    this.setState({ appliedFilterTemplate: null });
+    this.setState({
+      appliedFilterStrength: null,
+      appliedFilterTemplate: null,
+    });
   };
 
   applySticker = () => {
@@ -438,9 +462,12 @@ export default class VideoEffect
 
   protected renderConfiguration(): ReactElement | undefined {
     const {
+      appliedBeautyOptions,
       appliedBeautyTemplate,
+      appliedFilterStrength,
       appliedFilterTemplate,
       appliedStickerTemplate,
+      appliedStyleIntensity,
       appliedStyleMakeupTemplate,
       beautyOptions,
       bundleError,
@@ -458,11 +485,29 @@ export default class VideoEffect
 
     const controlsDisabled = !hasVideoEffectObject;
     const beautyApplied = Boolean(appliedBeautyTemplate);
+    const displayedBeautyOptions = getDisplayValueForSelectedTemplate(
+      selectedBeautyTemplate,
+      appliedBeautyTemplate,
+      beautyOptions,
+      appliedBeautyOptions
+    );
+    const displayedFilterStrength = getDisplayValueForSelectedTemplate(
+      selectedFilterTemplate,
+      appliedFilterTemplate,
+      filterStrength,
+      appliedFilterStrength
+    );
     const filterApplied = Boolean(appliedFilterTemplate);
     const bundleStatusText =
       bundleStatus === 'failed'
         ? `Bundle status: failed${bundleError ? ` (${bundleError})` : ''}`
         : `Bundle status: ${bundleStatus}`;
+    const displayedStyleIntensity = getDisplayValueForSelectedTemplate(
+      selectedStyleMakeupTemplate,
+      appliedStyleMakeupTemplate,
+      styleIntensity,
+      appliedStyleIntensity
+    );
     const styleMakeupApplied = Boolean(appliedStyleMakeupTemplate);
     const stickerApplied = Boolean(appliedStickerTemplate);
 
@@ -522,8 +567,8 @@ export default class VideoEffect
             this.updateBeautyOptions({ smoothness: value }, 'throttled');
           }}
           step={0.1}
-          title={`smoothness ${beautyOptions.smoothness}`}
-          value={beautyOptions.smoothness}
+          title={`smoothness ${displayedBeautyOptions.smoothness}`}
+          value={displayedBeautyOptions.smoothness}
         />
         <AgoraDivider />
         <VideoEffectSlider
@@ -537,8 +582,8 @@ export default class VideoEffect
             this.updateBeautyOptions({ lightness: value }, 'throttled');
           }}
           step={0.1}
-          title={`lightness ${beautyOptions.lightness}`}
-          value={beautyOptions.lightness}
+          title={`lightness ${displayedBeautyOptions.lightness}`}
+          value={displayedBeautyOptions.lightness}
         />
         <AgoraDivider />
         <VideoEffectSlider
@@ -552,8 +597,8 @@ export default class VideoEffect
             this.updateBeautyOptions({ redness: value }, 'throttled');
           }}
           step={0.1}
-          title={`redness ${beautyOptions.redness}`}
-          value={beautyOptions.redness}
+          title={`redness ${displayedBeautyOptions.redness}`}
+          value={displayedBeautyOptions.redness}
         />
         <AgoraDivider />
         <VideoEffectSlider
@@ -567,8 +612,8 @@ export default class VideoEffect
             this.updateBeautyOptions({ eyePouch: value }, 'throttled');
           }}
           step={0.1}
-          title={`eye_pouch ${beautyOptions.eyePouch}`}
-          value={beautyOptions.eyePouch}
+          title={`eye_pouch ${displayedBeautyOptions.eyePouch}`}
+          value={displayedBeautyOptions.eyePouch}
         />
         <AgoraDivider />
         <AgoraDropdown
@@ -578,7 +623,7 @@ export default class VideoEffect
             this.updateBeautyOptions({ faceStyle }, 'commit');
           }}
           title={'faceStyle'}
-          value={beautyOptions.faceStyle}
+          value={displayedBeautyOptions.faceStyle}
         />
         <AgoraDivider />
         <VideoEffectSlider
@@ -592,8 +637,8 @@ export default class VideoEffect
             this.updateBeautyOptions({ faceIntensity: value }, 'throttled');
           }}
           step={1}
-          title={`faceIntensity ${beautyOptions.faceIntensity}`}
-          value={beautyOptions.faceIntensity}
+          title={`faceIntensity ${displayedBeautyOptions.faceIntensity}`}
+          value={displayedBeautyOptions.faceIntensity}
         />
         <AgoraDivider />
         <AgoraButton
@@ -641,8 +686,8 @@ export default class VideoEffect
             this.updateStyleIntensity(value, 'throttled');
           }}
           step={0.1}
-          title={`styleIntensity ${styleIntensity}`}
-          value={styleIntensity}
+          title={`styleIntensity ${displayedStyleIntensity}`}
+          value={displayedStyleIntensity}
         />
         <AgoraDivider />
         <AgoraButton
@@ -684,8 +729,8 @@ export default class VideoEffect
             this.updateFilterStrength(value, 'throttled');
           }}
           step={0.1}
-          title={`strength ${filterStrength}`}
-          value={filterStrength}
+          title={`strength ${displayedFilterStrength}`}
+          value={displayedFilterStrength}
         />
         <AgoraDivider />
         <AgoraButton
@@ -1009,8 +1054,27 @@ export default class VideoEffect
         if (!this.isMountedFlag) {
           return;
         }
+        if (
+          !this.isAppliedTemplateSelected(
+            this.state.appliedBeautyTemplate,
+            appliedBeautyTemplate
+          )
+        ) {
+          return;
+        }
 
-        this.setState({ beautyOptions });
+        const nextState: Pick<State, 'appliedBeautyOptions' | 'beautyOptions'> =
+          {
+            appliedBeautyOptions: beautyOptions,
+            beautyOptions: this.isAppliedTemplateSelected(
+              this.state.selectedBeautyTemplate,
+              appliedBeautyTemplate
+            )
+              ? beautyOptions
+              : this.state.beautyOptions,
+          };
+
+        this.setState(nextState);
       } catch (error) {
         this.warn('scheduleBeautyRefresh failed', error);
       }
@@ -1019,6 +1083,7 @@ export default class VideoEffect
 
   private async selectBeautyTemplate(templateName: string) {
     const {
+      appliedBeautyOptions,
       appliedBeautyTemplate,
       beautyOptions,
       preparedBundlePath,
@@ -1041,7 +1106,7 @@ export default class VideoEffect
       )
     ) {
       this.setState({
-        beautyOptions,
+        beautyOptions: appliedBeautyOptions ?? beautyOptions,
         selectedBeautyTemplate,
       });
       return;
@@ -1074,6 +1139,7 @@ export default class VideoEffect
 
   private async selectFilterTemplate(templateName: string) {
     const {
+      appliedFilterStrength,
       appliedFilterTemplate,
       filterStrength,
       preparedBundlePath,
@@ -1103,13 +1169,20 @@ export default class VideoEffect
     }
 
     this.setState({
-      filterStrength: nextFilterStrength,
+      filterStrength:
+        this.isAppliedTemplateSelected(
+          selectedFilterTemplate,
+          appliedFilterTemplate
+        ) && appliedFilterStrength !== null
+          ? appliedFilterStrength
+          : nextFilterStrength,
       selectedFilterTemplate,
     });
   }
 
   private async selectStyleMakeupTemplate(templateName: string) {
     const {
+      appliedStyleIntensity,
       appliedStyleMakeupTemplate,
       preparedBundlePath,
       styleIntensity,
@@ -1140,7 +1213,13 @@ export default class VideoEffect
 
     this.setState({
       selectedStyleMakeupTemplate,
-      styleIntensity: nextStyleIntensity,
+      styleIntensity:
+        this.isAppliedTemplateSelected(
+          selectedStyleMakeupTemplate,
+          appliedStyleMakeupTemplate
+        ) && appliedStyleIntensity !== null
+          ? appliedStyleIntensity
+          : nextStyleIntensity,
     });
   }
 
@@ -1148,20 +1227,25 @@ export default class VideoEffect
     patch: Partial<SdkDrivenBeautyOptions>,
     mode: 'commit' | 'throttled'
   ) {
+    const isUpdatingAppliedTemplate =
+      Boolean(this.videoEffectObject) &&
+      Boolean(this.state.appliedBeautyTemplate) &&
+      this.isAppliedTemplateSelected(
+        this.state.selectedBeautyTemplate,
+        this.state.appliedBeautyTemplate
+      );
     const nextOptions = {
       ...this.state.beautyOptions,
       ...patch,
     };
-    this.setState({ beautyOptions: nextOptions });
+    this.setState({
+      appliedBeautyOptions: isUpdatingAppliedTemplate
+        ? nextOptions
+        : this.state.appliedBeautyOptions,
+      beautyOptions: nextOptions,
+    });
 
-    if (
-      !this.videoEffectObject ||
-      !this.state.appliedBeautyTemplate ||
-      !this.isAppliedTemplateSelected(
-        this.state.selectedBeautyTemplate,
-        this.state.appliedBeautyTemplate
-      )
-    ) {
+    if (!isUpdatingAppliedTemplate) {
       return;
     }
 
@@ -1182,15 +1266,20 @@ export default class VideoEffect
     filterStrength: number,
     mode: 'commit' | 'throttled'
   ) {
-    this.setState({ filterStrength });
-    if (
-      !this.videoEffectObject ||
-      !this.state.appliedFilterTemplate ||
-      !this.isAppliedTemplateSelected(
+    const isUpdatingAppliedTemplate =
+      Boolean(this.videoEffectObject) &&
+      Boolean(this.state.appliedFilterTemplate) &&
+      this.isAppliedTemplateSelected(
         this.state.selectedFilterTemplate,
         this.state.appliedFilterTemplate
-      )
-    ) {
+      );
+    this.setState({
+      appliedFilterStrength: isUpdatingAppliedTemplate
+        ? filterStrength
+        : this.state.appliedFilterStrength,
+      filterStrength,
+    });
+    if (!isUpdatingAppliedTemplate) {
       return;
     }
 
@@ -1215,15 +1304,20 @@ export default class VideoEffect
     styleIntensity: number,
     mode: 'commit' | 'throttled'
   ) {
-    this.setState({ styleIntensity });
-    if (
-      !this.videoEffectObject ||
-      !this.state.appliedStyleMakeupTemplate ||
-      !this.isAppliedTemplateSelected(
+    const isUpdatingAppliedTemplate =
+      Boolean(this.videoEffectObject) &&
+      Boolean(this.state.appliedStyleMakeupTemplate) &&
+      this.isAppliedTemplateSelected(
         this.state.selectedStyleMakeupTemplate,
         this.state.appliedStyleMakeupTemplate
-      )
-    ) {
+      );
+    this.setState({
+      appliedStyleIntensity: isUpdatingAppliedTemplate
+        ? styleIntensity
+        : this.state.appliedStyleIntensity,
+      styleIntensity,
+    });
+    if (!isUpdatingAppliedTemplate) {
       return;
     }
 

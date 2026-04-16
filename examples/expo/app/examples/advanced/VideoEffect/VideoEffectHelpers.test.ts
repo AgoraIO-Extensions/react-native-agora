@@ -8,6 +8,7 @@ import {
   enableVideoEffectExtension,
   extractSdkDrivenBeautyOptionsFromConfig,
   findTemplateOptionByName,
+  getDisplayValueForSelectedTemplate,
   isSameTemplateOption,
   loadBundleTemplateGroupsAndInitialBeautyOptions,
   parseBundleUiOptions,
@@ -125,6 +126,37 @@ describe('VideoEffectHelpers', () => {
       true
     );
     expect(isSameTemplateOption(null, null)).toBe(true);
+  });
+
+  it('shows applied values only when the selected template matches the applied template', () => {
+    const selectedTemplate = {
+      label: 'Beauty-Natural',
+      relativePath: 'beauty_natural/',
+      templateName: 'Beauty-Natural',
+    };
+    const appliedTemplate = {
+      label: 'Beauty-Basic',
+      relativePath: 'beauty_normal_basic/',
+      templateName: 'Beauty-Basic',
+    };
+
+    expect(
+      getDisplayValueForSelectedTemplate(
+        appliedTemplate,
+        appliedTemplate,
+        { smoothness: 0.2 },
+        { smoothness: 0.8 }
+      )
+    ).toEqual({ smoothness: 0.8 });
+
+    expect(
+      getDisplayValueForSelectedTemplate(
+        selectedTemplate,
+        appliedTemplate,
+        { smoothness: 0.2 },
+        { smoothness: 0.8 }
+      )
+    ).toEqual({ smoothness: 0.2 });
   });
 
   it('uses saved.json override when reading template config', async () => {
