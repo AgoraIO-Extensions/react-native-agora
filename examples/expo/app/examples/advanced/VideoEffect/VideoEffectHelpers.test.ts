@@ -1,6 +1,7 @@
 import { VideoEffectNodeId } from '../../../../../../src/IAgoraRtcEngine';
 
 import {
+  areAllVideoEffectSdkResultsSuccessful,
   buildBundleCacheSyncTargets,
   buildStyleEffectOperations,
   classifyBundleTemplates,
@@ -159,6 +160,15 @@ describe('VideoEffectHelpers', () => {
         { smoothness: 0.8 }
       )
     ).toEqual({ smoothness: 0.2 });
+
+    expect(
+      getDisplayValueForSelectedTemplate(
+        appliedTemplate,
+        appliedTemplate,
+        0.2,
+        0
+      )
+    ).toBe(0);
   });
 
   it('treats only zero SDK results as success', () => {
@@ -166,6 +176,12 @@ describe('VideoEffectHelpers', () => {
     expect(isVideoEffectSdkResultSuccess(-1)).toBe(false);
     expect(isVideoEffectSdkResultSuccess(1)).toBe(false);
     expect(isVideoEffectSdkResultSuccess(undefined)).toBe(false);
+  });
+
+  it('treats a batch of setter results as successful only when every result is zero', () => {
+    expect(areAllVideoEffectSdkResultsSuccessful([0, 0])).toBe(true);
+    expect(areAllVideoEffectSdkResultsSuccessful([0, -1])).toBe(false);
+    expect(areAllVideoEffectSdkResultsSuccessful([0, undefined])).toBe(false);
   });
 
   it('validates created video effect handles by object id', () => {

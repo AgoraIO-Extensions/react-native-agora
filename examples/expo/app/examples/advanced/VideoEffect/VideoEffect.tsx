@@ -44,6 +44,7 @@ import {
   DEFAULT_SDK_DRIVEN_BEAUTY_OPTIONS,
   SdkDrivenBeautyOptions,
   VideoEffectOperation,
+  areAllVideoEffectSdkResultsSuccessful,
   buildStyleEffectOperations,
   destroyVideoEffectObjectResource,
   extractSdkDrivenBeautyOptionsFromConfig,
@@ -303,7 +304,15 @@ export default class VideoEffect
 
   destroyVideoEffectObject = () => {
     this.clearPendingTimers();
-    destroyVideoEffectObjectResource(this.engine, this.videoEffectObject);
+    const destroyResult = destroyVideoEffectObjectResource(
+      this.engine,
+      this.videoEffectObject
+    );
+    this.handleSdkResult('destroyVideoEffectObject', destroyResult);
+    if (!isVideoEffectSdkResultSuccess(destroyResult)) {
+      return;
+    }
+
     this.videoEffectObject = undefined;
     this.setState({
       appliedBeautyOptions: null,
@@ -331,7 +340,9 @@ export default class VideoEffect
     if (!isVideoEffectSdkResultSuccess(applyResult)) {
       return;
     }
-    this.applyOperations(this.buildBeautyOperations(beautyOptions));
+    if (!this.applyOperations(this.buildBeautyOperations(beautyOptions))) {
+      return;
+    }
     this.setState({
       appliedBeautyOptions: beautyOptions,
       appliedBeautyTemplate: selectedBeautyTemplate,
@@ -402,9 +413,13 @@ export default class VideoEffect
     if (!isVideoEffectSdkResultSuccess(applyResult)) {
       return;
     }
-    this.applyOperations(
-      buildStyleEffectOperations('style_makeup_option', styleIntensity)
-    );
+    if (
+      !this.applyOperations(
+        buildStyleEffectOperations('style_makeup_option', styleIntensity)
+      )
+    ) {
+      return;
+    }
     this.setState({
       appliedStyleIntensity: styleIntensity,
       appliedStyleMakeupTemplate: selectedStyleMakeupTemplate,
@@ -440,9 +455,13 @@ export default class VideoEffect
     if (!isVideoEffectSdkResultSuccess(applyResult)) {
       return;
     }
-    this.applyOperations(
-      buildStyleEffectOperations('filter_effect_option', filterStrength)
-    );
+    if (
+      !this.applyOperations(
+        buildStyleEffectOperations('filter_effect_option', filterStrength)
+      )
+    ) {
+      return;
+    }
     this.setState({
       appliedFilterStrength: filterStrength,
       appliedFilterTemplate: selectedFilterTemplate,
@@ -881,14 +900,15 @@ export default class VideoEffect
   }
 
   private applyBeautyOptions(options: SdkDrivenBeautyOptions) {
-    this.applyOperations(this.buildBeautyOperations(options));
+    return this.applyOperations(this.buildBeautyOperations(options));
   }
 
   private applyOperations(operations: VideoEffectOperation[]) {
     if (!this.videoEffectObject) {
-      return;
+      return false;
     }
 
+    const results: Array<number | null | undefined | void> = [];
     operations.forEach((operation) => {
       let result: number | undefined;
       switch (operation.kind) {
@@ -916,7 +936,10 @@ export default class VideoEffect
       }
 
       this.handleSdkResult(`${operation.option}.${operation.key}`, result);
+      results.push(result);
     });
+
+    return areAllVideoEffectSdkResultsSuccessful(results);
   }
 
   private buildBeautyOperations(
@@ -990,7 +1013,7 @@ export default class VideoEffect
     this.clearStyleUpdateTimer();
   }
 
-  private handleSdkResult(action: string, result: number | undefined) {
+  private handleSdkResult(action: string, result?: number | void) {
     if (typeof result === 'number' && result < 0) {
       this.error(`${action} failed: ${result}`);
     }
@@ -1269,12 +1292,7 @@ export default class VideoEffect
       ...this.state.beautyOptions,
       ...patch,
     };
-    this.setState({
-      appliedBeautyOptions: isUpdatingAppliedTemplate
-        ? nextOptions
-        : this.state.appliedBeautyOptions,
-      beautyOptions: nextOptions,
-    });
+    this.setState({ beautyOptions: nextOptions });
 
     if (!isUpdatingAppliedTemplate) {
       return;
@@ -1284,13 +1302,17 @@ export default class VideoEffect
       this.clearBeautyUpdateTimer();
       this.beautyUpdateTimer = setTimeout(() => {
         this.beautyUpdateTimer = undefined;
-        this.applyBeautyOptions(nextOptions);
+        if (this.applyBeautyOptions(nextOptions)) {
+          this.setState({ appliedBeautyOptions: nextOptions });
+        }
       }, THROTTLE_MS);
       return;
     }
 
     this.clearBeautyUpdateTimer();
-    this.applyBeautyOptions(nextOptions);
+    if (this.applyBeautyOptions(nextOptions)) {
+      this.setState({ appliedBeautyOptions: nextOptions });
+    }
   }
 
   private updateFilterStrength(
@@ -1304,12 +1326,7 @@ export default class VideoEffect
         this.state.selectedFilterTemplate,
         this.state.appliedFilterTemplate
       );
-    this.setState({
-      appliedFilterStrength: isUpdatingAppliedTemplate
-        ? filterStrength
-        : this.state.appliedFilterStrength,
-      filterStrength,
-    });
+    this.setState({ filterStrength });
     if (!isUpdatingAppliedTemplate) {
       return;
     }
@@ -1318,17 +1335,25 @@ export default class VideoEffect
       this.clearFilterUpdateTimer();
       this.filterUpdateTimer = setTimeout(() => {
         this.filterUpdateTimer = undefined;
-        this.applyOperations(
-          buildStyleEffectOperations('filter_effect_option', filterStrength)
-        );
+        if (
+          this.applyOperations(
+            buildStyleEffectOperations('filter_effect_option', filterStrength)
+          )
+        ) {
+          this.setState({ appliedFilterStrength: filterStrength });
+        }
       }, THROTTLE_MS);
       return;
     }
 
     this.clearFilterUpdateTimer();
-    this.applyOperations(
-      buildStyleEffectOperations('filter_effect_option', filterStrength)
-    );
+    if (
+      this.applyOperations(
+        buildStyleEffectOperations('filter_effect_option', filterStrength)
+      )
+    ) {
+      this.setState({ appliedFilterStrength: filterStrength });
+    }
   }
 
   private updateStyleIntensity(
@@ -1342,12 +1367,7 @@ export default class VideoEffect
         this.state.selectedStyleMakeupTemplate,
         this.state.appliedStyleMakeupTemplate
       );
-    this.setState({
-      appliedStyleIntensity: isUpdatingAppliedTemplate
-        ? styleIntensity
-        : this.state.appliedStyleIntensity,
-      styleIntensity,
-    });
+    this.setState({ styleIntensity });
     if (!isUpdatingAppliedTemplate) {
       return;
     }
@@ -1356,17 +1376,25 @@ export default class VideoEffect
       this.clearStyleUpdateTimer();
       this.styleUpdateTimer = setTimeout(() => {
         this.styleUpdateTimer = undefined;
-        this.applyOperations(
-          buildStyleEffectOperations('style_makeup_option', styleIntensity)
-        );
+        if (
+          this.applyOperations(
+            buildStyleEffectOperations('style_makeup_option', styleIntensity)
+          )
+        ) {
+          this.setState({ appliedStyleIntensity: styleIntensity });
+        }
       }, THROTTLE_MS);
       return;
     }
 
     this.clearStyleUpdateTimer();
-    this.applyOperations(
-      buildStyleEffectOperations('style_makeup_option', styleIntensity)
-    );
+    if (
+      this.applyOperations(
+        buildStyleEffectOperations('style_makeup_option', styleIntensity)
+      )
+    ) {
+      this.setState({ appliedStyleIntensity: styleIntensity });
+    }
   }
 }
 

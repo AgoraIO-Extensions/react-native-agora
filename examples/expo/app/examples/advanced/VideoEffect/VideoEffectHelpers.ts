@@ -74,7 +74,11 @@ export function getDisplayValueForSelectedTemplate<T>(
   draftValue: T,
   appliedValue?: T | null
 ) {
-  if (isSameTemplateOption(selectedTemplate, appliedTemplate) && appliedValue) {
+  if (
+    isSameTemplateOption(selectedTemplate, appliedTemplate) &&
+    appliedValue !== undefined &&
+    appliedValue !== null
+  ) {
     return appliedValue;
   }
 
@@ -85,6 +89,12 @@ export function isVideoEffectSdkResultSuccess(
   result?: number | null | void
 ): result is 0 {
   return result === 0;
+}
+
+export function areAllVideoEffectSdkResultsSuccessful(
+  results: Array<number | null | undefined | void>
+) {
+  return results.every((result) => isVideoEffectSdkResultSuccess(result));
 }
 
 export function isVideoEffectObjectHandleValid(videoEffectObject: unknown) {
