@@ -1,4 +1,5 @@
-export const CLEAR_VISION_EXTENSION_PROVIDER = 'agora_video_filters_clear_vision';
+export const CLEAR_VISION_EXTENSION_PROVIDER =
+  'agora_video_filters_clear_vision';
 export const CLEAR_VISION_EXTENSION_NAME = 'clear_vision';
 
 export interface VideoEffectOperation {
@@ -38,6 +39,34 @@ export const DEFAULT_SDK_DRIVEN_BEAUTY_OPTIONS: SdkDrivenBeautyOptions = {
   faceStyle: -1,
   faceIntensity: 50,
 };
+
+export function findTemplateOptionByName(
+  options: BundleTemplateOption[],
+  templateName?: string | null
+) {
+  if (!templateName) {
+    return null;
+  }
+
+  return options.find((option) => option.templateName === templateName) ?? null;
+}
+
+export function isSameTemplateOption(
+  left?: BundleTemplateOption | null,
+  right?: BundleTemplateOption | null
+) {
+  if (!left && !right) {
+    return true;
+  }
+  if (!left || !right) {
+    return false;
+  }
+
+  return (
+    left.templateName === right.templateName &&
+    left.relativePath === right.relativePath
+  );
+}
 
 export function parseBundleUiOptions(config: {
   user_interface_option?: Record<string, string>;
@@ -138,7 +167,9 @@ export function setVideoEffectExtensionEnabled(
   );
 }
 
-export function enableVideoEffectExtension(engine: VideoEffectEngine | undefined) {
+export function enableVideoEffectExtension(
+  engine: VideoEffectEngine | undefined
+) {
   return setVideoEffectExtensionEnabled(engine, true);
 }
 
@@ -152,7 +183,10 @@ export function releaseVideoEffectResources(
   engine: VideoEffectEngine | undefined,
   videoEffectObject: unknown
 ) {
-  const destroyResult = destroyVideoEffectObjectResource(engine, videoEffectObject);
+  const destroyResult = destroyVideoEffectObjectResource(
+    engine,
+    videoEffectObject
+  );
   const disableResult = disableVideoEffectExtension(engine);
   return {
     destroyResult,
@@ -179,7 +213,10 @@ function getRNFS(): RNFSModule {
   return module.default ?? module;
 }
 
-async function readJsonFile<T>(rnfs: RNFSModule, absolutePath: string): Promise<T> {
+async function readJsonFile<T>(
+  rnfs: RNFSModule,
+  absolutePath: string
+): Promise<T> {
   const content = await rnfs.readFile(absolutePath, 'utf8');
   return JSON.parse(content) as T;
 }
@@ -203,7 +240,9 @@ function trimLeadingSlash(path: string) {
 }
 
 function toTemplateRootPath(bundlePath: string, relativePath: string) {
-  const normalizedRelativePath = trimLeadingSlash(trimTrailingSlash(relativePath));
+  const normalizedRelativePath = trimLeadingSlash(
+    trimTrailingSlash(relativePath)
+  );
   return `${trimTrailingSlash(bundlePath)}/${normalizedRelativePath}`;
 }
 
@@ -288,11 +327,13 @@ export async function loadBundleTemplateGroupsAndInitialBeautyOptions(
   rnfs: RNFSModule = getRNFS()
 ): Promise<BundleTemplateAndBeautyDefaults> {
   const rootConfig = await readBundleRootConfig(bundlePath, rnfs);
-  const templateGroups = classifyBundleTemplates(parseBundleUiOptions(rootConfig));
+  const templateGroups = classifyBundleTemplates(
+    parseBundleUiOptions(rootConfig)
+  );
   const selectedBeautyTemplate =
-    templateGroups.beauty.find(
-      (template) => template.templateName === rootConfig.beauty_config
-    ) ?? templateGroups.beauty[0] ?? null;
+    findTemplateOptionByName(templateGroups.beauty, rootConfig.beauty_config) ??
+    templateGroups.beauty[0] ??
+    null;
 
   if (!selectedBeautyTemplate) {
     return {
@@ -313,8 +354,7 @@ export async function loadBundleTemplateGroupsAndInitialBeautyOptions(
     rootConfig,
     templateGroups,
     selectedBeautyTemplate,
-    initialBeautyOptions: extractSdkDrivenBeautyOptionsFromConfig(
-      beautyTemplateConfig
-    ),
+    initialBeautyOptions:
+      extractSdkDrivenBeautyOptionsFromConfig(beautyTemplateConfig),
   };
 }

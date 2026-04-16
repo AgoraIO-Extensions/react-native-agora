@@ -1,4 +1,5 @@
 import { VideoEffectNodeId } from '../../../../../../src/IAgoraRtcEngine';
+
 import {
   buildBundleCacheSyncTargets,
   buildStyleEffectOperations,
@@ -6,6 +7,8 @@ import {
   disableVideoEffectExtension,
   enableVideoEffectExtension,
   extractSdkDrivenBeautyOptionsFromConfig,
+  findTemplateOptionByName,
+  isSameTemplateOption,
   loadBundleTemplateGroupsAndInitialBeautyOptions,
   parseBundleUiOptions,
   readBundleTemplateConfig,
@@ -14,7 +17,7 @@ import {
 
 describe('VideoEffectHelpers', () => {
   it('exposes the Sticker node id for video effect object callers', () => {
-    expect(VideoEffectNodeId.Sticker).toBe(1 << 3);
+    expect(VideoEffectNodeId.Sticker).toBe(8);
   });
 
   it('parses bundle UI options into label/relativePath/templateName triples', () => {
@@ -83,6 +86,45 @@ describe('VideoEffectHelpers', () => {
         value: 0.75,
       },
     ]);
+  });
+
+  it('looks up templates by template name', () => {
+    const selected = findTemplateOptionByName(
+      [
+        {
+          label: 'Beauty-Basic',
+          relativePath: 'beauty_normal_basic/',
+          templateName: 'Beauty-Basic',
+        },
+      ],
+      'Beauty-Basic'
+    );
+
+    expect(selected).toEqual({
+      label: 'Beauty-Basic',
+      relativePath: 'beauty_normal_basic/',
+      templateName: 'Beauty-Basic',
+    });
+    expect(findTemplateOptionByName([], 'missing')).toBeNull();
+  });
+
+  it('distinguishes selected templates from separately applied templates', () => {
+    const selectedTemplate = {
+      label: 'Beauty-Natural',
+      relativePath: 'beauty_natural/',
+      templateName: 'Beauty-Natural',
+    };
+    const appliedTemplate = {
+      label: 'Beauty-Basic',
+      relativePath: 'beauty_normal_basic/',
+      templateName: 'Beauty-Basic',
+    };
+
+    expect(isSameTemplateOption(selectedTemplate, appliedTemplate)).toBe(false);
+    expect(isSameTemplateOption(appliedTemplate, { ...appliedTemplate })).toBe(
+      true
+    );
+    expect(isSameTemplateOption(null, null)).toBe(true);
   });
 
   it('uses saved.json override when reading template config', async () => {
@@ -235,10 +277,7 @@ describe('VideoEffectHelpers', () => {
 
   it('returns extension enable/disable SDK call results', () => {
     const engine = {
-      enableExtension: jest
-        .fn()
-        .mockReturnValueOnce(-4)
-        .mockReturnValueOnce(0),
+      enableExtension: jest.fn().mockReturnValueOnce(-4).mockReturnValueOnce(0),
     };
 
     expect(enableVideoEffectExtension(engine)).toBe(-4);
