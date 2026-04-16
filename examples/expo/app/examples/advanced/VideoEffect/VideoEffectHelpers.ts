@@ -247,6 +247,9 @@ export async function syncSavedConfigCacheForBundle(
     if (!(await rnfs.exists(target.jsonPath))) {
       continue;
     }
+    if (await rnfs.exists(target.cachePath)) {
+      await rnfs.unlink(target.cachePath);
+    }
     await rnfs.copyFile(target.jsonPath, target.cachePath);
     copiedTargets.push(target);
   }

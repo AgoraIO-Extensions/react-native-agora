@@ -203,6 +203,31 @@ describe('VideoEffectHelpers', () => {
     ]);
   });
 
+  it('unlinks an existing saved.cache before copying so repeated sync is safe', async () => {
+    const existing = new Set<string>([
+      '/bundle/saved.json',
+      '/bundle/saved.cache',
+    ]);
+    const calls: string[] = [];
+    const rnfs = {
+      exists: jest.fn(async (path: string) => existing.has(path)),
+      unlink: jest.fn(async (path: string) => {
+        calls.push(`unlink:${path}`);
+        existing.delete(path);
+      }),
+      copyFile: jest.fn(async (from: string, to: string) => {
+        calls.push(`copy:${from}->${to}`);
+      }),
+    };
+
+    await syncSavedConfigCacheForBundle('/bundle', [], rnfs as any);
+
+    expect(calls).toEqual([
+      'unlink:/bundle/saved.cache',
+      'copy:/bundle/saved.json->/bundle/saved.cache',
+    ]);
+  });
+
   it('returns extension enable/disable SDK call results', () => {
     const engine = {
       enableExtension: jest
