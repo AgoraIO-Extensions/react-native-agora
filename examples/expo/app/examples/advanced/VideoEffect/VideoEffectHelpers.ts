@@ -114,7 +114,7 @@ type VideoEffectEngine = {
     extension: string,
     enable?: boolean
   ) => number | void;
-  destroyVideoEffectObject?: (videoEffectObject: unknown) => void;
+  destroyVideoEffectObject?: (videoEffectObject: unknown) => number | void;
 };
 
 export function destroyVideoEffectObjectResource(
@@ -122,15 +122,16 @@ export function destroyVideoEffectObjectResource(
   videoEffectObject: unknown
 ) {
   if (videoEffectObject && engine?.destroyVideoEffectObject) {
-    engine.destroyVideoEffectObject(videoEffectObject);
+    return engine.destroyVideoEffectObject(videoEffectObject);
   }
+  return undefined;
 }
 
 export function setVideoEffectExtensionEnabled(
   engine: VideoEffectEngine | undefined,
   enabled: boolean
 ) {
-  engine?.enableExtension?.(
+  return engine?.enableExtension?.(
     CLEAR_VISION_EXTENSION_PROVIDER,
     CLEAR_VISION_EXTENSION_NAME,
     enabled
@@ -138,21 +139,25 @@ export function setVideoEffectExtensionEnabled(
 }
 
 export function enableVideoEffectExtension(engine: VideoEffectEngine | undefined) {
-  setVideoEffectExtensionEnabled(engine, true);
+  return setVideoEffectExtensionEnabled(engine, true);
 }
 
 export function disableVideoEffectExtension(
   engine: VideoEffectEngine | undefined
 ) {
-  setVideoEffectExtensionEnabled(engine, false);
+  return setVideoEffectExtensionEnabled(engine, false);
 }
 
 export function releaseVideoEffectResources(
   engine: VideoEffectEngine | undefined,
   videoEffectObject: unknown
 ) {
-  destroyVideoEffectObjectResource(engine, videoEffectObject);
-  disableVideoEffectExtension(engine);
+  const destroyResult = destroyVideoEffectObjectResource(engine, videoEffectObject);
+  const disableResult = disableVideoEffectExtension(engine);
+  return {
+    destroyResult,
+    disableResult,
+  };
 }
 
 type RNFSModule = typeof import('react-native-fs');
@@ -200,6 +205,52 @@ function trimLeadingSlash(path: string) {
 function toTemplateRootPath(bundlePath: string, relativePath: string) {
   const normalizedRelativePath = trimLeadingSlash(trimTrailingSlash(relativePath));
   return `${trimTrailingSlash(bundlePath)}/${normalizedRelativePath}`;
+}
+
+export type BundleCacheSyncTarget = {
+  cachePath: string;
+  jsonPath: string;
+};
+
+export function buildBundleCacheSyncTargets(
+  bundlePath: string,
+  relativePaths: string[]
+): BundleCacheSyncTarget[] {
+  const normalizedBundlePath = trimTrailingSlash(bundlePath);
+  const normalizedRelativePaths = relativePaths
+    .map((relativePath) => trimLeadingSlash(trimTrailingSlash(relativePath)))
+    .filter((relativePath) => Boolean(relativePath))
+    .filter(
+      (relativePath, index, array) => array.indexOf(relativePath) === index
+    );
+
+  return [
+    {
+      cachePath: `${normalizedBundlePath}/saved.cache`,
+      jsonPath: `${normalizedBundlePath}/saved.json`,
+    },
+    ...normalizedRelativePaths.map((relativePath) => ({
+      cachePath: `${normalizedBundlePath}/${relativePath}/saved.cache`,
+      jsonPath: `${normalizedBundlePath}/${relativePath}/saved.json`,
+    })),
+  ];
+}
+
+export async function syncSavedConfigCacheForBundle(
+  bundlePath: string,
+  relativePaths: string[],
+  rnfs: RNFSModule = getRNFS()
+): Promise<BundleCacheSyncTarget[]> {
+  const copiedTargets: BundleCacheSyncTarget[] = [];
+  const targets = buildBundleCacheSyncTargets(bundlePath, relativePaths);
+  for (const target of targets) {
+    if (!(await rnfs.exists(target.jsonPath))) {
+      continue;
+    }
+    await rnfs.copyFile(target.jsonPath, target.cachePath);
+    copiedTargets.push(target);
+  }
+  return copiedTargets;
 }
 
 export async function readBundleRootConfig(

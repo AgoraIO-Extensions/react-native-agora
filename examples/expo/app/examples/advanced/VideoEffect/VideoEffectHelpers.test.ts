@@ -1,8 +1,14 @@
 import {
+  buildBundleCacheSyncTargets,
   buildStyleEffectOperations,
   classifyBundleTemplates,
+  disableVideoEffectExtension,
+  enableVideoEffectExtension,
   extractSdkDrivenBeautyOptionsFromConfig,
+  loadBundleTemplateGroupsAndInitialBeautyOptions,
   parseBundleUiOptions,
+  readBundleTemplateConfig,
+  syncSavedConfigCacheForBundle,
 } from './VideoEffectHelpers';
 
 describe('VideoEffectHelpers', () => {
@@ -72,5 +78,140 @@ describe('VideoEffectHelpers', () => {
         value: 0.75,
       },
     ]);
+  });
+
+  it('uses saved.json override when reading template config', async () => {
+    const rnfs = {
+      readFile: jest.fn(async (path: string) => {
+        if (path.endsWith('/config.json')) {
+          return JSON.stringify({
+            beauty_effect_option: { smoothness: 0.4 },
+          });
+        }
+        return JSON.stringify({
+          beauty_effect_option: { smoothness: 0.9 },
+        });
+      }),
+      exists: jest.fn(async (path: string) => path.endsWith('/saved.json')),
+    };
+
+    await expect(
+      readBundleTemplateConfig('/bundle', 'beauty_normal_basic/', rnfs as any)
+    ).resolves.toMatchObject({
+      beauty_effect_option: { smoothness: 0.9 },
+    });
+  });
+
+  it('falls back to config.json when saved.json is absent', async () => {
+    const rnfs = {
+      readFile: jest.fn(async () =>
+        JSON.stringify({
+          beauty_effect_option: { smoothness: 0.4 },
+        })
+      ),
+      exists: jest.fn(async () => false),
+    };
+
+    await expect(
+      readBundleTemplateConfig('/bundle', 'beauty_normal_basic/', rnfs as any)
+    ).resolves.toMatchObject({
+      beauty_effect_option: { smoothness: 0.4 },
+    });
+  });
+
+  it('loads template groups and initial beauty defaults from selected template', async () => {
+    const files: Record<string, string> = {
+      '/bundle/config.json': JSON.stringify({
+        user_interface_option: {
+          'Beauty-Basic': 'beauty_normal_basic/',
+          'Filter-Whitetea': 'filter_baicha/',
+        },
+        beauty_config: 'Beauty-Basic',
+      }),
+      '/bundle/beauty_normal_basic/config.json': JSON.stringify({
+        beauty_effect_option: { smoothness: 0.7, lightness: 0.7, redness: 0.3 },
+      }),
+    };
+
+    const rnfs = {
+      readFile: jest.fn(async (path: string) => files[path]),
+      exists: jest.fn(async () => false),
+    };
+
+    const loaded = await loadBundleTemplateGroupsAndInitialBeautyOptions(
+      '/bundle',
+      rnfs as any
+    );
+
+    expect(loaded.selectedBeautyTemplate?.templateName).toBe('Beauty-Basic');
+    expect(loaded.templateGroups.filter).toHaveLength(1);
+    expect(loaded.initialBeautyOptions.smoothness).toBe(0.7);
+  });
+
+  it('builds cache sync targets for bundle root and selected templates', () => {
+    expect(
+      buildBundleCacheSyncTargets('/bundle', [
+        'beauty_normal_basic/',
+        'filter_baicha/',
+      ])
+    ).toEqual([
+      { cachePath: '/bundle/saved.cache', jsonPath: '/bundle/saved.json' },
+      {
+        cachePath: '/bundle/beauty_normal_basic/saved.cache',
+        jsonPath: '/bundle/beauty_normal_basic/saved.json',
+      },
+      {
+        cachePath: '/bundle/filter_baicha/saved.cache',
+        jsonPath: '/bundle/filter_baicha/saved.json',
+      },
+    ]);
+  });
+
+  it('copies only existing saved.json files to saved.cache', async () => {
+    const copied: Array<[string, string]> = [];
+    const existing = new Set<string>([
+      '/bundle/saved.json',
+      '/bundle/beauty_normal_basic/saved.json',
+    ]);
+    const rnfs = {
+      exists: jest.fn(async (path: string) => existing.has(path)),
+      copyFile: jest.fn(async (from: string, to: string) => {
+        copied.push([from, to]);
+      }),
+    };
+
+    await expect(
+      syncSavedConfigCacheForBundle(
+        '/bundle',
+        ['beauty_normal_basic/', 'filter_baicha/'],
+        rnfs as any
+      )
+    ).resolves.toEqual([
+      { cachePath: '/bundle/saved.cache', jsonPath: '/bundle/saved.json' },
+      {
+        cachePath: '/bundle/beauty_normal_basic/saved.cache',
+        jsonPath: '/bundle/beauty_normal_basic/saved.json',
+      },
+    ]);
+
+    expect(copied).toEqual([
+      ['/bundle/saved.json', '/bundle/saved.cache'],
+      [
+        '/bundle/beauty_normal_basic/saved.json',
+        '/bundle/beauty_normal_basic/saved.cache',
+      ],
+    ]);
+  });
+
+  it('returns extension enable/disable SDK call results', () => {
+    const engine = {
+      enableExtension: jest
+        .fn()
+        .mockReturnValueOnce(-4)
+        .mockReturnValueOnce(0),
+    };
+
+    expect(enableVideoEffectExtension(engine)).toBe(-4);
+    expect(disableVideoEffectExtension(engine)).toBe(0);
   });
 });
