@@ -12,6 +12,7 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		62B8C0AB79D11D7A26F5E0A4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 845E3E35A7D6C63406176706 /* PrivacyInfo.xcprivacy */; };
 		78477FA152C1B174C3EA039C /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90F64417D32ABC2ED788171 /* ExpoModulesProvider.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* AgoraBeautyMaterial in Resources */ = {isa = PBXBuildFile; fileRef = D4C3B2A19087654321FEDCBA /* AgoraBeautyMaterial */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		BB64E1FB2E55B6F8005341DF /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BB64E1F92E55B6F8005341DF /* SampleHandler.m */; };
 		BBDB174B2E533AF300733525 /* dang.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BBDB17432E533AF300733525 /* dang.mp3 */; };
@@ -62,6 +63,7 @@
 		99654AB28D272EBD2C97BA21 /* libPods-ScreenShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ScreenShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A90F64417D32ABC2ED788171 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-reactnativeagoraexampleexpo/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = reactnativeagoraexampleexpo/SplashScreen.storyboard; sourceTree = "<group>"; };
+		D4C3B2A19087654321FEDCBA /* AgoraBeautyMaterial */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AgoraBeautyMaterial; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		BB64E1F72E55B6F8005341DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB64E1F82E55B6F8005341DF /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				BBDB17432E533AF300733525 /* dang.mp3 */,
 				BBDB17442E533AF300733525 /* ding.mp3 */,
 				BBDB17452E533AF300733525 /* effect.mp3 */,
+				D4C3B2A19087654321FEDCBA /* AgoraBeautyMaterial */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				62B8C0AB79D11D7A26F5E0A4 /* PrivacyInfo.xcprivacy in Resources */,
+				A1B2C3D4E5F60718293A4B5C /* AgoraBeautyMaterial in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

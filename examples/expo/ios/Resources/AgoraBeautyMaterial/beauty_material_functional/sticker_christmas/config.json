@@ -1,0 +1,7 @@
+{
+    "sticker_effect_option": {
+        "enable" : true,
+        "strength" : 1.0,
+        "path" : "list-christmas.json"
+    }
+}

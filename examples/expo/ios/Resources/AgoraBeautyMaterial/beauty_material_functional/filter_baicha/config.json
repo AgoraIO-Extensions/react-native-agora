@@ -1,0 +1,7 @@
+{
+    "filter_effect_option": {
+        "enable": true,
+        "path": "baicha.png",
+        "strength": 0.5
+    }
+}

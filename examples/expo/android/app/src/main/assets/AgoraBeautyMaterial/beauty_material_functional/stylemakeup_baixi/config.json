@@ -1,0 +1,27 @@
+{
+    "makeup_options": {
+        "enable_mu": true,
+        "resPath": "../../resource",
+        "browStyle": 8,
+        "browColor": 1,
+        "browStrength": 1.0,
+        "lashStyle": 10,
+        "lashColor": 1,
+        "lashStrength": 1.0,
+        "shadowStyle": 10,
+        "shadowStrength": 1.0,
+        "pupilStyle": 1,
+        "pupilStrength": 0.5,
+        "blushStyle": 4,
+        "blushColor": 3,
+        "blushStrength": 0.6,
+        "lipStyle": 2,
+        "lipColor": 3,
+        "lipStrength": 0.5,
+        "facialStyle": 3,
+        "facialStrength": 0.9
+    },
+    "style_makeup_option" : {
+      "styleIntensity" : 0.95
+    }
+}

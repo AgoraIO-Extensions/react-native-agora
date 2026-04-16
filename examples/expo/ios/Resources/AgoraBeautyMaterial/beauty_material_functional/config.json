@@ -1,0 +1,21 @@
+{
+    "engine_option": {
+        "identifier": "functional_beauty_material_200",
+        "version": "2.0.0",
+        "aspect": "16:9",
+        "preferred_fps": 24
+    },
+    "user_interface_option": {
+        "Beauty-Basic": "beauty_normal_basic/",
+        "Makeup-Natural": "stylemakeup_baixi/",
+        "Filter-Whitetea": "filter_baicha/",
+        "Sticker-Christmas": "sticker_christmas/"
+    },
+    "beauty_config" : "Beauty-Basic",
+    "beauty_custom_option" : {
+        "smooth_factor": 1.0
+    },
+    "face_shape_custom_option": {
+        "max_crop_percent": 0.0
+    }
+}

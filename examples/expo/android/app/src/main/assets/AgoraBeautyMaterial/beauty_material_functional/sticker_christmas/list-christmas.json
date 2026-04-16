@@ -1,0 +1,39 @@
+{
+    "lists" : [
+        {
+            "name": "christmas_headband",
+            "type": 3,
+            "resourceType": "png",
+            "path": "christmas/cap.png",
+            "anchor": 1,
+            "follow": 2,
+            "followIndex": 3,
+            "followCtrls": [76.5, 225, 253.5, 225, 165, 174],
+            "followOffset": [0, 0],
+            "scale": 2.0,
+            "blendMode": 0
+        },
+        {
+            "name": "christmas_blush_l",
+            "type": 3,
+            "resourceType": "gif",
+            "path": "christmas/JBR_l",
+            "follow": 7,
+            "followIndex": 1,
+            "scale": 1.5,
+            "blendMode": 0,
+            "fps": 6
+        },
+        {
+            "name": "christmas_blush_r",
+            "type": 3,
+            "resourceType": "gif",
+            "path": "christmas/JBR_r",
+            "follow": 7,
+            "followIndex": 2,
+            "scale": 1.5,
+            "blendMode": 0,
+            "fps": 6
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "beauty_effect_option": {
+        "enable": true,
+        "smoothness": 0.7,
+        "sharpness": 0.6,
+        "lightness": 0.7,
+        "redness": 0.3
+    },
+    "face_shape_beauty_option": {
+        "enable": true,
+        "intensity": 0
+    },
+    "face_shape_area_option": [
+        {
+            "area": 102,
+            "strength": 10
+        },
+        {
+            "area": 104,
+            "strength": 10
+        },
+        {
+            "area": 106,
+            "strength": 10
+        },
+        {
+            "area": 107,
+            "strength": 50
+        },
+        {
+            "area": 200,
+            "strength": 40
+        }
+    ],
+    "face_buffing_option": {
+        "brighten_eye": 0.8,
+        "eye_pouch": 0.8,
+        "nasolabial_fold": 0.8
+    }
+}
