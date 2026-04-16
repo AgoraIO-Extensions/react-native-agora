@@ -310,6 +310,7 @@ export default class VideoEffect
     );
     this.handleSdkResult('destroyVideoEffectObject', destroyResult);
     if (!isVideoEffectSdkResultSuccess(destroyResult)) {
+      this.error('destroyVideoEffectObject failed', destroyResult);
       return;
     }
 
@@ -341,6 +342,12 @@ export default class VideoEffect
       return;
     }
     if (!this.applyOperations(this.buildBeautyOperations(beautyOptions))) {
+      if (this.rollbackVideoEffectNode(VideoEffectNodeId.Beauty, 'Beauty')) {
+        this.setState({
+          appliedBeautyOptions: null,
+          appliedBeautyTemplate: null,
+        });
+      }
       return;
     }
     this.setState({
@@ -418,6 +425,17 @@ export default class VideoEffect
         buildStyleEffectOperations('style_makeup_option', styleIntensity)
       )
     ) {
+      if (
+        this.rollbackVideoEffectNode(
+          VideoEffectNodeId.StyleMakeup,
+          'StyleMakeup'
+        )
+      ) {
+        this.setState({
+          appliedStyleIntensity: null,
+          appliedStyleMakeupTemplate: null,
+        });
+      }
       return;
     }
     this.setState({
@@ -460,6 +478,12 @@ export default class VideoEffect
         buildStyleEffectOperations('filter_effect_option', filterStrength)
       )
     ) {
+      if (this.rollbackVideoEffectNode(VideoEffectNodeId.Filter, 'Filter')) {
+        this.setState({
+          appliedFilterStrength: null,
+          appliedFilterTemplate: null,
+        });
+      }
       return;
     }
     this.setState({
@@ -1023,6 +1047,16 @@ export default class VideoEffect
     const removeResult = this.videoEffectObject?.removeVideoEffect(nodeId);
     this.handleSdkResult(`removeVideoEffect(${label})`, removeResult);
     return removeResult;
+  }
+
+  private rollbackVideoEffectNode(nodeId: number, label: string) {
+    const rollbackResult = this.removeVideoEffectNode(nodeId, label);
+    if (!isVideoEffectSdkResultSuccess(rollbackResult)) {
+      this.error(`rollback removeVideoEffect(${label}) failed`, rollbackResult);
+      return false;
+    }
+
+    return true;
   }
 
   private async readTemplateNumberOption(
