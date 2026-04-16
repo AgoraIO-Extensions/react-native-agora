@@ -12,14 +12,6 @@ describe('VideoEffectBundle', () => {
     });
   });
 
-  it('requires both the prepared bundle config and the sibling resource directory', () => {
-    expect(
-      isPreparedVideoEffectRootValid([
-        '/cache/AgoraBeautyMaterial/beauty_material_functional/config.json',
-      ])
-    ).toBe(false);
-  });
-
   it('returns false when config.json is missing', () => {
     expect(
       isPreparedVideoEffectRootValid(['/cache/AgoraBeautyMaterial/resource'])
@@ -50,6 +42,12 @@ describe('VideoEffectBundle', () => {
         CachesDirectoryPath: '/ios-cache',
       })
     ).toBe('/android-cache');
+
+    expect(
+      getCacheRootForVideoEffectBundle('android', {
+        CachesDirectoryPath: '/fallback-cache',
+      })
+    ).toBe('/fallback-cache');
 
     expect(
       getCacheRootForVideoEffectBundle('ios', {

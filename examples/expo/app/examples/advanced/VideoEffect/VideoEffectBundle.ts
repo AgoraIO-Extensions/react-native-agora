@@ -19,13 +19,17 @@ export function getPreparedVideoEffectPaths(
 }
 
 export function isPreparedVideoEffectRootValid(files: string[]) {
+  const normalizedFiles = files.map((file) => file.replace(/\/+$/, ''));
+
   return (
-    files.some((file) =>
+    normalizedFiles.some((file) =>
       file.endsWith(
         `/${VIDEO_EFFECT_RESOURCE_ROOT}/${VIDEO_EFFECT_BUNDLE_DIR}/config.json`
       )
     ) &&
-    files.some((file) => file.endsWith(`/${VIDEO_EFFECT_RESOURCE_ROOT}/resource`))
+    normalizedFiles.some((file) =>
+      file.endsWith(`/${VIDEO_EFFECT_RESOURCE_ROOT}/resource`)
+    )
   );
 }
 
@@ -46,7 +50,10 @@ export function getCacheRootForVideoEffectBundle(
   cacheRootSource: VideoEffectCacheRootSource
 ) {
   if (platformOs === 'android') {
-    return cacheRootSource.ExternalCachesDirectoryPath;
+    return (
+      cacheRootSource.ExternalCachesDirectoryPath ??
+      cacheRootSource.CachesDirectoryPath
+    );
   }
   return cacheRootSource.CachesDirectoryPath;
 }
