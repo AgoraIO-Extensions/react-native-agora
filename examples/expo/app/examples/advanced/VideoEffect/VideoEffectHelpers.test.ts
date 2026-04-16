@@ -10,6 +10,8 @@ import {
   findTemplateOptionByName,
   getDisplayValueForSelectedTemplate,
   isSameTemplateOption,
+  isVideoEffectObjectHandleValid,
+  isVideoEffectSdkResultSuccess,
   loadBundleTemplateGroupsAndInitialBeautyOptions,
   parseBundleUiOptions,
   readBundleTemplateConfig,
@@ -157,6 +159,32 @@ describe('VideoEffectHelpers', () => {
         { smoothness: 0.8 }
       )
     ).toEqual({ smoothness: 0.2 });
+  });
+
+  it('treats only zero SDK results as success', () => {
+    expect(isVideoEffectSdkResultSuccess(0)).toBe(true);
+    expect(isVideoEffectSdkResultSuccess(-1)).toBe(false);
+    expect(isVideoEffectSdkResultSuccess(1)).toBe(false);
+    expect(isVideoEffectSdkResultSuccess(undefined)).toBe(false);
+  });
+
+  it('validates created video effect handles by object id', () => {
+    expect(
+      isVideoEffectObjectHandleValid({
+        getVideoEffectObjectId: () => 1,
+      })
+    ).toBe(true);
+    expect(
+      isVideoEffectObjectHandleValid({
+        getVideoEffectObjectId: () => 0,
+      })
+    ).toBe(false);
+    expect(
+      isVideoEffectObjectHandleValid({
+        getVideoEffectObjectId: () => -2,
+      })
+    ).toBe(false);
+    expect(isVideoEffectObjectHandleValid({})).toBe(false);
   });
 
   it('uses saved.json override when reading template config', async () => {

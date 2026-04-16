@@ -50,6 +50,8 @@ import {
   findTemplateOptionByName,
   getDisplayValueForSelectedTemplate,
   isSameTemplateOption,
+  isVideoEffectObjectHandleValid,
+  isVideoEffectSdkResultSuccess,
   loadBundleTemplateGroupsAndInitialBeautyOptions,
   readBundleTemplateConfig,
   releaseVideoEffectResources,
@@ -288,7 +290,7 @@ export default class VideoEffect
       MediaSourceType.PrimaryCameraSource
     ) as IVideoEffectObject | undefined;
 
-    if (!videoEffectObject) {
+    if (!isVideoEffectObjectHandleValid(videoEffectObject)) {
       this.error('createVideoEffectObject failed');
       return;
     }
@@ -321,13 +323,14 @@ export default class VideoEffect
       return;
     }
 
-    this.handleSdkResult(
-      'addOrUpdateVideoEffect(Beauty)',
-      this.videoEffectObject.addOrUpdateVideoEffect(
-        VideoEffectNodeId.Beauty,
-        selectedBeautyTemplate?.templateName ?? ''
-      )
+    const applyResult = this.videoEffectObject.addOrUpdateVideoEffect(
+      VideoEffectNodeId.Beauty,
+      selectedBeautyTemplate?.templateName ?? ''
     );
+    this.handleSdkResult('addOrUpdateVideoEffect(Beauty)', applyResult);
+    if (!isVideoEffectSdkResultSuccess(applyResult)) {
+      return;
+    }
     this.applyOperations(this.buildBeautyOperations(beautyOptions));
     this.setState({
       appliedBeautyOptions: beautyOptions,
@@ -338,7 +341,13 @@ export default class VideoEffect
   removeBeauty = () => {
     this.clearBeautyRefreshTimer();
     this.clearBeautyUpdateTimer();
-    this.removeVideoEffectNode(VideoEffectNodeId.Beauty, 'Beauty');
+    const removeResult = this.removeVideoEffectNode(
+      VideoEffectNodeId.Beauty,
+      'Beauty'
+    );
+    if (!isVideoEffectSdkResultSuccess(removeResult)) {
+      return;
+    }
     this.setState({
       appliedBeautyOptions: null,
       appliedBeautyTemplate: null,
@@ -351,13 +360,14 @@ export default class VideoEffect
       return;
     }
 
-    this.handleSdkResult(
-      'performVideoEffectAction(Save)',
-      this.videoEffectObject.performVideoEffectAction(
-        VideoEffectNodeId.Beauty,
-        VideoEffectAction.Save
-      )
+    const saveResult = this.videoEffectObject.performVideoEffectAction(
+      VideoEffectNodeId.Beauty,
+      VideoEffectAction.Save
     );
+    this.handleSdkResult('performVideoEffectAction(Save)', saveResult);
+    if (!isVideoEffectSdkResultSuccess(saveResult)) {
+      return;
+    }
     this.scheduleBeautyRefresh(appliedBeautyTemplate);
   };
 
@@ -367,13 +377,14 @@ export default class VideoEffect
       return;
     }
 
-    this.handleSdkResult(
-      'performVideoEffectAction(Reset)',
-      this.videoEffectObject.performVideoEffectAction(
-        VideoEffectNodeId.Beauty,
-        VideoEffectAction.Reset
-      )
+    const resetResult = this.videoEffectObject.performVideoEffectAction(
+      VideoEffectNodeId.Beauty,
+      VideoEffectAction.Reset
     );
+    this.handleSdkResult('performVideoEffectAction(Reset)', resetResult);
+    if (!isVideoEffectSdkResultSuccess(resetResult)) {
+      return;
+    }
     this.scheduleBeautyRefresh(appliedBeautyTemplate);
   };
 
@@ -383,13 +394,14 @@ export default class VideoEffect
       return;
     }
 
-    this.handleSdkResult(
-      'addOrUpdateVideoEffect(StyleMakeup)',
-      this.videoEffectObject.addOrUpdateVideoEffect(
-        VideoEffectNodeId.StyleMakeup,
-        selectedStyleMakeupTemplate?.templateName ?? ''
-      )
+    const applyResult = this.videoEffectObject.addOrUpdateVideoEffect(
+      VideoEffectNodeId.StyleMakeup,
+      selectedStyleMakeupTemplate?.templateName ?? ''
     );
+    this.handleSdkResult('addOrUpdateVideoEffect(StyleMakeup)', applyResult);
+    if (!isVideoEffectSdkResultSuccess(applyResult)) {
+      return;
+    }
     this.applyOperations(
       buildStyleEffectOperations('style_makeup_option', styleIntensity)
     );
@@ -401,7 +413,13 @@ export default class VideoEffect
 
   removeStyleMakeup = () => {
     this.clearStyleUpdateTimer();
-    this.removeVideoEffectNode(VideoEffectNodeId.StyleMakeup, 'StyleMakeup');
+    const removeResult = this.removeVideoEffectNode(
+      VideoEffectNodeId.StyleMakeup,
+      'StyleMakeup'
+    );
+    if (!isVideoEffectSdkResultSuccess(removeResult)) {
+      return;
+    }
     this.setState({
       appliedStyleIntensity: null,
       appliedStyleMakeupTemplate: null,
@@ -414,13 +432,14 @@ export default class VideoEffect
       return;
     }
 
-    this.handleSdkResult(
-      'addOrUpdateVideoEffect(Filter)',
-      this.videoEffectObject.addOrUpdateVideoEffect(
-        VideoEffectNodeId.Filter,
-        selectedFilterTemplate?.templateName ?? ''
-      )
+    const applyResult = this.videoEffectObject.addOrUpdateVideoEffect(
+      VideoEffectNodeId.Filter,
+      selectedFilterTemplate?.templateName ?? ''
     );
+    this.handleSdkResult('addOrUpdateVideoEffect(Filter)', applyResult);
+    if (!isVideoEffectSdkResultSuccess(applyResult)) {
+      return;
+    }
     this.applyOperations(
       buildStyleEffectOperations('filter_effect_option', filterStrength)
     );
@@ -432,7 +451,13 @@ export default class VideoEffect
 
   removeFilter = () => {
     this.clearFilterUpdateTimer();
-    this.removeVideoEffectNode(VideoEffectNodeId.Filter, 'Filter');
+    const removeResult = this.removeVideoEffectNode(
+      VideoEffectNodeId.Filter,
+      'Filter'
+    );
+    if (!isVideoEffectSdkResultSuccess(removeResult)) {
+      return;
+    }
     this.setState({
       appliedFilterStrength: null,
       appliedFilterTemplate: null,
@@ -445,18 +470,25 @@ export default class VideoEffect
       return;
     }
 
-    this.handleSdkResult(
-      'addOrUpdateVideoEffect(Sticker)',
-      this.videoEffectObject.addOrUpdateVideoEffect(
-        VideoEffectNodeId.Sticker,
-        selectedStickerTemplate?.templateName ?? ''
-      )
+    const applyResult = this.videoEffectObject.addOrUpdateVideoEffect(
+      VideoEffectNodeId.Sticker,
+      selectedStickerTemplate?.templateName ?? ''
     );
+    this.handleSdkResult('addOrUpdateVideoEffect(Sticker)', applyResult);
+    if (!isVideoEffectSdkResultSuccess(applyResult)) {
+      return;
+    }
     this.setState({ appliedStickerTemplate: selectedStickerTemplate });
   };
 
   removeSticker = () => {
-    this.removeVideoEffectNode(VideoEffectNodeId.Sticker, 'Sticker');
+    const removeResult = this.removeVideoEffectNode(
+      VideoEffectNodeId.Sticker,
+      'Sticker'
+    );
+    if (!isVideoEffectSdkResultSuccess(removeResult)) {
+      return;
+    }
     this.setState({ appliedStickerTemplate: null });
   };
 
@@ -965,10 +997,9 @@ export default class VideoEffect
   }
 
   private removeVideoEffectNode(nodeId: number, label: string) {
-    this.handleSdkResult(
-      `removeVideoEffect(${label})`,
-      this.videoEffectObject?.removeVideoEffect(nodeId)
-    );
+    const removeResult = this.videoEffectObject?.removeVideoEffect(nodeId);
+    this.handleSdkResult(`removeVideoEffect(${label})`, removeResult);
+    return removeResult;
   }
 
   private async readTemplateNumberOption(

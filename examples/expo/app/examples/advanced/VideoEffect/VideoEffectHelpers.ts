@@ -81,6 +81,27 @@ export function getDisplayValueForSelectedTemplate<T>(
   return draftValue;
 }
 
+export function isVideoEffectSdkResultSuccess(
+  result?: number | null | void
+): result is 0 {
+  return result === 0;
+}
+
+export function isVideoEffectObjectHandleValid(videoEffectObject: unknown) {
+  if (
+    !videoEffectObject ||
+    typeof (videoEffectObject as { getVideoEffectObjectId?: unknown })
+      .getVideoEffectObjectId !== 'function'
+  ) {
+    return false;
+  }
+
+  const videoEffectObjectId = (
+    videoEffectObject as { getVideoEffectObjectId: () => number }
+  ).getVideoEffectObjectId();
+  return Number.isFinite(videoEffectObjectId) && videoEffectObjectId > 0;
+}
+
 export function parseBundleUiOptions(config: {
   user_interface_option?: Record<string, string>;
 }): BundleTemplateOption[] {
