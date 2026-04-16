@@ -25,6 +25,7 @@ import SendMultiVideoStream from './SendMultiVideoStream/SendMultiVideoStream';
 import SpatialAudio from './SpatialAudio/SpatialAudio';
 import StreamMessage from './StreamMessage/StreamMessage';
 import TakeSnapshot from './TakeSnapshot/TakeSnapshot';
+import VideoEffect from './VideoEffect/VideoEffect';
 import VideoEncoderConfiguration from './VideoEncoderConfiguration/VideoEncoderConfiguration';
 import VirtualBackground from './VirtualBackground/VirtualBackground';
 import VoiceChanger from './VoiceChanger/VoiceChanger';
@@ -139,6 +140,10 @@ const Advanced = {
     {
       name: 'TakeSnapshot',
       component: TakeSnapshot,
+    },
+    {
+      name: 'VideoEffect',
+      component: VideoEffect,
     },
     {
       name: 'VideoEncoderConfiguration',
