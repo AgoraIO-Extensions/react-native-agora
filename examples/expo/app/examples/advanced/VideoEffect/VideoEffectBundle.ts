@@ -94,7 +94,11 @@ async function copyFilesystemDirectoryRecursively(
     const destinationPath = `${destinationDir}/${entry.name}`;
     if (entry.isDirectory()) {
       await rnfs.mkdir(destinationPath);
-      await copyFilesystemDirectoryRecursively(rnfs, sourcePath, destinationPath);
+      await copyFilesystemDirectoryRecursively(
+        rnfs,
+        sourcePath,
+        destinationPath
+      );
       continue;
     }
     await rnfs.copyFile(sourcePath, destinationPath);
