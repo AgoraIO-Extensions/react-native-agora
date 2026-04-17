@@ -27,6 +27,7 @@ import {
   ConnectionStateType,
   DataStreamConfig,
   DeviceInfo,
+  DownlinkNetworkInfo,
   EarMonitoringFilterType,
   EchoTestConfiguration,
   EncryptionConfig,
@@ -62,15 +63,12 @@ import {
   PermissionType,
   QualityAdaptIndication,
   QualityType,
-  RdtState,
-  RdtStreamType,
   RecorderStreamInfo,
   Rectangle,
   RemoteAudioState,
   RemoteAudioStateReason,
   RemoteVideoState,
   RemoteVideoStateReason,
-  RenewTokenErrorCode,
   RtcStats,
   RtmpStreamPublishReason,
   RtmpStreamPublishState,
@@ -113,8 +111,10 @@ import {
   VoiceAiTunerType,
   VoiceBeautifierPreset,
   VoiceConversionPreset,
-  WatermarkConfig,
   WatermarkOptions,
+  WlAccStats,
+  WlaccMessageReason,
+  WlaccSuggestAction,
 } from './AgoraBase';
 import {
   ContentInspectConfig,
@@ -527,10 +527,6 @@ export class LocalVideoStats {
    * @ignore
    */
   simulcastDimensions?: VideoDimensions[];
-  /**
-   * @ignore
-   */
-  encodedFrameDepth?: number;
 }
 
 /**
@@ -589,14 +585,6 @@ export class RemoteAudioStats {
    * @ignore
    */
   plcCount?: number;
-  /**
-   * @ignore
-   */
-  frozenCntByCustom?: number;
-  /**
-   * @ignore
-   */
-  frozenTimeByCustom?: number;
   /**
    * Effective duration (ms) from the start of the audio call to this callback.
    * Effective duration refers to the total time excluding when the remote user is muted.
@@ -1265,7 +1253,7 @@ export class ChannelMediaOptions {
    */
   mediaPlayerAudioDelayMs?: number;
   /**
-   * (Optional) A dynamic key generated on the server for authentication. See [Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * (Optional) A dynamic key generated on the server for authentication. See [Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    *  This parameter only takes effect when calling updateChannelMediaOptions or updateChannelMediaOptionsEx.
    *  Make sure the App ID, channel name, and user name used to generate the token are consistent with those used in the initialize method to initialize the engine and in the joinChannel or joinChannelEx method to join the channel.
    */
@@ -1288,7 +1276,7 @@ export class ChannelMediaOptions {
    */
   customVideoTrackId?: number;
   /**
-   * To enable this feature, please [contact sales](https://www.shengwang.cn/contact-sales/). Sets whether the current audio stream participates in stream selection based on volume algorithm. true : Participate in volume-based stream selection. If the volume-based stream selection feature is not enabled, this parameter has no effect. false : Do not participate in volume-based stream selection.
+   * To enable this feature, please [contact sales](mailto:support@agora.io). Sets whether the current audio stream participates in stream selection based on volume algorithm. true : Participate in volume-based stream selection. If the volume-based stream selection feature is not enabled, this parameter has no effect. false : Do not participate in volume-based stream selection.
    */
   isAudioFilterable?: boolean;
   /**
@@ -1304,11 +1292,11 @@ export class ChannelMediaOptions {
    */
   enableMultipath?: boolean;
   /**
-   * Uplink transmission mode. See MultipathMode. When using this parameter, make sure enableMultipath is set to true.
+   * @ignore
    */
   uplinkMultipathMode?: MultipathMode;
   /**
-   * Downlink transmission mode. See MultipathMode. When using this parameter, make sure enableMultipath is set to true.
+   * @ignore
    */
   downlinkMultipathMode?: MultipathMode;
   /**
@@ -1377,6 +1365,10 @@ export class LeaveChannelOptions {
    * Whether to stop playing sound effects when leaving the channel: true : (default) Stop playing sound effects. false : Do not stop playing sound effects.
    */
   stopAllEffect?: boolean;
+  /**
+   * @ignore
+   */
+  unloadAllEffect?: boolean;
   /**
    * Whether to stop microphone capture when leaving the channel: true : (default) Stop microphone capture. false : Do not stop microphone capture.
    */
@@ -1585,6 +1577,11 @@ export interface IRtcEngineEventHandler {
    * @param info Uplink network information. See UplinkNetworkInfo.
    */
   onUplinkNetworkInfoUpdated?(info: UplinkNetworkInfo): void;
+
+  /**
+   * @ignore
+   */
+  onDownlinkNetworkInfoUpdated?(info: DownlinkNetworkInfo): void;
 
   /**
    * Callback for the last mile network quality report.
@@ -1868,11 +1865,7 @@ export interface IRtcEngineEventHandler {
    * @param connection Connection information. See RtcConnection.
    * @param stats Local video stream statistics. See LocalVideoStats.
    */
-  onLocalVideoStats?(
-    connection: RtcConnection,
-    sourceType: VideoSourceType,
-    stats: LocalVideoStats
-  ): void;
+  onLocalVideoStats?(connection: RtcConnection, stats: LocalVideoStats): void;
 
   /**
    * Callback for remote video stream statistics during a call.
@@ -2049,36 +2042,6 @@ export interface IRtcEngineEventHandler {
     code: ErrorCodeType,
     missed: number,
     cached: number
-  ): void;
-
-  /**
-   * @ignore
-   */
-  onRdtMessage?(
-    connection: RtcConnection,
-    userId: number,
-    type: RdtStreamType,
-    data: string,
-    length: number
-  ): void;
-
-  /**
-   * @ignore
-   */
-  onRdtStateChanged?(
-    connection: RtcConnection,
-    userId: number,
-    state: RdtState
-  ): void;
-
-  /**
-   * @ignore
-   */
-  onMediaControlMessage?(
-    connection: RtcConnection,
-    userId: number,
-    data: string,
-    length: number
   ): void;
 
   /**
@@ -2346,6 +2309,11 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
+   * @ignore
+   */
+  onLocalPublishFallbackToAudioOnly?(isFallbackOrRecover: boolean): void;
+
+  /**
    * Callback when the subscribed stream falls back to audio-only or recovers to audio and video.
    *
    * When you call setRemoteSubscribeFallbackOption and set option to StreamFallbackOptionAudioOnly, this callback is triggered in the following situations:
@@ -2417,6 +2385,25 @@ export interface IRtcEngineEventHandler {
   ): void;
 
   /**
+   * @ignore
+   */
+  onWlAccMessage?(
+    connection: RtcConnection,
+    reason: WlaccMessageReason,
+    action: WlaccSuggestAction,
+    wlAccMsg: string
+  ): void;
+
+  /**
+   * @ignore
+   */
+  onWlAccStats?(
+    connection: RtcConnection,
+    currentStats: WlAccStats,
+    averageStats: WlAccStats
+  ): void;
+
+  /**
    * Callback when the local network type changes.
    *
    * When the local network connection type changes, the SDK triggers this callback and specifies the current network connection type in the callback. You can use this callback to get the network type being used. When the connection is interrupted, this callback can help identify whether the interruption is due to a network switch or poor network conditions.
@@ -2447,13 +2434,6 @@ export interface IRtcEngineEventHandler {
    * @param permissionType Device permission type. See PermissionType.
    */
   onPermissionError?(permissionType: PermissionType): void;
-
-  /**
-   * Callback when permission is granted.
-   *
-   * @param permissionType Type of permission. See PermissionType.
-   */
-  onPermissionGranted?(permissionType: PermissionType): void;
 
   /**
    * Occurs when the local user successfully registers a User Account.
@@ -2682,20 +2662,6 @@ export interface IRtcEngineEventHandler {
    * @param stats Multipath transmission statistics. See MultipathStats.
    */
   onMultipathStats?(connection: RtcConnection, stats: MultipathStats): void;
-
-  /**
-   * Callback for the result of calling the renewToken method.
-   *
-   * Since Added since v4.6.2. This callback is triggered after you call the renewToken method to update the token, to notify the update result.
-   *
-   * @param token The updated token.
-   * @param code Error code. See RenewTokenErrorCode.
-   */
-  onRenewTokenResult?(
-    connection: RtcConnection,
-    token: string,
-    code: RenewTokenErrorCode
-  ): void;
 }
 
 /**
@@ -2765,7 +2731,7 @@ export enum VideoEffectNodeId {
    */
   Filter = 1 << 2,
   /**
-   * (8): Sticker effect node.
+   * @ignore
    */
   Sticker = 1 << 3,
 }
@@ -2836,6 +2802,15 @@ export abstract class IVideoEffectObject {
   abstract performVideoEffectAction(
     nodeId: number,
     actionId: VideoEffectAction
+  ): number;
+
+  /**
+   * @ignore
+   */
+  abstract setVideoEffectStringParam(
+    option: string,
+    key: string,
+    param: string
   ): number;
 
   /**
@@ -3058,105 +3033,93 @@ export interface IMetadataObserver {
 }
 
 /**
- * Reason for CDN streaming state change.
- *
- * Deprecated Deprecated since v4.6.2.
+ * @ignore
  */
 export enum DirectCdnStreamingReason {
   /**
-   * 0: Streaming state is normal.
+   * @ignore
    */
   DirectCdnStreamingReasonOk = 0,
   /**
-   * 1: General error with no specific reason. You can try restarting the stream.
+   * @ignore
    */
   DirectCdnStreamingReasonFailed = 1,
   /**
-   * 2: Error in audio streaming. For example, the local audio capture device is not working properly, is occupied by another process, or lacks permission.
+   * @ignore
    */
   DirectCdnStreamingReasonAudioPublication = 2,
   /**
-   * 3: Error in video streaming. For example, the local video capture device is not working properly, is occupied by another process, or lacks permission.
+   * @ignore
    */
   DirectCdnStreamingReasonVideoPublication = 3,
   /**
-   * 4: Failed to connect to CDN.
+   * @ignore
    */
   DirectCdnStreamingReasonNetConnect = 4,
   /**
-   * 5: The URL is already used for streaming. Please use a new URL.
+   * @ignore
    */
   DirectCdnStreamingReasonBadName = 5,
 }
 
 /**
- * Current CDN streaming state.
- *
- * Deprecated Deprecated since v4.6.2.
+ * @ignore
  */
 export enum DirectCdnStreamingState {
   /**
-   * 0: Initial state, streaming has not started yet.
+   * @ignore
    */
   DirectCdnStreamingStateIdle = 0,
   /**
-   * 1: Streaming in progress. When you call startDirectCdnStreaming and the streaming starts successfully, the SDK returns this value.
+   * @ignore
    */
   DirectCdnStreamingStateRunning = 1,
   /**
-   * 2: Streaming has ended normally. When you call stopDirectCdnStreaming to stop streaming manually, the SDK returns this value.
+   * @ignore
    */
   DirectCdnStreamingStateStopped = 2,
   /**
-   * 3: Streaming failed. You can troubleshoot the issue using the information reported in the onDirectCdnStreamingStateChanged callback, then restart streaming.
+   * @ignore
    */
   DirectCdnStreamingStateFailed = 3,
   /**
-   * 4: Attempting to reconnect to the Agora server and CDN. The SDK tries to reconnect up to 10 times. If reconnection still fails, the streaming state changes to DirectCdnStreamingStateFailed.
+   * @ignore
    */
   DirectCdnStreamingStateRecovering = 4,
 }
 
 /**
- * Current CDN streaming statistics.
- *
- * Deprecated Deprecated since v4.6.2.
+ * @ignore
  */
 export class DirectCdnStreamingStats {
   /**
-   * Video width (px).
+   * @ignore
    */
   videoWidth?: number;
   /**
-   * Video height (px).
+   * @ignore
    */
   videoHeight?: number;
   /**
-   * Current video frame rate (fps).
+   * @ignore
    */
   fps?: number;
   /**
-   * Current video bitrate (bps).
+   * @ignore
    */
   videoBitrate?: number;
   /**
-   * Current audio bitrate (bps).
+   * @ignore
    */
   audioBitrate?: number;
 }
 
 /**
- * The IDirectCdnStreamingEventHandler interface class is used by the SDK to send CDN streaming event notifications to the App. The App obtains SDK event notifications by inheriting methods of this interface class.
+ * @ignore
  */
 export interface IDirectCdnStreamingEventHandler {
   /**
-   * Callback when the CDN streaming state changes.
-   *
-   * After the host starts direct CDN streaming, when the streaming state changes, the SDK triggers this callback to report the new state, error code, and message. You can use this information to troubleshoot.
-   *
-   * @param state The current streaming state. See DirectCdnStreamingState.
-   * @param reason The reason for the change in streaming state. See DirectCdnStreamingReason.
-   * @param message The message corresponding to the state change.
+   * @ignore
    */
   onDirectCdnStreamingStateChanged?(
     state: DirectCdnStreamingState,
@@ -3165,35 +3128,29 @@ export interface IDirectCdnStreamingEventHandler {
   ): void;
 
   /**
-   * Callback for CDN streaming statistics.
-   *
-   * During the process of pushing streams directly to CDN by the host, the SDK triggers this callback every second.
-   *
-   * @param stats Current streaming statistics. See DirectCdnStreamingStats.
+   * @ignore
    */
   onDirectCdnStreamingStats?(stats: DirectCdnStreamingStats): void;
 }
 
 /**
- * Media options for the host.
- *
- * Deprecated Deprecated since v4.6.2.
+ * @ignore
  */
 export class DirectCdnStreamingMediaOptions {
   /**
-   * Whether to publish video captured by the camera. true : Publish camera video. false : (Default) Do not publish camera video.
+   * @ignore
    */
   publishCameraTrack?: boolean;
   /**
-   * Whether to publish audio captured by the microphone. true : Publish microphone audio. false : (Default) Do not publish microphone audio.
+   * @ignore
    */
   publishMicrophoneTrack?: boolean;
   /**
-   * Whether to publish custom captured audio. true : Publish custom audio. false : (Default) Do not publish custom audio.
+   * @ignore
    */
   publishCustomAudioTrack?: boolean;
   /**
-   * Whether to publish custom captured video. true : Publish custom video. false : (Default) Do not publish custom video.
+   * @ignore
    */
   publishCustomVideoTrack?: boolean;
   /**
@@ -3205,7 +3162,7 @@ export class DirectCdnStreamingMediaOptions {
    */
   publishMediaPlayerId?: number;
   /**
-   * The video track ID returned by the createCustomVideoTrack method. Default is 0.
+   * @ignore
    */
   customVideoTrackId?: number;
 }
@@ -3303,11 +3260,11 @@ export abstract class IRtcEngine {
    *  Ensure the channel name, user ID, and Token passed during preload match those used when joining the channel, otherwise preload will not take effect.
    *  A single IRtcEngine instance supports up to 20 preloaded channels. If exceeded, only the latest 20 preloaded channels are effective.
    *
-   * @param token A dynamic key generated on your server for authentication. See [Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * @param token A dynamic key generated on your server for authentication. See [Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    * When the Token expires, depending on the number of preloaded channels, you can provide a new Token in different ways:
    *  For one preloaded channel: call this method again with the new Token.
    *  For multiple preloaded channels:
-   *  If using a wildcard Token, call updatePreloadChannelToken to update the Token for all preloaded channels. When generating a wildcard Token, the user ID must not be 0. See [Using Wildcard Token](https://doc.shengwang.cn/doc/rtc/rn/best-practice/wildcard-token).
+   *  If using a wildcard Token, call updatePreloadChannelToken to update the Token for all preloaded channels. When generating a wildcard Token, the user ID must not be 0. See [Using Wildcard Token](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    *  If using different Tokens: call this method with the user ID, channel name, and the updated Token.
    * @param channelId The name of the channel to preload. This parameter identifies the channel for real-time audio and video interaction. Users with the same App ID and channel name join the same channel.
    * This parameter must be a string no longer than 64 bytes. Supported character set (89 characters total):
@@ -3338,11 +3295,11 @@ export abstract class IRtcEngine {
    *  Make sure the channelId, userAccount, and token passed during preloading are the same as those used when joining the channel later; otherwise, preloading will not take effect.
    *  Currently, one IRtcEngine instance supports preloading up to 20 channels. If this limit is exceeded, only the latest 20 preloaded channels take effect.
    *
-   * @param token A dynamic key generated on your server for authentication. See [Use Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * @param token A dynamic key generated on your server for authentication. See [Use Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    * When the token expires, depending on the number of preloaded channels, you can pass a new token in different ways:
    *  For a single preloaded channel: call this method to pass the new token.
    *  For multiple preloaded channels:
-   *  If you use a wildcard token, call updatePreloadChannelToken to update the token for all preloaded channels. When generating a wildcard token, the user ID must not be 0. See [Use Wildcard Token](https://doc.shengwang.cn/doc/rtc/rn/best-practice/wildcard-token).
+   *  If you use a wildcard token, call updatePreloadChannelToken to update the token for all preloaded channels. When generating a wildcard token, the user ID must not be 0. See [Use Wildcard Token](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    *  If you use different tokens: call this method and pass your user ID, corresponding channel name, and the updated token.
    * @param channelId The name of the channel to preload. This parameter identifies the channel for real-time audio and video interaction. Under the same App ID, users with the same channel name will join the same channel for interaction.
    * This parameter must be a string within 64 bytes. The supported character set includes 89 characters:
@@ -3393,10 +3350,10 @@ export abstract class IRtcEngine {
    *  Apps with different App IDs cannot communicate with each other.
    *  Before joining a channel, make sure the App ID used to generate the Token is the same as the one used in the initialize method to initialize the engine, otherwise joining the channel with the Token will fail.
    *
-   * @param token A dynamic key generated on your server for authentication. See [Use Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * @param token A dynamic key generated on your server for authentication. See [Use Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    *  (Recommended) If your project enables the security mode, i.e., uses APP ID + Token for authentication, this parameter is required.
    *  If your project only enables debug mode, i.e., uses only the APP ID for authentication, you can join the channel without a Token. The user will automatically leave the channel 24 hours after successfully joining.
-   *  If you need to join multiple channels simultaneously or switch channels frequently, Agora recommends using a wildcard Token to avoid requesting a new Token from the server each time. See [Use Wildcard Token](https://doc.shengwang.cn/doc/rtc/rn/best-practice/wildcard-token).
+   *  If you need to join multiple channels simultaneously or switch channels frequently, Agora recommends using a wildcard Token to avoid requesting a new Token from the server each time. See [Use Wildcard Token](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    * @param channelId Channel name. This parameter identifies the channel for real-time audio and video interaction. Users with the same App ID and channel name will join the same channel. This parameter is a string of up to 64 bytes. Supported character set (89 characters total):
    *  26 lowercase English letters a~z
    *  26 uppercase English letters A~Z
@@ -3686,7 +3643,7 @@ export abstract class IRtcEngine {
   /**
    * Sets face shaping effect options and specifies the media source.
    *
-   * Call this method to apply preset parameters for facial modifications such as face slimming, eye enlargement, and nose slimming in one go, and to adjust the overall intensity of the effects. Face shaping is a value-added service. For billing details, see [Billing Strategy](https://doc.shengwang.cn/doc/rtc/android/billing/billing-strategy).
+   * Call this method to apply preset parameters for facial modifications such as face slimming, eye enlargement, and nose slimming in one go, and to adjust the overall intensity of the effects. Face shaping is a value-added service. For billing details, see [Billing Strategy](https://docs.agora.io/en/video-calling/overview/pricing).
    *  On Android, this method is only supported on Android 4.4 and above.
    *  This method depends on the video enhancement dynamic library libagora_clear_vision_extension.dll. Removing this library will cause the feature to fail.
    *  This feature has high performance requirements. When calling this method, the SDK automatically checks the capabilities of the current device.
@@ -3713,7 +3670,7 @@ export abstract class IRtcEngine {
   /**
    * Sets face shape area options and specifies the media source.
    *
-   * If the preset face shaping effects implemented in the setFaceShapeBeautyOptions method do not meet your expectations, you can use this method to set face shape area options to fine-tune individual facial features for more refined face shaping effects. Face shaping is a value-added service. For billing details, see [Billing Strategy](https://doc.shengwang.cn/doc/rtc/android/billing/billing-strategy).
+   * If the preset face shaping effects implemented in the setFaceShapeBeautyOptions method do not meet your expectations, you can use this method to set face shape area options to fine-tune individual facial features for more refined face shaping effects. Face shaping is a value-added service. For billing details, see [Billing Strategy](https://docs.agora.io/en/video-calling/overview/pricing).
    *  On Android, this method is only supported on Android 4.4 and above.
    *  This method depends on the video enhancement dynamic library libagora_clear_vision_extension.dll. Removing this library will cause the feature to fail.
    *  This feature has high performance requirements. When calling this method, the SDK automatically checks the capabilities of the current device.
@@ -3970,7 +3927,7 @@ export abstract class IRtcEngine {
    *  When someone subscribes to the low stream, it is enabled and reset to the SimulcastStreamConfig set by the user's most recent call to setDualStreamMode. If not previously set, the following values are used:
    *  Resolution: 480 × 272
    *  Frame rate: 15 fps
-   *  Bitrate: 500 Kbps ApplicationScenario1v1 (2) is suitable for [1v1 video call](https://doc.shengwang.cn/doc/one-to-one-live/android/rtm/overview/product-overview) scenarios. The SDK optimizes strategies for low latency and high video quality, improving performance in image quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak networks. ApplicationScenarioLiveshow (3) is suitable for [showroom live streaming](https://doc.shengwang.cn/doc/showroom/android/overview/product-overview) scenarios. For this scenario's high requirements on first frame rendering time and image clarity, the SDK applies optimizations such as enabling audio/video frame accelerated rendering by default to enhance first frame experience (no need to call enableInstantMediaRendering), and enabling B-frames by default to ensure high image quality and transmission efficiency. It also enhances video quality and smoothness under weak networks and on low-end devices.
+   *  Bitrate: 500 Kbps ApplicationScenario1v1 (2) is suitable for 1v1 video call scenarios. The SDK optimizes strategies for low latency and high video quality, improving performance in image quality, first frame rendering, latency on mid-to-low-end devices, and smoothness under weak networks. ApplicationScenarioLiveshow (3) is suitable for showroom live streaming scenarios. For this scenario's high requirements on first frame rendering time and image clarity, the SDK applies optimizations such as enabling audio/video frame accelerated rendering by default to enhance first frame experience (no need to call enableInstantMediaRendering), and enabling B-frames by default to ensure high image quality and transmission efficiency. It also enhances video quality and smoothness under weak networks and on low-end devices.
    *
    * @returns
    * 0: Method call succeeds.
@@ -4153,7 +4110,7 @@ export abstract class IRtcEngine {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setRemoteDefaultVideoStreamType(streamType: VideoStreamType): number;
 
@@ -4165,7 +4122,7 @@ export abstract class IRtcEngine {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract muteRemoteVideoStream(uid: number, mute: boolean): number;
 
@@ -4184,7 +4141,7 @@ export abstract class IRtcEngine {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setRemoteVideoStreamType(
     uid: number,
@@ -4375,7 +4332,7 @@ export abstract class IRtcEngine {
   /**
    * Starts playing a music file.
    *
-   * For supported audio file formats, see [What audio formats does the RTC SDK support](https://doc.shengwang.cn/faq/general-product-inquiry/audio-format). If the local music file does not exist, the file format is not supported, or the online music file URL is inaccessible, the SDK reports AudioMixingReasonCanNotOpen.
+   * For supported audio file formats, see [What audio formats does the RTC SDK support](https://docs.agora.io/en/help/general-product-inquiry/audio_format#extended-audio-file-formats). If the local music file does not exist, the file format is not supported, or the online music file URL is inaccessible, the SDK reports AudioMixingReasonCanNotOpen.
    *  Using this method to play short sound effect files may result in failure. If you need to play sound effects, use playEffect instead.
    *  If you need to call this method multiple times, make sure the interval between calls is greater than 500 ms.
    *  When calling this method on Android, note the following:
@@ -4445,7 +4402,7 @@ export abstract class IRtcEngine {
    * Specifies the audio track to play in the current music file.
    *
    * After retrieving the number of audio tracks in a music file, you can call this method to specify any track for playback. For example, if different tracks in a multi-track file contain songs in different languages, you can use this method to set the playback language.
-   *  For supported audio file formats, see [What audio file formats does the RTC SDK support?](https://doc.shengwang.cn/faq/general-product-inquiry/audio-format).
+   *  For supported audio file formats, see [What audio file formats does the RTC SDK support?](https://docs.agora.io/en/help/general-product-inquiry/audio_format#extended-audio-file-formats).
    *  You must call this method after calling startAudioMixing and receiving the onAudioMixingStateChanged(AudioMixingStatePlaying) callback.
    *
    * @param index The specified audio track to play. The value must be greater than or equal to 0 and less than the return value of getAudioTrackCount.
@@ -4631,7 +4588,7 @@ export abstract class IRtcEngine {
    * Loads the audio effect file into memory.
    *
    * To ensure smooth communication, pay attention to the size of the audio effect files you preload.
-   * Supported audio formats for preloading are listed in [Supported Audio Formats](https://doc.shengwang.cn/faq/general-product-inquiry/audio-format).
+   * Supported audio formats for preloading are listed in [Supported Audio Formats](https://docs.agora.io/en/help/general-product-inquiry/audio_format#extended-audio-file-formats).
    *
    * @param soundId The ID of the audio effect. Each audio effect has a unique ID.
    * @param filePath File path:
@@ -5341,7 +5298,7 @@ export abstract class IRtcEngine {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setDualStreamMode(
     mode: SimulcastStreamMode,
@@ -5480,8 +5437,7 @@ export abstract class IRtcEngine {
    */
   abstract setPlaybackAudioFrameBeforeMixingParameters(
     sampleRate: number,
-    channel: number,
-    samplesPerCall: number
+    channel: number
   ): number;
 
   /**
@@ -5599,6 +5555,11 @@ export abstract class IRtcEngine {
    *  < 0: Failure. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract adjustUserPlaybackSignalVolume(uid: number, volume: number): number;
+
+  /**
+   * @ignore
+   */
+  abstract setLocalPublishFallbackOption(option: StreamFallbackOptions): number;
 
   /**
    * Sets the fallback option for subscribed audio and video streams under poor network conditions.
@@ -6088,7 +6049,7 @@ export abstract class IRtcEngine {
    *  Voice call: Earpiece
    *  Voice live streaming: Speaker
    *  Video call: Speaker
-   *  Video live streaming: Speaker Calling this API allows you to change the default audio route above. After setting the default audio route using this method, the actual audio route may change when external audio devices (wired or Bluetooth headsets) are connected. See [Audio Route](https://doc.shengwang.cn/doc/rtc/android/advanced-features/audio-route).
+   *  Video live streaming: Speaker Calling this API allows you to change the default audio route above. After setting the default audio route using this method, the actual audio route may change when external audio devices (wired or Bluetooth headsets) are connected..
    *
    * @param defaultToSpeaker Whether to use the speaker as the default audio route: true : Set the default audio route to speaker. false : Set the default audio route to earpiece.
    *
@@ -6103,7 +6064,7 @@ export abstract class IRtcEngine {
   /**
    * Enables or disables speakerphone playback.
    *
-   * For default audio routes in different scenarios, see [Audio Route](https://doc.shengwang.cn/doc/rtc/android/advanced-features/audio-route).
+   * For default audio routes in different scenarios,.
    *  This method only sets the audio route used by the user in the current channel and does not affect the SDK's default audio route. If the user leaves the current channel and joins a new one, the SDK's default audio route will still be used.
    *  If the user uses external audio playback devices such as Bluetooth or wired headsets, this method has no effect, and audio will only be played through the external device. If multiple external devices are connected, audio will be played through the most recently connected device.
    *
@@ -6441,7 +6402,7 @@ export abstract class IRtcEngine {
   /**
    * Starts RTMP streaming without transcoding.
    *
-   * Agora recommends using the more advanced server-side streaming feature. See [Implement server-side streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+   * Agora recommends using the more advanced server-side streaming feature. See [Implement server-side streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
    * Call this method to push live audio and video streams to the specified RTMP streaming URL. This method can push to only one URL at a time. To push to multiple URLs, call this method multiple times.
    * After calling this method, the SDK triggers the onRtmpStreamingStateChanged callback locally to report the streaming status.
    *  Call this method after joining a channel.
@@ -6462,9 +6423,9 @@ export abstract class IRtcEngine {
   /**
    * Starts pushing media streams to a CDN and sets the transcoding configuration.
    *
-   * Agora recommends using the more comprehensive server-side CDN streaming service. See [Implement server-side CDN streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+   * Agora recommends using the more comprehensive server-side CDN streaming service. See [Implement server-side CDN streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
    * Call this method to push live audio and video streams to the specified CDN streaming URL and set the transcoding configuration. This method can only push media streams to one URL at a time. To push to multiple URLs, call this method multiple times.
-   * Each push stream represents a streaming task. The maximum number of concurrent tasks is 200 by default, which means you can run up to 200 streaming tasks simultaneously under one Agora project. To increase the quota, [contact technical support](https://ticket.shengwang.cn/).
+   * Each push stream represents a streaming task. The maximum number of concurrent tasks is 200 by default, which means you can run up to 200 streaming tasks simultaneously under one Agora project. To increase the quota, [contact technical support](https://www.agora.io/cn/contact/).
    * After calling this method, the SDK triggers the onRtmpStreamingStateChanged callback locally to report the streaming status.
    *  Call this method after joining a channel.
    *  Only hosts in a live streaming scenario can call this method.
@@ -6488,7 +6449,7 @@ export abstract class IRtcEngine {
   /**
    * Updates the transcoding configuration for CDN streaming.
    *
-   * Agora recommends using the more comprehensive server-side CDN streaming service. See [Implement server-side CDN streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+   * Agora recommends using the more comprehensive server-side CDN streaming service. See [Implement server-side CDN streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
    * After enabling transcoding streaming, you can dynamically update the transcoding configuration based on your scenario. After the update, the SDK triggers the onTranscodingUpdated callback.
    *
    * @param transcoding The transcoding configuration for CDN streaming. See LiveTranscoding.
@@ -6538,7 +6499,7 @@ export abstract class IRtcEngine {
   /**
    * Stops CDN streaming.
    *
-   * Agora recommends using the more comprehensive server-side CDN streaming service. See [Implement server-side CDN streaming](https://doc.shengwang.cn/doc/media-push/restful/landing-page).
+   * Agora recommends using the more comprehensive server-side CDN streaming service. See [Implement server-side CDN streaming](https://docs.agora.io/en/media-push/get-started/enable-media-push).
    * Call this method to stop the live streaming to the specified CDN streaming URL. This method can only stop streaming to one URL at a time. To stop streaming to multiple URLs, call this method multiple times.
    * After calling this method, the SDK triggers the onRtmpStreamingStateChanged callback locally to report the streaming status.
    *
@@ -6764,25 +6725,6 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * @ignore
-   */
-  abstract sendRdtMessage(
-    uid: number,
-    type: RdtStreamType,
-    data: string,
-    length: number
-  ): number;
-
-  /**
-   * @ignore
-   */
-  abstract sendMediaControlMessage(
-    uid: number,
-    data: string,
-    length: number
-  ): number;
-
-  /**
    * Adds a local video watermark.
    *
    * Deprecated Deprecated: This method is deprecated. Use addVideoWatermarkWithConfig instead. This method adds a PNG image as a watermark to the local published live video stream. Users in the same live channel, audience of the CDN live stream, and capture devices can all see or capture the watermark image. Currently, only one watermark can be added to the live video stream. A newly added watermark replaces the previous one.
@@ -6807,19 +6749,6 @@ export abstract class IRtcEngine {
     watermarkUrl: string,
     options: WatermarkOptions
   ): number;
-
-  /**
-   * Removes the watermark image from the local video.
-   *
-   * Since Available since v4.6.2. This method removes a previously added watermark image from the local video stream based on the specified unique ID.
-   *
-   * @param id The ID of the watermark to be removed. This value must match the ID used when adding the watermark.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract removeVideoWatermark(id: string): number;
 
   /**
    * Removes added video watermarks.
@@ -6857,7 +6786,7 @@ export abstract class IRtcEngine {
   /**
    * Sends a custom report message.
    *
-   * Agora provides custom data reporting and analytics services. This service is currently in a free beta period. During the beta, you can send up to 10 custom data messages within 6 seconds. Each message must not exceed 256 bytes, and each string must not exceed 100 bytes. To try this service, please [contact sales](https://www.shengwang.cn/contact-sales/) to enable it and agree on the custom data format.
+   * Agora provides custom data reporting and analytics services. This service is currently in a free beta period. During the beta, you can send up to 10 custom data messages within 6 seconds. Each message must not exceed 256 bytes, and each string must not exceed 100 bytes. To try this service, please [contact sales](mailto:support@agora.io) to enable it and agree on the custom data format.
    */
   abstract sendCustomReportMessage(
     id: string,
@@ -6932,7 +6861,7 @@ export abstract class IRtcEngine {
    *  Thunder
    *  Explosions
    *  Cracking sounds, etc.
-   *  This method depends on the AI noise reduction dynamic library. Removing the dynamic library will cause the feature to fail. For the name of the AI noise reduction dynamic library, see [Plugin List](https://doc.shengwang.cn/doc/rtc/rn/best-practice/reduce-app-size#%E6%8F%92%E4%BB%B6%E5%88%97%E8%A1%A8).
+   *  This method depends on the AI noise reduction dynamic library. Removing the dynamic library will cause the feature to fail. For the name of the AI noise reduction dynamic library, see [Plugin List](https://docs.agora.io/en/video-calling/best-practices/app-size-optimization?platform=android#extension-list).
    *  Currently, it is not recommended to enable this feature on devices running Android 6.0 or below.
    *
    * @param enabled Whether to enable AI noise reduction: true : Enable AI noise reduction. false : (Default) Disable AI noise reduction.
@@ -6977,10 +6906,10 @@ export abstract class IRtcEngine {
    *  Apps with different App IDs cannot communicate with each other.
    *  Before joining a channel, make sure the App ID used to generate the Token is the same as the one used in the initialize method to initialize the engine, otherwise joining the channel with the Token will fail.
    *
-   * @param token A dynamic key generated on your server for authentication. See [Use Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * @param token A dynamic key generated on your server for authentication. See [Use Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    *  (Recommended) If your project enables the security mode, i.e., uses APP ID + Token for authentication, this parameter is required.
    *  If your project only enables debug mode, i.e., uses only the APP ID for authentication, you can join the channel without a Token. The user will automatically leave the channel 24 hours after successfully joining.
-   *  If you need to join multiple channels simultaneously or switch channels frequently, Agora recommends using a wildcard Token to avoid requesting a new Token from the server each time. See [Use Wildcard Token](https://doc.shengwang.cn/doc/rtc/rn/best-practice/wildcard-token).
+   *  If you need to join multiple channels simultaneously or switch channels frequently, Agora recommends using a wildcard Token to avoid requesting a new Token from the server each time. See [Use Wildcard Token](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    * @param userAccount User Account. This parameter identifies the user in the real-time audio and video interaction channel. You must set and manage the User Account yourself and ensure it is unique within the same channel. This parameter is required, must not exceed 255 bytes, and cannot be null. Supported character set (89 characters total):
    *  26 lowercase English letters a-z
    *  26 uppercase English letters A-Z
@@ -7016,10 +6945,10 @@ export abstract class IRtcEngine {
    *  Apps with different App IDs cannot communicate with each other.
    *  Before joining a channel, ensure the App ID used to generate the Token is the same as the one used to initialize the engine with initialize, otherwise joining the channel with Token will fail.
    *
-   * @param token A dynamic key generated on your server for authentication. See [Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * @param token A dynamic key generated on your server for authentication. See [Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    *  (Recommended) If your project has enabled the security mode using APP ID + Token for authentication, this parameter is required.
    *  If your project is in debug mode using only APP ID for authentication, you can join the channel without a Token. You will automatically leave the channel 24 hours after joining.
-   *  If you need to join multiple channels or switch frequently, Agora recommends using a wildcard Token to avoid requesting a new Token from your server each time. See [Using Wildcard Token](https://doc.shengwang.cn/doc/rtc/rn/best-practice/wildcard-token).
+   *  If you need to join multiple channels or switch frequently, Agora recommends using a wildcard Token to avoid requesting a new Token from your server each time. See [Using Wildcard Token](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    * @param userAccount The user's User Account. This parameter identifies the user in the real-time audio and video channel. You must set and manage the User Account yourself and ensure that each user in the same channel has a unique User Account. This parameter is required and must not exceed 255 bytes or be null. Supported character set (89 characters total):
    *  26 lowercase letters a-z
    *  26 uppercase letters A-Z
@@ -7079,7 +7008,7 @@ export abstract class IRtcEngine {
    *  If the callback reports RelayStateFailure (3), it means an error occurred in cross-channel media stream forwarding.
    *  Call this method after successfully joining a channel.
    *  In a live streaming scenario, only users with the broadcaster role can call this method.
-   *  To use the cross-channel media stream forwarding feature, you need to [contact technical support](https://ticket.shengwang.cn/) to enable it.
+   *  To use the cross-channel media stream forwarding feature, you need to [contact technical support](https://www.agora.io/cn/contact/) to enable it.
    *  This feature does not support string-type UIDs.
    *
    * @param configuration Configuration for cross-channel media stream forwarding. See ChannelMediaRelayConfiguration.
@@ -7132,53 +7061,21 @@ export abstract class IRtcEngine {
   abstract resumeAllChannelMediaRelay(): number;
 
   /**
-   * Sets the audio encoding profile for direct CDN streaming from the host.
-   *
-   * Deprecated Deprecated since v4.6.2. This method is only effective for audio collected from the microphone or custom audio sources, i.e., when publishMicrophoneTrack or publishCustomAudioTrack is set to true in DirectCdnStreamingMediaOptions.
-   *
-   * @returns
-   * 0: The method call succeeds.
-   *  < 0: The method call fails. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * @ignore
    */
   abstract setDirectCdnStreamingAudioConfiguration(
     profile: AudioProfileType
   ): number;
 
   /**
-   * Sets the video encoding profile for direct CDN streaming from the host.
-   *
-   * Deprecated Deprecated since v4.6.2. This method is only effective for video collected from the camera, screen sharing, or custom video sources, i.e., when publishCameraTrack or publishCustomVideoTrack is set to true in DirectCdnStreamingMediaOptions.
-   * If the resolution you set exceeds the capabilities of your camera device, the SDK adapts the resolution to the closest supported value with the same aspect ratio for capturing, encoding, and streaming. You can use the onDirectCdnStreamingStats callback to get the actual resolution of the pushed video stream.
-   *
-   * @param config Video encoding configuration. See VideoEncoderConfiguration. When streaming directly to CDN, the SDK currently only supports setting OrientationMode to landscape (OrientationFixedLandscape) or portrait (OrientationFixedPortrait).
-   *
-   * @returns
-   * 0: The method call succeeds.
-   *  < 0: The method call fails. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * @ignore
    */
   abstract setDirectCdnStreamingVideoConfiguration(
     config: VideoEncoderConfiguration
   ): number;
 
   /**
-   * Starts direct CDN streaming from the host.
-   *
-   * Deprecated Deprecated since v4.6.2. The SDK does not support pushing streams to the same URL simultaneously.
-   * Media options:
-   * The SDK does not support setting both publishCameraTrack and publishCustomVideoTrack to true, nor both publishMicrophoneTrack and publishCustomAudioTrack to true. You can configure the media options (DirectCdnStreamingMediaOptions) based on your scenario. For example:
-   * If you want to push custom audio and video streams from the host, set the media options as follows:
-   *  Set publishCustomAudioTrack to true and call pushAudioFrame
-   *  Set publishCustomVideoTrack to true and call pushVideoFrame
-   *  Ensure publishCameraTrack is false (default)
-   *  Ensure publishMicrophoneTrack is false (default) Since v4.2.0, the SDK supports pushing audio-only streams. You can set publishCustomAudioTrack or publishMicrophoneTrack to true in DirectCdnStreamingMediaOptions and call pushAudioFrame to push audio-only streams.
-   *
-   * @param eventHandler See onDirectCdnStreamingStateChanged and onDirectCdnStreamingStats.
-   * @param publishUrl CDN streaming URL.
-   * @param options Media options for the host. See DirectCdnStreamingMediaOptions.
-   *
-   * @returns
-   * 0: The method call succeeds.
-   *  < 0: The method call fails. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * @ignore
    */
   abstract startDirectCdnStreaming(
     eventHandler: IDirectCdnStreamingEventHandler,
@@ -7187,13 +7084,7 @@ export abstract class IRtcEngine {
   ): number;
 
   /**
-   * Stops direct CDN streaming from the host.
-   *
-   * Deprecated Deprecated since v4.6.2.
-   *
-   * @returns
-   * 0: The method call succeeds.
-   *  < 0: The method call fails. See [Error Codes](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
+   * @ignore
    */
   abstract stopDirectCdnStreaming(): number;
 
@@ -7211,8 +7102,8 @@ export abstract class IRtcEngine {
    *  After the virtual metronome is enabled, the SDK starts playing the specified audio files from the beginning and controls the playback duration of each file based on the beatsPerMinute you set in AgoraRhythmPlayerConfig. For example, if beatsPerMinute is set to 60, the SDK plays one beat per second. If the file duration exceeds the beat duration, the SDK only plays the portion of the audio corresponding to the beat duration.
    *  By default, the sound of the virtual metronome is not published to remote users. If you want remote users to hear the sound of the virtual metronome, you can set publishRhythmPlayerTrack in ChannelMediaOptions to true after calling this method.
    *
-   * @param sound1 The absolute path or URL of the strong beat file, including the file name and extension. For example, C:\music\audio.mp4. For supported audio formats, see [Supported Audio Formats in RTC SDK](https://doc.shengwang.cn/faq/general-product-inquiry/audio-format).
-   * @param sound2 The absolute path or URL of the weak beat file, including the file name and extension. For example, C:\music\audio.mp4. For supported audio formats, see [Supported Audio Formats in RTC SDK](https://doc.shengwang.cn/faq/general-product-inquiry/audio-format).
+   * @param sound1 The absolute path or URL of the strong beat file, including the file name and extension. For example, C:\music\audio.mp4. For supported audio formats, see [Supported Audio Formats in RTC SDK](https://docs.agora.io/en/help/general-product-inquiry/audio_format#extended-audio-file-formats).
+   * @param sound2 The absolute path or URL of the weak beat file, including the file name and extension. For example, C:\music\audio.mp4. For supported audio formats, see [Supported Audio Formats in RTC SDK](https://docs.agora.io/en/help/general-product-inquiry/audio_format#extended-audio-file-formats).
    * @param config Metronome configuration. See AgoraRhythmPlayerConfig.
    *
    * @returns
@@ -7404,6 +7295,11 @@ export abstract class IRtcEngine {
   abstract getCurrentMonotonicTimeInMs(): number;
 
   /**
+   * @ignore
+   */
+  abstract enableWirelessAccelerate(enabled: boolean): number;
+
+  /**
    * Gets the local network connection type.
    *
    * You can call this method at any time to get the current network type in use. This method can be called before and after joining a channel.
@@ -7491,19 +7387,6 @@ export abstract class IRtcEngine {
    * @ignore
    */
   abstract queryHDRCapability(videoModule: VideoModuleType): HdrCapability;
-
-  /**
-   * Adds a watermark image to the local video stream.
-   *
-   * Since Available since v4.6.2. You can use this method to overlay a watermark image on the local video stream and configure the position, size, and visibility of the watermark in the preview using WatermarkConfig.
-   *
-   * @param configs Watermark configuration. See WatermarkConfig.
-   *
-   * @returns
-   * 0: Success.
-   *  < 0: Failure.
-   */
-  abstract addVideoWatermarkWithConfig(configs: WatermarkConfig): number;
 
   /**
    * @ignore

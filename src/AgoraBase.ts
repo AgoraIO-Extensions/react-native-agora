@@ -3,7 +3,6 @@ import {
   AudioSourceType,
   RenderModeType,
   VideoModulePosition,
-  VideoPixelFormat,
   VideoSourceType,
 } from './AgoraMediaBase';
 
@@ -133,6 +132,10 @@ export enum WarnCodeType {
    * @ignore
    */
   WarnAdmPlayoutAudioLowlevel = 1032,
+  /**
+   * @ignore
+   */
+  WarnAdmRecordIsOccupied = 1033,
   /**
    * @ignore
    */
@@ -268,10 +271,6 @@ export enum ErrorCodeType {
    * 22: The SDK failed to allocate resources, possibly due to excessive resource usage by the app or system resource exhaustion.
    */
   ErrResourceLimited = 22,
-  /**
-   * @ignore
-   */
-  ErrFuncIsProhibited = 23,
   /**
    * 101: Invalid App ID. Please use a valid App ID to rejoin the channel.
    */
@@ -414,30 +413,6 @@ export enum ErrorCodeType {
    * 201: Buffer overflow due to PCM sending rate being too fast.
    */
   ErrPcmsendBufferoverflow = 201,
-  /**
-   * @ignore
-   */
-  ErrRdtUserNotExist = 250,
-  /**
-   * @ignore
-   */
-  ErrRdtUserNotReady = 251,
-  /**
-   * @ignore
-   */
-  ErrRdtDataBlocked = 252,
-  /**
-   * @ignore
-   */
-  ErrRdtCmdExceedLimit = 253,
-  /**
-   * @ignore
-   */
-  ErrRdtDataExceedLimit = 254,
-  /**
-   * @ignore
-   */
-  ErrRdtEncryption = 255,
   /**
    * @ignore
    */
@@ -1243,6 +1218,10 @@ export enum MaxUserAccountLengthType {
  */
 export class EncodedVideoFrameInfo {
   /**
+   * @ignore
+   */
+  uid?: number;
+  /**
    * Video codec type. See VideoCodecType. Default value is VideoCodecH264 (2).
    */
   codecType?: VideoCodecType;
@@ -1514,7 +1493,7 @@ export class VideoEncoderConfiguration {
    */
   frameRate?: number;
   /**
-   * Bitrate of the video encoding in Kbps. You do not need to set this parameter; keep the default value STANDARD_BITRATE. The SDK automatically matches the optimal bitrate based on your configured resolution and frame rate. For the mapping between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/rn/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
+   * Bitrate of the video encoding in Kbps. You do not need to set this parameter; keep the default value STANDARD_BITRATE. The SDK automatically matches the optimal bitrate based on your configured resolution and frame rate. For the mapping between resolution and frame rate, see [Video Profile](https://docs.agora.io/en/video-calling/enhance-call-quality/configure-video-encoding).
    *  STANDARD_BITRATE (0): (Default) Standard bitrate mode.
    *  COMPATIBLE_BITRATE (-1): Compatible bitrate mode. In general, we recommend not using this value.
    */
@@ -1663,10 +1642,6 @@ export class SimulcastConfig {
    * @ignore
    */
   configs?: StreamLayerConfig[];
-  /**
-   * @ignore
-   */
-  publish_fallback_enable?: boolean;
 }
 
 /**
@@ -1738,146 +1713,6 @@ export class WatermarkOptions {
    * The fit mode of the watermark. See WatermarkFitMode.
    */
   mode?: WatermarkFitMode;
-  /**
-   * The z-order of the watermark image. Default is 0.
-   */
-  zOrder?: number;
-}
-
-/**
- * Watermark source type.
- *
- * Since Available since v4.6.2.
- */
-export enum WatermarkSourceType {
-  /**
-   * (0): The watermark source is an image.
-   */
-  Image = 0,
-  /**
-   * (1): The watermark source is a buffer.
-   */
-  Buffer = 1,
-  /**
-   * (2): The watermark source is a text literal. (Linux only)
-   */
-  Literal = 2,
-  /**
-   * (3): The watermark source is a timestamp. (Linux only)
-   */
-  Timestamps = 3,
-}
-
-/**
- * Used to configure timestamp watermark.
- *
- * Since Available since v4.6.2. (Linux only)
- */
-export class WatermarkTimestamp {
-  /**
-   * Font size of the timestamp. Default is 10.
-   */
-  fontSize?: number;
-  /**
-   * Path to the timestamp font file. Default is NULL. The font file must be in .ttf format. If not set, the SDK uses the system default font (if available). If used asynchronously, copy the path to memory that will not be released.
-   */
-  fontFilePath?: string;
-  /**
-   * Stroke width of the timestamp. Default is 1.
-   */
-  strokeWidth?: number;
-  /**
-   * Format of the timestamp. Default is %F %X. The format follows the C standard library function strftime. See strftime. If used asynchronously, copy the format string to memory that will not be released.
-   */
-  format?: string;
-}
-
-/**
- * Used to configure text watermark.
- *
- * Since Available since v4.6.2. (Linux only)
- */
-export class WatermarkLiteral {
-  /**
-   * Font size of the text. Default is 10.
-   */
-  fontSize?: number;
-  /**
-   * Stroke width of the text. Default is 1.
-   */
-  strokeWidth?: number;
-  /**
-   * Text content of the watermark. Default is NULL. If used asynchronously, copy the string to memory that will not be released.
-   */
-  wmLiteral?: string;
-  /**
-   * Path to the font file. Default is NULL. The font file should be in .ttf format. If not set, the SDK uses the system default font (if available). If used asynchronously, copy the string to memory that will not be released.
-   */
-  fontFilePath?: string;
-}
-
-/**
- * Used to configure the format, size, and pixel buffer of the watermark image.
- *
- * Since Available since v4.6.2.
- */
-export class WatermarkBuffer {
-  /**
-   * Width of the watermark image in pixels.
-   */
-  width?: number;
-  /**
-   * Height of the watermark image in pixels.
-   */
-  height?: number;
-  /**
-   * Length of the watermark image buffer in bytes.
-   */
-  length?: number;
-  /**
-   * Pixel format of the watermark image. See VideoPixelFormat.
-   */
-  format?: VideoPixelFormat;
-  /**
-   * Pixel buffer data of the watermark image.
-   */
-  buffer?: Uint8Array;
-}
-
-/**
- * Used to configure watermark information.
- *
- * Since Available since v4.6.2.
- */
-export class WatermarkConfig {
-  /**
-   * Unique identifier of the watermark. It is recommended to use UUID.
-   */
-  id?: string;
-  /**
-   * Type of the watermark. See WatermarkSourceType.
-   */
-  type?: WatermarkSourceType;
-  /**
-   * Buffer of the watermark. See WatermarkBuffer.
-   */
-  buffer?: WatermarkBuffer;
-  /**
-   * Timestamp of the watermark. (Linux only)
-   */
-  timestamp?: WatermarkTimestamp;
-  /**
-   * Text content of the watermark. (Linux only)
-   */
-  literal?: WatermarkLiteral;
-  /**
-   * URL of the watermark image file. Default is NULL.
-   */
-  imageUrl?: string;
-  /**
-   * Configuration options for the watermark. See WatermarkOptions.
-   */
-  options?: WatermarkOptions;
 }
 
 /**
@@ -1891,7 +1726,7 @@ export enum MultipathMode {
    */
   Duplicate = 0,
   /**
-   * (1): Dynamic transmission mode. The SDK dynamically selects the optimal path for data transmission based on the current network conditions to improve performance.
+   * @ignore
    */
   Dynamic = 1,
 }
@@ -2058,7 +1893,7 @@ export class RtcStats {
   /**
    * Round-trip time (ms) from client to local router. This property is enabled by default on devices before iOS 14 and disabled on iOS 14 and later.
    *
-   *  To enable this property on iOS 14 and later, [contact technical support](https://ticket.shengwang.cn/).
+   *  To enable this property on iOS 14 and later, [contact technical support](https://www.agora.io/cn/contact/).
    * On Android, to obtain gatewayRtt, ensure that the android.permission.ACCESS_WIFI_STATE permission is added after </application> in your project's AndroidManifest.xml file.
    */
   gatewayRtt?: number;
@@ -2122,10 +1957,6 @@ export class RtcStats {
    * Downlink packet loss rate (%) from server to client before anti-packet-loss technique is applied.
    */
   rxPacketLossRate?: number;
-  /**
-   * @ignore
-   */
-  lanAccelerateState?: number;
 }
 
 /**
@@ -2313,7 +2144,7 @@ export enum AudioScenarioType {
    */
   AudioScenarioAiServer = 9,
   /**
-   * 10: AI dialogue scenario, only applicable to interactions with [Agora Conversational AI Engine](https://doc.shengwang.cn/doc/convoai/restful/landing-page).
+   * 10: AI dialogue scenario, only applicable to interactions with [Agora Conversational AI Engine](https://docs.agora.io/en/conversational-ai/overview/product-overview).
    */
   AudioScenarioAiClient = 10,
   /**
@@ -2647,7 +2478,7 @@ export enum LocalVideoStreamReason {
   /**
    * 14: (Android only) Video capture is interrupted. Possible reasons:
    *  The camera is occupied by another app. Prompt the user to check if the camera is occupied.
-   *  The app has been switched to the background. You can use a foreground service notification to inform the OS to continue capturing video in the background. See [Why does audio/video capture fail after screen lock or backgrounding on some Android versions?](https://doc.shengwang.cn/faq/quality-issues/android-background).
+   *  The app has been switched to the background. You can use a foreground service notification to inform the OS to continue capturing video in the background..
    */
   LocalVideoStreamReasonDeviceInterrupt = 14,
   /**
@@ -2710,22 +2541,6 @@ export enum LocalVideoStreamReason {
    * @ignore
    */
   LocalVideoStreamReasonScreenCaptureDisplayDisconnected = 30,
-  /**
-   * @ignore
-   */
-  LocalVideoStreamReasonScreenCaptureStoppedByUser = 31,
-  /**
-   * @ignore
-   */
-  LocalVideoStreamReasonScreenCaptureInterruptedByOther = 32,
-  /**
-   * @ignore
-   */
-  LocalVideoStreamReasonScreenCaptureStoppedByCall = 33,
-  /**
-   * @ignore
-   */
-  LocalVideoStreamReasonScreenCaptureExcludeWindowFailed = 34,
 }
 
 /**
@@ -3306,7 +3121,7 @@ export class RtcImage {
 /**
  * Advanced feature configuration for live transcoding.
  *
- * To use advanced features for live transcoding, please [contact sales](https://www.shengwang.cn/contact-sales/).
+ * To use advanced features for live transcoding, please [contact sales](mailto:support@agora.io).
  */
 export class LiveStreamAdvancedFeature {
   /**
@@ -3413,7 +3228,7 @@ export class LiveTranscoding {
    */
   height?: number;
   /**
-   * Video encoding bitrate in Kbps. You do not need to set this parameter. Keep the default value STANDARD_BITRATE, and the SDK will automatically match the optimal bitrate based on the video resolution and frame rate you set. For the relationship between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/rn/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
+   * Video encoding bitrate in Kbps. You do not need to set this parameter. Keep the default value STANDARD_BITRATE, and the SDK will automatically match the optimal bitrate based on the video resolution and frame rate you set. For the relationship between resolution and frame rate, see [Video Profile](https://docs.agora.io/en/video-calling/enhance-call-quality/configure-video-encoding).
    */
   videoBitrate?: number;
   /**
@@ -3449,7 +3264,7 @@ export class LiveTranscoding {
    */
   transcodingUsers?: TranscodingUser[];
   /**
-   * Reserved parameter: custom information sent to the CDN client, used to fill SEI frames in H264/H265 video. Length limit: 4096 bytes. For more about SEI, see [SEI Frame Issues](https://doc.shengwang.cn/faq/quality-issues/sei).
+   * Reserved parameter: custom information sent to the CDN client, used to fill SEI frames in H264/H265 video. Length limit: 4096 bytes.
    */
   transcodingExtraInfo?: string;
   /**
@@ -3865,6 +3680,60 @@ export enum ClientRoleChangeFailedReason {
    * 4: Network connection failed. You can troubleshoot the cause based on the reason reported in onConnectionStateChanged. Deprecated: This enum value is deprecated since v4.4.0 and not recommended for use.
    */
   ClientRoleChangeFailedConnectionFailed = 4,
+}
+
+/**
+ * @ignore
+ */
+export enum WlaccMessageReason {
+  /**
+   * @ignore
+   */
+  WlaccMessageReasonWeakSignal = 0,
+  /**
+   * @ignore
+   */
+  WlaccMessageReasonChannelCongestion = 1,
+}
+
+/**
+ * @ignore
+ */
+export enum WlaccSuggestAction {
+  /**
+   * @ignore
+   */
+  WlaccSuggestActionCloseToWifi = 0,
+  /**
+   * @ignore
+   */
+  WlaccSuggestActionConnectSsid = 1,
+  /**
+   * @ignore
+   */
+  WlaccSuggestActionCheck5g = 2,
+  /**
+   * @ignore
+   */
+  WlaccSuggestActionModifySsid = 3,
+}
+
+/**
+ * @ignore
+ */
+export class WlAccStats {
+  /**
+   * @ignore
+   */
+  e2eDelayPercent?: number;
+  /**
+   * @ignore
+   */
+  frozenRatioPercent?: number;
+  /**
+   * @ignore
+   */
+  lossRatePercent?: number;
 }
 
 /**
@@ -4400,24 +4269,6 @@ export enum SegModelType {
 }
 
 /**
- * Screen color type.
- */
-export enum ScreenColorType {
-  /**
-   * (0): Automatically selects the screen color.
-   */
-  ScreenColorAuto = 0,
-  /**
-   * (1): Green screen color.
-   */
-  ScreenColorGreen = 1,
-  /**
-   * (2): Blue screen color.
-   */
-  ScreenColorBlue = 2,
-}
-
-/**
  * Background image processing properties.
  */
 export class SegmentationProperty {
@@ -4429,10 +4280,6 @@ export class SegmentationProperty {
    * The precision range for recognizing background colors in the image. Value range is [0,1], default is 0.5. A higher value indicates a wider range of recognizable solid colors. If the value is too high, edges of the portrait and solid colors within the portrait may also be recognized. It is recommended to adjust this value dynamically based on actual effects. This parameter takes effect only when modelType is set to SegModelGreen.
    */
   greenCapacity?: number;
-  /**
-   * Type of screen color. See ScreenColorType.
-   */
-  screenColorType?: ScreenColorType;
 }
 
 /**
@@ -4930,7 +4777,7 @@ export class AudioRecordingConfiguration {
   /**
    * The actual recorded audio channel depends on the captured audio channel:
    *  If the captured audio is mono and recordingChannel is set to 2, the recorded audio will be stereo copied from mono data, not true stereo.
-   *  If the captured audio is stereo and recordingChannel is set to 1, the recorded audio will be mono mixed from stereo data. In addition, the integration solution may also affect the final recorded audio channel. If you want to record stereo, please [contact technical support](https://ticket.shengwang.cn/) for assistance. Audio recording channel. The following values are supported:
+   *  If the captured audio is stereo and recordingChannel is set to 1, the recorded audio will be mono mixed from stereo data. In addition, the integration solution may also affect the final recorded audio channel. If you want to record stereo, please [contact technical support](https://www.agora.io/cn/contact/) for assistance. Audio recording channel. The following values are supported:
    *  1: (Default) Mono.
    *  2: Stereo.
    */
@@ -5088,7 +4935,7 @@ export enum ChannelMediaRelayError {
   /**
    * 2: No response from the server.
    * This error may be caused by poor network conditions. If this error is reported when initiating channel media relay, you can retry later; if it occurs during the relay process, you can call the leaveChannel method to leave the channel.
-   * This error may also occur if the current App ID has not enabled the channel media relay feature. You can [contact technical support](https://ticket.shengwang.cn/) to request enabling channel media relay.
+   * This error may also occur if the current App ID has not enabled the channel media relay feature. You can [contact technical support](https://www.agora.io/cn/contact/) to request enabling channel media relay.
    */
   RelayErrorServerNoResponse = 2,
   /**
@@ -5360,42 +5207,6 @@ export enum UploadErrorReason {
 }
 
 /**
- * Error codes after calling renewToken.
- *
- * Since Available since v4.6.0.
- */
-export enum RenewTokenErrorCode {
-  /**
-   * (0): Token updated successfully.
-   */
-  RenewTokenSuccess = 0,
-  /**
-   * (1): Token update failed due to an unknown server error. It is recommended to check the parameters used to generate the Token, regenerate the Token, and retry renewToken.
-   */
-  RenewTokenFailure = 1,
-  /**
-   * (2): Token update failed because the provided Token has expired. It is recommended to generate a new Token with a longer expiration time and retry renewToken.
-   */
-  RenewTokenTokenExpired = 2,
-  /**
-   * (3): Token update failed because the provided Token is invalid. Common causes include: the project has enabled App Certificate in the Agora Console but did not use a Token when joining the channel; the uid specified in joinChannel does not match the one used to generate the Token; the channel name specified in joinChannel does not match the one used to generate the Token. It is recommended to check the Token generation process, regenerate the Token, and retry renewToken.
-   */
-  RenewTokenInvalidToken = 3,
-  /**
-   * (4): Token update failed because the channel name in the Token does not match the current channel. It is recommended to check the channel name, regenerate the Token, and retry renewToken.
-   */
-  RenewTokenInvalidChannelName = 4,
-  /**
-   * (5): Token update failed because the App ID in the Token does not match the current App ID. It is recommended to check the App ID, regenerate the Token, and retry renewToken.
-   */
-  RenewTokenInconsistentAppid = 5,
-  /**
-   * (6): The previous Token update request was canceled due to a new request being initiated.
-   */
-  RenewTokenCanceledByNewRequest = 6,
-}
-
-/**
  * Device permission types.
  */
 export enum PermissionType {
@@ -5486,7 +5297,7 @@ export class EchoTestConfiguration {
    */
   enableVideo?: boolean;
   /**
-   * Token used to secure the audio and video loopback test. If you have not enabled App Certificate in the console, you do not need to provide this parameter. If you have enabled App Certificate, you must provide a Token, and the uid used to generate the Token must be 0xFFFFFFFF, and the channel name must uniquely identify each loopback test. For how to generate a Token on the server, see [Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * Token used to secure the audio and video loopback test. If you have not enabled App Certificate in the console, you do not need to provide this parameter. If you have enabled App Certificate, you must provide a Token, and the uid used to generate the Token must be 0xFFFFFFFF, and the channel name must uniquely identify each loopback test. For how to generate a Token on the server, see [Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    */
   token?: string;
   /**
@@ -5800,50 +5611,6 @@ export class RecorderStreamInfo {
    * @ignore
    */
   type?: RecorderStreamType;
-}
-
-/**
- * @ignore
- */
-export enum RdtStreamType {
-  /**
-   * @ignore
-   */
-  RdtStreamCmd = 0,
-  /**
-   * @ignore
-   */
-  RdtStreamData = 1,
-  /**
-   * @ignore
-   */
-  RdtStreamCount = 2,
-}
-
-/**
- * @ignore
- */
-export enum RdtState {
-  /**
-   * @ignore
-   */
-  RdtStateClosed = 0,
-  /**
-   * @ignore
-   */
-  RdtStateOpened = 1,
-  /**
-   * @ignore
-   */
-  RdtStateBlocked = 2,
-  /**
-   * @ignore
-   */
-  RdtStatePending = 3,
-  /**
-   * @ignore
-   */
-  RdtStateBroken = 4,
 }
 
 /**

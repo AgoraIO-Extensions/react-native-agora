@@ -1052,7 +1052,7 @@ export class VideoFrame {
    */
   pixelBuffer?: Uint8Array;
   /**
-   * Metadata in the video frame. Contact [technical support](https://ticket.shengwang.cn/) to use this parameter.
+   * Metadata in the video frame. Contact [technical support](https://www.agora.io/cn/contact/) to use this parameter.
    */
   metaInfo?: IVideoFrameMetaInfo;
   /**
@@ -1175,7 +1175,7 @@ export class ContentInspectConfig {
    */
   extraInfo?: string;
   /**
-   * (Optional) Server configuration for video moderation services on the cloud marketplace. This parameter only takes effect when the type in ContentInspectModule is set to ContentInspectImageModeration. To use this feature, please [contact technical support](https://ticket.shengwang.cn/).
+   * (Optional) Server configuration for video moderation services on the cloud marketplace. This parameter only takes effect when the type in ContentInspectModule is set to ContentInspectImageModeration. To use this feature, please [contact technical support](https://www.agora.io/cn/contact/).
    */
   serverConfig?: string;
   /**
@@ -1488,7 +1488,6 @@ export interface IVideoEncodedFrameObserver {
    * @param videoEncodedFrameInfo Information about the encoded video frame. See EncodedVideoFrameInfo.
    */
   onEncodedVideoFrameReceived?(
-    channelId: string,
     uid: number,
     imageBuffer: Uint8Array,
     length: number,
