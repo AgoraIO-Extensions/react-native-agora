@@ -1,7 +1,7 @@
 import createAgoraRtcEngine from '../';
 import { emitEvent } from '../internal/event';
 
-import { EVENT_PROCESSORS } from '../internal/IrisApiEngine';
+import { EVENT_PROCESSORS, handleEvent } from '../internal/IrisApiEngine';
 const nativeHandle = 1;
 jest.mock('react-native/Libraries/TurboModule/TurboModuleRegistry', () => ({
   getEnforcing: () => {},
@@ -119,4 +119,28 @@ test('removeAllListeners', () => {
   });
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
+});
+
+test('setMediaRecorderObserver should override addListener placeholder observer', () => {
+  const engine = createAgoraRtcEngine().createMediaRecorder({});
+  const addListenerCallback = jest.fn();
+  const observer = {
+    onRecorderInfoUpdated: jest.fn(),
+  };
+
+  engine.addListener('onRecorderInfoUpdated', addListenerCallback);
+  engine.setMediaRecorderObserver(observer);
+
+  handleEvent({
+    event: 'MediaRecorderObserver_onRecorderInfoUpdated',
+    data: JSON.stringify({
+      nativeHandle,
+      channelId: 'test-channel',
+      uid: 1001,
+      info: {},
+    }),
+    buffers: [],
+  });
+
+  expect(observer.onRecorderInfoUpdated).toBeCalledTimes(1);
 });

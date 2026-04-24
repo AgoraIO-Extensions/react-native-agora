@@ -17,7 +17,13 @@ import IAgoraMusicContentCenterTI from '../ti/IAgoraMusicContentCenter-ti';
 const checkers = createCheckers(IAgoraMusicContentCenterTI);
 
 import { MediaPlayerInternal } from './MediaPlayerInternal';
-import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
+import {
+  EVENT_TYPE,
+  EventProcessor,
+  addScopedEventListener,
+  removeAllScopedEventListeners,
+  removeScopedEventListener,
+} from './event';
 
 export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   static _event_handlers: IMusicContentCenterEventHandler[] = [];
@@ -52,15 +58,16 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
     };
     // @ts-ignore
     listener!.agoraCallback = callback;
-    DeviceEventEmitter.addListener(eventType, callback);
+    addScopedEventListener(this, eventType as string, callback);
   }
 
   removeListener<EventType extends keyof IMusicContentCenterEvent>(
     eventType: EventType,
     listener?: IMusicContentCenterEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(
-      eventType,
+    removeScopedEventListener(
+      this,
+      eventType as string,
       // @ts-ignore
       listener?.agoraCallback ?? listener
     );
@@ -69,7 +76,7 @@ export class MusicContentCenterInternal extends IMusicContentCenterImpl {
   removeAllListeners<EventType extends keyof IMusicContentCenterEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    removeAllScopedEventListeners(this, eventType as string | undefined);
   }
 
   override registerEventHandler(

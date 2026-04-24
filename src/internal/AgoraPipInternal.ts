@@ -9,7 +9,13 @@ import { IAgoraPipEvent } from '../extension/IAgoraPipExtension';
 import AgoraRtcNg from '../specs';
 import IAgoraPipTI from '../ti/IAgoraPip-ti';
 
-import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
+import {
+  EVENT_TYPE,
+  EventProcessor,
+  addScopedEventListener,
+  removeAllScopedEventListeners,
+  removeScopedEventListener,
+} from './event';
 
 const checkers = createCheckers(IAgoraPipTI);
 
@@ -95,24 +101,23 @@ export class AgoraPipInternal implements AgoraPip {
     };
     // @ts-ignore
     listener!.agoraCallback = callback;
-    DeviceEventEmitter.addListener(eventType, callback);
+    addScopedEventListener(this, eventType as string, callback);
   }
 
   removeListener<EventType extends keyof IAgoraPipEvent>(
     eventType: EventType,
     listener?: IAgoraPipEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(
-      eventType,
+    removeScopedEventListener(
+      this,
+      eventType as string,
       // @ts-ignore
       listener?.agoraCallback ?? listener
     );
   }
 
-  removeAllListeners<EventType extends keyof IAgoraPipEvent>(
-    eventType?: EventType
-  ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+  removeAllListeners(eventType?: keyof IAgoraPipEvent) {
+    removeAllScopedEventListeners(this, eventType as string | undefined);
   }
 
   registerPipStateChangedObserver(

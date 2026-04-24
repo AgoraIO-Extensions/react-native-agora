@@ -48,7 +48,14 @@ import { MediaRecorderInternal } from './MediaRecorderInternal';
 import { MusicContentCenterInternal } from './MusicContentCenterInternal';
 import { VideoEffectObjectInternal } from './VideoEffectObjectInternal';
 import { callIrisApi } from './call';
-import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
+import {
+  EVENT_TYPE,
+  EventProcessor,
+  addScopedEventListener,
+  removeAllEventListeners,
+  removeAllScopedEventListeners,
+  removeScopedEventListener,
+} from './event';
 
 const checkers = createCheckers(
   AgoraBaseTI,
@@ -83,6 +90,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     this._agora_pip.release();
     this._media_engine.release();
     this._local_spatial_audio_engine.release();
+    this._music_content_center.release();
     RtcEngineExInternal._event_handlers.map((it) => {
       super.unregisterEventHandler(it);
     });
@@ -98,6 +106,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     MediaRecorderInternal._observers.clear();
     this._h265_transcoder.release();
     this.removeAllListeners();
+    removeAllEventListeners();
     super.release(sync);
   }
 
@@ -176,15 +185,16 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
     };
     // @ts-ignore
     listener!.agoraCallback = callback;
-    DeviceEventEmitter.addListener(eventType, callback);
+    addScopedEventListener(this, eventType as string, callback);
   }
 
   removeListener<EventType extends keyof IRtcEngineEvent>(
     eventType: EventType,
     listener?: IRtcEngineEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(
-      eventType,
+    removeScopedEventListener(
+      this,
+      eventType as string,
       // @ts-ignore
       listener?.agoraCallback ?? listener
     );
@@ -193,7 +203,7 @@ export class RtcEngineExInternal extends IRtcEngineExImpl {
   removeAllListeners<EventType extends keyof IRtcEngineEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    removeAllScopedEventListeners(this, eventType as string | undefined);
   }
 
   override getVersion(): SDKBuildInfo {

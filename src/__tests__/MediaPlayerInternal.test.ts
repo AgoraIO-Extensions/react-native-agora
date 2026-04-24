@@ -136,3 +136,23 @@ test('removeAllListeners', () => {
   expect(callback1).not.toBeCalled();
   expect(callback2).not.toBeCalled();
 });
+
+test('media player removeAllListeners should not remove rtc engine listeners', () => {
+  const rtcEngine = createAgoraRtcEngine();
+  const mediaPlayer = rtcEngine.createMediaPlayer();
+  const rtcCallback = jest.fn();
+  const mediaPlayerCallback = jest.fn();
+
+  rtcEngine.addListener('onLocalVideoStateChanged', rtcCallback);
+  mediaPlayer.addListener('onAgoraCDNTokenWillExpire', mediaPlayerCallback);
+
+  mediaPlayer.removeAllListeners();
+
+  emitEvent(
+    'onLocalVideoStateChanged',
+    EVENT_PROCESSORS.IRtcEngineEventHandler,
+    {}
+  );
+
+  expect(rtcCallback).toBeCalledTimes(1);
+});

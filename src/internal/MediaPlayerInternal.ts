@@ -19,7 +19,13 @@ const checkers = createCheckers(
   IAgoraMediaPlayerSourceTI
 );
 
-import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
+import {
+  EVENT_TYPE,
+  EventProcessor,
+  addScopedEventListener,
+  removeAllScopedEventListeners,
+  removeScopedEventListener,
+} from './event';
 
 export class MediaPlayerInternal extends IMediaPlayerImpl {
   static _source_observers: Map<number, IMediaPlayerSourceObserver[]> = new Map<
@@ -124,15 +130,16 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
     };
     // @ts-ignore
     listener!.agoraCallback = callback;
-    DeviceEventEmitter.addListener(eventType, callback);
+    addScopedEventListener(this, eventType as string, callback);
   }
 
   removeListener<EventType extends keyof IMediaPlayerEvent>(
     eventType: EventType,
     listener?: IMediaPlayerEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(
-      eventType,
+    removeScopedEventListener(
+      this,
+      eventType as string,
       // @ts-ignore
       listener?.agoraCallback ?? listener
     );
@@ -141,7 +148,7 @@ export class MediaPlayerInternal extends IMediaPlayerImpl {
   removeAllListeners<EventType extends keyof IMediaPlayerEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    removeAllScopedEventListeners(this, eventType as string | undefined);
   }
 
   override getMediaPlayerId(): number {

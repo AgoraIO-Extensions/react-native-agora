@@ -30,6 +30,116 @@ export type IrisApiParam = {
 // @ts-ignore
 export const DeviceEventEmitter: EventEmitter = new EventEmitter();
 
+type ScopedEventListener = (...args: any[]) => void;
+
+const scopedDeviceEventListeners: Map<
+  object,
+  Map<string, Set<ScopedEventListener>>
+> = new Map();
+
+function getOwnerScopedEventListeners(
+  owner: object,
+  create: boolean = false
+): Map<string, Set<ScopedEventListener>> | undefined {
+  let ownerScopedEventListeners = scopedDeviceEventListeners.get(owner);
+  if (ownerScopedEventListeners === undefined && create) {
+    ownerScopedEventListeners = new Map<string, Set<ScopedEventListener>>();
+    scopedDeviceEventListeners.set(owner, ownerScopedEventListeners);
+  }
+  return ownerScopedEventListeners;
+}
+
+function getScopedEventListeners(
+  owner: object,
+  eventType: string,
+  create: boolean = false
+): Set<ScopedEventListener> | undefined {
+  const ownerScopedEventListeners = getOwnerScopedEventListeners(owner, create);
+  if (ownerScopedEventListeners === undefined) {
+    return undefined;
+  }
+
+  let scopedEventListeners = ownerScopedEventListeners.get(eventType);
+  if (scopedEventListeners === undefined && create) {
+    scopedEventListeners = new Set<ScopedEventListener>();
+    ownerScopedEventListeners.set(eventType, scopedEventListeners);
+  }
+
+  return scopedEventListeners;
+}
+
+function cleanupScopedEventListeners(owner: object, eventType: string): void {
+  const ownerScopedEventListeners = getOwnerScopedEventListeners(owner);
+  if (ownerScopedEventListeners === undefined) {
+    return;
+  }
+
+  const scopedEventListeners = ownerScopedEventListeners.get(eventType);
+  if (scopedEventListeners?.size === 0) {
+    ownerScopedEventListeners.delete(eventType);
+  }
+
+  if (ownerScopedEventListeners.size === 0) {
+    scopedDeviceEventListeners.delete(owner);
+  }
+}
+
+export function addScopedEventListener(
+  owner: object,
+  eventType: string,
+  listener: ScopedEventListener
+): void {
+  getScopedEventListeners(owner, eventType, true)?.add(listener);
+  DeviceEventEmitter.addListener(eventType, listener);
+}
+
+export function removeScopedEventListener(
+  owner: object,
+  eventType: string,
+  listener?: ScopedEventListener
+): void {
+  const scopedEventListeners = getScopedEventListeners(owner, eventType);
+  if (scopedEventListeners === undefined) {
+    return;
+  }
+
+  const listenersToRemove =
+    listener !== undefined ? [listener] : Array.from(scopedEventListeners);
+  listenersToRemove.forEach((it) => {
+    DeviceEventEmitter.removeListener(eventType, it);
+    scopedEventListeners.delete(it);
+  });
+
+  cleanupScopedEventListeners(owner, eventType);
+}
+
+export function removeAllScopedEventListeners(
+  owner: object,
+  eventType?: string
+): void {
+  if (eventType !== undefined) {
+    removeScopedEventListener(owner, eventType);
+    return;
+  }
+
+  const ownerScopedEventListeners = getOwnerScopedEventListeners(owner);
+  if (ownerScopedEventListeners === undefined) {
+    return;
+  }
+
+  ownerScopedEventListeners.forEach((scopedEventListeners, registeredEvent) => {
+    scopedEventListeners.forEach((listener) => {
+      DeviceEventEmitter.removeListener(registeredEvent, listener);
+    });
+  });
+  scopedDeviceEventListeners.delete(owner);
+}
+
+export function removeAllEventListeners(): void {
+  DeviceEventEmitter.removeAllListeners();
+  scopedDeviceEventListeners.clear();
+}
+
 /**
  * @internal
  */

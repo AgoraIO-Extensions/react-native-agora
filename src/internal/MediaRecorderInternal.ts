@@ -7,7 +7,13 @@ import { IMediaRecorderImpl } from '../impl/IAgoraMediaRecorderImpl';
 import AgoraMediaBaseTI from '../ti/AgoraMediaBase-ti';
 const checkers = createCheckers(AgoraMediaBaseTI);
 
-import { DeviceEventEmitter, EVENT_TYPE, EventProcessor } from './event';
+import {
+  EVENT_TYPE,
+  EventProcessor,
+  addScopedEventListener,
+  removeAllScopedEventListeners,
+  removeScopedEventListener,
+} from './event';
 
 export class MediaRecorderInternal extends IMediaRecorderImpl {
   static _observers: Map<string, IMediaRecorderObserver> = new Map<
@@ -32,7 +38,7 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
 
   override setMediaRecorderObserver(callback: IMediaRecorderObserver): number {
     const key = this._nativeHandle;
-    if (MediaRecorderInternal._observers.has(key)) {
+    if (MediaRecorderInternal._observers.get(key) === callback) {
       return ErrorCodeType.ErrOk;
     }
     MediaRecorderInternal._observers.set(key, callback);
@@ -74,15 +80,16 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
     };
     // @ts-ignore
     listener!.agoraCallback = callback;
-    DeviceEventEmitter.addListener(eventType, callback);
+    addScopedEventListener(this, eventType as string, callback);
   }
 
   removeListener<EventType extends keyof IMediaRecorderEvent>(
     eventType: EventType,
     listener?: IMediaRecorderEvent[EventType]
   ) {
-    DeviceEventEmitter.removeListener(
-      eventType,
+    removeScopedEventListener(
+      this,
+      eventType as string,
       // @ts-ignore
       listener?.agoraCallback ?? listener
     );
@@ -91,6 +98,6 @@ export class MediaRecorderInternal extends IMediaRecorderImpl {
   removeAllListeners<EventType extends keyof IMediaRecorderEvent>(
     eventType?: EventType
   ) {
-    DeviceEventEmitter.removeAllListeners(eventType);
+    removeAllScopedEventListeners(this, eventType as string | undefined);
   }
 }
