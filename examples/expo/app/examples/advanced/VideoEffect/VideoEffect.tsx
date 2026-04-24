@@ -111,7 +111,8 @@ function getTemplateItems(options: BundleTemplateOption[]) {
 
 function normalizeSliderValue(value: number, step: number) {
   const stepText = `${step}`;
-  const precision = stepText.includes('.') ? stepText.split('.')[1].length : 0;
+  const [, fractionalPart] = stepText.split('.');
+  const precision = fractionalPart?.length ?? 0;
   return Number(value.toFixed(precision));
 }
 

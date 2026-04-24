@@ -1,3 +1,5 @@
+import type { IRtcEngine, IVideoEffectObject } from 'react-native-agora';
+
 export const CLEAR_VISION_EXTENSION_PROVIDER =
   'agora_video_filters_clear_vision';
 export const CLEAR_VISION_EXTENSION_NAME = 'clear_vision';
@@ -181,18 +183,14 @@ export function buildStyleEffectOperations(
   ];
 }
 
-type VideoEffectEngine = {
-  enableExtension?: (
-    provider: string,
-    extension: string,
-    enable?: boolean
-  ) => number | void;
-  destroyVideoEffectObject?: (videoEffectObject: unknown) => number | void;
-};
+type VideoEffectEngine = Pick<
+  IRtcEngine,
+  'enableExtension' | 'destroyVideoEffectObject'
+>;
 
 export function destroyVideoEffectObjectResource(
   engine: VideoEffectEngine | undefined,
-  videoEffectObject: unknown
+  videoEffectObject: IVideoEffectObject | undefined
 ) {
   if (videoEffectObject && engine?.destroyVideoEffectObject) {
     return engine.destroyVideoEffectObject(videoEffectObject);
@@ -225,7 +223,7 @@ export function disableVideoEffectExtension(
 
 export function releaseVideoEffectResources(
   engine: VideoEffectEngine | undefined,
-  videoEffectObject: unknown
+  videoEffectObject: IVideoEffectObject | undefined
 ) {
   const destroyResult = destroyVideoEffectObjectResource(
     engine,
