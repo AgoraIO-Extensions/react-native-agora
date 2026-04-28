@@ -1,5 +1,29 @@
 
 
+## [4.5.4-dev.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.6.2...v4.5.4-dev.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* align Expo VideoEffect nodes ([88ba7b4](https://github.com/AgoraIO-Extensions/react-native-agora/commit/88ba7b46cc15abba489f10b5351b077d1755a2d1))
+* clear stale video effect state ([55bc8af](https://github.com/AgoraIO-Extensions/react-native-agora/commit/55bc8afd52d438c67c5ad2a7caae05f17bb38b2f))
+* extend VideoEffect helper fs sync and tests ([9338bd4](https://github.com/AgoraIO-Extensions/react-native-agora/commit/9338bd40634861e114dae1045fc31c5e68d11cd6))
+* fallback to caches path for VideoEffect prep ([45b12ef](https://github.com/AgoraIO-Extensions/react-native-agora/commit/45b12ef95ac433346da8d0fe8692e33cc42a1105))
+* guard Expo video effect state ([92dc8c0](https://github.com/AgoraIO-Extensions/react-native-agora/commit/92dc8c0e759ca1c45013645a42559c01811e60d5))
+* harden Expo video effect state ([d20d0f3](https://github.com/AgoraIO-Extensions/react-native-agora/commit/d20d0f3624d5407d51441de0efb40fa6d7863f47))
+* make saved cache sync overwrite-safe ([6aea398](https://github.com/AgoraIO-Extensions/react-native-agora/commit/6aea39891834b0fb904d6ea2248d16292e848967))
+* rollback failed video effect apply ([6b7124e](https://github.com/AgoraIO-Extensions/react-native-agora/commit/6b7124ef45f5d1ea75d57727686da2e5f6eb5ecb))
+* separate video effect draft values ([db868e4](https://github.com/AgoraIO-Extensions/react-native-agora/commit/db868e4a55d3c021fa37ce87590fbe613ac3c746))
+* track applied video effect templates ([8573079](https://github.com/AgoraIO-Extensions/react-native-agora/commit/8573079695b92e398d4d95ca06e92a4c147d1dc8))
+* use iOS cache directory for VideoEffect bundle prep ([35ac505](https://github.com/AgoraIO-Extensions/react-native-agora/commit/35ac5053e4fda4aa9fda051c3264ed9b84f6d087))
+
+
+### Features
+
+* add Expo VideoEffect example ([d5f8f4f](https://github.com/AgoraIO-Extensions/react-native-agora/commit/d5f8f4f0ebdffb28471d93861323225c758c0902))
+* add VideoEffect bundle preparation helpers ([638ba23](https://github.com/AgoraIO-Extensions/react-native-agora/commit/638ba239171146da96cea124c8be8c8b9ae75dd7))
+* add VideoEffect parsing helpers ([b862677](https://github.com/AgoraIO-Extensions/react-native-agora/commit/b86267707e3f7cc04f14066c3d5663ba2a1caf82))
+
 ## [4.6.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.3...v4.6.2) (2026-03-05)
 
 
