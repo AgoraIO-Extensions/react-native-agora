@@ -80,7 +80,7 @@
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
     "ts-interface-builder": "^0.3.3",
-    "turbo": "^1.10.7",
+    "turbo": "^2.9.14",
     "typedoc": "^0.24.1",
     "typescript": "5.0.4"
   },
