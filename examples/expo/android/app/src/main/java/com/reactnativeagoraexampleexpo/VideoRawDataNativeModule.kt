@@ -16,7 +16,7 @@ class VideoRawDataNativeModule(reactContext: ReactApplicationContext) :
 
   override fun getName(): String = "VideoRawDataNativeModule"
 
-  @ReactMethod(isBlockingSynchronousMethod = true)
+  @ReactMethod
   fun initialize(appId: String) {
     try {
       val config =
@@ -82,7 +82,7 @@ class VideoRawDataNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod(isBlockingSynchronousMethod = true)
+  @ReactMethod
   fun releaseModule() {
     rtcEngine?.let {
       it.registerVideoFrameObserver(null)
