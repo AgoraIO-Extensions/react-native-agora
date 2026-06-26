@@ -1514,7 +1514,7 @@ export class VideoEncoderConfiguration {
    */
   frameRate?: number;
   /**
-   * Bitrate of the video encoding in Kbps. You do not need to set this parameter; keep the default value STANDARD_BITRATE. The SDK automatically matches the optimal bitrate based on your configured resolution and frame rate. For the mapping between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/rn/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
+   * Bitrate of the video encoding in Kbps. You do not need to set this parameter; keep the default value STANDARD_BITRATE. The SDK automatically matches the optimal bitrate based on your configured resolution and frame rate. For the mapping between resolution and frame rate, see [Video Profile](https://docs.agora.io/en/video-calling/enhance-call-quality/configure-video-encoding).
    *  STANDARD_BITRATE (0): (Default) Standard bitrate mode.
    *  COMPATIBLE_BITRATE (-1): Compatible bitrate mode. In general, we recommend not using this value.
    */
@@ -1891,7 +1891,7 @@ export enum MultipathMode {
    */
   Duplicate = 0,
   /**
-   * (1): Dynamic transmission mode. The SDK dynamically selects the optimal path for data transmission based on the current network conditions to improve performance.
+   * @ignore
    */
   Dynamic = 1,
 }
@@ -2058,7 +2058,7 @@ export class RtcStats {
   /**
    * Round-trip time (ms) from client to local router. This property is enabled by default on devices before iOS 14 and disabled on iOS 14 and later.
    *
-   *  To enable this property on iOS 14 and later, [contact technical support](https://ticket.shengwang.cn/).
+   *  To enable this property on iOS 14 and later, [contact technical support](https://www.agora.io/cn/contact/).
    * On Android, to obtain gatewayRtt, ensure that the android.permission.ACCESS_WIFI_STATE permission is added after </application> in your project's AndroidManifest.xml file.
    */
   gatewayRtt?: number;
@@ -2313,7 +2313,7 @@ export enum AudioScenarioType {
    */
   AudioScenarioAiServer = 9,
   /**
-   * 10: AI dialogue scenario, only applicable to interactions with [Agora Conversational AI Engine](https://doc.shengwang.cn/doc/convoai/restful/landing-page).
+   * 10: AI dialogue scenario, only applicable to interactions with [Agora Conversational AI Engine](https://docs.agora.io/en/conversational-ai/overview/product-overview).
    */
   AudioScenarioAiClient = 10,
   /**
@@ -2647,7 +2647,7 @@ export enum LocalVideoStreamReason {
   /**
    * 14: (Android only) Video capture is interrupted. Possible reasons:
    *  The camera is occupied by another app. Prompt the user to check if the camera is occupied.
-   *  The app has been switched to the background. You can use a foreground service notification to inform the OS to continue capturing video in the background. See [Why does audio/video capture fail after screen lock or backgrounding on some Android versions?](https://doc.shengwang.cn/faq/quality-issues/android-background).
+   *  The app has been switched to the background. You can use a foreground service notification to inform the OS to continue capturing video in the background..
    */
   LocalVideoStreamReasonDeviceInterrupt = 14,
   /**
@@ -3306,7 +3306,7 @@ export class RtcImage {
 /**
  * Advanced feature configuration for live transcoding.
  *
- * To use advanced features for live transcoding, please [contact sales](https://www.shengwang.cn/contact-sales/).
+ * To use advanced features for live transcoding, please [contact sales](mailto:support@agora.io).
  */
 export class LiveStreamAdvancedFeature {
   /**
@@ -3413,7 +3413,7 @@ export class LiveTranscoding {
    */
   height?: number;
   /**
-   * Video encoding bitrate in Kbps. You do not need to set this parameter. Keep the default value STANDARD_BITRATE, and the SDK will automatically match the optimal bitrate based on the video resolution and frame rate you set. For the relationship between resolution and frame rate, see [Video Profile](https://doc.shengwang.cn/doc/rtc/rn/basic-features/video-profile#%E8%A7%86%E9%A2%91%E5%B1%9E%E6%80%A7%E5%8F%82%E8%80%83).
+   * Video encoding bitrate in Kbps. You do not need to set this parameter. Keep the default value STANDARD_BITRATE, and the SDK will automatically match the optimal bitrate based on the video resolution and frame rate you set. For the relationship between resolution and frame rate, see [Video Profile](https://docs.agora.io/en/video-calling/enhance-call-quality/configure-video-encoding).
    */
   videoBitrate?: number;
   /**
@@ -3449,7 +3449,7 @@ export class LiveTranscoding {
    */
   transcodingUsers?: TranscodingUser[];
   /**
-   * Reserved parameter: custom information sent to the CDN client, used to fill SEI frames in H264/H265 video. Length limit: 4096 bytes. For more about SEI, see [SEI Frame Issues](https://doc.shengwang.cn/faq/quality-issues/sei).
+   * Reserved parameter: custom information sent to the CDN client, used to fill SEI frames in H264/H265 video. Length limit: 4096 bytes.
    */
   transcodingExtraInfo?: string;
   /**
@@ -4930,7 +4930,7 @@ export class AudioRecordingConfiguration {
   /**
    * The actual recorded audio channel depends on the captured audio channel:
    *  If the captured audio is mono and recordingChannel is set to 2, the recorded audio will be stereo copied from mono data, not true stereo.
-   *  If the captured audio is stereo and recordingChannel is set to 1, the recorded audio will be mono mixed from stereo data. In addition, the integration solution may also affect the final recorded audio channel. If you want to record stereo, please [contact technical support](https://ticket.shengwang.cn/) for assistance. Audio recording channel. The following values are supported:
+   *  If the captured audio is stereo and recordingChannel is set to 1, the recorded audio will be mono mixed from stereo data. In addition, the integration solution may also affect the final recorded audio channel. If you want to record stereo, please [contact technical support](https://www.agora.io/cn/contact/) for assistance. Audio recording channel. The following values are supported:
    *  1: (Default) Mono.
    *  2: Stereo.
    */
@@ -5088,7 +5088,7 @@ export enum ChannelMediaRelayError {
   /**
    * 2: No response from the server.
    * This error may be caused by poor network conditions. If this error is reported when initiating channel media relay, you can retry later; if it occurs during the relay process, you can call the leaveChannel method to leave the channel.
-   * This error may also occur if the current App ID has not enabled the channel media relay feature. You can [contact technical support](https://ticket.shengwang.cn/) to request enabling channel media relay.
+   * This error may also occur if the current App ID has not enabled the channel media relay feature. You can [contact technical support](https://www.agora.io/cn/contact/) to request enabling channel media relay.
    */
   RelayErrorServerNoResponse = 2,
   /**
@@ -5486,7 +5486,7 @@ export class EchoTestConfiguration {
    */
   enableVideo?: boolean;
   /**
-   * Token used to secure the audio and video loopback test. If you have not enabled App Certificate in the console, you do not need to provide this parameter. If you have enabled App Certificate, you must provide a Token, and the uid used to generate the Token must be 0xFFFFFFFF, and the channel name must uniquely identify each loopback test. For how to generate a Token on the server, see [Token Authentication](https://doc.shengwang.cn/doc/rtc/rn/basic-features/token-authentication).
+   * Token used to secure the audio and video loopback test. If you have not enabled App Certificate in the console, you do not need to provide this parameter. If you have enabled App Certificate, you must provide a Token, and the uid used to generate the Token must be 0xFFFFFFFF, and the channel name must uniquely identify each loopback test. For how to generate a Token on the server, see [Token Authentication](https://docs.agora.io/en/video-calling/token-authentication/deploy-token-server).
    */
   token?: string;
   /**
