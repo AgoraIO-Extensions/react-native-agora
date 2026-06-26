@@ -17,7 +17,9 @@ runs:
 
     - name: Setup by gem
       if: ${{ runner.os == 'macOS' }}
-      run: gem install 'activesupport:7.0.8' 'xcodeproj:1.25.1'
+      run: |
+        # Pin Ruby 2.7-compatible transitive gems to avoid resolver drift on CI.
+        gem install 'concurrent-ruby:1.2.2' 'i18n:1.14.1' 'minitest:5.20.0' 'tzinfo:2.0.6' 'activesupport:7.0.8' 'xcodeproj:1.25.1' --no-document
       shell: bash
 
     - name: Setup Cocoapods
