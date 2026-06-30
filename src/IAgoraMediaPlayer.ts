@@ -114,7 +114,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setAudioPitch(pitch: number): number;
 
@@ -169,7 +169,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setLoopCount(loopCount: number): number;
 
@@ -185,7 +185,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setPlaybackSpeed(speed: number): number;
 
@@ -198,7 +198,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract selectAudioTrack(index: number): number;
 
@@ -438,7 +438,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setAudioDualMonoMode(mode: AudioDualMonoMode): number;
 
@@ -546,7 +546,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract unloadSrc(src: string): number;
 
@@ -583,7 +583,7 @@ export abstract class IMediaPlayer {
    *
    * @returns
    * 0: Success.
-   *  < 0: Failure. See [Error Code](https://doc.shengwang.cn/api-ref/rtc/rn/error-code) for details and resolution suggestions.
+   *  < 0: Failure. See [Error Code](https://docs.agora.io/en/video-calling/troubleshooting/error-codes) for details and resolution suggestions.
    */
   abstract setPlayerOptionInInt(key: string, value: number): number;
 
