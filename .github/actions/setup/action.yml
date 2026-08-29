@@ -19,7 +19,7 @@ runs:
       if: ${{ runner.os == 'macOS' }}
       run: |
         # Pin Ruby 2.7-compatible transitive gems to avoid resolver drift on CI.
-        gem install 'concurrent-ruby:1.2.2' 'i18n:1.14.1' 'minitest:5.20.0' 'tzinfo:2.0.6' 'activesupport:7.0.8' 'xcodeproj:1.25.1' --no-document
+        gem install 'concurrent-ruby:1.2.2' 'i18n:1.14.1' 'minitest:5.20.0' 'tzinfo:2.0.6' 'activesupport:7.0.8' 'xcodeproj:1.25.1' 'ffi:1.16.3' --no-document
       shell: bash
 
     - name: Setup Cocoapods
