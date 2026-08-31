@@ -1,7 +1,10 @@
+import { Platform } from 'react-native';
+
 import AudioCallRoute from './AudioCallRoute/AudioCallRoute';
 import AudioMixing from './AudioMixing/AudioMixing';
 import AudioSpectrum from './AudioSpectrum/AudioSpectrum';
 import BeautyEffect from './BeautyEffect/BeautyEffect';
+import CameraCapturerConfiguration from './CameraCapturerConfiguration/CameraCapturerConfiguration';
 import ChannelMediaRelay from './ChannelMediaRelay/ChannelMediaRelay';
 import ContentInspect from './ContentInspect/ContentInspect';
 import DirectCdnStreaming from './DirectCdnStreaming/DirectCdnStreaming';
@@ -52,6 +55,14 @@ const Advanced = {
       name: 'BeautyEffect',
       component: BeautyEffect,
     },
+    ...(Platform.OS === 'android'
+      ? [
+          {
+            name: 'CameraCapturerConfiguration',
+            component: CameraCapturerConfiguration,
+          },
+        ]
+      : []),
     {
       name: 'ChannelMediaRelay',
       component: ChannelMediaRelay,
