@@ -1,5 +1,18 @@
 
 
+## [4.6.4-alpha.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.6.3-build.1-rc.1...v4.6.4-alpha.1) (2026-08-31)
+
+
+### Bug Fixes
+
+* normalize preview version for terra headers ([#977](https://github.com/AgoraIO-Extensions/react-native-agora/issues/977)) ([1c56561](https://github.com/AgoraIO-Extensions/react-native-agora/commit/1c565619a0bd225fb968c6cfc853800b9e1fc420))
+
+
+### Features
+
+* **example:** add camera capturer configuration demo ([#980](https://github.com/AgoraIO-Extensions/react-native-agora/issues/980)) ([24848bf](https://github.com/AgoraIO-Extensions/react-native-agora/commit/24848bf0a18a7521464efd3c2721ddb308875b3d))
+* **example:** log local video events ([#979](https://github.com/AgoraIO-Extensions/react-native-agora/issues/979)) ([f1d21bf](https://github.com/AgoraIO-Extensions/react-native-agora/commit/f1d21bf3176a1183ee1173667101a91bd1e86b3b))
+
 ## [4.6.3-build.1-rc.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.6.2...v4.6.3-build.1-rc.1) (2026-06-30)
 
 ## [4.6.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.5.3...v4.6.2) (2026-03-05)
