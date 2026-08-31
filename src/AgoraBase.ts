@@ -2594,6 +2594,14 @@ export enum LocalVideoEventType {
    * (4): A system internal error occurs during screen capture. (Android only)
    */
   LocalVideoEventTypeScreenCaptureSystemInternalError = 4,
+  /**
+   * @ignore
+   */
+  LocalVideoEventTypeCameraFocalLengthApplied = 5,
+  /**
+   * @ignore
+   */
+  LocalVideoEventTypeCameraFocalLengthFallbackToDefault = 6,
 }
 
 /**
