@@ -17,6 +17,8 @@ INPUT=$1
 MAVEN_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .maven[]')
 IRIS_MAVEN_DEPENDENCIES=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .iris_maven[]')
 DEP_VERSION=$(echo "$INPUT" | jq -r '.[] | select(.platform == "Android") | .version')
+# Preview package versions map to Native header directories without the build suffix.
+DEP_VERSION=${DEP_VERSION%%-build.*}
 
 # Function to modify dependencies
 modify_dependencies() {
