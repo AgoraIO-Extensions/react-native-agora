@@ -7,6 +7,7 @@ import {
   ErrorCodeType,
   IRtcEngineEventHandler,
   LocalAudioStats,
+  LocalVideoEventType,
   LocalVideoStats,
   LocalVideoStreamReason,
   LocalVideoStreamState,
@@ -225,6 +226,18 @@ export default class JoinChannelVideo
       state,
       'error',
       error
+    );
+  }
+
+  onLocalVideoEvent(source: VideoSourceType, event: LocalVideoEventType) {
+    this.info(
+      'onLocalVideoEvent',
+      'source',
+      source,
+      'event',
+      event,
+      'eventName',
+      LocalVideoEventType[event]
     );
   }
 
