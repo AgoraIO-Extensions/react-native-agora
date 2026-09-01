@@ -165,7 +165,9 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
   /// dependencies start
+  api 'io.agora.rtc:agora-full-preview:4.6.4-build.6'
   implementation 'io.agora.rtc:full-screen-sharing-special:4.6.4-build.6'
+  api 'io.agora.rtc:iris-rtc:4.6.4-build.6'
   /// dependencies end
 }
 
