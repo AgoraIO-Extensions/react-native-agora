@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
   end
 
   #dependencies start
-  s.dependency 'AgoraRtcEngine_iOS_Preview', '4.6.4-build.6'
+  s.dependency 'AgoraRtcEngine_iOS', '4.6.4'
   s.dependency 'AgoraIrisRTC_iOS', '4.6.4-build.6'
   #dependencies end
 
