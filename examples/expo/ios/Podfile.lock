@@ -1680,7 +1680,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-agora (4.6.4-alpha.2):
+  - react-native-agora (4.6.4):
     - AgoraIrisRTC_iOS (= 4.6.4-build.6)
     - AgoraRtcEngine_iOS (= 4.6.4)
     - DoubleConversion
