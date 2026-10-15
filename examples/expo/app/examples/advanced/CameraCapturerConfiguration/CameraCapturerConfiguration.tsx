@@ -38,7 +38,7 @@ import {
   UltraWidePlan,
   queryUltraWidePlan,
   startUltraWidePreview,
-} from './ultraWideCamera';
+} from '../../../../src/utils/ultraWideCamera';
 
 interface State extends BaseVideoComponentState {
   cameraDirection: CameraDirection;

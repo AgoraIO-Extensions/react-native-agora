@@ -1,7 +1,7 @@
 import {
   queryUltraWidePlan,
   startUltraWidePreview,
-} from '../../examples/expo/app/examples/advanced/CameraCapturerConfiguration/ultraWideCamera';
+} from '../../examples/expo/src/utils/ultraWideCamera';
 import { CameraFocalLengthType } from '../AgoraBase';
 import { CameraDirection } from '../IAgoraRtcEngine';
 
