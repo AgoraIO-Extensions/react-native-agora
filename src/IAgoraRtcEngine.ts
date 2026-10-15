@@ -1678,7 +1678,7 @@ export interface IRtcEngineEventHandler {
    * Since Available since v4.6.1. You can use this callback to get the reason for the local video event.
    *
    * @param source Type of video source. See VideoSourceType.
-   * @param event Type of local video event. See LocalVideoEventType.
+   * @param event Type of local video event: LocalVideoEventTypeScreenCaptureWindowHidden : The screen capture window is hidden. LocalVideoEventTypeScreenCaptureWindowRecoverFromHidden : The screen capture window recovers from the hidden state. LocalVideoEventTypeScreenCaptureStoppedByUser : Screen capture is stopped by the user. LocalVideoEventTypeScreenCaptureSystemInternalError : A system internal error occurs during screen capture. LocalVideoEventTypeCameraFocalLengthApplied : The requested wide-angle or ultra-wide-angle camera is applied. LocalVideoEventTypeCameraFocalLengthFallbackToDefault : The requested wide-angle or ultra-wide-angle camera cannot be opened, and the SDK falls back to the default camera.
    */
   onLocalVideoEvent?(source: VideoSourceType, event: LocalVideoEventType): void;
 

@@ -2595,11 +2595,11 @@ export enum LocalVideoEventType {
    */
   LocalVideoEventTypeScreenCaptureSystemInternalError = 4,
   /**
-   * @ignore
+   * (5): The requested wide-angle or ultra-wide-angle camera is applied. (Android only)
    */
   LocalVideoEventTypeCameraFocalLengthApplied = 5,
   /**
-   * @ignore
+   * (6): The requested wide-angle or ultra-wide-angle camera cannot be opened, and the SDK falls back to the default camera. (Android only)
    */
   LocalVideoEventTypeCameraFocalLengthFallbackToDefault = 6,
 }
