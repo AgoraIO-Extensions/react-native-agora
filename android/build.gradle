@@ -154,6 +154,7 @@ android {
 
 repositories {
   mavenCentral()
+  maven { url 'https://download.agora.io/maven' }
   google()
 }
 
