@@ -11,6 +11,6 @@ class AgoraServicePackage : ReactPackage {
     }
 
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return listOf(AgoraServiceManager(reactContext))
+        return listOf(AgoraServiceManager(reactContext), CameraCapabilitiesModule(reactContext))
     }
 }
