@@ -1,5 +1,17 @@
 
 
+## [4.6.4-build.1](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.6.4...v4.6.4-build.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* resolve special SDK dependencies from Agora Maven ([#986](https://github.com/AgoraIO-Extensions/react-native-agora/issues/986)) ([124f271](https://github.com/AgoraIO-Extensions/react-native-agora/commit/124f271ec131c355775887f051d39ec89196bf9f))
+
+
+### Features
+
+* add CSD-80336 Android ultra-wide and Pixel zoom Demo ([#987](https://github.com/AgoraIO-Extensions/react-native-agora/issues/987)) ([c339547](https://github.com/AgoraIO-Extensions/react-native-agora/commit/c339547d51544040bdbda0dca11f2f71cfde3b29))
+
 ## [4.6.4](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.6.4-alpha.2...v4.6.4) (2026-09-03)
 
 ## [4.6.4-alpha.2](https://github.com/AgoraIO-Extensions/react-native-agora/compare/v4.6.4-alpha.1...v4.6.4-alpha.2) (2026-09-01)
