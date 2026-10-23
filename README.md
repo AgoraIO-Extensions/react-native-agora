@@ -149,7 +149,7 @@ compileOptions{
 - Complete [API Doc](https://docs.agora.io/en/) at the Developer Center
 - [Changelog](CHANGELOG.md)
 - [Release Notes](https://docs.agora.io/en/video-calling/reference/release-notes?platform=react-native)
-- [File bugs about this sample](https://github.com/AgoraIO-Extensions/react-native-agora/issues)
+- [Contact Agora Support](https://www.agora.io/en/customer-support/)
 - [React Native Getting Started](https://facebook.github.io/react-native/docs/getting-started.html)
 - [Picture in Picture](./example/src/examples/advanced/PictureInPicture/PictureInPicture.md)
 
