@@ -6,7 +6,7 @@
 #import <react/renderer/components/AgoraRtcNgSpec/Props.h>
 #import <react/renderer/components/AgoraRtcNgSpec/RCTComponentViewHelpers.h>
 
-#import "RCTFabricComponentsPlugins.h"
+#import <React/RCTFabricComponentsPlugins.h>
 #import "AgoraRtcNg.h"
 #import <AgoraRtcWrapper/iris_engine_base.h>
 
