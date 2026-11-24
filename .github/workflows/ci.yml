@@ -101,7 +101,9 @@ jobs:
 
       - name: Build example for Android
         run: |
+          node scripts/test-detox-build.cjs
           yarn example detox:android
+          test -s examples/expo/android/app/build/outputs/apk/release/app-release.apk
 
       - name: Clean Useless cache
         run: |
@@ -120,9 +122,15 @@ jobs:
           android: false
           dotnet: true
           haskell: true
-          large-packages: true
+          large-packages: false
           docker-images: true
-          swap-storage: true
+          swap-storage: false
+
+      - name: Install Android emulator libraries
+        if: ${{ matrix.newArch == false }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libpulse0 libgl1
 
       - name: Enable KVM group perms
         run: |
