@@ -40,10 +40,31 @@ Pod::Spec.new do |s|
     end
   end
 
+  if ENV['AGORA_USE_SPM'] == '1'
+    unless respond_to?(:spm_dependency, true)
+      raise 'AGORA_USE_SPM requires React Native 0.75 or newer (spm_dependency).'
+    end
+
+    spm_dependency(s,
+      url: 'https://github.com/AgoraIO/AgoraRtcEngine_iOS.git',
+      requirement: { kind: 'exactVersion', version: '4.6.2' },
+      products: %w[
+        RtcBasic AINS AINSLL AudioBeauty ClearVision ContentInspect SpatialAudio
+        VirtualBackground AIAEC AIAECLL VQA FaceDetection FaceCapture LipSync
+        VideoCodecEnc VideoAv1CodecEnc ReplayKit
+      ])
+    spm_dependency(s,
+      url: package['repository'],
+      requirement: ENV['AGORA_SPM_REVISION'] ?
+        { kind: 'revision', revision: ENV['AGORA_SPM_REVISION'] } :
+        { kind: 'exactVersion', version: s.version.to_s },
+      products: ['AgoraRtcWrapper'])
+  else
   #dependencies start
   s.dependency 'AgoraVideo_Special_iOS', '4.6.2.70'
   s.dependency 'AgoraIrisRTC_iOS2', '4.6.2-build.1'
   #dependencies end
+  end
 
   s.libraries = 'stdc++'
   s.framework = 'ReplayKit'

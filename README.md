@@ -46,6 +46,34 @@ Go to your **ios** folder and run:
 pod install
 ```
 
+### iOS native dependencies through Swift Package Manager
+
+React Native 0.75+ applications can opt into SPM for Agora's native SDKs:
+
+```sh
+cd ios
+AGORA_USE_SPM=1 USE_FRAMEWORKS=dynamic pod install
+```
+
+Your Podfile must honor `USE_FRAMEWORKS` (or call
+`use_frameworks! :linkage => :dynamic`) and call `react_native_post_install`.
+The React Native bridge and React Native itself still use CocoaPods; this is
+the `spm_dependency` integration, not a CocoaPods-free installation.
+
+SPM mode pins the **standard RTC SDK 4.6.2** and **Iris 4.6.2-build.1**.
+The default CocoaPods installation uses RTC **4.6.2.70**, a special build whose
+fixes are not included in the standard SPM SDK. Applications that require that
+special build must keep the default installation. Do not add the Agora pods or
+another RTC version alongside SPM mode.
+
+The Iris Swift package comes from the matching `react-native-agora` release tag.
+SPM mode therefore requires a release containing `Package.swift`; older tags do
+not support it. `Package.swift` supplies Iris only and does not expose the React
+Native bridge as a standalone Swift package.
+
+When testing an unreleased commit, set `AGORA_SPM_REVISION` to the full commit
+SHA containing its `Package.swift`. Omit this variable for released packages.
+
 ## General Usage
 
 ```typescript

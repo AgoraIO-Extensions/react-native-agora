@@ -143,6 +143,7 @@ jobs:
     strategy:
       matrix:
         newArch: [1, 0]
+        nativeDependencies: [cocoapods, spm]
     runs-on: macos-15
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
@@ -153,8 +154,15 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Check iOS dependency modes
+        run: ruby scripts/test-ios-spm.rb
+
       - name: Install cocoapods
         run: |
+          if [ "${{ matrix.nativeDependencies }}" = "spm" ]; then
+            export AGORA_USE_SPM=1 USE_FRAMEWORKS=dynamic
+            export AGORA_SPM_REVISION="${{ github.event.pull_request.head.sha || github.sha }}"
+          fi
           yarn pod-install examples/expo/ios
 
       - name: Switch Xcode

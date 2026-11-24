@@ -40,7 +40,9 @@ target 'AgoraRtcNgExample' do
 end
 
 target 'ScreenShare' do
+  unless ENV['AGORA_USE_SPM'] == '1'
   #dependencies start
   pod 'AgoraVideo_Special_iOS', '4.6.2.70'
   #dependencies end
+  end
 end
