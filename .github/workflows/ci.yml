@@ -141,6 +141,7 @@ jobs:
 
   test-ios:
     strategy:
+      fail-fast: false
       matrix:
         newArch: [1, 0]
         nativeDependencies: [cocoapods, spm]
