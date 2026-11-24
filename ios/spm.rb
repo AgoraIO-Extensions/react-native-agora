@@ -1,14 +1,14 @@
 require 'digest'
 
 module AgoraReactNativeSPM
-  RTC_VERSION = '4.6.2'
+  RTC_VERSION = '4.6.4-rc.2'
   RTC_PRODUCTS = %w[
     RtcBasic AINS AINSLL AudioBeauty ClearVision ContentInspect SpatialAudio
     VirtualBackground AIAEC AIAECLL VQA FaceDetection FaceCapture LipSync
     VideoCodecEnc VideoAv1CodecEnc ReplayKit
   ].freeze
   RTC_FRAMEWORKS = %w[
-    AgoraRtcKit Agorafdkaac Agoraffmpeg AgoraSoundTouch video_dec video_enc aosl
+    AgoraRtcKit Agorafdkaac Agoraffmpeg AgoraSoundTouch video_dec aosl
     AgoraAiNoiseSuppressionExtension AgoraAiNoiseSuppressionLLExtension
     AgoraAudioBeautyExtension AgoraClearVisionExtension AgoraContentInspectExtension
     AgoraSpatialAudioExtension AgoraVideoSegmentationExtension

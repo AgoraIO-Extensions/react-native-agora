@@ -25,9 +25,8 @@ begin
   pods = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
   check(pods.dependencies.map(&:name).include?('AgoraIrisRTC_iOS2'), 'Default Iris pod missing')
   check(pods.dependencies.map(&:name).include?('AgoraVideo_Special_iOS'), 'Default RTC pod missing')
-  iris_pod = pods.dependencies.find { |dep| dep.name == 'AgoraIrisRTC_iOS2' }
-  iris_version = iris_pod.requirement.requirements.first.last.to_s
-  check(File.read(File.join(ROOT, 'Package.swift')).include?("#{iris_pod.name}-#{iris_version}.zip"), 'SPM and CocoaPods Iris binaries differ')
+  manifest = File.read(File.join(ROOT, 'Package.swift'))
+  check(manifest.include?('AgoraIrisRTC_iOS-4.6.4-build.7.zip'), 'SPM Iris version must stay pinned')
   check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Default mode registered SPM packages')
   AgoraReactNativeSPM.post_install(nil)
 
@@ -37,10 +36,11 @@ begin
   dependencies = SPM.instance_variable_get(:@dependencies_by_pod).fetch(spec.name)
   check(dependencies.size == 2, 'Expected RTC and Iris Swift packages')
   rtc, iris = dependencies
-  check(rtc[:requirement] == { kind: 'exactVersion', version: '4.6.2' }, 'RTC version must stay pinned')
+  check(rtc[:requirement] == { kind: 'exactVersion', version: '4.6.4-rc.2' }, 'RTC version must stay pinned')
   check(rtc[:products].include?('RtcBasic') && rtc[:products].include?('ReplayKit'), 'RTC products missing')
   check(iris[:products] == ['AgoraRtcWrapper'], 'Iris product missing')
   check(iris[:requirement] == { kind: 'exactVersion', version: spec.version.to_s }, 'Iris package must match the npm release')
+  check(!AgoraReactNativeSPM::RTC_FRAMEWORKS.include?('video_enc'), 'RTC 4.6.4-rc.2 has no standalone video_enc framework')
 
   ENV['AGORA_SPM_REVISION'] = '0123456789abcdef0123456789abcdef01234567'
   Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))

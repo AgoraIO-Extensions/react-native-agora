@@ -68,11 +68,11 @@ versions with built-in SPM framework embedding use that implementation instead.
 The React Native bridge and React Native itself still use CocoaPods; this is
 the `spm_dependency` integration, not a CocoaPods-free installation.
 
-SPM mode pins the **standard RTC SDK 4.6.2** and **Iris 4.6.2-build.1**.
-The default CocoaPods installation uses the special RTC build **4.6.2.70**.
-Parity with fixes specific to that special build has not been verified in SPM
-mode. Applications that require it must keep the default installation. Do not
-add the Agora pods or another RTC version alongside SPM mode.
+SPM mode pins **RTC 4.6.4-rc.2** (the Native release referred to as 4.6.4.2)
+and **Iris 4.6.4-build.7**. The default CocoaPods installation uses the special
+RTC build **4.6.2.70** and **Iris 4.6.2-build.1**. These are separate, pinned
+dependency baselines; applications switching modes must validate their SDK
+behavior. Do not add the Agora pods or another RTC version alongside SPM mode.
 
 The Iris Swift package comes from the matching `react-native-agora` release tag.
 SPM mode therefore requires a release containing `Package.swift`; older tags do
