@@ -145,7 +145,7 @@ jobs:
       matrix:
         newArch: [1, 0]
         nativeDependencies: [cocoapods, spm]
-    runs-on: macos-15
+    runs-on: macos-15-intel
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
       RUBYOPT: -rlogger
