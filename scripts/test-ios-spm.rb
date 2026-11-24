@@ -47,6 +47,26 @@ begin
   revision = SPM.instance_variable_get(:@dependencies_by_pod).fetch(spec.name).last
   check(revision[:requirement] == { kind: 'revision', revision: ENV['AGORA_SPM_REVISION'] }, 'Development revision ignored')
 
+  Dir.mktmpdir('agora-spm-uuid') do |dir|
+    project = Pod::Project.new(File.join(dir, 'Pods.xcodeproj'))
+    project.new_target(:framework, spec.name, :ios, '15.1')
+    root = project.root_object
+    collision = true
+    project.define_singleton_method(:generate_uuid) do
+      if collision
+        collision = false
+        root.uuid
+      else
+        super()
+      end
+    end
+    SPM.apply_on_post_install(Struct.new(:pods_project).new(project))
+    check(project.objects_by_uuid[root.uuid].equal?(root), 'SPM UUID collision overwrote the root project')
+    project.save
+    reloaded = Xcodeproj::Project.open(project.path)
+    check(reloaded.root_object.isa == 'PBXProject', 'Generated Pods project cannot be reopened')
+  end
+
   Dir.mktmpdir('agora-spm') do |dir|
     path = File.join(dir, 'frameworks.sh')
     File.write(path, "#!/bin/sh\nif [ \"${COCOAPODS_PARALLEL_CODE_SIGN}\" == \"true\" ]; then\n  wait\nfi\n")

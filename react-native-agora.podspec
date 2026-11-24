@@ -45,6 +45,7 @@ Pod::Spec.new do |s|
     unless respond_to?(:spm_dependency, true)
       raise 'AGORA_USE_SPM requires React Native 0.75 or newer (spm_dependency).'
     end
+    AgoraReactNativeSPM.prepare!
 
     spm_dependency(s,
       url: 'https://github.com/AgoraIO/AgoraRtcEngine_iOS.git',

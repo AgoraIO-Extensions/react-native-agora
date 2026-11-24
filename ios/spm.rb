@@ -18,6 +18,31 @@ module AgoraReactNativeSPM
     AgoraVideoAv1EncoderExtension AgoraReplayKitExtension
   ].freeze
 
+  # Older RN helpers add objects after CocoaPods' UUID counter has been reset.
+  # Probe occupied IDs so an SPM product cannot overwrite the project's root.
+  module UniqueProjectUUIDs
+    def generate_uuid
+      uuid = super
+      uuid = super while objects_by_uuid.key?(uuid)
+      uuid
+    end
+  end
+
+  module LegacyInstall
+    def apply_on_post_install(installer)
+      singleton = installer.pods_project.singleton_class
+      singleton.prepend(UniqueProjectUUIDs) unless singleton.ancestors.include?(UniqueProjectUUIDs)
+      super
+    end
+  end
+
+  def self.prepare!
+    return if SPM.respond_to?(:new_object, true)
+
+    singleton = SPM.singleton_class
+    singleton.prepend(LegacyInstall) unless singleton.ancestors.include?(LegacyInstall)
+  end
+
   def self.native_embedding?
     Object.instance_method(:spm_dependency).parameters.any? { |_, name| name == :embed_frameworks }
   rescue NameError
