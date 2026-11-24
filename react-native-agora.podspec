@@ -41,10 +41,9 @@ Pod::Spec.new do |s|
     end
   end
 
-  if ENV['AGORA_USE_SPM'] == '1'
-    unless respond_to?(:spm_dependency, true)
-      raise 'AGORA_USE_SPM requires React Native 0.75 or newer (spm_dependency).'
-    end
+  # RN's existing dynamic-framework setting opts into native SDKs via SPM.
+  # Older RN versions and static/default linkage keep using CocoaPods.
+  if AgoraReactNativeSPM.enabled?
     AgoraReactNativeSPM.prepare!
 
     spm_dependency(s,

@@ -162,7 +162,7 @@ jobs:
       - name: Install cocoapods
         run: |
           if [ "${{ matrix.nativeDependencies }}" = "spm" ]; then
-            export AGORA_USE_SPM=1 USE_FRAMEWORKS=dynamic
+            export USE_FRAMEWORKS=dynamic
             export AGORA_SPM_REVISION="${{ github.event.pull_request.head.sha || github.sha }}"
           fi
           yarn pod-install examples/expo/ios

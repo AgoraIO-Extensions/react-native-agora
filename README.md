@@ -52,11 +52,15 @@ React Native 0.75+ applications can opt into SPM for Agora's native SDKs:
 
 ```sh
 cd ios
-AGORA_USE_SPM=1 USE_FRAMEWORKS=dynamic pod install
+USE_FRAMEWORKS=dynamic pod install
 ```
 
-Your Podfile must honor `USE_FRAMEWORKS` (or call
-`use_frameworks! :linkage => :dynamic`) and call `react_native_post_install`.
+Your Podfile must honor `USE_FRAMEWORKS` by calling
+`use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym`, and call
+`react_native_post_install`.
+Agora selects SPM automatically when `spm_dependency` is available and
+`USE_FRAMEWORKS=dynamic` is set. There is no Agora-specific mode switch.
+Default/static linkage and older RN versions use CocoaPods.
 Immediately after that call in your `post_install` block, add:
 
 ```ruby
@@ -69,7 +73,7 @@ The React Native bridge and React Native itself still use CocoaPods; this is
 the `spm_dependency` integration, not a CocoaPods-free installation.
 
 SPM mode pins **RTC 4.6.4-rc.2** (the Native release referred to as 4.6.4.2)
-and **Iris 4.6.4-build.7**. The default CocoaPods installation uses the special
+and **Iris 4.6.4.2-build.1**. The default CocoaPods installation uses the special
 RTC build **4.6.2.70** and **Iris 4.6.2-build.1**. These are separate, pinned
 dependency baselines; applications switching modes must validate their SDK
 behavior. Do not add the Agora pods or another RTC version alongside SPM mode.

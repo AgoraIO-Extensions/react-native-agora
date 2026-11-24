@@ -1,6 +1,10 @@
 require 'digest'
 
 module AgoraReactNativeSPM
+  def self.enabled?
+    respond_to?(:spm_dependency, true) && ENV['USE_FRAMEWORKS'] == 'dynamic'
+  end
+
   RTC_VERSION = '4.6.4-rc.2'
   RTC_PRODUCTS = %w[
     RtcBasic AINS AINSLL AudioBeauty ClearVision ContentInspect SpatialAudio
@@ -56,7 +60,7 @@ module AgoraReactNativeSPM
   # Older RN versions register Swift packages without embedding their dynamic
   # frameworks in the app. Reuse CocoaPods' copy/strip/sign function for these binaries.
   def self.post_install(installer)
-    return unless ENV['AGORA_USE_SPM'] == '1'
+    return unless enabled?
     return if native_embedding?
 
     frameworks = RTC_FRAMEWORKS + ['AgoraRtcWrapper']

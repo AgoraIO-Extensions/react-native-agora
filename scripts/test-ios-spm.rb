@@ -18,19 +18,24 @@ def check(condition, message)
   raise message unless condition
 end
 
-original_mode = ENV['AGORA_USE_SPM']
+original_linkage = ENV['USE_FRAMEWORKS']
 original_revision = ENV.delete('AGORA_SPM_REVISION')
 begin
-  ENV.delete('AGORA_USE_SPM')
+  ENV.delete('USE_FRAMEWORKS')
   pods = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
   check(pods.dependencies.map(&:name).include?('AgoraIrisRTC_iOS2'), 'Default Iris pod missing')
   check(pods.dependencies.map(&:name).include?('AgoraVideo_Special_iOS'), 'Default RTC pod missing')
   manifest = File.read(File.join(ROOT, 'Package.swift'))
-  check(manifest.include?('AgoraIrisRTC_iOS-4.6.4-build.7.zip'), 'SPM Iris version must stay pinned')
+  check(manifest.include?('AgoraIrisRTC_iOS-4.6.4.2-build.1.zip'), 'SPM Iris version must stay pinned')
   check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Default mode registered SPM packages')
   AgoraReactNativeSPM.post_install(nil)
 
-  ENV['AGORA_USE_SPM'] = '1'
+  ENV['USE_FRAMEWORKS'] = 'static'
+  static = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
+  check(static.dependencies.map(&:name).include?('AgoraVideo_Special_iOS'), 'Static linkage must use CocoaPods')
+  check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Static linkage registered SPM packages')
+
+  ENV['USE_FRAMEWORKS'] = 'dynamic'
   spec = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
   check(spec.dependencies.none? { |dep| dep.name.start_with?('Agora') }, 'SPM mode also installs Agora pods')
   dependencies = SPM.instance_variable_get(:@dependencies_by_pod).fetch(spec.name)
@@ -99,14 +104,13 @@ begin
   AgoraReactNativeSPM.post_install(nil)
 
   Object.send(:remove_method, :spm_dependency)
-  begin
-    Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
-    raise 'SPM mode accepted a React Native version without spm_dependency'
-  rescue Pod::DSLError => error
-    check(error.message.include?('React Native 0.75 or newer'), 'Missing actionable version error')
-  end
+  SPM.instance_variable_get(:@dependencies_by_pod).clear
+  older_rn = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
+  check(older_rn.dependencies.map(&:name).include?('AgoraVideo_Special_iOS'), 'Older RN must fall back to CocoaPods')
+  check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Older RN registered SPM packages')
+  AgoraReactNativeSPM.post_install(nil)
   puts 'iOS SPM dependency checks passed'
 ensure
-  ENV['AGORA_USE_SPM'] = original_mode
+  ENV['USE_FRAMEWORKS'] = original_linkage
   ENV['AGORA_SPM_REVISION'] = original_revision
 end
