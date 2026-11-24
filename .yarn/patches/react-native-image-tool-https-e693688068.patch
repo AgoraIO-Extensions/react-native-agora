@@ -1,0 +1,11 @@
+diff --git a/react-native-image-tools.podspec b/react-native-image-tools.podspec
+index 3cc4b9bfbb0d50470842651892c5919c67c11cde..639249378937862c26b551be24f729459f29cd42 100644
+--- a/react-native-image-tools.podspec
++++ b/react-native-image-tools.podspec
+@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
+   s.preserve_paths = 'README.md', 'LICENSE', 'package.json', 'index.js'
+   s.source_files   = "ios/RCTImagetools/*.{h,m,mm}"
+ 
+-  s.dependency 'React'
++  s.dependency 'React-Core'
+ end

@@ -14840,13 +14840,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-react-native-image-tool@AgoraIO-Extensions/react-native-image-tools:
+"react-native-image-tool@https://github.com/AgoraIO-Extensions/react-native-image-tools.git#commit=7ffc05ec3a6976b605c307942986a289ab4f47ef":
   version: 0.8.1
   resolution: "react-native-image-tool@https://github.com/AgoraIO-Extensions/react-native-image-tools.git#commit=7ffc05ec3a6976b605c307942986a289ab4f47ef"
   peerDependencies:
     react: "*"
     react-native: "*"
   checksum: 1a6eb6e3c9b09c092a3c0a6408d04ebbecc350bee4eda4b2c8f1ed2d50d2b0fe9f12b8f912540cda333e7ae9a7bf6d6e3fb0d7f840a1d741938314290c463e74
+  languageName: node
+  linkType: hard
+
+"react-native-image-tool@patch:react-native-image-tool@https%3A//github.com/AgoraIO-Extensions/react-native-image-tools.git%23commit=7ffc05ec3a6976b605c307942986a289ab4f47ef#./.yarn/patches/react-native-image-tool-https-e693688068.patch::locator=react-native-agora%40workspace%3A.":
+  version: 0.8.1
+  resolution: "react-native-image-tool@patch:react-native-image-tool@https%3A//github.com/AgoraIO-Extensions/react-native-image-tools.git%23commit=7ffc05ec3a6976b605c307942986a289ab4f47ef#./.yarn/patches/react-native-image-tool-https-e693688068.patch::version=0.8.1&hash=2fbdc8&locator=react-native-agora%40workspace%3A."
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 8c67e4cce1fef215966702ab36f62b6a14de6edd7a8556aea53e2cb30e52460cd0e35c8b5cb47742390e9316e6ae8758910aaba68d7e37ba9e29e23e5e79ba2b
   languageName: node
   linkType: hard
 
