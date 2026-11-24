@@ -14928,6 +14928,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-reanimated@patch:react-native-reanimated@npm%3A3.17.5#./.yarn/patches/react-native-reanimated-npm-3.17.5-134bd4e99e.patch::locator=react-native-agora%40workspace%3A.":
+  version: 3.17.5
+  resolution: "react-native-reanimated@patch:react-native-reanimated@npm%3A3.17.5#./.yarn/patches/react-native-reanimated-npm-3.17.5-134bd4e99e.patch::version=3.17.5&hash=846876&locator=react-native-agora%40workspace%3A."
+  dependencies:
+    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
+    "@babel/plugin-transform-class-properties": ^7.0.0-0
+    "@babel/plugin-transform-classes": ^7.0.0-0
+    "@babel/plugin-transform-nullish-coalescing-operator": ^7.0.0-0
+    "@babel/plugin-transform-optional-chaining": ^7.0.0-0
+    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
+    "@babel/plugin-transform-template-literals": ^7.0.0-0
+    "@babel/plugin-transform-unicode-regex": ^7.0.0-0
+    "@babel/preset-typescript": ^7.16.7
+    convert-source-map: ^2.0.0
+    invariant: ^2.2.4
+    react-native-is-edge-to-edge: 1.1.7
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+    react: "*"
+    react-native: "*"
+  checksum: d89ca5a79ab7d11e471aeccf69a46dea49e2fbbf16da67bbf9091ce716c0719a4ffd15f3d2c43d8b34b55fc54aa8049fd06e55c7758bae9f76baeaf8adae45da
+  languageName: node
+  linkType: hard
+
 "react-native-safe-area-context@npm:^5.2.0":
   version: 5.6.0
   resolution: "react-native-safe-area-context@npm:5.6.0"
