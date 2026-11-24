@@ -111,6 +111,8 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/examples/legacy/node_modules",
       "<rootDir>/examples/expo/node_modules",
+      "<rootDir>/examples/legacy/ios/build/",
+      "<rootDir>/examples/expo/ios/build/",
       "<rootDir>/lib/"
     ],
     "testPathIgnorePatterns": [

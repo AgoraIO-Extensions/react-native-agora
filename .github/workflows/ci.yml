@@ -66,6 +66,7 @@ jobs:
 
   test-android:
     strategy:
+      fail-fast: false
       matrix:
         newArch: [true, false]
     runs-on: ubuntu-latest
