@@ -88,6 +88,13 @@ jobs:
         run: |
           /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
 
+      - name: Configure Gradle memory and diagnostics
+        run: |
+          mkdir -p ~/.gradle
+          printf '%s\n' \
+            'org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError' \
+            'org.gradle.logging.stacktrace=all' >> ~/.gradle/gradle.properties
+
       - name: Install Detox dependencies
         shell: bash
         run: |
