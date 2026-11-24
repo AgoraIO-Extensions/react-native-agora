@@ -1,3 +1,6 @@
+source 'https://download.agora.io/cocoapods/'
+source 'https://cdn.cocoapods.org/'
+
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -36,11 +39,14 @@ target 'AgoraRtcNgExample' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    AgoraReactNativeSPM.post_install(installer)
   end
 end
 
 target 'ScreenShare' do
+  unless AgoraReactNativeSPM.enabled?
   #dependencies start
-  pod 'AgoraRtcEngine_Special_iOS', '4.6.4.1'
+  pod 'AgoraRtcEngine_Special_iOS', '4.6.4.2'
   #dependencies end
+  end
 end

@@ -8,9 +8,11 @@ on:
   push:
     branches:
       - main
+      - special/4.6
   pull_request:
     branches:
       - main
+      - special/4.6
       - release/*
 
 jobs:
@@ -141,11 +143,14 @@ jobs:
 
   test-ios:
     strategy:
+      fail-fast: false
       matrix:
         newArch: [1, 0]
-    runs-on: macos-15
+        nativeDependencies: [cocoapods, spm]
+    runs-on: macos-15-intel
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
+      RUBYOPT: -rlogger
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -153,9 +158,26 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Check iOS dependency modes
+        run: ruby scripts/test-ios-spm.rb
+
       - name: Install cocoapods
         run: |
+          if [ "${{ matrix.nativeDependencies }}" = "spm" ]; then
+            export USE_FRAMEWORKS=dynamic
+            export AGORA_SPM_REVISION="${{ github.event.pull_request.head.sha || github.sha }}"
+          fi
           yarn pod-install examples/expo/ios
+
+      - name: Check Agora CocoaPods source
+        if: ${{ matrix.nativeDependencies == 'cocoapods' }}
+        run: |
+          ruby -ryaml <<'RUBY'
+          lock = YAML.load_file('examples/expo/ios/Podfile.lock')
+          agora_pods = lock.fetch('SPEC REPOS').fetch('https://download.agora.io/cocoapods/')
+          expected = %w[AgoraRtcEngine_Special_iOS AgoraIrisRTC_iOS]
+          abort 'Agora SDKs must resolve from the Agora Specs CDN' unless (expected - agora_pods).empty?
+          RUBY
 
       - name: Switch Xcode
         run: |
@@ -167,6 +189,7 @@ jobs:
         run: |
           npm i -g detox-cli react-native-cli
           brew tap wix/brew
+          brew trust --formula wix/brew/applesimutils
           brew install applesimutils
 
       - name: Modify APP ID
