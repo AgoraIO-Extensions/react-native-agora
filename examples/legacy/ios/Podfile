@@ -36,6 +36,7 @@ target 'AgoraRtcNgExample' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    AgoraReactNativeSPM.post_install(installer)
   end
 end
 

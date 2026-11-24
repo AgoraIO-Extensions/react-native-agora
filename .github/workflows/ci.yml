@@ -148,6 +148,7 @@ jobs:
     runs-on: macos-15
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
+      RUBYOPT: -rlogger
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -1,4 +1,5 @@
 require "json"
+require_relative "ios/spm"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
@@ -47,18 +48,16 @@ Pod::Spec.new do |s|
 
     spm_dependency(s,
       url: 'https://github.com/AgoraIO/AgoraRtcEngine_iOS.git',
-      requirement: { kind: 'exactVersion', version: '4.6.2' },
-      products: %w[
-        RtcBasic AINS AINSLL AudioBeauty ClearVision ContentInspect SpatialAudio
-        VirtualBackground AIAEC AIAECLL VQA FaceDetection FaceCapture LipSync
-        VideoCodecEnc VideoAv1CodecEnc ReplayKit
-      ])
+      requirement: { kind: 'exactVersion', version: AgoraReactNativeSPM::RTC_VERSION },
+      products: AgoraReactNativeSPM::RTC_PRODUCTS,
+      **AgoraReactNativeSPM.embedding_options(AgoraReactNativeSPM::RTC_FRAMEWORKS))
     spm_dependency(s,
       url: package['repository'],
       requirement: ENV['AGORA_SPM_REVISION'] ?
         { kind: 'revision', revision: ENV['AGORA_SPM_REVISION'] } :
         { kind: 'exactVersion', version: s.version.to_s },
-      products: ['AgoraRtcWrapper'])
+      products: ['AgoraRtcWrapper'],
+      **AgoraReactNativeSPM.embedding_options(['AgoraRtcWrapper']))
   else
   #dependencies start
   s.dependency 'AgoraVideo_Special_iOS', '4.6.2.70'

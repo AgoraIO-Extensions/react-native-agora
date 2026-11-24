@@ -57,14 +57,22 @@ AGORA_USE_SPM=1 USE_FRAMEWORKS=dynamic pod install
 
 Your Podfile must honor `USE_FRAMEWORKS` (or call
 `use_frameworks! :linkage => :dynamic`) and call `react_native_post_install`.
+Immediately after that call in your `post_install` block, add:
+
+```ruby
+AgoraReactNativeSPM.post_install(installer)
+```
+
+This embeds the dynamic SDK frameworks on older React Native versions. Newer
+versions with built-in SPM framework embedding use that implementation instead.
 The React Native bridge and React Native itself still use CocoaPods; this is
 the `spm_dependency` integration, not a CocoaPods-free installation.
 
 SPM mode pins the **standard RTC SDK 4.6.2** and **Iris 4.6.2-build.1**.
-The default CocoaPods installation uses RTC **4.6.2.70**, a special build whose
-fixes are not included in the standard SPM SDK. Applications that require that
-special build must keep the default installation. Do not add the Agora pods or
-another RTC version alongside SPM mode.
+The default CocoaPods installation uses the special RTC build **4.6.2.70**.
+Parity with fixes specific to that special build has not been verified in SPM
+mode. Applications that require it must keep the default installation. Do not
+add the Agora pods or another RTC version alongside SPM mode.
 
 The Iris Swift package comes from the matching `react-native-agora` release tag.
 SPM mode therefore requires a release containing `Package.swift`; older tags do

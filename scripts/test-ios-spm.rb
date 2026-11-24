@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
+require 'logger'
 require 'cocoapods'
+require 'tmpdir'
 
 ROOT = File.expand_path('..', __dir__)
 require File.join(ROOT, 'node_modules/react-native/scripts/cocoapods/spm')
@@ -27,6 +29,7 @@ begin
   iris_version = iris_pod.requirement.requirements.first.last.to_s
   check(File.read(File.join(ROOT, 'Package.swift')).include?("#{iris_pod.name}-#{iris_version}.zip"), 'SPM and CocoaPods Iris binaries differ')
   check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Default mode registered SPM packages')
+  AgoraReactNativeSPM.post_install(nil)
 
   ENV['AGORA_USE_SPM'] = '1'
   spec = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
@@ -43,6 +46,37 @@ begin
   Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
   revision = SPM.instance_variable_get(:@dependencies_by_pod).fetch(spec.name).last
   check(revision[:requirement] == { kind: 'revision', revision: ENV['AGORA_SPM_REVISION'] }, 'Development revision ignored')
+
+  Dir.mktmpdir('agora-spm') do |dir|
+    path = File.join(dir, 'frameworks.sh')
+    File.write(path, "#!/bin/sh\nif [ \"${COCOAPODS_PARALLEL_CODE_SIGN}\" == \"true\" ]; then\n  wait\nfi\n")
+    target = Struct.new(:pod_targets, :embed_frameworks_script_path).new([spec], path)
+    installer = Struct.new(:aggregate_targets).new([target])
+    AgoraReactNativeSPM.post_install(installer)
+    script = File.read(path)
+    check(script.include?('/AgoraRtcKit.framework') && script.include?('/AgoraRtcWrapper.framework'), 'Dynamic RTC/Iris embedding missing')
+    check(script.include?('/aosl.framework'), 'Transitive infrastructure framework missing')
+    check(system('bash', '-n', path), 'Invalid embed shell script')
+    AgoraReactNativeSPM.post_install(installer)
+    check(File.read(path) == script, 'Embedding must be idempotent')
+    File.delete(path)
+    begin
+      AgoraReactNativeSPM.post_install(installer)
+      raise 'Missing app embed phase was accepted'
+    rescue RuntimeError => error
+      check(error.message.include?('use_frameworks!'), 'Missing actionable framework linkage error')
+    end
+  end
+
+  # Newer RN versions receive actual framework names, which differ from SPM product names.
+  native_frameworks = []
+  Object.send(:define_method, :spm_dependency) do |pod_spec, url:, requirement:, products:, embed_frameworks: products|
+    native_frameworks << embed_frameworks
+    SPM.dependency(pod_spec, url: url, requirement: requirement, products: products)
+  end
+  Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
+  check(native_frameworks == [AgoraReactNativeSPM::RTC_FRAMEWORKS, ['AgoraRtcWrapper']], 'Native RN embedding received product names instead of framework names')
+  AgoraReactNativeSPM.post_install(nil)
 
   Object.send(:remove_method, :spm_dependency)
   begin
