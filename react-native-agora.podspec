@@ -60,8 +60,8 @@ Pod::Spec.new do |s|
       **AgoraReactNativeSPM.embedding_options(['AgoraRtcWrapper']))
   else
   #dependencies start
-  s.dependency 'AgoraVideo_Special_iOS', '4.6.2.70'
-  s.dependency 'AgoraIrisRTC_iOS2', '4.6.2-build.1'
+  s.dependency 'AgoraRtcEngine_Special_iOS', '4.6.4.2'
+  s.dependency 'AgoraIrisRTC_iOS', '4.6.4.2-build.1'
   #dependencies end
   end
 

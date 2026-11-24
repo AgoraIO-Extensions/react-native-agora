@@ -1,6 +1,6 @@
 PODS:
-  - AgoraIrisRTC_iOS (4.5.2.2-lite.1)
-  - AgoraRtcEngine_Special_iOS (4.5.2.2.LITE)
+  - AgoraIrisRTC_iOS (4.6.4.2-build.1)
+  - AgoraRtcEngine_Special_iOS (4.6.4.2)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
@@ -1212,9 +1212,9 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-agora (4.5.2-build.140-rc.2):
-    - AgoraIrisRTC_iOS (= 4.5.2.2-lite.1)
-    - AgoraRtcEngine_Special_iOS (= 4.5.2.2.LITE)
+  - react-native-agora (4.6.2):
+    - AgoraIrisRTC_iOS (= 4.6.4.2-build.1)
+    - AgoraRtcEngine_Special_iOS (= 4.6.4.2)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1236,7 +1236,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - react-native-image-tools (0.8.1):
-    - React
+    - React-Core
   - react-native-safe-area-context (5.6.0):
     - DoubleConversion
     - glog
@@ -1687,6 +1687,7 @@ PODS:
     - RCTRequired
     - RCTTypeSafety
     - React-Core
+    - React-CoreModules
     - React-debug
     - React-Fabric
     - React-featureflags
@@ -1712,6 +1713,7 @@ PODS:
     - RCTRequired
     - RCTTypeSafety
     - React-Core
+    - React-CoreModules
     - React-debug
     - React-Fabric
     - React-featureflags
@@ -1736,6 +1738,7 @@ PODS:
     - RCTRequired
     - RCTTypeSafety
     - React-Core
+    - React-CoreModules
     - React-debug
     - React-Fabric
     - React-featureflags
@@ -1759,6 +1762,7 @@ PODS:
     - RCTRequired
     - RCTTypeSafety
     - React-Core
+    - React-CoreModules
     - React-debug
     - React-Fabric
     - React-featureflags
@@ -1783,6 +1787,7 @@ PODS:
     - RCTRequired
     - RCTTypeSafety
     - React-Core
+    - React-CoreModules
     - React-debug
     - React-Fabric
     - React-featureflags
@@ -1892,7 +1897,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - AgoraRtcEngine_Special_iOS (= 4.5.2.2.LITE)
+  - AgoraRtcEngine_Special_iOS (= 4.6.4.2)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
@@ -1974,9 +1979,10 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
+  https://download.agora.io/cocoapods/:
     - AgoraIrisRTC_iOS
     - AgoraRtcEngine_Special_iOS
+  trunk:
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -2137,8 +2143,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AgoraIrisRTC_iOS: a181e24ca69052c9b8dd03a42e2b56b0ad655d9d
-  AgoraRtcEngine_Special_iOS: 6240ca22a740b9ca12394857b58aad74ade72e1c
+  AgoraIrisRTC_iOS: 703504730159d845d017631250211b7e3182b957
+  AgoraRtcEngine_Special_iOS: 6b3ed06c33ae91d946ee254e11701ea89ad43ac3
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
@@ -2146,7 +2152,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: ccc24d29d650ea725d582a9a53d57cd417fbdb53
-  RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
+  RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: 664055db806cce35c3c1b43c84414dd66e117ae6
   RCTRequired: dc9a83fa1012054f94430d210337ca3a1afe6fc0
   RCTTypeSafety: 031cefa254a1df313a196f105b8fcffdab1c5ab6
@@ -2175,8 +2181,8 @@ SPEC CHECKSUMS:
   React-logger: 1935d6e6461e9c8be4c87af56c56a4876021171e
   React-Mapbuffer: 212171f037e3b22e6c2df839aa826806da480b85
   React-microtasksnativemodule: 72564d5469003687d39bfc4efad281df8efc0684
-  react-native-agora: 2b94cc8489af0ac85b2ade84cb867eaf051e5072
-  react-native-image-tools: 88218449791389bbf550a2c475a3b564c8233c8b
+  react-native-agora: 262a4f62b629c75a73490652e18053e7ced8b2b5
+  react-native-image-tools: e8a3906e22fae1c70c04f1d46cbb3cc0b6686519
   react-native-safe-area-context: 673dffed28e5ed410e0ed789b22eea27dacf3fca
   react-native-slider: 27263d134d55db948a4706f1e47d0ec88fb354dd
   React-nativeconfig: cb207ebba7cafce30657c7ad9f1587a8f32e4564
@@ -2211,13 +2217,13 @@ SPEC CHECKSUMS:
   RNCPicker: 9710a2110f506b9a9541044c04df290730b3a78a
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 675c0ca118ece2f007ff68ca513ef8b6e6b8a2b4
-  RNReanimated: a1f7ece8b19bffad90fa3de403ef01a9ebc9f5da
+  RNReanimated: d74680a42c15ed7d5ffc18c70541f6ffff533071
   RNScreens: 6edb124b97753c3978b2a7c8974672c0f31bc78a
   RNSVG: 8d0b028ced9556d2e63a7f69783f8d9062943e65
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 2957d0e744897870b5a377f26522e3f08cadd7ac
 
-PODFILE CHECKSUM: 7a13221579e060f11d34482113b3022a25bd3056
+PODFILE CHECKSUM: 5a998adb270ac998a509df77647523bfc45986df
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.16.2

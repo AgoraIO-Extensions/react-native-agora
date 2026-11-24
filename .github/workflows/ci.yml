@@ -167,6 +167,16 @@ jobs:
           fi
           yarn pod-install examples/expo/ios
 
+      - name: Check Agora CocoaPods source
+        if: ${{ matrix.nativeDependencies == 'cocoapods' }}
+        run: |
+          ruby -ryaml <<'RUBY'
+          lock = YAML.load_file('examples/expo/ios/Podfile.lock')
+          agora_pods = lock.fetch('SPEC REPOS').fetch('https://download.agora.io/cocoapods/')
+          expected = %w[AgoraRtcEngine_Special_iOS AgoraIrisRTC_iOS]
+          abort 'Agora SDKs must resolve from the Agora Specs CDN' unless (expected - agora_pods).empty?
+          RUBY
+
       - name: Switch Xcode
         run: |
           #https://github.com/actions/runner-images/issues/12758

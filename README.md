@@ -40,43 +40,103 @@ or
 npm i --save react-native-agora
 ```
 
-Go to your **ios** folder and run:
+### iOS dependency options
 
-```shell script
-pod install
+Both options below require `pod install`. CocoaPods builds the React Native
+bridge from the installed npm package in `node_modules`; that local podspec
+does not need to be published to CocoaPods Trunk. The option changes how the
+Native RTC and Iris SDKs are resolved:
+
+| Application configuration | Native RTC / Iris dependencies | Customer setup |
+| --- | --- | --- |
+| Default/static linkage, or RN without `spm_dependency` | CocoaPods from Agora's Specs CDN | Add the two Podfile sources below |
+| RN 0.75+ with `USE_FRAMEWORKS=dynamic` | Swift Package Manager | Enable dynamic frameworks and add the SPM post-install hook below |
+
+There is no Agora-specific mode switch. Applications already setting
+`USE_FRAMEWORKS=dynamic` select SPM after upgrading and must configure its hook.
+
+### iOS native dependencies through CocoaPods (default)
+
+Add these sources at the **top level** of `ios/Podfile`, before the target blocks:
+
+```ruby
+source 'https://download.agora.io/cocoapods/'
+source 'https://cdn.cocoapods.org/'
 ```
+
+The first URL is Agora's public, self-hosted **Podspec index**, not an SDK ZIP
+download URL. It supplies the Native/Iris podspecs and their SDK download
+locations without publishing new versions to CocoaPods Trunk. Keep the official
+CocoaPods source too, for other dependencies; declaring a custom source removes
+the implicit official source. No Agora source login is required.
+
+Then install:
+
+```sh
+cd ios
+pod install --repo-update
+```
+
+The RN bridge declares the exact Native/Iris pod dependencies automatically.
+There is no need to add them separately to the application's Podfile.
 
 ### iOS native dependencies through Swift Package Manager
 
-React Native 0.75+ applications can opt into SPM for Agora's native SDKs:
+For RN 0.75+ applications, make sure the Podfile honors `USE_FRAMEWORKS`. The
+standard RN template normally already contains this at the top level:
+
+```ruby
+linkage = ENV['USE_FRAMEWORKS']
+use_frameworks! :linkage => linkage.to_sym if linkage
+```
+
+In the existing `post_install` block, immediately **after** the existing
+`react_native_post_install(...)` call, add:
+
+```ruby
+AgoraReactNativeSPM.post_install(installer)
+```
+
+This embeds the dynamic SDK frameworks on older RN versions. Newer versions
+with built-in SPM framework embedding use that implementation instead.
+
+Run this command for **every** install, including CI:
 
 ```sh
 cd ios
 USE_FRAMEWORKS=dynamic pod install
 ```
 
-Your Podfile must honor `USE_FRAMEWORKS` by calling
-`use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym`, and call
-`react_native_post_install`.
-Agora selects SPM automatically when `spm_dependency` is available and
-`USE_FRAMEWORKS=dynamic` is set. There is no Agora-specific mode switch.
-Default/static linkage and older RN versions use CocoaPods.
-Immediately after that call in your `post_install` block, add:
+The environment setting selects the SPM path; a hard-coded
+`use_frameworks! :linkage => :dynamic` without that setting does not select it.
+The Agora Specs CDN source is not required for Native/Iris in this path, and
+the Swift packages are registered automatically. The RN bridge and RN itself
+still use CocoaPods; this is RN's `spm_dependency` integration.
 
-```ruby
-AgoraReactNativeSPM.post_install(installer)
+### Pinned iOS SDK versions and upgrading
+
+Both paths use the same special Native/Iris release:
+
+| SDK | CocoaPods dependency from Agora's CDN | SPM dependency |
+| --- | --- | --- |
+| Native RTC 4.6.4.2 | `AgoraRtcEngine_Special_iOS` 4.6.4.2 | `AgoraRtcEngine_iOS` tag 4.6.4-rc.2 |
+| Iris 4.6.4.2-build.1 | `AgoraIrisRTC_iOS` 4.6.4.2-build.1 | `AgoraRtcWrapper` binary 4.6.4.2-build.1 |
+
+This upgrades the previous CocoaPods baseline of RTC 4.6.2.70 / Iris
+4.6.2-build.1. When upgrading an existing CocoaPods installation, add the CDN
+sources above and remove explicit old `AgoraVideo_Special_iOS` /
+`AgoraIrisRTC_iOS2` declarations or duplicate manually installed Agora SDKs.
+If `Podfile.lock` still pins the previous SDKs, update only these dependencies:
+
+```sh
+cd ios
+pod update AgoraRtcEngine_Special_iOS AgoraIrisRTC_iOS
 ```
 
-This embeds the dynamic SDK frameworks on older React Native versions. Newer
-versions with built-in SPM framework embedding use that implementation instead.
-The React Native bridge and React Native itself still use CocoaPods; this is
-the `spm_dependency` integration, not a CocoaPods-free installation.
-
-SPM mode pins **RTC 4.6.4-rc.2** (the Native release referred to as 4.6.4.2)
-and **Iris 4.6.4.2-build.1**. The default CocoaPods installation uses the special
-RTC build **4.6.2.70** and **Iris 4.6.2-build.1**. These are separate, pinned
-dependency baselines; applications switching modes must validate their SDK
-behavior. Do not add the Agora pods or another RTC version alongside SPM mode.
+Commit the resulting `Podfile.lock` and regression-test the Native SDK upgrade.
+If a screen-sharing extension declares its own Native pod, change it to
+`AgoraRtcEngine_Special_iOS` 4.6.4.2 as well. When switching to SPM, remove direct
+Agora SDK pod declarations so the same binaries are not installed twice.
 
 The Iris Swift package comes from the matching `react-native-agora` release tag.
 SPM mode therefore requires a release containing `Package.swift`; older tags do

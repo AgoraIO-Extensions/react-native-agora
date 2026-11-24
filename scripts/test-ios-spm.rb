@@ -23,8 +23,10 @@ original_revision = ENV.delete('AGORA_SPM_REVISION')
 begin
   ENV.delete('USE_FRAMEWORKS')
   pods = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
-  check(pods.dependencies.map(&:name).include?('AgoraIrisRTC_iOS2'), 'Default Iris pod missing')
-  check(pods.dependencies.map(&:name).include?('AgoraVideo_Special_iOS'), 'Default RTC pod missing')
+  iris_pod = pods.dependencies.find { |dep| dep.name == 'AgoraIrisRTC_iOS' }
+  rtc_pod = pods.dependencies.find { |dep| dep.name == 'AgoraRtcEngine_Special_iOS' }
+  check(iris_pod && iris_pod.requirement.to_s == '= 4.6.4.2-build.1', 'Default Iris pod must match the SPM release')
+  check(rtc_pod && rtc_pod.requirement.to_s == '= 4.6.4.2', 'Default RTC pod must match the SPM release')
   manifest = File.read(File.join(ROOT, 'Package.swift'))
   check(manifest.include?('AgoraIrisRTC_iOS-4.6.4.2-build.1.zip'), 'SPM Iris version must stay pinned')
   check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Default mode registered SPM packages')
@@ -32,7 +34,7 @@ begin
 
   ENV['USE_FRAMEWORKS'] = 'static'
   static = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
-  check(static.dependencies.map(&:name).include?('AgoraVideo_Special_iOS'), 'Static linkage must use CocoaPods')
+  check(static.dependencies == pods.dependencies, 'Static linkage must use the same CocoaPods dependencies')
   check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Static linkage registered SPM packages')
 
   ENV['USE_FRAMEWORKS'] = 'dynamic'
@@ -106,7 +108,7 @@ begin
   Object.send(:remove_method, :spm_dependency)
   SPM.instance_variable_get(:@dependencies_by_pod).clear
   older_rn = Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
-  check(older_rn.dependencies.map(&:name).include?('AgoraVideo_Special_iOS'), 'Older RN must fall back to CocoaPods')
+  check(older_rn.dependencies == pods.dependencies, 'Older RN must fall back to the same CocoaPods dependencies')
   check(SPM.instance_variable_get(:@dependencies_by_pod).empty?, 'Older RN registered SPM packages')
   AgoraReactNativeSPM.post_install(nil)
   puts 'iOS SPM dependency checks passed'
