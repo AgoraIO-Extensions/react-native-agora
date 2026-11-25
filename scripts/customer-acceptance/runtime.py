@@ -15,7 +15,7 @@ def sim(*args, capture=False):
         (report / 'runtime-progress.json').write_text(json.dumps(summary, indent=2))
     result = subprocess.run(["xcrun", "simctl", *args], check=True, text=True,
                             stdout=subprocess.PIPE if capture else None,
-                            timeout=300 if args[0] == 'bootstatus' else 240 if args[0] == 'create' else 90)
+                            timeout=300 if args[0] == 'bootstatus' else 240 if args[0] in ['create', 'launch'] else 90)
     return result.stdout.strip() if capture else None
 
 
@@ -85,13 +85,12 @@ try:
         devices[role] = device
         sim("boot", device)
         sim("bootstatus", device, "-b")
-    for role, device in devices.items():
         sim("install", device, str(app))
         sim("privacy", device, "grant", "camera", bundle)
         sim("privacy", device, "grant", "microphone", bundle)
         container = Path(sim("get_app_container", device, bundle, "data", capture=True))
         documents[role] = container / "Documents"
-        sim("launch", "--terminate-running-process", device, bundle,
+        sim("launch", device, bundle,
             "-acceptanceRole", role, "-acceptanceChannel", channel)
     current = wait_for(states, lambda value: len(value) == 2 and
                        all(item.get("baseReady") for item in value.values()),
@@ -130,6 +129,9 @@ finally:
     secret = os.environ.get("AGORA_APP_ID", "")
     diagnostic = json.dumps(summary, indent=2)
     print(diagnostic.replace(secret, '[APP_ID]') if secret else diagnostic, flush=True)
+    for crash in (Path.home() / 'Library/Logs/DiagnosticReports').glob('AgoraCustomer*.ips'):
+        text = crash.read_text(errors='replace')
+        (report / crash.name).write_text(text.replace(secret, '[APP_ID]') if secret else text)
     for role, directory in documents.items():
         output = report / role
         output.mkdir(exist_ok=True)
@@ -139,6 +141,17 @@ finally:
                 text = text.replace(secret, "[APP_ID]")
             (output / file.name).write_text(text)
         device = devices[role]
+        if summary.get('failure'):
+            command = ['xcrun', 'simctl', 'spawn', device, 'log', 'show', '--last', '5m',
+                       '--style', 'compact', '--predicate',
+                       'process == "AgoraCustomer" OR (eventMessage CONTAINS "AgoraCustomer")']
+            try:
+                logs = subprocess.run(command, text=True, stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT, timeout=20).stdout
+            except subprocess.TimeoutExpired as error:
+                captured = error.stdout or b''
+                logs = captured.decode(errors='replace') if isinstance(captured, bytes) else captured
+            (output / 'launch-system.log').write_text(logs.replace(secret, '[APP_ID]') if secret else logs)
         try:
             subprocess.run(["xcrun", "simctl", "io", device, "screenshot",
                             str(report / f"{role}-final.png")], check=False, timeout=20)

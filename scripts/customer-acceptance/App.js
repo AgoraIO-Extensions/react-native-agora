@@ -95,7 +95,9 @@ export default function App() {
       });
     }, 1000);
     try {
+      report({ stage: 'createEngine' });
       engine = createAgoraRtcEngine();
+      report({ stage: 'getVersion' });
       const version = engine.getVersion();
       if (!version.version.startsWith('4.6.4'))
         throw new Error(`Unexpected SDK ${version.version}`);

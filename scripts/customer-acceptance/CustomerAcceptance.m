@@ -11,6 +11,8 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)constantsToExport {
   NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+  NSData *initial = [NSJSONSerialization dataWithJSONObject:@{@"nativeReporterLoaded": @YES} options:0 error:nil];
+  [initial writeToFile:[documents stringByAppendingPathComponent:@"customer-acceptance.json"] atomically:YES];
   NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
   return @{
     @"documents": documents,
