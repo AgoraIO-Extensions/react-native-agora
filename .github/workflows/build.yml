@@ -6,7 +6,7 @@ on:
       scenario:
         type: choice
         default: all
-        options: [all, spm-new, host-control, upgrade]
+        options: [all, spm-new, host-control, upgrade, launch-study]
 
 permissions:
   contents: read
@@ -211,4 +211,36 @@ jobs:
         with:
           name: customer-upgrade
           path: ${{ runner.temp }}/upgrade-evidence/
+          if-no-files-found: error
+
+  launch-study:
+    if: inputs.scenario == 'launch-study'
+    needs: package-sdk
+    runs-on: macos-15
+    timeout-minutes: 75
+    env:
+      RUBYOPT: -rlogger
+      AGORA_APP_ID: ${{ secrets.APP_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - run: gem install cocoapods -v 1.16.2 --no-document
+      - uses: actions/download-artifact@v4
+        with:
+          name: pr990-sdk-package
+          path: ${{ runner.temp }}/sdk-package
+      - name: Compare RN control, SPM linkage, and SDK initialization
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
+          python3 -u scripts/customer-acceptance/launch-study.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: launch-study
+          path: ${{ runner.temp }}/launch-study/
           if-no-files-found: error
