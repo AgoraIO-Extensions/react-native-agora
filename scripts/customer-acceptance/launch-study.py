@@ -17,7 +17,8 @@ env.update(USE_FRAMEWORKS='dynamic', RCT_NEW_ARCH_ENABLED='1',
 summary = {}
 device = None
 permissions = '--permissions' in sys.argv
-followup = '--followup' in sys.argv or permissions
+rtc = '--rtc' in sys.argv
+followup = '--followup' in sys.argv or permissions or rtc
 
 def redact(value):
     secret = os.environ.get('AGORA_APP_ID', '')
@@ -209,7 +210,7 @@ import {NativeModules,Text,View} from 'react-native';
 import config from './acceptance-config.json';
 export default function App(){useEffect(()=>{const state={jsReady:true};const mark=(stage)=>{state.stage=stage;NativeModules.CustomerAcceptance.report(state);};try{mark('before.import');const sdk=require('react-native-agora');mark('after.import');const engine=sdk.createAgoraRtcEngine();mark('engine.created');state.version=engine.getVersion();mark('version.loaded');state.initializeCode=engine.initialize({appId:config.appId});mark('initialized');engine.release();state.sdkInitialized=state.initializeCode===0;mark('released');}catch(error){state.failure=error.message;mark('failed');}},[]);return <View><Text>Agora minimal initialization probe</Text></View>;}
 ''')
-    if permissions:
+    if permissions or rtc:
         info_path = app / 'ios/AgoraCustomer/Info.plist'
         with info_path.open('rb') as stream:
             info = plistlib.load(stream)
@@ -222,12 +223,18 @@ export default function App(){useEffect(()=>{const state={jsReady:true};const ma
         test('without-privacy', 'baseReady', bundle_override=original_bundle)
         sim('shutdown', device, timeout=90)
         sim('delete', device, timeout=90)
-        device = sim('create', 'PR990-TCC-Control', 'com.apple.CoreSimulator.SimDeviceType.iPhone-16',
-                     'com.apple.CoreSimulator.SimRuntime.iOS-18-5', timeout=240)
-        (evidence / 'device.txt').write_text(device)
-        sim('boot', device)
-        sim('bootstatus', device, '-b', timeout=300)
-        test('with-privacy', 'baseReady', bundle_override=original_bundle, rebuild=False, grant_privacy=True)
+        device = None
+        if rtc:
+            binary = root / 'launch-derived/Build/Products/Release-iphonesimulator/AgoraCustomer.app'
+            run([sys.executable, str(Path(__file__).with_name('runtime.py')), str(binary),
+                 str(evidence / 'rtc'), '--arch', '1', '--mode', 'spm'], 'rtc-runtime', timeout=900)
+        else:
+            device = sim('create', 'PR990-TCC-Control', 'com.apple.CoreSimulator.SimDeviceType.iPhone-16',
+                         'com.apple.CoreSimulator.SimRuntime.iOS-18-5', timeout=240)
+            (evidence / 'device.txt').write_text(device)
+            sim('boot', device)
+            sim('bootstatus', device, '-b', timeout=300)
+            test('with-privacy', 'baseReady', bundle_override=original_bundle, rebuild=False, grant_privacy=True)
     elif not followup:
         test('spm-init', 'sdkInitialized')
     else:
@@ -259,5 +266,5 @@ finally:
     for file in evidence.rglob('*'):
         if file.is_file() and file.suffix in ['.log','.json','.txt','.sample','.ips']:
             file.write_text(redact(file.read_text(errors='replace')))
-if not all(value['passed'] for value in summary.values()) or len(summary) != (2 if permissions else 4 if followup else 3):
+if not all(value['passed'] for value in summary.values()) or len(summary) != (1 if rtc else 2 if permissions else 4 if followup else 3):
     raise SystemExit(1)
