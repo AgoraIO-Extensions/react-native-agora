@@ -20,6 +20,7 @@ target.source_build_phase.add_file_reference(file)
 target.add_dependency(host)
 target.build_configurations.each do |config|
   config.build_settings.merge!({
+    'PRODUCT_NAME' => '$(TARGET_NAME)',
     'PRODUCT_BUNDLE_IDENTIFIER' => 'io.agora.customer.BridgeSmokeTests',
     'GENERATE_INFOPLIST_FILE' => 'YES',
     'CLANG_ENABLE_MODULES' => 'YES',
