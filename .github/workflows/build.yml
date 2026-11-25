@@ -76,8 +76,10 @@ jobs:
           archive, = package.glob('*.tgz')
           digest = hashlib.sha256(archive.read_bytes()).hexdigest()
           assert digest == (package / 'package-sha256.txt').read_text().split()[0]
+          declaration_config = json.loads((package / 'declaration-build-config.json').read_text())
           evidence = {'packageSource': source, 'currentPRSource': os.environ['SDK_SOURCE_REF'],
-                      'sourceTree': (package / 'source-tree.txt').read_text().strip(), 'packageSHA256': digest}
+                      'sourceTree': (package / 'source-tree.txt').read_text().strip(), 'packageSHA256': digest,
+                      'declarationBuildExcludes': declaration_config['exclude']}
           (Path(os.environ['RUNNER_TEMP']) / 'native-evidence/package.json').write_text(json.dumps(evidence, indent=2))
           PY
       - name: Create a standalone customer App and hosted XCTest target
@@ -131,9 +133,18 @@ jobs:
           corepack enable
           yarn workspaces focus react-native-agora
           yarn test --runInBand
+          # Unit tests run above. Library declarations must not import Demo types through tests.
+          node - <<'JS'
+          const fs = require('node:fs');
+          const file = 'tsconfig.build.json';
+          const config = JSON.parse(fs.readFileSync(file, 'utf8'));
+          config.exclude = [...new Set([...(config.exclude || []), 'src/__tests__'])];
+          fs.writeFileSync(file, JSON.stringify(config, null, 2) + '\n');
+          JS
           yarn prepare
           git diff --exit-code -- src ios Package.swift react-native-agora.podspec package.json
           mkdir -p "$RUNNER_TEMP/sdk-package"
+          cp tsconfig.build.json "$RUNNER_TEMP/sdk-package/declaration-build-config.json"
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/sdk-package"
           git rev-parse HEAD > "$RUNNER_TEMP/sdk-package/source-commit.txt"
           git rev-parse HEAD^{tree} > "$RUNNER_TEMP/sdk-package/source-tree.txt"

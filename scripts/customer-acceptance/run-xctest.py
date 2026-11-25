@@ -106,7 +106,9 @@ def main():
         if summary['status'] == 'passed' and args.negative_control:
             code, tests, run_id = execute_tests('negative', 'invalid-negative-control')
             confirmed = code != 0 and tests.get('failedTests', 0) >= 1 and any(
-                'invalid-negative-control' in json.dumps(failure) for failure in tests.get('testFailures', []))
+                all(marker in json.dumps(failure) for marker in
+                    ['XCTAssertEqualObjects', '4.6.4.2', 'invalid-negative-control'])
+                for failure in tests.get('testFailures', []))
             summary['negativeControl'] = {'xcodeExitCode': code, 'tests': tests,
                                           'runID': run_id, 'failureConfirmed': confirmed}
             if not confirmed:
@@ -122,7 +124,7 @@ def main():
                 candidates = [item['udid'] for values in json.loads(output)['devices'].values()
                               for item in values if item['name'] == name]
                 if code == 0 and len(candidates) == 1:
-                    device = candidates[0]
+                    device = str(uuid.UUID(candidates[0]))
             except Exception as error:
                 summary['cleanupFailure'] = str(error)
         if device:
@@ -130,7 +132,8 @@ def main():
                 run('shutdown', ['xcrun', 'simctl', 'shutdown', device], 30)
                 run('delete', ['xcrun', 'simctl', 'delete', device], 30)
                 code, output = run('verify-cleanup', ['xcrun', 'simctl', 'list', 'devices', '--json'], 60)
-                remaining = [item['udid'] for values in json.loads(output)['devices'].values() for item in values]
+                remaining = [str(uuid.UUID(item['udid']))
+                             for values in json.loads(output)['devices'].values() for item in values]
                 if code or device in remaining:
                     raise RuntimeError('Owned Simulator removal could not be verified')
                 summary['cleanupVerified'] = True

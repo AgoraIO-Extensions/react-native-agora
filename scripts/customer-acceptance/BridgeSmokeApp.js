@@ -26,7 +26,6 @@ export default function App() {
         for (let cycle = 0; cycle < 2; cycle++) {
           engine = createAgoraRtcEngine();
           const result = {
-            version: engine.getVersion(),
             initialize: engine.initialize({
               appId: config.appId,
               logConfig: { filePath: `${reporter.documents}/agora-sdk.log` },
@@ -36,6 +35,7 @@ export default function App() {
           report();
           if (result.initialize !== 0)
             throw new Error(`initialize returned ${result.initialize}`);
+          result.version = engine.getVersion();
           engine.registerEventHandler({
             onError: (code, message) => {
               state.errors.push({ code, message });
