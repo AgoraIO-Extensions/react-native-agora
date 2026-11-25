@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pr990-customer-acceptance-${{ github.ref }}
+  group: pr990-customer-acceptance-${{ github.ref }}-${{ inputs.scenario || 'all' }}
   cancel-in-progress: false
 
 env:
