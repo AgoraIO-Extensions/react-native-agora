@@ -101,6 +101,21 @@ jobs:
         working-directory: ${{ runner.temp }}/AgoraCustomer/ios
         run: |
           xcodebuild -quiet -workspace AgoraCustomer.xcworkspace -scheme AgoraCustomerTests -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/native-derived" build-for-testing CODE_SIGN_IDENTITY=- ARCHS=arm64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/native-evidence/build.log" 2>&1
+      - name: Preserve the exact compiled App and test bundle
+        run: |
+          cp "$RUNNER_TEMP/native-derived/Build/Products/"*.xctestrun "$RUNNER_TEMP/native-evidence/"
+          cp "$RUNNER_TEMP/native-evidence/package.json" "$RUNNER_TEMP/native-derived/Build/Products/sdk-package.json"
+          tar -czf "$RUNNER_TEMP/native-test-products.tgz" -C "$RUNNER_TEMP/native-derived/Build" Products
+          shasum -a 256 "$RUNNER_TEMP/native-test-products.tgz" > "$RUNNER_TEMP/native-test-products.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-test-products-${{ matrix.mode }}-arch${{ matrix.newArch }}
+          path: |
+            ${{ runner.temp }}/native-test-products.tgz
+            ${{ runner.temp }}/native-test-products.sha256
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
       - name: Run the real RN bridge lifecycle through XCTest
         timeout-minutes: 20
         run: python3 -u scripts/customer-acceptance/run-xctest.py "$RUNNER_TEMP/native-derived/Build/Products" "$RUNNER_TEMP/native-evidence" --negative-control

@@ -74,10 +74,17 @@ def main():
         def execute_tests(label, expected_version):
             data = plistlib.loads(runs[0].read_bytes())
             run_id = str(uuid.uuid4())
-            for configuration in data['TestConfigurations']:
-                for target in configuration['TestTargets']:
-                    target.setdefault('EnvironmentVariables', {}).update({
-                        'AGORA_TEST_RUN_ID': run_id, 'AGORA_TEST_VERSION': expected_version})
+            if 'TestConfigurations' in data:
+                targets = [target for configuration in data['TestConfigurations']
+                           for target in configuration['TestTargets']]
+            else:
+                # Schemes without a Test Plan still emit format 1 on Xcode 16.4.
+                targets = [target for target in data.values() if isinstance(target, dict)
+                           and 'TestBundlePath' in target]
+            if len(targets) != 1:
+                raise RuntimeError('Expected exactly one hosted native test target')
+            targets[0].setdefault('EnvironmentVariables', {}).update({
+                'AGORA_TEST_RUN_ID': run_id, 'AGORA_TEST_VERSION': expected_version})
             configuration_file = args.products / ('BridgeSmoke-' + label + '.xctestrun')
             configuration_file.write_bytes(plistlib.dumps(data))
             result = args.report / ('BridgeSmoke-' + label + '.xcresult')
