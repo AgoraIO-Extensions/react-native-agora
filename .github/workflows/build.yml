@@ -6,7 +6,7 @@ on:
       scenario:
         type: choice
         default: all
-        options: [all, spm-new]
+        options: [all, spm-new, host-control]
 
 permissions:
   contents: read
@@ -20,6 +20,7 @@ env:
 
 jobs:
   package-sdk:
+    if: inputs.scenario != 'host-control'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -47,6 +48,38 @@ jobs:
           name: pr990-sdk-package
           path: ${{ runner.temp }}/sdk-package/
           if-no-files-found: error
+
+  simulator-control:
+    if: inputs.scenario == 'host-control'
+    runs-on: macos-15
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime: ['18-5', '18-6']
+    steps:
+      - name: Launch the system Settings app without RN or Agora
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
+          python3 -u - <<'PY'
+          import subprocess
+          def sim(*args, timeout=180):
+              print('simctl ' + ' '.join(args), flush=True)
+              result = subprocess.run(['xcrun','simctl',*args], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=timeout)
+              print(result.stdout, flush=True)
+              result.check_returncode()
+              return result.stdout.strip()
+          device = sim('create','Agora-Host-Control','com.apple.CoreSimulator.SimDeviceType.iPhone-16','com.apple.CoreSimulator.SimRuntime.iOS-${{ matrix.runtime }}')
+          try:
+              sim('boot',device)
+              sim('bootstatus',device,'-b',timeout=300)
+              sim('launch',device,'com.apple.Preferences')
+              print('HOST_CONTROL_SETTINGS_LAUNCH_PASSED', flush=True)
+          finally:
+              for action in ['shutdown','delete']:
+                  try: sim(action,device,timeout=20)
+                  except Exception as error: print(type(error).__name__, flush=True)
+          PY
 
   customer-ios:
     needs: package-sdk
