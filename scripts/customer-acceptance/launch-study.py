@@ -4,6 +4,7 @@ from pathlib import Path
 import plistlib
 import shutil
 import subprocess
+import sys
 import time
 
 root = Path(os.environ['RUNNER_TEMP'])
@@ -15,6 +16,7 @@ env.update(USE_FRAMEWORKS='dynamic', RCT_NEW_ARCH_ENABLED='1',
            CP_HOME_DIR=str(root / 'launch-cocoapods'))
 summary = {}
 device = None
+followup = '--followup' in sys.argv
 
 def redact(value):
     secret = os.environ.get('AGORA_APP_ID', '')
@@ -65,17 +67,18 @@ def collect(stage, launch, bundle):
         except subprocess.TimeoutExpired:
             (folder / filename).write_text('Command timed out')
 
-def test(stage, expected):
+def test(stage, expected, bundle_override=None, rebuild=True):
     global device
     folder = evidence / stage
     folder.mkdir()
-    bundle = 'io.agora.pr990.' + stage.replace('-', '')
-    run(['ruby', '-rxcodeproj', '-e', '''
+    bundle = bundle_override or 'io.agora.pr990.' + stage.replace('-', '')
+    if rebuild:
+        run(['ruby', '-rxcodeproj', '-e', '''
 project=Xcodeproj::Project.open(ARGV[0]); target=project.targets.find{|t|t.name=='AgoraCustomer'}
 target.build_configurations.each{|config|config.build_settings['PRODUCT_BUNDLE_IDENTIFIER']=ARGV[1]}
 project.save
 ''', str(app / 'ios/AgoraCustomer.xcodeproj'), bundle], stage + '-bundle-id')
-    run(['xcodebuild', '-workspace', 'AgoraCustomer.xcworkspace', '-scheme', 'AgoraCustomer',
+        run(['xcodebuild', '-workspace', 'AgoraCustomer.xcworkspace', '-scheme', 'AgoraCustomer',
          '-configuration', 'Release', '-sdk', 'iphonesimulator', '-destination', 'generic/platform=iOS Simulator',
          '-derivedDataPath', str(root / 'launch-derived'), '-jobs', '2', 'build',
          'ARCHS=arm64', 'ONLY_ACTIVE_ARCH=YES', 'CODE_SIGN_IDENTITY=-'], stage + '-build', app / 'ios')
@@ -93,6 +96,8 @@ project.save
     sim('install', device, str(binary), timeout=240)
     container = Path(sim('get_app_container', device, bundle, 'data'))
     documents = container / 'Documents'
+    for name in ['native-launch-stage.json', 'customer-acceptance.json']:
+        (documents / name).unlink(missing_ok=True)
     started = time.time()
     with (folder / 'launcher.log').open('w') as launcher:
         command = ['xcrun', 'simctl', 'launch', '--stdout=' + str(folder / 'app-stdout.log'),
@@ -176,8 +181,9 @@ import {NativeModules,Text,View} from 'react-native';
 export default function App(){useEffect(()=>{NativeModules.CustomerAcceptance.report({jsReady:true,fabric:!!global.nativeFabricUIManager});},[]);return <View><Text>RN dynamic launch control</Text></View>;}
 '''
     (app / 'App.js').write_text(control)
-    run(['pod','install','--repo-update'], 'pods-control', app / 'ios')
-    test('rn-control', 'jsReady')
+    if not followup:
+        run(['pod','install','--repo-update'], 'pods-control', app / 'ios')
+        test('rn-control', 'jsReady')
     package = next((root / 'sdk-package').glob('*.tgz'))
     run(['npm','install','--no-audit','--no-fund',str(package)], 'npm-spm')
     podfile = app / 'ios/Podfile'
@@ -187,14 +193,37 @@ export default function App(){useEffect(()=>{NativeModules.CustomerAcceptance.re
     podfile.write_text(source.replace(anchor, anchor+'\n    AgoraReactNativeSPM.post_install(installer)'))
     env['AGORA_SPM_REVISION'] = os.environ['SDK_SOURCE_REF']
     run(['pod','install','--repo-update'], 'pods-spm', app / 'ios')
-    test('spm-linked', 'jsReady')
+    if not followup:
+        test('spm-linked', 'jsReady')
     (app / 'acceptance-config.json').write_text(json.dumps({'appId':os.environ['AGORA_APP_ID']}))
     (app / 'App.js').write_text('''import React,{useEffect} from 'react';
 import {NativeModules,Text,View} from 'react-native';
 import config from './acceptance-config.json';
 export default function App(){useEffect(()=>{const state={jsReady:true};const mark=(stage)=>{state.stage=stage;NativeModules.CustomerAcceptance.report(state);};try{mark('before.import');const sdk=require('react-native-agora');mark('after.import');const engine=sdk.createAgoraRtcEngine();mark('engine.created');state.version=engine.getVersion();mark('version.loaded');state.initializeCode=engine.initialize({appId:config.appId});mark('initialized');engine.release();state.sdkInitialized=state.initializeCode===0;mark('released');}catch(error){state.failure=error.message;mark('failed');}},[]);return <View><Text>Agora minimal initialization probe</Text></View>;}
 ''')
-    test('spm-init', 'sdkInitialized')
+    if not followup:
+        test('spm-init', 'sdkInitialized')
+    else:
+        source = (app / 'App.js').read_text()
+        source = source.replace("import config from './acceptance-config.json';", "import config from './acceptance-config.json';\nimport {createAgoraRtcEngine} from 'react-native-agora';")
+        source = source.replace("const sdk=require('react-native-agora');", 'const sdk={createAgoraRtcEngine};')
+        (app / 'App.js').write_text(source)
+        test('static-import', 'sdkInitialized')
+        original_bundle = 'org.reactjs.native.example.AgoraCustomer'
+        test('original-bundle', 'sdkInitialized', bundle_override=original_bundle)
+        shutil.copy(Path(__file__).with_name('App.js'), app / 'App.js')
+        test('full-app', 'baseReady', bundle_override=original_bundle)
+        sim('shutdown', device, timeout=90)
+        sim('delete', device, timeout=90)
+        device = sim('create', 'PR990-Prewarm-Control', 'com.apple.CoreSimulator.SimDeviceType.iPhone-16',
+                     'com.apple.CoreSimulator.SimRuntime.iOS-18-5', timeout=240)
+        (evidence / 'device.txt').write_text(device)
+        sim('boot', device)
+        sim('bootstatus', device, '-b', timeout=300)
+        sim('shutdown', device, timeout=90)
+        sim('boot', device)
+        sim('bootstatus', device, '-b', timeout=300)
+        test('prewarm-reboot', 'baseReady', bundle_override=original_bundle, rebuild=False)
 finally:
     if device:
         for action in ['shutdown','delete']:
@@ -203,5 +232,5 @@ finally:
     for file in evidence.rglob('*'):
         if file.is_file() and file.suffix in ['.log','.json','.txt','.sample','.ips']:
             file.write_text(redact(file.read_text(errors='replace')))
-if not all(value['passed'] for value in summary.values()) or len(summary) != 3:
+if not all(value['passed'] for value in summary.values()) or len(summary) != (4 if followup else 3):
     raise SystemExit(1)

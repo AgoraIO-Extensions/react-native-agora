@@ -6,7 +6,7 @@ on:
       scenario:
         type: choice
         default: all
-        options: [all, spm-new, host-control, upgrade, launch-study]
+        options: [all, spm-new, host-control, upgrade, launch-study, launch-followup]
 
 permissions:
   contents: read
@@ -214,7 +214,7 @@ jobs:
           if-no-files-found: error
 
   launch-study:
-    if: inputs.scenario == 'launch-study'
+    if: inputs.scenario == 'launch-study' || inputs.scenario == 'launch-followup'
     needs: package-sdk
     runs-on: macos-15
     timeout-minutes: 75
@@ -237,7 +237,7 @@ jobs:
       - name: Compare RN control, SPM linkage, and SDK initialization
         run: |
           sudo xcode-select --switch /Applications/Xcode_16.4.app
-          python3 -u scripts/customer-acceptance/launch-study.py
+          python3 -u scripts/customer-acceptance/launch-study.py ${{ inputs.scenario == 'launch-followup' && '--followup' || '' }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
