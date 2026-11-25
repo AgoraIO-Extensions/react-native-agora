@@ -16,7 +16,8 @@ env.update(USE_FRAMEWORKS='dynamic', RCT_NEW_ARCH_ENABLED='1',
            CP_HOME_DIR=str(root / 'launch-cocoapods'))
 summary = {}
 device = None
-followup = '--followup' in sys.argv
+permissions = '--permissions' in sys.argv
+followup = '--followup' in sys.argv or permissions
 
 def redact(value):
     secret = os.environ.get('AGORA_APP_ID', '')
@@ -67,7 +68,7 @@ def collect(stage, launch, bundle):
         except subprocess.TimeoutExpired:
             (folder / filename).write_text('Command timed out')
 
-def test(stage, expected, bundle_override=None, rebuild=True):
+def test(stage, expected, bundle_override=None, rebuild=True, grant_privacy=False):
     global device
     folder = evidence / stage
     folder.mkdir()
@@ -98,6 +99,9 @@ project.save
         sim('boot', device)
         sim('bootstatus', device, '-b', timeout=300)
     sim('install', device, str(binary), timeout=240)
+    if grant_privacy:
+        sim('privacy', device, 'grant', 'camera', bundle)
+        sim('privacy', device, 'grant', 'microphone', bundle)
     container = Path(sim('get_app_container', device, bundle, 'data'))
     documents = container / 'Documents'
     for name in ['native-launch-stage.json', 'customer-acceptance.json']:
@@ -205,7 +209,26 @@ import {NativeModules,Text,View} from 'react-native';
 import config from './acceptance-config.json';
 export default function App(){useEffect(()=>{const state={jsReady:true};const mark=(stage)=>{state.stage=stage;NativeModules.CustomerAcceptance.report(state);};try{mark('before.import');const sdk=require('react-native-agora');mark('after.import');const engine=sdk.createAgoraRtcEngine();mark('engine.created');state.version=engine.getVersion();mark('version.loaded');state.initializeCode=engine.initialize({appId:config.appId});mark('initialized');engine.release();state.sdkInitialized=state.initializeCode===0;mark('released');}catch(error){state.failure=error.message;mark('failed');}},[]);return <View><Text>Agora minimal initialization probe</Text></View>;}
 ''')
-    if not followup:
+    if permissions:
+        info_path = app / 'ios/AgoraCustomer/Info.plist'
+        with info_path.open('rb') as stream:
+            info = plistlib.load(stream)
+        info['NSCameraUsageDescription'] = 'Customer SDK acceptance test'
+        info['NSMicrophoneUsageDescription'] = 'Customer SDK acceptance test'
+        with info_path.open('wb') as stream:
+            plistlib.dump(info, stream)
+        shutil.copy(Path(__file__).with_name('App.js'), app / 'App.js')
+        original_bundle = 'org.reactjs.native.example.AgoraCustomer'
+        test('without-privacy', 'baseReady', bundle_override=original_bundle)
+        sim('shutdown', device, timeout=90)
+        sim('delete', device, timeout=90)
+        device = sim('create', 'PR990-TCC-Control', 'com.apple.CoreSimulator.SimDeviceType.iPhone-16',
+                     'com.apple.CoreSimulator.SimRuntime.iOS-18-5', timeout=240)
+        (evidence / 'device.txt').write_text(device)
+        sim('boot', device)
+        sim('bootstatus', device, '-b', timeout=300)
+        test('with-privacy', 'baseReady', bundle_override=original_bundle, rebuild=False, grant_privacy=True)
+    elif not followup:
         test('spm-init', 'sdkInitialized')
     else:
         source = (app / 'App.js').read_text()
@@ -236,5 +259,5 @@ finally:
     for file in evidence.rglob('*'):
         if file.is_file() and file.suffix in ['.log','.json','.txt','.sample','.ips']:
             file.write_text(redact(file.read_text(errors='replace')))
-if not all(value['passed'] for value in summary.values()) or len(summary) != (4 if followup else 3):
+if not all(value['passed'] for value in summary.values()) or len(summary) != (2 if permissions else 4 if followup else 3):
     raise SystemExit(1)
