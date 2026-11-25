@@ -126,11 +126,12 @@ This upgrades the previous CocoaPods baseline of RTC 4.6.2.70 / Iris
 4.6.2-build.1. When upgrading an existing CocoaPods installation, add the CDN
 sources above and remove explicit old `AgoraVideo_Special_iOS` /
 `AgoraIrisRTC_iOS2` declarations or duplicate manually installed Agora SDKs.
-If `Podfile.lock` still pins the previous SDKs, update only these dependencies:
+After upgrading the npm package, update the wrapper pod so CocoaPods can migrate
+its Native/Iris dependencies to their new pod names:
 
 ```sh
 cd ios
-pod update AgoraRtcEngine_Special_iOS AgoraIrisRTC_iOS
+pod update react-native-agora
 ```
 
 Commit the resulting `Podfile.lock` and regression-test the Native SDK upgrade.

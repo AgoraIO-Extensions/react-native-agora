@@ -57,11 +57,10 @@ module AgoraReactNativeSPM
     native_embedding? ? { embed_frameworks: frameworks } : {}
   end
 
-  # Older RN versions register Swift packages without embedding their dynamic
-  # frameworks in the app. Reuse CocoaPods' copy/strip/sign function for these binaries.
+  # Older RN helpers need dynamic framework embedding. Archive also needs one
+  # provenance file per binary even when RN already handles the embedding.
   def self.post_install(installer)
     return unless enabled?
-    return if native_embedding?
 
     frameworks = RTC_FRAMEWORKS + ['AgoraRtcWrapper']
     manifest_hash = Digest::SHA256.file(File.join(__dir__, '..', 'Package.swift')).hexdigest
@@ -73,19 +72,34 @@ module AgoraReactNativeSPM
       unless File.file?(path)
         raise 'Agora SPM requires use_frameworks! :linkage => :dynamic in the app target.'
       end
-      script = File.read(path)
-      next if script.include?(marker)
-
-      anchor = /^if \[ "\$\{COCOAPODS_PARALLEL_CODE_SIGN\}" == "true" \]; then$/
-      unless script.match?(anchor)
-        raise 'Cannot configure Agora SPM framework embedding in the CocoaPods script.'
+      original = File.read(path)
+      script = original
+      unless native_embedding? || script.include?(marker)
+        anchor = /^if \[ "\$\{COCOAPODS_PARALLEL_CODE_SIGN\}" == "true" \]; then$/
+        unless script.match?(anchor)
+          raise 'Cannot configure Agora SPM framework embedding in the CocoaPods script.'
+        end
+        # Package requirements are inputs too: rewrite the script when binaries change.
+        calls = "#{marker} RTC=#{RTC_VERSION} Iris=#{manifest_hash}\n"
+        calls += frameworks.map do |framework|
+          "install_framework \"${PODS_CONFIGURATION_BUILD_DIR}/#{framework}.framework\"\n"
+        end.join
+        script = script.sub(anchor) { "#{calls}\n#{$&}" }
       end
-      # Package requirements are inputs too: rewrite the script when binaries change.
-      calls = "#{marker} RTC=#{RTC_VERSION} Iris=#{manifest_hash}\n"
-      calls += frameworks.map do |framework|
-        "install_framework \"${PODS_CONFIGURATION_BUILD_DIR}/#{framework}.framework\"\n"
-      end.join
-      File.write(path, script.sub(anchor) { "#{calls}\n#{$&}" })
+
+      # Xcode stages SPM provenance in both the app and pod build directories.
+      # Keep the pod copy so Archive collects each signature once. The framework
+      # binaries and their code signatures are not changed.
+      signature_marker = '# [Agora] Deduplicate Swift package archive signatures'
+      unless script.include?(signature_marker)
+        removals = frameworks.flat_map do |framework|
+          %w[ios ios-simulator].map do |slice|
+            "  rm -f \"${CONFIGURATION_BUILD_DIR}/#{framework}.xcframework-#{slice}.signature\"\n"
+          end
+        end.join
+        script += "\n#{signature_marker}\nif [ \"${ACTION:-}\" = \"install\" ]; then\n#{removals}fi\n"
+      end
+      File.write(path, script) if script != original
     end
   end
 end
