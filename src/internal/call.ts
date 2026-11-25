@@ -47,6 +47,17 @@ export function callIrisApi(funcName: string, params: any): any {
           buffers.push(
             base64.fromByteArray(Buffer.from('') as unknown as Uint8Array)
           );
+          // Iris restores these pointers from buffers before parsing the frame.
+          // Keep pixel data out of JSON and its native API logs.
+          params = params.toJSON?.() ?? params;
+          params = {
+            ...params,
+            frame: {
+              ...params.frame,
+              buffer: undefined,
+              alphaBuffer: undefined,
+            },
+          };
           break;
         case 'MediaEngine_pushEncodedVideoImage_e71452b':
           // imageBuffer
