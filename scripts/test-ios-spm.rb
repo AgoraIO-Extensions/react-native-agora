@@ -103,7 +103,26 @@ begin
   end
   Pod::Specification.from_file(File.join(ROOT, 'react-native-agora.podspec'))
   check(native_frameworks == [AgoraReactNativeSPM::RTC_FRAMEWORKS, ['AgoraRtcWrapper']], 'Native RN embedding received product names instead of framework names')
-  AgoraReactNativeSPM.post_install(nil)
+  Dir.mktmpdir('agora-spm-signatures') do |dir|
+    path = File.join(dir, 'frameworks.sh')
+    File.write(path, "#!/bin/sh\n")
+    target = Struct.new(:pod_targets, :embed_frameworks_script_path).new([spec], path)
+    installer = Struct.new(:aggregate_targets).new([target])
+    AgoraReactNativeSPM.post_install(installer)
+    script = File.read(path)
+    check(!script.include?('install_framework'), 'Native RN embedding was duplicated')
+    signatures = %w[AgoraRtcKit.xcframework-ios.signature AgoraRtcWrapper.xcframework-ios-simulator.signature]
+    signatures.each { |file| File.write(File.join(dir, file), 'signature') }
+    unrelated = File.join(dir, 'OtherSDK.xcframework-ios.signature')
+    File.write(unrelated, 'keep')
+    check(system({ 'ACTION' => 'build', 'CONFIGURATION_BUILD_DIR' => dir }, 'bash', path), 'Signature script failed during build')
+    check(signatures.all? { |file| File.file?(File.join(dir, file)) }, 'Normal build removed provenance')
+    check(system({ 'ACTION' => 'install', 'CONFIGURATION_BUILD_DIR' => dir }, 'bash', path), 'Signature script failed during Archive')
+    check(signatures.none? { |file| File.exist?(File.join(dir, file)) }, 'Duplicate Archive provenance remains')
+    check(File.read(unrelated) == 'keep', 'Unrelated SDK provenance was removed')
+    AgoraReactNativeSPM.post_install(installer)
+    check(File.read(path) == script, 'Signature workaround must be idempotent')
+  end
 
   Object.send(:remove_method, :spm_dependency)
   SPM.instance_variable_get(:@dependencies_by_pod).clear
