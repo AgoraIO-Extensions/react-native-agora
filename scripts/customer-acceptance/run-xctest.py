@@ -65,7 +65,7 @@ def main():
                                      'com.apple.CoreSimulator.SimDeviceType.iPhone-16', runtime['identifier']], 90)
         if code:
             raise RuntimeError('Device creation failed')
-        device = str(uuid.UUID(output.strip()))
+        device = str(uuid.UUID(output.strip())).upper()
         summary['device'] = device
         save()
         runs = list(args.products.glob('*.xctestrun'))
@@ -89,7 +89,7 @@ def main():
             configuration_file.write_bytes(plistlib.dumps(data))
             result = args.report / ('BridgeSmoke-' + label + '.xcresult')
             code, _ = run('xctest-' + label, ['xcodebuild', 'test-without-building', '-xctestrun', str(configuration_file),
-                               '-destination', 'id=' + device, '-destination-timeout', '90',
+                               '-destination', 'platform=iOS Simulator,id=' + device + ',arch=arm64', '-destination-timeout', '90',
                                '-parallel-testing-enabled', 'NO',
                                '-maximum-concurrent-test-simulator-destinations', '1',
                                '-test-timeouts-enabled', 'YES',
@@ -131,7 +131,7 @@ def main():
                 candidates = [item['udid'] for values in json.loads(output)['devices'].values()
                               for item in values if item['name'] == name]
                 if code == 0 and len(candidates) == 1:
-                    device = str(uuid.UUID(candidates[0]))
+                    device = str(uuid.UUID(candidates[0])).upper()
             except Exception as error:
                 summary['cleanupFailure'] = str(error)
         if device:
@@ -139,7 +139,7 @@ def main():
                 run('shutdown', ['xcrun', 'simctl', 'shutdown', device], 30)
                 run('delete', ['xcrun', 'simctl', 'delete', device], 30)
                 code, output = run('verify-cleanup', ['xcrun', 'simctl', 'list', 'devices', '--json'], 60)
-                remaining = [str(uuid.UUID(item['udid']))
+                remaining = [str(uuid.UUID(item['udid'])).upper()
                              for values in json.loads(output)['devices'].values() for item in values]
                 if code or device in remaining:
                     raise RuntimeError('Owned Simulator removal could not be verified')

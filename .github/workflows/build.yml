@@ -7,6 +7,10 @@ on:
         description: 'Full SDK commit SHA to package and test'
         type: string
         default: c1e267a21b6c634d61b368e8484a9de14a92d8b5
+      build_run_id:
+        description: 'Prior native build run to reuse (SPM NewArch prototype only)'
+        type: string
+        default: ''
       scenario:
         type: choice
         default: all
@@ -22,6 +26,7 @@ on:
             launch-rtc,
             native-smoke,
             native-matrix,
+            native-reuse,
           ]
 
 permissions:
@@ -36,6 +41,49 @@ env:
   SDK_SOURCE_REF: ${{ inputs.sdk_source || 'c1e267a21b6c634d61b368e8484a9de14a92d8b5' }}
 
 jobs:
+  native-reuse:
+    if: inputs.scenario == 'native-reuse'
+    runs-on: macos-15
+    timeout-minutes: 25
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-test-products-spm-arch1
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/native-products-archive
+      - name: Verify and restore the exact built test products
+        run: |
+          mkdir -p "$RUNNER_TEMP/native-derived/Build" "$RUNNER_TEMP/native-evidence"
+          python3 - <<'PY'
+          import hashlib, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'native-products-archive'
+          digest = hashlib.sha256((root / 'native-test-products.tgz').read_bytes()).hexdigest()
+          assert digest == (root / 'native-test-products.sha256').read_text().split()[0]
+          PY
+          tar -xzf "$RUNNER_TEMP/native-products-archive/native-test-products.tgz" -C "$RUNNER_TEMP/native-derived/Build"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          metadata = json.loads((root / 'native-derived/Build/Products/sdk-package.json').read_text())
+          assert metadata['packageSource'] == os.environ['SDK_SOURCE_REF']
+          (root / 'native-evidence/package.json').write_text(json.dumps(metadata, indent=2))
+          PY
+      - name: Execute the updated controller without rebuilding the App
+        timeout-minutes: 20
+        run: python3 -u scripts/customer-acceptance/run-xctest.py "$RUNNER_TEMP/native-derived/Build/Products" "$RUNNER_TEMP/native-evidence" --negative-control
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-reuse-spm-arch1
+          path: ${{ runner.temp }}/native-evidence/
+          if-no-files-found: error
+
   native-xctest:
     if: inputs.scenario == 'native-smoke' || inputs.scenario == 'native-matrix'
     needs: package-sdk
@@ -127,7 +175,7 @@ jobs:
           if-no-files-found: error
 
   package-sdk:
-    if: inputs.scenario != 'host-control'
+    if: inputs.scenario != 'host-control' && inputs.scenario != 'native-reuse'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
