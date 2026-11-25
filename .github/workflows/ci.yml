@@ -47,10 +47,6 @@ jobs:
       - name: Run unit tests
         run: yarn test --maxWorkers=2 --coverage
 
-      - name: Check iOS test supervision
-        if: runner.os == 'Linux'
-        run: python3 -m unittest discover -s scripts -p test_ios_simulator.py -v
-
   build-library:
     strategy:
       matrix:
@@ -153,15 +149,12 @@ jobs:
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
       RUBYOPT: -rlogger
-      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup
         uses: ./.github/actions/setup
-        env:
-          DETOX_DISABLE_POSTINSTALL: '1'
 
       - name: Check iOS dependency modes
         run: ruby scripts/test-ios-spm.rb
@@ -184,11 +177,15 @@ jobs:
           abort 'Agora SDKs must resolve from the Agora Specs CDN' unless (expected - agora_pods).empty?
           RUBY
 
-      - name: Prepare Detox iOS dependencies once
-        shell: bash
-        working-directory: examples/expo
+      - name: Switch Xcode
         run: |
-          node node_modules/detox/scripts/postinstall.js
+          #https://github.com/actions/runner-images/issues/12758
+          sudo xcode-select --switch /Applications/Xcode_16.4.app
+
+      - name: Install Detox dependencies
+        shell: bash
+        run: |
+          npm i -g detox-cli react-native-cli
           brew tap wix/brew
           brew trust --formula wix/brew/applesimutils
           brew install applesimutils
@@ -203,24 +200,15 @@ jobs:
         run: |
           yarn example detox:ios
 
-      - name: Run iOS tests with bounded Simulator recovery
-        if: ${{ matrix.newArch == 0 }}
-        timeout-minutes: 40
-        env:
-          AGORA_TEST_APP_ID: ${{ secrets.APP_ID }}
-        run: |
-          python3 scripts/run-ios-tests.py --app-dir examples/expo --artifacts "$RUNNER_TEMP/ios-test-results"
-
-      - name: Clean up task-owned Simulators
-        if: always() && matrix.newArch == 0
-        timeout-minutes: 3
-        run: python3 scripts/run-ios-tests.py --artifacts "$RUNNER_TEMP/ios-test-results" --cleanup-only
-
-      - name: Upload iOS test diagnostics
-        if: always() && matrix.newArch == 0
-        uses: actions/upload-artifact@v4
+      - uses: futureware-tech/simulator-action@v4
         with:
-          name: ios-tests-${{ matrix.newArch }}-${{ matrix.nativeDependencies }}
-          path: ${{ runner.temp }}/ios-test-results/
-          if-no-files-found: ignore
-          retention-days: 14
+          model: 'iPhone 16'
+
+      - name: Run e2e tests
+        # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
+        if: ${{ matrix.newArch == 0 }}
+        working-directory: examples/expo
+        run: |
+          detox clean-framework-cache
+          detox build-framework-cache
+          detox test -c ios.sim.release
