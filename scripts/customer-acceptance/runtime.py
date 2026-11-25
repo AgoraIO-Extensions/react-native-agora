@@ -36,12 +36,16 @@ parser.add_argument("report")
 parser.add_argument("--arch", choices=["0", "1"], required=True)
 parser.add_argument("--mode", required=True)
 parser.add_argument("--prepare-only", action="store_true")
+parser.add_argument("--preinstalled", action="store_true",
+                    help="Use caller-owned installed simulators from simulators.json")
 args = parser.parse_args()
 app = Path(args.app).resolve()
 report = Path(args.report).resolve()
 report.mkdir(parents=True, exist_ok=True)
 device_file = report / 'simulators.json'
 devices = json.loads(device_file.read_text()) if device_file.exists() else {}
+if args.preinstalled and set(devices) != {'publisher', 'receiver'}:
+    parser.error('--preinstalled requires both caller-owned simulator IDs')
 documents = {}
 launchers = []
 summary = {"mode": args.mode, "expectedNewArchitecture": args.arch == "1",
@@ -86,11 +90,15 @@ try:
         devices[role] = device
         sim("boot", device)
         sim("bootstatus", device, "-b")
-        sim("install", device, str(app))
+        if not args.preinstalled:
+            sim("install", device, str(app))
         container = Path(sim("get_app_container", device, bundle, "data", capture=True))
         documents[role] = container / "Documents"
         for name in ['customer-acceptance.json', 'native-launch-stage.json']:
             (documents[role] / name).unlink(missing_ok=True)
+    # Provision both devices before starting a real-time publisher on this host.
+    for role in ["publisher", "receiver"]:
+        device = devices[role]
         output = report / role
         output.mkdir(exist_ok=True)
         command = ['xcrun', 'simctl', 'launch',
@@ -199,7 +207,7 @@ finally:
             except subprocess.TimeoutExpired:
                 launcher.kill()
                 launcher.wait()
-    for device in devices.values():
+    for device in ([] if args.preinstalled else devices.values()):
         for action in ['shutdown', 'delete']:
             try:
                 subprocess.run(["xcrun", "simctl", action, device], check=False, timeout=20)
