@@ -20,11 +20,13 @@ SPEC.loader.exec_module(guard)
 
 
 class FakeRunner:
-    def __init__(self, outcomes, bad_health=False, bad_boot=False, delete_fails=False, unknown_create=False):
+    def __init__(self, outcomes, bad_health=False, bad_boot=False, delete_fails=False, unknown_create=False,
+                 slow_discovery=False):
         self.outcomes = iter(outcomes)
         self.bad_health, self.bad_boot = bad_health, bad_boot
         self.delete_fails = delete_fails
         self.unknown_create = unknown_create
+        self.slow_discovery = slow_discovery
         self.devices, self.calls = set(), []
         self.names = {}
 
@@ -35,6 +37,12 @@ class FakeRunner:
             output = json.dumps({'binary': str(cwd / 'Test.app'),
                                  'runner': {'args': {'$0': 'jest'}, 'jest': {'setupTimeout': 2100000}},
                                  'jest': {'rootDir': str(cwd), 'testMatch': ['<rootDir>/e2e/*.test.js']}})
+        elif log.stem == 'runtimes':
+            output = json.dumps({'runtimes': [{'identifier': 'runtime', 'isAvailable': True,
+                                               'version': '18.5', 'buildversion': '22F77'}]})
+            if self.slow_discovery:
+                self.slow_discovery = False
+                output, code, timed_out = '', 124, True
         elif argv[:3] == ['xcrun', 'simctl', 'create']:
             output = str(uuid.uuid4())
             self.devices.add(output)
@@ -157,6 +165,15 @@ class GuardTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(len(current.summary['attempts']), 2)
         self.assertFalse(any(name == 'tests' for name, _ in runner.calls))
+
+    def test_slow_first_discovery_recovers_before_any_device_creation(self):
+        runner = FakeRunner([], slow_discovery=True)
+        current, code = self.run_guard(runner, probe_only=True)
+        self.assertEqual(code, 0)
+        self.assertEqual(len(current.summary['attempts']), 2)
+        self.assertEqual(sum(name == 'create' for name, _ in runner.calls), 1)
+        self.assertEqual(current.summary['attempts'][0]['failure'],
+                         'Runtime discovery failed before device creation')
 
     def test_failed_cleanup_keeps_job_red_and_records_owned_device(self):
         current, code = self.run_guard(FakeRunner(['passed'], delete_fails=True))

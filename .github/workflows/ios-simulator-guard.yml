@@ -22,7 +22,7 @@ jobs:
   simulator-lifecycle:
     needs: logic
     runs-on: macos-15-intel
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
     steps:
