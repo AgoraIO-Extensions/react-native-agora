@@ -4,6 +4,7 @@ import {
   RtcSurfaceView,
   ChannelProfileType,
   ClientRoleType,
+  LogLevel,
   VideoBufferType,
   VideoPixelFormat,
   createAgoraRtcEngine,
@@ -112,7 +113,10 @@ export default function App() {
         engine.initialize({
           appId: config.appId,
           channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
-          logConfig: { filePath: `${reporter.documents}/agora-sdk.log` },
+          logConfig: {
+            filePath: `${reporter.documents}/agora-sdk.log`,
+            level: LogLevel.LogLevelWarn,
+          },
         })
       );
       engine.registerEventHandler(handler);
