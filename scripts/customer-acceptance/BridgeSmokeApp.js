@@ -43,18 +43,18 @@ export default function App() {
             },
           });
           result.connectionState = engine.getConnectionState();
-          engine.release();
+          engine.release(true);
           engine = undefined;
           result.released = true;
           report();
-          // Yield so native and JS queues can drain between lifecycle cycles.
+          // Let the asynchronous reporter flush between lifecycle cycles.
           await new Promise((resolve) => setImmediate(resolve));
         }
         state.completed = true;
       } catch (error) {
         state.failure = error.message;
       } finally {
-        if (engine) engine.release();
+        if (engine) engine.release(true);
         report();
       }
     };
