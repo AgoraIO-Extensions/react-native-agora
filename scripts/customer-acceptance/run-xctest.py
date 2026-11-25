@@ -16,7 +16,7 @@ def main():
     parser.add_argument('--negative-control', action='store_true')
     args = parser.parse_args()
     args.report.mkdir(parents=True, exist_ok=True)
-    summary = {'status': 'infrastructure_failure', 'stages': []}
+    summary = {'status': 'execution_failure', 'stages': []}
     device = None
     name = 'Agora-XCTest-' + str(uuid.uuid4())
 
@@ -99,8 +99,10 @@ def main():
         summary['xcodeExitCode'] = code
         summary['runID'] = run_id
         summary['tests'] = tests
-        summary['status'] = 'passed' if (code == 0 and tests.get('passedTests', 0) >= 1 and
-                                         tests.get('failedTests') == 0) else 'test_failure'
+        if code == 0 and tests.get('passedTests', 0) >= 1 and tests.get('failedTests') == 0:
+            summary['status'] = 'passed'
+        else:
+            summary['status'] = 'test_failure' if tests.get('failedTests', 0) > 0 else 'execution_failure'
         if summary['status'] == 'passed' and args.negative_control:
             code, tests, run_id = execute_tests('negative', 'invalid-negative-control')
             confirmed = code != 0 and tests.get('failedTests', 0) >= 1 and any(
@@ -110,7 +112,7 @@ def main():
             if not confirmed:
                 summary['status'] = 'negative_control_failure'
     except Exception as error:
-        summary['status'] = 'infrastructure_failure'
+        summary['status'] = 'execution_failure'
         summary['failure'] = str(error)
     finally:
         # Reconcile a unique create request even when its response was interrupted.

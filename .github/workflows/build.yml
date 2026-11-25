@@ -3,6 +3,10 @@ name: PR990 Customer Acceptance
 on:
   workflow_dispatch:
     inputs:
+      sdk_source:
+        description: 'Full SDK commit SHA to package and test'
+        type: string
+        default: c1e267a21b6c634d61b368e8484a9de14a92d8b5
       scenario:
         type: choice
         default: all
@@ -29,11 +33,12 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  SDK_SOURCE_REF: c1e267a21b6c634d61b368e8484a9de14a92d8b5
+  SDK_SOURCE_REF: ${{ inputs.sdk_source || 'c1e267a21b6c634d61b368e8484a9de14a92d8b5' }}
 
 jobs:
   native-xctest:
     if: inputs.scenario == 'native-smoke' || inputs.scenario == 'native-matrix'
+    needs: package-sdk
     runs-on: macos-15
     timeout-minutes: 75
     strategy:
@@ -48,11 +53,6 @@ jobs:
       AGORA_APP_ID: '0123456789abcdef0123456789abcdef'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ env.SDK_SOURCE_REF }}
-          fetch-depth: 0
-          path: sdk-source
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -63,27 +63,21 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: pr990-sdk-package
-          run-id: 45554406490
-          github-token: ${{ github.token }}
           path: ${{ runner.temp }}/sdk-package
-      - name: Verify package source matches the current SPM-only PR tree
+      - name: Verify the freshly built SDK package
         run: |
           mkdir -p "$RUNNER_TEMP/native-evidence"
           python3 - <<'PY'
-          import hashlib, json, os, subprocess
+          import hashlib, json, os
           from pathlib import Path
           package = Path(os.environ['RUNNER_TEMP']) / 'sdk-package'
           source = (package / 'source-commit.txt').read_text().strip()
-          expected = '8dba08e82321fc2c87a0de032507942f23a27596'
-          assert source == expected
-          def tree(ref):
-              return subprocess.check_output(['git', '-C', 'sdk-source', 'rev-parse', ref + '^{tree}'], text=True).strip()
-          assert tree(source) == tree(os.environ['SDK_SOURCE_REF'])
+          assert source == os.environ['SDK_SOURCE_REF']
           archive, = package.glob('*.tgz')
           digest = hashlib.sha256(archive.read_bytes()).hexdigest()
           assert digest == (package / 'package-sha256.txt').read_text().split()[0]
           evidence = {'packageSource': source, 'currentPRSource': os.environ['SDK_SOURCE_REF'],
-                      'sourceTree': tree(source), 'packageSHA256': digest}
+                      'sourceTree': (package / 'source-tree.txt').read_text().strip(), 'packageSHA256': digest}
           (Path(os.environ['RUNNER_TEMP']) / 'native-evidence/package.json').write_text(json.dumps(evidence, indent=2))
           PY
       - name: Create a standalone customer App and hosted XCTest target
@@ -116,7 +110,7 @@ jobs:
           if-no-files-found: error
 
   package-sdk:
-    if: inputs.scenario != 'host-control' && inputs.scenario != 'native-smoke' && inputs.scenario != 'native-matrix'
+    if: inputs.scenario != 'host-control'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -131,13 +125,18 @@ jobs:
         env:
           POD_INSTALL: '0'
           LEFTHOOK: '0'
+          DETOX_DISABLE_POSTINSTALL: '1'
+          YARN_ENABLE_IMMUTABLE_INSTALLS: 'true'
         run: |
           corepack enable
-          yarn install --immutable
+          yarn workspaces focus react-native-agora
+          yarn test --runInBand
           yarn prepare
+          git diff --exit-code -- src ios Package.swift react-native-agora.podspec package.json
           mkdir -p "$RUNNER_TEMP/sdk-package"
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/sdk-package"
           git rev-parse HEAD > "$RUNNER_TEMP/sdk-package/source-commit.txt"
+          git rev-parse HEAD^{tree} > "$RUNNER_TEMP/sdk-package/source-tree.txt"
           sha256sum "$RUNNER_TEMP/sdk-package/"*.tgz > "$RUNNER_TEMP/sdk-package/package-sha256.txt"
       - uses: actions/upload-artifact@v4
         with:
