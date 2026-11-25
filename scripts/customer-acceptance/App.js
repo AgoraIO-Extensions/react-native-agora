@@ -3,7 +3,6 @@ import { NativeModules, SafeAreaView, Text, View } from 'react-native';
 import {
   ChannelProfileType,
   ClientRoleType,
-  LogLevel,
   RtcSurfaceView,
   VideoBufferType,
   VideoPixelFormat,
@@ -115,7 +114,6 @@ export default function App() {
           channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
           logConfig: {
             filePath: `${reporter.documents}/agora-sdk.log`,
-            level: LogLevel.LogLevelWarn,
           },
         })
       );
