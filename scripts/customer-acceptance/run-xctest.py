@@ -113,8 +113,10 @@ def main():
         if summary['status'] == 'passed' and args.negative_control:
             code, tests, run_id = execute_tests('negative', 'invalid-negative-control')
             confirmed = code != 0 and tests.get('failedTests', 0) >= 1 and any(
-                all(marker in json.dumps(failure) for marker in
-                    ['XCTAssertEqualObjects', '4.6.4.2', 'invalid-negative-control'])
+                failure.get('testIdentifierString') == 'BridgeSmokeTests/testRealReactNativeBridgeLifecycle'
+                and failure.get('targetName') == 'AgoraCustomerTests'
+                and all(marker in failure.get('failureText', '') for marker in
+                        ['expectedVersion', '4.6.4.2', 'invalid-negative-control', 'is not equal to'])
                 for failure in tests.get('testFailures', []))
             summary['negativeControl'] = {'xcodeExitCode': code, 'tests': tests,
                                           'runID': run_id, 'failureConfirmed': confirmed}
