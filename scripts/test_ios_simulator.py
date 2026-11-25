@@ -138,6 +138,14 @@ class GuardTests(unittest.TestCase):
     def test_unknown_app_process_state_is_not_recoverable(self):
         self.assertFalse(guard.can_recover(False, None, [], guard.Result(124, True)))
 
+    def test_interrupted_state_write_preserves_cleanup_ledger(self):
+        path = self.root / 'owned.json'
+        guard.write_json(path, ['previous-owned-device'])
+        with patch.object(Path, 'replace', side_effect=OSError('interrupted')):
+            with self.assertRaises(OSError):
+                guard.write_json(path, ['new-owned-device'])
+        self.assertEqual(json.loads(path.read_text()), ['previous-owned-device'])
+
     def test_empty_suite_is_not_success(self):
         current, code = self.run_guard(FakeRunner(['empty']))
         self.assertEqual(code, 1)
