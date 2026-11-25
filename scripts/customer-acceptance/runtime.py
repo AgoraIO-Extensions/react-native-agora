@@ -15,7 +15,7 @@ def sim(*args, capture=False):
         (report / 'runtime-progress.json').write_text(json.dumps(summary, indent=2))
     result = subprocess.run(["xcrun", "simctl", *args], check=True, text=True,
                             stdout=subprocess.PIPE if capture else None,
-                            timeout=300 if args[0] == 'bootstatus' else 240 if args[0] in ['create', 'launch'] else 90)
+                            timeout=300 if args[0] == 'bootstatus' else 240 if args[0] in ['create', 'install', 'launch'] else 90)
     return result.stdout.strip() if capture else None
 
 
@@ -43,6 +43,7 @@ report.mkdir(parents=True, exist_ok=True)
 device_file = report / 'simulators.json'
 devices = json.loads(device_file.read_text()) if device_file.exists() else {}
 documents = {}
+launchers = []
 summary = {"mode": args.mode, "expectedNewArchitecture": args.arch == "1",
            "basic": "pending", "rtcVideo": "pending", "lifecycle": "pending"}
 channel = f"ca_{os.environ.get('GITHUB_RUN_ID', 'local')}_{args.mode}_{args.arch}"
@@ -86,12 +87,27 @@ try:
         sim("boot", device)
         sim("bootstatus", device, "-b")
         sim("install", device, str(app))
-        sim("privacy", device, "grant", "camera", bundle)
-        sim("privacy", device, "grant", "microphone", bundle)
         container = Path(sim("get_app_container", device, bundle, "data", capture=True))
         documents[role] = container / "Documents"
-        sim("launch", device, bundle,
-            "-acceptanceRole", role, "-acceptanceChannel", channel)
+        for name in ['customer-acceptance.json', 'native-launch-stage.json']:
+            (documents[role] / name).unlink(missing_ok=True)
+        output = report / role
+        output.mkdir(exist_ok=True)
+        command = ['xcrun', 'simctl', 'launch',
+                   '--stdout=' + str(output / 'app-stdout.log'),
+                   '--stderr=' + str(output / 'app-stderr.log'), device, bundle,
+                   '-acceptanceRole', role, '-acceptanceChannel', channel]
+        summary['lastSimulatorCommand'] = command[2:]
+        (report / 'runtime-progress.json').write_text(json.dumps(summary, indent=2))
+        with (output / 'launcher.log').open('w') as log:
+            launcher = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
+        launchers.append(launcher)
+        wait_for(states, lambda value: value.get(role, {}).get('baseReady') or
+                 value.get(role, {}).get('failure') or launcher.poll() not in (None, 0),
+                 180, f'{role} App readiness')
+        summary.setdefault('launcherCodes', {})[role] = launcher.poll()
+        if not states().get(role, {}).get('baseReady'):
+            raise RuntimeError(f'{role} failed to initialize; launch exit: {launcher.poll()}')
     current = wait_for(states, lambda value: len(value) == 2 and
                        all(item.get("baseReady") for item in value.values()),
                        180, "SDK initialization in both customer apps")
@@ -119,6 +135,9 @@ try:
                                      for item in value.values()),
              60, "leave, release, reinitialize and release")
     summary["lifecycle"] = "passed"
+    for role, value in states().items():
+        if value.get('errors') or value.get('failure'):
+            raise RuntimeError(f'{role} reported an SDK error: {value}')
 except Exception as error:
     summary["failure"] = str(error)
     raise
@@ -131,9 +150,25 @@ finally:
     for crash in (Path.home() / 'Library/Logs/DiagnosticReports').glob('AgoraCustomer*.ips'):
         text = crash.read_text(errors='replace')
         (report / crash.name).write_text(text.replace(secret, '[APP_ID]') if secret else text)
+    if summary.get('failure'):
+        processes = subprocess.run(['ps', '-axo', 'pid,ppid,state,etime,command'], text=True,
+                                   stdout=subprocess.PIPE, timeout=10).stdout
+        (report / 'host-processes.txt').write_text(processes)
+        pids = [item.pid for item in launchers if item.poll() is None]
+        pids += [int(line.split()[0]) for line in processes.splitlines()
+                 if '/AgoraCustomer.app/AgoraCustomer' in line]
+        for pid in set(pids):
+            try:
+                subprocess.run(['sample', str(pid), '3', '-file', str(report / f'process-{pid}.sample')],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+            except subprocess.TimeoutExpired:
+                pass
     for role, directory in documents.items():
         output = report / role
         output.mkdir(exist_ok=True)
+        for file in directory.glob('*.json'):
+            text = file.read_text(errors='replace')
+            (output / file.name).write_text(text.replace(secret, '[APP_ID]') if secret else text)
         for file in directory.glob("*.log"):
             text = file.read_text(errors="replace")
             if secret:
@@ -143,7 +178,7 @@ finally:
         if summary.get('failure'):
             command = ['xcrun', 'simctl', 'spawn', device, 'log', 'show', '--last', '5m',
                        '--style', 'compact', '--predicate',
-                       'process == "AgoraCustomer" OR (eventMessage CONTAINS "AgoraCustomer")']
+                       'process IN {"AgoraCustomer","CoreSimulatorBridge","SpringBoard","runningboardd","launchd_sim","amfid","taskgated"}']
             try:
                 logs = subprocess.run(command, text=True, stdout=subprocess.PIPE,
                                       stderr=subprocess.STDOUT, timeout=20).stdout
@@ -156,9 +191,20 @@ finally:
                             str(report / f"{role}-final.png")], check=False, timeout=20)
         except subprocess.TimeoutExpired:
             print(f'Screenshot timed out for {role}', flush=True)
+    for launcher in launchers:
+        if launcher.poll() is None:
+            launcher.terminate()
+            try:
+                launcher.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                launcher.kill()
+                launcher.wait()
     for device in devices.values():
         for action in ['shutdown', 'delete']:
             try:
                 subprocess.run(["xcrun", "simctl", action, device], check=False, timeout=20)
             except subprocess.TimeoutExpired:
                 print(f'Simulator cleanup timed out: {action}', flush=True)
+    for file in report.rglob('*'):
+        if secret and file.is_file() and file.suffix in ['.log', '.json', '.txt', '.sample', '.ips']:
+            file.write_text(file.read_text(errors='replace').replace(secret, '[APP_ID]'))
