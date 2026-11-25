@@ -6,21 +6,117 @@ on:
       scenario:
         type: choice
         default: all
-        options: [all, spm-new, host-control, upgrade, launch-study, launch-followup, launch-permissions, launch-rtc]
+        options:
+          [
+            all,
+            spm-new,
+            host-control,
+            upgrade,
+            launch-study,
+            launch-followup,
+            launch-permissions,
+            launch-rtc,
+            native-smoke,
+            native-matrix,
+          ]
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: pr990-customer-acceptance-${{ github.ref }}-${{ inputs.scenario || 'all' }}
   cancel-in-progress: false
 
 env:
-  SDK_SOURCE_REF: 237140e4695201b6f708aad9bdba48b0addc7468
+  SDK_SOURCE_REF: c1e267a21b6c634d61b368e8484a9de14a92d8b5
 
 jobs:
+  native-xctest:
+    if: inputs.scenario == 'native-smoke' || inputs.scenario == 'native-matrix'
+    runs-on: macos-15
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(inputs.scenario == 'native-smoke' && '[{"mode":"spm","newArch":1}]' || '[{"mode":"cocoapods","newArch":0},{"mode":"cocoapods","newArch":1},{"mode":"spm","newArch":0},{"mode":"spm","newArch":1}]') }}
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
+      RUBYOPT: -rlogger
+      # Offline lifecycle checks use a synthetic identifier; they do not join RTC.
+      AGORA_APP_ID: '0123456789abcdef0123456789abcdef'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SDK_SOURCE_REF }}
+          fetch-depth: 0
+          path: sdk-source
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - run: gem install cocoapods -v 1.16.2 --no-document
+      - uses: actions/download-artifact@v4
+        with:
+          name: pr990-sdk-package
+          run-id: 45554406490
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/sdk-package
+      - name: Verify package source matches the current SPM-only PR tree
+        run: |
+          mkdir -p "$RUNNER_TEMP/native-evidence"
+          python3 - <<'PY'
+          import hashlib, json, os, subprocess
+          from pathlib import Path
+          package = Path(os.environ['RUNNER_TEMP']) / 'sdk-package'
+          source = (package / 'source-commit.txt').read_text().strip()
+          expected = '8dba08e82321fc2c87a0de032507942f23a27596'
+          assert source == expected
+          def tree(ref):
+              return subprocess.check_output(['git', '-C', 'sdk-source', 'rev-parse', ref + '^{tree}'], text=True).strip()
+          assert tree(source) == tree(os.environ['SDK_SOURCE_REF'])
+          archive, = package.glob('*.tgz')
+          digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+          assert digest == (package / 'package-sha256.txt').read_text().split()[0]
+          evidence = {'packageSource': source, 'currentPRSource': os.environ['SDK_SOURCE_REF'],
+                      'sourceTree': tree(source), 'packageSHA256': digest}
+          (Path(os.environ['RUNNER_TEMP']) / 'native-evidence/package.json').write_text(json.dumps(evidence, indent=2))
+          PY
+      - name: Create a standalone customer App and hosted XCTest target
+        run: |
+          node scripts/customer-acceptance/prepare.cjs "$RUNNER_TEMP/AgoraCustomer" "$RUNNER_TEMP/sdk-package/"*.tgz '${{ matrix.mode }}' > "$RUNNER_TEMP/native-evidence/npm-install.log" 2>&1
+          ruby scripts/customer-acceptance/configure-xctest.rb "$RUNNER_TEMP/AgoraCustomer" '${{ matrix.newArch }}'
+      - name: Install customer dependencies through the README path
+        run: |
+          if [ '${{ matrix.mode }}' = spm ]; then
+            export USE_FRAMEWORKS=dynamic
+            export AGORA_SPM_REVISION="$SDK_SOURCE_REF"
+          fi
+          cd "$RUNNER_TEMP/AgoraCustomer/ios"
+          pod install --repo-update > "$RUNNER_TEMP/native-evidence/pod-install.log" 2>&1
+          cp Podfile.lock "$RUNNER_TEMP/native-evidence/"
+      - name: Audit native dependency linkage
+        run: ruby scripts/customer-acceptance/audit.rb '${{ matrix.mode }}' "$RUNNER_TEMP/AgoraCustomer" "$RUNNER_TEMP/native-evidence"
+      - name: Build the hosted native test bundle once
+        working-directory: ${{ runner.temp }}/AgoraCustomer/ios
+        run: |
+          xcodebuild -quiet -workspace AgoraCustomer.xcworkspace -scheme AgoraCustomerTests -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/native-derived" build-for-testing CODE_SIGN_IDENTITY=- ARCHS=arm64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/native-evidence/build.log" 2>&1
+      - name: Run the real RN bridge lifecycle through XCTest
+        timeout-minutes: 20
+        run: python3 -u scripts/customer-acceptance/run-xctest.py "$RUNNER_TEMP/native-derived/Build/Products" "$RUNNER_TEMP/native-evidence" --negative-control
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-xctest-${{ matrix.mode }}-arch${{ matrix.newArch }}
+          path: ${{ runner.temp }}/native-evidence/
+          if-no-files-found: error
+
   package-sdk:
-    if: inputs.scenario != 'host-control'
+    if: inputs.scenario != 'host-control' && inputs.scenario != 'native-smoke' && inputs.scenario != 'native-matrix'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4

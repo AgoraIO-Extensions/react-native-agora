@@ -16,6 +16,9 @@ RCT_EXPORT_MODULE();
   NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
   return @{
     @"documents": documents,
+    @"testRunID": NSProcessInfo.processInfo.environment[@"AGORA_TEST_RUN_ID"] ?: @"",
+    @"processID": @(NSProcessInfo.processInfo.processIdentifier),
+    @"bundleID": NSBundle.mainBundle.bundleIdentifier ?: @"",
     @"role": [defaults stringForKey:@"acceptanceRole"] ?: @"publisher",
     @"channel": [defaults stringForKey:@"acceptanceChannel"] ?: @"missing-channel"
   };
