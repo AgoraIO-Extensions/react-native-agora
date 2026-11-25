@@ -56,7 +56,6 @@ jobs:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
       RUBYOPT: -rlogger
       AGORA_APP_ID: ${{ secrets.APP_ID }}
-      CP_HOME_DIR: ${{ runner.temp }}/customer-cocoapods
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -73,6 +72,7 @@ jobs:
       - name: Select Xcode and create fresh customer app
         run: |
           sudo xcode-select --switch /Applications/Xcode_16.4.app
+          echo "CP_HOME_DIR=$RUNNER_TEMP/customer-cocoapods" >> "$GITHUB_ENV"
           mkdir -p "$RUNNER_TEMP/customer-evidence"
           node scripts/customer-acceptance/prepare.cjs "$RUNNER_TEMP/AgoraCustomer" "$RUNNER_TEMP/sdk-package/"*.tgz '${{ matrix.mode }}' > "$RUNNER_TEMP/customer-evidence/npm-install.log" 2>&1
           cp "$RUNNER_TEMP/AgoraCustomer/package.json" "$RUNNER_TEMP/AgoraCustomer/package-lock.json" "$RUNNER_TEMP/customer-evidence/"
