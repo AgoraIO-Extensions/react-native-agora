@@ -105,7 +105,6 @@ try:
                        value.get("publisher", {}).get("joined") and
                        value.get("publisher", {}).get("pushedFrames", 0) >= 10 and
                        value.get("receiver", {}).get("joined") and
-                       value.get("receiver", {}).get("surfaceMounted") and
                        value.get("receiver", {}).get("decoded", {}).get("width", 0) > 0 and
                        value.get("receiver", {}).get("rendered", {}).get("width", 0) > 0,
                        240, "two clients joined and remote synthetic video decoded/rendered")

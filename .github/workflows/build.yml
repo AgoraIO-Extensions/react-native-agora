@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  SDK_SOURCE_REF: 722d87d846e793a48765bcd9d47661dbd7caa51f
+  SDK_SOURCE_REF: 8dba08e82321fc2c87a0de032507942f23a27596
 
 jobs:
   package-sdk:

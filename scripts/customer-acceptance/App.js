@@ -4,7 +4,6 @@ import {
   AgoraRtcSurfaceView,
   ChannelProfileType,
   ClientRoleType,
-  ExternalVideoSourceType,
   VideoBufferType,
   VideoPixelFormat,
   createAgoraRtcEngine,
@@ -60,6 +59,12 @@ export default function App() {
         report({ decoded: { uid: remote, width, height } }),
       onFirstRemoteVideoFrame: (_connection, remote, width, height) =>
         report({ rendered: { uid: remote, width, height } }),
+      onLocalVideoStateChanged: (source, videoState, reason) =>
+        report({ localVideoState: { source, videoState, reason } }),
+      onRemoteVideoStateChanged: (_connection, remote, videoState, reason) =>
+        report({ remoteVideoState: { remote, videoState, reason } }),
+      onLocalVideoStats: (_connection, _source, stats) =>
+        report({ localVideoStats: stats }),
     };
     const release = () => {
       if (released || !engine) return;
@@ -111,8 +116,10 @@ export default function App() {
         })
       );
       engine.registerEventHandler(handler);
+      check('disableAudio', engine.disableAudio());
       check('enableVideo', engine.enableVideo());
-      check('enableLocalVideo(false)', engine.enableLocalVideo(false));
+      if (!publisher)
+        check('enableLocalVideo(false)', engine.enableLocalVideo(false));
       check(
         'setVideoEncoderConfiguration',
         engine.setVideoEncoderConfiguration({
@@ -126,19 +133,9 @@ export default function App() {
         if (!Number.isInteger(track) || track < 0 || track === 0xffffffff)
           throw new Error(`Invalid custom track ${track}`);
         report({ track });
-        check(
-          'setExternalVideoSource',
-          engine
-            .getMediaEngine()
-            .setExternalVideoSource(
-              true,
-              false,
-              ExternalVideoSourceType.VideoFrame
-            )
-        );
       }
       setReady(true);
-      report({ baseReady: true });
+      report({ baseReady: true, stage: 'ready' });
       check(
         'joinChannel',
         engine.joinChannel('', reporter.channel, uid, {
