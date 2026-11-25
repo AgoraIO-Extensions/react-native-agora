@@ -133,7 +133,8 @@ jobs:
       - name: Clean Release build
         run: |
           cd "$RUNNER_TEMP/AgoraCustomer/ios"
-          xcodebuild -workspace AgoraCustomer.xcworkspace -scheme AgoraCustomer -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/customer-derived" build CODE_SIGNING_ALLOWED=NO ARCHS=arm64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/customer-evidence/simulator-build.log" 2>&1
+          xcodebuild -workspace AgoraCustomer.xcworkspace -scheme AgoraCustomer -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/customer-derived" build CODE_SIGN_IDENTITY=- ARCHS=arm64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/customer-evidence/simulator-build.log" 2>&1
+          codesign --verify --deep --strict "$RUNNER_TEMP/customer-derived/Build/Products/Release-iphonesimulator/AgoraCustomer.app" > "$RUNNER_TEMP/customer-evidence/simulator-signing.log" 2>&1
       - name: Verify unsigned device Archive
         if: ${{ matrix.newArch == 1 }}
         run: |
