@@ -128,6 +128,8 @@ finally:
     summary["runtime"] = states()
     (report / "runtime-summary.json").write_text(json.dumps(summary, indent=2))
     secret = os.environ.get("AGORA_APP_ID", "")
+    diagnostic = json.dumps(summary, indent=2)
+    print(diagnostic.replace(secret, '[APP_ID]') if secret else diagnostic, flush=True)
     for role, directory in documents.items():
         output = report / role
         output.mkdir(exist_ok=True)
