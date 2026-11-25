@@ -30,7 +30,7 @@ execFileSync(
 );
 execFileSync(
   'npm',
-  ['install', '--ignore-scripts', '--no-audit', '--no-fund', packageFile],
+  ['install', '--no-audit', '--no-fund', packageFile],
   { cwd: appDir, stdio: 'inherit' }
 );
 
