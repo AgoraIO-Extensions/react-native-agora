@@ -45,7 +45,7 @@ jobs:
 
   customer-ios:
     needs: package-sdk
-    runs-on: macos-15-intel
+    runs-on: macos-15
     timeout-minutes: 180
     strategy:
       fail-fast: false
@@ -69,11 +69,15 @@ jobs:
         with:
           name: pr990-sdk-package
           path: ${{ runner.temp }}/sdk-package
-      - name: Select Xcode and create fresh customer app
+      - name: Verify simulator hosts before installing the SDK
+        timeout-minutes: 12
         run: |
           sudo xcode-select --switch /Applications/Xcode_16.4.app
           echo "CP_HOME_DIR=$RUNNER_TEMP/customer-cocoapods" >> "$GITHUB_ENV"
           mkdir -p "$RUNNER_TEMP/customer-evidence"
+          python3 scripts/customer-acceptance/runtime.py "$RUNNER_TEMP/AgoraCustomer" "$RUNNER_TEMP/customer-evidence" --arch '${{ matrix.newArch }}' --mode '${{ matrix.mode }}' --prepare-only
+      - name: Create fresh customer app
+        run: |
           node scripts/customer-acceptance/prepare.cjs "$RUNNER_TEMP/AgoraCustomer" "$RUNNER_TEMP/sdk-package/"*.tgz '${{ matrix.mode }}' > "$RUNNER_TEMP/customer-evidence/npm-install.log" 2>&1
           cp "$RUNNER_TEMP/AgoraCustomer/package.json" "$RUNNER_TEMP/AgoraCustomer/package-lock.json" "$RUNNER_TEMP/customer-evidence/"
           cp "$RUNNER_TEMP/AgoraCustomer/ios/Podfile" "$RUNNER_TEMP/customer-evidence/"
@@ -91,10 +95,7 @@ jobs:
       - name: Clean Release build
         run: |
           cd "$RUNNER_TEMP/AgoraCustomer/ios"
-          xcodebuild -workspace AgoraCustomer.xcworkspace -scheme AgoraCustomer -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/customer-derived" build CODE_SIGNING_ALLOWED=NO ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/customer-evidence/simulator-build.log" 2>&1
-      - name: Launch two customer clients and verify SDK / real video / release
-        run: |
-          python3 scripts/customer-acceptance/runtime.py "$RUNNER_TEMP/customer-derived/Build/Products/Release-iphonesimulator/AgoraCustomer.app" "$RUNNER_TEMP/customer-evidence" --arch '${{ matrix.newArch }}' --mode '${{ matrix.mode }}'
+          xcodebuild -workspace AgoraCustomer.xcworkspace -scheme AgoraCustomer -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/customer-derived" build CODE_SIGNING_ALLOWED=NO ARCHS=arm64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/customer-evidence/simulator-build.log" 2>&1
       - name: Verify unsigned device Archive
         if: ${{ matrix.newArch == 1 }}
         run: |
@@ -102,6 +103,25 @@ jobs:
           xcodebuild -workspace AgoraCustomer.xcworkspace -scheme AgoraCustomer -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/customer-device-derived" -archivePath "$RUNNER_TEMP/AgoraCustomer.xcarchive" archive CODE_SIGNING_ALLOWED=NO > "$RUNNER_TEMP/customer-evidence/device-archive.log" 2>&1
           test -d "$RUNNER_TEMP/AgoraCustomer.xcarchive/Products/Applications/AgoraCustomer.app/Frameworks/AgoraRtcWrapper.framework"
           find "$RUNNER_TEMP/AgoraCustomer.xcarchive/Products/Applications/AgoraCustomer.app/Frameworks" -maxdepth 1 -name '*.framework' -print > "$RUNNER_TEMP/customer-evidence/archive-frameworks.txt"
+      - name: Launch two customer clients and verify SDK / real video / release
+        timeout-minutes: 20
+        run: |
+          python3 scripts/customer-acceptance/runtime.py "$RUNNER_TEMP/customer-derived/Build/Products/Release-iphonesimulator/AgoraCustomer.app" "$RUNNER_TEMP/customer-evidence" --arch '${{ matrix.newArch }}' --mode '${{ matrix.mode }}'
+      - name: Clean up task-owned simulators
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          file = Path(os.environ['RUNNER_TEMP']) / 'customer-evidence' / 'simulators.json'
+          if file.exists():
+              for device in json.loads(file.read_text()).values():
+                  for action in ['shutdown', 'delete']:
+                      try:
+                          subprocess.run(['xcrun', 'simctl', action, device], timeout=20, check=False)
+                      except subprocess.TimeoutExpired:
+                          print(f'Simulator {action} timed out; hosted runner teardown will reclaim it.')
+          PY
       - name: Redact the test project identifier in diagnostic logs
         if: always()
         run: |

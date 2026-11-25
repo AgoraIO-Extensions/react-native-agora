@@ -9,8 +9,13 @@ import time
 
 
 def sim(*args, capture=False):
+    print('simctl ' + ' '.join(args), flush=True)
+    if 'summary' in globals():
+        summary['lastSimulatorCommand'] = list(args)
+        (report / 'runtime-progress.json').write_text(json.dumps(summary, indent=2))
     result = subprocess.run(["xcrun", "simctl", *args], check=True, text=True,
-                            stdout=subprocess.PIPE if capture else None)
+                            stdout=subprocess.PIPE if capture else None,
+                            timeout=300 if args[0] == 'bootstatus' else 90)
     return result.stdout.strip() if capture else None
 
 
@@ -30,17 +35,33 @@ parser.add_argument("app")
 parser.add_argument("report")
 parser.add_argument("--arch", choices=["0", "1"], required=True)
 parser.add_argument("--mode", required=True)
+parser.add_argument("--prepare-only", action="store_true")
 args = parser.parse_args()
 app = Path(args.app).resolve()
 report = Path(args.report).resolve()
 report.mkdir(parents=True, exist_ok=True)
-with (app / "Info.plist").open("rb") as stream:
-    bundle = plistlib.load(stream)["CFBundleIdentifier"]
-devices = {}
+device_file = report / 'simulators.json'
+devices = json.loads(device_file.read_text()) if device_file.exists() else {}
 documents = {}
 summary = {"mode": args.mode, "expectedNewArchitecture": args.arch == "1",
            "basic": "pending", "rtcVideo": "pending", "lifecycle": "pending"}
 channel = f"ca_{os.environ.get('GITHUB_RUN_ID', 'local')}_{args.mode}_{args.arch}"
+
+if args.prepare_only:
+    for role in ["publisher", "receiver"]:
+        device = sim("create", f"AgoraCustomer-{args.mode}-{args.arch}-{role}",
+                     "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+                     "com.apple.CoreSimulator.SimRuntime.iOS-18-5", capture=True)
+        devices[role] = device
+        device_file.write_text(json.dumps(devices))
+        sim("boot", device)
+        sim("bootstatus", device, "-b")
+        sim("shutdown", device)
+    print('Both simulators passed boot preflight without the SDK app.', flush=True)
+    raise SystemExit(0)
+
+with (app / "Info.plist").open("rb") as stream:
+    bundle = plistlib.load(stream)["CFBundleIdentifier"]
 
 
 def states():
@@ -56,13 +77,15 @@ def states():
 
 try:
     for role in ["publisher", "receiver"]:
-        device = sim("create", f"AgoraCustomer-{args.mode}-{args.arch}-{role}",
-                     "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
-                     "com.apple.CoreSimulator.SimRuntime.iOS-18-5", capture=True)
+        device = devices.get(role)
+        if not device:
+            device = sim("create", f"AgoraCustomer-{args.mode}-{args.arch}-{role}",
+                         "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+                         "com.apple.CoreSimulator.SimRuntime.iOS-18-5", capture=True)
         devices[role] = device
         sim("boot", device)
-    for role, device in devices.items():
         sim("bootstatus", device, "-b")
+    for role, device in devices.items():
         sim("install", device, str(app))
         sim("privacy", device, "grant", "camera", bundle)
         sim("privacy", device, "grant", "microphone", bundle)
@@ -114,8 +137,14 @@ finally:
                 text = text.replace(secret, "[APP_ID]")
             (output / file.name).write_text(text)
         device = devices[role]
-        subprocess.run(["xcrun", "simctl", "io", device, "screenshot",
-                        str(report / f"{role}-final.png")], check=False)
+        try:
+            subprocess.run(["xcrun", "simctl", "io", device, "screenshot",
+                            str(report / f"{role}-final.png")], check=False, timeout=20)
+        except subprocess.TimeoutExpired:
+            print(f'Screenshot timed out for {role}', flush=True)
     for device in devices.values():
-        subprocess.run(["xcrun", "simctl", "shutdown", device], check=False)
-        subprocess.run(["xcrun", "simctl", "delete", device], check=False)
+        for action in ['shutdown', 'delete']:
+            try:
+                subprocess.run(["xcrun", "simctl", action, device], check=False, timeout=20)
+            except subprocess.TimeoutExpired:
+                print(f'Simulator cleanup timed out: {action}', flush=True)
