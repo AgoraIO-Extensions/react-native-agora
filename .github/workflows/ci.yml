@@ -8,9 +8,11 @@ on:
   push:
     branches:
       - main
+      - special/4.6
   pull_request:
     branches:
       - main
+      - special/4.6
       - release/*
 
 jobs:
@@ -64,6 +66,7 @@ jobs:
 
   test-android:
     strategy:
+      fail-fast: false
       matrix:
         newArch: [true, false]
     runs-on: ubuntu-latest
@@ -86,6 +89,13 @@ jobs:
         run: |
           /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
 
+      - name: Configure Gradle memory and diagnostics
+        run: |
+          mkdir -p ~/.gradle
+          printf '%s\n' \
+            'org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError' \
+            'org.gradle.logging.stacktrace=all' >> ~/.gradle/gradle.properties
+
       - name: Install Detox dependencies
         shell: bash
         run: |
@@ -99,7 +109,9 @@ jobs:
 
       - name: Build example for Android
         run: |
+          node scripts/test-detox-build.cjs
           yarn example detox:android
+          test -s examples/expo/android/app/build/outputs/apk/release/app-release.apk
 
       - name: Clean Useless cache
         run: |
@@ -118,9 +130,15 @@ jobs:
           android: false
           dotnet: true
           haskell: true
-          large-packages: true
+          large-packages: false
           docker-images: true
-          swap-storage: true
+          swap-storage: false
+
+      - name: Install Android emulator libraries
+        if: ${{ matrix.newArch == false }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libpulse0 libgl1
 
       - name: Enable KVM group perms
         run: |
@@ -141,11 +159,14 @@ jobs:
 
   test-ios:
     strategy:
+      fail-fast: false
       matrix:
         newArch: [1, 0]
-    runs-on: macos-15
+        nativeDependencies: [cocoapods, spm]
+    runs-on: macos-15-intel
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
+      RUBYOPT: -rlogger
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -153,9 +174,26 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Check iOS dependency modes
+        run: ruby scripts/test-ios-spm.rb
+
       - name: Install cocoapods
         run: |
+          if [ "${{ matrix.nativeDependencies }}" = "spm" ]; then
+            export USE_FRAMEWORKS=dynamic
+            export AGORA_SPM_REVISION="${{ github.event.pull_request.head.sha || github.sha }}"
+          fi
           yarn pod-install examples/expo/ios
+
+      - name: Check Agora CocoaPods source
+        if: ${{ matrix.nativeDependencies == 'cocoapods' }}
+        run: |
+          ruby -ryaml <<'RUBY'
+          lock = YAML.load_file('examples/expo/ios/Podfile.lock')
+          agora_pods = lock.fetch('SPEC REPOS').fetch('https://download.agora.io/cocoapods/')
+          expected = %w[AgoraRtcEngine_Special_iOS AgoraIrisRTC_iOS]
+          abort 'Agora SDKs must resolve from the Agora Specs CDN' unless (expected - agora_pods).empty?
+          RUBY
 
       - name: Switch Xcode
         run: |
@@ -167,6 +205,7 @@ jobs:
         run: |
           npm i -g detox-cli react-native-cli
           brew tap wix/brew
+          brew trust --formula wix/brew/applesimutils
           brew install applesimutils
 
       - name: Modify APP ID

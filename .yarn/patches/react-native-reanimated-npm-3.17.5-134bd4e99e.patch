@@ -1,0 +1,12 @@
+diff --git a/RNReanimated.podspec b/RNReanimated.podspec
+index a5aea4f30a68f8843c6518a213399f1330a86818..fb478442175de99e07aa74cfeb84fa3c0a240b07 100644
+--- a/RNReanimated.podspec
++++ b/RNReanimated.podspec
+@@ -105,6 +105,7 @@ Pod::Spec.new do |s|
+   install_modules_dependencies(s)
+ 
+   s.dependency 'React-jsi'
++  s.dependency 'React-CoreModules'
+   using_hermes = ENV['USE_HERMES'] == nil || ENV['USE_HERMES'] == '1'
+   if using_hermes && !$config[:is_tvos_target]
+     s.dependency 'React-hermes'

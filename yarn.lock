@@ -14840,13 +14840,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-react-native-image-tool@AgoraIO-Extensions/react-native-image-tools:
+"react-native-image-tool@https://github.com/AgoraIO-Extensions/react-native-image-tools.git#commit=7ffc05ec3a6976b605c307942986a289ab4f47ef":
   version: 0.8.1
   resolution: "react-native-image-tool@https://github.com/AgoraIO-Extensions/react-native-image-tools.git#commit=7ffc05ec3a6976b605c307942986a289ab4f47ef"
   peerDependencies:
     react: "*"
     react-native: "*"
   checksum: 1a6eb6e3c9b09c092a3c0a6408d04ebbecc350bee4eda4b2c8f1ed2d50d2b0fe9f12b8f912540cda333e7ae9a7bf6d6e3fb0d7f840a1d741938314290c463e74
+  languageName: node
+  linkType: hard
+
+"react-native-image-tool@patch:react-native-image-tool@https%3A//github.com/AgoraIO-Extensions/react-native-image-tools.git%23commit=7ffc05ec3a6976b605c307942986a289ab4f47ef#./.yarn/patches/react-native-image-tool-https-e693688068.patch::locator=react-native-agora%40workspace%3A.":
+  version: 0.8.1
+  resolution: "react-native-image-tool@patch:react-native-image-tool@https%3A//github.com/AgoraIO-Extensions/react-native-image-tools.git%23commit=7ffc05ec3a6976b605c307942986a289ab4f47ef#./.yarn/patches/react-native-image-tool-https-e693688068.patch::version=0.8.1&hash=2fbdc8&locator=react-native-agora%40workspace%3A."
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 8c67e4cce1fef215966702ab36f62b6a14de6edd7a8556aea53e2cb30e52460cd0e35c8b5cb47742390e9316e6ae8758910aaba68d7e37ba9e29e23e5e79ba2b
   languageName: node
   linkType: hard
 
@@ -14915,6 +14925,30 @@ react-native-image-tool@AgoraIO-Extensions/react-native-image-tools:
     react: "*"
     react-native: "*"
   checksum: fe667e4764f691b2e752eaedb7527fd8ac251637ae9e7dd9ab124abae85627839b5daea064befc5e09ca710ef673d5501ed11286eb39dfcb04f5d57b2d47e49c
+  languageName: node
+  linkType: hard
+
+"react-native-reanimated@patch:react-native-reanimated@npm%3A3.17.5#./.yarn/patches/react-native-reanimated-npm-3.17.5-134bd4e99e.patch::locator=react-native-agora%40workspace%3A.":
+  version: 3.17.5
+  resolution: "react-native-reanimated@patch:react-native-reanimated@npm%3A3.17.5#./.yarn/patches/react-native-reanimated-npm-3.17.5-134bd4e99e.patch::version=3.17.5&hash=846876&locator=react-native-agora%40workspace%3A."
+  dependencies:
+    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
+    "@babel/plugin-transform-class-properties": ^7.0.0-0
+    "@babel/plugin-transform-classes": ^7.0.0-0
+    "@babel/plugin-transform-nullish-coalescing-operator": ^7.0.0-0
+    "@babel/plugin-transform-optional-chaining": ^7.0.0-0
+    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
+    "@babel/plugin-transform-template-literals": ^7.0.0-0
+    "@babel/plugin-transform-unicode-regex": ^7.0.0-0
+    "@babel/preset-typescript": ^7.16.7
+    convert-source-map: ^2.0.0
+    invariant: ^2.2.4
+    react-native-is-edge-to-edge: 1.1.7
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+    react: "*"
+    react-native: "*"
+  checksum: d89ca5a79ab7d11e471aeccf69a46dea49e2fbbf16da67bbf9091ce716c0719a4ffd15f3d2c43d8b34b55fc54aa8049fd06e55c7758bae9f76baeaf8adae45da
   languageName: node
   linkType: hard
 

@@ -1,6 +1,7 @@
 /** @type {import('@jest/types').Config.InitialOptions} */
 module.exports = {
   rootDir: '..',
+  modulePathIgnorePatterns: ['<rootDir>/ios/build/'],
   testMatch: ['<rootDir>/e2e/**/*.test.js'],
   testTimeout: 6000000,
   maxWorkers: 1,
