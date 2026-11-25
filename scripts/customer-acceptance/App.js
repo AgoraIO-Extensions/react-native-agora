@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NativeModules, SafeAreaView, Text, View } from 'react-native';
 import {
-  AgoraRtcSurfaceView,
+  RtcSurfaceView,
   ChannelProfileType,
   ClientRoleType,
   VideoBufferType,
@@ -193,7 +193,7 @@ export default function App() {
       <Text style={{ padding: 16 }}>{status}</Text>
       <View style={{ height: 260, margin: 16, backgroundColor: '#18202a' }}>
         {ready && !publisher && remoteUid > 0 && (
-          <AgoraRtcSurfaceView
+          <RtcSurfaceView
             canvas={{ uid: remoteUid }}
             style={{ flex: 1 }}
             onLayout={() => {

@@ -28,11 +28,10 @@ execFileSync(
   ],
   { stdio: 'inherit' }
 );
-execFileSync(
-  'npm',
-  ['install', '--no-audit', '--no-fund', packageFile],
-  { cwd: appDir, stdio: 'inherit' }
-);
+execFileSync('npm', ['install', '--no-audit', '--no-fund', packageFile], {
+  cwd: appDir,
+  stdio: 'inherit',
+});
 
 // Only these dependency-manager edits come from PR #990's README.
 const podfile = path.join(appDir, 'ios/Podfile');
@@ -109,6 +108,35 @@ const manifest = path.join(
 );
 if (!fs.existsSync(manifest))
   throw new Error('Installed npm package omitted Package.swift');
+const ts = require(require.resolve('typescript', { paths: [appDir] }));
+const types = path.join(appDir, 'node_modules/react-native-agora', sdk.types);
+const program = ts.createProgram([types], { skipLibCheck: true });
+const checker = program.getTypeChecker();
+const sdkExports = new Set(
+  checker
+    .getExportsOfModule(
+      checker.getSymbolAtLocation(program.getSourceFile(types))
+    )
+    .map((symbol) => symbol.getName())
+);
+const appSource = ts.createSourceFile(
+  'App.js',
+  fs.readFileSync(path.join(appDir, 'App.js'), 'utf8'),
+  ts.ScriptTarget.Latest,
+  true,
+  ts.ScriptKind.JSX
+);
+appSource.forEachChild((node) => {
+  if (
+    !ts.isImportDeclaration(node) ||
+    node.moduleSpecifier.text !== 'react-native-agora'
+  )
+    return;
+  for (const binding of node.importClause.namedBindings.elements) {
+    const name = (binding.propertyName || binding.name).text;
+    if (!sdkExports.has(name)) throw new Error(`SDK does not export ${name}`);
+  }
+});
 console.log(
   JSON.stringify({
     customerApp: appDir,
