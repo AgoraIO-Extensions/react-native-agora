@@ -88,6 +88,12 @@ def read_json(path):
         return None
 
 
+def write_json(path, value):
+    temporary = path.with_name(path.name + '.tmp')
+    temporary.write_text(json.dumps(value, indent=2))
+    temporary.replace(path)
+
+
 def file_hash(path):
     digest = hashlib.sha256()
     with path.open('rb') as stream:
@@ -136,11 +142,11 @@ class Guard:
         started = time.monotonic()
         event = {'stage': name, 'argv': argv, 'state': 'running'}
         self.events.append(event)
-        (self.artifacts / 'stages.json').write_text(json.dumps(self.events, indent=2))
+        write_json(self.artifacts / 'stages.json', self.events)
         result = self.execute(argv, folder / (name + '.log'), timeout, self.app)
         event.update(state='completed', pid=result.pid, code=result.code, timeout=result.timeout,
                      seconds=round(time.monotonic() - started, 3))
-        (self.artifacts / 'stages.json').write_text(json.dumps(self.events, indent=2))
+        write_json(self.artifacts / 'stages.json', self.events)
         print(f'{name}: exit={result.code} timeout={result.timeout}', flush=True)
         return result
 
@@ -161,7 +167,7 @@ class Guard:
             return False, False
         self.device = str(uuid.UUID(result.output.strip()))
         self.owned.add(self.device)
-        (self.artifacts / 'owned-simulators.json').write_text(json.dumps(sorted(self.owned)))
+        write_json(self.artifacts / 'owned-simulators.json', sorted(self.owned))
         for stage, args, timeout in [
             ('boot', ['boot', self.device], 60),
             ('bootstatus', ['bootstatus', self.device, '-b'], 240),
@@ -216,7 +222,7 @@ class Guard:
             else:
                 self.owned.remove(device)
         self.device = None
-        (self.artifacts / 'owned-simulators.json').write_text(json.dumps(sorted(self.owned)))
+        write_json(self.artifacts / 'owned-simulators.json', sorted(self.owned))
         return ok
 
     def configs(self, folder, config):
@@ -330,7 +336,7 @@ class Guard:
 
     def finish(self, code):
         self.summary['remainingOwnedSimulators'] = sorted(self.owned)
-        (self.artifacts / 'summary.json').write_text(json.dumps(self.summary, indent=2))
+        write_json(self.artifacts / 'summary.json', self.summary)
         secret = os.environ.get('AGORA_TEST_APP_ID')
         for path in self.artifacts.rglob('*'):
             if path.is_file() and path.suffix in ('.json', '.log', '.txt', '.sample', '.ips', '.crash'):
@@ -386,8 +392,8 @@ def main():
                     parser.error('Recorded ID belongs to another Simulator')
                 guard.owned.intersection_update(devices)
                 verified = guard.cleanup(guard.artifacts)
-                (guard.artifacts / 'cleanup.json').write_text(json.dumps({
-                    'verified': verified, 'remaining': sorted(guard.owned)}))
+                write_json(guard.artifacts / 'cleanup.json', {
+                    'verified': verified, 'remaining': sorted(guard.owned)})
                 return 0 if verified else 1
             return guard.run(args.probe_only)
         except (Exception, KeyboardInterrupt) as error:
