@@ -157,3 +157,20 @@ Xcode 官方说明并行测试会产生 Simulator clone，并可控制 worker �
 | 当前 CLI + hosted XCTest | 不增加额外测试运行器，复用 Apple 工具及普通客户宿主 | 自有少量 fixture/编排；Android 与双端覆盖尚需补齐 | 先完成成功/故意失败及真实运行验证，再评估维护成本 |
 
 以上是针对当前需求和原型规模的选择，不是断言自写测试框架普遍优于现成工具。当前实现应停留在薄薄的 fixture/原生断言/平台调用层；一旦开始需要动态装载测试、跨平台匹配器、交互式重试或测试发现协议，就应重新评估 Harness，而不是继续造通用框架。任何候选都不能省略最终对真实 npm 包、SPM 动态库、Release Archive 和双端媒体结果的独立验收。
+
+## 原型的真实验证结果
+
+独立分支 `codex/ios-xctest-prototype` 已通过 [CI 45675518268](https://github.com/AgoraIO-Extensions/react-native-agora/actions/runs/45675518268)。没有修改 #990/#992，也没有替换默认 PR CI。
+
+SDK 为 #990 的 SPM-only 提交 `c1e267a21b6c634d61b368e8484a9de14a92d8b5`，npm 包 SHA256 为 `19b4f5df3d5ce7eed43180b841a7b0cdcb027308f0bee8698f44d1c44175120e`。新客户 App 使用 RN 0.79.5、Release、新架构、SPM Native/Iris，在 Xcode 16.4 / iOS 18.5 / arm64 Simulator 上执行真实公开 RN API。
+
+- 正向 hosted XCTest 实际通过：两次创建、初始化返回0、版本4.6.4.2、未入会连接态、同步 `release(true)`；核对运行ID、进程ID、宿主bundle和Documents，错误列表为空。
+- 同一预编译 App 再运行错误版本断言，XCTest 返回65并报告预期测试方法中的版本比较失败；控制器按真实测试标识和失败文本确认反例，整体CI成功。
+- 第五轮45672899676的正向测试已经成功，但控制器起初错误地要求失败文本包含宏名，导致整体失败；第六轮修正后再次完整通过。不能把早先整体失败记录改称绿色。
+- 精确 Products 和原始 `.xctestrun` 以 tar 归档，第二台 CI runner 下载、校验来源后无需重编译就能执行。创建的独立模拟器已删除并验证。没有自动重跑测试或重置全局服务。
+
+控制器适配也通过真实运行修正了两处假设：scheme testables 生成的是 `.xctestrun` 格式1；Xcode精确目的设备匹配要求保留大写UUID。格式1/2和空结果、错误反例、清理失败等边界另有普通Python进程测试；它们只验证控制器，不算SDK集成通过。
+
+快速 UT 已在两个独立临时 checkout 实测：main45条、special64条通过。special 的库声明构建会经测试文件import拉入Demo；声明构建排除 `src/__tests__` 后，64条UT仍单独执行，库打包成功，原有SDK源文件SHA均未变化。原型将声明构建配置作为制品元数据记录，没有把它混入SPM PR。
+
+当前原生通过范围只有 **main SDK / RN0.79.5 / SPM / 新架构 / 单端离线生命周期**，使用格式合法的合成AppID，不验证RTC账号授权、入会、音视频或真实设备。CocoaPods/旧架构/special原生矩阵、双端解码渲染及长期稳定性对照尚未完成；Android尚未迁移。当前结果证明新入口可运行，不能证明CoreSimulator永不挂起，也不能据此宣布SPM完整客户验收或默认CI替换已完成。
