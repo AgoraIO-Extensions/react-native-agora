@@ -2,6 +2,11 @@ name: PR990 Customer Acceptance
 
 on:
   workflow_dispatch:
+    inputs:
+      scenario:
+        type: choice
+        default: all
+        options: [all, spm-new]
 
 permissions:
   contents: read
@@ -50,8 +55,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mode: [cocoapods, spm]
-        newArch: [0, 1]
+        include: ${{ fromJSON(inputs.scenario == 'spm-new' && '[{"mode":"spm","newArch":1}]' || '[{"mode":"cocoapods","newArch":0},{"mode":"cocoapods","newArch":1},{"mode":"spm","newArch":0},{"mode":"spm","newArch":1}]') }}
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
       RUBYOPT: -rlogger

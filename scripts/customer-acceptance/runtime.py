@@ -15,7 +15,7 @@ def sim(*args, capture=False):
         (report / 'runtime-progress.json').write_text(json.dumps(summary, indent=2))
     result = subprocess.run(["xcrun", "simctl", *args], check=True, text=True,
                             stdout=subprocess.PIPE if capture else None,
-                            timeout=300 if args[0] == 'bootstatus' else 90)
+                            timeout=300 if args[0] == 'bootstatus' else 240 if args[0] == 'create' else 90)
     return result.stdout.strip() if capture else None
 
 
