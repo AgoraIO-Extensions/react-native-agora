@@ -16,6 +16,7 @@ env.update(USE_FRAMEWORKS='dynamic', RCT_NEW_ARCH_ENABLED='1',
            CP_HOME_DIR=str(root / 'launch-cocoapods'))
 summary = {}
 device = None
+peer_device = None
 permissions = '--permissions' in sys.argv
 rtc = '--rtc' in sys.argv
 followup = '--followup' in sys.argv or permissions or rtc
@@ -221,14 +222,22 @@ export default function App(){useEffect(()=>{const state={jsReady:true};const ma
         shutil.copy(Path(__file__).with_name('App.js'), app / 'App.js')
         original_bundle = 'org.reactjs.native.example.AgoraCustomer'
         test('without-privacy', 'baseReady', bundle_override=original_bundle)
-        sim('shutdown', device, timeout=90)
-        sim('delete', device, timeout=90)
-        device = None
         if rtc:
+            if not summary['without-privacy']['passed']:
+                raise RuntimeError('Cold simulator preflight failed before the peer test')
+            sim('shutdown', device, timeout=90)
+            peer_device = sim('clone', device, 'PR990-RTC-Receiver', timeout=240)
+            runtime_evidence = evidence / 'rtc'
+            runtime_evidence.mkdir()
+            (runtime_evidence / 'simulators.json').write_text(json.dumps({
+                'publisher': device, 'receiver': peer_device}))
             binary = root / 'launch-derived/Build/Products/Release-iphonesimulator/AgoraCustomer.app'
             run([sys.executable, str(Path(__file__).with_name('runtime.py')), str(binary),
-                 str(evidence / 'rtc'), '--arch', '1', '--mode', 'spm'], 'rtc-runtime', timeout=900)
+                 str(runtime_evidence), '--arch', '1', '--mode', 'spm', '--preinstalled'],
+                'rtc-runtime', timeout=900)
         else:
+            sim('shutdown', device, timeout=90)
+            sim('delete', device, timeout=90)
             device = sim('create', 'PR990-TCC-Control', 'com.apple.CoreSimulator.SimDeviceType.iPhone-16',
                          'com.apple.CoreSimulator.SimRuntime.iOS-18-5', timeout=240)
             (evidence / 'device.txt').write_text(device)
@@ -259,9 +268,11 @@ export default function App(){useEffect(()=>{const state={jsReady:true};const ma
         sim('bootstatus', device, '-b', timeout=300)
         test('prewarm-reboot', 'baseReady', bundle_override=original_bundle, rebuild=False)
 finally:
-    if device:
+    for owned_device in [device, peer_device]:
+        if not owned_device:
+            continue
         for action in ['shutdown','delete']:
-            try: sim(action, device, timeout=30, check=False)
+            try: sim(action, owned_device, timeout=30, check=False)
             except subprocess.TimeoutExpired: print('Cleanup timed out:', action, flush=True)
     for file in evidence.rglob('*'):
         if file.is_file() and file.suffix in ['.log','.json','.txt','.sample','.ips']:
