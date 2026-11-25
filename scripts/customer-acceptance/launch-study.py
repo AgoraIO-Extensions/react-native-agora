@@ -72,7 +72,12 @@ def test(stage, expected, bundle_override=None, rebuild=True):
     folder = evidence / stage
     folder.mkdir()
     bundle = bundle_override or 'io.agora.pr990.' + stage.replace('-', '')
+    binary = root / 'launch-derived/Build/Products/Release-iphonesimulator/AgoraCustomer.app'
     if rebuild:
+        # RN's always-run bundling phase can change JS without invalidating an
+        # incremental CodeSign task. Recreate the app product, retaining native objects.
+        if binary.exists():
+            shutil.rmtree(binary)
         run(['ruby', '-rxcodeproj', '-e', '''
 project=Xcodeproj::Project.open(ARGV[0]); target=project.targets.find{|t|t.name=='AgoraCustomer'}
 target.build_configurations.each{|config|config.build_settings['PRODUCT_BUNDLE_IDENTIFIER']=ARGV[1]}
@@ -82,7 +87,6 @@ project.save
          '-configuration', 'Release', '-sdk', 'iphonesimulator', '-destination', 'generic/platform=iOS Simulator',
          '-derivedDataPath', str(root / 'launch-derived'), '-jobs', '2', 'build',
          'ARCHS=arm64', 'ONLY_ACTIVE_ARCH=YES', 'CODE_SIGN_IDENTITY=-'], stage + '-build', app / 'ios')
-    binary = root / 'launch-derived/Build/Products/Release-iphonesimulator/AgoraCustomer.app'
     run(['codesign', '--verify', '--deep', '--strict', str(binary)], stage + '-codesign')
     run(['otool', '-L', str(binary / 'AgoraCustomer')], stage + '-linked-libraries')
     (folder / 'frameworks.json').write_text(json.dumps(sorted(p.name for p in (binary / 'Frameworks').glob('*.framework'))))
