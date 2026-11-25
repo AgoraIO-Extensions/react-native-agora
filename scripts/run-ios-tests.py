@@ -154,6 +154,19 @@ class Guard:
         return self.command(folder, name, ['xcrun', 'simctl', *args], timeout)
 
     def prepare(self, folder, attempt):
+        # The first simctl call may mount/scan runtimes. Keep it read-only so a
+        # slow service startup cannot leave an uncertain device creation.
+        listed = self.sim(folder, 'runtimes', 'list', 'runtimes', '--json', timeout=240)
+        if listed.code:
+            attempt['failure'] = 'Runtime discovery failed before device creation'
+            return False, listed.timeout
+        runtime = next((value for value in json.loads(listed.output).get('runtimes', [])
+                        if value['identifier'] == self.runtime and value.get('isAvailable')), None)
+        if runtime is None:
+            attempt['failure'] = 'Requested Simulator runtime is not available'
+            return False, False
+        attempt['runtime'] = {key: runtime.get(key)
+                              for key in ('identifier', 'version', 'buildversion')}
         name = f'RNAgora-CI-{uuid.uuid4()}'
         result = self.sim(folder, 'create', 'create', name, self.device_type,
                           self.runtime, timeout=120)

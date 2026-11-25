@@ -10,7 +10,10 @@ python3 scripts/run-ios-tests.py \
   --app-dir examples/expo --artifacts /absolute/path/to/results
 ```
 
-The guard creates an exclusively owned iPhone 16 / iOS 18.5 Simulator. It checks
+The guard first enumerates runtimes with a separate deadline. This read-only
+stage absorbs first-use CoreSimulator mounting/scanning and records the selected
+runtime build before any device creation. An unavailable runtime fails explicitly.
+It then creates an exclusively owned iPhone 16 / iOS 18.5 Simulator. It checks
 boot completion and independently launches Settings before installing the product
 through Detox. A per-user lock prevents overlapping invocations of this guard.
 Other test launchers sharing the Mac must use the same node scheduling policy;
