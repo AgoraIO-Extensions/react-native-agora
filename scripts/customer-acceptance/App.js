@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { NativeModules, SafeAreaView, Text, View } from 'react-native';
 import {
-  RtcSurfaceView,
   ChannelProfileType,
   ClientRoleType,
   LogLevel,
+  RtcSurfaceView,
   VideoBufferType,
   VideoPixelFormat,
   createAgoraRtcEngine,
