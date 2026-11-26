@@ -50,6 +50,9 @@ The controller selects one exclusively created device, has bounded runtime,
 creation and execution deadlines, and retains `.xcresult` plus stage logs. All
 three cases must pass; empty or skipped results fail. Cleanup deletes only its
 own UUID and verifies removal. It does not reset global Simulator services.
+Each invocation creates a uniquely named `.xcresult`, so the same local command
+can run again without overwriting the previous test result. Stage logs and
+`summary.json` describe the latest invocation.
 
 Run result/cleanup policy checks on Linux or macOS with Python's standard library:
 

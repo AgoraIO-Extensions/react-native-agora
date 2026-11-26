@@ -55,6 +55,10 @@ class NativeResultTests(unittest.TestCase):
                                         env=env, capture_output=True, text=True, timeout=15)
                 state = json.loads((root / 'report/summary.json').read_text())
                 self.assertEqual(result.returncode, 0 if case == 'passed' else 1, result.stdout + result.stderr)
+                if case == 'passed':
+                    repeated = subprocess.run(result.args, env=env, capture_output=True, text=True, timeout=15)
+                    self.assertEqual(repeated.returncode, 0, repeated.stdout + repeated.stderr)
+                    self.assertEqual(len(list((root / 'report').glob('*.xcresult'))), 2)
                 if case != 'cleanup':
                     self.assertTrue(state['cleanupVerified'])
                     self.assertFalse((root / 'owned').exists())

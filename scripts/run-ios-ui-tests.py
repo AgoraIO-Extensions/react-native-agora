@@ -74,7 +74,7 @@ def main():
         runs = list(args.products.glob('*.xctestrun'))
         if len(runs) != 1:
             raise RuntimeError('Expected exactly one built .xctestrun file')
-        result = args.report / 'DemoSmoke.xcresult'
+        result = args.report / (name + '.xcresult')
         code, _ = run('xctest', ['xcodebuild', 'test-without-building', '-xctestrun', str(runs[0]),
                                '-destination', 'platform=iOS Simulator,id=' + device + ',arch=' + args.arch,
                                '-destination-timeout', '90', '-parallel-testing-enabled', 'NO',
