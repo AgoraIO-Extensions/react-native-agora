@@ -1,5 +1,4 @@
-
 {
   "extends": "./tsconfig",
-  "exclude": ["examples","scripts/terra"]
+  "exclude": ["examples", "scripts/terra", "src/__tests__"]
 }
