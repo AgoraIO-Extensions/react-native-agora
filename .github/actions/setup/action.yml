@@ -1,11 +1,17 @@
 name: Setup
 description: Setup Node.js and install dependencies
 
+inputs:
+  workspace:
+    description: 'Install only this workspace; empty installs all workspaces'
+    required: false
+    default: ''
+
 runs:
   using: composite
   steps:
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
 
@@ -13,6 +19,7 @@ runs:
       if: ${{ runner.os == 'macOS' }}
       uses: ruby/setup-ruby@v1
       with:
+        ruby-version: '3.3'
         bundler-cache: true
 
     - name: Setup by gem
@@ -29,5 +36,10 @@ runs:
     - name: Install dependencies
       env:
         POD_INSTALL: '0'
-      run: yarn install --no-immutable
+      run: |
+        if [ -n '${{ inputs.workspace }}' ]; then
+          yarn workspaces focus '${{ inputs.workspace }}'
+        else
+          yarn install --immutable
+        fi
       shell: bash
