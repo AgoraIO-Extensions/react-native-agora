@@ -6,6 +6,7 @@ from pathlib import Path
 import platform
 import signal
 import subprocess
+import time
 import uuid
 
 
@@ -31,9 +32,11 @@ def main():
     signal.signal(signal.SIGTERM, interrupted)
 
     def run(stage, command, seconds):
+        started = time.monotonic()
         event = {'stage': stage, 'command': command, 'state': 'running'}
         summary['stages'].append(event)
         save()
+        print(stage + ': starting', flush=True)
         log = args.report / (stage + '.log')
         with log.open('w') as stream:
             process = subprocess.Popen(command, stdout=stream, stderr=subprocess.STDOUT,
@@ -52,6 +55,9 @@ def main():
                     except subprocess.TimeoutExpired:
                         os.killpg(process.pid, signal.SIGKILL)
                         process.wait(timeout=10)
+                event['elapsedSeconds'] = round(time.monotonic() - started, 2)
+                save()
+                print(stage + ': finished after ' + str(event['elapsedSeconds']) + 's', flush=True)
         event.update(state='completed', exitCode=code)
         save()
         return code, log.read_text(errors='replace')
@@ -82,7 +88,7 @@ def main():
                                '-test-timeouts-enabled', 'YES',
                                '-default-test-execution-time-allowance', '120',
                                '-maximum-test-execution-time-allowance', '180',
-                               '-resultBundlePath', str(result)], 600)
+                               '-resultBundlePath', str(result)], 1200)
         result_code, output = run('test-results', ['xcrun', 'xcresulttool', 'get', 'test-results',
                                                  'summary', '--path', str(result)], 30)
         if result_code:

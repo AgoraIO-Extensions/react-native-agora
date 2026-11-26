@@ -53,6 +53,10 @@ own UUID and verifies removal. It does not reset global Simulator services.
 Each invocation creates a uniquely named `.xcresult`, so the same local command
 can run again without overwriting the previous test result. Stage logs and
 `summary.json` describe the latest invocation.
+The outer Xcode process budget is 20 minutes, including the first launch of the
+test runner. Individual test methods retain their 120-second default and
+180-second maximum. Stage durations are printed in CI and saved in the summary;
+the CI step allows 30 minutes for setup, execution and owned-device cleanup.
 
 Run result/cleanup policy checks on Linux or macOS with Python's standard library:
 
