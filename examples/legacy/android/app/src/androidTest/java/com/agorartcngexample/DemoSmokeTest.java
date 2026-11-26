@@ -45,6 +45,9 @@ public class DemoSmokeTest {
         text(name).click();
         text("join Channel");
         text(name);
+        // Unmount the RTC page while its Activity is still alive for native cleanup.
+        device.pressBack();
+        text(HOME);
     }
 
     private UiObject2 text(String value) {

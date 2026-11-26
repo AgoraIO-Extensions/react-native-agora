@@ -30,6 +30,10 @@ Release App and test APKs use the existing test signing configuration. CI runs
 both React Native architectures on API 31 and requires all three JUnit cases,
 with no failures, errors or skips. It retains XML/HTML reports, logcat, a screen
 capture and the final UI hierarchy. No test retries are configured.
+Page checks navigate back to home before closing the Activity so asynchronous
+React Native unmounting can release RTC resources while the Activity is alive.
+The CI build targets only the emulator's x86_64 ABI and uses a 4 GiB Gradle heap
+with two workers; local Demo build defaults are unchanged.
 
 iOS uses XCUITest with a generated test-only target and scheme:
 
