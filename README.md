@@ -129,20 +129,12 @@ conflict with the versions in the table. The RN bridge declares these pods.
 Remove duplicate manually installed SDKs, including older
 `AgoraVideo_Special_iOS`, `AgoraRtcEngine_iOS_Preview`, or `AgoraIrisRTC_iOS2`
 declarations if present.
-If both pod names are already in `Podfile.lock` and still pin the previous SDKs,
-update only these dependencies:
+After upgrading the npm package, update the wrapper pod so CocoaPods can migrate
+its Native/Iris dependencies to their new pod names:
 
 ```sh
 cd ios
-pod update AgoraRtcEngine_Special_iOS AgoraIrisRTC_iOS
-```
-
-For older preview installations that already have `AgoraIrisRTC_iOS` but not
-`AgoraRtcEngine_Special_iOS`, update only the installed Iris pod. CocoaPods adds
-the new Native dependency automatically:
-
-```sh
-pod update AgoraIrisRTC_iOS
+pod update react-native-agora
 ```
 
 Commit the resulting `Podfile.lock` and regression-test the Native SDK upgrade.
