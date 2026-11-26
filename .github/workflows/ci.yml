@@ -125,7 +125,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: android-tests-${{ matrix.newArch }}
+          name: android-tests-${{ matrix.newArch }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/android-tests/
             examples/expo/android/app/build/reports/androidTests/
@@ -188,6 +188,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ios-tests-${{ matrix.nativeDependencies }}-${{ matrix.newArch }}
+          name: ios-tests-${{ matrix.nativeDependencies }}-${{ matrix.newArch }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/ios-tests/
+          if-no-files-found: ignore
+      - name: Upload iOS text diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-text-${{ matrix.nativeDependencies }}-${{ matrix.newArch }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ios-tests/*.log
+            ${{ runner.temp }}/ios-tests/summary.json
           if-no-files-found: ignore

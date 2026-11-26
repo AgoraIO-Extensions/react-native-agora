@@ -10,7 +10,10 @@
   self.continueAfterFailure = NO;
   self.app = [[XCUIApplication alloc] init];
   [self.app launch];
-  XCTAssertTrue([[self element:[self homeTitle]] waitForExistenceWithTimeout:60]);
+  NSPredicate *homeReady = [NSPredicate predicateWithFormat:@"exists == YES AND hittable == YES"];
+  XCTestExpectation *expectation = [self expectationForPredicate:homeReady
+                                          evaluatedWithObject:[self element:[self homeTitle]] handler:nil];
+  [self waitForExpectations:@[expectation] timeout:60];
 }
 
 - (NSString *)homeTitle {
