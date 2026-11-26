@@ -57,6 +57,10 @@ The outer Xcode process budget is 20 minutes, including the first launch of the
 test runner. Individual test methods retain their 120-second default and
 180-second maximum. Stage durations are printed in CI and saved in the summary;
 the CI step allows 30 minutes for setup, execution and owned-device cleanup.
+Home readiness waits for the title to exist and be hittable before each case;
+the visibility assertion remains enabled. CI also uploads logs and the summary
+as a separate text artifact, and artifact names include the workflow attempt
+so reruns retain earlier diagnostics without name collisions.
 
 Run result/cleanup policy checks on Linux or macOS with Python's standard library:
 
