@@ -110,9 +110,8 @@
       "<rootDir>/examples/expo/node_modules",
       "<rootDir>/lib/"
     ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/examples/expo/e2e",
-      "<rootDir>/examples/legacy/e2e"
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.test.[jt]s?(x)"
     ]
   },
   "commitlint": {

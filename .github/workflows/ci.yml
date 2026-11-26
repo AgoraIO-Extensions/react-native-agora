@@ -44,8 +44,15 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+        with:
+          workspace: react-native-agora
+
       - name: Run unit tests
         run: yarn test --maxWorkers=2 --coverage
+
+      - name: Check native test result gates
+        if: runner.os == 'Linux'
+        run: python3 -m unittest discover -s tests -p test_native_ui_runners.py -v
 
   build-library:
     strategy:
@@ -59,135 +66,109 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+        with:
+          workspace: react-native-agora
+
       - name: Build package
         run: yarn prepare
 
   test-android:
+    timeout-minutes: 90
     strategy:
+      fail-fast: false
       matrix:
         newArch: [true, false]
     runs-on: ubuntu-latest
     env:
       ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
+      ORG_GRADLE_PROJECT_reactNativeArchitectures: x86_64
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g" -Dorg.gradle.workers.max=2'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup
         uses: ./.github/actions/setup
-
       - name: Install JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: '17'
-
-      - name: Finalize Android SDK
+      - name: Configure the test App ID
+        env:
+          TEST_APP_ID: ${{ secrets.APP_ID }}
         run: |
-          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
-
-      - name: Install Detox dependencies
-        shell: bash
-        run: |
-          npm i -g detox-cli react-native-cli
-
-      - name: Modify APP ID
-        run: |
-          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
-          mv tmp agora.config.ts
-        working-directory: examples/expo/src/config
-
-      - name: Build example for Android
-        run: |
-          yarn example detox:android
-
-      - name: Clean Useless cache
-        run: |
-          rm -rf ~/.gradle/caches || true
-          rm -rf ~/.gradle/wrapper || true
-          sudo apt-get clean
-          npm cache clean --force
-          rm -rf examples/**/ios
-          yarn cache clean
-          df -h
-
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: false
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
-
-      - name: Enable KVM group perms
+          python3 - <<'PYTHON'
+          import os, re
+          from pathlib import Path
+          p = Path('examples/expo/src/config/agora.config.ts')
+          p.write_text(re.sub(r"localAppId = '[^']*'", "localAppId = '" + os.environ['TEST_APP_ID'] + "'", p.read_text()))
+          PYTHON
+      - name: Build release App and native tests
+        working-directory: examples/expo/android
+        run: ./gradlew :app:assembleRelease :app:assembleAndroidTest -DtestBuildType=release --no-daemon --console=plain
+      - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-
-      - name: Run e2e tests
-        # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
-        if: ${{ matrix.newArch == false }}
+      - name: Run native Android page smoke tests
+        timeout-minutes: 20
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           arch: x86_64
           avd-name: emulator
-          working-directory: examples/expo
-          script: detox test -c android.emu.release
+          script: bash scripts/run-android-ui-tests.sh examples/expo "$RUNNER_TEMP/android-tests"
+      - name: Upload Android results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-tests-${{ matrix.newArch }}
+          path: |
+            ${{ runner.temp }}/android-tests/
+            examples/expo/android/app/build/reports/androidTests/
+          if-no-files-found: ignore
 
   test-ios:
+    timeout-minutes: 90
     strategy:
+      fail-fast: false
       matrix:
         newArch: [1, 0]
     runs-on: macos-15
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      RUBYOPT: -rlogger
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup
         uses: ./.github/actions/setup
-
-      - name: Install cocoapods
+      - name: Install App dependencies
+        run: yarn pod-install examples/expo/ios
+      - name: Configure the test App ID
+        env:
+          TEST_APP_ID: ${{ secrets.APP_ID }}
         run: |
-          yarn pod-install examples/expo/ios
-
-      - name: Switch Xcode
+          python3 - <<'PYTHON'
+          import os, re
+          from pathlib import Path
+          p = Path('examples/expo/src/config/agora.config.ts')
+          p.write_text(re.sub(r"localAppId = '[^']*'", "localAppId = '" + os.environ['TEST_APP_ID'] + "'", p.read_text()))
+          PYTHON
+      - name: Build App and native UI test bundle once
         run: |
-          #https://github.com/actions/runner-images/issues/12758
-          sudo xcode-select --switch /Applications/Xcode_16.4.app
-
-      - name: Install Detox dependencies
-        shell: bash
-        run: |
-          npm i -g detox-cli react-native-cli
-          brew tap wix/brew
-          brew install applesimutils
-
-      - name: Modify APP ID
-        run: |
-          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
-          mv tmp agora.config.ts
-        working-directory: examples/expo/src/config
-
-      - name: Build example for iOS
-        run: |
-          yarn example detox:ios
-
-      - uses: futureware-tech/simulator-action@v4
+          mkdir -p "$RUNNER_TEMP/ios-tests"
+          ruby scripts/configure-ios-ui-tests.rb examples/expo/ios reactnativeagoraexampleexpo
+          xcodebuild -quiet -workspace examples/expo/ios/reactnativeagoraexampleexpo.xcworkspace -scheme AgoraDemoSmokeTests -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/ios-derived" build-for-testing CODE_SIGN_IDENTITY=- ARCHS=arm64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/ios-tests/build.log" 2>&1
+      - name: Run native iOS page smoke tests
+        timeout-minutes: 30
+        run: python3 scripts/run-ios-ui-tests.py "$RUNNER_TEMP/ios-derived/Build/Products" "$RUNNER_TEMP/ios-tests" --arch arm64
+      - name: Upload iOS results
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          model: 'iPhone 16'
-
-      - name: Run e2e tests
-        # https://github.com/wix/Detox/issues/3720#issuecomment-1347855162
-        if: ${{ matrix.newArch == 0 }}
-        working-directory: examples/expo
-        run: |
-          detox clean-framework-cache
-          detox build-framework-cache
-          detox test -c ios.sim.release
+          name: ios-tests-${{ matrix.newArch }}
+          path: ${{ runner.temp }}/ios-tests/
+          if-no-files-found: ignore

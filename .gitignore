@@ -84,3 +84,4 @@ lib/
 *.xcframework
 ios/AgoraRtcWrapper.podspec
 appId.*
+__pycache__/
