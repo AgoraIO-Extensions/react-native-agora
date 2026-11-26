@@ -8,8 +8,9 @@
     "start": "react-native start",
     "build:android": "cd android && ./gradlew assembleRelease --no-daemon --console=plain",
     "build:ios": "cd ios && fastlane gym --export_method \"development\" --export_options \"{\\\"compileBitcode\\\":false}\" CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
-    "detox:android": "detox build --configuration android.emu.release",
-    "detox:ios": "detox build --configuration ios.sim.release"
+    "test:android": "cd android && ./gradlew connectedReleaseAndroidTest -DtestBuildType=release --no-daemon --console=plain",
+    "build:test:ios": "ruby ../../scripts/configure-ios-ui-tests.rb ios AgoraRtcNgExample && xcodebuild -workspace ios/AgoraRtcNgExample.xcworkspace -scheme AgoraDemoSmokeTests -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build build-for-testing CODE_SIGN_IDENTITY=- ONLY_ACTIVE_ARCH=YES",
+    "test:ios": "python3 ../../scripts/run-ios-ui-tests.py ios/build/Build/Products ios/test-results"
   },
   "dependencies": {
     "@react-native-community/slider": "^4.5.5",
@@ -26,7 +27,7 @@
     "react-native-color-picker": "^0.6.0",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.24.0",
-    "react-native-image-tool": "AgoraIO-Extensions/react-native-image-tools",
+    "react-native-image-tool": "https://github.com/AgoraIO-Extensions/react-native-image-tools/archive/7ffc05ec3a6976b605c307942986a289ab4f47ef.tar.gz",
     "react-native-picker-select": "^9.3.1",
     "react-native-reanimated": "3.17.5",
     "react-native-safe-area-context": "^5.2.0",
@@ -45,8 +46,6 @@
     "@react-native/eslint-config": "0.77.1",
     "@react-native/metro-config": "0.77.1",
     "babel-plugin-module-resolver": "^5.0.0",
-    "detox": "^20.22.0",
-    "jest": "^29.6.3",
     "pod-install": "^0.1.0"
   },
   "engines": {

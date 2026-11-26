@@ -30,9 +30,6 @@ allprojects {
     google()
     mavenCentral()
     maven { url 'https://download.agora.io/maven' }
-    maven {
-        url("$rootDir/../node_modules/detox/Detox-android")
-    }
     maven { url 'https://www.jitpack.io' }
   }
 
