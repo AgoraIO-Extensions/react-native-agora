@@ -136,7 +136,7 @@ jobs:
       matrix:
         newArch: [1, 0]
         nativeDependencies: [cocoapods, spm]
-    runs-on: macos-15-intel
+    runs-on: macos-15
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
@@ -178,10 +178,10 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/ios-tests"
           ruby scripts/configure-ios-ui-tests.rb examples/expo/ios reactnativeagoraexampleexpo
-          xcodebuild -quiet -workspace examples/expo/ios/reactnativeagoraexampleexpo.xcworkspace -scheme AgoraDemoSmokeTests -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/ios-derived" build-for-testing CODE_SIGN_IDENTITY=- ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/ios-tests/build.log" 2>&1
+          xcodebuild -quiet -workspace examples/expo/ios/reactnativeagoraexampleexpo.xcworkspace -scheme AgoraDemoSmokeTests -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath "$RUNNER_TEMP/ios-derived" build-for-testing CODE_SIGN_IDENTITY=- ARCHS=arm64 ONLY_ACTIVE_ARCH=YES > "$RUNNER_TEMP/ios-tests/build.log" 2>&1
       - name: Run native iOS page smoke tests
         timeout-minutes: 30
-        run: python3 scripts/run-ios-ui-tests.py "$RUNNER_TEMP/ios-derived/Build/Products" "$RUNNER_TEMP/ios-tests" --arch x86_64
+        run: python3 scripts/run-ios-ui-tests.py "$RUNNER_TEMP/ios-derived/Build/Products" "$RUNNER_TEMP/ios-tests" --arch arm64
       - name: Upload iOS results
         if: always()
         uses: actions/upload-artifact@v4
