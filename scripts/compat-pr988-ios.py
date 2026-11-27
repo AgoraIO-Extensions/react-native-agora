@@ -188,8 +188,11 @@ def main():
         if args.render_only:
             summary['status'] = 'rendered'
             return 0
-        if not legacy and run('pack', ['npm', 'pack', '--ignore-scripts', '--pack-destination', str(root)], cwd=sdk):
-            raise RuntimeError('Native SDK package preparation failed')
+        if not legacy:
+            # Preserve native sources without running publishing lifecycle scripts.
+            npm_archive = root / dependencies['react-native-agora'].removeprefix('file:./')
+            with tarfile.open(npm_archive, 'w:gz') as package_archive:
+                package_archive.add(sdk, arcname='package')
         if run('npm', ['npm', 'install', '--ignore-scripts', '--legacy-peer-deps',
                        '--no-audit', '--no-fund'], seconds=900):
             raise RuntimeError('RN dependency installation failed')
