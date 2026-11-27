@@ -1,4 +1,5 @@
 require "json"
+require_relative "ios/spm"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
@@ -40,10 +41,29 @@ Pod::Spec.new do |s|
     end
   end
 
+  # RN's existing dynamic-framework setting opts into native SDKs via SPM.
+  # Older RN versions and static/default linkage keep using CocoaPods.
+  if AgoraReactNativeSPM.enabled?
+    AgoraReactNativeSPM.prepare!
+
+    spm_dependency(s,
+      url: 'https://github.com/AgoraIO/AgoraRtcEngine_iOS.git',
+      requirement: { kind: 'exactVersion', version: AgoraReactNativeSPM::RTC_VERSION },
+      products: AgoraReactNativeSPM::RTC_PRODUCTS,
+      **AgoraReactNativeSPM.embedding_options(AgoraReactNativeSPM::RTC_FRAMEWORKS))
+    spm_dependency(s,
+      url: package['repository'],
+      requirement: ENV['AGORA_SPM_REVISION'] ?
+        { kind: 'revision', revision: ENV['AGORA_SPM_REVISION'] } :
+        { kind: 'exactVersion', version: s.version.to_s },
+      products: ['AgoraRtcWrapper'],
+      **AgoraReactNativeSPM.embedding_options(['AgoraRtcWrapper']))
+  else
   #dependencies start
-  s.dependency 'AgoraVideo_Special_iOS', '4.6.2.70'
-  s.dependency 'AgoraIrisRTC_iOS2', '4.6.2-build.1'
+  s.dependency 'AgoraRtcEngine_Special_iOS', '4.6.4.2'
+  s.dependency 'AgoraIrisRTC_iOS', '4.6.4.2-build.1'
   #dependencies end
+  end
 
   s.libraries = 'stdc++'
   s.framework = 'ReplayKit'

@@ -26,6 +26,8 @@ xcuserdata
 **/.xcode.env.local
 *.moved-aside
 DerivedData
+.build/
+.swiftpm/
 *.hmap
 *.ipa
 *.xcuserstate

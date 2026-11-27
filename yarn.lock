@@ -13784,6 +13784,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-image-tool@patch:react-native-image-tool@https%3A//github.com/AgoraIO-Extensions/react-native-image-tools/archive/7ffc05ec3a6976b605c307942986a289ab4f47ef.tar.gz#./.yarn/patches/react-native-image-tool-https-e693688068.patch::locator=react-native-agora%40workspace%3A.":
+  version: 0.8.1
+  resolution: "react-native-image-tool@patch:react-native-image-tool@https%3A//github.com/AgoraIO-Extensions/react-native-image-tools/archive/7ffc05ec3a6976b605c307942986a289ab4f47ef.tar.gz#./.yarn/patches/react-native-image-tool-https-e693688068.patch::version=0.8.1&hash=2fbdc8&locator=react-native-agora%40workspace%3A."
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: dd39ee0d5ab0b39b819f306664c49e4e60368d03c38d814c9e5f78e2fac18facab92c29cb692aaf4ee7e90a668681e79c1d6dbd80a53db31571acbf9c70566ea
+  languageName: node
+  linkType: hard
+
 "react-native-is-edge-to-edge@npm:1.1.7":
   version: 1.1.7
   resolution: "react-native-is-edge-to-edge@npm:1.1.7"
@@ -13849,6 +13859,30 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: fe667e4764f691b2e752eaedb7527fd8ac251637ae9e7dd9ab124abae85627839b5daea064befc5e09ca710ef673d5501ed11286eb39dfcb04f5d57b2d47e49c
+  languageName: node
+  linkType: hard
+
+"react-native-reanimated@patch:react-native-reanimated@npm%3A3.17.5#./.yarn/patches/react-native-reanimated-npm-3.17.5-134bd4e99e.patch::locator=react-native-agora%40workspace%3A.":
+  version: 3.17.5
+  resolution: "react-native-reanimated@patch:react-native-reanimated@npm%3A3.17.5#./.yarn/patches/react-native-reanimated-npm-3.17.5-134bd4e99e.patch::version=3.17.5&hash=846876&locator=react-native-agora%40workspace%3A."
+  dependencies:
+    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
+    "@babel/plugin-transform-class-properties": ^7.0.0-0
+    "@babel/plugin-transform-classes": ^7.0.0-0
+    "@babel/plugin-transform-nullish-coalescing-operator": ^7.0.0-0
+    "@babel/plugin-transform-optional-chaining": ^7.0.0-0
+    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
+    "@babel/plugin-transform-template-literals": ^7.0.0-0
+    "@babel/plugin-transform-unicode-regex": ^7.0.0-0
+    "@babel/preset-typescript": ^7.16.7
+    convert-source-map: ^2.0.0
+    invariant: ^2.2.4
+    react-native-is-edge-to-edge: 1.1.7
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+    react: "*"
+    react-native: "*"
+  checksum: d89ca5a79ab7d11e471aeccf69a46dea49e2fbbf16da67bbf9091ce716c0719a4ffd15f3d2c43d8b34b55fc54aa8049fd06e55c7758bae9f76baeaf8adae45da
   languageName: node
   linkType: hard
 

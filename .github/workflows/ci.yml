@@ -135,6 +135,7 @@ jobs:
       fail-fast: false
       matrix:
         newArch: [1, 0]
+        nativeDependencies: [cocoapods, spm]
     runs-on: macos-15
     env:
       RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
@@ -145,8 +146,24 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+      - name: Check iOS dependency modes
+        run: ruby scripts/test-ios-spm.rb
       - name: Install App dependencies
-        run: yarn pod-install examples/expo/ios
+        run: |
+          if [ "${{ matrix.nativeDependencies }}" = "spm" ]; then
+            export USE_FRAMEWORKS=dynamic
+            export AGORA_SPM_REVISION="${{ github.event.pull_request.head.sha || github.sha }}"
+          fi
+          yarn pod-install examples/expo/ios
+      - name: Check Agora CocoaPods source
+        if: ${{ matrix.nativeDependencies == 'cocoapods' }}
+        run: |
+          ruby -ryaml <<'RUBY'
+          lock = YAML.load_file('examples/expo/ios/Podfile.lock')
+          agora_pods = lock.fetch('SPEC REPOS').fetch('https://download.agora.io/cocoapods/')
+          expected = %w[AgoraRtcEngine_Special_iOS AgoraIrisRTC_iOS]
+          abort 'Agora SDKs must resolve from the Agora Specs CDN' unless (expected - agora_pods).empty?
+          RUBY
       - name: Configure the test App ID
         env:
           TEST_APP_ID: ${{ secrets.APP_ID }}
@@ -169,14 +186,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ios-tests-${{ matrix.newArch }}-${{ github.run_attempt }}
+          name: ios-tests-${{ matrix.nativeDependencies }}-${{ matrix.newArch }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/ios-tests/
           if-no-files-found: ignore
       - name: Upload iOS text diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ios-text-${{ matrix.newArch }}-${{ github.run_attempt }}
+          name: ios-text-${{ matrix.nativeDependencies }}-${{ matrix.newArch }}-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/ios-tests/*.log
             ${{ runner.temp }}/ios-tests/summary.json

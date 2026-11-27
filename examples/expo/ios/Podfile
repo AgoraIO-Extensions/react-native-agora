@@ -1,3 +1,6 @@
+source 'https://download.agora.io/cocoapods/'
+source 'https://cdn.cocoapods.org/'
+
 require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
 
@@ -12,6 +15,9 @@ install! 'cocoapods',
   :deterministic_uuids => false
 
 prepare_react_native_project!
+
+use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
+use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
 
 target 'reactnativeagoraexampleexpo' do
   use_expo_modules!
@@ -31,9 +37,6 @@ target 'reactnativeagoraexampleexpo' do
 
   config = use_native_modules!(config_command)
 
-  use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
-  use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
-
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
@@ -49,6 +52,7 @@ target 'reactnativeagoraexampleexpo' do
       :mac_catalyst_enabled => false,
       :ccache_enabled => podfile_properties['apple.ccacheEnabled'] == 'true',
     )
+    AgoraReactNativeSPM.post_install(installer)
 
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.
@@ -64,7 +68,9 @@ target 'reactnativeagoraexampleexpo' do
 end
 
 target 'ScreenShare' do
+  unless AgoraReactNativeSPM.enabled?
   #dependencies start
-  pod 'AgoraVideo_Special_iOS', '4.6.2.70'
+  pod 'AgoraRtcEngine_Special_iOS', '4.6.4.2'
   #dependencies end
+  end
 end
