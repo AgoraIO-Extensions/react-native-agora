@@ -137,7 +137,7 @@ def main():
                         process.wait(timeout=10)
         stage.update(status='finished' if code != 124 else 'timeout', exitCode=code)
         stage['errors'] = [line[:1000] for line in log.read_text(errors='replace').splitlines()
-                           if re.search(r'fatal error:|error:|\[!\]', line)][:15]
+                           if re.search(r'fatal error:|error:|npm error|\[!\]', line)][:15]
         save()
         print(name + ': exit ' + str(code), flush=True)
         return code
@@ -156,13 +156,11 @@ def main():
                                  '0.77.1': '18.3.1', '0.79.5': '19.0.0'}[args.rn],
                         'react-native': args.rn}
         if not legacy:
-            dependencies['react-native-agora'] = 'file:./sdk'
+            sdk_package = json.loads((sdk / 'package.json').read_text())
+            dependencies['react-native-agora'] = 'file:./react-native-agora-' + sdk_package['version'] + '.tgz'
             if args.rn != '0.71.19':
                 for name in ['cli', 'cli-platform-ios', 'cli-platform-android']:
                     dependencies['@react-native-community/' + name] = '15.0.1'
-            (root / 'react-native.config.js').write_text(
-                "module.exports = { dependencies: { 'react-native-agora': { "
-                "root: require('path').join(__dirname, 'sdk') } } };\n")
         (root / 'package.json').write_text(json.dumps({'name': 'pr988-ios-consumer',
             'version': '1.0.0', 'private': True, 'dependencies': dependencies}))
         (ios / 'Podfile').write_text(PODFILE if legacy else MODERN_PODFILE)
@@ -190,9 +188,17 @@ def main():
         if args.render_only:
             summary['status'] = 'rendered'
             return 0
+        if not legacy and run('pack', ['npm', 'pack', '--ignore-scripts', '--pack-destination', str(root)], cwd=sdk):
+            raise RuntimeError('Native SDK package preparation failed')
         if run('npm', ['npm', 'install', '--ignore-scripts', '--legacy-peer-deps',
                        '--no-audit', '--no-fund'], seconds=900):
             raise RuntimeError('RN dependency installation failed')
+        if not legacy:
+            installed_sdk = root / 'node_modules/react-native-agora'
+            for name in FILES:
+                if (installed_sdk / name).read_bytes() != (sdk / name).read_bytes():
+                    raise RuntimeError('Installed SDK differs from reviewed PR base: ' + name)
+            sdk = installed_sdk
         env = dict(os.environ, PLATFORM_NAME='iphonesimulator', CURRENT_ARCH='x86_64',
                    RCT_NEW_ARCH_ENABLED='1' if args.architecture == 'new' else '0',
                    COMPAT_RN=args.rn, COCOAPODS_DISABLE_STATS='true', NO_FLIPPER='1')
