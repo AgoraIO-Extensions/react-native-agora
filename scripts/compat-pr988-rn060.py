@@ -73,6 +73,7 @@ def main():
     report.mkdir(parents=True, exist_ok=True)
     summary = {'reactNative': '0.60.6', 'base': BASE, 'patch': PATCH,
                'architecture': 'old', 'nativeDependencies': 'cocoapods',
+               'toolchainCompatibility': ['-Wno-error=bitwise-instead-of-logical'],
                'status': 'setup_failure', 'stages': []}
 
     def save():
@@ -158,7 +159,8 @@ def main():
         if run('pods', ['pod', 'install', '--verbose'], cwd=ios, env=env):
             raise RuntimeError('CocoaPods installation failed')
         flags = ['-configuration', 'Debug', '-sdk', 'iphonesimulator',
-                 'ARCHS=x86_64', 'ONLY_ACTIVE_ARCH=YES', 'CODE_SIGNING_ALLOWED=NO', 'build']
+                 'ARCHS=x86_64', 'ONLY_ACTIVE_ARCH=YES', 'CODE_SIGNING_ALLOWED=NO',
+                 'OTHER_CPLUSPLUSFLAGS=$(inherited) -Wno-error=bitwise-instead-of-logical', 'build']
         library = ['xcodebuild', '-project', str(ios / 'Pods/Pods.xcodeproj'),
                    '-target', 'react-native-agora', *flags]
         app = ['xcodebuild', '-workspace', str(ios / 'Compat.xcworkspace'),
