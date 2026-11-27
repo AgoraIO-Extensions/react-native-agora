@@ -1,5 +1,5 @@
 #import "AgoraRtcNg.h"
-#import "RCTBridge.h"
+#import <React/RCTBridge.h>
 #import <AgoraRtcWrapper/iris_engine_base.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTViewManager.h>
