@@ -1,140 +1,40 @@
-name: Build API Example
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+name: PR 988 RN 0.60 compatibility
 
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build-android:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        newArch: [false, true]
+  rn060:
+    runs-on: macos-15-intel
+    timeout-minutes: 90
     env:
-      ORG_GRADLE_PROJECT_newArchEnabled: ${{ matrix.newArch }}
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      RUBYOPT: -rlogger
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Install JDK
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Finalize Android SDK
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '16.20.2'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - name: Install CocoaPods
+        run: gem install cocoapods -v 1.16.2 --no-document
+      - name: Fetch reviewed PR revision
         run: |
-          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
-
-      - name: Modify APP ID
-        run: |
-          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
-          mv tmp agora.config.ts
-        working-directory: examples/expo/src/config
-
-      - name: Build example for Android
-        run: |
-          yarn example build:android
-
-      - name: Upload APK
+          git fetch origin refs/pull/988/head:refs/remotes/origin/pr-988-compat
+          test "$(git rev-parse refs/remotes/origin/pr-988-compat)" = cd6020ac3d63067f2b4d135335768be4e5215e69
+      - name: Build minimum supported RN before and after PR
+        run: python3 scripts/compat-pr988-rn060.py "$RUNNER_TEMP/rn060"
+      - name: Upload compatibility evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: AgoraRtcNgExampleExpo-Android-${{ matrix.newArch && 'NewArch' || 'OldArch' }}-${{ github.run_id }}
-          path: |
-            examples/expo/android/app/build/outputs/apk/release/*.apk
+          name: rn060-before-after-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rn060/report/
           if-no-files-found: error
-
-  build-ios:
-    runs-on: macos-15
-    strategy:
-      matrix:
-        newArch: [false, true]
-    env:
-      RCT_NEW_ARCH_ENABLED: ${{ matrix.newArch }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Setup fastlane
-        run: |
-          brew install fastlane
-
-      - name: Switch Xcode
-        run: |
-          #https://github.com/actions/runner-images/issues/12758
-          sudo xcode-select --switch /Applications/Xcode_16.4.app
-
-      - name: Install cocoapods
-        run: |
-          yarn pod-install examples/expo/ios
-
-      - name: Modify APP ID
-        run: |
-          sed "s/localAppId = '\(.*\)'/localAppId = '${{ secrets.APP_ID }}'/g" agora.config.ts > tmp
-          mv tmp agora.config.ts
-        working-directory: examples/expo/src/config
-
-      - name: Install the Apple certificate and provisioning profile
-        env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-        run: |
-          # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/${{ secrets.BUILD_PROVISION_PROFILE_UUID }}.mobileprovision
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-          # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
-
-          # apply provisioning profile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
-      - name: Build example for iOS
-        run: |
-          yarn example build:ios
-
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: AgoraRtcNgExampleExpo-iOS-${{ matrix.newArch && 'NewArch' || 'OldArch' }}-${{ github.run_id }}
-          path: |
-            examples/expo/ios/*.ipa
-          if-no-files-found: error
-
-      - name: Upload dSYM
-        uses: actions/upload-artifact@v4
-        with:
-          name: AgoraRtcNgExampleExpoSymbol-${{ matrix.newArch && 'NewArch' || 'OldArch' }}-${{ github.run_id }}
-          path: |
-            examples/expo/ios/*.dSYM.zip
-          if-no-files-found: error
-
-  notification:
-    runs-on: ubuntu-latest
-    needs: [build-android, build-ios]
-    steps:
-      - run: |
-          curl -X POST "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${{ secrets.WECHAT_KEY }}" -d '{"msgtype":"text","text":{"content":"ReactNative Example:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\nDownload Link:\nhttps://nightly.link/${{ github.repository }}/actions/runs/${{ github.run_id }}"}}'
