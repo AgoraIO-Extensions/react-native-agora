@@ -1,4 +1,4 @@
-"""Build an RN 0.60.6 consumer before/after the two imports in PR 988."""
+"""Build real iOS consumers before/after the two imports in PR 988."""
 import argparse
 import json
 import os
@@ -19,7 +19,7 @@ require 'cocoapods'
 require 'xcodeproj'
 root=ARGV.fetch(0)
 project=Xcodeproj::Project.new(File.join(root,'Compat.xcodeproj'))
-app=project.new_target(:application,'Compat',:ios,'12.4')
+app=project.new_target(:application,'Compat',:ios,ARGV.fetch(1,'12.4'))
 app.build_configurations.each do |config|
   config.build_settings.merge!({
     'PRODUCT_BUNDLE_IDENTIFIER'=>'io.agora.pr988.compat',
@@ -62,18 +62,47 @@ for name in ['DoubleConversion', 'glog', 'Folly']:
     PODFILE += f"  pod '{name}', :podspec => '../node_modules/react-native/third-party-podspecs/{name}.podspec'\n"
 PODFILE += "  pod 'react-native-agora', :path => '../sdk'\nend\n"
 
+MODERN_PODFILE = '''source 'https://cdn.cocoapods.org/'
+source 'https://download.agora.io/cocoapods/'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules' if ENV['COMPAT_RN'] == '0.71.19'
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+target 'Compat' do
+  config = use_native_modules!
+  options = {
+    :path => config[:reactNativePath],
+    :hermes_enabled => true,
+    :fabric_enabled => ENV['RCT_NEW_ARCH_ENABLED'] == '1',
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  }
+  options[:flipper_configuration] = FlipperConfiguration.disabled if defined?(FlipperConfiguration)
+  use_react_native!(**options)
+  post_install do |installer|
+    react_native_post_install(installer, :mac_catalyst_enabled => false)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer) if ENV['COMPAT_RN'] == '0.71.19'
+  end
+end
+'''
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('work', type=Path)
     parser.add_argument('--render-only', action='store_true')
+    parser.add_argument('--rn', choices=['0.60.6', '0.71.19', '0.77.1', '0.79.5'], default='0.60.6')
+    parser.add_argument('--architecture', choices=['old', 'new'], default='old')
     args = parser.parse_args()
+    if args.rn == '0.60.6' and args.architecture == 'new':
+        parser.error('RN 0.60 has no new architecture')
+    legacy = args.rn == '0.60.6'
+    platform = '15.1' if args.rn in ['0.77.1', '0.79.5'] else '12.4'
     root = args.work.resolve()
     report = root / 'report'
     report.mkdir(parents=True, exist_ok=True)
-    summary = {'reactNative': '0.60.6', 'base': BASE, 'patch': PATCH,
-               'architecture': 'old', 'nativeDependencies': 'cocoapods',
-               'toolchainCompatibility': ['-Wno-error=bitwise-instead-of-logical'],
+    summary = {'reactNative': args.rn, 'base': BASE, 'patch': PATCH,
+               'architecture': args.architecture, 'nativeDependencies': 'cocoapods',
+               'toolchainCompatibility': ['-Wno-error=bitwise-instead-of-logical'] if legacy else [],
                'status': 'setup_failure', 'stages': []}
 
     def save():
@@ -118,15 +147,25 @@ def main():
         sdk.mkdir(exist_ok=True)
         archive = root / 'sdk.tar'
         subprocess.run(['git', 'archive', '--format=tar', '--output', str(archive), BASE,
-                        'ios', 'package.json', 'react-native-agora.podspec'], cwd=REPO, check=True)
+                        'ios', 'src', 'package.json', 'react-native-agora.podspec'], cwd=REPO, check=True)
         with tarfile.open(archive) as source:
             source.extractall(sdk, filter='data')
         ios = root / 'ios'
         ios.mkdir(exist_ok=True)
-        (root / 'package.json').write_text(json.dumps({'name': 'pr988-rn060-consumer',
-            'version': '1.0.0', 'private': True,
-            'dependencies': {'react': '16.8.6', 'react-native': '0.60.6'}}))
-        (ios / 'Podfile').write_text(PODFILE)
+        dependencies = {'react': {'0.60.6': '16.8.6', '0.71.19': '18.2.0',
+                                 '0.77.1': '18.3.1', '0.79.5': '19.0.0'}[args.rn],
+                        'react-native': args.rn}
+        if not legacy:
+            dependencies['react-native-agora'] = 'file:./sdk'
+            if args.rn != '0.71.19':
+                for name in ['cli', 'cli-platform-ios', 'cli-platform-android']:
+                    dependencies['@react-native-community/' + name] = '15.0.1'
+            (root / 'react-native.config.js').write_text(
+                "module.exports = { dependencies: { 'react-native-agora': { "
+                "root: require('path').join(__dirname, 'sdk') } } };\n")
+        (root / 'package.json').write_text(json.dumps({'name': 'pr988-ios-consumer',
+            'version': '1.0.0', 'private': True, 'dependencies': dependencies}))
+        (ios / 'Podfile').write_text(PODFILE if legacy else MODERN_PODFILE)
         (root / 'project.rb').write_text(PROJECT)
         (ios / 'main.m').write_text('#import <UIKit/UIKit.h>\nint main(int argc,char *argv[]) {'
             '@autoreleasepool { return UIApplicationMain(argc,argv,nil,@"AppDelegate"); }}\n')
@@ -146,7 +185,7 @@ def main():
 }
 @end
 ''')
-        if run('project', ['ruby', str(root / 'project.rb'), str(ios)], seconds=60):
+        if run('project', ['ruby', str(root / 'project.rb'), str(ios), platform], seconds=60):
             raise RuntimeError('Consumer project generation failed')
         if args.render_only:
             summary['status'] = 'rendered'
@@ -155,22 +194,27 @@ def main():
                        '--no-audit', '--no-fund'], seconds=900):
             raise RuntimeError('RN dependency installation failed')
         env = dict(os.environ, PLATFORM_NAME='iphonesimulator', CURRENT_ARCH='x86_64',
-                   RCT_NEW_ARCH_ENABLED='0', COCOAPODS_DISABLE_STATS='true')
+                   RCT_NEW_ARCH_ENABLED='1' if args.architecture == 'new' else '0',
+                   COMPAT_RN=args.rn, COCOAPODS_DISABLE_STATS='true', NO_FLIPPER='1')
         if run('pods', ['pod', 'install', '--verbose'], cwd=ios, env=env):
             raise RuntimeError('CocoaPods installation failed')
         flags = ['-configuration', 'Debug', '-sdk', 'iphonesimulator',
-                 'ARCHS=x86_64', 'ONLY_ACTIVE_ARCH=YES', 'CODE_SIGNING_ALLOWED=NO',
-                 'OTHER_CPLUSPLUSFLAGS=$(inherited) -Wno-error=bitwise-instead-of-logical', 'build']
+                 'ARCHS=x86_64', 'ONLY_ACTIVE_ARCH=YES', 'CODE_SIGNING_ALLOWED=NO']
+        if legacy:
+            flags.append('OTHER_CPLUSPLUSFLAGS=$(inherited) -Wno-error=bitwise-instead-of-logical')
+        flags.append('build')
         library = ['xcodebuild', '-project', str(ios / 'Pods/Pods.xcodeproj'),
                    '-target', 'react-native-agora', *flags]
         app = ['xcodebuild', '-workspace', str(ios / 'Compat.xcworkspace'),
                '-scheme', 'Compat', '-destination', 'generic/platform=iOS Simulator',
                '-derivedDataPath', str(root / 'derived'), *flags]
-        before = [run('sdk-before', library, env=env), run('app-before', app, env=env)]
+        before = ([run('sdk-before', library, env=env)] if legacy else []) + [
+            run('app-before', app, env=env, seconds=1800)]
         for name in FILES:
             (sdk / name).write_bytes(subprocess.check_output(['git', 'show', PATCH + ':' + name], cwd=REPO))
-        after = [run('sdk-after', library, env=env), run('app-after', app, env=env)]
-        status = 'passed' if before == after == [0, 0] else 'patch_fixed_build' if after == [0, 0] else 'baseline_failed' if any(before) else 'regression'
+        after = ([run('sdk-after', library, env=env)] if legacy else []) + [
+            run('app-after', app, env=env, seconds=1800)]
+        status = 'passed' if not any(before + after) else 'patch_fixed_build' if not any(after) else 'baseline_failed' if any(before) else 'regression'
         summary.update(before=before, after=after, status=status)
     except Exception as error:
         summary['failure'] = str(error)

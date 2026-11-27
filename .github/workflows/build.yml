@@ -1,4 +1,4 @@
-name: PR 988 RN 0.60 compatibility
+name: PR 988 iOS compatibility
 
 on:
   workflow_dispatch:
@@ -7,9 +7,15 @@ permissions:
   contents: read
 
 jobs:
-  rn060:
+  ios-compat:
+    name: RN ${{ matrix.rn }} ${{ matrix.architecture }}
     runs-on: macos-15-intel
     timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        rn: ['0.71.19', '0.77.1', '0.79.5']
+        architecture: [old, new]
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       RUBYOPT: -rlogger
@@ -19,7 +25,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: '16.20.2'
+          node-version: '20.19.4'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
@@ -29,12 +35,12 @@ jobs:
         run: |
           git fetch origin refs/pull/988/head:refs/remotes/origin/pr-988-compat
           test "$(git rev-parse refs/remotes/origin/pr-988-compat)" = cd6020ac3d63067f2b4d135335768be4e5215e69
-      - name: Build minimum supported RN before and after PR
-        run: python3 scripts/compat-pr988-rn060.py "$RUNNER_TEMP/rn060"
+      - name: Build consumers before and after PR
+        run: python3 scripts/compat-pr988-ios.py "$RUNNER_TEMP/rn-compat" --rn '${{ matrix.rn }}' --architecture '${{ matrix.architecture }}'
       - name: Upload compatibility evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rn060-before-after-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/rn060/report/
+          name: rn-${{ matrix.rn }}-${{ matrix.architecture }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rn-compat/report/
           if-no-files-found: error
